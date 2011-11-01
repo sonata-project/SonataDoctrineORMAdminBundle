@@ -35,6 +35,18 @@ class Configuration implements ConfigurationInterface
         $treeBuilder = new TreeBuilder();
         $rootNode = $treeBuilder->root('sonata_doctrine_orm_admin', 'array');
 
+        $rootNode
+            ->children()
+                ->arrayNode('templates')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->scalarNode('form')->defaultValue(array('SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig'))->cannotBeEmpty()->end()
+                        ->scalarNode('filter')->defaultValue(array('SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig'))->cannotBeEmpty()->end()
+                    ->end()
+                ->end()
+            ->end()
+        ;
+
         return $treeBuilder;
     }
 }

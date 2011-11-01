@@ -45,5 +45,7 @@ class SonataDoctrineORMAdminExtension extends Extension
         $processor = new Processor();
         $config = $processor->processConfiguration($configuration, $config);
 
+        $pool = $container->getDefinition('sonata.admin.manager.orm');
+        $pool->addMethodCall('__hack_doctrine_orm__', $config);
     }
 }
