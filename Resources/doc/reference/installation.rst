@@ -30,7 +30,7 @@ files:
   {
       return array(
           // ...
-          new Sonata\AdminBundle\SonataDoctrineORMAdminBundle(),
+          new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
           // ...
       );
   }
