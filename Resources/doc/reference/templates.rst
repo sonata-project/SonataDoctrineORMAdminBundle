@@ -1,7 +1,7 @@
 Templates
 =========
 
-By default, an Admin class used a set of templates, it is possible to tweak the default values by editing the configuration
+You can customize the global layout by tweaking the ``SonataAdminBundle`` configuration.
 
 .. code-block:: yaml
 
@@ -17,12 +17,11 @@ By default, an Admin class used a set of templates, it is possible to tweak the 
             edit:    SonataAdminBundle:CRUD:edit.html.twig
 
 
-Usage of each template :
+You can also configure the templates used by the Form Framework while rendering the widget
 
-* layout : based layout used by the dashboard and an admin class
-* ajax : default layout used when an ajax request is performed
-* list : the template to use for the list action
-* show : the template to use for the show action
-* edit : the template to use for the edit and create action
+.. code-block:: yaml
 
-The default values will be set only if the ``Admin::setTemplates`` is not called by the Container.
+    sonata_doctrine_orm_admin:
+        templates:
+            form: [ SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig ]
+            filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
