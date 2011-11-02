@@ -3,8 +3,8 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to Sonata - Doctrine ORM Admin's documentation!
-=======================================================
+Doctrine ORM Admin's documentation!
+===================================
 
 The ``Doctrine ORM Admin`` provides services to work with the ``Admin Bundle`` and the ``Doctrine Project``.
 
