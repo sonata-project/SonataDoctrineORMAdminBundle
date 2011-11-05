@@ -14,6 +14,9 @@ Comment
 .. code-block:: php
 
     <?php
+    // src/Sonata/NewsBundle/Entity/Comment.php
+
+    namespace Sonata\NewsBundle\Entity;
 
     class Comment
     {
@@ -57,6 +60,10 @@ Post
 .. code-block:: php
 
     <?php
+    // src/Sonata/NewsBundle/Entity/Post.php
+
+    namespace Sonata\NewsBundle\Entity;
+
     class Post
     {
         protected $title;
@@ -96,6 +103,11 @@ Tag
 
 .. code-block:: php
 
+    <?php
+    // src/Sonata/NewsBundle/Entity/Tag.php
+
+    namespace Sonata\NewsBundle\Entity;
+
     class Tag
     {
         protected $name;
@@ -126,6 +138,7 @@ Comment
 
 .. code-block:: xml
 
+    <!-- src/Sonata/NewsBundle/Resources/config/doctrine/Comment.orm.xml -->
     <?xml version="1.0" encoding="utf-8"?>
     <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
         <entity name="Sonata\NewsBundle\Entity\Comment" table="news__comment">
@@ -158,6 +171,7 @@ Post
 
 .. code-block:: xml
 
+    <!-- src/Sonata/NewsBundle/Resources/config/doctrine/Post.orm.xml -->
     <?xml version="1.0" encoding="utf-8"?>
     <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
         <entity name="Sonata\NewsBundle\Entity\Post" table="news__post">
@@ -226,11 +240,12 @@ Post
     </doctrine-mapping>
 
 
-Comment
-~~~~~~~
+Tag
+~~~
 
 .. code-block:: xml
 
+    <!-- src/Sonata/NewsBundle/Resources/config/doctrine/Tag.orm.xml -->
     <?xml version="1.0" encoding="utf-8"?>
     <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
 
