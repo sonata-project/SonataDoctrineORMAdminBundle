@@ -16,6 +16,8 @@ Comment
     <?php
     // src/Sonata/NewsBundle/Entity/Comment.php
 
+    namespace Sonata\NewsBundle\Entity;
+
     class Comment
     {
         const STATUS_MODERATE   = 2;
@@ -60,6 +62,8 @@ Post
     <?php
     // src/Sonata/NewsBundle/Entity/Post.php
 
+    namespace Sonata\NewsBundle\Entity;
+
     class Post
     {
         protected $title;
@@ -101,6 +105,8 @@ Tag
 
     <?php
     // src/Sonata/NewsBundle/Entity/Tag.php
+
+    namespace Sonata\NewsBundle\Entity;
 
     class Tag
     {
