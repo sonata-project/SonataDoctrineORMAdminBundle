@@ -83,6 +83,9 @@ class ChoiceFilter extends Filter
         return array();
     }
 
+    /**
+     * @return array
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
