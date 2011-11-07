@@ -18,6 +18,7 @@
         <!-- ListBuilder -->
         <service id="sonata.admin.builder.orm_list" class="Sonata\DoctrineORMAdminBundle\Builder\ListBuilder" >
             <argument type="service" id="sonata.admin.guesser.orm_list_chain" />
+            <argument />
         </service>
 
         <service id="sonata.admin.guesser.orm_list" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">

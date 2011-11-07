@@ -25,3 +25,20 @@ You can also configure the templates used by the Form Framework while rendering 
         templates:
             form: [ SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig ]
             filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
+
+
+You can also customize field types
+
+.. code-block:: yaml
+
+    sonata_doctrine_orm_admin:
+        templates:
+        types:
+            list:
+                date:       SonataAdminBundle:CRUD:date_field.html.twig
+                datetime:   SonataAdminBundle:CRUD:datetime_field.html.twig
+
+.. note::
+
+    By default, if the ``SonataIntlBundle`` classes are availables, then the numeric and date fields will be
+    localized with the current user locale (only for list, work in progress).

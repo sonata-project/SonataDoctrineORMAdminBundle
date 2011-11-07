@@ -23,16 +23,33 @@ class ListBuilder implements ListBuilderInterface
 {
     protected $guesser;
 
-    public function __construct(TypeGuesserInterface $guesser)
+    protected $templates = array();
+
+    /**
+     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
+     * @param array $templates
+     */
+    public function __construct(TypeGuesserInterface $guesser, $templates = array())
     {
-        $this->guesser = $guesser;
+        $this->guesser   = $guesser;
+        $this->templates = $templates;
     }
 
+    /**
+     * @param array $options
+     * @return \Sonata\AdminBundle\Admin\FieldDescriptionCollection
+     */
     public function getBaseList(array $options = array())
     {
         return new FieldDescriptionCollection;
     }
 
+    /**
+     * @param \Sonata\AdminBundle\Admin\FieldDescriptionCollection $list
+     * @param null $type
+     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     */
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
@@ -48,6 +65,19 @@ class ListBuilder implements ListBuilderInterface
         $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
 
         return $list->add($fieldDescription);
+    }
+
+    /**
+     * @param $type
+     * @return string
+     */
+    private function getTemplate($type)
+    {
+        if (!isset($this->templates[$type])) {
+            return null;
+        }
+
+        return $this->templates[$type];
     }
 
     /**
@@ -93,7 +123,7 @@ class ListBuilder implements ListBuilderInterface
 
         if (!$fieldDescription->getTemplate()) {
 
-            $fieldDescription->setTemplate(sprintf('SonataAdminBundle:CRUD:list_%s.html.twig', $fieldDescription->getType()));
+            $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
 
             if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
                 $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig');

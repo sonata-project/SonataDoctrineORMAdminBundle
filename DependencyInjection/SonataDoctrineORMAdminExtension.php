@@ -35,17 +35,55 @@ class SonataDoctrineORMAdminExtension extends Extension
      * @param array            $configs    An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
-    public function load(array $config, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container)
     {
+
+        $defaultConfig = array(
+            'templates' => array(
+                'types' => array(
+                    'list' => array(
+                        'array'        => 'SonataAdminBundle:CRUD:list_array.html.twig',
+                        'boolean'      => 'SonataAdminBundle:CRUD:list_boolean.html.twig',
+                        'date'         => 'SonataAdminBundle:CRUD:list_date.html.twig',
+                        'datetime'     => 'SonataAdminBundle:CRUD:list_datetime.html.twig',
+                        'text'         => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'string'       => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'smallint'     => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'bigint'       => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'integer'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'decimal'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'identifier'   => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                    )
+                )
+            )
+        );
+
+        // let's add some magic
+        if (class_exists('Sonata\IntlBundle\SonataIntlBundle', true)) {
+            $defaultConfig['templates']['types']['list'] = array_merge($defaultConfig['templates']['types']['list'], array(
+                'date'         => 'SonataIntlBundle:CRUD:list_date.html.twig',
+                'datetime'     => 'SonataIntlBundle:CRUD:list_datetime.html.twig',
+                'smallint'     => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
+                'bigint'       => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
+                'integer'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
+                'decimal'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
+            ));
+        }
+
+        array_unshift($configs, $defaultConfig);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
 
         $configuration = new Configuration();
         $processor = new Processor();
-        $config = $processor->processConfiguration($configuration, $config);
+        $config = $processor->processConfiguration($configuration, $configs);
 
         $pool = $container->getDefinition('sonata.admin.manager.orm');
         $pool->addMethodCall('__hack_doctrine_orm__', $config);
+
+        $container->getDefinition('sonata.admin.builder.orm_list')
+            ->replaceArgument(1, $config['templates']['types']['list']);
     }
 }
