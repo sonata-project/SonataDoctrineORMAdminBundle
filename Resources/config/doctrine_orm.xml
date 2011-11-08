@@ -33,6 +33,7 @@
         <!-- ShowBuilder  -->
         <service id="sonata.admin.builder.orm_show" class="Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder" >
             <argument type="service" id="sonata.admin.guesser.orm_show_chain" />
+            <argument />
         </service>
 
         <service id="sonata.admin.guesser.orm_show" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">

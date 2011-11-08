@@ -27,7 +27,7 @@ You can also configure the templates used by the Form Framework while rendering 
             filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
 
 
-You can also customize field types
+You can also customize field types by adding types in the ``config.yml`` file. The default values are :
 
 .. code-block:: yaml
 
@@ -35,10 +35,31 @@ You can also customize field types
         templates:
         types:
             list:
-                date:       SonataAdminBundle:CRUD:date_field.html.twig
-                datetime:   SonataAdminBundle:CRUD:datetime_field.html.twig
+                array:      SonataAdminBundle:CRUD:list_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:list_date.html.twig
+                datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                string:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
+                identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+
+            show:
+                array:      SonataAdminBundle:CRUD:show_array.html.twig
+                boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
+                date:       SonataAdminBundle:CRUD:show_date.html.twig
+                datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
+                text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                string:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
+                bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
+                integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
 
 .. note::
 
     By default, if the ``SonataIntlBundle`` classes are availables, then the numeric and date fields will be
-    localized with the current user locale (only for list, work in progress).
+    localized with the current user locale.

@@ -37,7 +37,34 @@ class SonataDoctrineORMAdminExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
+        $configs = $this->fixTemplatesConfiguration($configs);
 
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('doctrine_orm.xml');
+        $loader->load('doctrine_orm_filter_types.xml');
+
+        $configuration = new Configuration();
+        $processor = new Processor();
+        $config = $processor->processConfiguration($configuration, $configs);
+
+        $pool = $container->getDefinition('sonata.admin.manager.orm');
+        $pool->addMethodCall('__hack_doctrine_orm__', $config);
+
+        // define the templates
+        $container->getDefinition('sonata.admin.builder.orm_list')
+            ->replaceArgument(1, $config['templates']['types']['list']);
+
+        $container->getDefinition('sonata.admin.builder.orm_show')
+            ->replaceArgument(1, $config['templates']['types']['show']);
+    }
+
+
+    /**
+     * @param array $configs
+     * @return array
+     */
+    private function fixTemplatesConfiguration(array $configs)
+    {
         $defaultConfig = array(
             'templates' => array(
                 'types' => array(
@@ -53,6 +80,18 @@ class SonataDoctrineORMAdminExtension extends Extension
                         'integer'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'decimal'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'identifier'   => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                    ),
+                    'show' => array(
+                        'array'        => 'SonataAdminBundle:CRUD:show_array.html.twig',
+                        'boolean'      => 'SonataAdminBundle:CRUD:show_boolean.html.twig',
+                        'date'         => 'SonataAdminBundle:CRUD:show_date.html.twig',
+                        'datetime'     => 'SonataAdminBundle:CRUD:show_datetime.html.twig',
+                        'text'         => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'string'       => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'smallint'     => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'bigint'       => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'integer'      => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'decimal'      => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
                     )
                 )
             )
@@ -68,22 +107,19 @@ class SonataDoctrineORMAdminExtension extends Extension
                 'integer'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
                 'decimal'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
             ));
+
+            $defaultConfig['templates']['types']['show'] = array_merge($defaultConfig['templates']['types']['show'], array(
+                'date'         => 'SonataIntlBundle:CRUD:show_date.html.twig',
+                'datetime'     => 'SonataIntlBundle:CRUD:show_datetime.html.twig',
+                'smallint'     => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
+                'bigint'       => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
+                'integer'      => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
+                'decimal'      => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
+            ));
         }
 
         array_unshift($configs, $defaultConfig);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('doctrine_orm.xml');
-        $loader->load('doctrine_orm_filter_types.xml');
-
-        $configuration = new Configuration();
-        $processor = new Processor();
-        $config = $processor->processConfiguration($configuration, $configs);
-
-        $pool = $container->getDefinition('sonata.admin.manager.orm');
-        $pool->addMethodCall('__hack_doctrine_orm__', $config);
-
-        $container->getDefinition('sonata.admin.builder.orm_list')
-            ->replaceArgument(1, $config['templates']['types']['list']);
+        return $configs;
     }
 }
