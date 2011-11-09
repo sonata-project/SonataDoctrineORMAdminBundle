@@ -55,10 +55,9 @@ Example
         protected function configureDatagridFilters(DatagridMapper $datagrid)
         {
             $datagrid
-                ->add('title');
-                ->add('enabled');
-                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true)
-            ;
+                ->add('title')
+                ->add('enabled')
+                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true));
         }
     }
 
