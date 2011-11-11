@@ -10,8 +10,8 @@ The ``Doctrine ORM Admin`` provides services to work with the ``Admin Bundle`` a
 
 **Google Groups**: For questions and proposals you can post on this google groups
 
-* [Sonata Users](https://groups.google.com/group/sonata-users): Only for user questions
-* [Sonata Devs](https://groups.google.com/group/sonata-devs): Only for devs
+* `Sonata Users <https://groups.google.com/group/sonata-users>`_: Only for user questions
+* `Sonata Devs <https://groups.google.com/group/sonata-devs>`_: Only for devs
 
 Reference Guide
 ---------------
