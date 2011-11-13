@@ -10,11 +10,11 @@ if (!is_dir($vendorDir)) {
 }
 
 $deps = array(
-    array('symfony', 'git://github.com/symfony/symfony.git', 'v2.0.5'),
-    array('Sonata/AdminBundle', 'git://github.com/sonata-project/SonataAdminBundle.git', 'master'),
-    array('doctrine', 'git://github.com/doctrine/doctrine2.git', 'master'),
-    array('doctrine-common', 'git://github.com/doctrine/common.git', 'master'),
-    array('knpmenu', 'git://github.com/knplabs/KnpMenu.git', 'master')
+    array('symfony', 'git://github.com/symfony/symfony.git', isset($_SERVER['SYMFONY_VERSION']) ? $_SERVER['SYMFONY_VERSION'] : 'origin/master'),
+    array('Sonata/AdminBundle', 'git://github.com/sonata-project/SonataAdminBundle.git', 'origin/master'),
+    array('doctrine', 'git://github.com/doctrine/doctrine2.git', 'origin/master'),
+    array('doctrine-common', 'git://github.com/doctrine/common.git', 'origin/master'),
+    array('knpmenu', 'git://github.com/knplabs/KnpMenu.git', 'origin/master')
 );
 
 foreach ($deps as $dep) {

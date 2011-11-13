@@ -7,11 +7,11 @@ use Symfony\Component\ClassLoader\UniversalClassLoader;
 
 $loader = new UniversalClassLoader();
 $loader->registerNamespaces(array(
-    'Symfony'  => array($vendorDir.'/symfony/src'),
-    'Knp'  => array($vendorDir.'/knpmenu/src'),
-    'Sonata\\AdminBundle'  => array($vendorDir),
-    'Doctrine\\ORM' => array($vendorDir.'/doctrine/lib'),
-    'Doctrine\\Common' => array($vendorDir.'/doctrine-common/lib')
+    'Symfony'               => array($vendorDir.'/symfony/src'),
+    'Knp'                   => array($vendorDir.'/knpmenu/src'),
+    'Sonata\\AdminBundle'   => array($vendorDir),
+    'Doctrine\\ORM'         => array($vendorDir.'/doctrine/lib'),
+    'Doctrine\\Common'      => array($vendorDir.'/doctrine-common/lib')
 ));
 $loader->register();
 
