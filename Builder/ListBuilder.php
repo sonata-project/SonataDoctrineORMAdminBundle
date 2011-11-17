@@ -59,8 +59,6 @@ class ListBuilder implements ListBuilderInterface
             $fieldDescription->setType($type);
         }
 
-        $fieldDescription->setType($type);
-
         $this->fixFieldDescription($admin, $fieldDescription);
         $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
 
