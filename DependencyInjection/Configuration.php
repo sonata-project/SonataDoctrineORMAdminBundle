@@ -37,7 +37,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
-             ->scalarNode('model_manager')->defaultValue(null)->end()
+             ->scalarNode('entity_manager')->defaultValue(null)->end()
                 ->arrayNode('templates')
                     ->addDefaultsIfNotSet()
                     ->children()
