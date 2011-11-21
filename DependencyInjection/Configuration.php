@@ -37,6 +37,7 @@ class Configuration implements ConfigurationInterface
 
         $rootNode
             ->children()
+             ->scalarNode('model_manager')->defaultValue('doctrine.orm.default_entity_manager')->end()
                 ->arrayNode('templates')
                     ->addDefaultsIfNotSet()
                     ->children()
