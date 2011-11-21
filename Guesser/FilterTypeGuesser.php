@@ -85,8 +85,8 @@ class FilterTypeGuesser implements TypeGuesserInterface
 //            case 'vardatetime':
 //            case 'datetimetz':
 //                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
-//            case 'date':
-//                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
+            case 'date':
+                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
