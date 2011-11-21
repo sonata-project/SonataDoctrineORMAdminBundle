@@ -46,7 +46,7 @@ class SonataDoctrineORMAdminExtension extends Extension
         $configuration = new Configuration();
         $processor = new Processor();
         $config = $processor->processConfiguration($configuration, $configs);
-        $container->setParameter('sonata_doctrine_orm_admin.model_manager', $config['model_manager']);
+        $container->setParameter('sonata_doctrine_orm_admin.model_manager', $config['entity_manager']);
 
 
         $pool = $container->getDefinition('sonata.admin.manager.orm');
