@@ -24,19 +24,17 @@ class DateFilter extends Filter
      */
     public function filter($queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data))
-        {
+        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
         }
 
-        if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value']))
-        {
+        if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])) {
             return;
         }
         
         $value = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
         
-        $data['type'] = !isset($data['type']) ?  DateType::TYPE_BETWEEN : $data['type'];
+        $data['type'] = !isset($data['type']) ?  DateType::TYPE_EQUAL : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
@@ -44,12 +42,9 @@ class DateFilter extends Filter
             $operator = '=';
         }
 
-        if(in_array($operator, array('NULL', 'NOT NULL')))
-        {
+        if(in_array($operator, array('NULL', 'NOT NULL'))) {
             $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
-        }
-        else
-        {
+        } else {
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
             $queryBuilder->setParameter($this->getName(),  $value);
         }

@@ -24,14 +24,12 @@ class DateRangeFilter extends Filter
      */
     public function filter($queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !array_key_exists('valueb', $data))
-        {
+        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !array_key_exists('valueb', $data)) {
             return;
         }
         
         if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])
-                || !array_key_exists('year', $data['valueb']) || !array_key_exists('month', $data['valueb']) || !array_key_exists('day', $data['valueb']))
-        {
+                || !array_key_exists('year', $data['valueb']) || !array_key_exists('month', $data['valueb']) || !array_key_exists('day', $data['valueb'])) {
             return;
         }
 
