@@ -61,7 +61,7 @@ class DateRangeFilter extends Filter
 
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_daterange', array(
+        return array('sonata_type_filter_date_range', array(
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel()
