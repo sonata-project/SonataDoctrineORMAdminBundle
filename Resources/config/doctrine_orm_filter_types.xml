@@ -33,8 +33,8 @@
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_date" />
         </service>
 
-        <service id="sonata.admin.orm.filter.type.daterange" class="Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_daterange" />
+        <service id="sonata.admin.orm.filter.type.date_range" class="Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_date_range" />
         </service>
 
     </services>

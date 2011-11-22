@@ -24,18 +24,27 @@ class DateRangeFilter extends Filter
      */
     public function filter($queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !array_key_exists('valueb', $data)) {
-            return;
-        }
-        
-        if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])
-                || !array_key_exists('year', $data['valueb']) || !array_key_exists('month', $data['valueb']) || !array_key_exists('day', $data['valueb'])) {
+        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
         }
 
-        $start = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
-        $end = $data['valueb']['year'].'-'.$data['valueb']['month'].'-'.$data['valueb']['day'];
+        if(!array_key_exists('start', $data['value']) || !array_key_exists('end', $data['value'])) {
+            return;
+        }
         
+        if(!array_key_exists('year', $data['value']['start']) || !array_key_exists('month', $data['value']['start']) || !array_key_exists('day', $data['value']['start'])
+                || !array_key_exists('year', $data['value']['end']) || !array_key_exists('month', $data['value']['end']) || !array_key_exists('day', $data['value']['end'])) {
+            return;
+        }
+    
+        if(trim($data['value']['start']['year']) == "" && trim($data['value']['start']['month']) == "" && trim($data['value']['start']['day']) == ""
+                && trim($data['value']['end']['year']) == "" && trim($data['value']['end']['month']) == "" && trim($data['value']['end']['day']) == "") {
+            return;
+        }
+        
+        $start = $data['value']['start']['year'].'-'.$data['value']['start']['month'].'-'.$data['value']['start']['day'];
+        $end = $data['value']['end']['year'].'-'.$data['value']['end']['month'].'-'.$data['value']['end']['day'];
+                
         $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $this->getName().'_start'));
         $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
         $queryBuilder->setParameter($this->getName().'_start',  $start);

@@ -32,6 +32,11 @@ class DateFilter extends Filter
             return;
         }
         
+        if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "")
+        {
+            return;
+        }
+        
         $value = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
         
         $data['type'] = !isset($data['type']) ?  DateType::TYPE_EQUAL : $data['type'];
