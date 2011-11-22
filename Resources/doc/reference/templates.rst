@@ -40,6 +40,7 @@ You can also customize field types by adding types in the ``config.yml`` file. T
                 date:       SonataAdminBundle:CRUD:list_date.html.twig
                 datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
                 text:       SonataAdminBundle:CRUD:base_list_field.html.twig
+                trans:      SonataAdminBundle:CRUD:list_trans.html.twig
                 string:     SonataAdminBundle:CRUD:base_list_field.html.twig
                 smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
                 bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
@@ -53,6 +54,7 @@ You can also customize field types by adding types in the ``config.yml`` file. T
                 date:       SonataAdminBundle:CRUD:show_date.html.twig
                 datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
                 text:       SonataAdminBundle:CRUD:base_show_field.html.twig
+                trans:      SonataAdminBundle:CRUD:show_trans.html.twig
                 string:     SonataAdminBundle:CRUD:base_show_field.html.twig
                 smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
                 bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
