@@ -11,8 +11,7 @@ Full Configuration Options
 
     sonata_doctrine_orm_admin:
         # default value is null, so doctrine uses the value defined in the configuration
-        # which is by default .... 'default'
-        entity_manager: default
+        entity_manager: ~
 
         templates:
             form:
