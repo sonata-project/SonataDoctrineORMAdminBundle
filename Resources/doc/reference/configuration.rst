@@ -1,38 +1,23 @@
-Templates
-=========
+Configuration
+=============
 
-You can customize the global layout by tweaking the ``SonataAdminBundle`` configuration.
+The configuration section is only about the ``SonataDoctrineORMAdminBundle`` for more information about the
+global configuration of the ``SonataAdminBundle`` please refer to the dedicated documentation.
 
-.. code-block:: yaml
-
-    sonata_admin:
-        templates:
-            # default global templates
-            layout:  SonataAdminBundle::standard_layout.html.twig
-            ajax:    SonataAdminBundle::ajax_layout.html.twig
-
-            # default value if done set, actions templates, should extends a global templates
-            list:    SonataAdminBundle:CRUD:list.html.twig
-            show:    SonataAdminBundle:CRUD:show.html.twig
-            edit:    SonataAdminBundle:CRUD:edit.html.twig
-
-
-You can also configure the templates used by the Form Framework while rendering the widget
+Full Configuration Options
+==========================
 
 .. code-block:: yaml
 
     sonata_doctrine_orm_admin:
+        # default value is null, so doctrine uses the value defined in the configuration
+        entity_manager: ~
+
         templates:
-            form: [ SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig ]
-            filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
-
-
-You can also customize field types by adding types in the ``config.yml`` file. The default values are :
-
-.. code-block:: yaml
-
-    sonata_doctrine_orm_admin:
-        templates:
+            form:
+                - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+            filter:
+                - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
             types:
                 list:
                     array:      SonataAdminBundle:CRUD:list_array.html.twig
@@ -60,8 +45,3 @@ You can also customize field types by adding types in the ``config.yml`` file. T
                     bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
                     integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
                     decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
-
-.. note::
-
-    By default, if the ``SonataIntlBundle`` classes are availables, then the numeric and date fields will be
-    localized with the current user locale.

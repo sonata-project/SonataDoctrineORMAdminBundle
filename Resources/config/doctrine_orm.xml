@@ -5,9 +5,12 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
+        <service id="sonata.admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
+            <argument>%sonata_doctrine_orm_admin.entity_manager%</argument>
+        </service>
 
         <service id="sonata.admin.manager.orm" class="Sonata\DoctrineORMAdminBundle\Model\ModelManager">
-            <argument type="service" id="doctrine.orm.default_entity_manager" />
+            <argument type="service" id="sonata.admin.entity_manager" />
         </service>
 
         <!-- FormBuilder -->

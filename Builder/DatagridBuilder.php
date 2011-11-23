@@ -21,7 +21,6 @@ use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Component\Form\FormFactory;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -125,14 +124,11 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())
     {
-        $queryBuilder = $admin->getModelManager()->createQuery($admin->getClass());
-
-        $query = new ProxyQuery($queryBuilder);
         $pager = new Pager;
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
         $formBuilder = $this->formFactory->createNamedBuilder('form', 'filter', array(), array('csrf_protection' => false));
 
-        return new Datagrid($query, $admin->getList(), $pager, $formBuilder, $values);
+        return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }
 }

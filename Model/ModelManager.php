@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\QueryBuilder;
 
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class ModelManager implements ModelManagerInterface
 {
@@ -192,7 +193,7 @@ class ModelManager implements ModelManagerInterface
     {
         $repository = $this->getEntityManager()->getRepository($class);
 
-        return $repository->createQueryBuilder($alias);
+        return new ProxyQuery($repository->createQueryBuilder($alias));
     }
 
     /**

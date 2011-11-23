@@ -48,15 +48,14 @@ Example
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
-    use Sonata\AdminBundle\Validator\ErrorElement;
 
     class PostAdmin extends Admin
     {
         protected function configureDatagridFilters(DatagridMapper $datagrid)
         {
             $datagrid
-                ->add('title');
-                ->add('enabled');
+                ->add('title')
+                ->add('enabled')
                 ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true)
             ;
         }
@@ -75,7 +74,14 @@ You can customize the label which appears on the main widget by using a ``label`
 
     <?php
 
-    ->add('tags', null, array('label' => 'les tags'), null, array('expanded' => true, 'multiple' => true)
+    protected function configureDatagridFilters(DatagridMapper $datagrid)
+    {
+        $datagrid
+            // ..
+            ->add('tags', null, array('label' => 'les tags'), null, array('expanded' => true, 'multiple' => true)
+            // ..
+        ;
+    }
 
 
 Callback
@@ -96,7 +102,6 @@ this functionality.
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
-    use Sonata\AdminBundle\Validator\ErrorElement;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 

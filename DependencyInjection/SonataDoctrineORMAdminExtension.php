@@ -47,6 +47,8 @@ class SonataDoctrineORMAdminExtension extends Extension
         $processor = new Processor();
         $config = $processor->processConfiguration($configuration, $configs);
 
+        $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
+
         $pool = $container->getDefinition('sonata.admin.manager.orm');
         $pool->addMethodCall('__hack_doctrine_orm__', $config);
 
@@ -74,6 +76,7 @@ class SonataDoctrineORMAdminExtension extends Extension
                         'date'         => 'SonataAdminBundle:CRUD:list_date.html.twig',
                         'datetime'     => 'SonataAdminBundle:CRUD:list_datetime.html.twig',
                         'text'         => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'trans'        => 'SonataAdminBundle:CRUD:list_trans.html.twig',
                         'string'       => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'smallint'     => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'bigint'       => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
@@ -87,6 +90,7 @@ class SonataDoctrineORMAdminExtension extends Extension
                         'date'         => 'SonataAdminBundle:CRUD:show_date.html.twig',
                         'datetime'     => 'SonataAdminBundle:CRUD:show_datetime.html.twig',
                         'text'         => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'trans'        => 'SonataAdminBundle:CRUD:show_trans.html.twig',
                         'string'       => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
                         'smallint'     => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
                         'bigint'       => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
