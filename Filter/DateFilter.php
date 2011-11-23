@@ -32,8 +32,7 @@ class DateFilter extends Filter
             return;
         }
         
-        if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "")
-        {
+        if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "") {
             return;
         }
         
