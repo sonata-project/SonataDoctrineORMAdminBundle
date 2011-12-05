@@ -20,7 +20,7 @@ file that was distributed with this source code.
         {% if sonata_admin.edit == 'list' %}
             <span id="field_widget_{{ id }}" >
                 {% if sonata_admin.admin.id(sonata_admin.value) %}
-                    {% render 'SonataAdminBundle:Helper:getShortObjectDescription' with {}, {
+                    {% render 'sonata.admin.controller.admin:getShortObjectDescriptionAction' with {}, {
                         'query': {
                             'code':     sonata_admin.field_description.associationadmin.code,
                             'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
