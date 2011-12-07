@@ -28,16 +28,20 @@ class DateFilter extends Filter
             return;
         }
 
-        if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])) {
-            return;
+        if(is_array($data['value'])) { 
+            if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])) {
+                return;
+            }
+
+            if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "")
+            {
+                return;
+            }
+
+            $value = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
+        } else {
+            $value = $data['value'];
         }
-        
-        if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "")
-        {
-            return;
-        }
-        
-        $value = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
         
         $data['type'] = !isset($data['type']) ?  DateType::TYPE_EQUAL : $data['type'];
 
