@@ -83,6 +83,8 @@ class SonataDoctrineORMAdminExtension extends Extension
                         'integer'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'decimal'      => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
                         'identifier'   => 'SonataAdminBundle:CRUD:base_list_field.html.twig',
+                        'currency'     => 'SonataAdminBundle:CRUD:list_currency.html.twig',
+                        'percent'      => 'SonataAdminBundle:CRUD:list_percent.html.twig',
                     ),
                     'show' => array(
                         'array'        => 'SonataAdminBundle:CRUD:show_array.html.twig',
@@ -96,6 +98,8 @@ class SonataDoctrineORMAdminExtension extends Extension
                         'bigint'       => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
                         'integer'      => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
                         'decimal'      => 'SonataAdminBundle:CRUD:base_show_field.html.twig',
+                        'currency'     => 'SonataAdminBundle:CRUD:base_currency.html.twig',
+                        'percent'      => 'SonataAdminBundle:CRUD:base_percent.html.twig',
                     )
                 )
             )
@@ -110,6 +114,8 @@ class SonataDoctrineORMAdminExtension extends Extension
                 'bigint'       => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
                 'integer'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
                 'decimal'      => 'SonataIntlBundle:CRUD:list_decimal.html.twig',
+                'currency'     => 'SonataIntlBundle:CRUD:list_currency.html.twig',
+                'percent'      => 'SonataIntlBundle:CRUD:list_percent.html.twig',
             ));
 
             $defaultConfig['templates']['types']['show'] = array_merge($defaultConfig['templates']['types']['show'], array(
@@ -119,6 +125,8 @@ class SonataDoctrineORMAdminExtension extends Extension
                 'bigint'       => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
                 'integer'      => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
                 'decimal'      => 'SonataIntlBundle:CRUD:show_decimal.html.twig',
+                'currency'     => 'SonataIntlBundle:CRUD:show_currency.html.twig',
+                'percent'      => 'SonataIntlBundle:CRUD:show_percent.html.twig',
             ));
         }
 

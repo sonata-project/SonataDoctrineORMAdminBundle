@@ -62,7 +62,6 @@ file that was distributed with this source code.
     {% elseif sonata_admin.field_description.mappingtype == 8 %}
         {{ block('sonata_admin_orm_many_to_many_widget') }}
     {% elseif sonata_admin.field_description.mappingtype == 4 %}
-        ICI
         {{ block('sonata_admin_orm_one_to_many_widget') }}
     {% else %}
         INVALID MODE : {{ id }}
