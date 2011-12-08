@@ -38,8 +38,8 @@ class DateRangeFilter extends Filter
                 return;
             }
 
-            if(trim($data['value']['start']['year']) == "" && trim($data['value']['start']['month']) == "" && trim($data['value']['start']['day']) == ""
-                    && trim($data['value']['end']['year']) == "" && trim($data['value']['end']['month']) == "" && trim($data['value']['end']['day']) == "") {
+            if(trim($data['value']['start']['year']) == "" || trim($data['value']['start']['month']) == "" || trim($data['value']['start']['day']) == ""
+                    || trim($data['value']['end']['year']) == "" || trim($data['value']['end']['month']) == "" || trim($data['value']['end']['day']) == "") {
                 return;
             }
 
@@ -49,8 +49,16 @@ class DateRangeFilter extends Filter
             $start = $data['value']['start'];
             $end = $data['value']['end'];
         }
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $this->getName().'_start'));
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
+        
+        $data['type'] = !isset($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
+
+        if($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
+            $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $this->getName().'_start', $alias, $field, $this->getName().'_end'));
+        } else {
+            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $this->getName().'_start'));
+            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
+        }
+        
         $queryBuilder->setParameter($this->getName().'_start',  $start);
         $queryBuilder->setParameter($this->getName().'_end',  $end);
     }

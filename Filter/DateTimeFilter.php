@@ -11,9 +11,9 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateType;
+use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 
-class DateFilter extends Filter
+class DateTimeFilter extends Filter
 {
     /**
      * @param QueryBuilder $queryBuilder
@@ -39,26 +39,32 @@ class DateFilter extends Filter
         if(in_array($operator, array('NULL', 'NOT NULL'))) {
             $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
         } else {
-            if(is_array($data['value'])) { 
-                if(!array_key_exists('year', $data['value']) || !array_key_exists('month', $data['value']) || !array_key_exists('day', $data['value'])) {
-                    return;
-                }
-
-                if(trim($data['value']['year']) == "" || trim($data['value']['month']) == "" || trim($data['value']['day']) == "")
-                {
-                    return;
-                }
-
-                $value = $data['value']['year'].'-'.$data['value']['month'].'-'.$data['value']['day'];
-            } else {
-                $value = $data['value'];
+            if(!array_key_exists('date', $data['value']) || !array_key_exists('time', $data['value'])) {
+                return;
             }
-            
+
+            if(is_array($data['value']['date'])) { 
+                if(!array_key_exists('year', $data['value']['date']) || !array_key_exists('month', $data['value']['date']) || !array_key_exists('day', $data['value']['date'])
+                    || !array_key_exists('hour', $data['value']['time']) || !array_key_exists('minute', $data['value']['time'])) {
+                    return;
+                }
+
+                if(trim($data['value']['date']['year']) == "" || trim($data['value']['date']['month']) == "" || trim($data['value']['date']['day']) == ""
+                    || trim($data['value']['time']['hour']) == "" || trim($data['value']['time']['minute']) == "") {
+                    return;
+                }
+
+                $dateTime = new \DateTime($data['value']['date']['year'].'-'.$data['value']['date']['month'].'-'.$data['value']['date']['day']
+                        .' '.$data['value']['time']['hour'].':'.$data['value']['time']['minute']);
+            } else {
+                $dateTime = new \DateTime($data['value']['date'].' '.$data['value']['time']);
+            }
+                
+            $value = $dateTime->format('Y-m-d H:i:s');
+
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
             $queryBuilder->setParameter($this->getName(),  $value);
-        }
-        
-        
+        }        
     }
 
     /**
@@ -68,13 +74,13 @@ class DateFilter extends Filter
     private function getOperator($type)
     {
         $choices = array(
-            DateType::TYPE_EQUAL            => '=',
-            DateType::TYPE_GREATER_EQUAL    => '>=',
-            DateType::TYPE_GREATER_THAN     => '>',
-            DateType::TYPE_LESS_EQUAL       => '<=',
-            DateType::TYPE_LESS_THAN        => '<',
-            DateType::TYPE_NULL       => 'NULL',
-            DateType::TYPE_NOT_NULL        => 'NOT NULL',
+            DateTimeType::TYPE_EQUAL            => '=',
+            DateTimeType::TYPE_GREATER_EQUAL    => '>=',
+            DateTimeType::TYPE_GREATER_THAN     => '>',
+            DateTimeType::TYPE_LESS_EQUAL       => '<=',
+            DateTimeType::TYPE_LESS_THAN        => '<',
+            DateTimeType::TYPE_NULL       => 'NULL',
+            DateTimeType::TYPE_NOT_NULL        => 'NOT NULL',
         );
 
         return isset($choices[$type]) ? $choices[$type] : false;
@@ -90,7 +96,7 @@ class DateFilter extends Filter
 
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_date', array(
+        return array('sonata_type_filter_datetime', array(
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel()
