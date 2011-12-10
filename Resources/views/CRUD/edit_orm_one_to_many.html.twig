@@ -80,7 +80,7 @@ file that was distributed with this source code.
                 <span id="field_actions_{{ id }}" >
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
-                        onclick="start_field_retrieve_{{ id }}(event)"
+                        onclick="return start_field_retrieve_{{ id }}(this);"
                         class="sonata-ba-action"
                         >
                         <img
@@ -93,7 +93,7 @@ file that was distributed with this source code.
 
             {# add code for the sortable options #}
             {% if sonata_admin.field_description.options.sortable is defined %}
-                <script>
+                <script type="text/javascript">
                     jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody').sortable({
                         axis: 'y',
                         opacity: 0.6,
@@ -134,7 +134,7 @@ file that was distributed with this source code.
                 {% if sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') %}
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
-                        onclick="start_field_dialog_form_add_{{ id }}(event)"
+                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
                         class="sonata-ba-action"
                         >
                         <img
