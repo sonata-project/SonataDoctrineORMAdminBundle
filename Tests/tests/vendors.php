@@ -14,7 +14,7 @@ $deps = array(
     array('Sonata/AdminBundle', 'git://github.com/sonata-project/SonataAdminBundle.git', 'origin/master'),
     array('doctrine', 'git://github.com/doctrine/doctrine2.git', 'origin/master'),
     array('doctrine-common', 'git://github.com/doctrine/common.git', 'origin/master'),
-    array('knpmenu', 'git://github.com/knplabs/KnpMenu.git', 'origin/master')
+    array('knpmenu', 'git://github.com/KnpLabs/KnpMenu.git', 'origin/master')
 );
 
 foreach ($deps as $dep) {
