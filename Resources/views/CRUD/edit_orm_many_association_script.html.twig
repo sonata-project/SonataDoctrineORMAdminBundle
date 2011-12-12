@@ -37,7 +37,7 @@ This code manage the many-to-[one|many] association field popup
 
         Admin.log('[{{ id }}|field_dialog_form_list_link] handle link click in a list');
 
-        var element = jQuery(this).parents('#field_dialog_{{ id }} td.sonata-ba-list-field');
+        var element = jQuery(this).parents('#field_dialog_{{ id }} .sonata-ba-list-field');
 
         // the user does click on a row column
         if (element.length == 0) {
