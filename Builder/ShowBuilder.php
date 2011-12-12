@@ -63,17 +63,7 @@ class ShowBuilder implements ShowBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
         $admin->addShowFieldDescription($fieldDescription->getName(), $fieldDescription);
 
-        switch($fieldDescription->getMappingType()) {
-            case ClassMetadataInfo::MANY_TO_ONE:
-            case ClassMetadataInfo::MANY_TO_MANY:
-            case ClassMetadataInfo::ONE_TO_MANY:
-            case ClassMetadataInfo::ONE_TO_ONE:
-                // todo
-                return;
-            default:
-                $list->add($fieldDescription);
-        }
-
+        $list->add($fieldDescription);
     }
 
     /**
