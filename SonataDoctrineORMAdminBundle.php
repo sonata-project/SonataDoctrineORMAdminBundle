@@ -15,6 +15,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
+use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 
 class SonataDoctrineORMAdminBundle extends Bundle
 {
@@ -22,5 +23,6 @@ class SonataDoctrineORMAdminBundle extends Bundle
     {
         $container->addCompilerPass(new AddGuesserCompilerPass());
         $container->addCompilerPass(new AddTemplatesCompilerPass());
+        $container->addCompilerPass(new AddAuditEntityCompilerPass());
     }
 }

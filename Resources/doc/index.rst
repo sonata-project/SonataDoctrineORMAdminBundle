@@ -27,6 +27,7 @@ Reference Guide
    reference/form_field_definition
    reference/form_types_and_transformers
    reference/templates
+   reference/audit
    reference/query_proxy
    reference/troubleshootings
 
