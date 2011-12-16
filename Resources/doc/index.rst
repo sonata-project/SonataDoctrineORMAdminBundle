@@ -1,10 +1,5 @@
-.. SonataAdminBundle documentation master file, created by
-   sphinx-quickstart on Sun May  1 16:09:38 2011.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
-
-Doctrine ORM Admin's documentation!
-===================================
+Doctrine ORM Admin Bundle
+=========================
 
 The ``Doctrine ORM Admin`` provides services to work with the ``Admin Bundle`` and the ``Doctrine Project``.
 
