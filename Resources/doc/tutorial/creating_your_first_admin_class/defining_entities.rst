@@ -8,48 +8,7 @@ entities as provided by Doctrine.
 Model definition
 ----------------
 
-Comment
-~~~~~~~
-
-.. code-block:: php
-
-    <?php
-
-    class Comment
-    {
-        const STATUS_MODERATE   = 2;
-        const STATUS_VALID   = 1;
-        const STATUS_INVALID = 0;
-
-        protected $name;
-        protected $email;
-        protected $url;
-        protected $message;
-        protected $createdAt;
-        protected $updatedAt;
-        protected $status = self::STATUS_VALID;
-        protected $post;
-
-        public static function getStatusList()
-        {
-            return array(
-                self::STATUS_MODERATE => 'moderate',
-                self::STATUS_INVALID => 'invalid',
-                self::STATUS_VALID   => 'valid',
-            );
-        }
-
-        public function preInsert($object)
-        {
-            $object->setCreatedAt(new \DateTime);
-            $object->setUpdatedAt(new \DateTime);
-        }
-
-        public function preUpdate($object)
-        {
-            $object->setUpdatedAt(new \DateTime);
-        }
-    }
+No we need to create the entities that will be used in the blog:
 
 Post
 ~~~~
@@ -57,211 +16,212 @@ Post
 .. code-block:: php
 
     <?php
+    // src/Tutorial/BlogBundle/Entity/Post.php
+    namespace Tutorial\BlogBundle\Entity;
+
+    use Doctrine\ORM\Mapping as ORM;
+
+    /**
+     * @ORM\Entity
+     */
     class Post
     {
+
+
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        protected $id;
+
+
+        /**
+         * @ORM\Column(type="string", length="255")
+         * @validation:Validation({
+         *      @validation:MinLength(limit=10),
+         *      @validation:NotBlank(),
+         *      @validation:MaxLength(limit=255)
+         * })
+         */
         protected $title;
-        protected $slug;
+
+        /**
+         * @ORM\Column(type="text")
+         */
         protected $abstract;
+
+
+        /**
+         * @ORM\Column(type="text")
+         * @validation:Validation({
+         *      @validation:NotBlank()
+         * })
+         */
         protected $content;
-        protected $tags;
-        protected $comments;
+
+        /**
+         * @ORM\Column(type="boolean")
+         */
         protected $enabled;
-        protected $publicationDateStart;
-        protected $createdAt;
-        protected $updatedAt;
-        protected $commentsEnabled = true;
-        protected $commentsCloseAt;
-        protected $commentsDefaultStatus;
+
+
+        /**
+         * @ORM\Column(type="datetime")
+         */
+        protected $created_at;
+
+        /**
+         * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
+         */
+        protected $comments;
+
+        /**
+         * @ORM\ManyToMany(targetEntity="Tag")
+         */
+        protected $tags;
+
+        public function __toString() 
+        {
+          return $this->getTitle();
+        }
 
         public function __construct()
         {
             $this->tags     = new \Doctrine\Common\Collections\ArrayCollection;
             $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
+            $this->created_at = new \DateTime("now");;
         }
-
-        public function preInsert($object)
-        {
-            $object->setCreatedAt(new \DateTime);
-            $object->setUpdatedAt(new \DateTime);
-        }
-
-        public function preUpdate($object)
-        {
-            $object->setUpdatedAt(new \DateTime);
-        }
-    }
 
 Tag
 ~~~
 
 .. code-block:: php
 
+    <?php
+    // src/Tutorial/BlogBundle/Entity/Tag.php
+    namespace Tutorial\BlogBundle\Entity;
+
+    use Doctrine\ORM\Mapping as ORM;
+
+    /**
+     * @ORM\Entity
+     */
     class Tag
     {
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        protected $id;     
+
+        /**
+         * @ORM\Column(type="string")
+         * @validation:Validation({
+         *      @validation:NotBlank()
+         * })
+         */
         protected $name;
-        protected $slug;
-        protected $createdAt;
-        protected $updatedAt;
+
+        /**
+         * @ORM\Column(type="boolean")
+         */
         protected $enabled;
+
+        /**
+         * @ORM\ManyToMany(targetEntity="Post")
+         */
         protected $posts;
 
-        public function preInsert($object)
+        public function __toString() 
         {
-            $object->setCreatedAt(new \DateTime);
-            $object->setUpdatedAt(new \DateTime);
+          return $this->getName();
         }
 
-        public function preUpdate($object)
+        public function __construct()
         {
-            $object->setUpdatedAt(new \DateTime);
+            $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
         }
-    }
-
-
-Mapping definition
-------------------
 
 Comment
 ~~~~~~~
 
-.. code-block:: xml
+.. code-block:: php
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-        <entity name="Sonata\NewsBundle\Entity\Comment" table="news__comment">
-            <id name="id" type="integer" column="id">
-                <generator strategy="AUTO"/>
-            </id>
+    <?php
+    // src/Tutorial/BlogBundle/Entity/Comment.php
+    namespace Tutorial\BlogBundle\Entity;
 
-            <field name="name"              type="string"       column="name"          />
-            <field name="url"               type="string"       column="url"           />
-            <field name="email"             type="string"       column="email"           />
-            <field name="message"           type="text"         column="message"       />
-            <field name="status"            type="integer"      column="status"        default="false" />
-            <field name="createdAt"         type="datetime"     column="created_at" />
-            <field name="updatedAt"         type="datetime"     column="updated_at" />
+    use Doctrine\ORM\Mapping as ORM;
 
-            <lifecycle-callbacks>
-              <lifecycle-callback type="prePersist" method="prePersist"/>
-              <lifecycle-callback type="preUpdate" method="preUpdate"/>
-            </lifecycle-callbacks>
+    /**
+     * @ORM\Entity
+     */
+    class Comment
+    {
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         * @ORM\GeneratedValue(strategy="AUTO")
+         */
+        protected $id;  
 
-            <many-to-one field="post" target-entity="Sonata\NewsBundle\Entity\Post">
-               <join-column name="post_id" referenced-column-name="id" />
-            </many-to-one>
-        </entity>
-    </doctrine-mapping>
-
-
-Post
-~~~~
-
-.. code-block:: xml
-
-    <?xml version="1.0" encoding="utf-8"?>
-    <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
-        <entity name="Sonata\NewsBundle\Entity\Post" table="news__post">
-
-            <id name="id" type="integer" column="id">
-                <generator strategy="AUTO"/>
-            </id>
-
-            <field name="title"             type="string"       column="title"           />
-            <field name="abstract"          type="text"         column="abstract"           />
-            <field name="content"           type="text"         column="content"           />
-            <field name="enabled"           type="boolean"      column="enabled"        default="false" />
-            <field name="slug"              type="string"      column="slug" />
-            <field name="publicationDateStart"   type="datetime"   column="publication_date_start"    nullable="true"/>
-            <field name="commentsEnabled"    type="boolean"   column="comments_enabled" default="true"/>
-            <field name="commentsClose_at"   type="datetime"  column="comments_close_at" nullable="true"/>
-            <field name="commentsDefaultStatus"   type="integer"  column="comments_default_status" nullable="false"/>
-            <field name="createdAt"          type="datetime"   column="created_at" />
-            <field name="updatedAt"          type="datetime"   column="updated_at" />
-
-            <lifecycle-callbacks>
-                <lifecycle-callback type="prePersist" method="prePersist"/>
-                <lifecycle-callback type="preUpdate" method="preUpdate"/>
-            </lifecycle-callbacks>
-
-            <many-to-many
-                field="tags"
-                target-entity="Sonata\NewsBundle\Entity\Tag"
-                inversed-by="posts"
-                fetch="EAGER"
-                >
-
-                <cascade>
-                   <cascade-persist />
-                </cascade>
-
-                <join-table name="news__post_tag">
-                    <join-columns>
-                        <join-column name="post_id" referenced-column-name="id"/>
-                    </join-columns>
-
-                    <inverse-join-columns>
-                        <join-column name="tag_id" referenced-column-name="id"/>
-                    </inverse-join-columns>
-                </join-table>
-            </many-to-many>
-
-            <one-to-many
-                field="comments"
-                target-entity="Sonata\NewsBundle\Entity\Comment"
-                mapped-by="post">
-
-                <cascade>
-                    <cascade-persist/>
-                </cascade>
-                <join-columns>
-                    <join-column name="id" referenced-column-name="post_id" />
-                </join-columns>
-
-                <order-by>
-                    <order-by-field name="created_at" direction="DESC" />
-                </order-by>
-
-            </one-to-many>
-        </entity>
-    </doctrine-mapping>
+        /**
+         * @ORM\Column(type="string")
+         * @validation:Validation({
+         *      @validation:NotBlank()
+         * })
+         */
+        protected $name;
 
 
-Comment
-~~~~~~~
+        /**
+         * @ORM\Column(type="string")
+         * @validation:Validation({
+         *      @validation:NotBlank()
+         * })
+         */
+        protected $email;
 
-.. code-block:: xml
 
-    <?xml version="1.0" encoding="utf-8"?>
-    <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+        /**
+         * @ORM\Column(type="string")
+         */
+        protected $url;
 
-        <entity name="Sonata\NewsBundle\Entity\Tag" table="news__tag">
 
-            <id name="id" type="integer" column="id">
-                <generator strategy="AUTO"/>
-            </id>
+        /**
+         * @ORM\Column(type="text")
+         * @validation:Validation({
+         *      @validation:NotBlank()
+         * })
+         */
+        protected $message;
 
-            <field name="name"          type="string"       column="title"           />
-            <field name="enabled"       type="boolean"      column="enabled"        default="false" />
-            <field name="slug"          type="string"      column="slug"    />
-            <field name="createdAt"     type="datetime"   column="created_at" />
-            <field name="updatedAt"     type="datetime"   column="updated_at" />
+        /**
+         * @ORM\ManyToOne(targetEntity="Post")
+         */
+        protected $post;
 
-            <lifecycle-callbacks>
-                <lifecycle-callback type="prePersist" method="prePersist"/>
-                <lifecycle-callback type="preUpdate" method="preUpdate"/>
-            </lifecycle-callbacks>
 
-            <many-to-many field="posts" target-entity="Sonata\NewsBundle\Entity\Post" mapped-by="tags" >
-            </many-to-many>
+        public function __toString() 
+        {
+          return $this->getName();
+        }
 
-        </entity>
-
-    </doctrine-mapping>
 
 
 Generate getter and setter
 --------------------------
 
-Run the doctrine command "doctrine:generate:entities" to fill in the relevant
-getter/setter methods for your new entities. This is usually accomplished by
-using the "console" application in your application directory.
+Fill the entities with getters and setters running the command:
+
+  php app/console doctrine:generate:entities Tutorial
+
+Creating Database
+-----------------
+
+Create the database related to the entities and the mapping running:
+
+  php app/console doctrine:schema:update --force
