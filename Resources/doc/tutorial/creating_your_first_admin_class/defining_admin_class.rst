@@ -14,7 +14,8 @@ First, you need to create an Admin/PostAdmin.php file
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Admin;
+    // src/Tutorial/BlogBundle/Admin/PostAdmin.php
+    namespace Tutorial\BlogBundle\Admin;
 
     use Sonata\AdminBundle\Admin\Admin;
     use Sonata\AdminBundle\Form\FormMapper;
@@ -24,10 +25,15 @@ First, you need to create an Admin/PostAdmin.php file
 
     use Knp\Menu\ItemInterface as MenuItemInterface;
 
-    use Application\Sonata\NewsBundle\Entity\Comment;
+    use Tutorial\BlogBundle\Entity\Comment;
 
     class PostAdmin extends Admin
     {
+        /**
+         * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
+         *
+         * @return void
+         */
         protected function configureShowField(ShowMapper $showMapper)
         {
             $showMapper
@@ -39,6 +45,11 @@ First, you need to create an Admin/PostAdmin.php file
             ;
         }
 
+        /**
+         * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
+         *
+         * @return void
+         */
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
@@ -51,98 +62,77 @@ First, you need to create an Admin/PostAdmin.php file
                 ->with('Tags')
                     ->add('tags', 'sonata_type_model', array('expanded' => true))
                 ->end()
-                ->with('Options', array('collapsed' => true))
-                    ->add('commentsCloseAt')
-                    ->add('commentsEnabled', null, array('required' => false))
-                    ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList()))
+                ->with('Comments')
+                    ->add('comments', 'sonata_type_model')
+                ->end()
+                ->with('System Information', array('collapsed' => true))
+                    ->add('created_at')
                 ->end()
             ;
         }
 
+        /**
+         * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
+         *
+         * @return void
+         */
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
                 ->addIdentifier('title')
                 ->add('enabled')
+                ->add('abstract')
+                ->add('content')
                 ->add('tags')
-                ->add('commentsEnabled')
-            ;
-        }
-
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
-        {
-            $datagridMapper
-                ->add('title')
-                ->add('enabled')
-                ->add('tags', 'orm_many_to_many', array('filter_field_options' => array('expanded' => true, 'multiple' => true)))
-                ->add('with_open_comments', 'callback', array(
-                    'template' => 'SonataAdminBundle:CRUD:filter_callback.html.twig',
-                    'filter_options' => array(
-                        'filter' => array($this, 'getWithOpenCommentFilter'),
-                        'type'   => 'checkbox'
-                    ),
-                    'filter_field_options' => array(
-                        'required' => false
+                ->add('_action', 'actions', array(
+                    'actions' => array(
+                        'view' => array(),
+                        'edit' => array(),
+                        'delete' => array(),
                     )
                 ))
             ;
         }
 
-        public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
+        /**
+         * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
+         *
+         * @return void
+         */
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
-            if (!$value) {
-                return;
-            }
-
-            $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
-            $queryBuilder->andWhere('c.status = :status');
-            $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
-        }
-
-        protected function configureSideMenu(MenuItemInterface $menu, $action, Admin $childAdmin = null)
-        {
-            if (!$childAdmin && !in_array($action, array('edit'))) {
-                return;
-            }
-
-            $admin = $this->isChild() ? $this->getParent() : $this;
-
-            $id = $admin->getRequest()->get('id');
-
-            $menu->addChild(
-                $this->trans('view_post'),
-                array('uri' => $admin->generateUrl('edit', array('id' => $id)))
-            );
-
-            $menu->addChild(
-                $this->trans('link_view_comment'),
-                array('uri' => $admin->generateUrl('sonata.news.admin.comment.list', array('id' => $id)))
-            );
+            $datagridMapper
+                ->add('title')
+                ->add('enabled')
+                ->add('tags', null, array('field_options' => array('expanded' => true, 'multiple' => true)))
+            ;
         }
     }
 
 Second, register the PostAdmin class inside the DIC in your config file:
 
-.. code-block:: xml
-
-    <service id="sonata.news.admin.post" class="Sonata\NewsBundle\Admin\PostAdmin">
-        <tag name="sonata.admin" manager_type="orm" group="sonata_blog" label="post"/>
-
-        <argument/>
-        <argument>Sonata\NewsBundle\Entity\Post</argument>
-        <argument>SonataNewsBundle:PostAdmin</argument>
-    </service>
-
-Or if you're using a YML configuration file:
-
 .. code-block:: yaml
 
+    # app/config/config.yml
     services:
-       sonata.news.admin.post:
-          class: Sonata\NewsBundle\Admin\PostAdmin
+       tutorial.blog.admin.post:
+          class: Tutorial\BlogBundle\Admin\PostAdmin
           tags:
-            - { name: sonata.admin, manager_type: orm, group: sonata_blog, label: post }
-          arguments: [null, Sonata\NewsBundle\Entity\Post, SonataNewsBundle:PostAdmin]
+            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: post }
+          arguments: [null, Tutorial\BlogBundle\Entity\Post, TutorialBlogBundle:PostAdmin]
+
+Or if you're using a XML configuration file:
+
+.. code-block:: xml
+
+    <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
+        <tag name="sonata.admin" manager_type="orm" group="tutorial_blog" label="post"/>
+
+        <argument/>
+        <argument>Tutorial\BlogBundle\Entity\Post</argument>
+        <argument>TutorialBlogBundle:PostAdmin</argument>
+    </service>
+
 
 These is the minimal configuration required to display the entity inside the
 dashboard and interact with the CRUD interface. Following this however, you will
@@ -160,13 +150,16 @@ Tweak the TagAdmin class
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Admin;
+    // src/Tutorial/BlogBundle/Admin/TagAdmin.php
+    namespace Tutorial\BlogBundle\Admin;
 
     use Sonata\AdminBundle\Admin\Admin;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Validator\ErrorElement;
     use Sonata\AdminBundle\Form\FormMapper;
+
+    use Tutorial\BlogBundle\Entity\Tag;
 
     class TagAdmin extends Admin
     {
@@ -202,7 +195,6 @@ Tweak the TagAdmin class
         {
             $listMapper
                 ->addIdentifier('name')
-                ->add('slug')
                 ->add('enabled')
             ;
         }
@@ -222,13 +214,28 @@ Tweak the TagAdmin class
         }
     }
 
+And register the TagAdmin class inside the DIC in your config file:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    services:
+       #...
+       tutorial.blog.admin.tag:
+          class: Tutorial\BlogBundle\Admin\TagAdmin
+          tags:
+            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: tag }
+          arguments: [null, Tutorial\BlogBundle\Entity\Tag, TutorialBlogBundle:TagAdmin]
+
+
 Tweak the CommentAdmin class
 ----------------------------
 
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Admin;
+    // src/Tutorial/BlogBundle/Admin/TagAdmin.php
+    namespace Tutorial\BlogBundle\Admin;
 
     use Sonata\AdminBundle\Admin\Admin;
     use Sonata\AdminBundle\Form\FormMapper;
@@ -249,7 +256,6 @@ Tweak the CommentAdmin class
         {
             if(!$this->isChild()) {
                 $formMapper->add('post', 'sonata_type_model', array(), array('edit' => 'list'));
-    //            $formMapper->add('post', 'sonata_type_admin', array(), array('edit' => 'inline'));
             }
 
             $formMapper
@@ -257,7 +263,6 @@ Tweak the CommentAdmin class
                 ->add('email')
                 ->add('url', null, array('required' => false))
                 ->add('message')
-                ->add('status', 'choice', array('choices' => Comment::getStatusList(), 'expanded' => true, 'multiple' => false))
             ;
         }
 
@@ -282,7 +287,6 @@ Tweak the CommentAdmin class
         {
             $listMapper
                 ->addIdentifier('name')
-                ->add('getStatusCode', 'text', array('label' => 'status_code', 'sortable' => 'status'))
                 ->add('post')
                 ->add('email')
                 ->add('url')
@@ -298,7 +302,7 @@ Tweak the CommentAdmin class
 
             $actions['enabled'] = array(
                 'label' => $this->trans('batch_enable_comments'),
-                'ask_confirmation' => false,
+                'ask_confirmation' => true,
             );
 
             $actions['disabled'] = array(
@@ -309,3 +313,16 @@ Tweak the CommentAdmin class
             return $actions;
         }
     }
+
+And register the TagAdmin class inside the DIC in your config file:
+
+.. code-block:: yaml
+
+    # app/config/config.yml
+    services:
+       #...
+       tutorial.blog.admin.comment:
+          class: Tutorial\BlogBundle\Admin\CommentAdmin
+          tags:
+            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: comment }
+          arguments: [null, Tutorial\BlogBundle\Entity\Comment, TutorialBlogBundle:CommentAdmin]
