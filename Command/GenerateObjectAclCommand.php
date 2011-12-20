@@ -175,7 +175,7 @@ class GenerateObjectAclCommand extends ContainerAwareCommand
 
             if (!is_null($securityIdentity)) {
                 // add object owner
-                $securityHandler->addObjectOwnwer($acl, $securityIdentity);
+                $securityHandler->addObjectOwner($acl, $securityIdentity);
             }
 
             $securityHandler->addObjectClassAces($acl, $securityHandler->buildSecurityInformation($admin));
