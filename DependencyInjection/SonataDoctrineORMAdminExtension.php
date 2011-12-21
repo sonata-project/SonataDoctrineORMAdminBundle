@@ -43,6 +43,7 @@ class SonataDoctrineORMAdminExtension extends Extension
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
         $loader->load('audit.xml');
+        $loader->load('security.xml');
 
         $configuration = new Configuration();
         $processor = new Processor();
