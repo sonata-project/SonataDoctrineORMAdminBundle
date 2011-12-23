@@ -33,13 +33,12 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             return;
         }
 
-        $em = $admin->getModelManager()->getEntityManager();
-        $datagrid = $admin->getDatagrid();
-        $datagrid->buildPager();
-        $query = $datagrid->getQuery();
+        $output->writeln(sprintf(' > generate ACLs for %s', $admin->getCode()));
+        $objectOwnersMsg = is_null($securityIdentity) ? '' : ' and set the object owner';
 
-        $query->setFirstResult(null);
-        $query->setMaxResults(null);
+        $em = $admin->getModelManager()->getEntityManager();
+        $qb = $em->createQueryBuilder();
+        $qb->select('o')->from($admin->getClass(), 'o');
 
         $count = 0;
         $countUpdated = 0;
@@ -50,7 +49,8 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             $batchSizeOutput = 200;
             $i = 0;
             $oids = array();
-            foreach ($query->getQuery()->iterate() as $row) {
+
+            foreach ($qb->getQuery()->iterate() as $row) {
                 $oids[] = ObjectIdentity::fromDomainObject($row[0]);
 
                 // detach from Doctrine, so that it can be Garbage-Collected immediately
@@ -65,7 +65,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 }
 
                 if ((++$i % $batchSizeOutput) == 0) {
-                    $output->writeln(sprintf('   - generated class ACEs for %s objects (added %s, updated %s)', $count, $countAdded, $countUpdated));
+                    $output->writeln(sprintf('   - generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
                 }
 
                 $count++;
@@ -80,6 +80,6 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             throw new ModelManagerException('', 0, $e);
         }
 
-        $output->writeln(sprintf('   - [TOTAL] generated class ACEs for %s objects (added %s, updated %s)', $count, $countAdded, $countUpdated));
+        $output->writeln(sprintf('   - [TOTAL] generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
     }
 }
