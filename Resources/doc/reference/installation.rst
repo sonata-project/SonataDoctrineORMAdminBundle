@@ -45,6 +45,6 @@ files:
     // autoload.php
     $loader->registerNamespaces(array(
         // ...
-        'simplethings'      => __dir__.'/../vendor/bundles',
+        'SimpleThings'      => __DIR__.'/../vendor/bundles',
         // ...
     ));
