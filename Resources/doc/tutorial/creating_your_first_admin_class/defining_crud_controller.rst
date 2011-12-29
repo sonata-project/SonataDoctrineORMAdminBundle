@@ -17,7 +17,9 @@ CommentAdminController
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Controller;
+    // src/Tutorial/BlogBundle/Controller/CommentAdminController.php
+
+    namespace Tutorial\BlogBundle\Controller;
 
     use Sonata\AdminBundle\Controller\CRUDController as Controller;
     
@@ -32,7 +34,8 @@ PostAdminController
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Controller;
+    // src/Tutorial/BlogBundle/Controller/PostAdminController.php
+    namespace Tutorial\BlogBundle\Controller;
 
     use Sonata\AdminBundle\Controller\CRUDController as Controller;
 
@@ -47,7 +50,8 @@ TagAdminController
 .. code-block:: php
 
     <?php
-    namespace Sonata\NewsBundle\Controller;
+    // src/Tutorial/BlogBundle/Controller/TagAdminController.php
+    namespace Tutorial\BlogBundle\Controller;
 
     use Sonata\AdminBundle\Controller\CRUDController as Controller;
 

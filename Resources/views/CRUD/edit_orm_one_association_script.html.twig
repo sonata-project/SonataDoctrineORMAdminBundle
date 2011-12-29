@@ -18,9 +18,9 @@ This code manage the one-to-many association field popup
 
 {% autoescape false %}
 
-<script>
+<!-- edit one association -->
 
-    <!-- edit one association -->
+<script type="text/javascript">
 
     // handle the add link
     var field_add_{{ id }} = function(event) {
@@ -43,7 +43,8 @@ This code manage the one-to-many association field popup
             success: function(html) {
                 jQuery('#field_container_{{ id }}')
                     .replaceWith(html) // replace the html
-                    .trigger('sonata.add_element');
+                    .trigger('sonata.add_element')
+                ;
             }
         });
 
@@ -54,27 +55,23 @@ This code manage the one-to-many association field popup
 
     // this function initialize the popup
     // this can be only done this way has popup can be cascaded
-    function start_field_retrieve_{{ id }}(event) {
-        var targetElement = Admin.stopEvent(event);
+    function start_field_retrieve_{{ id }}(link) {
 
-        // remove the html event a
-        var a = jQuery(targetElement).closest('a');
-        a.removeAttr('onclick');
+        link.onclick = null;
 
         // initialize component
         field_widget_{{ id }} = jQuery("#field_widget_{{ id }}");
 
         // add the jQuery event to the a element
-        a.click(field_add_{{ id }});
-
-        // trigger the event
-        a.trigger('click');
+        jQuery(link)
+            .click(field_add_{{ id }})
+            .trigger('click')
+        ;
 
         return false;
     }
-
-    <!-- edit one association -->
-
 </script>
+
+<!-- / edit one association -->
 
 {% endautoescape %}
