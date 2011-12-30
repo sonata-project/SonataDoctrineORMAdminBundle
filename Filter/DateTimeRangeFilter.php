@@ -13,6 +13,9 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+
 class DateTimeRangeFilter extends Filter
 {
     /**
@@ -32,32 +35,25 @@ class DateTimeRangeFilter extends Filter
             return;
         }
         
+        // set startDateTime and endDateTime
         if(is_array($data['value']['start']['date'])) {
-            if(!array_key_exists('year', $data['value']['start']['date']) || !array_key_exists('month', $data['value']['start']['date']) || !array_key_exists('day', $data['value']['start']['date'])
-                    || !array_key_exists('hour', $data['value']['start']['time']) || !array_key_exists('minute', $data['value']['start']['time'])
-                    || !array_key_exists('year', $data['value']['end']['date']) || !array_key_exists('month', $data['value']['end']['date']) || !array_key_exists('day', $data['value']['end']['date'])
-                    || !array_key_exists('hour', $data['value']['end']['time']) || !array_key_exists('minute', $data['value']['end']['time'])) {
-                return;
-            }
-
-            if(trim($data['value']['start']['date']['year']) == "" || trim($data['value']['start']['date']['month']) == "" || trim($data['value']['start']['date']['day']) == ""
-                    || trim($data['value']['start']['time']['hour']) == "" || trim($data['value']['start']['time']['minute']) == ""
-                    || trim($data['value']['end']['date']['year']) == "" || trim($data['value']['end']['date']['month']) == "" || trim($data['value']['end']['date']['day']) == "" 
-                    || trim($data['value']['end']['time']['hour']) == "" || trim($data['value']['end']['time']['minute']) == "") {
-                return;
-            }
-            
-            $startDateTime = new \DateTime($data['value']['start']['date']['year'].'-'.$data['value']['start']['date']['month'].'-'.$data['value']['start']['date']['day']
-                    .' '.$data['value']['start']['time']['hour'].':'.$data['value']['start']['time']['minute']);
-            $endDateTime = new \DateTime($data['value']['end']['date']['year'].'-'.$data['value']['end']['date']['month'].'-'.$data['value']['end']['date']['day']
-                    .' '.$data['value']['end']['time']['hour'].':'.$data['value']['end']['time']['minute']);
+            $transformer = new DateTimeToArrayTransformer(null, null, array('year', 'month', 'day', 'hour', 'minute'));
+            $startValueRaw = array_merge($data['value']['start']['date'], $data['value']['start']['time']);
+            $endValueRaw = array_merge($data['value']['end']['date'], $data['value']['end']['time']);
         } else {
-            $startDateTime = new \DateTime($data['value']['start']['date'].' '.$data['value']['start']['time']);
-            $endDateTime = new \DateTime($data['value']['end']['date'].' '.$data['value']['end']['time']);
+            $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d H:i');            
+            $startValueRaw = $data['value']['start']['date'].' '.$data['value']['start']['time'];
+            $endValueRaw = $data['value']['end']['date'].' '.$data['value']['end']['time'];
         }
-        
-        $start = $startDateTime->format('Y-m-d H:i:s');
-        $end = $endDateTime->format('Y-m-d H:i:s');
+        $startValueTransformed = $transformer->reverseTransform($startValueRaw);
+        $endValueTransformed = $transformer->reverseTransform($endValueRaw);
+
+        if($startValueTransformed && $endValueTransformed) {
+            $startValue = $startValueTransformed->format('Y-m-d H:i:s');
+            $endValue = $endValueTransformed->format('Y-m-d H:i:s');
+        } else {
+            return;
+        }
         
         $data['type'] = !isset($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
 
@@ -68,8 +64,8 @@ class DateTimeRangeFilter extends Filter
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
         }
         
-        $queryBuilder->setParameter($this->getName().'_start',  $start);
-        $queryBuilder->setParameter($this->getName().'_end',  $end);
+        $queryBuilder->setParameter($this->getName().'_start',  $startValue);
+        $queryBuilder->setParameter($this->getName().'_end',  $endValue);
 
     }
 

@@ -13,6 +13,9 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+
 class DateTimeFilter extends Filter
 {
     /**
@@ -42,26 +45,19 @@ class DateTimeFilter extends Filter
             if(!array_key_exists('date', $data['value']) || !array_key_exists('time', $data['value'])) {
                 return;
             }
-
-            if(is_array($data['value']['date'])) { 
-                if(!array_key_exists('year', $data['value']['date']) || !array_key_exists('month', $data['value']['date']) || !array_key_exists('day', $data['value']['date'])
-                    || !array_key_exists('hour', $data['value']['time']) || !array_key_exists('minute', $data['value']['time'])) {
-                    return;
-                }
-
-                if(trim($data['value']['date']['year']) == "" || trim($data['value']['date']['month']) == "" || trim($data['value']['date']['day']) == ""
-                    || trim($data['value']['time']['hour']) == "" || trim($data['value']['time']['minute']) == "") {
-                    return;
-                }
-
-                $dateTime = new \DateTime($data['value']['date']['year'].'-'.$data['value']['date']['month'].'-'.$data['value']['date']['day']
-                        .' '.$data['value']['time']['hour'].':'.$data['value']['time']['minute']);
+            
+            if(is_array($data['value']['date'])) {
+                $transformer = new DateTimeToArrayTransformer(null, null, array('year', 'month', 'day', 'hour', 'minute'));
+                $valueRaw = array_merge($data['value']['date'], $data['value']['time']);
             } else {
-                $dateTime = new \DateTime($data['value']['date'].' '.$data['value']['time']);
+                $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d H:i');            
+                $valueRaw = $data['value']['date'].' '.$data['value']['time'];
             }
-                
-            $value = $dateTime->format('Y-m-d H:i:s');
+            $valueTransformed = $transformer->reverseTransform($valueRaw);
 
+            if($valueTransformed) $value = $valueTransformed->format('Y-m-d H:i:s');
+            else return;
+                
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
             $queryBuilder->setParameter($this->getName(),  $value);
         }        

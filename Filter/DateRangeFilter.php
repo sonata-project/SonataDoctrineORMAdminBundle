@@ -13,6 +13,9 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
+
 class DateRangeFilter extends Filter
 {
     /**
@@ -33,21 +36,18 @@ class DateRangeFilter extends Filter
         }
         
         if(is_array($data['value']['start'])) {
-            if(!array_key_exists('year', $data['value']['start']) || !array_key_exists('month', $data['value']['start']) || !array_key_exists('day', $data['value']['start'])
-                    || !array_key_exists('year', $data['value']['end']) || !array_key_exists('month', $data['value']['end']) || !array_key_exists('day', $data['value']['end'])) {
-                return;
-            }
-
-            if(trim($data['value']['start']['year']) == "" || trim($data['value']['start']['month']) == "" || trim($data['value']['start']['day']) == ""
-                    || trim($data['value']['end']['year']) == "" || trim($data['value']['end']['month']) == "" || trim($data['value']['end']['day']) == "") {
-                return;
-            }
-
-            $start = $data['value']['start']['year'].'-'.$data['value']['start']['month'].'-'.$data['value']['start']['day'];
-            $end = $data['value']['end']['year'].'-'.$data['value']['end']['month'].'-'.$data['value']['end']['day'];
+            $transformer = new DateTimeToArrayTransformer(null, null, array('year', 'month', 'day'));
         } else {
-            $start = $data['value']['start'];
-            $end = $data['value']['end'];
+            $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d');            
+        }
+        $startValueTransformed = $transformer->reverseTransform($data['value']['start']);
+        $endValueTransformed = $transformer->reverseTransform($data['value']['end']);
+                
+        if($startValueTransformed && $endValueTransformed) {
+            $startValue = $startValueTransformed->format('Y-m-d');
+            $endValue = $endValueTransformed->format('Y-m-d');
+        } else {
+            return;
         }
         
         $data['type'] = !isset($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
@@ -59,8 +59,8 @@ class DateRangeFilter extends Filter
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
         }
         
-        $queryBuilder->setParameter($this->getName().'_start',  $start);
-        $queryBuilder->setParameter($this->getName().'_end',  $end);
+        $queryBuilder->setParameter($this->getName().'_start',  $startValue);
+        $queryBuilder->setParameter($this->getName().'_end',  $endValue);
     }
 
     /**
