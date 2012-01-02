@@ -6,8 +6,8 @@ The ``ProxyQuery`` object is used to add missing features from the original Doct
 
   - ``execute`` method - no need to call the ``getQuery()`` method
   - add sort by and sort order options
-  - add preselect id query on left join query, so a limit query will be only apply on the left statement and
-    not on the full select statement. This simulate the original Doctrine 1 behavior.
+  - add preselect id query on left join query, so a limit query will be only applied on the left statement and
+    not on the full select statement. This simulates the original Doctrine 1 behavior.
 
 
 .. code-block:: php
@@ -22,6 +22,5 @@ The ``ProxyQuery`` object is used to add missing features from the original Doct
     $proxyQuery->leftJoin('p.tags', t);
     $proxyQuery->setSortBy('name');
     $proxyQuery->setMaxResults(10);
-
 
     $results = $proxyQuery->execute();

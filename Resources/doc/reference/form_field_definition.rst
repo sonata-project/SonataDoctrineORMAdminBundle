@@ -73,7 +73,7 @@ If no type is set, the Admin class will use the one set in the doctrine mapping
 definition.
 
 Advanced Usage: File Management
---------------------------------
+-------------------------------
 
 If you want to use custom types from the Form framework you must use the
 ``addType`` method. (The ``add`` method uses the information provided by the
@@ -112,7 +112,7 @@ model definition).
     method. Otherwise, the full path will be provided.
 
 Advanced Usage: Many-to-one
-----------------------------
+---------------------------
 
 If you have many ``Post``s linked to one ``User``, then the ``Post`` form should
 display a ``User`` field.
@@ -161,7 +161,7 @@ With the ``standard`` and ``list`` options, you can create a new ``User`` by cli
     }
 
 Advanced Usage: One-to-many
-----------------------------
+---------------------------
 
 Let's say you have a ``Gallery`` that links to some ``Media``s with a join table
 ``galleryHasMedias``. You can easily add a new ``galleryHasMedias`` row by
