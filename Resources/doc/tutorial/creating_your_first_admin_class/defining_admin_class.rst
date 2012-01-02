@@ -139,7 +139,7 @@ dashboard and interact with the CRUD interface. Following this however, you will
 need to create an admin Controller.
 
 This interface will display too many fields as some of them are not relevant to
-a general overview. Next We'll see how to specify the fields we want to use and
+a general overview. Next we'll see how to specify the fields we want to use and
 how we want to use them.
 
 So same goes for the TagAdmin and CommentAdmin class.

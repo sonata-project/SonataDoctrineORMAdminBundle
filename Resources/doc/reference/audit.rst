@@ -3,8 +3,8 @@ Audit
 
 The bundle provides a support for the ``EntityAuditBundle`` from https://github.com/simplethings/EntityAudit.
 
-How it work
------------
+How it works
+------------
 
 **Extract from the original documentation**
 

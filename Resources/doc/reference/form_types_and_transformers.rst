@@ -2,7 +2,7 @@ Form types and data transformers
 ================================
 
 The AdminBundle is shipped with custom form types and data transfomers in order
-to handle the diffent model's workflows and lifecycle.
+to handle the different model's workflows and lifecycle.
 
 Form types
 ----------
@@ -19,7 +19,7 @@ Form types
 
     - ``sonata_type_immutable_array``: this type allows to edit a fixed array, like a settings array.
 
-Let's say, the object have a settings properties
+Let's say, the object has settings properties
 
 .. code-block:: php
 
@@ -68,7 +68,7 @@ the output will be :
 
 .. image:: ../images/sonata_type_immutable_array.png
            :alt: Immutable Array Type
-           :width: 200
+           :width: 460
 
 Other options :
 
