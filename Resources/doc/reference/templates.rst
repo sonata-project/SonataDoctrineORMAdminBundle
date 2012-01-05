@@ -38,6 +38,7 @@ You can also customize field types by adding types in the ``config.yml`` file. T
                     array:      SonataAdminBundle:CRUD:list_array.html.twig
                     boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
                     date:       SonataAdminBundle:CRUD:list_date.html.twig
+                    time:       SonataAdminBundle:CRUD:list_time.html.twig
                     datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
                     text:       SonataAdminBundle:CRUD:base_list_field.html.twig
                     trans:      SonataAdminBundle:CRUD:list_trans.html.twig
@@ -52,6 +53,7 @@ You can also customize field types by adding types in the ``config.yml`` file. T
                     array:      SonataAdminBundle:CRUD:show_array.html.twig
                     boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
                     date:       SonataAdminBundle:CRUD:show_date.html.twig
+                    time:       SonataAdminBundle:CRUD:show_time.html.twig
                     datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
                     text:       SonataAdminBundle:CRUD:base_show_field.html.twig
                     trans:      SonataAdminBundle:CRUD:show_trans.html.twig
