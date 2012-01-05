@@ -67,6 +67,7 @@ Types available
     - integer
     - text
     - date
+    - time
     - datetime
 
 If no type is set, the Admin class will use the one set in the doctrine mapping
