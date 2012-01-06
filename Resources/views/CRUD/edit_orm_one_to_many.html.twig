@@ -13,15 +13,16 @@ file that was distributed with this source code.
         {{ element|render_relation_element(sonata_admin.field_description) }}
     {% endfor %}
 {% else %}
+
     <div id="field_container_{{ id }}">
         <span id="field_widget_{{ id }}" >
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
-                    {% if form.children %}
+                    {% if form.getChildren() %}
                         <table class="bordered-table">
                             <thead>
                                 <tr>
-                                    {% for field_name, nested_field in form.children[0].children %}
+                                    {% for field_name, nested_field in form.getChild(0).getChildren() %}
                                         {% if field_name == '_delete' %}
                                             <th>{% trans from 'SonataAdminBundle' %}action_delete{% endtrans %}</th>
                                         {% else %}
@@ -31,9 +32,9 @@ file that was distributed with this source code.
                                 </tr>
                             </thead>
                             <tbody class="sonata-ba-tbody">
-                                {% for nested_group_field_name, nested_group_field in form.children %}
+                                {% for nested_group_field_name, nested_group_field in form.getChildren() %}
                                     <tr>
-                                        {% for field_name, nested_field in nested_group_field.children %}
+                                        {% for field_name, nested_field in nested_group_field.getChildren() %}
                                             <td class="sonata-ba-td-{{ id }}-{{ field_name  }}">
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
@@ -49,24 +50,22 @@ file that was distributed with this source code.
                             </tbody>
                         </table>
                     {% endif %}
-                {% else %}
-                    {% if form.children %}
-                        <div>
-                            {% for nested_group_field_name, nested_group_field in form.children %}
-                                {% for field_name, nested_field in nested_group_field.children %}
-                                    {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
-                                        {{ form_widget(nested_field, {
-                                            'inline': 'natural',
-                                            'edit'  : 'inline'
-                                        }) }}
-                                        {% set dummy = nested_group_field.setrendered %}
-                                    {% else %}
-                                        {{ form_widget(nested_field) }}
-                                    {% endif %}
-                                {% endfor %}
+                {% elseif form.getChildren() %}
+                    <div>
+                        {% for nested_group_field_name, nested_group_field in form.getChildren() %}
+                            {% for field_name, nested_field in nested_group_field.getChildren() %}
+                                {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
+                                    {{ form_widget(nested_field, {
+                                        'inline': 'natural',
+                                        'edit'  : 'inline'
+                                    }) }}
+                                    {% set dummy = nested_group_field.setrendered %}
+                                {% else %}
+                                    {{ form_widget(nested_field) }}
+                                {% endif %}
                             {% endfor %}
-                        </div>
-                    {% endif %}
+                        {% endfor %}
+                    </div>
                 {% endif %}
             {% else %}
                 {{ form_widget(form) }}
