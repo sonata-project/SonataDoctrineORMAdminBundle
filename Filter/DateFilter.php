@@ -49,9 +49,12 @@ class DateFilter extends Filter
             }
             $valueTransformed = $transformer->reverseTransform($data['value']);
 
-            if($valueTransformed) $value = $valueTransformed->format('Y-m-d');
-            else return;
-
+            if($valueTransformed) {
+                $value = $valueTransformed->format('Y-m-d');
+            } else {
+                return;
+            }
+            
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
             $queryBuilder->setParameter($this->getName(),  $value);
         }
