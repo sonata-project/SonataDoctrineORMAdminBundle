@@ -162,7 +162,8 @@ class ModelManager implements ModelManagerInterface
     /**
      * @return \Doctrine\ORM\EntityManager
      */
-    public function getEntityManager($class) {
+    public function getEntityManager($class)
+    {
         if (is_object($class)) {
             $class = get_class($class);
         }
