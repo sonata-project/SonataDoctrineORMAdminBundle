@@ -26,7 +26,7 @@ abstract class Filter extends BaseFilter
 
     protected function association($queryBuilder, $value)
     {
-        return array($queryBuilder->getRootAlias(), $this->getFieldName());
+        return array($this->getOption('alias', $queryBuilder->getRootAlias()), $this->getFieldName());
     }
 
     protected function applyWhere($queryBuilder, $parameter)

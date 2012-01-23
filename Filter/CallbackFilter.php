@@ -20,7 +20,7 @@ class CallbackFilter extends Filter
      */
     protected function association($queryBuilder, $data)
     {
-        return array($queryBuilder->getRootAlias(), false);
+        return array($this->getOption('alias', $queryBuilder->getRootAlias()), false);
     }
 
     /**
