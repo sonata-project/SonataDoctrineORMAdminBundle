@@ -12,6 +12,7 @@
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
@@ -22,8 +23,8 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Doctrine\ORM\QueryBuilder;
 
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
+
 use Symfony\Bridge\Doctrine\RegistryInterface;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class ModelManager implements ModelManagerInterface
 {
@@ -33,7 +34,7 @@ class ModelManager implements ModelManagerInterface
      *
      * @param \Doctrine\ORM\EntityManager $entityManager
      */
-    public function __construct(\Symfony\Bridge\Doctrine\RegistryInterface $registry)
+    public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
     }
