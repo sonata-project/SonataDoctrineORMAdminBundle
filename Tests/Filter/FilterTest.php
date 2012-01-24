@@ -41,6 +41,11 @@ class FilterTest_Filter extends Filter
             'options' => $this->getFieldOptions()
         ));
     }
+
+    public function testAssociation($queryBuilder, $value)
+    {
+        return $this->association($queryBuilder, $value);
+    }
 }
 
 class FilterTest extends \PHPUnit_Framework_TestCase
@@ -69,6 +74,21 @@ class FilterTest extends \PHPUnit_Framework_TestCase
 
         $filter->setValue(42);
         $this->assertEquals(42, $filter->getValue());
+    }
+
+    public function testAliasOption()
+    {
+        $filter = new FilterTest_Filter();
+
+        $filter->initialize('field_name', array('alias' => 'association_alias', 'field_name' => 'field_name'));
+
+        $this->assertEquals('association_alias', $filter->getOption('alias'));
+
+        $builder = new QueryBuilder;
+        $this->assertEquals(array('association_alias', 'field_name'), $filter->testAssociation($builder, 'value'));
+
+        $filter->initialize('field_name', array('field_name' => 'field_name'));
+        $this->assertEquals(array($builder->getRootAlias(), 'field_name'), $filter->testAssociation($builder, 'value'));
     }
 
     /**
