@@ -10,7 +10,7 @@
         </service>
 
         <service id="sonata.admin.manager.orm" class="Sonata\DoctrineORMAdminBundle\Model\ModelManager">
-            <argument type="service" id="sonata.admin.entity_manager" />
+            <argument type="service" id="doctrine" />
         </service>
 
         <!-- FormBuilder -->
