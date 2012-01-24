@@ -309,6 +309,8 @@ class ModelManager implements ModelManagerInterface
      */
     public function batchDelete($class, ProxyQueryInterface $queryProxy)
     {
+        $queryProxy->select('DISTINCT '.$queryProxy->getRootAlias());
+
         try {
             $entityManager = $this->getEntityManager($class);
 
