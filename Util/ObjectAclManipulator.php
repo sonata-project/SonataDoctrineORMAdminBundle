@@ -56,23 +56,22 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 // detach from Doctrine, so that it can be Garbage-Collected immediately
                 $em->detach($row[0]);
 
-                if ((++$i % $batchSize) == 0) {
+                $count++;
 
-                    list($batchAdded, $batchUpdated) = $this->configureAcls($admin, $oids, $securityIdentity);
+                if (($count % $batchSize) == 0) {
+                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $oids, $securityIdentity);
                     $countAdded += $batchAdded;
                     $countUpdated += $batchUpdated;
                     $oids = array();
                 }
 
-                if ((++$i % $batchSizeOutput) == 0) {
+                if (($count % $batchSizeOutput) == 0) {
                     $output->writeln(sprintf('   - generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
                 }
-
-                $count++;
             }
 
             if (count($oids) > 0) {
-                list($batchAdded, $batchUpdated) = $this->configureAcls($admin, $oids, $securityIdentity);
+                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $oids, $securityIdentity);
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
