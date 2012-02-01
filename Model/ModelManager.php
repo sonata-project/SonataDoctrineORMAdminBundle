@@ -338,7 +338,11 @@ class ModelManager implements ModelManagerInterface
      */
     public function getModelInstance($class)
     {
-        return new $class;
+        if (class_exists($class)) {
+            return new $class;
+        } else {
+            throw new \RunTimeException($class.' does not exist');
+        }
     }
 
     /**
