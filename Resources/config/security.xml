@@ -9,8 +9,6 @@
     </parameters>
 
     <services>
-        <service id="sonata.admin.manipulator.acl.object.orm" class="%sonata.admin.manipulator.acl.object.orm.class%" >
-            <argument type="service" id="sonata.admin.security.handler" />
-        </service>
+        <service id="sonata.admin.manipulator.acl.object.orm" class="%sonata.admin.manipulator.acl.object.orm.class%" />
     </services>
 </container>
