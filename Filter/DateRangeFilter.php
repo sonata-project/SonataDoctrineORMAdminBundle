@@ -16,8 +16,11 @@ use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 
-class DateRangeFilter extends Filter
+class DateRangeFilter extends AbstractDateFilter
 {
+    protected $range = true;
+    protected $time = false;
+
     /**
      * @param QueryBuilder $queryBuilder
      * @param string $alias
@@ -25,7 +28,7 @@ class DateRangeFilter extends Filter
      * @param string $data
      * @return
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    /*public function filter($queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
@@ -34,22 +37,22 @@ class DateRangeFilter extends Filter
         if(!array_key_exists('start', $data['value']) || !array_key_exists('end', $data['value'])) {
             return;
         }
-        
+
         if(is_array($data['value']['start'])) {
             $transformer = new DateTimeToArrayTransformer(null, null, array('year', 'month', 'day'));
         } else {
-            $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d');            
+            $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d');
         }
         $startValueTransformed = $transformer->reverseTransform($data['value']['start']);
         $endValueTransformed = $transformer->reverseTransform($data['value']['end']);
-                
+
         if($startValueTransformed && $endValueTransformed) {
             $startValue = $startValueTransformed->format('Y-m-d');
             $endValue = $endValueTransformed->format('Y-m-d');
         } else {
             return;
         }
-        
+
         $data['type'] = !isset($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
 
         if($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
@@ -58,25 +61,8 @@ class DateRangeFilter extends Filter
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $this->getName().'_start'));
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
         }
-        
+
         $queryBuilder->setParameter($this->getName().'_start',  $startValue);
         $queryBuilder->setParameter($this->getName().'_end',  $endValue);
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultOptions()
-    {
-        return array();
-    }
-
-    public function getRenderSettings()
-    {
-        return array('sonata_type_filter_date_range', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
-        ));
-    }
+    }*/
 }

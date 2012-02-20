@@ -16,8 +16,11 @@ use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 
-class DateTimeFilter extends Filter
+class DateTimeFilter extends AbstractDateFilter
 {
+    protected $time = true;
+    protected $range = false;
+
     /**
      * @param QueryBuilder $queryBuilder
      * @param string $alias
@@ -25,7 +28,7 @@ class DateTimeFilter extends Filter
      * @param string $data
      * @return
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    /*public function filter($queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
@@ -45,23 +48,23 @@ class DateTimeFilter extends Filter
             if(!array_key_exists('date', $data['value']) || !array_key_exists('time', $data['value'])) {
                 return;
             }
-            
+
             if(is_array($data['value']['date'])) {
                 $transformer = new DateTimeToArrayTransformer(null, null, array('year', 'month', 'day', 'hour', 'minute'));
                 $valueRaw = array_merge($data['value']['date'], $data['value']['time']);
             } else {
-                $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d H:i');            
+                $transformer = new DateTimeToStringTransformer(null, null, 'Y-m-d H:i');
                 $valueRaw = $data['value']['date'].' '.$data['value']['time'];
             }
             $valueTransformed = $transformer->reverseTransform($valueRaw);
 
             if($valueTransformed) $value = $valueTransformed->format('Y-m-d H:i:s');
             else return;
-                
+
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
             $queryBuilder->setParameter($this->getName(),  $value);
-        }        
-    }
+        }
+    }*/
 
     /**
      * @param $type
@@ -80,22 +83,5 @@ class DateTimeFilter extends Filter
         );
 
         return isset($choices[$type]) ? $choices[$type] : false;
-    }
-
-    /**
-     * @return array
-     */
-    public function getDefaultOptions()
-    {
-        return array();
-    }
-
-    public function getRenderSettings()
-    {
-        return array('sonata_type_filter_datetime', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
-        ));
     }
 }
