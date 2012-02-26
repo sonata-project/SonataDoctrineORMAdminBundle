@@ -13,9 +13,9 @@ file that was distributed with this source code.
 
 {% block field%}
     <ul class="sonata-ba-show-one-to-many">
-    {% if field_description.hasassociationadmin and field_description.associationadmin.isGranted('EDIT') and field_description.associationadmin.hasRoute('edit') %}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.isGranted('SHOW') and field_description.associationadmin.hasRoute('show') %}
         {% for element in value%}
-            <li><a href="{{ field_description.associationadmin.generateObjectUrl('edit', element) }}">{{ element|render_relation_element(field_description) }}</a></li>
+            <li><a href="{{ field_description.associationadmin.generateObjectUrl('show', element) }}">{{ element|render_relation_element(field_description) }}</a></li>
         {% endfor %}
     {% else %}
         {% for element in value%}
