@@ -39,6 +39,7 @@ This code manage the one-to-many association field popup
                 'uniqid':    sonata_admin.admin.root.uniqid
             }) }}',
             type: "POST",
+            dataType: 'html',
             data: { _xml_http_request: true },
             success: function(html) {
                 jQuery('#field_container_{{ id }}').replaceWith(html); // replace the html
