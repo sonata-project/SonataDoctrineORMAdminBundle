@@ -26,13 +26,14 @@ use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
+use Exporter\Source\DoctrineORMQuerySourceIterator;
+
 class ModelManager implements ModelManagerInterface
 {
     protected $registry;
 
     /**
-     *
-     * @param \Doctrine\ORM\EntityManager $entityManager
+     * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
@@ -42,9 +43,8 @@ class ModelManager implements ModelManagerInterface
     /**
      * Returns the related model's metadata
      *
-     * @abstract
-     * @param string $name
-     * @return \Doctrine\ORM\Mapping\ClassMetadataInfo
+     * @param $class
+     * @return \Doctrine\ORM\Mapping\ClassMetadata
      */
     public function getMetadata($class)
     {
@@ -229,7 +229,7 @@ class ModelManager implements ModelManagerInterface
     /**
      * @throws \RuntimeException
      * @param $entity
-     * @return
+     * @return mixed
      */
     public function getIdentifierValues($entity)
     {
@@ -329,6 +329,36 @@ class ModelManager implements ModelManagerInterface
         } catch ( \PDOException $e ) {
             throw new ModelManagerException('', 0, $e);
         }
+    }
+
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
+     * @param array $fields
+     * @param null $firstResult
+     * @param null $maxResult
+     * @return \Exporter\Source\DoctrineORMQuerySourceIterator
+     */
+    public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
+    {
+        $datagrid->buildPager();
+        $query = $datagrid->getQuery();
+
+        $query->select('DISTINCT '.$query->getRootAlias());
+        $query->setFirstResult($firstResult);
+        $query->setMaxResults($maxResult);
+
+        return new DoctrineORMQuerySourceIterator($query instanceof ProxyQuery ? $query->getQuery() : $query, $fields);
+    }
+
+    /**
+     * @param $class
+     * @return array
+     */
+    public function getExportFields($class)
+    {
+        $metadata = $this->registry->getEntityManager()->getClassMetadata($class);
+
+        return $metadata->getFieldNames();
     }
 
     /**
