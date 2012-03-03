@@ -88,9 +88,10 @@ Callback
 ^^^^^^^^
 
 To create a custom callback filter, two methods need to be implemented; one to
-define the field type and one to define how to use the field's value. In this
-example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` implement
-this functionality.
+define the field type and one to define how to use the field's value. The
+latter shall return wether the filter actually is applied to the queryBuilder
+or not. In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter``
+implement this functionality.
 
 .. code-block:: php
 
@@ -124,6 +125,8 @@ this functionality.
                         $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
                         $queryBuilder->andWhere('c.status = :status');
                         $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
+
+                        return true;
                     },
                     'field_type' => 'checkbox'
                 ))
@@ -139,5 +142,7 @@ this functionality.
             $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
             $queryBuilder->andWhere('c.status = :status');
             $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
+
+            return true;
         }
     }
