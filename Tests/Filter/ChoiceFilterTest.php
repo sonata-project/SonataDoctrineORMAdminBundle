@@ -28,6 +28,7 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array());
 
         $this->assertEquals(array(), $builder->query);
+        $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterArray()
@@ -40,6 +41,7 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => array('1', '2')));
 
         $this->assertEquals(array('in_alias.field', 'alias.field IN ("1,2")'), $builder->query);
+        $this->assertEquals(true, $filter->isActive());
     }
 
     public function testFilterScalar()
@@ -53,6 +55,6 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('alias.field = :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => '1'), $builder->parameters);
-
+        $this->assertEquals(true, $filter->isActive());
     }
 }

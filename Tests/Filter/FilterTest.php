@@ -99,4 +99,10 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $filter = new FilterTest_Filter();
         $filter->getFieldName();
     }
+
+    public function testIsActive()
+    {
+        $filter = new FilterTest_Filter();
+        $this->assertEquals(false, $filter->isActive());
+    }
 }

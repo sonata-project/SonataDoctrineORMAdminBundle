@@ -32,6 +32,7 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array(null, 'test'));
 
         $this->assertEquals(array(), $builder->query);
+        $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterNo()
@@ -45,6 +46,7 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('alias.field = :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => 0), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
     }
 
     public function testFilterYes()
@@ -58,6 +60,7 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('alias.field = :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => 1), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
     }
 
     public function testFilterArray()
@@ -70,5 +73,6 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => array(BooleanType::TYPE_NO)));
 
         $this->assertEquals(array('in_alias.field', 'alias.field IN ("0")'), $builder->query);
+        $this->assertEquals(true, $filter->isActive());
     }
 }
