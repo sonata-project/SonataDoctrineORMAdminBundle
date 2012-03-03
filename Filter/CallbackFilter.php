@@ -37,7 +37,7 @@ class CallbackFilter extends Filter
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
-        call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $data);
+        $this->active = call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $data);
     }
 
     /**

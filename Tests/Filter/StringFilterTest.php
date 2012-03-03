@@ -27,6 +27,7 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', '');
 
         $this->assertEquals(array(), $builder->query);
+        $this->assertEquals(false, $filter->isActive());
     }
 
     public function testContains()
@@ -48,6 +49,7 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('value' => 'asd', 'type' => null));
         $this->assertEquals(array('alias.field LIKE :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => 'asd'), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
     }
 
     public function testNotContains()
@@ -61,6 +63,7 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('value' => 'asd', 'type' => ChoiceType::TYPE_NOT_CONTAINS));
         $this->assertEquals(array('alias.field NOT LIKE :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => 'asd'), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
     }
 
     public function testEquals()
@@ -74,5 +77,6 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('value' => 'asd', 'type' => ChoiceType::TYPE_EQUAL));
         $this->assertEquals(array('alias.field = :field_name'), $builder->query);
         $this->assertEquals(array('field_name' => 'asd'), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
     }
 }

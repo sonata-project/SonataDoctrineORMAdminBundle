@@ -27,6 +27,7 @@ class NumberFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', 'asds');
 
         $this->assertEquals(array(), $builder->query);
+        $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterInvalidOperator()
@@ -39,6 +40,7 @@ class NumberFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('type' => 'foo'));
 
         $this->assertEquals(array(), $builder->query);
+        $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilter()
@@ -65,5 +67,6 @@ class NumberFilterTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expected, $builder->query);
+        $this->assertEquals(true, $filter->isActive());
     }
 }
