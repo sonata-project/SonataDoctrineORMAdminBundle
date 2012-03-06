@@ -8,11 +8,12 @@
     "authors": [
         {
             "name": "Thomas Rabaix",
-            "email": "thomas.rabaix@sonata-project.org"
+            "email": "thomas.rabaix@sonata-project.org",
+            "homepage": "http://sonata-project.org"
         },
         {
             "name": "Sonata Community",
-            "homepage": "https://github.com/sonata-project/SonataAdminBundle/contributors"
+            "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
     "require": {
