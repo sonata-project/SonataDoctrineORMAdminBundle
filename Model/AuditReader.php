@@ -32,7 +32,7 @@ class AuditReader implements AuditReaderInterface
      * @param $revision
      * @return mixed
      */
-    function find($className, $id, $revision)
+    public function find($className, $id, $revision)
     {
         return $this->auditReader->find($className, $id, $revision);
     }
@@ -43,7 +43,7 @@ class AuditReader implements AuditReaderInterface
      * @param int $offset
      * @return mixed
      */
-    function findRevisionHistory($className, $limit = 20, $offset = 0)
+    public function findRevisionHistory($className, $limit = 20, $offset = 0)
     {
         return $this->auditReader->findRevisionHistory($limit, $offset);
     }
@@ -53,7 +53,7 @@ class AuditReader implements AuditReaderInterface
      * @param $revision
      * @return mixed
      */
-    function findRevision($classname, $revision)
+    public function findRevision($classname, $revision)
     {
         return $this->auditReader->findRevision($revision);
     }
@@ -63,7 +63,7 @@ class AuditReader implements AuditReaderInterface
      * @param $id
      * @return mixed
      */
-    function findRevisions($className, $id)
+    public function findRevisions($className, $id)
     {
         return $this->auditReader->findRevisions($className, $id);
     }

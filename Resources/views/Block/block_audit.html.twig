@@ -1,0 +1,32 @@
+{#
+
+This file is part of the Sonata package.
+
+(c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+
+For the full copyright and license information, please view the LICENSE
+file that was distributed with this source code.
+
+#}
+{% extends 'SonataBlockBundle:Block:block_base.html.twig' %}
+
+{% block block %}
+    <h3>{{ "title_audit_log"|trans({}, 'SonataAdminBundle') }}</h3>
+
+    <div>
+        {% for revision in revisions %}
+            <div>
+                {{ revision.revision.rev }} - {{ revision.revision.username }} - {{ revision.revision.timestamp | format_date }}
+
+                <ul>
+                    {% for changedEntity in revision.entities %}
+                        <li>
+                            {{ changedEntity.entity }} / {{ changedEntity.revisionType }} / {{ changedEntity.className }} - {{ changedEntity.id }}
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endfor %}
+
+    </div>
+{% endblock %}
