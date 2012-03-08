@@ -14,7 +14,7 @@
 
             <argument>sonata.admin_doctrine_orm.block.audit</argument>
             <argument type="service" id="templating" />
-            <argument type="service" id="simplethings_entityaudit.reader" />
+            <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore" />
         </service>
     </services>
 </container>
