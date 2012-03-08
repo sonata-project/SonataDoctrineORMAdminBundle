@@ -64,8 +64,8 @@ class TypeGuesser implements TypeGuesserInterface
 
         switch ($metadata->getTypeOfField($property))
         {
-            //case 'array':
-            //  return new TypeGuess('Collection', array(), Guess::HIGH_CONFIDENCE);
+            case 'array':
+                return new TypeGuess('array', array(), Guess::HIGH_CONFIDENCE);
             case 'boolean':
                 return new TypeGuess('boolean', array(), Guess::HIGH_CONFIDENCE);
             case 'datetime':
