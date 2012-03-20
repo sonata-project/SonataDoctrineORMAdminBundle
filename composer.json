@@ -18,9 +18,9 @@
     ],
     "require": {
         "php": ">=5.3.2",
-        "sonata-project/admin-bundle": "*",
-        "symfony/framework-bundle": "2.*",
-        "symfony/security-bundle": "2.*"
+        "sonata-project/admin-bundle": "master-dev",
+        "symfony/framework-bundle": "master-dev",
+        "symfony/security-bundle": "master-dev"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
