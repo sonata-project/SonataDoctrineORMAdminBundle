@@ -2,7 +2,7 @@
     "name": "sonata-project/doctrine-orm-admin-bundle",
     "type": "symfony-bundle",
     "description": "Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle",
-    "keywords": ["Admin Generator", "admin", "sonata", "bootstrap"],
+    "keywords": ["Admin Generator", "admin", "sonata", "bootstrap", "generator"],
     "homepage": "http://sonata-project.org/bundles/admin",
     "license": "MIT",
     "authors": [
