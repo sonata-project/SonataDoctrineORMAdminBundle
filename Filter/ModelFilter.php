@@ -12,7 +12,7 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sonata\AdminBundle\Form\Type\BooleanType;
+use Sonata\AdminBundle\Form\Type\EqualType;
 
 class ModelFilter extends Filter
 {
@@ -42,7 +42,7 @@ class ModelFilter extends Filter
             return;
         }
 
-        if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
+        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn(sprintf('%s.%s', $alias, $field), $data['value']));
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $data['value']));
@@ -55,7 +55,7 @@ class ModelFilter extends Filter
             return;
         }
 
-        if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
+        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
         } else {
             $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
@@ -78,7 +78,7 @@ class ModelFilter extends Filter
         }
 
         if (!$this->getOption('field_name')) {
-            throw new \RunTimeException('please provide a field_name options');
+            throw new \RunTimeException('Please provide a field_name options');
         }
 
         $alias = 's_'.$this->getName();
@@ -95,7 +95,7 @@ class ModelFilter extends Filter
             'field_name'   => false,
             'field_type'   => 'entity',
             'field_options' => array(),
-            'operator_type' => 'sonata_type_boolean',
+            'operator_type' => 'sonata_type_equal',
             'operator_options' => array(),
         );
     }
