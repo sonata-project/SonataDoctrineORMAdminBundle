@@ -138,6 +138,10 @@ class ModelManager implements ModelManagerInterface
      */
     public function find($class, $id)
     {
+        if ( !isset($id) ) {
+            return null;
+        }
+
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
