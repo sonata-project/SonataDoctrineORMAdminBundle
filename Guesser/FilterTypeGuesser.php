@@ -59,7 +59,7 @@ class FilterTypeGuesser implements TypeGuesserInterface
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
 
-                    $options['operator_type'] = 'sonata_type_boolean';
+                    $options['operator_type'] = 'sonata_type_equal';
                     $options['operator_options'] = array();
 
                     $options['field_type'] = 'entity';
