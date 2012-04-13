@@ -12,6 +12,7 @@ Add the following lines to the file ``deps``::
     [SonataDoctrineORMAdminBundle]
         git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
         target=/bundles/Sonata/DoctrineORMAdminBundle
+        version=origin/2.0
 
     # optional bundle
     [EntityAudit]
