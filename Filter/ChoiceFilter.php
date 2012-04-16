@@ -46,7 +46,7 @@ class ChoiceFilter extends Filter
 
         } else {
 
-            if (empty($data['value']) || $data['value'] == 'all') {
+            if ($data['value'] === '' || $data['value'] === null || $data['value'] === false || $data['value'] == 'all') {
                 return;
             }
 
