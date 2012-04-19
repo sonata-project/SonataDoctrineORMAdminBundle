@@ -37,8 +37,9 @@ class NumberFilter extends Filter
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
-        $queryBuilder->setParameter($this->getName(),  $data['value']);
+        $parameterName = $this->getNewParameterName();
+        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        $queryBuilder->setParameter($parameterName,  $data['value']);
     }
 
     /**

@@ -43,13 +43,15 @@ class ModelFilter extends Filter
             return;
         }
 
+        $parameterName = $this->getNewParameterName();
+
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$this->getName()));
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
         } else {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$this->getName()));
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($this->getName(), $data['value']->toArray());
+        $queryBuilder->setParameter($parameterName, $data['value']->toArray());
     }
 
     protected function handleModel($queryBuilder, $alias, $field, $data)
@@ -58,17 +60,21 @@ class ModelFilter extends Filter
             return;
         }
 
+        $parameterName = $this->getNewParameterName();
+
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $this->getName()));
+            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
         } else {
-            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $this->getName()));
+            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $queryBuilder->setParameter($this->getName(), $data['value']);
+        $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
     protected function association($queryBuilder, $data)
     {
+        list($alias, $field) = parent::association($queryBuilder, $data);
+
         $types = array(
             ClassMetadataInfo::ONE_TO_ONE,
             ClassMetadataInfo::ONE_TO_MANY,
@@ -84,11 +90,11 @@ class ModelFilter extends Filter
             throw new \RunTimeException('Please provide a field_name options');
         }
 
-        $alias = 's_'.$this->getName();
+        $newAlias = $alias.'_'.$field;
 
-        $queryBuilder->leftJoin(sprintf('%s.%s', $queryBuilder->getRootAlias(), $this->getFieldName()), $alias);
+        $queryBuilder->leftJoin(sprintf('%s.%s', $alias, $field), $newAlias);
 
-        return array($alias, 'id');
+        return array($newAlias, false);
     }
 
     public function getDefaultOptions()
