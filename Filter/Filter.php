@@ -29,7 +29,17 @@ abstract class Filter extends BaseFilter
 
     protected function association($queryBuilder, $value)
     {
-        return array($this->getOption('alias', $queryBuilder->getRootAlias()), $this->getFieldName());
+        $parentAssociationMappings = $this->getParentAssociationMappings();
+        $alias = $this->getOption('alias', $queryBuilder->getRootAlias());
+        $newAlias = 's_'.$alias;
+
+        foreach($parentAssociationMappings as $parentAssociationMapping){
+            $newAlias .= '_'.$parentAssociationMapping['fieldName'];
+            $queryBuilder->leftJoin(sprintf('%s.%s', $alias, $parentAssociationMapping['fieldName']), $newAlias);
+            $alias = $newAlias;
+        }
+
+        return array($alias, $this->getFieldName());
     }
 
     protected function applyWhere($queryBuilder, $parameter)

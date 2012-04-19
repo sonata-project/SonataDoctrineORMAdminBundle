@@ -37,7 +37,7 @@ class FilterTypeGuesser implements TypeGuesserInterface
      */
     public function guessType($class, $property)
     {
-        if (!$ret = $this->getMetadata($class)) {
+        if (!$ret = $this->getParentMetadataForProperty($class, $property)) {
             return false;
         }
 
@@ -47,11 +47,13 @@ class FilterTypeGuesser implements TypeGuesserInterface
             'options'        => array(),
         );
 
-        list($metadata, $name) = $ret;
+        list($metadata, $propertyName, $parentAssociationMappings) = $ret;
 
-        if ($metadata->hasAssociation($property)) {
-            $multiple = $metadata->isCollectionValuedAssociation($property);
-            $mapping = $metadata->getAssociationMapping($property);
+        $options['parent_association_mappings'] = $parentAssociationMappings;
+
+        if ($metadata->hasAssociation($propertyName)) {
+            $multiple = $metadata->isCollectionValuedAssociation($propertyName);
+            $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
                 case ClassMetadataInfo::ONE_TO_ONE:
@@ -66,6 +68,7 @@ class FilterTypeGuesser implements TypeGuesserInterface
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity']
                     );
+
                     $options['field_name'] = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
 
@@ -73,9 +76,9 @@ class FilterTypeGuesser implements TypeGuesserInterface
             }
         }
 
-        $options['field_name'] = $metadata->fieldMappings[$property]['fieldName'];
+        $options['field_name'] = $metadata->fieldMappings[$propertyName]['fieldName'];
 
-        switch ($metadata->getTypeOfField($property)) {
+        switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
                 $options['field_type'] = 'sonata_type_boolean';
                 $options['field_options'] = array();
@@ -118,12 +121,49 @@ class FilterTypeGuesser implements TypeGuesserInterface
         }
 
         $this->cache[$class] = null;
-        foreach ($this->registry->getEntityManagers() as $name => $em) {
+        foreach ($this->registry->getEntityManagers() as $em) {
             try {
-                return $this->cache[$class] = array($em->getClassMetadata($class), $name);
+                return $this->cache[$class] = $em->getClassMetadata($class);
             } catch (MappingException $e) {
                 // not an entity or mapped super class
             }
         }
+    }
+
+    protected function getParentMetadataForProperty($baseClass, $propertyFullName)
+    {
+        $nameElements = explode('.', $propertyFullName);
+        $lastPropertyName = array_pop($nameElements);
+        $class = $baseClass;
+        $parentAssociationMappings = array();
+
+        foreach($nameElements as $nameElement){
+            if (!$metadata = $this->getMetadata($class)) {
+                return null;
+            }
+
+            $class = $metadata->associationMappings[$nameElement]['targetEntity'];
+
+            if (!$metadata->hasAssociation($nameElement)) {
+                return null;
+            }
+
+            $mapping = $metadata->getAssociationMapping($nameElement);
+
+            switch ($mapping['type']) {
+                case ClassMetadataInfo::ONE_TO_ONE:
+                case ClassMetadataInfo::ONE_TO_MANY:
+                case ClassMetadataInfo::MANY_TO_ONE:
+                case ClassMetadataInfo::MANY_TO_MANY:
+                    $parentAssociationMappings[] = $mapping;
+
+                    break;
+
+                default:
+                    return null;
+            }
+        }
+
+        return array($this->getMetadata($class), $lastPropertyName, $parentAssociationMappings);
     }
 }
