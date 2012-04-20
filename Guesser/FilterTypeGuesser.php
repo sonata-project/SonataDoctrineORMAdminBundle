@@ -12,32 +12,21 @@
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Mapping\MappingException;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 
-class FilterTypeGuesser implements TypeGuesserInterface
+class FilterTypeGuesser extends AbstractTypeGuesser
 {
-    protected $registry;
-
-    private $cache;
-
-    public function __construct(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
-        $this->cache = array();
-    }
-
     /**
      * @param string $class
      * @param string $property
      * @return TypeGuess
      */
-    public function guessType($class, $property)
+    public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
-        if (!$ret = $this->getParentMetadataForProperty($class, $property)) {
+        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
             return false;
         }
 
@@ -111,58 +100,5 @@ class FilterTypeGuesser implements TypeGuesserInterface
             default:
                 return new TypeGuess('doctrine_orm_string', $options, Guess::LOW_CONFIDENCE);
         }
-    }
-
-    protected function getMetadata($class)
-    {
-        if (array_key_exists($class, $this->cache)) {
-            return $this->cache[$class];
-        }
-
-        $this->cache[$class] = null;
-        foreach ($this->registry->getEntityManagers() as $em) {
-            try {
-                return $this->cache[$class] = $em->getClassMetadata($class);
-            } catch (MappingException $e) {
-                // not an entity or mapped super class
-            }
-        }
-    }
-
-    protected function getParentMetadataForProperty($baseClass, $propertyFullName)
-    {
-        $nameElements = explode('.', $propertyFullName);
-        $lastPropertyName = array_pop($nameElements);
-        $class = $baseClass;
-        $parentAssociationMappings = array();
-
-        foreach($nameElements as $nameElement){
-            if (!$metadata = $this->getMetadata($class)) {
-                return null;
-            }
-
-            $class = $metadata->associationMappings[$nameElement]['targetEntity'];
-
-            if (!$metadata->hasAssociation($nameElement)) {
-                return null;
-            }
-
-            $mapping = $metadata->getAssociationMapping($nameElement);
-
-            switch ($mapping['type']) {
-                case ClassMetadataInfo::ONE_TO_ONE:
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::MANY_TO_ONE:
-                case ClassMetadataInfo::MANY_TO_MANY:
-                    $parentAssociationMappings[] = $mapping;
-
-                    break;
-
-                default:
-                    return null;
-            }
-        }
-
-        return array($this->getMetadata($class), $lastPropertyName, $parentAssociationMappings);
     }
 }
