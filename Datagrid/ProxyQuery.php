@@ -25,9 +25,12 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $sortOrder;
 
+    protected $parameterUniqueId;
+
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
+        $this->uniqueParameterId = 0;
     }
 
     public function execute(array $params = array(), $hydrationMode = null)
@@ -162,5 +165,10 @@ class ProxyQuery implements ProxyQueryInterface
     public function getMaxResults()
     {
         $this->queryBuilder->getMaxResults();
+    }
+
+    public function getUniqueParameterId()
+    {
+        return $this->uniqueParameterId++;
     }
 }

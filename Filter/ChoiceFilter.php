@@ -50,7 +50,7 @@ class ChoiceFilter extends Filter
                 return;
             }
 
-            $parameterName = $this->getNewParameterName();
+            $parameterName = $this->getNewParameterName($queryBuilder);
 
             if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));

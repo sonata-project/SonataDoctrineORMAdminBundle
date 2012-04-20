@@ -43,7 +43,7 @@ class ModelFilter extends Filter
             return;
         }
 
-        $parameterName = $this->getNewParameterName();
+        $parameterName = $this->getNewParameterName($queryBuilder);
 
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
@@ -60,7 +60,7 @@ class ModelFilter extends Filter
             return;
         }
 
-        $parameterName = $this->getNewParameterName();
+        $parameterName = $this->getNewParameterName($queryBuilder);
 
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));

@@ -16,7 +16,6 @@ use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 abstract class Filter extends BaseFilter
 {
     protected $active = false;
-    protected $parameterUniqueId = 0;
 
     public function apply($queryBuilder, $value)
     {
@@ -54,14 +53,11 @@ abstract class Filter extends BaseFilter
         $this->active = true;
     }
 
-    protected function getNewParameterName()
+    protected function getNewParameterName($queryBuilder)
     {
         // dots are not accepted in a DQL identifier so replace them
-        // by underscores. To avoid any name conflict with two filters
-        // named myEntity.myProperty and myEntity_myProperty used at the
-        // same time, we also use the object hash, that are different
-        // for two objects alive at the same time.
-        return str_replace('.', '_', $this->getName()).'_'.spl_object_hash($this).'_'.($this->parameterUniqueId++);
+        // by underscores.
+        return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
     }
 
     public function isActive()
