@@ -44,7 +44,6 @@ class TypeGuesser implements TypeGuesserInterface
         list($metadata, $name) = $ret;
 
         if ($metadata->hasAssociation($property)) {
-            $multiple = $metadata->isCollectionValuedAssociation($property);
             $mapping = $metadata->getAssociationMapping($property);
 
             switch ($mapping['type']) {

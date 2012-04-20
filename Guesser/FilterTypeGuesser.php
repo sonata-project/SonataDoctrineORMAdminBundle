@@ -52,7 +52,6 @@ class FilterTypeGuesser implements TypeGuesserInterface
         $options['parent_association_mappings'] = $parentAssociationMappings;
 
         if ($metadata->hasAssociation($propertyName)) {
-            $multiple = $metadata->isCollectionValuedAssociation($propertyName);
             $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
