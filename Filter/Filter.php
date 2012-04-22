@@ -28,15 +28,7 @@ abstract class Filter extends BaseFilter
 
     protected function association($queryBuilder, $value)
     {
-        $parentAssociationMappings = $this->getParentAssociationMappings();
-        $alias = $this->getOption('alias', $queryBuilder->getRootAlias());
-        $newAlias = 's_'.$alias;
-
-        foreach($parentAssociationMappings as $parentAssociationMapping){
-            $newAlias .= '_'.$parentAssociationMapping['fieldName'];
-            $queryBuilder->leftJoin(sprintf('%s.%s', $alias, $parentAssociationMapping['fieldName']), $newAlias);
-            $alias = $newAlias;
-        }
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 
         return array($alias, $this->getFieldName());
     }

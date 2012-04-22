@@ -73,8 +73,6 @@ class ModelFilter extends Filter
 
     protected function association($queryBuilder, $data)
     {
-        list($alias, $field) = parent::association($queryBuilder, $data);
-
         $types = array(
             ClassMetadataInfo::ONE_TO_ONE,
             ClassMetadataInfo::ONE_TO_MANY,
@@ -86,11 +84,9 @@ class ModelFilter extends Filter
             throw new \RunTimeException('Invalid mapping type');
         }
 
-        $newAlias = $alias.'_'.$field;
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings() + array($this->getAssociationMapping()));
 
-        $queryBuilder->leftJoin(sprintf('%s.%s', $alias, $field), $newAlias);
-
-        return array($newAlias, false);
+        return array($alias, false);
     }
 
     public function getDefaultOptions()

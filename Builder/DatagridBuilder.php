@@ -60,12 +60,12 @@ class DatagridBuilder implements DatagridBuilderInterface
 
             // set the default field mapping
             if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
+                $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $metadata->fieldMappings[$lastPropertyName]));
             }
 
             // set the default association mapping
             if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
+                $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $metadata->associationMappings[$lastPropertyName]));
             }
 
             $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings));

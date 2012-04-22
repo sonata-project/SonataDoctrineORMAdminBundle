@@ -27,10 +27,13 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $parameterUniqueId;
 
+    protected $entityJoinAliases;
+
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
+        $this->entityJoinAliases = array();
     }
 
     public function execute(array $params = array(), $hydrationMode = null)
@@ -170,5 +173,23 @@ class ProxyQuery implements ProxyQueryInterface
     public function getUniqueParameterId()
     {
         return $this->uniqueParameterId++;
+    }
+
+    public function entityJoin($associationMappings)
+    {
+        $alias = $this->queryBuilder->getRootAlias();
+        $newAlias = 's';
+
+        foreach($associationMappings as $associationMapping){
+            $newAlias .= '_'.$associationMapping['fieldName'];
+            if (!in_array($newAlias, $this->entityJoinAliases)) {
+                $this->entityJoinAliases[] = $newAlias;
+                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
+            }
+
+            $alias = $newAlias;
+        }
+
+        return $alias;
     }
 }
