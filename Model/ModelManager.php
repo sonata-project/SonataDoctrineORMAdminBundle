@@ -114,6 +114,7 @@ class ModelManager implements ModelManagerInterface
         $fieldDescription = new FieldDescription;
         $fieldDescription->setName($name);
         $fieldDescription->setOptions($options);
+        $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
         if (isset($metadata->associationMappings[$propertyName])) {
             $fieldDescription->setAssociationMapping($metadata->associationMappings[$propertyName]);
@@ -418,7 +419,7 @@ class ModelManager implements ModelManagerInterface
     {
         $values = $datagrid->getValues();
 
-        if ($fieldDescription->getOption('sortable') == $values['_sort_by']) {
+        if ($fieldDescription->getName() == $values['_sort_by']) {
             if ($values['_sort_order'] == 'ASC') {
                 $values['_sort_order'] = 'DESC';
             } else {
@@ -426,7 +427,7 @@ class ModelManager implements ModelManagerInterface
             }
         } else {
             $values['_sort_order']  = 'ASC';
-            $values['_sort_by']     = $fieldDescription->getOption('sortable');
+            $values['_sort_by']     = $fieldDescription->getName();
         }
 
         return array('filter' => $values);

@@ -88,6 +88,7 @@ class ProxyQuery implements ProxyQueryInterface
             if (strpos($sortBy, '.') === false) { // add the current alias
                 $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
             }
+            $sortBy .= ' AS __order_by';
             $queryBuilderId->addSelect($sortBy);
         }
 
@@ -113,9 +114,10 @@ class ProxyQuery implements ProxyQueryInterface
         return call_user_func_array(array($this->queryBuilder, $name), $args);
     }
 
-    public function setSortBy($sortBy)
+    public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
-        $this->sortBy = $sortBy;
+        $alias = $this->entityJoin($parentAssociationMappings);
+        $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
     }
 
     public function getSortBy()
