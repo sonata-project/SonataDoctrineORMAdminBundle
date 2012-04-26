@@ -338,12 +338,26 @@ class ModelManager implements ModelManagerInterface
      * @param null $maxResult
      * @return \Exporter\Source\DoctrineORMQuerySourceIterator
      */
-    public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
+    public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null, $associationMappings = array())
     {
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
-
-        $query->select('DISTINCT '.$query->getRootAlias());
+     
+        $alias = $query->getRootAlias();
+        $query->select('DISTINCT '.$alias);
+        
+        if(is_array($associationMappings) && count($associationMappings) > 0){
+            $associationMappingAlias = '';
+            
+            foreach($associationMappings as $associationMapping){
+                $associationMappingAlias = substr($associationMapping, 0, 3);
+                $query->addSelect($associationMappingAlias);
+                $query->leftJoin($alias.'.'.$associationMapping, $associationMappingAlias);
+            }
+            
+            $fields = array_merge($fields, $associationMappings);
+        }        
+        
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
@@ -359,6 +373,25 @@ class ModelManager implements ModelManagerInterface
         $metadata = $this->registry->getEntityManager()->getClassMetadata($class);
 
         return $metadata->getFieldNames();
+    }
+
+    /**
+     * @param $class
+     * @return array
+     */
+    public function getExportAssociationMappings($class)
+    {
+        $metadata = $this->registry->getEntityManager()->getClassMetadata($class);
+        $associationMappings = $metadata->getAssociationMappings();
+        
+        $result = array();
+        foreach($associationMappings as $associationMappingName => $associationMapping){
+            if(in_array($associationMapping['type'], array(1, 2))){ // ONE_TO_ONE and MANY_TO_ONE
+                $result[] = $associationMappingName;
+            }
+        }
+        
+        return $result;
     }
 
     /**
