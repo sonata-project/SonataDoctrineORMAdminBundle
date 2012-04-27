@@ -59,7 +59,7 @@ class FilterTypeGuesser implements TypeGuesserInterface
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
 
-                    $options['operator_type'] = 'sonata_type_boolean';
+                    $options['operator_type'] = 'sonata_type_equal';
                     $options['operator_options'] = array();
 
                     $options['field_type'] = 'entity';
@@ -81,12 +81,12 @@ class FilterTypeGuesser implements TypeGuesserInterface
                 $options['field_options'] = array();
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
-//            case 'datetime':
-//            case 'vardatetime':
-//            case 'datetimetz':
-//                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
-//            case 'date':
-//                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
+            case 'datetime':
+            case 'vardatetime':
+            case 'datetimetz':
+                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
+            case 'date':
+                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);

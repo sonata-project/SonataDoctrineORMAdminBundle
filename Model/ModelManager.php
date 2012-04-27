@@ -32,6 +32,8 @@ class ModelManager implements ModelManagerInterface
 {
     protected $registry;
 
+    const ID_SEPARATOR = '~';
+
     /**
      * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
      */
@@ -136,7 +138,11 @@ class ModelManager implements ModelManagerInterface
      */
     public function find($class, $id)
     {
-        $values = array_combine($this->getIdentifierFieldNames($class), explode('-', $id));
+        if ( !isset($id) ) {
+            return null;
+        }
+
+        $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
@@ -268,7 +274,7 @@ class ModelManager implements ModelManagerInterface
 
         $values = $this->getIdentifierValues($entity);
 
-        return implode('-', $values);
+        return implode(self::ID_SEPARATOR, $values);
     }
 
     /**
@@ -285,7 +291,7 @@ class ModelManager implements ModelManagerInterface
         $prefix = uniqid();
         $sqls = array();
         foreach ($idx as $pos => $id) {
-            $ids     = explode('-', $id);
+            $ids     = explode(self::ID_SEPARATOR, $id);
 
             $ands = array();
             foreach ($fieldNames as $posName => $name) {

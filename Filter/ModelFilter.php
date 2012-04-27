@@ -11,8 +11,9 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sonata\AdminBundle\Form\Type\BooleanType;
+use Sonata\AdminBundle\Form\Type\EqualType;
 
 class ModelFilter extends Filter
 {
@@ -29,36 +30,38 @@ class ModelFilter extends Filter
             return;
         }
 
-        if (is_array($data['value'])) {
+        if ($data['value'] instanceof Collection) {
             $this->handleMultiple($queryBuilder, $alias, $field, $data);
         } else {
-            $this->handleScalar($queryBuilder, $alias, $field, $data);
+            $this->handleModel($queryBuilder, $alias, $field, $data);
         }
     }
 
     protected function handleMultiple($queryBuilder, $alias, $field, $data)
     {
-        if (count($data['value']) == 0) {
+        if ($data['value']->count() == 0) {
             return;
         }
 
-        if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn(sprintf('%s.%s', $alias, $field), $data['value']));
+        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$this->getName()));
         } else {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $data['value']));
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$this->getName()));
         }
+
+        $queryBuilder->setParameter($this->getName(), $data['value']->toArray());
     }
 
-    protected function handleScalar($queryBuilder, $alias, $field, $data)
+    protected function handleModel($queryBuilder, $alias, $field, $data)
     {
         if (empty($data['value'])) {
             return;
         }
 
-        if (isset($data['type']) && $data['type'] == BooleanType::TYPE_NO) {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $this->getName()));
+        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
+            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $this->getName()));
         } else {
-            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $this->getName()));
         }
 
         $queryBuilder->setParameter($this->getName(), $data['value']);
@@ -78,7 +81,7 @@ class ModelFilter extends Filter
         }
 
         if (!$this->getOption('field_name')) {
-            throw new \RunTimeException('please provide a field_name options');
+            throw new \RunTimeException('Please provide a field_name options');
         }
 
         $alias = 's_'.$this->getName();
@@ -95,7 +98,7 @@ class ModelFilter extends Filter
             'field_name'   => false,
             'field_type'   => 'entity',
             'field_options' => array(),
-            'operator_type' => 'sonata_type_boolean',
+            'operator_type' => 'sonata_type_equal',
             'operator_options' => array(),
         );
     }
