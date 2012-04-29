@@ -10,4 +10,4 @@ before_script: php Tests/tests/vendors.php
 script: phpunit
 
 notifications:
-    webhooks: http://sonata-project.org/bundles/doctrine-orm-admin/2-0/travis
+    webhooks: http://sonata-project.org/bundles/doctrine-orm-admin/master/travis
