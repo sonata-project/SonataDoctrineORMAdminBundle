@@ -362,7 +362,7 @@ class ModelManager implements ModelManagerInterface
      */
     public function getExportFields($class)
     {
-        $metadata = $this->registry->getEntityManager()->getClassMetadata($class);
+        $metadata = $this->getEntityManager($class)->getClassMetadata($class);
 
         return $metadata->getFieldNames();
     }
