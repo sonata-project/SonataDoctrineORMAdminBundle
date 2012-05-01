@@ -93,6 +93,43 @@ You can specify your own by setting up the 'template' option like so:
 Advance Usage
 -------------
 
+Displaying sub entity properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you need to display only one field from a sub entity in a dedicated column,
+you can simply use the dot-separated notation (note that this only makes sense
+when the prefix path is made of entities, not collections):
+
+.. code-block:: php
+
+    <?php
+    namespace Acme\AcmeBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Datagrid\ListMapper;
+    use Sonata\AdminBundle\Show\ShowMapper;
+
+    class UserAdmin extends Admin
+    {
+        protected function configureListFields(ListMapper $listMapper)
+        {
+            $listMapper
+                ->addIdentifier('id')
+                ->addIdentifier('firstName')
+                ->addIdentifier('lastName')
+                ->addIdentifier('address.street')
+                ->addIdentifier('address.ZIPCode')
+                ->addIdentifier('address.town')
+            ;
+        }
+    }
+
+
+Custom template
+^^^^^^^^^^^^^^^
+
 If you need a specific layout for a row cell, you can define a custom template
 
 .. code-block:: php
