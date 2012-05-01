@@ -53,7 +53,7 @@ class ListBuilder implements ListBuilderInterface
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName());
+            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
@@ -94,19 +94,22 @@ class ListBuilder implements ListBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
+            $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
             // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
+            if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
                 if ($fieldDescription->getOption('sortable') !== false) {
-                    $fieldDescription->setOption('sortable', $fieldDescription->getOption('sortable', $fieldDescription->getName()));
+                    $fieldDescription->setOption('sortable', $fieldDescription->getOption('sortable', true));
+                    $fieldDescription->setOption('sort_parent_association_mappings', $fieldDescription->getOption('sort_parent_association_mappings', $fieldDescription->getParentAssociationMappings()));
+                    $fieldDescription->setOption('sort_field_mapping', $fieldDescription->getOption('sort_field_mapping', $fieldDescription->getFieldMapping()));
                 }
             }
 
             // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
+            if (isset($metadata->associationMappings[$lastPropertyName])) {
+                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
             }
 
             $fieldDescription->setOption('_sort_order', $fieldDescription->getOption('_sort_order', 'ASC'));

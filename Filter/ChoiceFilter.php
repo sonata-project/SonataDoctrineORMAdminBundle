@@ -50,13 +50,15 @@ class ChoiceFilter extends Filter
                 return;
             }
 
+            $parameterName = $this->getNewParameterName($queryBuilder);
+
             if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
             }
 
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter($parameterName, $data['value']);
         }
     }
 

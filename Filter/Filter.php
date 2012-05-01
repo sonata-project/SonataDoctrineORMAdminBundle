@@ -28,7 +28,9 @@ abstract class Filter extends BaseFilter
 
     protected function association($queryBuilder, $value)
     {
-        return array($this->getOption('alias', $queryBuilder->getRootAlias()), $this->getFieldName());
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($alias, $this->getFieldName());
     }
 
     protected function applyWhere($queryBuilder, $parameter)
@@ -41,6 +43,13 @@ abstract class Filter extends BaseFilter
 
         // filter is active since it's added to the queryBuilder
         $this->active = true;
+    }
+
+    protected function getNewParameterName($queryBuilder)
+    {
+        // dots are not accepted in a DQL identifier so replace them
+        // by underscores.
+        return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
     }
 
     public function isActive()
