@@ -68,6 +68,40 @@ Example
 Advanced usage
 --------------
 
+Filtering by sub entity properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you need to filter your base entities by the value of a sub entity property,
+you can simply use the dot-separated notation (note that this only makes sense
+when the prefix path is made of entities, not collections):
+
+.. code-block:: php
+
+    <?php
+    namespace Acme\AcmeBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Datagrid\ListMapper;
+    use Sonata\AdminBundle\Show\ShowMapper;
+
+    class UserAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid
+                ->add('id')
+                ->add('firstName')
+                ->add('lastName')
+                ->add('address.street')
+                ->add('address.ZIPCode')
+                ->add('address.town')
+            ;
+        }
+    }
+
+
 Label
 ^^^^^
 

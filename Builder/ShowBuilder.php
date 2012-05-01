@@ -54,7 +54,7 @@ class ShowBuilder implements ShowBuilderInterface
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName());
+            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
@@ -91,16 +91,17 @@ class ShowBuilder implements ShowBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
+            $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
             // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
+            if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
             }
 
             // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
+            if (isset($metadata->associationMappings[$lastPropertyName])) {
+                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
             }
         }
 

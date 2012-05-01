@@ -49,8 +49,9 @@ class BooleanFilter extends Filter
                 return;
             }
 
-            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
-            $queryBuilder->setParameter($this->getName(), ($data['value'] == BooleanType::TYPE_YES) ? 1 : 0);
+            $parameterName = $this->getNewParameterName($queryBuilder);
+            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+            $queryBuilder->setParameter($parameterName, ($data['value'] == BooleanType::TYPE_YES) ? 1 : 0);
         }
     }
 

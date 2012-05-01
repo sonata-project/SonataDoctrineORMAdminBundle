@@ -43,13 +43,15 @@ class ModelFilter extends Filter
             return;
         }
 
+        $parameterName = $this->getNewParameterName($queryBuilder);
+
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$this->getName()));
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
         } else {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$this->getName()));
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($this->getName(), $data['value']->toArray());
+        $queryBuilder->setParameter($parameterName, $data['value']->toArray());
     }
 
     protected function handleModel($queryBuilder, $alias, $field, $data)
@@ -58,13 +60,15 @@ class ModelFilter extends Filter
             return;
         }
 
+        $parameterName = $this->getNewParameterName($queryBuilder);
+
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $this->getName()));
+            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
         } else {
-            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $this->getName()));
+            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $queryBuilder->setParameter($this->getName(), $data['value']);
+        $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
     protected function association($queryBuilder, $data)
@@ -80,15 +84,9 @@ class ModelFilter extends Filter
             throw new \RunTimeException('Invalid mapping type');
         }
 
-        if (!$this->getOption('field_name')) {
-            throw new \RunTimeException('Please provide a field_name options');
-        }
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings() + array($this->getAssociationMapping()));
 
-        $alias = 's_'.$this->getName();
-
-        $queryBuilder->leftJoin(sprintf('%s.%s', $queryBuilder->getRootAlias(), $this->getFieldName()), $alias);
-
-        return array($alias, 'id');
+        return array($alias, false);
     }
 
     public function getDefaultOptions()

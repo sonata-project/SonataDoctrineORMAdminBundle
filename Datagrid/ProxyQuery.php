@@ -25,9 +25,15 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $sortOrder;
 
+    protected $parameterUniqueId;
+
+    protected $entityJoinAliases;
+
     public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
+        $this->uniqueParameterId = 0;
+        $this->entityJoinAliases = array();
     }
 
     public function execute(array $params = array(), $hydrationMode = null)
@@ -82,6 +88,7 @@ class ProxyQuery implements ProxyQueryInterface
             if (strpos($sortBy, '.') === false) { // add the current alias
                 $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
             }
+            $sortBy .= ' AS __order_by';
             $queryBuilderId->addSelect($sortBy);
         }
 
@@ -107,9 +114,10 @@ class ProxyQuery implements ProxyQueryInterface
         return call_user_func_array(array($this->queryBuilder, $name), $args);
     }
 
-    public function setSortBy($sortBy)
+    public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
-        $this->sortBy = $sortBy;
+        $alias = $this->entityJoin($parentAssociationMappings);
+        $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
     }
 
     public function getSortBy()
@@ -162,5 +170,28 @@ class ProxyQuery implements ProxyQueryInterface
     public function getMaxResults()
     {
         $this->queryBuilder->getMaxResults();
+    }
+
+    public function getUniqueParameterId()
+    {
+        return $this->uniqueParameterId++;
+    }
+
+    public function entityJoin($associationMappings)
+    {
+        $alias = $this->queryBuilder->getRootAlias();
+        $newAlias = 's';
+
+        foreach($associationMappings as $associationMapping){
+            $newAlias .= '_'.$associationMapping['fieldName'];
+            if (!in_array($newAlias, $this->entityJoinAliases)) {
+                $this->entityJoinAliases[] = $newAlias;
+                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
+            }
+
+            $alias = $newAlias;
+        }
+
+        return $alias;
     }
 }
