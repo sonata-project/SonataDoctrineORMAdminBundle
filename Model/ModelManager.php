@@ -23,7 +23,6 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Doctrine\ORM\QueryBuilder;
 
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
-
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 use Exporter\Source\DoctrineORMQuerySourceIterator;
@@ -43,10 +42,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Returns the related model's metadata
-     *
-     * @param $class
-     * @return \Doctrine\ORM\Mapping\ClassMetadata
+     * {@inheritdoc}
      */
     public function getMetadata($class)
     {
@@ -84,10 +80,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Returns true is the model has some metadata
-     *
-     * @param $class
-     * @return boolean
+     * {@inheritdoc}
      */
     public function hasMetadata($class)
     {
@@ -95,13 +88,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Returns a new FieldDescription
-     *
-     * @throws \RunTimeException
-     * @param $class
-     * @param $name
-     * @param array $options
-     * @return \Sonata\AdminBundle\Admin\ORM\FieldDescription
+     * {@inheritdoc}
      */
     public function getNewFieldDescriptionInstance($class, $name, array $options = array())
     {
@@ -127,6 +114,9 @@ class ModelManager implements ModelManagerInterface
         return $fieldDescription;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function create($object)
     {
         try {
@@ -138,6 +128,9 @@ class ModelManager implements ModelManagerInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function update($object)
     {
         try {
@@ -149,6 +142,9 @@ class ModelManager implements ModelManagerInterface
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function delete($object)
     {
         try {
@@ -161,11 +157,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Find one object from the given class repository.
-     *
-     * @param string $class Class name
-     * @param string|int $id Identifier. Can be a string with several IDs concatenated, separated by '-'.
-     * @return Object
+     * {@inheritdoc}
      */
     public function find($class, $id)
     {
@@ -178,9 +170,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @param array $criteria
-     * @return array
+     * {@inheritdoc}
      */
     public function findBy($class, array $criteria = array())
     {
@@ -188,9 +178,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @param array $criteria
-     * @return array
+     * {@inheritdoc}
      */
     public function findOneBy($class, array $criteria = array())
     {
@@ -210,9 +198,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param string $parentAssociationMapping
-     * @param string $class
-     * @return \Sonata\AdminBundle\Admin\ORM\FieldDescription
+     * {@inheritdoc}
      */
     public function getParentFieldDescription($parentAssociationMapping, $class)
     {
@@ -230,9 +216,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @param string $alias
-     * @return \Doctrine\ORM\QueryBuilder
+     * {@inheritdoc}
      */
     public function createQuery($class, $alias = 'o')
     {
@@ -242,8 +226,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $query
-     * @return mixed
+     * {@inheritdoc}
      */
     public function executeQuery($query)
     {
@@ -255,8 +238,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param string $class
-     * @return string
+     * {@inheritdoc}
      */
     public function getModelIdentifier($class)
     {
@@ -264,9 +246,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @throws \RuntimeException
-     * @param $entity
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getIdentifierValues($entity)
     {
@@ -279,8 +259,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @return mixed
+     * {@inheritdoc}
      */
     public function getIdentifierFieldNames($class)
     {
@@ -288,9 +267,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @throws \RunTimeException
-     * @param $entity
-     * @return null|string
+     * {@inheritdoc}
      */
     public function getNormalizedIdentifier($entity)
     {
@@ -309,10 +286,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryProxy
-     * @param array $idx
-     * @return void
+     * {@inheritdoc}
      */
     public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
     {
@@ -338,11 +312,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Deletes a set of $class identified by the provided $idx array
-     *
-     * @param $class
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryProxy
-     * @return void
+     * {@inheritdoc}
      */
     public function batchDelete($class, ProxyQueryInterface $queryProxy)
     {
@@ -369,11 +339,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
-     * @param array $fields
-     * @param null $firstResult
-     * @param null $maxResult
-     * @return \Exporter\Source\DoctrineORMQuerySourceIterator
+     * {@inheritdoc}
      */
     public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
     {
@@ -388,8 +354,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param $class
-     * @return array
+     * {@inheritdoc}
      */
     public function getExportFields($class)
     {
@@ -399,9 +364,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Returns a new model instance
-     * @param string $class
-     * @return
+     * {@inheritdoc}
      */
     public function getModelInstance($class)
     {
@@ -409,11 +372,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * Returns the parameters used in the columns header
-     *
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
-     * @return array
+     * {@inheritdoc}
      */
     public function getSortParameters(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid)
     {
@@ -434,9 +393,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
-     * @param $page
-     * @return array
+     * {@inheritdoc}
      */
     public function getPaginationParameters(DatagridInterface $datagrid, $page)
     {
@@ -448,8 +405,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param sring $class
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultSortValues($class)
     {
@@ -461,9 +417,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param string $class
-     * @param object $instance
-     * @return mixed
+     * {@inheritdoc}
      */
     public function modelTransform($class, $instance)
     {
@@ -471,9 +425,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param string $class
-     * @param array $array
-     * @return object
+     * {@inheritdoc}
      */
     public function modelReverseTransform($class, array $array = array())
     {
@@ -533,29 +485,40 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @param string $class
-     * @return \Doctrine\Common\Collections\ArrayCollection
+     * {@inheritdoc}
      */
     public function getModelCollectionInstance($class)
     {
         return new \Doctrine\Common\Collections\ArrayCollection();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collectionClear(&$collection)
     {
         return $collection->clear();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collectionHasElement(&$collection, &$element)
     {
         return $collection->contains($element);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collectionAddElement(&$collection, &$element)
     {
         return $collection->add($element);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function collectionRemoveElement(&$collection, &$element)
     {
         return $collection->removeElement($element);
