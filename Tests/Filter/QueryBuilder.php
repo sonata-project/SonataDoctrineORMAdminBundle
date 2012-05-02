@@ -38,9 +38,12 @@ class QueryBuilder
     public function in($name, $value)
     {
         $this->query[] = 'in_'.$name;
-        $this->parameters[] = 'in_'.$value;
 
-        return sprintf('%s IN ("%s")', $name, implode(',', $value));
+        if (is_array($value)) {
+            return sprintf('%s IN ("%s")', $name, implode(',', $value));
+        }
+
+        return sprintf('%s IN %s', 'in_'.$name, $value);
     }
 
     public function getRootAlias()

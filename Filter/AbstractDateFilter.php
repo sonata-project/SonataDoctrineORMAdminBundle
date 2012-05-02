@@ -4,6 +4,8 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 
@@ -22,14 +24,9 @@ abstract class AbstractDateFilter extends Filter
     protected $time = false;
 
     /**
-     *
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param array $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         //check data sanity
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -87,6 +84,7 @@ abstract class AbstractDateFilter extends Filter
 
     /**
      * Resolves DataType:: constants to SQL operators
+     *
      * @param integer $type
      * @return string
      */
@@ -108,8 +106,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Gets default options
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
@@ -117,8 +114,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Gets render settings
-     * @return array
+     * {@inheritdoc}
      */
     public function getRenderSettings()
     {

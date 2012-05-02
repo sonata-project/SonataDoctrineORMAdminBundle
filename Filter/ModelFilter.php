@@ -14,32 +14,42 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Form\Type\EqualType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ModelFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param mixed $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
         }
 
         if ($data['value'] instanceof Collection) {
-            $this->handleMultiple($queryBuilder, $alias, $field, $data);
+            $data['value'] = $data['value']->toArray();
+        }
+
+        if (is_array($data['value'])) {
+            $this->handleMultiple($queryBuilder, $alias, $data);
         } else {
-            $this->handleModel($queryBuilder, $alias, $field, $data);
+            $this->handleModel($queryBuilder, $alias, $data);
         }
     }
 
-    protected function handleMultiple($queryBuilder, $alias, $field, $data)
+    /**
+     * For the record, the $alias value is provided by the association method (and the entity join method)
+     *  so the field value is not used here
+     *
+     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     * @param $alias
+     * @param $data
+     * @return mixed
+     */
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
-        if ($data['value']->count() == 0) {
+        if (count($data['value']) == 0) {
             return;
         }
 
@@ -51,10 +61,16 @@ class ModelFilter extends Filter
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $data['value']->toArray());
+        $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    protected function handleModel($queryBuilder, $alias, $field, $data)
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     * @param $alias
+     * @param $data
+     * @return mixed
+     */
+    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
         if (empty($data['value'])) {
             return;
@@ -71,7 +87,10 @@ class ModelFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    protected function association($queryBuilder, $data)
+    /**
+     * {@inheritdoc}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $types = array(
             ClassMetadataInfo::ONE_TO_ONE,
@@ -89,6 +108,9 @@ class ModelFilter extends Filter
         return array($alias, false);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getDefaultOptions()
     {
         return array(
@@ -101,6 +123,9 @@ class ModelFilter extends Filter
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(

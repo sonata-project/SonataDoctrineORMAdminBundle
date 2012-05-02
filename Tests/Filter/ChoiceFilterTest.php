@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 {
@@ -21,7 +22,7 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
         $filter = new ChoiceFilter;
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'all');
@@ -36,7 +37,7 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
         $filter = new ChoiceFilter;
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => array('1', '2')));
 
@@ -49,12 +50,12 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
         $filter = new ChoiceFilter;
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => '1'));
 
-        $this->assertEquals(array('alias.field = :field_name'), $builder->query);
-        $this->assertEquals(array('field_name' => '1'), $builder->parameters);
+        $this->assertEquals(array('alias.field = :field_name_0'), $builder->query);
+        $this->assertEquals(array('field_name_0' => '1'), $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 }

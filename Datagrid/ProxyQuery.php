@@ -29,13 +29,16 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $entityJoinAliases;
 
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct($queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
         $this->entityJoinAliases = array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function execute(array $params = array(), $hydrationMode = null)
     {
         // always clone the original queryBuilder
@@ -109,32 +112,58 @@ class ProxyQuery implements ProxyQueryInterface
         return $queryBuilder;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __call($name, $args)
     {
         return call_user_func_array(array($this->queryBuilder, $name), $args);
     }
 
+    /**
+     * {@inheritdoc}
+     */
+    public function __get($name)
+    {
+        return $this->queryBuilder->$name;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
         $alias = $this->entityJoin($parentAssociationMappings);
         $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSortBy()
     {
         return $this->sortBy;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSortOrder()
     {
         return $this->sortOrder;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getSingleScalarResult()
     {
         $query = $this->queryBuilder->getQuery();
@@ -142,6 +171,9 @@ class ProxyQuery implements ProxyQueryInterface
         return $query->getSingleScalarResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function __clone()
     {
         $this->queryBuilder = clone $this->queryBuilder;
@@ -152,34 +184,53 @@ class ProxyQuery implements ProxyQueryInterface
       return $this->queryBuilder;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setFirstResult($firstResult)
     {
         $this->queryBuilder->setFirstResult($firstResult);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getFirstResult()
     {
         $this->queryBuilder->getFirstResult();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function setMaxResults($maxResults)
     {
         $this->queryBuilder->setMaxResults($maxResults);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getMaxResults()
     {
         $this->queryBuilder->getMaxResults();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getUniqueParameterId()
     {
         return $this->uniqueParameterId++;
     }
 
-    public function entityJoin($associationMappings)
+    /**
+     * {@inheritdoc}
+     */
+    public function entityJoin(array $associationMappings)
     {
         $alias = $this->queryBuilder->getRootAlias();
+
         $newAlias = 's';
 
         foreach($associationMappings as $associationMapping){

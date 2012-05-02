@@ -12,17 +12,14 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\BooleanType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class BooleanFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param mixed $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;
@@ -56,13 +53,16 @@ class BooleanFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
