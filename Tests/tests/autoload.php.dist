@@ -5,15 +5,15 @@ if (is_file($autoload)) {
     include $autoload;
 } else {
     $vendorDir = __DIR__.'/../../vendor';
-    require_once $vendorDir.'/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
+    require_once $vendorDir.'/symfony/symfony/src/Symfony/Component/ClassLoader/UniversalClassLoader.php';
 
     $loader = new Symfony\Component\ClassLoader\UniversalClassLoader();
     $loader->registerNamespaces(array(
-        'Symfony'               => array($vendorDir.'/symfony/src'),
-        'Knp'                   => array($vendorDir.'/knpmenu/src'),
-        'Sonata\\AdminBundle'   => array($vendorDir),
-        'Doctrine\\ORM'         => array($vendorDir.'/doctrine/lib'),
-        'Doctrine\\Common'      => array($vendorDir.'/doctrine-common/lib')
+        'Symfony'               => array($vendorDir.'/symfony/symfony/src'),
+        'Knp'                   => array($vendorDir.'/knplabs/knpmenu/src'),
+        'Sonata\\AdminBundle'   => array($vendorDir.'/sonata-project/admin-bundle/'),
+        'Doctrine\\ORM'         => array($vendorDir.'/doctrine/orm/lib'),
+        'Doctrine\\Common'      => array($vendorDir.'/doctrine/common/lib')
     ));
     $loader->register();
 

@@ -16,11 +16,17 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
+    "repositories": [
+        {
+            "type": "vcs",
+            "url": "https://github.com/r1pp3rj4ck/SonataAdminBundle.git"
+        }
+    ],
     "require": {
         "php": ">=5.3.2",
-        "sonata-project/admin-bundle": "master-dev",
-        "symfony/framework-bundle": "master-dev",
-        "symfony/security-bundle": "master-dev"
+        "symfony/symfony": "2.1.*",
+        "doctrine/orm": "2.2.2",
+        "sonata-project/admin-bundle": "master-dev"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }

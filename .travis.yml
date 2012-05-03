@@ -6,7 +6,10 @@ php:
 env:
   - SYMFONY_VERSION=origin/master
 
-before_script: php Tests/tests/vendors.php
+before_script: 
+  - curl -S http://getcomposer.org/installer | php
+  - php composer.phar install
+
 script: phpunit
 
 notifications:
