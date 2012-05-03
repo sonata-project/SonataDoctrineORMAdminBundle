@@ -21,7 +21,7 @@ class QueryBuilder
 
     /**
      * @param string $name
-     * @param mixed $value
+     * @param mixed  $value
      */
     public function setParameter($name, $value)
     {

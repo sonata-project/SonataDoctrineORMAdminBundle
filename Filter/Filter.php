@@ -58,13 +58,14 @@ abstract class Filter extends BaseFilter
 
     /**
      * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     *
      * @return string
      */
     protected function getNewParameterName(ProxyQueryInterface $queryBuilder)
     {
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.
-        return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
+        return str_replace('.', '_', $this->getName()) . '_' . $queryBuilder->getUniqueParameterId();
     }
 
     /**

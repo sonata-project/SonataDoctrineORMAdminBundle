@@ -61,6 +61,7 @@ class ChoiceFilter extends Filter
 
     /**
      * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)

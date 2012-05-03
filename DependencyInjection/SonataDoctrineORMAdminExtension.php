@@ -65,6 +65,7 @@ class SonataDoctrineORMAdminExtension extends Extension
 
     /**
      * @param array $configs
+     *
      * @return array
      */
     private function fixTemplatesConfiguration(array $configs)

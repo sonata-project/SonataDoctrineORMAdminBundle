@@ -48,13 +48,12 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         $autitedEntities = array_unique($autitedEntities);
 
         $container->setParameter('simplethings.entityaudit.audited_entities', $autitedEntities);
-        $container->getDefinition('sonata.admin.audit.manager')
-            ->addMethodCall('setReader', array('sonata.admin.audit.orm.reader', $autitedEntities));
+        $container->getDefinition('sonata.admin.audit.manager')->addMethodCall('setReader', array('sonata.admin.audit.orm.reader', $autitedEntities));
     }
 
     /**
      * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string $name
+     * @param string                                                  $name
      *
      * @return string
      */
