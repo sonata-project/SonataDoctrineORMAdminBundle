@@ -16,12 +16,6 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
-    "repositories": [
-        {
-            "type": "vcs",
-            "url": "https://github.com/r1pp3rj4ck/SonataAdminBundle.git"
-        }
-    ],
     "require": {
         "php": ">=5.3.2",
         "symfony/symfony": "2.1.*",
