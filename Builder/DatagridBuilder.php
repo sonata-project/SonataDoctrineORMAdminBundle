@@ -34,9 +34,9 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $guesser;
 
     /**
-     * @param \Symfony\Component\Form\FormFactory $formFactory
+     * @param \Symfony\Component\Form\FormFactory               $formFactory
      * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
-     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
+     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface  $guesser
      */
     public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser)
     {
@@ -46,8 +46,9 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -76,10 +77,11 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
-     * @param null $type
+     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface      $datagrid
+     * @param null                                                $type
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
+     *
      * @return \Sonata\AdminBundle\Filter\FilterInterface
      */
     public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
@@ -93,7 +95,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
             $options = $guessType->getOptions();
 
-            foreach($options as $name => $value) {
+            foreach ($options as $name => $value) {
                 if (is_array($value)) {
                     $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, array())));
                 } else {
@@ -121,7 +123,8 @@ class DatagridBuilder implements DatagridBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
-     * @param array $values
+     * @param array                                    $values
+     *
      * @return \Sonata\AdminBundle\Datagrid\DatagridInterface
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())

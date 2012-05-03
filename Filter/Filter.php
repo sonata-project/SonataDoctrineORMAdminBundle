@@ -42,7 +42,7 @@ abstract class Filter extends BaseFilter
 
     /**
      * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param $parameter
+     * @param mixed                                            $parameter
      */
     protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
     {

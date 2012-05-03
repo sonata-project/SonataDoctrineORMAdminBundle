@@ -29,9 +29,12 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $entityJoinAliases;
 
+    /**
+     * @param mixed $queryBuilder
+     */
     public function __construct($queryBuilder)
     {
-        $this->queryBuilder = $queryBuilder;
+        $this->queryBuilder      = $queryBuilder;
         $this->uniqueParameterId = 0;
         $this->entityJoinAliases = array();
     }
@@ -48,7 +51,7 @@ class ProxyQuery implements ProxyQueryInterface
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilder->getRootAlias().'.'.$sortBy;
+                $sortBy = $queryBuilder->getRootAlias() . '.' . $sortBy;
             }
             $queryBuilder->orderBy($sortBy, $this->getSortOrder());
         }
@@ -61,14 +64,15 @@ class ProxyQuery implements ProxyQueryInterface
      * set of Object
      *
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
-     * @return void
+     *
+     * @return \Doctrine\ORM\QueryBuilder
      */
     private function getFixedQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilderId = clone $queryBuilder;
 
         // step 1 : retrieve the targeted class
-        $from = $queryBuilderId->getDQLPart('from');
+        $from  = $queryBuilderId->getDQLPart('from');
         $class = $from[0]->getFrom();
 
         // step 2 : retrieve the column id
@@ -77,7 +81,7 @@ class ProxyQuery implements ProxyQueryInterface
         // step 3 : retrieve the different subjects id
         $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
         $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT '.$select);
+        $queryBuilderId->add('select', 'DISTINCT ' . $select);
 
         //for SELECT DISTINCT, ORDER BY expressions must appear in select list
         /* Consider
@@ -89,16 +93,16 @@ class ProxyQuery implements ProxyQueryInterface
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
+                $sortBy = $queryBuilderId->getRootAlias() . '.' . $sortBy;
             }
             $sortBy .= ' AS __order_by';
             $queryBuilderId->addSelect($sortBy);
         }
 
-        $results  = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
-        $idx      = array();
+        $results    = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+        $idx        = array();
         $connection = $queryBuilder->getEntityManager()->getConnection();
-        foreach($results as $id) {
+        foreach ($results as $id) {
             $idx[] = $connection->quote($id[$idName]);
         }
 
@@ -133,8 +137,8 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
-        $alias = $this->entityJoin($parentAssociationMappings);
-        $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
+        $alias        = $this->entityJoin($parentAssociationMappings);
+        $this->sortBy = $alias . '.' . $fieldMapping['fieldName'];
     }
 
     /**
@@ -179,9 +183,12 @@ class ProxyQuery implements ProxyQueryInterface
         $this->queryBuilder = clone $this->queryBuilder;
     }
 
+    /**
+     * @return mixed
+     */
     public function getQueryBuilder()
     {
-      return $this->queryBuilder;
+        return $this->queryBuilder;
     }
 
     /**
@@ -233,8 +240,8 @@ class ProxyQuery implements ProxyQueryInterface
 
         $newAlias = 's';
 
-        foreach($associationMappings as $associationMapping){
-            $newAlias .= '_'.$associationMapping['fieldName'];
+        foreach ($associationMappings as $associationMapping) {
+            $newAlias .= '_' . $associationMapping['fieldName'];
             if (!in_array($newAlias, $this->entityJoinAliases)) {
                 $this->entityJoinAliases[] = $newAlias;
                 $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);

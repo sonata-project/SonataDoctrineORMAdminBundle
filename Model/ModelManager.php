@@ -186,7 +186,9 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @param string $class
+     *
+     * @return null|\Symfony\Bridge\Doctrine\EntityManager
      */
     public function getEntityManager($class)
     {
@@ -476,7 +478,8 @@ class ModelManager implements ModelManagerInterface
     /**
      * method taken from PropertyPath
      *
-     * @param  $property
+     * @param string $property
+     *
      * @return mixed
      */
     protected function camelize($property)

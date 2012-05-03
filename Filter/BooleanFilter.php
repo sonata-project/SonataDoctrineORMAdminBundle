@@ -29,7 +29,7 @@ class BooleanFilter extends Filter
             $values = array();
             foreach ($data['value'] as $v) {
                 if (!in_array($v, array(BooleanType::TYPE_NO, BooleanType::TYPE_YES))) {
-                   continue;
+                    continue;
                 }
 
                 $values[] = ($v == BooleanType::TYPE_YES) ? 1 : 0;

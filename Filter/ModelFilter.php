@@ -43,8 +43,9 @@ class ModelFilter extends Filter
      *  so the field value is not used here
      *
      * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param $alias
-     * @param $data
+     * @param string                                           $alias
+     * @param mixed                                            $data
+     *
      * @return mixed
      */
     protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
@@ -66,8 +67,9 @@ class ModelFilter extends Filter
 
     /**
      * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param $alias
-     * @param $data
+     * @param string                                           $alias
+     * @param mixed                                            $data
+     *
      * @return mixed
      */
     protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data)

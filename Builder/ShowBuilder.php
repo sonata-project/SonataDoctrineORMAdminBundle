@@ -67,7 +67,7 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * @param $type
+     * @param string $type
      * @return string
      */
     private function getTemplate($type)

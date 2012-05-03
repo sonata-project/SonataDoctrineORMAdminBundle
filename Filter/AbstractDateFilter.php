@@ -86,6 +86,7 @@ abstract class AbstractDateFilter extends Filter
      * Resolves DataType:: constants to SQL operators
      *
      * @param integer $type
+     *
      * @return string
      */
     protected function getOperator($type)
