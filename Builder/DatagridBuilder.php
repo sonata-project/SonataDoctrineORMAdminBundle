@@ -56,17 +56,19 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
 
             // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
+            if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $metadata->fieldMappings[$lastPropertyName]));
             }
 
             // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
+            if (isset($metadata->associationMappings[$lastPropertyName])) {
+                $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $metadata->associationMappings[$lastPropertyName]));
             }
+
+            $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings));
         }
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
@@ -83,7 +85,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName());
+            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
 
             $type = $guessType->getType();
 

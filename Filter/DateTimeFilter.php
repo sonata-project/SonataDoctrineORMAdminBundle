@@ -15,12 +15,14 @@ class DateTimeFilter extends AbstractDateFilter
 {
     /**
      * This filter has time
+     *
      * @var boolean
      */
     protected $time = true;
 
     /**
      * This is not a rangle filter
+     *
      * @var boolean
      */
     protected $range = false;

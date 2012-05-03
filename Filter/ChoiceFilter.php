@@ -13,17 +13,14 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ChoiceFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param mixed $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;
@@ -50,13 +47,15 @@ class ChoiceFilter extends Filter
                 return;
             }
 
+            $parameterName = $this->getNewParameterName($queryBuilder);
+
             if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
             }
 
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter($parameterName, $data['value']);
         }
     }
 
@@ -76,7 +75,7 @@ class ChoiceFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
@@ -84,7 +83,7 @@ class ChoiceFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getRenderSettings()
     {

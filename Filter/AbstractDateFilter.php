@@ -4,6 +4,8 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToStringTransformer;
 
@@ -22,14 +24,9 @@ abstract class AbstractDateFilter extends Filter
     protected $time = false;
 
     /**
-     *
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param array $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         //check data sanity
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -49,15 +46,18 @@ abstract class AbstractDateFilter extends Filter
             //default type for range filter
             $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
 
+            $startDateParameterName = $this->getNewParameterName($queryBuilder);
+            $endDateParameterName = $this->getNewParameterName($queryBuilder);
+
             if ($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $this->getName().'_start', $alias, $field, $this->getName().'_end'));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $this->getName().'_start'));
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $this->getName().'_end'));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
             }
 
-            $queryBuilder->setParameter($this->getName().'_start',  $data['value']['start']);
-            $queryBuilder->setParameter($this->getName().'_end',  $data['value']['end']);
+            $queryBuilder->setParameter($startDateParameterName,  $data['value']['start']);
+            $queryBuilder->setParameter($endDateParameterName,  $data['value']['end']);
         } else {
 
             if (!$data['value']) {
@@ -74,14 +74,17 @@ abstract class AbstractDateFilter extends Filter
             if (in_array($operator, array('NULL', 'NOT NULL'))) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
-                $queryBuilder->setParameter($this->getName(), $data['value']);
+                $parameterName = $this->getNewParameterName($queryBuilder);
+
+                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+                $queryBuilder->setParameter($parameterName, $data['value']);
             }
         }
     }
 
     /**
      * Resolves DataType:: constants to SQL operators
+     *
      * @param integer $type
      * @return string
      */
@@ -103,8 +106,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Gets default options
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
@@ -112,8 +114,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Gets render settings
-     * @return array
+     * {@inheritdoc}
      */
     public function getRenderSettings()
     {
