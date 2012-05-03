@@ -85,9 +85,6 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             case 'bigint':
             case 'smallint':
                 $options['field_type'] = 'number';
-                $options['field_options'] = array(
-                    'csrf_protection' => false
-                );
 
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
