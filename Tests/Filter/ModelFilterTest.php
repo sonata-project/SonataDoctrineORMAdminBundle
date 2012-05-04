@@ -121,4 +121,36 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('o.association_mapping', 's_association_mapping = :field_name_0'), $builder->query);
         $this->assertEquals(true, $filter->isActive());
     }
+
+    public function testAssociationWithValidParentAssociationMappings()
+    {
+        $filter = new ModelFilter;
+        $filter->initialize('field_name', array(
+            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name' => 'field_name',
+            'parent_association_mappings' => array(
+                array(
+                    'fieldName' => 'association_mapping'
+                ),
+                array(
+                    'fieldName' => 'sub_association_mapping'
+                ),
+            ),
+            'association_mapping' => array(
+                'fieldName' => 'sub_sub_association_mapping'
+            )
+        ));
+
+        $builder = new ProxyQuery(new QueryBuilder);
+
+        $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
+
+        $this->assertEquals(array(
+            'o.association_mapping',
+            's_association_mapping.sub_association_mapping',
+            's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
+            's_association_mapping_sub_association_mapping_sub_sub_association_mapping = :field_name_0'
+        ), $builder->query);
+        $this->assertEquals(true, $filter->isActive());
+    }
 }
