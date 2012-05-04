@@ -109,14 +109,16 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->initialize('field_name', array(
             'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
             'field_name' => 'field_name',
-            'association_mapping' => 'association_mapping'
+            'association_mapping' => array(
+                'fieldName' => 'association_mapping'
+            )
         ));
 
         $builder = new ProxyQuery(new QueryBuilder);
 
         $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
-        $this->assertEquals(array('o.a', 's_a = :field_name_0'), $builder->query);
+        $this->assertEquals(array('o.association_mapping', 's_association_mapping = :field_name_0'), $builder->query);
         $this->assertEquals(true, $filter->isActive());
     }
 }
