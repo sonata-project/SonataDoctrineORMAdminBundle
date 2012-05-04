@@ -105,7 +105,9 @@ class ModelFilter extends Filter
             throw new \RunTimeException('Invalid mapping type');
         }
 
-        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings() + array($this->getAssociationMapping()));
+        $associationMappings = $this->getParentAssociationMappings();
+        $associationMappings[] = $this->getAssociationMapping();
+        $alias = $queryBuilder->entityJoin($associationMappings);
 
         return array($alias, false);
     }
