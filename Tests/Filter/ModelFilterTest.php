@@ -13,7 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class ModelFilterTest extends \PHPUnit_Framework_TestCase
@@ -53,7 +53,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder);
 
         $filter->filter($builder, 'alias', 'field', array(
-            'type' => ChoiceType::TYPE_CONTAINS,
+            'type' => EqualType::TYPE_IS_EQUAL,
             'value' => array('1', '2')
         ));
 
@@ -69,7 +69,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $builder = new ProxyQuery(new QueryBuilder);
 
-        $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => 2));
+        $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 2));
 
         $this->assertEquals(array('alias = :field_name_0'), $builder->query);
         $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
@@ -109,14 +109,48 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->initialize('field_name', array(
             'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
             'field_name' => 'field_name',
-            'association_mapping' => 'association_mapping'
+            'association_mapping' => array(
+                'fieldName' => 'association_mapping'
+            )
         ));
 
         $builder = new ProxyQuery(new QueryBuilder);
 
-        $filter->apply($builder, array('type' => ChoiceType::TYPE_CONTAINS, 'value' => 'asd'));
+        $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
-        $this->assertEquals(array('o.a', 's_a = :field_name_0'), $builder->query);
+        $this->assertEquals(array('o.association_mapping', 's_association_mapping = :field_name_0'), $builder->query);
+        $this->assertEquals(true, $filter->isActive());
+    }
+
+    public function testAssociationWithValidParentAssociationMappings()
+    {
+        $filter = new ModelFilter;
+        $filter->initialize('field_name', array(
+            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name' => 'field_name',
+            'parent_association_mappings' => array(
+                array(
+                    'fieldName' => 'association_mapping'
+                ),
+                array(
+                    'fieldName' => 'sub_association_mapping'
+                ),
+            ),
+            'association_mapping' => array(
+                'fieldName' => 'sub_sub_association_mapping'
+            )
+        ));
+
+        $builder = new ProxyQuery(new QueryBuilder);
+
+        $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
+
+        $this->assertEquals(array(
+            'o.association_mapping',
+            's_association_mapping.sub_association_mapping',
+            's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
+            's_association_mapping_sub_association_mapping_sub_sub_association_mapping = :field_name_0'
+        ), $builder->query);
         $this->assertEquals(true, $filter->isActive());
     }
 }
