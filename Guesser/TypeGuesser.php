@@ -21,9 +21,7 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 class TypeGuesser extends AbstractTypeGuesser
 {
     /**
-     * @param string $class
-     * @param string $property
-     * @return TypeGuess
+     * {@inheritdoc}
      */
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {

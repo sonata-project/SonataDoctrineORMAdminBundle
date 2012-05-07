@@ -27,7 +27,7 @@ class ListBuilder implements ListBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
-     * @param array $templates
+     * @param array                                            $templates
      */
     public function __construct(TypeGuesserInterface $guesser, $templates = array())
     {
@@ -36,8 +36,7 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * @param array $options
-     * @return \Sonata\AdminBundle\Admin\FieldDescriptionCollection
+     * {@inheritdoc}
      */
     public function getBaseList(array $options = array())
     {
@@ -45,10 +44,7 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionCollection $list
-     * @param null $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * {@inheritdoc}
      */
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
@@ -66,7 +62,8 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return string
      */
     private function getTemplate($type)
@@ -79,11 +76,7 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * The method defines the correct default settings for the provided FieldDescription
-     *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @return void
+     * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -162,6 +155,7 @@ class ListBuilder implements ListBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
      */
     public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription)

@@ -51,7 +51,8 @@ class StringFilter extends Filter
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)

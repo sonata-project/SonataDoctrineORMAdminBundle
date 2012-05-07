@@ -54,9 +54,10 @@ class ModelManager implements ModelManagerInterface
      * Returns the model's metadata holding the fully qualified property, and the last
      * property name
      *
-     * @param string $baseClass The base class of the model holding the fully qualified property.
+     * @param string $baseClass        The base class of the model holding the fully qualified property.
      * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
-     * property string)
+     *                                 property string)
+     *
      * @return array(
      *     \Doctrine\ORM\Mapping\ClassMetadata $parentMetadata,
      *     string $lastPropertyName,
@@ -123,7 +124,7 @@ class ModelManager implements ModelManagerInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch ( \PDOException $e ) {
+        } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
@@ -137,7 +138,7 @@ class ModelManager implements ModelManagerInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch ( \PDOException $e ) {
+        } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
@@ -151,7 +152,7 @@ class ModelManager implements ModelManagerInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->remove($object);
             $entityManager->flush();
-        } catch ( \PDOException $e ) {
+        } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
@@ -161,7 +162,7 @@ class ModelManager implements ModelManagerInterface
      */
     public function find($class, $id)
     {
-        if ( !isset($id) ) {
+        if (!isset($id)) {
             return null;
         }
 
@@ -186,7 +187,9 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * @return \Doctrine\ORM\EntityManager
+     * @param string $class
+     *
+     * @return null|\Symfony\Bridge\Doctrine\EntityManager
      */
     public function getEntityManager($class)
     {
@@ -231,7 +234,7 @@ class ModelManager implements ModelManagerInterface
     public function executeQuery($query)
     {
         if ($query instanceof QueryBuilder) {
-          return $query->getQuery()->execute();
+            return $query->getQuery()->execute();
         }
 
         return $query->execute();
@@ -333,7 +336,7 @@ class ModelManager implements ModelManagerInterface
 
             $entityManager->flush();
             $entityManager->clear();
-        } catch ( \PDOException $e ) {
+        } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
@@ -346,7 +349,7 @@ class ModelManager implements ModelManagerInterface
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
-        $query->select('DISTINCT '.$query->getRootAlias());
+        $query->select('DISTINCT ' . $query->getRootAlias());
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
@@ -385,8 +388,8 @@ class ModelManager implements ModelManagerInterface
                 $values['_sort_order'] = 'ASC';
             }
         } else {
-            $values['_sort_order']  = 'ASC';
-            $values['_sort_by']     = $fieldDescription->getName();
+            $values['_sort_order'] = 'ASC';
+            $values['_sort_by']    = $fieldDescription->getName();
         }
 
         return array('filter' => $values);
@@ -476,7 +479,8 @@ class ModelManager implements ModelManagerInterface
     /**
      * method taken from PropertyPath
      *
-     * @param  $property
+     * @param string $property
+     *
      * @return mixed
      */
     protected function camelize($property)

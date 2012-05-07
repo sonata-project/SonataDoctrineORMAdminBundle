@@ -36,11 +36,12 @@ class NumberFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
         $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        $queryBuilder->setParameter($parameterName,  $data['value']);
+        $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)

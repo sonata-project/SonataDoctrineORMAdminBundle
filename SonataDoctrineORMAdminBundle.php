@@ -19,6 +19,9 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCom
 
 class SonataDoctrineORMAdminBundle extends Bundle
 {
+    /**
+     * {@inheritdoc}
+     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new AddGuesserCompilerPass());
