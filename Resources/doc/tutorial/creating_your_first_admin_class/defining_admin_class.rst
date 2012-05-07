@@ -201,7 +201,7 @@ Tweak the TagAdmin class
 
         /**
          * @param \Sonata\AdminBundle\Validator\ErrorElement $errorElement
-         * @param $object
+         * @param mixed $object
          * @return void
          */
         public function validate(ErrorElement $errorElement, $object)

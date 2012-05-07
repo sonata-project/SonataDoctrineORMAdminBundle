@@ -36,8 +36,9 @@ class FormContractor implements FormContractorInterface
     /**
      * The method defines the correct default settings for the provided FieldDescription
      *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -78,7 +79,8 @@ class FormContractor implements FormContractorInterface
 
     /**
      * @param string $name
-     * @param array $options
+     * @param array  $options
+     *
      * @return \Symfony\Component\Form\FormBuilder
      */
     public function getFormBuilder($name, array $options = array())
@@ -87,13 +89,14 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param $type
+     * @param string                                              $type
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return array
      */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
-        $options = array();
+        $options                             = array();
         $options['sonata_field_description'] = $fieldDescription;
 
         if ($type == 'sonata_type_model') {
@@ -103,8 +106,8 @@ class FormContractor implements FormContractorInterface
             switch ($fieldDescription->getMappingType()) {
                 case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::MANY_TO_MANY:
-                    $options['multiple']            = true;
-                    $options['parent']              = 'choice';
+                    $options['multiple'] = true;
+                    $options['parent']   = 'choice';
                     break;
 
                 case ClassMetadataInfo::MANY_TO_ONE:

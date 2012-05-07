@@ -77,6 +77,7 @@ This code manage the many-to-[one|many] association field popup
         // retrieve the form element from the related admin generator
         jQuery.ajax({
             url: a.attr('href'),
+            dataType: 'html',
             success: function(html) {
 
                 Admin.log('[{{ id }}|field_dialog_form_list] retrieving the list content');
@@ -362,7 +363,7 @@ This code manage the many-to-[one|many] association field popup
 
             Admin.log('[{{ id }}] update the label');
 
-            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information ...'|trans([], 'SonataAdminBundle') }}</span>");
+            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
             jQuery.ajax({
                 type: 'GET',
                 url: '{{ url('sonata_admin_short_object_information', {

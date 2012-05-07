@@ -44,9 +44,10 @@ file that was distributed with this source code.
                 <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
                     onclick="return start_field_dialog_form_list_{{ id }}(this);"
                     class="sonata-ba-action"
+                    title="{% trans from 'SonataAdminBundle' %}link_list{% endtrans %}"
                     >
                     <img src="{{ asset('bundles/sonataadmin/famfamfam/application_view_list.png') }}"
-                         alt="{% trans from 'SonataAdminBundle' %}btn_add{% endtrans %}"
+                         alt="{% trans from 'SonataAdminBundle' %}link_list{% endtrans %}"
                     />
                 </a>
             {% endif %}
@@ -55,8 +56,9 @@ file that was distributed with this source code.
                 <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                     onclick="return start_field_dialog_form_add_{{ id }}(this);"
                     class="sonata-ba-action"
+                    title="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}"
                     >
-                        <img src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}" alt="{% trans from 'SonataAdminBundle' %}btn_add{% endtrans %}" />
+                        <img src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}" alt="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}" />
                 </a>
             {% endif %}
 
@@ -64,9 +66,10 @@ file that was distributed with this source code.
                 <a  href=""
                     onclick="return remove_selected_element_{{ id }}(this);"
                     class="sonata-ba-action"
+                    title="{% trans from 'SonataAdminBundle' %}link_delete{% endtrans %}"
                     >
                     <img src="{{ asset('bundles/sonataadmin/famfamfam/cancel.png') }}"
-                         alt="{% trans from 'SonataAdminBundle' %}btn_cancel{% endtrans %}"
+                         alt="{% trans from 'SonataAdminBundle' %}link_delete{% endtrans %}"
                     />
                 </a>
             {% endif %}

@@ -12,11 +12,15 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class Filter extends BaseFilter
 {
     protected $active = false;
 
+    /**
+     * {@inheritdoc}
+     */
     public function apply($queryBuilder, $value)
     {
         $this->value = $value;
@@ -26,12 +30,21 @@ abstract class Filter extends BaseFilter
         $this->filter($queryBuilder, $alias, $field, $value);
     }
 
-    protected function association($queryBuilder, $value)
+    /**
+     * {@inheritdoc}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
-        return array($this->getOption('alias', $queryBuilder->getRootAlias()), $this->getFieldName());
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($alias, $this->getFieldName());
     }
 
-    protected function applyWhere($queryBuilder, $parameter)
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     * @param mixed                                            $parameter
+     */
+    protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
     {
         if ($this->getCondition() == self::CONDITION_OR) {
             $queryBuilder->orWhere($parameter);
@@ -43,6 +56,21 @@ abstract class Filter extends BaseFilter
         $this->active = true;
     }
 
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     *
+     * @return string
+     */
+    protected function getNewParameterName(ProxyQueryInterface $queryBuilder)
+    {
+        // dots are not accepted in a DQL identifier so replace them
+        // by underscores.
+        return str_replace('.', '_', $this->getName()) . '_' . $queryBuilder->getUniqueParameterId();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function isActive()
     {
         return $this->active;

@@ -16,36 +16,23 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Mapping\MappingException;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 
-class TypeGuesser implements TypeGuesserInterface
+class TypeGuesser extends AbstractTypeGuesser
 {
-    protected $registry;
-
-    private $cache;
-
-    public function __construct(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
-        $this->cache = array();
-    }
-
     /**
-     * @param string $class
-     * @param string $property
-     * @return TypeGuess
+     * {@inheritdoc}
      */
-    public function guessType($class, $property)
+    public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
-        if (!$ret = $this->getMetadata($class)) {
+        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
             return new TypeGuess('text', array(), Guess::LOW_CONFIDENCE);
         }
 
-        list($metadata, $name) = $ret;
+        list($metadata, $propertyName, $parentAssociationMappings) = $ret;
 
-        if ($metadata->hasAssociation($property)) {
-            $multiple = $metadata->isCollectionValuedAssociation($property);
-            $mapping = $metadata->getAssociationMapping($property);
+        if ($metadata->hasAssociation($propertyName)) {
+            $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
                 case ClassMetadataInfo::ONE_TO_MANY:
@@ -62,7 +49,7 @@ class TypeGuesser implements TypeGuesserInterface
             }
         }
 
-        switch ($metadata->getTypeOfField($property))
+        switch ($metadata->getTypeOfField($propertyName))
         {
             case 'array':
                 return new TypeGuess('array', array(), Guess::HIGH_CONFIDENCE);
@@ -89,22 +76,6 @@ class TypeGuesser implements TypeGuesserInterface
                 return new TypeGuess('time', array(), Guess::HIGH_CONFIDENCE);
             default:
                 return new TypeGuess('text', array(), Guess::LOW_CONFIDENCE);
-        }
-    }
-
-    protected function getMetadata($class)
-    {
-        if (array_key_exists($class, $this->cache)) {
-            return $this->cache[$class];
-        }
-
-        $this->cache[$class] = null;
-        foreach ($this->registry->getEntityManagers() as $name => $em) {
-            try {
-                return $this->cache[$class] = array($em->getClassMetadata($class), $name);
-            } catch (MappingException $e) {
-                // not an entity or mapped super class
-            }
         }
     }
 }

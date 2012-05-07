@@ -34,9 +34,9 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $guesser;
 
     /**
-     * @param \Symfony\Component\Form\FormFactory $formFactory
+     * @param \Symfony\Component\Form\FormFactory               $formFactory
      * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
-     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
+     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface  $guesser
      */
     public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser)
     {
@@ -46,8 +46,9 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -56,17 +57,19 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
 
             // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
+            if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $metadata->fieldMappings[$lastPropertyName]));
             }
 
             // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
+            if (isset($metadata->associationMappings[$lastPropertyName])) {
+                $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $metadata->associationMappings[$lastPropertyName]));
             }
+
+            $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings));
         }
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
@@ -74,16 +77,17 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface $datagrid
-     * @param null $type
+     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface      $datagrid
+     * @param null                                                $type
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
+     *
      * @return \Sonata\AdminBundle\Filter\FilterInterface
      */
     public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName());
+            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
 
             $type = $guessType->getType();
 
@@ -91,7 +95,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
             $options = $guessType->getOptions();
 
-            foreach($options as $name => $value) {
+            foreach ($options as $name => $value) {
                 if (is_array($value)) {
                     $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, array())));
                 } else {
@@ -119,7 +123,8 @@ class DatagridBuilder implements DatagridBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
-     * @param array $values
+     * @param array                                    $values
+     *
      * @return \Sonata\AdminBundle\Datagrid\DatagridInterface
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())

@@ -33,21 +33,21 @@ class SonataDoctrineORMAdminExtension extends Extension
     /**
      *
      * @param array            $configs    An array of configuration settings
-     * @param ContainerBuilder $container A ContainerBuilder instance
+     * @param ContainerBuilder $container  A ContainerBuilder instance
      */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configs = $this->fixTemplatesConfiguration($configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
         $loader->load('audit.xml');
         $loader->load('security.xml');
 
         $configuration = new Configuration();
-        $processor = new Processor();
-        $config = $processor->processConfiguration($configuration, $configs);
+        $processor     = new Processor();
+        $config        = $processor->processConfiguration($configuration, $configs);
 
         $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
 
@@ -65,6 +65,7 @@ class SonataDoctrineORMAdminExtension extends Extension
 
     /**
      * @param array $configs
+     *
      * @return array
      */
     private function fixTemplatesConfiguration(array $configs)
