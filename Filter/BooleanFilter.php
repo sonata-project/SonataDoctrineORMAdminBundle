@@ -12,17 +12,14 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\BooleanType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class BooleanFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param mixed $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;
@@ -32,7 +29,7 @@ class BooleanFilter extends Filter
             $values = array();
             foreach ($data['value'] as $v) {
                 if (!in_array($v, array(BooleanType::TYPE_NO, BooleanType::TYPE_YES))) {
-                   continue;
+                    continue;
                 }
 
                 $values[] = ($v == BooleanType::TYPE_YES) ? 1 : 0;
@@ -49,19 +46,23 @@ class BooleanFilter extends Filter
                 return;
             }
 
-            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
-            $queryBuilder->setParameter($this->getName(), ($data['value'] == BooleanType::TYPE_YES) ? 1 : 0);
+            $parameterName = $this->getNewParameterName($queryBuilder);
+            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+            $queryBuilder->setParameter($parameterName, ($data['value'] == BooleanType::TYPE_YES) ? 1 : 0);
         }
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(

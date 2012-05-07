@@ -48,7 +48,12 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
         }
     }
 
-    public function fixSettings($container)
+    /**
+     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
+     *
+     * @return bool
+     */
+    public function fixSettings(ContainerBuilder $container)
     {
         $pool = $container->getDefinition('sonata.admin.manager.orm');
 
@@ -70,5 +75,4 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
 
         return $settings;
     }
-
 }

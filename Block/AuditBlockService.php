@@ -32,9 +32,9 @@ class AuditBlockService extends BaseBlockService
     protected $auditReader;
 
     /**
-     * @param $name
+     * @param string                                                     $name
      * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
-     * @param \SimpleThings\EntityAudit\AuditReader $auditReader
+     * @param \SimpleThings\EntityAudit\AuditReader                      $auditReader
      */
     public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
     {

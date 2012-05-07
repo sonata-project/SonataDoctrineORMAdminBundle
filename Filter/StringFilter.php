@@ -12,17 +12,14 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class StringFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param string $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
             return;
@@ -43,17 +40,19 @@ class StringFilter extends Filter
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
+        $parameterName = $this->getNewParameterName($queryBuilder);
+        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
         if ($data['type'] == ChoiceType::TYPE_EQUAL) {
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            $queryBuilder->setParameter($this->getName(), sprintf($this->getOption('format'), $data['value']));
+            $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
         }
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)
@@ -68,7 +67,7 @@ class StringFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
@@ -77,6 +76,9 @@ class StringFilter extends Filter
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_choice', array(

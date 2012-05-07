@@ -75,7 +75,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
-        } catch ( \PDOException $e ) {
+        } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
         }
 

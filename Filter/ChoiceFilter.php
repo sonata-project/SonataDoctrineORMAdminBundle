@@ -13,17 +13,14 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ChoiceFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param mixed $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;
@@ -46,22 +43,25 @@ class ChoiceFilter extends Filter
 
         } else {
 
-            if (empty($data['value']) || $data['value'] == 'all') {
+            if ($data['value'] === '' || $data['value'] === null || $data['value'] === false || $data['value'] == 'all') {
                 return;
             }
 
+            $parameterName = $this->getNewParameterName($queryBuilder);
+
             if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $this->getName()));
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
             }
 
-            $queryBuilder->setParameter($this->getName(), $data['value']);
+            $queryBuilder->setParameter($parameterName, $data['value']);
         }
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)
@@ -76,7 +76,7 @@ class ChoiceFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
@@ -84,12 +84,12 @@ class ChoiceFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
-            'operator_type' => 'sonata_type_boolean',
+            'operator_type' => 'sonata_type_equal',
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel()
