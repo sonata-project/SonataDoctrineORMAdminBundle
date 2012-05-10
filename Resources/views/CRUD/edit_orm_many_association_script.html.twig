@@ -247,6 +247,7 @@ This code manage the many-to-[one|many] association field popup
                                 'code':      sonata_admin.admin.root.code
                             }) }}',
                             data: {_xml_http_request: true },
+                            dataType: 'html',
                             type: 'POST',
                             success: function(html) {
                                 jQuery('#field_container_{{ id }}').replaceWith(html);
