@@ -18,14 +18,6 @@ class FieldDescription extends BaseFieldDescription
     /**
      * {@inheritdoc}
      */
-    public function __construct()
-    {
-        $this->parentAssociationMappings = array();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function setAssociationMapping($associationMapping)
     {
         if (!is_array($associationMapping)) {
