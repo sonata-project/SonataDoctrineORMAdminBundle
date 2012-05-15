@@ -53,7 +53,7 @@ class ProxyQuery implements ProxyQueryInterface
             if (strpos($sortBy, '.') === false) { // add the current alias
                 $sortBy = $queryBuilder->getRootAlias() . '.' . $sortBy;
             }
-            $queryBuilder->orderBy($sortBy, $this->getSortOrder());
+            $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
