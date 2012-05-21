@@ -129,6 +129,8 @@ class FormContractor implements FormContractorInterface
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
 
+            $options['data_class']=$fieldDescription->getAssociationAdmin()->getClass();
+            $fieldDescription->setOption('edit','admin');
         } else if ($type == 'sonata_type_collection') {
 
             if (!$fieldDescription->getAssociationAdmin()) {
