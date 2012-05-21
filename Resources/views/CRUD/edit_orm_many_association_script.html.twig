@@ -250,6 +250,7 @@ This code manage the many-to-[one|many] association field popup
                             type: 'POST',
                             success: function(html) {
                                 jQuery('#field_container_{{ id }}').replaceWith(html);
+                                jQuery('#{{ id }} option[value="' + data.objectId + '"]').attr('selected', 'selected');
                             }
                         });
 
