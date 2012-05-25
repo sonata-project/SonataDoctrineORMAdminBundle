@@ -40,7 +40,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
                 continue;
             }
 
-            if(isset($attributes[0]['audit']) && $attributes[0]['audit'] == false) {
+            if (isset($attributes[0]['audit']) && $attributes[0]['audit'] == false) {
                 continue;
             }
 
