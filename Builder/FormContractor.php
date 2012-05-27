@@ -85,7 +85,7 @@ class FormContractor implements FormContractorInterface
      */
     public function getFormBuilder($name, array $options = array())
     {
-        return $this->getFormFactory()->createNamedBuilder('form', $name, null, $options);
+        return $this->getFormFactory()->createNamedBuilder($name, 'form', null, $options);
     }
 
     /**
