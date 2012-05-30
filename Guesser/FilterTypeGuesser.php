@@ -29,7 +29,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
         }
 
         $options = array(
-            'field_type'     => false,
+            'field_type'     => null,
             'field_options'  => array(),
             'options'        => array(),
         );
