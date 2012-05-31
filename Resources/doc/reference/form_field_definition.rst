@@ -172,6 +172,15 @@ defining one of these options:
   - ``inline``: ``table|standard``, the fields are displayed into table
   - ``sortable``: if the model has a position field, you can enable a drag and
     drop sortable effect by setting ``sortable=field_name``
+    NOTE - child admin class should have sortable field added in configureFormFields.
+    If you want to hide it - use hidden attribute
+
+.. code-block:: php
+
+protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+            ->add('position',null,array('attr'=>array("hidden" => true)))
 
 .. code-block:: php
 
