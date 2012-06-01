@@ -16,7 +16,7 @@ file that was distributed with this source code.
         {{ form_row(form.getChild(field_description.name)) }}
     {% endfor %}
 {% else %}
-    <div id="field_container_{{ id }}">
+    <div id="field_container_{{ id }}" class="field-container">
         {% if sonata_admin.edit == 'list' %}
             <span id="field_widget_{{ id }}" >
                 {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
@@ -37,7 +37,7 @@ file that was distributed with this source code.
                 {{ form_widget(form) }}
             </span>
         {% endif %}
-        <span id="field_actions_{{ id }}" >
+        <span id="field_actions_{{ id }}" class="field-actions">
 
             {% if sonata_admin.edit == 'list' and sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') %}
 
