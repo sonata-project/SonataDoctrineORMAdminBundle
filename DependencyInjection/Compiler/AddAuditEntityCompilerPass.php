@@ -40,9 +40,12 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
                 continue;
             }
 
-            $definition = $container->getDefinition($id);
+            if(isset($attributes[0]['audit']) && $attributes[0]['audit'] == 'true') {
+                
+                $definition = $container->getDefinition($id);
 
-            $autitedEntities[] = $this->getModelName($container, $definition->getArgument(1));
+                $autitedEntities[] = $this->getModelName($container, $definition->getArgument(1));
+            }
         }
 
         $autitedEntities = array_unique($autitedEntities);
