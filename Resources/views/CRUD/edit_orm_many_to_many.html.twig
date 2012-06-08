@@ -10,12 +10,12 @@ file that was distributed with this source code.
 #}
 
 {% if sonata_admin.field_description.associationadmin %}
-    <div id="field_container_{{ id }}">
+    <div id="field_container_{{ id }}" class="field-container">
         <span id="field_widget_{{ id }}" >
             {{ form_widget(form) }}
         </span>
 
-        <span id="field_actions_{{ id }}" >
+        <span id="field_actions_{{ id }}" class="field-actions">
             {% if sonata_admin.field_description.associationadmin.hasRoute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') %}
                 <a
                     href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
