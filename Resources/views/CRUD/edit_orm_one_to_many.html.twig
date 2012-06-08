@@ -19,7 +19,7 @@ file that was distributed with this source code.
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
                     {% if form.getChildren() %}
-                        <table class="bordered-table">
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
                                     {% for field_name, nested_field in form.getChild(0).getChildren() %}
@@ -35,7 +35,7 @@ file that was distributed with this source code.
                                 {% for nested_group_field_name, nested_group_field in form.getChildren() %}
                                     <tr>
                                         {% for field_name, nested_field in nested_group_field.getChildren() %}
-                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} clearfix error{% endif %}">
+                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
 
