@@ -32,7 +32,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
             return;
         }
 
-        $autitedEntities = $container->getParameter('simplethings.entityaudit.audited_entities');
+        $auditedEntities = $container->getParameter('simplethings.entityaudit.audited_entities');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
 
@@ -40,15 +40,18 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
                 continue;
             }
 
-            $definition = $container->getDefinition($id);
+            if (isset($attributes[0]['audit']) && $attributes[0]['audit'] == false) {
+                continue;
+            }
 
-            $autitedEntities[] = $this->getModelName($container, $definition->getArgument(1));
+            $definition = $container->getDefinition($id);
+            $auditedEntities[] = $this->getModelName($container, $definition->getArgument(1));
         }
 
-        $autitedEntities = array_unique($autitedEntities);
+        $auditedEntities = array_unique($auditedEntities);
 
-        $container->setParameter('simplethings.entityaudit.audited_entities', $autitedEntities);
-        $container->getDefinition('sonata.admin.audit.manager')->addMethodCall('setReader', array('sonata.admin.audit.orm.reader', $autitedEntities));
+        $container->setParameter('simplethings.entityaudit.audited_entities', $auditedEntities);
+        $container->getDefinition('sonata.admin.audit.manager')->addMethodCall('setReader', array('sonata.admin.audit.orm.reader', $auditedEntities));
     }
 
     /**

@@ -43,11 +43,12 @@ This code manage the one-to-many association field popup
             data: { _xml_http_request: true },
             success: function(html) {
                 jQuery('#field_container_{{ id }}').replaceWith(html); // replace the html
-								if(jQuery(form + 'input[type="file"]').length > 0) {
-									jQuery(form).attr('enctype', 'multipart/form-data');
-									jQuery(form).attr('encoding', 'multipart/form-data');
-								}
+                if(jQuery(form + 'input[type="file"]').length > 0) {
+                    jQuery(form).attr('enctype', 'multipart/form-data');
+                    jQuery(form).attr('encoding', 'multipart/form-data');
+                }
                 jQuery('#sonata-ba-field-container-{{ id }}').trigger('sonata.add_element');
+                jQuery('#field_container_{{ id }}').trigger('sonata.add_element');
             }
         });
 

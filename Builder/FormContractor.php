@@ -130,7 +130,7 @@ class FormContractor implements FormContractorInterface
             }
 
             $options['data_class']=$fieldDescription->getAssociationAdmin()->getClass();
-            $fieldDescription->setOption('edit','admin');
+            $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
         } else if ($type == 'sonata_type_collection') {
 
             if (!$fieldDescription->getAssociationAdmin()) {

@@ -78,6 +78,8 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
+                $options['field_type'] = 'number';
+
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
