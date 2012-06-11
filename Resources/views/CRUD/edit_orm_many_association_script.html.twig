@@ -111,7 +111,7 @@ This code manage the many-to-[one|many] association field popup
                     height: 'auto',
                     width: 980,
                     modal: true,
-                    resizable: false,
+                    resizable: true,
                     title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
                     close: function(event, ui) {
                         // make sure we have a clean state
@@ -159,7 +159,7 @@ This code manage the many-to-[one|many] association field popup
                     width: 650,
                     modal: true,
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
                     close: function(event, ui) {
                         Admin.log('[{{ id }}|field_dialog_form_add] dialog closed - removing `live` events');
