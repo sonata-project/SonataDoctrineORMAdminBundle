@@ -43,6 +43,12 @@ abstract class AbstractDateFilter extends Filter
                 return;
             }
 
+            //transform types
+            if ($this->getOption('input_type') == 'timestamp') {
+                $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
+                $data['value']['end'] = $data['value']['end'] instanceof \DateTime ? $data['value']['end']->getTimestamp() : 0;
+            }
+
             //default type for range filter
             $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
 
@@ -69,6 +75,11 @@ abstract class AbstractDateFilter extends Filter
 
             //just find an operator and apply query
             $operator = $this->getOperator($data['type']);
+
+            //transform types
+            if ($this->getOption('input_type') == 'timestamp') {
+                $data['value'] = $data['value'] instanceof \DateTime ? $data['value']->getTimestamp() : 0;
+            }
 
             //null / not null only check for col
             if (in_array($operator, array('NULL', 'NOT NULL'))) {
@@ -132,7 +143,8 @@ abstract class AbstractDateFilter extends Filter
         return array($name, array(
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
+            'label'         => $this->getLabel(),
+            'input_type'    => 'datetime'
         ));
     }
 }
