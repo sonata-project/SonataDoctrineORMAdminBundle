@@ -64,6 +64,29 @@ Example
         }
     }
 
+Timestamps
+----------
+
+``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range`` support
+filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option:
+
+.. code-block:: php
+
+    <?php
+    namespace Sonata\NewsBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+
+    class PostAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid
+                ->add('timestamp', 'doctrine_orm_datetime_range', array('input_type' => 'timestamp'));
+        }
+    }
+
 
 Advanced usage
 --------------
