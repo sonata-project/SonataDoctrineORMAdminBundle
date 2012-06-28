@@ -228,33 +228,29 @@ This code manage the many-to-[one|many] association field popup
                 if (data.result == 'ok') {
                     field_dialog_{{ id }}.dialog('close');
 
-                    {% if sonata_admin.field_description.options.edit == 'list' %}
-                        {#
-                           in this case we update the hidden input, and call the change event to
-                           retrieve the post information
-                        #}
-                        jQuery('#{{ id }}').val(data.objectId);
-                        jQuery('#{{ id }}').change();
-
-                    {% else %}
-
-                        // reload the form element
-                        jQuery('#field_widget_{{ id }}').closest('form').ajaxSubmit({
-                            url: '{{ url('sonata_admin_retrieve_form_element', {
-                                'elementId': id,
-                                'objectId':  sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
-                                'uniqid':    sonata_admin.admin.root.uniqid,
-                                'code':      sonata_admin.admin.root.code
-                            }) }}',
-                            data: {_xml_http_request: true },
-                            type: 'POST',
-                            success: function(html) {
-                                jQuery('#field_container_{{ id }}').replaceWith(html);
-                                jQuery('#{{ id }} option[value="' + data.objectId + '"]').attr('selected', 'selected');
-                            }
-                        });
-
-                    {% endif %}
+                    // reload the form element
+                    jQuery('#field_widget_{{ id }}').closest('form').ajaxSubmit({
+                        url: '{{ url('sonata_admin_retrieve_form_element', {
+                            'elementId': id,
+                            'objectId':  sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
+                            'uniqid':    sonata_admin.admin.root.uniqid,
+                            'code':      sonata_admin.admin.root.code
+                        }) }}',
+                        data: {_xml_http_request: true },
+                        type: 'POST',
+                        success: function(html) {
+                            jQuery('#field_container_{{ id }}').replaceWith(html);
+                            jQuery('#{{ id }} option[value="' + data.objectId + '"]').attr('selected', 'selected');
+                            
+                            {% if sonata_admin.field_description.options.edit == 'list' %}
+                                {#
+                                   in this case we update the hidden input, and call the change event to
+                                   retrieve the post information
+                                #}
+                                jQuery('#{{ id }}').change();
+                            {% endif %}
+                        }
+                    });
 
                     return;
                 }
