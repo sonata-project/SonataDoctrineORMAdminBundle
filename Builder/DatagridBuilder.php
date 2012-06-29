@@ -118,7 +118,6 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $datagrid->addFilter($filter);
 
-        return $datagrid->addFilter($filter);
     }
 
     /**
