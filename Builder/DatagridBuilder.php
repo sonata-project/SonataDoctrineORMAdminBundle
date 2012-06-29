@@ -82,7 +82,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
      * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      *
-     * @return \Sonata\AdminBundle\Filter\FilterInterface
+     * @return void
      */
     public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
@@ -118,7 +118,6 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $datagrid->addFilter($filter);
 
-        return $datagrid->addFilter($filter);
     }
 
     /**
