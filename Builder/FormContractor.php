@@ -91,7 +91,7 @@ class FormContractor implements FormContractorInterface
         if ($type == 'sonata_type_model' || $type == 'sonata_type_model_list') {
 
             if ($fieldDescription->getOption('edit') == 'list') {
-                throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the ``UPDATE-2.1.md`` file');
+                throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the UPGRATE-2.1.md file from the SonataAdminBundle');
             }
 
             $options['class']         = $fieldDescription->getTargetEntity();
