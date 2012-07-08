@@ -197,7 +197,13 @@ class ModelManager implements ModelManagerInterface
             $class = get_class($class);
         }
 
-        return $this->registry->getEntityManagerForClass($class);
+        $em = $this->registry->getEntityManagerForClass($class);
+
+        if (!$em) {
+            throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
+        }
+
+        return $em;
     }
 
     /**
@@ -254,6 +260,7 @@ class ModelManager implements ModelManagerInterface
     public function getIdentifierValues($entity)
     {
         $entityManager = $this->getEntityManager($entity);
+
         if (!$entityManager->getUnitOfWork()->isInIdentityMap($entity)) {
             throw new \RuntimeException('Entities passed to the choice field must be managed');
         }
