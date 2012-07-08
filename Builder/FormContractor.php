@@ -34,12 +34,7 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * The method defines the correct default settings for the provided FieldDescription
-     *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     *
-     * @return void
+     * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -78,10 +73,7 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param string $name
-     * @param array  $options
-     *
-     * @return \Symfony\Component\Form\FormBuilder
+     * {@inheritdoc}
      */
     public function getFormBuilder($name, array $options = array())
     {
@@ -89,10 +81,7 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param string                                              $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
