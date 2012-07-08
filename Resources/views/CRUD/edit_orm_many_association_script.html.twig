@@ -167,7 +167,7 @@ This code manage the many-to-[one|many] association field popup
                         jQuery('a', field_dialog_{{ id }}).die('click');
                         jQuery('form', field_dialog_{{ id }}).die('submit');
                     },
-                    zIndex: 9998,
+                    zIndex: 9998
                 });
             }
         });
@@ -228,7 +228,7 @@ This code manage the many-to-[one|many] association field popup
                 if (data.result == 'ok') {
                     field_dialog_{{ id }}.dialog('close');
 
-                    {% if sonata_admin.field_description.options.edit == 'list' %}
+                    {% if sonata_admin.edit == 'list' %}
                         {#
                            in this case we update the hidden input, and call the change event to
                            retrieve the post information
@@ -310,7 +310,7 @@ This code manage the many-to-[one|many] association field popup
     Admin.add_pretty_errors(field_dialog_{{ id }});
 
 
-    {% if sonata_admin.field_description.options.edit == 'list' %}
+    {% if sonata_admin.edit == 'list' %}
         {#
             This code is used to defined the "list" popup
         #}

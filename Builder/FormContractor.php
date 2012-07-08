@@ -99,29 +99,9 @@ class FormContractor implements FormContractorInterface
         $options                             = array();
         $options['sonata_field_description'] = $fieldDescription;
 
-        if ($type == 'sonata_type_model') {
+        if ($type == 'sonata_type_model' || $type == 'sonata_type_model_list') {
             $options['class']         = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
-
-            switch ($fieldDescription->getMappingType()) {
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::MANY_TO_MANY:
-                    $options['multiple'] = true;
-                    $options['parent']   = 'choice';
-                    break;
-
-                case ClassMetadataInfo::MANY_TO_ONE:
-                case ClassMetadataInfo::ONE_TO_ONE:
-                    break;
-            }
-
-            if ($fieldDescription->getOption('edit') == 'list') {
-                $options['parent'] = 'text';
-
-                if (!array_key_exists('required', $options)) {
-                    $options['required'] = false;
-                }
-            }
 
         } else if ($type == 'sonata_type_admin') {
 
@@ -129,8 +109,9 @@ class FormContractor implements FormContractorInterface
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
 
-            $options['data_class']=$fieldDescription->getAssociationAdmin()->getClass();
+            $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
+
         } else if ($type == 'sonata_type_collection') {
 
             if (!$fieldDescription->getAssociationAdmin()) {
