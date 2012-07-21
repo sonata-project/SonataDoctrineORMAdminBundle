@@ -18,23 +18,23 @@ file that was distributed with this source code.
         <span id="field_widget_{{ id }}" >
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
-                    {% if form.all() %}
+                    {% if form.children|length > 0 %}
                         <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    {% for field_name, nested_field in form.get(0).all() %}
+                                    {% for field_name, nested_field in form.children[0].children %}
                                         {% if field_name == '_delete' %}
                                             <th>{% trans from 'SonataAdminBundle' %}action_delete{% endtrans %}</th>
                                         {% else %}
-                                            <th>{{ nested_field.getVar('sonata_admin').admin.trans(nested_field.vars.label) }}</th>
+                                            <th>{{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}</th>
                                         {% endif %}
                                     {% endfor %}
                                 </tr>
                             </thead>
                             <tbody class="sonata-ba-tbody">
-                                {% for nested_group_field_name, nested_group_field in form.all() %}
+                                {% for nested_group_field_name, nested_group_field in form.children %}
                                     <tr>
-                                        {% for field_name, nested_field in nested_group_field.all() %}
+                                        {% for field_name, nested_field in nested_group_field.children %}
                                             <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
@@ -55,10 +55,10 @@ file that was distributed with this source code.
                             </tbody>
                         </table>
                     {% endif %}
-                {% elseif form.all() %}
+                {% elseif form.children|length > 0 %}
                     <div>
-                        {% for nested_group_field_name, nested_group_field in form.all() %}
-                            {% for field_name, nested_field in nested_group_field.all() %}
+                        {% for nested_group_field_name, nested_group_field in form.children %}
+                            {% for field_name, nested_field in nested_group_field.children %}
                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                     {{ form_widget(nested_field, {
                                         'inline': 'natural',
