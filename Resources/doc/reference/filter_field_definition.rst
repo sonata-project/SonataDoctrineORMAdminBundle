@@ -37,6 +37,7 @@ For now, only Doctrine ORM filters are available
   - doctrine_orm_date_range     : depends on the ``sonata_type_filter_date_range`` From Type, renders a 2 date fields
   - doctrine_orm_datetime       : depends on the ``sonata_type_filter_datetime`` From Type, renders a datetime field
   - doctrine_orm_datetime_range : depends on the ``sonata_type_filter_datetime_range`` From Type, renders a 2 datetime fields
+  - doctrine_orm_class          : depends on the ``sonata_type_filter_default`` Form type, renders a choice list field
 
 Example
 -------
@@ -87,6 +88,26 @@ filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` opti
         }
     }
 
+Class
+-----
+
+``doctrine_orm_class`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option:
+
+.. code-block:: php
+
+    <?php
+    namespace Sonata\NewsBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+
+    class PostAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid->add('type', 'doctrine_orm_class', array('sub_classes' => $this->getSubClasses()));
+        }
+    }
 
 Advanced usage
 --------------
