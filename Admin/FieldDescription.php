@@ -94,6 +94,10 @@ class FieldDescription extends BaseFieldDescription
      */
     public function getValue($object)
     {
+        if ($this->getType() == 'class') {
+            return \array_search(\get_class($object), $this->getOption('classes'));
+        }
+
         foreach ($this->parentAssociationMappings as $parentAssociationMapping) {
             $object = $this->getFieldValue($object, $parentAssociationMapping['fieldName']);
         }

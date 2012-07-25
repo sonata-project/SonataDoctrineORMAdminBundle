@@ -88,11 +88,15 @@ class ListBuilder implements ListBuilderInterface
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
+
+        $fieldDescription->setAdmin($admin);
+
         if ($fieldDescription->getName() == '_action') {
             $this->buildActionFieldDescription($fieldDescription);
         }
-
-        $fieldDescription->setAdmin($admin);
+        else if ($fieldDescription->getName() == '_class') {
+            $this->buildClassFieldDescription($fieldDescription);
+        }
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
             list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
@@ -193,6 +197,22 @@ class ListBuilder implements ListBuilderInterface
             }
 
             $fieldDescription->setOption('actions', $actions);
+        }
+
+        return $fieldDescription;
+    }
+
+    /**
+     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
+     * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
+     */
+    public function buildClassFieldDescription(FieldDescriptionInterface $fieldDescription)
+    {
+        $fieldDescription->setType('class');
+
+        if (null === $fieldDescription->getOption('name')) {
+            $fieldDescription->setOption('name', 'Class');
         }
 
         return $fieldDescription;
