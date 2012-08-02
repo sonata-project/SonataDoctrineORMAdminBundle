@@ -122,7 +122,9 @@ abstract class AbstractDateFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return array(
+            'input_type' => 'datetime'
+        );
     }
 
     /**
@@ -144,7 +146,6 @@ abstract class AbstractDateFilter extends Filter
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel(),
-            'input_type'    => 'datetime'
         ));
     }
 }
