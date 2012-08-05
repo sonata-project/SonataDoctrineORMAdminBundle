@@ -24,7 +24,7 @@ file that was distributed with this source code.
                                 <tr>
                                     {% for field_name, nested_field in form.children[0].children %}
                                         {% if field_name == '_delete' %}
-                                            <th>{% trans from 'SonataAdminBundle' %}action_delete{% endtrans %}</th>
+                                            <th>{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}</th>
                                         {% else %}
                                             <th>{{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}</th>
                                         {% endif %}
@@ -86,11 +86,11 @@ file that was distributed with this source code.
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_retrieve_{{ id }}(this);"
                         class="sonata-ba-action"
-                        title="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}"
+                        title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
                         <img
                             src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}"
+                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                          />
                     </a>
                 </span>
@@ -141,11 +141,11 @@ file that was distributed with this source code.
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_dialog_form_add_{{ id }}(this);"
                         class="sonata-ba-action"
-                        title="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}"
+                        title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
                         <img
                             src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{% trans from 'SonataAdminBundle' %}link_add{% endtrans %}"
+                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                          />
                     </a>
                 {% endif %}
