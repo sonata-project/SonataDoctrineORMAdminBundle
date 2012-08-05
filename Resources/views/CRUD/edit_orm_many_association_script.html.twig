@@ -232,7 +232,12 @@ This code manage the many-to-[one|many] association field popup
                         {#
                            in this case we update the hidden input, and call the change event to
                            retrieve the post information
+                           
+                           First, we add a new option element in order to be able to set the value 
+                           of the select element.
                         #}
+                        
+                        jQuery('#{{ id }}').append('<option value="'+data.objectId+'"></option>');                        
                         jQuery('#{{ id }}').val(data.objectId);
                         jQuery('#{{ id }}').change();
 
