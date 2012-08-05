@@ -12,7 +12,7 @@ file that was distributed with this source code.
 {% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
 
 {% block field %}
-    {% if field_description.hasassociationadmin and field_description.associationadmin.isGranted('EDIT') and field_description.associationadmin.hasRoute('edit') %}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.isGranted('EDIT') and field_description.associationadmin.hasRoute('edit') and not field_description.getOption('no_link', false) %}
         {% for element in value%}
             <a href="{{ field_description.associationadmin.generateObjectUrl('edit', element) }}">{{ element|render_relation_element(field_description) }}</a>{% if not loop.last %}, {% endif %}
         {% endfor %}
