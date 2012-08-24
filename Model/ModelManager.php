@@ -411,7 +411,7 @@ class ModelManager implements ModelManagerInterface
     {
         $values = $datagrid->getValues();
 
-        $values['_sort_by'] = $values['_sort_by']->getFieldName();
+        $values['_sort_by'] = $values['_sort_by']->getName();
         $values['_page'] = $page;
 
         return array('filter' => $values);
