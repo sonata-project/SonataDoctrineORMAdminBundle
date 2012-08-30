@@ -19,7 +19,8 @@
     "minimum-stability": "dev",
     "require": {
         "doctrine/orm": ">=2.2,<2.4-dev",
-        "sonata-project/admin-bundle": "dev-master"
+        "sonata-project/admin-bundle": "dev-master",
+        "symfony/symfony": "2.1.*"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
