@@ -28,7 +28,8 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('simplethings_entityaudit.config')) {
+        if ($container->getParameter('sonata.admin_doctrine_orm.versioning') ||
+            !$container->hasDefinition('simplethings_entityaudit.config')) {
             return;
         }
 
