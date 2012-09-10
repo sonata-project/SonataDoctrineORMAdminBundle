@@ -296,6 +296,17 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
+     * {@inheritDoc}
+     *
+     * The ORM implementation does nothing special but you still should use
+     * this method when using the id in a URL to allow for future improvements.
+     */
+    public function getUrlsafeIdentifier($entity)
+    {
+        return $this->getNormalizedIdentifier($entity);
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
