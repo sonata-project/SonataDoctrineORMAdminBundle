@@ -54,6 +54,9 @@ class SonataDoctrineORMAdminExtension extends Extension
         $pool = $container->getDefinition('sonata.admin.manager.orm');
         $pool->addMethodCall('__hack_doctrine_orm__', $config);
 
+        // activate Entity audit
+        $container->setParameter('sonata.admin_doctrine_orm.versioning', $config['versioning']);
+
         // define the templates
         $container->getDefinition('sonata.admin.builder.orm_list')
             ->replaceArgument(1, $config['templates']['types']['list']);
