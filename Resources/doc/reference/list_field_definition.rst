@@ -55,6 +55,7 @@ types include:
 * text
 * date
 * time
+* array
 
 If no type is set, the ``Admin`` class will use the type defined in the doctrine
 mapping definition.
