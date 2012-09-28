@@ -23,6 +23,11 @@ This code manage the many-to-[one|many] association field popup
 <!-- edit many association -->
 
 <script type="text/javascript">
+    
+    {#
+      Set the selector used for binding on dialog links
+    #}
+    var link_event_selector_{{ id }} = 'a:not(.sonata-ba-action,.sonata-collection-add,.sonata-collection-delete)';
 
     {#
       handle link click in a list :
@@ -90,7 +95,7 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery(field_dialog_{{ id }}).on('click', 'a', field_dialog_form_list_link_{{ id }});
+                jQuery(field_dialog_{{ id }}).on('click', link_event_selector_{{ id }}, field_dialog_form_list_link_{{ id }});
                 jQuery(field_dialog_{{ id }}).on('submit', 'form', function(event) {
                     event.preventDefault();
 
@@ -117,8 +122,8 @@ This code manage the many-to-[one|many] association field popup
                     title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
                     close: function(event, ui) {
                         // make sure we have a clean state
-                        jQuery('a', field_dialog_{{ id }}).off('click');
-                        jQuery('form', field_dialog_{{ id }}).off('submit');
+                        jQuery(field_dialog_{{ id }}).off('click',link_event_selector_{{ id }});
+                        jQuery(field_dialog_{{ id }}).off('submit', 'form');
                     },
                     zIndex: 9998,
                 });
@@ -152,7 +157,7 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery(field_dialog_{{ id }}).on('click', 'a', field_dialog_form_action_{{ id }});
+                jQuery(field_dialog_{{ id }}).on('click', link_event_selector_{{ id }}, field_dialog_form_action_{{ id }});
                 jQuery(field_dialog_{{ id }}).on('submit', 'form', field_dialog_form_action_{{ id }});
 
                 // open the dialog in modal mode
@@ -166,8 +171,8 @@ This code manage the many-to-[one|many] association field popup
                     close: function(event, ui) {
                         Admin.log('[{{ id }}|field_dialog_form_add] dialog closed - removing `on` events');
                         // make sure we have a clean state
-                        jQuery('a', field_dialog_{{ id }}).off('click');
-                        jQuery('form', field_dialog_{{ id }}).off('submit');
+                        jQuery(field_dialog_{{ id }}).off('click',link_event_selector_{{ id }});
+                        jQuery(field_dialog_{{ id }}).off('submit', 'form');
                     },
                     zIndex: 9998
                 });
@@ -201,7 +206,7 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery(field_dialog_{{ id }}).on('click', 'a', field_dialog_form_action_{{ id }});
+                jQuery(field_dialog_{{ id }}).on('click', link_event_selector_{{ id }}, field_dialog_form_action_{{ id }});
                 jQuery(field_dialog_{{ id }}).on('submit', 'form', field_dialog_form_action_{{ id }});
 
                 // open the dialog in modal mode
@@ -215,8 +220,8 @@ This code manage the many-to-[one|many] association field popup
                     close: function(event, ui) {
                         Admin.log('[{{ id }}|field_dialog_form_edit] dialog closed - removing `on` events');
                         // make sure we have a clean state
-                        jQuery('a', field_dialog_{{ id }}).off('click');
-                        jQuery('form', field_dialog_{{ id }}).off('submit');
+                        jQuery(field_dialog_{{ id }}).off('click',link_event_selector_{{ id }});
+                        jQuery(field_dialog_{{ id }}).off('submit', 'form');
                     },
                     zIndex: 9998
                 });
@@ -244,11 +249,6 @@ This code manage the many-to-[one|many] association field popup
             var type = 'GET';
         } else {
             alert('unexpected element : @' + this.nodeName + '@');
-            return;
-        }
-
-        if (element.is('.sonata-ba-action, .sonata-collection-add, .sonata-collection-delete')) {
-            Admin.log('[{{ id }}|field_dialog_form_action] reserved action stop catch all events');
             return;
         }
 
