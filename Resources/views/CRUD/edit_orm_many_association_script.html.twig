@@ -47,6 +47,7 @@ This code manage the many-to-[one|many] association field popup
                 url: jQuery(this).attr('href'),
                 success: function(html) {
                    field_dialog_{{ id }}.html(html);
+                   Admin.add_filters(field_dialog_{{ id }});
                 }
             });
 
@@ -102,6 +103,7 @@ This code manage the many-to-[one|many] association field popup
                         data: {_xml_http_request: true},
                         success: function(html) {
                            field_dialog_{{ id }}.html(html);
+                           Admin.add_filters(field_dialog_{{ id }});
                         }
                     });
                 });
@@ -173,6 +175,55 @@ This code manage the many-to-[one|many] association field popup
         });
     };
 
+    // handle the edit link
+    var field_dialog_form_edit_{{ id }} = function(event) {
+        initialize_popup_{{ id }}();
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        var a = jQuery(this);
+
+        field_dialog_{{ id }}.html('');
+
+        Admin.log('[{{ id }}|field_dialog_form_edit] edit link action');
+
+        // retrieve the form element from the related admin generator
+        jQuery.ajax({
+            url: a.attr('href'),
+            dataType: 'html',
+            success: function(html) {
+
+                Admin.log('[{{ id }}|field_dialog_form_edit] ajax success', field_dialog_{{ id }});
+
+                // populate the popup container
+                field_dialog_{{ id }}.html(html);
+
+                // capture the submit event to make an ajax call, ie : POST data to the
+                // related create admin
+                jQuery('a', field_dialog_{{ id }}).live('click', field_dialog_form_action_{{ id }});
+                jQuery('form', field_dialog_{{ id }}).live('submit', field_dialog_form_action_{{ id }});
+
+                // open the dialog in modal mode
+                field_dialog_{{ id }}.dialog({
+                    height: 'auto',
+                    width: 650,
+                    modal: true,
+                    autoOpen: true,
+                    resizable: true,
+                    title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
+                    close: function(event, ui) {
+                        Admin.log('[{{ id }}|field_dialog_form_edit] dialog closed - removing `live` events');
+                        // make sure we have a clean state
+                        jQuery('a', field_dialog_{{ id }}).die('click');
+                        jQuery('form', field_dialog_{{ id }}).die('submit');
+                    },
+                    zIndex: 9998
+                });
+            }
+        });
+    };
+
     // handle the post data
     var field_dialog_form_action_{{ id }} = function(event) {
 
@@ -196,7 +247,7 @@ This code manage the many-to-[one|many] association field popup
             return;
         }
 
-        if (element.hasClass('sonata-ba-action')) {
+        if (element.is('.sonata-ba-action, .sonata-collection-add, .sonata-collection-delete')) {
             Admin.log('[{{ id }}|field_dialog_form_action] reserved action stop catch all events');
             return;
         }
@@ -312,6 +363,27 @@ This code manage the many-to-[one|many] association field popup
         return false;
     }
 
+    {#
+        This code is used to defined the "edit" popup
+    #}
+    // this function initialize the popup
+    // this can be only done this way has popup can be cascaded
+    function start_field_dialog_form_edit_{{ id }}(link) {
+
+        // remove the html event
+        link.onclick = null;
+
+        initialize_popup_{{ id }}();
+
+        // add the jQuery event to the a element
+        jQuery(link)
+            .click(field_dialog_form_edit_{{ id }})
+            .trigger('click')
+        ;
+
+        return false;
+    }
+
     Admin.add_pretty_errors(field_dialog_{{ id }});
 
 
@@ -381,6 +453,16 @@ This code manage the many-to-[one|many] association field popup
                     jQuery('#field_widget_{{ id }}').html(html);
                 }
             });
+        });
+        
+        // catch edit link
+        jQuery('#field_widget_{{ id }} a').live('click', function(event) {
+
+            Admin.log('[{{ id }}] edit the association');
+
+            start_field_dialog_form_edit_{{ id }}(this);
+            
+            return false;
         });
 
     {% endif %}
