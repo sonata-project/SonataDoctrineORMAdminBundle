@@ -380,8 +380,7 @@ class ModelManager implements ModelManagerInterface
     public function getSortParameters(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid)
     {
         $values = $datagrid->getValues();
-
-        if ($fieldDescription->getName() == $values['_sort_by']->getName()) {
+        if ($fieldDescription->getName() == $values['_sort_by']) {
             if ($values['_sort_order'] == 'ASC') {
                 $values['_sort_order'] = 'DESC';
             } else {
