@@ -227,3 +227,39 @@ implement this functionality.
             return true;
         }
     }
+
+
+Default value
+^^^^^^^^^^^^^^
+
+If you need to define the field's default value, use ``getFilterParameters``
+Exemple with ``doctrine_orm_date_range``
+
+.. code-block:: php
+
+    <?php
+    public function getFilterParameters()
+    {
+        $this->datagridValues = array_merge(
+                array(
+                    'fieldDate' => array(
+                        'type' => 1,
+                        'value' => array(
+                            'start' => array(
+                                'day' => date('j'),
+                                'month' => date('m'),
+                                'year' => date('Y')
+                                ),
+                            'end' => array(
+                                'day' => date('j'),
+                                'month' => date('m'),
+                                'year' => date('Y')
+                                )
+                            ),
+                        )
+                    ),
+                $this->datagridValues
+                );
+
+        return parent::getFilterParameters();
+    }
