@@ -22,7 +22,7 @@ use Doctrine\ORM\QueryBuilder;
  */
 class Pager extends BasePager
 {
-    protected $queryBuilder     = null;
+    protected $queryBuilder = null;
 
     /**
      * Returns a query for counting the total results.
@@ -46,6 +46,7 @@ class Pager extends BasePager
      * Get all the results for the pager instance
      *
      * @param mixed $hydrationMode A hydration mode identifier
+     *
      * @return array
      */
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)

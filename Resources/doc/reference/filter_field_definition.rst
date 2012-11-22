@@ -27,13 +27,17 @@ Filter types available
 
 For now, only Doctrine ORM filters are available
 
-  - doctrine_orm_boolean   : depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field
-  - doctrine_orm_callback  : depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed
-  - doctrine_orm_choice    : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
-  - doctrine_orm_model     : depends on the ``sonata_type_filter_number`` Form Type
-  - doctrine_orm_string    : depends on the ``sonata_type_filter_choice``
-  - doctrine_orm_number    : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
-
+  - doctrine_orm_boolean        : depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field
+  - doctrine_orm_callback       : depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed
+  - doctrine_orm_choice         : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
+  - doctrine_orm_model          : depends on the ``sonata_type_filter_number`` Form Type
+  - doctrine_orm_string         : depends on the ``sonata_type_filter_choice``
+  - doctrine_orm_number         : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
+  - doctrine_orm_date           : depends on the ``sonata_type_filter_date`` From Type, renders a date field
+  - doctrine_orm_date_range     : depends on the ``sonata_type_filter_date_range`` From Type, renders a 2 date fields
+  - doctrine_orm_datetime       : depends on the ``sonata_type_filter_datetime`` From Type, renders a datetime field
+  - doctrine_orm_datetime_range : depends on the ``sonata_type_filter_datetime_range`` From Type, renders a 2 datetime fields
+  - doctrine_orm_class          : depends on the ``sonata_type_filter_default`` Form type, renders a choice list field
 
 Example
 -------
@@ -61,9 +65,86 @@ Example
         }
     }
 
+Timestamps
+----------
+
+``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range`` support
+filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option:
+
+.. code-block:: php
+
+    <?php
+    namespace Sonata\NewsBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+
+    class PostAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid
+                ->add('timestamp', 'doctrine_orm_datetime_range', array('input_type' => 'timestamp'));
+        }
+    }
+
+Class
+-----
+
+``doctrine_orm_class`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option:
+
+.. code-block:: php
+
+    <?php
+    namespace Sonata\NewsBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+
+    class PostAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid->add('type', 'doctrine_orm_class', array('sub_classes' => $this->getSubClasses()));
+        }
+    }
 
 Advanced usage
 --------------
+
+Filtering by sub entity properties
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+If you need to filter your base entities by the value of a sub entity property,
+you can simply use the dot-separated notation (note that this only makes sense
+when the prefix path is made of entities, not collections):
+
+.. code-block:: php
+
+    <?php
+    namespace Acme\AcmeBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Datagrid\ListMapper;
+    use Sonata\AdminBundle\Show\ShowMapper;
+
+    class UserAdmin extends Admin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        {
+            $datagrid
+                ->add('id')
+                ->add('firstName')
+                ->add('lastName')
+                ->add('address.street')
+                ->add('address.ZIPCode')
+                ->add('address.town')
+            ;
+        }
+    }
+
 
 Label
 ^^^^^

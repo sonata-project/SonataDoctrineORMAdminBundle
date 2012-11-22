@@ -12,12 +12,13 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class CallbackFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterClosure()
     {
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter = new CallbackFilter;
         $filter->initialize('field_name', array(
@@ -37,7 +38,7 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterMethod()
     {
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter = new CallbackFilter;
         $filter->initialize('field_name', array(
@@ -62,7 +63,7 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterException()
     {
-        $builder = new QueryBuilder;
+        $builder = new ProxyQuery(new QueryBuilder);
 
         $filter = new CallbackFilter;
         $filter->initialize('field_name', array());

@@ -7,20 +7,13 @@ history feature (https://github.com/simplethings/EntityAudit).
 Download bundles
 ----------------
 
-Add the following lines to the file ``deps``::
+Use composer ::
 
-    [SonataDoctrineORMAdminBundle]
-        git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
-        target=/bundles/Sonata/DoctrineORMAdminBundle
+    php composer.phar require sonata-project/doctrine-orm-admin-bundle
 
     # optional bundle
-    [EntityAudit]
-        git=git://github.com/simplethings/EntityAudit.git
-        target=/bundles/SimpleThings/EntityAudit
+    php composer.phar require simplethings/entity-audit-bundle
 
-and run::
-
-  bin/vendors install
 
 Configuration
 -------------
@@ -41,10 +34,3 @@ files:
             // ...
         );
     }
-
-    // autoload.php
-    $loader->registerNamespaces(array(
-        // ...
-        'SimpleThings'      => __DIR__.'/../vendor/bundles',
-        // ...
-    ));

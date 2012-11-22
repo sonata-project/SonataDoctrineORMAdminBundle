@@ -27,10 +27,7 @@ class AuditReader implements AuditReaderInterface
     }
 
     /**
-     * @param $className
-     * @param $id
-     * @param $revision
-     * @return mixed
+     * {@inheritdoc}
      */
     public function find($className, $id, $revision)
     {
@@ -38,10 +35,7 @@ class AuditReader implements AuditReaderInterface
     }
 
     /**
-     * @param $className
-     * @param int $limit
-     * @param int $offset
-     * @return mixed
+     * {@inheritdoc}
      */
     public function findRevisionHistory($className, $limit = 20, $offset = 0)
     {
@@ -49,9 +43,7 @@ class AuditReader implements AuditReaderInterface
     }
 
     /**
-     * @param $classname
-     * @param $revision
-     * @return mixed
+     * {@inheritdoc}
      */
     public function findRevision($classname, $revision)
     {
@@ -59,9 +51,7 @@ class AuditReader implements AuditReaderInterface
     }
 
     /**
-     * @param $className
-     * @param $id
-     * @return mixed
+     * {@inheritdoc}
      */
     public function findRevisions($className, $id)
     {

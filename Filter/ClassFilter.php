@@ -11,10 +11,11 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Form\Type\EqualType;
+use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
-class StringFilter extends Filter
+class ClassFilter extends Filter
 {
     /**
      * {@inheritdoc}
@@ -25,42 +26,31 @@ class StringFilter extends Filter
             return;
         }
 
-        $data['value'] = trim($data['value']);
-
         if (strlen($data['value']) == 0) {
             return;
         }
 
-        $data['type'] = !isset($data['type']) ?  ChoiceType::TYPE_CONTAINS : $data['type'];
+        $data['type'] = !isset($data['type']) ?  EqualType::TYPE_IS_EQUAL : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
         if (!$operator) {
-            $operator = 'LIKE';
+            $operator = 'INSTANCE OF';
         }
 
-        // c.name > '1' => c.name OPERATOR :FIELDNAME
-        $parameterName = $this->getNewParameterName($queryBuilder);
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
-            $queryBuilder->setParameter($parameterName, $data['value']);
-        } else {
-            $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
-        }
+        $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $data['value']));
     }
 
     /**
-     * @param string $type
+     * @param int $type
      *
-     * @return bool
+     * @return mixed
      */
     private function getOperator($type)
     {
         $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL            => '=',
+            EqualType::TYPE_IS_EQUAL     => 'INSTANCE OF',
+            EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
         );
 
         return isset($choices[$type]) ? $choices[$type] : false;
@@ -71,9 +61,29 @@ class StringFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
-            'format'   => '%%%s%%'
-        );
+        return array();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'choice');
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldOptions()
+    {
+        return $this->getOption('choices', array(
+            'required' => false,
+            'choice_list'  => new ChoiceList(
+                \array_values($this->getOption('sub_classes')),
+                \array_keys($this->getOption('sub_classes'))
+            ),
+        ));
     }
 
     /**
@@ -81,7 +91,8 @@ class StringFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_choice', array(
+        return array('sonata_type_filter_default', array(
+            'operator_type' => 'sonata_type_equal',
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel()

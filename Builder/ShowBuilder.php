@@ -27,16 +27,17 @@ class ShowBuilder implements ShowBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
-     * @param array $templates
+     * @param array                                            $templates
      */
     public function __construct(TypeGuesserInterface $guesser, array $templates)
     {
-        $this->guesser = $guesser;
+        $this->guesser   = $guesser;
         $this->templates = $templates;
     }
 
     /**
      * @param array $options
+     *
      * @return \Sonata\AdminBundle\Admin\FieldDescriptionCollection
      */
     public function getBaseList(array $options = array())
@@ -46,15 +47,16 @@ class ShowBuilder implements ShowBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionCollection $list
-     * @param null $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param null                                                 $type
+     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface  $fieldDescription
+     * @param \Sonata\AdminBundle\Admin\AdminInterface             $admin
+     *
      * @return mixed
      */
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName());
+            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
@@ -67,7 +69,8 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return string
      */
     private function getTemplate($type)
@@ -82,8 +85,9 @@ class ShowBuilder implements ShowBuilderInterface
     /**
      * The method defines the correct default settings for the provided FieldDescription
      *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
+     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     *
      * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -91,16 +95,17 @@ class ShowBuilder implements ShowBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
+            $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
             // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
+            if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
             }
 
             // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
+            if (isset($metadata->associationMappings[$lastPropertyName])) {
+                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
             }
         }
 

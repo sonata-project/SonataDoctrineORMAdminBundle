@@ -34,11 +34,7 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * The method defines the correct default settings for the provided FieldDescription
-     *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @return void
+     * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -77,54 +73,38 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param string $name
-     * @param array $options
-     * @return \Symfony\Component\Form\FormBuilder
+     * {@inheritdoc}
      */
     public function getFormBuilder($name, array $options = array())
     {
-        return $this->getFormFactory()->createNamedBuilder('form', $name, null, $options);
+        return $this->getFormFactory()->createNamedBuilder($name, 'form', null, $options);
     }
 
     /**
-     * @param $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
-        $options = array();
+        $options                             = array();
         $options['sonata_field_description'] = $fieldDescription;
 
-        if ($type == 'sonata_type_model') {
-            $options['class']         = $fieldDescription->getTargetEntity();
-            $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
-
-            switch ($fieldDescription->getMappingType()) {
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::MANY_TO_MANY:
-                    $options['multiple']            = true;
-                    $options['parent']              = 'choice';
-                    break;
-
-                case ClassMetadataInfo::MANY_TO_ONE:
-                case ClassMetadataInfo::ONE_TO_ONE:
-                    break;
-            }
+        if ($type == 'sonata_type_model' || $type == 'sonata_type_model_list') {
 
             if ($fieldDescription->getOption('edit') == 'list') {
-                $options['parent'] = 'text';
-
-                if (!array_key_exists('required', $options)) {
-                    $options['required'] = false;
-                }
+                throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the UPGRADE-2.1.md file from the SonataAdminBundle');
             }
+
+            $options['class']         = $fieldDescription->getTargetEntity();
+            $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
         } else if ($type == 'sonata_type_admin') {
 
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
+
+            $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
+            $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
 
         } else if ($type == 'sonata_type_collection') {
 

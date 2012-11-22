@@ -13,41 +13,65 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 
-
 class QueryBuilder
 {
     public $parameters = array();
 
     public $query = array();
 
+    /**
+     * @param string $name
+     * @param mixed  $value
+     */
     public function setParameter($name, $value)
     {
         $this->parameters[$name] = $value;
     }
 
+    /**
+     * @param string $query
+     */
     public function andWhere($query)
     {
         $this->query[] = $query;
     }
 
+    /**
+     * @return QueryBuilder
+     */
     public function expr()
     {
         return $this;
     }
 
+    /**
+     * @param string $name
+     * @param string $value
+     * @return string
+     */
     public function in($name, $value)
     {
         $this->query[] = 'in_'.$name;
-        $this->parameters[] = 'in_'.$value;
 
-        return sprintf('%s IN ("%s")', $name, implode(',', $value));
+        if (is_array($value)) {
+            return sprintf('%s IN ("%s")', $name, implode(',', $value));
+        }
+
+        return sprintf('%s IN %s', 'in_'.$name, $value);
     }
 
+    /**
+     * @return string
+     */
     public function getRootAlias()
     {
         return 'o';
     }
 
+    /**
+     * @param string $parameter
+     * @param string $alias
+     */
     public function leftJoin($parameter, $alias)
     {
         $this->query[] = $parameter;

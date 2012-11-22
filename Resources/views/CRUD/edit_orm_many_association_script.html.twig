@@ -77,6 +77,7 @@ This code manage the many-to-[one|many] association field popup
         // retrieve the form element from the related admin generator
         jQuery.ajax({
             url: a.attr('href'),
+            dataType: 'html',
             success: function(html) {
 
                 Admin.log('[{{ id }}|field_dialog_form_list] retrieving the list content');
@@ -110,7 +111,7 @@ This code manage the many-to-[one|many] association field popup
                     height: 'auto',
                     width: 980,
                     modal: true,
-                    resizable: false,
+                    resizable: true,
                     title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
                     close: function(event, ui) {
                         // make sure we have a clean state
@@ -158,7 +159,7 @@ This code manage the many-to-[one|many] association field popup
                     width: 650,
                     modal: true,
                     autoOpen: true,
-                    resizable: false,
+                    resizable: true,
                     title: '{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}',
                     close: function(event, ui) {
                         Admin.log('[{{ id }}|field_dialog_form_add] dialog closed - removing `live` events');
@@ -166,7 +167,7 @@ This code manage the many-to-[one|many] association field popup
                         jQuery('a', field_dialog_{{ id }}).die('click');
                         jQuery('form', field_dialog_{{ id }}).die('submit');
                     },
-                    zIndex: 9998,
+                    zIndex: 9998
                 });
             }
         });
@@ -227,7 +228,7 @@ This code manage the many-to-[one|many] association field popup
                 if (data.result == 'ok') {
                     field_dialog_{{ id }}.dialog('close');
 
-                    {% if sonata_admin.field_description.options.edit == 'list' %}
+                    {% if sonata_admin.edit == 'list' %}
                         {#
                            in this case we update the hidden input, and call the change event to
                            retrieve the post information
@@ -249,6 +250,12 @@ This code manage the many-to-[one|many] association field popup
                             type: 'POST',
                             success: function(html) {
                                 jQuery('#field_container_{{ id }}').replaceWith(html);
+                                var newElement = jQuery('#{{ id }} [value="' + data.objectId + '"]');
+                                if (newElement.is("input")) {
+                                    newElement.attr('checked', 'checked');
+                                } else {
+                                    newElement.attr('selected', 'selected');
+                                }
                             }
                         });
 
@@ -308,7 +315,7 @@ This code manage the many-to-[one|many] association field popup
     Admin.add_pretty_errors(field_dialog_{{ id }});
 
 
-    {% if sonata_admin.field_description.options.edit == 'list' %}
+    {% if sonata_admin.edit == 'list' %}
         {#
             This code is used to defined the "list" popup
         #}
@@ -362,7 +369,7 @@ This code manage the many-to-[one|many] association field popup
 
             Admin.log('[{{ id }}] update the label');
 
-            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information ...'|trans([], 'SonataAdminBundle') }}</span>");
+            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
             jQuery.ajax({
                 type: 'GET',
                 url: '{{ url('sonata_admin_short_object_information', {

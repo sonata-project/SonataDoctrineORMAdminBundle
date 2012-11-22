@@ -14,28 +14,28 @@ file that was distributed with this source code.
     {% endfor %}
 {% else %}
 
-    <div id="field_container_{{ id }}">
+    <div id="field_container_{{ id }}" class="field-container">
         <span id="field_widget_{{ id }}" >
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
-                    {% if form.getChildren() %}
-                        <table class="bordered-table">
+                    {% if form.children|length > 0 %}
+                        <table class="table table-bordered">
                             <thead>
                                 <tr>
-                                    {% for field_name, nested_field in form.getChild(0).getChildren() %}
+                                    {% for field_name, nested_field in form.children[0].children %}
                                         {% if field_name == '_delete' %}
-                                            <th>{% trans from 'SonataAdminBundle' %}action_delete{% endtrans %}</th>
+                                            <th>{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}</th>
                                         {% else %}
-                                            <th>{{ nested_field.get('sonata_admin').admin.trans(nested_field.vars.label) }}</th>
+                                            <th>{{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}</th>
                                         {% endif %}
                                     {% endfor %}
                                 </tr>
                             </thead>
                             <tbody class="sonata-ba-tbody">
-                                {% for nested_group_field_name, nested_group_field in form.getChildren() %}
+                                {% for nested_group_field_name, nested_group_field in form.children %}
                                     <tr>
-                                        {% for field_name, nested_field in nested_group_field.getChildren() %}
-                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} clearfix error{% endif %}">
+                                        {% for field_name, nested_field in nested_group_field.children %}
+                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
 
@@ -55,10 +55,10 @@ file that was distributed with this source code.
                             </tbody>
                         </table>
                     {% endif %}
-                {% elseif form.getChildren() %}
+                {% elseif form.children|length > 0 %}
                     <div>
-                        {% for nested_group_field_name, nested_group_field in form.getChildren() %}
-                            {% for field_name, nested_field in nested_group_field.getChildren() %}
+                        {% for nested_group_field_name, nested_group_field in form.children %}
+                            {% for field_name, nested_field in nested_group_field.children %}
                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                     {{ form_widget(nested_field, {
                                         'inline': 'natural',
@@ -86,10 +86,11 @@ file that was distributed with this source code.
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_retrieve_{{ id }}(this);"
                         class="sonata-ba-action"
+                        title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
                         <img
                             src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{% trans from 'SonataAdminBundle' %}btn_add{% endtrans %}"
+                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                          />
                     </a>
                 </span>
@@ -107,14 +108,14 @@ file that was distributed with this source code.
 
                     function apply_position_value_{{ id }}() {
                         // update the input value position
-                        jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody td.sonata-ba-td-{{ id }}-position').each(function(index, element) {
+                        jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody td.sonata-ba-td-{{ id }}-{{ sonata_admin.field_description.options.sortable }}').each(function(index, element) {
                             // remove the sortable handler and put it back
                             jQuery('span.sonata-ba-sortable-handler', element).remove();
                             jQuery(element).append('<span class="sonata-ba-sortable-handler ui-icon ui-icon-grip-solid-horizontal"></span>');
                             jQuery('input', element).hide();
                         });
 
-                        jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody td.sonata-ba-td-{{ id }}-position input').each(function(index, value) {
+                        jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody td.sonata-ba-td-{{ id }}-{{ sonata_admin.field_description.options.sortable }} input').each(function(index, value) {
                             jQuery(value).val(index + 1);
                         });
                     }
@@ -140,10 +141,11 @@ file that was distributed with this source code.
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_dialog_form_add_{{ id }}(this);"
                         class="sonata-ba-action"
+                        title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
                         <img
                             src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{% trans from 'SonataAdminBundle' %}btn_add{% endtrans %}"
+                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                          />
                     </a>
                 {% endif %}

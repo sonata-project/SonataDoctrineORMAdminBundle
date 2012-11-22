@@ -28,7 +28,20 @@ DDL statements for your audited entities.
 Configuration
 -------------
 
-If the ``EntityAuditBundle`` is enabled, then all entities managed by the ``DoctrineORMAdminBundle`` will be autited.
+If the ``EntityAuditBundle`` is enabled, then all entities managed by the ``DoctrineORMAdminBundle`` will be audited.
+
+It is possible to disable an entity to be audited with the attribute audit="false" in services.xml
+For instance :
+.. code-block:: xml
+
+    <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
+        <tag name="sonata.admin" manager_type="orm" audit="false" group="tutorial_blog" label="post"/>
+
+        <argument/>
+        <argument>Tutorial\BlogBundle\Entity\Post</argument>
+        <argument>TutorialBlogBundle:PostAdmin</argument>
+    </service>
+
 
 Usage
 -----

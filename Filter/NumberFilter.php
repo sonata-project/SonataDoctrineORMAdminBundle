@@ -12,17 +12,14 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class NumberFilter extends Filter
 {
     /**
-     * @param QueryBuilder $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param string $data
-     * @return
+     * {@inheritdoc}
      */
-    public function filter($queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return;
@@ -37,12 +34,14 @@ class NumberFilter extends Filter
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $this->getName()));
-        $queryBuilder->setParameter($this->getName(),  $data['value']);
+        $parameterName = $this->getNewParameterName($queryBuilder);
+        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param $type
+     * @param string $type
+     *
      * @return bool
      */
     private function getOperator($type)
@@ -59,13 +58,16 @@ class NumberFilter extends Filter
     }
 
     /**
-     * @return array
+     * {@inheritdoc}
      */
     public function getDefaultOptions()
     {
         return array();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRenderSettings()
     {
         return array('sonata_type_filter_number', array(

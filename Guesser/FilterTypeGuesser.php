@@ -12,46 +12,34 @@
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\Mapping\MappingException;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 
-class FilterTypeGuesser implements TypeGuesserInterface
+class FilterTypeGuesser extends AbstractTypeGuesser
 {
-    protected $registry;
-
-    private $cache;
-
-    public function __construct(RegistryInterface $registry)
-    {
-        $this->registry = $registry;
-        $this->cache = array();
-    }
-
     /**
-     * @param string $class
-     * @param string $property
-     * @return TypeGuess
+     * {@inheritdoc}
      */
-    public function guessType($class, $property)
+    public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
-        if (!$ret = $this->getMetadata($class)) {
+        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
             return false;
         }
 
         $options = array(
-            'field_type'     => false,
+            'field_type'     => null,
             'field_options'  => array(),
             'options'        => array(),
         );
 
-        list($metadata, $name) = $ret;
+        list($metadata, $propertyName, $parentAssociationMappings) = $ret;
 
-        if ($metadata->hasAssociation($property)) {
-            $multiple = $metadata->isCollectionValuedAssociation($property);
-            $mapping = $metadata->getAssociationMapping($property);
+        $options['parent_association_mappings'] = $parentAssociationMappings;
+
+        if ($metadata->hasAssociation($propertyName)) {
+            $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
                 case ClassMetadataInfo::ONE_TO_ONE:
@@ -59,44 +47,44 @@ class FilterTypeGuesser implements TypeGuesserInterface
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
 
-                    $options['operator_type'] = 'sonata_type_boolean';
+                    $options['operator_type']    = 'sonata_type_equal';
                     $options['operator_options'] = array();
 
-                    $options['field_type'] = 'entity';
+                    $options['field_type']    = 'entity';
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity']
                     );
-                    $options['field_name'] = $mapping['fieldName'];
+
+                    $options['field_name']   = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
 
                     return new TypeGuess('doctrine_orm_model', $options, Guess::HIGH_CONFIDENCE);
             }
         }
 
-        $options['field_name'] = $metadata->fieldMappings[$property]['fieldName'];
+        $options['field_name'] = $metadata->fieldMappings[$propertyName]['fieldName'];
 
-        switch ($metadata->getTypeOfField($property)) {
+        switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type'] = 'sonata_type_boolean';
+                $options['field_type']    = 'sonata_type_boolean';
                 $options['field_options'] = array();
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
-//            case 'datetime':
-//            case 'vardatetime':
-//            case 'datetimetz':
-//                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
-//            case 'date':
-//                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
+            case 'datetime':
+            case 'vardatetime':
+            case 'datetimetz':
+                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
+            case 'date':
+                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
+                $options['field_type'] = 'number';
+
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
                 $options['field_type'] = 'number';
-                $options['field_options'] = array(
-                    'csrf_protection' => false
-                );
 
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
@@ -108,22 +96,6 @@ class FilterTypeGuesser implements TypeGuesserInterface
                 return new TypeGuess('doctrine_orm_time', $options, Guess::HIGH_CONFIDENCE);
             default:
                 return new TypeGuess('doctrine_orm_string', $options, Guess::LOW_CONFIDENCE);
-        }
-    }
-
-    protected function getMetadata($class)
-    {
-        if (array_key_exists($class, $this->cache)) {
-            return $this->cache[$class];
-        }
-
-        $this->cache[$class] = null;
-        foreach ($this->registry->getEntityManagers() as $name => $em) {
-            try {
-                return $this->cache[$class] = array($em->getClassMetadata($class), $name);
-            } catch (MappingException $e) {
-                // not an entity or mapped super class
-            }
         }
     }
 }
