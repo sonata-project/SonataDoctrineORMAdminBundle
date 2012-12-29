@@ -43,6 +43,9 @@ file that was distributed with this source code.
                                                 {% else %}
                                                     {{ form_widget(nested_field) }}
                                                 {% endif %}
+                                                {% if nested_field.vars.sonata_admin.field_description.help %}
+                                                    <span class="help-block sonata-ba-field-help">{{ nested_field.vars.sonata_admin.field_description.help }}</span>
+                                                {% endif %}
                                                 {% if nested_field.vars.errors|length > 0 %}
                                                     <div class="sonata-ba-field-error-messages">
                                                         {{ form_errors(nested_field) }}
