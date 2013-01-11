@@ -19,7 +19,7 @@ The ``ProxyQuery`` object is used to add missing features from the original Doct
     $queryBuilder->from('Post', 'p');
 
     $proxyQuery = new ProxyQuery($queryBuilder);
-    $proxyQuery->leftJoin('p.tags', t);
+    $proxyQuery->leftJoin('p.tags', 't');
     $proxyQuery->setSortBy('name');
     $proxyQuery->setMaxResults(10);
 
