@@ -154,6 +154,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->flush();
         } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
+        } catch (\Doctrine\DBAL\DBALException $e) {
+            throw new ModelManagerException('', 0, $e);
         }
     }
 
@@ -355,6 +357,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->flush();
             $entityManager->clear();
         } catch (\PDOException $e) {
+            throw new ModelManagerException('', 0, $e);
+        } catch (\Doctrine\DBAL\DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
