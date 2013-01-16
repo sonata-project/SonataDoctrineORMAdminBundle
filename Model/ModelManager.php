@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\DBAL\DBALException;
 
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -153,6 +154,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->remove($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
+            throw new ModelManagerException('', 0, $e);
+        } catch (DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
@@ -355,6 +358,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->flush();
             $entityManager->clear();
         } catch (\PDOException $e) {
+            throw new ModelManagerException('', 0, $e);
+        } catch (DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
