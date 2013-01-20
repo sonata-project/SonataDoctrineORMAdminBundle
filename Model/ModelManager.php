@@ -97,6 +97,14 @@ class ModelManager implements ModelManagerInterface
             throw new \RunTimeException('The name argument must be a string');
         }
 
+        if (!isset($options['route']['name'])) {
+            $options['route']['name'] = 'edit';
+        }
+
+        if (!isset($options['route']['parameters'])) {
+            $options['route']['parameters'] = array();
+        }
+
         list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
 
         $fieldDescription = new FieldDescription;
@@ -153,6 +161,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->remove($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
+            throw new ModelManagerException('', 0, $e);
+        } catch (\Doctrine\DBAL\DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }
