@@ -256,6 +256,8 @@ This code manage the many-to-[one|many] association field popup
                                 } else {
                                     newElement.attr('selected', 'selected');
                                 }
+
+                                jQuery('#field_container_{{ id }}').trigger('sonata-admin-append-form-element');
                             }
                         });
 
