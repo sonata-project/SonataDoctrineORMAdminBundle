@@ -200,7 +200,7 @@ class ModelManager implements ModelManagerInterface
             $class = get_class($class);
         }
 
-        $em = $this->registry->getEntityManagerForClass($class);
+        $em = $this->registry->getManagerForClass($class);
 
         if (!$em) {
             throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
