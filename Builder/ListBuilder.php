@@ -66,7 +66,7 @@ class ListBuilder implements ListBuilderInterface
         $this->buildField($type, $fieldDescription, $admin);
         $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
 
-        return $list->add($fieldDescription);
+        $list->add($fieldDescription);
     }
 
     /**
