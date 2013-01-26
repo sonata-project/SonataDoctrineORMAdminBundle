@@ -37,7 +37,7 @@ class SonataDoctrineORMAdminExtension extends Extension
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configs = $this->fixTemplatesConfiguration($configs);
+        $configs = $this->fixTemplatesConfiguration($configs, $container);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('doctrine_orm.xml');
@@ -64,11 +64,12 @@ class SonataDoctrineORMAdminExtension extends Extension
 
 
     /**
-     * @param array $configs
+     * @param array            $configs
+     * @param ContainerBuilder $container
      *
      * @return array
      */
-    private function fixTemplatesConfiguration(array $configs)
+    private function fixTemplatesConfiguration(array $configs, ContainerBuilder $container)
     {
         $defaultConfig = array(
             'templates' => array(
@@ -110,8 +111,9 @@ class SonataDoctrineORMAdminExtension extends Extension
             )
         );
 
-        // let's add some magic
-        if (class_exists('Sonata\IntlBundle\SonataIntlBundle', true)) {
+        // let's add some magic, only overwrite template if the SonataIntlBundle is enabled
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['SonataIntlBundle'])) {
             $defaultConfig['templates']['types']['list'] = array_merge($defaultConfig['templates']['types']['list'], array(
                 'date'         => 'SonataIntlBundle:CRUD:list_date.html.twig',
                 'datetime'     => 'SonataIntlBundle:CRUD:list_datetime.html.twig',
