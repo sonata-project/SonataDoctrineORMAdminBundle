@@ -35,7 +35,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
             }
 
             $definition = $container->getDefinition($id);
-            $templates = $container->getParameter( 'sonata_doctrine_orm_admin.templates' );
+            $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
 
             if (!$definition->hasMethodCall('setFormTheme')) {
                 $definition->addMethodCall('setFormTheme', array($templates['form']));
