@@ -12,7 +12,6 @@
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
@@ -22,8 +21,6 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Symfony\Component\Form\FormFactory;
-
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {

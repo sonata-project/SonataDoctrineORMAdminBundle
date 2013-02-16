@@ -43,7 +43,6 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array('alias.field LIKE :field_name_0'), $builder->query);
         $this->assertEquals(array('field_name_0' => 'asd'), $builder->parameters);
 
-
         $builder = new ProxyQuery(new QueryBuilder);
         $this->assertEquals(array(), $builder->query);
 

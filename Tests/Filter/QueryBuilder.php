@@ -45,8 +45,8 @@ class QueryBuilder
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param  string $name
+     * @param  string $value
      * @return string
      */
     public function in($name, $value)

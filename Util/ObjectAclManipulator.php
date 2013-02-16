@@ -30,6 +30,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
         $securityHandler = $admin->getSecurityHandler();
         if (!$securityHandler instanceof AclSecurityHandlerInterface) {
             $output->writeln('Admin class is not configured to use ACL : <info>ignoring</info>');
+
             return;
         }
 
