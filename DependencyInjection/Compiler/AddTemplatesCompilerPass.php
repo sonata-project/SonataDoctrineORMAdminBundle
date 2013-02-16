@@ -14,8 +14,6 @@ namespace Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
-use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /*
  *
@@ -34,7 +32,6 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
             if (!isset($attributes[0]['manager_type']) || $attributes[0]['manager_type'] != 'orm') {
                 continue;
             }
-
 
             $definition = $container->getDefinition($id);
 

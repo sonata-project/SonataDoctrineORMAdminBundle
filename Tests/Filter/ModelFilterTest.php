@@ -19,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 class ModelFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param array $options
+     * @param  array                                               $options
      * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
      */
     public function getFieldDescription(array $options)
