@@ -8,7 +8,7 @@ entities as provided by Doctrine.
 Model definition
 ----------------
 
-No we need to create the entities that will be used in the blog:
+Now we need to create the entities that will be used in the blog:
 
 Post
 ~~~~
@@ -16,18 +16,18 @@ Post
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Entity/Post.php
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
+    use Symfony\Component\Validator\Constraints as Assert;
 
     /**
      * @ORM\Entity
      */
     class Post
     {
-
-
         /**
          * @ORM\Id
          * @ORM\Column(type="integer")
@@ -35,14 +35,11 @@ Post
          */
         protected $id;
 
-
         /**
          * @ORM\Column(type="string", length="255")
-         * @validation:Validation({
-         *      @validation:MinLength(limit=10),
-         *      @validation:NotBlank(),
-         *      @validation:MaxLength(limit=255)
-         * })
+         *
+         * @Assert\NotBlank()
+         * @Assert\Length(min="10", max="255")
          */
         protected $title;
 
@@ -51,12 +48,10 @@ Post
          */
         protected $abstract;
 
-
         /**
          * @ORM\Column(type="text")
-         * @validation:Validation({
-         *      @validation:NotBlank()
-         * })
+         *
+         * @Assert\NotBlank()
          */
         protected $content;
 
@@ -64,7 +59,6 @@ Post
          * @ORM\Column(type="boolean")
          */
         protected $enabled;
-
 
         /**
          * @ORM\Column(type="datetime")
@@ -81,16 +75,16 @@ Post
          */
         protected $tags;
 
-        public function __toString() 
-        {
-          return $this->getTitle();
-        }
-
         public function __construct()
         {
-            $this->tags     = new \Doctrine\Common\Collections\ArrayCollection;
-            $this->comments = new \Doctrine\Common\Collections\ArrayCollection;
-            $this->created_at = new \DateTime("now");;
+            $this->tags     = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->created_at = new \DateTime("now");
+        }
+
+        public function __toString()
+        {
+            return $this->getTitle();
         }
 
 Tag
@@ -99,10 +93,12 @@ Tag
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Entity/Tag.php
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
+    use Symfony\Component\Validator\Constraints as Assert;
 
     /**
      * @ORM\Entity
@@ -114,13 +110,11 @@ Tag
          * @ORM\Column(type="integer")
          * @ORM\GeneratedValue(strategy="AUTO")
          */
-        protected $id;     
+        protected $id;
 
         /**
          * @ORM\Column(type="string")
-         * @validation:Validation({
-         *      @validation:NotBlank()
-         * })
+         * @Assert\NotBlank()
          */
         protected $name;
 
@@ -134,14 +128,14 @@ Tag
          */
         protected $posts;
 
-        public function __toString() 
-        {
-          return $this->getName();
-        }
-
         public function __construct()
         {
             $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+        }
+
+        public function __toString()
+        {
+            return $this->getName();
         }
 
 Comment
@@ -150,10 +144,12 @@ Comment
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Entity/Comment.php
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
+    use Symfony\Component\Validator\Constraints as Assert;
 
     /**
      * @ORM\Entity
@@ -165,37 +161,31 @@ Comment
          * @ORM\Column(type="integer")
          * @ORM\GeneratedValue(strategy="AUTO")
          */
-        protected $id;  
+        protected $id;
 
         /**
          * @ORM\Column(type="string")
-         * @validation:Validation({
-         *      @validation:NotBlank()
-         * })
+         *
+         * @Assert\NotBlank()
          */
         protected $name;
 
 
         /**
          * @ORM\Column(type="string")
-         * @validation:Validation({
-         *      @validation:NotBlank()
-         * })
+         *
+         * @Assert\NotBlank()
          */
         protected $email;
-
 
         /**
          * @ORM\Column(type="string")
          */
         protected $url;
 
-
         /**
          * @ORM\Column(type="text")
-         * @validation:Validation({
-         *      @validation:NotBlank()
-         * })
+         * @Assert\NotBlank()
          */
         protected $message;
 
@@ -204,24 +194,22 @@ Comment
          */
         protected $post;
 
-
-        public function __toString() 
+        public function __toString()
         {
-          return $this->getName();
+            return $this->getName();
         }
 
 
+Generate getters and setters
+----------------------------
 
-Generate getter and setter
---------------------------
-
-Fill the entities with getters and setters running the command:
+Fill the entities with getters and setters by running the following command:
 
   php app/console doctrine:generate:entities Tutorial
 
-Creating Database
------------------
+Creating the Database
+---------------------
 
-Create the database related to the entities and the mapping running:
+Create the database related to the entities and the mapping by running the following command:
 
   php app/console doctrine:schema:update --force
