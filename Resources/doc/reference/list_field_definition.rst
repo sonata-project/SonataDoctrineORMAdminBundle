@@ -178,14 +178,14 @@ Default route for an link is edit (many_to_one, one_to_one etc.). Using this, th
 
 	class MediaAdmin extends Admin
 	{
-    	protected function configureListFields(ListMapper $listMapper)
-    	{
-     	   $listMapper
+		protected function configureListFields(ListMapper $listMapper)
+		{
+			$listMapper
 				->add('field', null, array(
-			   	 	'route' => array(
-			    		'name' => 'show'
+					'route' => array(
+						'name' => 'show'
 					)
 				))
     		;
-    	}
+		}
 	}
