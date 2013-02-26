@@ -25,9 +25,7 @@ class Pager extends BasePager
     protected $queryBuilder = null;
 
     /**
-     * Returns a query for counting the total results.
-     *
-     * @return integer
+     * {@inheritdoc}
      */
     public function computeNbResult()
     {
@@ -43,11 +41,7 @@ class Pager extends BasePager
     }
 
     /**
-     * Get all the results for the pager instance
-     *
-     * @param mixed $hydrationMode A hydration mode identifier
-     *
-     * @return array
+     * {@inheritdoc}
      */
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
     {
@@ -55,15 +49,16 @@ class Pager extends BasePager
     }
 
     /**
-     * Get the query for the pager.
-     *
-     * @return \AdminBundle\Datagrid\ORM\ProxyQuery
+     * {@inheritdoc}
      */
     public function getQuery()
     {
         return $this->query;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function init()
     {
         $this->resetIterator();

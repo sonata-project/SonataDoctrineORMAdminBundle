@@ -13,14 +13,11 @@ namespace Sonata\DoctrineORMAdminBundle\DependencyInjection;
 
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\HttpKernel\DependencyInjection\Extension;
 
 use Symfony\Component\Config\FileLocator;
-use Symfony\Component\Config\Resource\FileResource;
 use Symfony\Component\Config\Definition\Processor;
-
 
 /**
  * SonataAdminBundleExtension
@@ -32,12 +29,12 @@ class SonataDoctrineORMAdminExtension extends Extension
 {
     /**
      *
-     * @param array            $configs    An array of configuration settings
-     * @param ContainerBuilder $container  A ContainerBuilder instance
+     * @param array            $configs   An array of configuration settings
+     * @param ContainerBuilder $container A ContainerBuilder instance
      */
     public function load(array $configs, ContainerBuilder $container)
     {
-        $configs = $this->fixTemplatesConfiguration($configs);
+        $configs = $this->fixTemplatesConfiguration($configs, $container);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('doctrine_orm.xml');
@@ -51,8 +48,7 @@ class SonataDoctrineORMAdminExtension extends Extension
 
         $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
 
-        $pool = $container->getDefinition('sonata.admin.manager.orm');
-        $pool->addMethodCall('__hack_doctrine_orm__', $config);
+        $container->setParameter('sonata_doctrine_orm_admin.templates', $config['templates']);
 
         // define the templates
         $container->getDefinition('sonata.admin.builder.orm_list')
@@ -62,13 +58,13 @@ class SonataDoctrineORMAdminExtension extends Extension
             ->replaceArgument(1, $config['templates']['types']['show']);
     }
 
-
     /**
-     * @param array $configs
+     * @param array            $configs
+     * @param ContainerBuilder $container
      *
      * @return array
      */
-    private function fixTemplatesConfiguration(array $configs)
+    private function fixTemplatesConfiguration(array $configs, ContainerBuilder $container)
     {
         $defaultConfig = array(
             'templates' => array(
@@ -110,8 +106,9 @@ class SonataDoctrineORMAdminExtension extends Extension
             )
         );
 
-        // let's add some magic
-        if (class_exists('Sonata\IntlBundle\SonataIntlBundle', true)) {
+        // let's add some magic, only overwrite template if the SonataIntlBundle is enabled
+        $bundles = $container->getParameter('kernel.bundles');
+        if (isset($bundles['SonataIntlBundle'])) {
             $defaultConfig['templates']['types']['list'] = array_merge($defaultConfig['templates']['types']['list'], array(
                 'date'         => 'SonataIntlBundle:CRUD:list_date.html.twig',
                 'datetime'     => 'SonataIntlBundle:CRUD:list_datetime.html.twig',

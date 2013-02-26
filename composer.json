@@ -19,11 +19,17 @@
     "minimum-stability": "dev",
     "require": {
         "doctrine/orm": ">=2.2,<2.4-dev",
-        "sonata-project/admin-bundle": "dev-master",
+        "sonata-project/admin-bundle": "2.1.x-dev",
         "symfony/symfony": ">=2.1,<2.3-dev"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
     },
-    "target-dir": "Sonata/DoctrineORMAdminBundle"
+    "target-dir": "Sonata/DoctrineORMAdminBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-2.0": "2.0.x-dev",
+            "dev-master": "2.1.x-dev"
+        }
+    }
 }

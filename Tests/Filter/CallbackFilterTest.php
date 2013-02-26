@@ -25,6 +25,7 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
             'callback' => function($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value);
+
                 return true;
             }
         ));
@@ -52,9 +53,11 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(true, $filter->isActive());
     }
 
-    public function customCallback($builder, $alias, $field, $value) {
+    public function customCallback($builder, $alias, $field, $value)
+    {
         $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
         $builder->setParameter('value', $value);
+
         return true;
     }
 

@@ -12,7 +12,6 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class FilterTest_Filter extends Filter
@@ -21,9 +20,9 @@ class FilterTest_Filter extends Filter
      * Apply the filter to the QueryBuilder instance
      *
      * @param $queryBuilder
-     * @param string $alias
-     * @param string $field
-     * @param string $value
+     * @param  string $alias
+     * @param  string $field
+     * @param  string $value
      * @return void
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
