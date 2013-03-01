@@ -17,9 +17,9 @@
         }
     ],
     "require": {
-        "doctrine/orm": ">=2.2,<2.4",
-        "sonata-project/admin-bundle": "2.1.*@dev",
-        "symfony/symfony": ">=2.1,<2.3"
+        "doctrine/orm": ">=2.3,<2.4",
+        "sonata-project/admin-bundle": "2.2.*@dev",
+        "symfony/symfony": ">=2.3,<2.3"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
@@ -28,7 +28,8 @@
     "extra": {
         "branch-alias": {
             "dev-2.0": "2.0.x-dev",
-            "dev-master": "2.1.x-dev"
+            "dev-2.1": "2.1.x-dev",
+            "dev-master": "2.2.x-dev"
         }
     }
 }
