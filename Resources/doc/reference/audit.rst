@@ -32,6 +32,7 @@ If the ``EntityAuditBundle`` is enabled, then all entities managed by the ``Doct
 
 It is possible to disable an entity to be audited with the attribute audit="false" in services.xml
 For instance :
+
 .. code-block:: xml
 
     <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
