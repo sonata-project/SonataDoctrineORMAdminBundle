@@ -139,6 +139,8 @@ class ProxyQuery implements ProxyQueryInterface
     {
         $alias        = $this->entityJoin($parentAssociationMappings);
         $this->sortBy = $alias . '.' . $fieldMapping['fieldName'];
+
+        return $this;
     }
 
     /**
@@ -155,6 +157,8 @@ class ProxyQuery implements ProxyQueryInterface
     public function setSortOrder($sortOrder)
     {
         $this->sortOrder = $sortOrder;
+
+        return $this;
     }
 
     /**
@@ -197,6 +201,8 @@ class ProxyQuery implements ProxyQueryInterface
     public function setFirstResult($firstResult)
     {
         $this->queryBuilder->setFirstResult($firstResult);
+
+        return $this;
     }
 
     /**
@@ -204,7 +210,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function getFirstResult()
     {
-        $this->queryBuilder->getFirstResult();
+        return $this->queryBuilder->getFirstResult();
     }
 
     /**
@@ -213,6 +219,8 @@ class ProxyQuery implements ProxyQueryInterface
     public function setMaxResults($maxResults)
     {
         $this->queryBuilder->setMaxResults($maxResults);
+
+        return $this;
     }
 
     /**
@@ -220,7 +228,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function getMaxResults()
     {
-        $this->queryBuilder->getMaxResults();
+        return $this->queryBuilder->getMaxResults();
     }
 
     /**
