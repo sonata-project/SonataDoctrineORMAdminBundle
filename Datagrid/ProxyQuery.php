@@ -76,12 +76,18 @@ class ProxyQuery implements ProxyQueryInterface
         $class = $from[0]->getFrom();
 
         // step 2 : retrieve the column id
-        $idName = current($queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class)->getIdentifierFieldNames());
+        $metadata = $queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class);
+        $idName = current($metadata->getIdentifierFieldNames());
 
         // step 3 : retrieve the different subjects id
         $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
         $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT ' . $select);
+
+        if (!$metadata->isSingleValuedAssociation($idName)) {
+            $queryBuilderId->add('select', 'DISTINCT ' . $select);
+        } else {
+            $queryBuilderId->add('select', 'DISTINCT IDENTITY(' . $select . ')');
+        }
 
         //for SELECT DISTINCT, ORDER BY expressions must appear in select list
         /* Consider
@@ -103,7 +109,7 @@ class ProxyQuery implements ProxyQueryInterface
         $idx        = array();
         $connection = $queryBuilder->getEntityManager()->getConnection();
         foreach ($results as $id) {
-            $idx[] = $connection->quote($id[$idName]);
+            $idx[] = $connection->quote(current($id));
         }
 
         // step 4 : alter the query to match the targeted ids
