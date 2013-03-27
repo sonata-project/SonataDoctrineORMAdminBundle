@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Symfony\Component\Form\FormFactory;
+use Symfony\Component\OptionsResolver\Exception\InvalidOptionsException;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -128,7 +129,11 @@ class DatagridBuilder implements DatagridBuilderInterface
         $pager = new Pager;
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), array('csrf_protection' => false));
+        try {
+            $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), array('csrf_protection' => false));
+        } catch (InvalidOptionsException $e) {
+            $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form');
+        }
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }
