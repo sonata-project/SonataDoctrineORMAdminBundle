@@ -30,16 +30,19 @@ class DatagridBuilder implements DatagridBuilderInterface
 
     protected $guesser;
 
+    protected $csrfEnabled;
+
     /**
      * @param \Symfony\Component\Form\FormFactory               $formFactory
      * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
      * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface  $guesser
      */
-    public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser)
+    public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfEnabled)
     {
         $this->formFactory   = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->guesser       = $guesser;
+        $this->csrfEnabled   = $csrfEnabled;
     }
 
     /**
@@ -128,7 +131,13 @@ class DatagridBuilder implements DatagridBuilderInterface
         $pager = new Pager;
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), array('csrf_protection' => false));
+        $options = array();
+
+        if ($this->csrfEnabled) {
+            $options['csrf_protection'] = false;
+        }
+
+        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), $options);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }

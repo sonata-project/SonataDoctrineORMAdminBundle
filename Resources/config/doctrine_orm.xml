@@ -51,6 +51,7 @@
             <argument type="service" id="form.factory" />
             <argument type="service" id="sonata.admin.builder.filter.factory" />
             <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain" />
+            <argument>%form.type_extension.csrf.enabled%</argument>
         </service>
 
         <service id="sonata.admin.guesser.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser">
