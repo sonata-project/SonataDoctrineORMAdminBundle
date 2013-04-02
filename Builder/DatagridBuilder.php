@@ -36,6 +36,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param \Symfony\Component\Form\FormFactory               $formFactory
      * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
      * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface  $guesser
+     * @param boolean                                           $csrfEnabled
      */
     public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfEnabled)
     {
