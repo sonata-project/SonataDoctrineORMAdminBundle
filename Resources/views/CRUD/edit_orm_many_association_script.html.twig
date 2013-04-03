@@ -89,7 +89,6 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery('a', field_dialog_{{ id }}).on('click', field_dialog_form_list_link_{{ id }});
                 jQuery('form', field_dialog_{{ id }}).on('submit', function(event) {
                     event.preventDefault();
 
@@ -117,8 +116,9 @@ This code manage the many-to-[one|many] association field popup
                         // make sure we have a clean state
                         jQuery('a', field_dialog_{{ id }}).off('click');
                         jQuery('form', field_dialog_{{ id }}).off('submit');
+                        field_dialog_{{ id }}.dialog('destroy').remove();
                     },
-                    zIndex: 9998,
+                    zIndex: 9998
                 });
             }
         });
@@ -150,7 +150,6 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery('a', field_dialog_{{ id }}).on('click', field_dialog_form_action_{{ id }});
                 jQuery('form', field_dialog_{{ id }}).on('submit', field_dialog_form_action_{{ id }});
 
                 // open the dialog in modal mode
@@ -166,6 +165,7 @@ This code manage the many-to-[one|many] association field popup
                         // make sure we have a clean state
                         jQuery('a', field_dialog_{{ id }}).off('click');
                         jQuery('form', field_dialog_{{ id }}).off('submit');
+                        field_dialog_{{ id }}.dialog('destroy').remove();
                     },
                     zIndex: 9998
                 });
