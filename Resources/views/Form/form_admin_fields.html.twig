@@ -56,6 +56,17 @@ file that was distributed with this source code.
 {% block sonata_type_model_list_widget %}
     <div id="field_container_{{ id }}" class="field-container">
         <span id="field_actions_{{ id }}" class="field-actions">
+            <span id="field_widget_{{ id }}" class="field-short-description">
+                {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
+                    {% render url('sonata_admin_short_object_information',{
+                            'code':     sonata_admin.field_description.associationadmin.code,
+                            'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
+                            'uniqid':   sonata_admin.field_description.associationadmin.uniqid
+                        }
+                    )%}
+                {% endif %}
+            </span>
+
             <span class="btn-group">
                 {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') %}
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
@@ -92,16 +103,6 @@ file that was distributed with this source code.
                     </a>
                 {% endif %}
             </span>
-        </span>
-        <span id="field_widget_{{ id }}" >
-            {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
-                {% render url('sonata_admin_short_object_information',{
-                        'code':     sonata_admin.field_description.associationadmin.code,
-                        'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
-                        'uniqid':   sonata_admin.field_description.associationadmin.uniqid
-                    }
-                )%}
-            {% endif %}
         </span>
 
         <span style="display: none" >
