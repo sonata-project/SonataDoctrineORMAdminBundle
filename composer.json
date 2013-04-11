@@ -17,11 +17,11 @@
         }
     ],
     "require": {
-        "doctrine/orm": ">=2.3,<2.4",
+        "doctrine/orm": "~2.3",
         "sonata-project/admin-bundle": "2.2.*@dev",
         "sonata-project/block-bundle": "2.2.*@dev",
         "symfony/symfony": ">=2.2,<2.3",
-        "knplabs/knp-menu-bundle": "1.1.x-dev"
+        "knplabs/knp-menu-bundle": "~1.1"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
@@ -29,8 +29,6 @@
     "target-dir": "Sonata/DoctrineORMAdminBundle",
     "extra": {
         "branch-alias": {
-            "dev-2.0": "2.0.x-dev",
-            "dev-2.1": "2.1.x-dev",
             "dev-master": "2.2.x-dev"
         }
     }
