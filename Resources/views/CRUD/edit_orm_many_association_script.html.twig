@@ -150,8 +150,8 @@ This code manage the many-to-[one|many] association field popup
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
-                jQuery('a', field_dialog_{{ id }}).on('click', field_dialog_form_action_{{ id }});
-                jQuery('form', field_dialog_{{ id }}).on('submit', field_dialog_form_action_{{ id }});
+                jQuery(field_dialog_{{ id }}).on('click', 'a', field_dialog_form_action_{{ id }});
+                jQuery(field_dialog_{{ id }}).on('submit', 'form', field_dialog_form_action_{{ id }});
 
                 // open the dialog in modal mode
                 field_dialog_{{ id }}.dialog({
@@ -164,8 +164,8 @@ This code manage the many-to-[one|many] association field popup
                     close: function(event, ui) {
                         Admin.log('[{{ id }}|field_dialog_form_add] dialog closed - removing `live` events');
                         // make sure we have a clean state
-                        jQuery('a', field_dialog_{{ id }}).off('click');
-                        jQuery('form', field_dialog_{{ id }}).off('submit');
+                        jQuery(field_dialog_{{ id }}).off('click', 'a');
+                        jQuery(field_dialog_{{ id }}).off('submit', 'form');
                     },
                     zIndex: 9998
                 });
