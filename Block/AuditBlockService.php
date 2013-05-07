@@ -18,6 +18,7 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Validator\ErrorElement;
 
 use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\BaseBlockService;
 
 use SimpleThings\EntityAudit\AuditReader;
@@ -45,7 +46,7 @@ class AuditBlockService extends BaseBlockService
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockInterface $block, Response $response = null)
+    public function execute(BlockContextInterface $block, Response $response = null)
     {
         $settings = array_merge($this->getDefaultSettings(), $block->getSettings());
 
