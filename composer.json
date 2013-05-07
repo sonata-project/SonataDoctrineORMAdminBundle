@@ -18,8 +18,7 @@
     ],
     "require": {
         "doctrine/orm": "~2.3",
-        "sonata-project/admin-bundle": "2.2.*@dev",
-        "sonata-project/block-bundle": "2.2.*@dev",
+        "sonata-project/admin-bundle": ">=2.2.2",
         "symfony/symfony": ">=2.2,<2.3",
         "knplabs/knp-menu-bundle": "~1.1"
     },

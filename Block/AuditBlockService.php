@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Block;
 
+use Sonata\BlockBundle\Block\BlockContextInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 
@@ -21,6 +22,7 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Sonata\BlockBundle\Block\BaseBlockService;
 
 use SimpleThings\EntityAudit\AuditReader;
+use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
  *
@@ -45,22 +47,20 @@ class AuditBlockService extends BaseBlockService
     /**
      * {@inheritdoc}
      */
-    public function execute(BlockInterface $block, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $settings = array_merge($this->getDefaultSettings(), $block->getSettings());
-
         $revisions = array();
 
-        foreach ($this->auditReader->findRevisionHistory($settings['limit'], 0) as $revision) {
+        foreach ($this->auditReader->findRevisionHistory($blockContext->getSetting('limit'), 0) as $revision) {
             $revisions[] = array(
                 'revision' => $revision,
                 'entities' => $this->auditReader->findEntitesChangedAtRevision($revision->getRev())
             );
         }
 
-        return $this->renderResponse('SonataDoctrineORMAdminBundle:Block:block_audit.html.twig', array(
-            'block'     => $block,
-            'settings'  => $settings,
+        return $this->renderResponse($blockContext->getTemplate(), array(
+            'block'     => $blockContext->getBlock(),
+            'settings'  => $blockContext->getSettings(),
             'revisions' => $revisions,
         ), $response);
     }
@@ -92,10 +92,11 @@ class AuditBlockService extends BaseBlockService
     /**
      * {@inheritdoc}
      */
-    public function getDefaultSettings()
+    public function setDefaultSettings(OptionsResolverInterface $resolver)
     {
-        return array(
-            'limit' => 10
-        );
+        $resolver->setDefaults(array(
+            'limit'    => 10,
+            'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig'
+        ));
     }
 }
