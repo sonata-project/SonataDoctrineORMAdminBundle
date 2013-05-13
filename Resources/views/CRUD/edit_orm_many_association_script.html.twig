@@ -24,6 +24,28 @@ This code manage the many-to-[one|many] association field popup
 
 <script type="text/javascript">
 
+    var field_dialog_form_list_register_events_{{ id }} = function() {
+        // capture the submit event to make an ajax call, ie : POST data to the
+        // related create admin
+        jQuery('a', field_dialog_{{ id }}).on('click', field_dialog_form_list_link_{{ id }});
+        jQuery('form', field_dialog_{{ id }}).on('submit', function(event) {
+            event.preventDefault();
+
+            var form = jQuery(this);
+
+            jQuery(form).ajaxSubmit({
+                type: form.attr('method'),
+                url: form.attr('action'),
+                dataType: 'html',
+                data: {_xml_http_request: true},
+                success: function(html) {
+                   field_dialog_{{ id }}.html(html);
+                   field_dialog_form_list_register_events_{{ id }}();
+                }
+            });
+        });
+    }
+
     {#
       handle link click in a list :
         - if the parent has an objectId defined then the related input get updated
@@ -47,6 +69,7 @@ This code manage the many-to-[one|many] association field popup
                 url: jQuery(this).attr('href'),
                 success: function(html) {
                    field_dialog_{{ id }}.html(html);
+                   field_dialog_form_list_register_events_{{ id }}();
                 }
             });
 
@@ -87,25 +110,8 @@ This code manage the many-to-[one|many] association field popup
 
                 Admin.add_filters(field_dialog_{{ id }});
 
-                // capture the submit event to make an ajax call, ie : POST data to the
-                // related create admin
-                jQuery('a', field_dialog_{{ id }}).on('click', field_dialog_form_list_link_{{ id }});
-                jQuery('form', field_dialog_{{ id }}).on('submit', function(event) {
-                    event.preventDefault();
-
-                    var form = jQuery(this);
-
-                    jQuery(form).ajaxSubmit({
-                        type: form.attr('method'),
-                        url: form.attr('action'),
-                        dataType: 'html',
-                        data: {_xml_http_request: true},
-                        success: function(html) {
-                           field_dialog_{{ id }}.html(html);
-                        }
-                    });
-                });
-
+                field_dialog_form_list_register_events_{{ id }}();
+                
                 // open the dialog in modal mode
                 field_dialog_{{ id }}.dialog({
                     height: 'auto',
