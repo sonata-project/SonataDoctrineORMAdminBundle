@@ -19,7 +19,7 @@
     "require": {
         "doctrine/orm": "~2.3",
         "sonata-project/admin-bundle": ">=2.2.2",
-        "symfony/symfony": ">=2.2,<2.3",
+        "symfony/symfony": ">=2.2,<2.4",
         "knplabs/knp-menu-bundle": "~1.1"
     },
     "autoload": {
