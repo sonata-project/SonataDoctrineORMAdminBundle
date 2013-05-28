@@ -26,7 +26,9 @@ file that was distributed with this source code.
                                         {% if field_name == '_delete' %}
                                             <th>{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}</th>
                                         {% else %}
-                                            <th>{{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}</th>
+                                            <th {{ nested_field.vars['required']  ? 'class="required"' : '' }}>
+                                                {{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}
+                                            </th>
                                         {% endif %}
                                     {% endfor %}
                                 </tr>
