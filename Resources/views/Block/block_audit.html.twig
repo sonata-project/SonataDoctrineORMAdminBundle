@@ -16,7 +16,7 @@ file that was distributed with this source code.
     <div>
         {% for revision in revisions %}
             <div>
-                {{ revision.revision.rev }} - {{ revision.revision.username }} - {{ revision.revision.timestamp | format_date }}
+                {{ revision.revision.rev }} - {{ revision.revision.username }} - {{ revision.revision.timestamp | date }}
 
                 <ul>
                     {% for changedEntity in revision.entities %}
