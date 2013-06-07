@@ -118,7 +118,7 @@ This code manage the many-to-[one|many] association field popup
                         jQuery('a', field_dialog_{{ id }}).off('click');
                         jQuery('form', field_dialog_{{ id }}).off('submit');
                     },
-                    zIndex: 9998,
+                    zIndex: 9998
                 });
             }
         });
@@ -176,14 +176,19 @@ This code manage the many-to-[one|many] association field popup
     // handle the post data
     var field_dialog_form_action_{{ id }} = function(event) {
 
+        var element = jQuery(this);
+
+        // return if the link is an anchor inside the same page
+        if (this.nodeName == 'A' && (element.attr('href').length == 0 || element.attr('href')[0] == '#')) {
+            return;
+        }
+
         event.preventDefault();
         event.stopPropagation();
 
         Admin.log('[{{ id }}|field_dialog_form_action] action catch', this);
 
         initialize_popup_{{ id }}();
-
-        var element = jQuery(this);
 
         if (this.nodeName == 'FORM') {
             var url  = element.attr('action');
