@@ -168,3 +168,24 @@ The related template :
             {{ object.providername}} : {{ object.width }}x{{ object.height }} <br />
         </div>
     {% endblock %}
+	
+Custom route
+^^^^^^^^^^^^^^^
+
+Default route for an link is edit (many_to_one, one_to_one etc.). Using this, the route can be customized as follows:
+
+.. code-block:: php
+
+	class MediaAdmin extends Admin
+	{
+		protected function configureListFields(ListMapper $listMapper)
+		{
+			$listMapper
+				->add('field', null, array(
+					'route' => array(
+						'name' => 'show'
+					)
+				))
+    		;
+		}
+	}

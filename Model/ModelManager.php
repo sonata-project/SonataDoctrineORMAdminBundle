@@ -97,6 +97,14 @@ class ModelManager implements ModelManagerInterface
             throw new \RunTimeException('The name argument must be a string');
         }
 
+        if (!isset($options['route']['name'])) {
+            $options['route']['name'] = 'edit';
+        }
+
+        if (!isset($options['route']['parameters'])) {
+            $options['route']['parameters'] = array();
+        }
+
         list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
 
         $fieldDescription = new FieldDescription;
