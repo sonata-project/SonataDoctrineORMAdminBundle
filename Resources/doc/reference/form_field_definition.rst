@@ -206,6 +206,7 @@ You can easily add a new ``galleryHasMedias`` row by defining one of these optio
 * ``edit``: ``inline|standard``, the inline mode allows you to add new rows,
 * ``inline``: ``table|standard``, the fields are displayed into table,
 * ``sortable``: if the model has a position field, you can enable a drag and drop sortable effect by setting ``sortable=field_name``.
+* ``limit``: ``<an integer>`` if defined, limits the number of elements that can be added, after which the "Add new" button will not be displayed
 
 .. code-block:: php
 
@@ -229,7 +230,8 @@ You can easily add a new ``galleryHasMedias`` row by defining one of these optio
                 ->add('galleryHasMedias', 'sonata_type_collection', array(), array(
                     'edit' => 'inline',
                     'inline' => 'table',
-                    'sortable'  => 'position'
+                    'sortable' => 'position',
+                    'limit' => 3
                 ))
             ;
         }
