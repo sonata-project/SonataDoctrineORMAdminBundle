@@ -11,8 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
@@ -49,8 +47,7 @@ class TypeGuesser extends AbstractTypeGuesser
             }
         }
 
-        switch ($metadata->getTypeOfField($propertyName))
-        {
+        switch ($metadata->getTypeOfField($propertyName)) {
             case 'array':
                 return new TypeGuess('array', array(), Guess::HIGH_CONFIDENCE);
             case 'boolean':

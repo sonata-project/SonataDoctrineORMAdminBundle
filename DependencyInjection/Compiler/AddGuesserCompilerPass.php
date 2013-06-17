@@ -15,7 +15,6 @@ use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\Reference;
-use Symfony\Component\DependencyInjection\ContainerInterface;
 
 /*
  *
@@ -38,7 +37,7 @@ class AddGuesserCompilerPass implements CompilerPassInterface
 
         $definition->replaceArgument(0, $services);
 
-        // ListBuilder
+        // DatagridBuilder
         $definition = $container->getDefinition('sonata.admin.guesser.orm_datagrid_chain');
         $services   = array();
         foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_datagrid') as $id => $attributes) {

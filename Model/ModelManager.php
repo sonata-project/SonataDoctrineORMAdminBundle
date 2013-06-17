@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\DBAL\DBALException;
 
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -49,7 +50,6 @@ class ModelManager implements ModelManagerInterface
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
 
-
     /**
      * Returns the model's metadata holding the fully qualified property, and the last
      * property name
@@ -71,7 +71,7 @@ class ModelManager implements ModelManagerInterface
         $class = $baseClass;
         $parentAssociationMappings = array();
 
-        foreach($nameElements as $nameElement){
+        foreach ($nameElements as $nameElement) {
             $metadata = $this->getMetadata($class);
             $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
             $class = $metadata->getAssociationTargetClass($nameElement);
@@ -95,6 +95,14 @@ class ModelManager implements ModelManagerInterface
     {
         if (!is_string($name)) {
             throw new \RunTimeException('The name argument must be a string');
+        }
+
+        if (!isset($options['route']['name'])) {
+            $options['route']['name'] = 'edit';
+        }
+
+        if (!isset($options['route']['parameters'])) {
+            $options['route']['parameters'] = array();
         }
 
         list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
@@ -154,6 +162,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->flush();
         } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
+        } catch (DBALException $e) {
+            throw new ModelManagerException('', 0, $e);
         }
     }
 
@@ -167,6 +177,7 @@ class ModelManager implements ModelManagerInterface
         }
 
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
+
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
@@ -197,7 +208,7 @@ class ModelManager implements ModelManagerInterface
             $class = get_class($class);
         }
 
-        $em = $this->registry->getEntityManagerForClass($class);
+        $em = $this->registry->getManagerForClass($class);
 
         if (!$em) {
             throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
@@ -356,6 +367,8 @@ class ModelManager implements ModelManagerInterface
             $entityManager->clear();
         } catch (\PDOException $e) {
             throw new ModelManagerException('', 0, $e);
+        } catch (DBALException $e) {
+            throw new ModelManagerException('', 0, $e);
         }
     }
 
@@ -466,7 +479,7 @@ class ModelManager implements ModelManagerInterface
                 $property = $metadata->fieldMappings[$name]['fieldName'];
                 $reflection_property = $metadata->reflFields[$name];
 
-            } else if (array_key_exists($name, $metadata->associationMappings)) {
+            } elseif (array_key_exists($name, $metadata->associationMappings)) {
                 $property = $metadata->associationMappings[$name]['fieldName'];
             } else {
                 $property = $name;
@@ -480,16 +493,16 @@ class ModelManager implements ModelManagerInterface
                 }
 
                 $instance->$setter($value);
-            } else if ($reflClass->hasMethod('__set')) {
+            } elseif ($reflClass->hasMethod('__set')) {
                 // needed to support magic method __set
                 $instance->$property = $value;
-            } else if ($reflClass->hasProperty($property)) {
+            } elseif ($reflClass->hasProperty($property)) {
                 if (!$reflClass->getProperty($property)->isPublic()) {
                     throw new PropertyAccessDeniedException(sprintf('Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?', $property, $reflClass->getName(), ucfirst($property)));
                 }
 
                 $instance->$property = $value;
-            } else if ($reflection_property) {
+            } elseif ($reflection_property) {
                 $reflection_property->setValue($instance, $value);
             }
         }

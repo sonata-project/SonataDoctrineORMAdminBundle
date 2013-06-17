@@ -11,19 +11,19 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-class DateTimeRangeFilter extends AbstractDateFilter
+class TimeFilter extends AbstractDateFilter
 {
     /**
-     * This Filter allows filtering by time
+     * This filter has no range
+     *
+     * @var boolean
+     */
+    protected $range = false;
+
+    /**
+     * This filter does not allow filtering by time
      *
      * @var boolean
      */
     protected $time = true;
-
-    /**
-     * This is a range filter
-     *
-     * @var boolean
-     */
-    protected $range = true;
 }

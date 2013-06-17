@@ -234,7 +234,7 @@ Tweak the CommentAdmin class
 .. code-block:: php
 
     <?php
-    // src/Tutorial/BlogBundle/Admin/TagAdmin.php
+    // src/Tutorial/BlogBundle/Admin/CommentAdmin.php
     namespace Tutorial\BlogBundle\Admin;
 
     use Sonata\AdminBundle\Admin\Admin;

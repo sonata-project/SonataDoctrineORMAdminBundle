@@ -118,13 +118,10 @@ Advanced Usage: Many-to-one
 If you have many ``Post``s linked to one ``User``, then the ``Post`` form should
 display a ``User`` field.
 
-The AdminBundle provides 3 edit options:
+The AdminBundle provides 2 options:
 
- - ``standard``: default value, the ``User`` list is set in a select widget
- - ``list``: the ``User`` list is set in a model where you can search and select a user
- - ``inline``: embed the ``User`` form into the ``Post`` form, great for one-to-one, or if your want to allow the user to edit the ``User`` information.
-
-With the ``standard`` and ``list`` options, you can create a new ``User`` by clicking on the "+" icon.
+ - ``sonata_type_model``: the ``User`` list is set in a select widget with an add button to create a new ``User``
+ - ``sonata_type_model_list``: the ``User`` list is set in a model where you can search, select and delete a ``User``
 
 .. code-block:: php
 
@@ -144,7 +141,7 @@ With the ``standard`` and ``list`` options, you can create a new ``User`` by cli
             $formMapper
                 ->with('General')
                     ->add('enabled', null, array('required' => false))
-                    ->add('author', 'sonata_type_model', array(), array('edit' => 'list'))
+                    ->add('author', 'sonata_type_model_list')
                     ->add('title')
                     ->add('abstract')
                     ->add('content')

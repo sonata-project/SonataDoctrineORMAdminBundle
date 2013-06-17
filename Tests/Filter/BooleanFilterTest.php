@@ -14,7 +14,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\AdminBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Doctrine\DBAL\Query\Expression\ExpressionBuilder;
 
 class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 {

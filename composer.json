@@ -16,14 +16,18 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
-        "doctrine/orm": ">=2.2,<2.4-dev",
-        "sonata-project/admin-bundle": "dev-master",
-        "symfony/symfony": ">=2.1,<2.3-dev"
+        "doctrine/orm": "~2.3",
+        "sonata-project/admin-bundle": ">=2.2.2",
+        "symfony/symfony": ">=2.2,<2.4"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
     },
-    "target-dir": "Sonata/DoctrineORMAdminBundle"
+    "target-dir": "Sonata/DoctrineORMAdminBundle",
+    "extra": {
+        "branch-alias": {
+            "dev-master": "2.2.x-dev"
+        }
+    }
 }

@@ -41,6 +41,10 @@
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_datetime" />
         </service>
 
+        <service id="sonata.admin.orm.filter.type.time" class="Sonata\DoctrineORMAdminBundle\Filter\TimeFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_time" />
+        </service>
+
         <service id="sonata.admin.orm.filter.type.datetime_range" class="Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_datetime_range" />
         </service>

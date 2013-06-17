@@ -26,7 +26,9 @@ file that was distributed with this source code.
                                         {% if field_name == '_delete' %}
                                             <th>{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}</th>
                                         {% else %}
-                                            <th>{{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}</th>
+                                            <th {{ nested_field.vars['required']  ? 'class="required"' : '' }}>
+                                                {{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}
+                                            </th>
                                         {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -35,7 +37,7 @@ file that was distributed with this source code.
                                 {% for nested_group_field_name, nested_group_field in form.children %}
                                     <tr>
                                         {% for field_name, nested_field in nested_group_field.children %}
-                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }}{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
+                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }} control-group{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
 
@@ -44,7 +46,7 @@ file that was distributed with this source code.
                                                     {{ form_widget(nested_field) }}
                                                 {% endif %}
                                                 {% if nested_field.vars.errors|length > 0 %}
-                                                    <div class="sonata-ba-field-error-messages">
+                                                    <div class="help-inline sonata-ba-field-error-messages">
                                                         {{ form_errors(nested_field) }}
                                                     </div>
                                                 {% endif %}
@@ -85,13 +87,11 @@ file that was distributed with this source code.
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_retrieve_{{ id }}(this);"
-                        class="sonata-ba-action"
+                        class="btn sonata-ba-action"
                         title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
-                        <img
-                            src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
-                         />
+                        <i class="icon-plus"></i>
+                        {{ 'link_add'|trans({}, 'SonataAdminBundle') }}
                     </a>
                 </span>
             {% endif %}
@@ -140,13 +140,11 @@ file that was distributed with this source code.
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
                         onclick="return start_field_dialog_form_add_{{ id }}(this);"
-                        class="sonata-ba-action"
+                        class="btn sonata-ba-action"
                         title="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
                         >
-                        <img
-                            src="{{ asset('bundles/sonataadmin/famfamfam/add.png') }}"
-                            alt="{{ 'link_add'|trans({}, 'SonataAdminBundle') }}"
-                         />
+                        <i class="icon-plus"></i>
+                        {{ 'link_add'|trans({}, 'SonataAdminBundle') }}
                     </a>
                 {% endif %}
             </span>
