@@ -119,38 +119,34 @@ class ShowBuilder implements ShowBuilderInterface
         if (!$fieldDescription->getTemplate()) {
 
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_ONE) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_MANY) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_MANY) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
+            
+            if (!$fieldDescription->getTemplate()) {
+                
+                switch($fieldDescription->getMappingType()) {
+                    case ClassMetadataInfo::MANY_TO_ONE:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
+                        break;
+                    case ClassMetadataInfo::ONE_TO_ONE:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig');
+                        break;
+                    case ClassMetadataInfo::ONE_TO_MANY:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig');
+                        break;
+                    case ClassMetadataInfo::MANY_TO_MANY:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
+                        break;
+                }
+                
             }
         }
 
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_ONE) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_MANY) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_MANY) {
-            $admin->attachAdminClass($fieldDescription);
+        switch($fieldDescription->getMappingType()) {
+            case ClassMetadataInfo::MANY_TO_ONE:
+            case ClassMetadataInfo::ONE_TO_ONE:
+            case ClassMetadataInfo::ONE_TO_MANY:
+            case ClassMetadataInfo::MANY_TO_MANY:
+                $admin->attachAdminClass($fieldDescription);
+                break;
         }
     }
 }
