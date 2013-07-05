@@ -57,7 +57,7 @@ file that was distributed with this source code.
     <div id="field_container_{{ id }}" class="field-container">
         <span id="field_actions_{{ id }}" class="field-actions">
             <span id="field_widget_{{ id }}" class="field-short-description">
-                {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) is defined %}
+                {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) is not null %}
                     {% render url('sonata_admin_short_object_information',{
                             'code':     sonata_admin.field_description.associationadmin.code,
                             'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
