@@ -212,4 +212,4 @@ Creating the Database
 
 Create the database related to the entities and the mapping by running the following command:
 
-  php app/console doctrine:schema:update --force
+  php app/console doctrine:schema:update \-\-force
