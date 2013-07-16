@@ -84,7 +84,7 @@ code to your application's routing file:
 
 The last step is to generate the blog bundle in which we will work.
 
-  php app/console generate:bundle --namespace=Tutorial/BlogBundle
+  php app/console generate:bundle \-\-namespace=Tutorial/BlogBundle
 
 And we enable it:
 
