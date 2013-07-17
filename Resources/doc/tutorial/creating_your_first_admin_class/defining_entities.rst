@@ -199,17 +199,20 @@ Comment
             return $this->getName();
         }
 
-
 Generate getters and setters
 ----------------------------
 
 Fill the entities with getters and setters by running the following command:
 
-  php app/console doctrine:generate:entities Tutorial
+.. code-block:: bash
+
+    php app/console doctrine:generate:entities Tutorial
 
 Creating the Database
 ---------------------
 
 Create the database related to the entities and the mapping by running the following command:
 
-  php app/console doctrine:schema:update \-\-force
+.. code-block:: bash
+
+    php app/console doctrine:schema:update --force
