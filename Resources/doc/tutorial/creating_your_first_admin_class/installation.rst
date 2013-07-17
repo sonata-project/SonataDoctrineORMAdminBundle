@@ -31,8 +31,9 @@ the following lines to the file ``deps``::
       git=http://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
       target=/bundles/Sonata/DoctrineORMAdminBundle
 
+and run:
 
-and run::
+.. code-block:: bash
 
   bin/vendors install
 
@@ -83,6 +84,8 @@ code to your application's routing file:
         prefix: /admin
 
 The last step is to generate the blog bundle in which we will work.
+
+.. code-block:: bash
 
   php app/console generate:bundle --namespace=Tutorial/BlogBundle
 
