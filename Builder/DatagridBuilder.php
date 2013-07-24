@@ -18,6 +18,7 @@ use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
+use Sonata\AdminBundle\Datagrid\PagerInterface;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Symfony\Component\Form\FormFactory;
@@ -30,6 +31,8 @@ class DatagridBuilder implements DatagridBuilderInterface
 
     protected $guesser;
 
+    protected $pager;
+
     /**
      * @param \Symfony\Component\Form\FormFactory               $formFactory
      * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
@@ -40,6 +43,27 @@ class DatagridBuilder implements DatagridBuilderInterface
         $this->formFactory   = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->guesser       = $guesser;
+    }
+
+    /**
+     * @param \Sonata\AdminBundle\Datagrid\PagerInterface $pager
+     * @return void
+     */
+    public function setPager(PagerInterface $pager)
+    {
+        $this->pager = $pager;
+    }
+
+    /**
+     * @return \Sonata\AdminBundle\Datagrid\PagerInterface
+     */
+    public function getPager()
+    {
+        if (null === $this->pager) {
+            $this->pager = new Pager();
+        }
+
+        return $this->pager;
     }
 
     /**
@@ -125,7 +149,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())
     {
-        $pager = new Pager;
+        $pager = $this->getPager();
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
         $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), array('csrf_protection' => false));
