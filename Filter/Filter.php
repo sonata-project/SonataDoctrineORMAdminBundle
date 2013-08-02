@@ -24,10 +24,11 @@ abstract class Filter extends BaseFilter
     public function apply($queryBuilder, $value)
     {
         $this->value = $value;
+        if($value && $value["value"]) {
+            list($alias, $field) = $this->association($queryBuilder, $value);
 
-        list($alias, $field) = $this->association($queryBuilder, $value);
-
-        $this->filter($queryBuilder, $alias, $field, $value);
+            $this->filter($queryBuilder, $alias, $field, $value);
+        }
     }
 
     /**
