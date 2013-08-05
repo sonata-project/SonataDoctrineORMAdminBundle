@@ -86,7 +86,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $builder = new ProxyQuery(new QueryBuilder);
 
-        $filter->apply($builder, 'asd');
+        $filter->apply($builder, array('value' => 'asd'));
     }
 
     /**
@@ -99,7 +99,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $builder = new ProxyQuery(new QueryBuilder);
 
-        $filter->apply($builder, 'asd');
+        $filter->apply($builder, array('value' => 'asd'));
         $this->assertEquals(true, $filter->isActive());
     }
 
