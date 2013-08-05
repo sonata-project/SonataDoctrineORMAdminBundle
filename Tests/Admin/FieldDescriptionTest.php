@@ -106,13 +106,6 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('integer', $field->getType());
     }
 
-    public function testCamelize()
-    {
-        $this->assertEquals('FooBar', FieldDescription::camelize('foo_bar'));
-        $this->assertEquals('FooBar', FieldDescription::camelize('foo bar'));
-        $this->assertEquals('FOoBar', FieldDescription::camelize('fOo bar'));
-    }
-
     public function testSetName()
     {
         $field = new FieldDescription();
