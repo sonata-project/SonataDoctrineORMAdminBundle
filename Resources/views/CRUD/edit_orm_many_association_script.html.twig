@@ -45,6 +45,7 @@ This code manage the many-to-[one|many] association field popup
             jQuery.ajax({
                 type: 'GET',
                 url: jQuery(this).attr('href'),
+                dataType: 'html',
                 success: function(html) {
                     Admin.log('[{{ id }}|field_dialog_form_list_link] callback success, attach valid js event');
 
@@ -405,6 +406,7 @@ This code manage the many-to-[one|many] association field popup
                     'uniqid': associationadmin.uniqid,
                     'code': associationadmin.code
                 })}}'.replace('OBJECT_ID', jQuery(this).val()),
+                dataType: 'html',
                 success: function(html) {
                     jQuery('#field_widget_{{ id }}').html(html);
                 }
