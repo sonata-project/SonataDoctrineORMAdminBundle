@@ -1,25 +1,31 @@
 Installation
 ============
 
-First install the Sonata Admin Bundle which provides Core functionalities. The ``EntityAudit`` is an optional
-history feature (https://github.com/simplethings/EntityAudit).
+First install the SonataAdminBundle which provides Core functionalities.
+Follow `these <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_ instructions to do so.
 
-Download bundles
-----------------
+Download the bundle
+-------------------
 
-Use composer ::
+Use composer:
+
+.. code-block:: bash
 
     php composer.phar require sonata-project/doctrine-orm-admin-bundle
 
-    # optional bundle
-    php composer.phar require simplethings/entity-audit-bundle
+You'll be asked to type in a version constraint. 'dev-master' will usually get you the latest
+version. Check `packagist <https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle>`_
+for older versions:
+
+.. code-block:: bash
+
+    Please provide a version constraint for the sonata-project/doctrine-orm-admin-bundle requirement: dev-master
 
 
-Configuration
--------------
+Enable the bundle
+-----------------
 
-Next, be sure to enable the bundles in your autoload.php and AppKernel.php
-files:
+Next, be sure to enable the bundle in your AppKernel.php file:
 
 .. code-block:: php
 
@@ -30,7 +36,6 @@ files:
         return array(
             // ...
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
-            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
             // ...
         );
     }
