@@ -1,7 +1,7 @@
 Audit
 =====
 
-The bundle provides a support for the ``EntityAuditBundle`` from https://github.com/simplethings/EntityAudit.
+The bundle provides optional support for the ``EntityAuditBundle`` from https://github.com/simplethings/EntityAudit.
 
 How it works
 ------------
@@ -24,6 +24,30 @@ points in time.
 This extension hooks into the SchemaTool generation process so that it will automatically create the necessary
 DDL statements for your audited entities.
 
+Installation
+------------
+
+The audit functionality is provided by an optional, separate bundle that you need to install:
+
+.. code-block:: bash
+
+    php composer.phar require simplethings/entity-audit-bundle
+    
+    
+Next, be sure to enable the bundle in your AppKernel.php file:
+
+.. code-block:: php
+
+    <?php
+    // app/AppKernel.php
+    public function registerBundles()
+    {
+        return array(
+            // ...
+            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
+            // ...
+        );
+    }
 
 Configuration
 -------------
