@@ -42,6 +42,10 @@ This code manage the one-to-many association field popup
             dataType: 'html',
             data: { _xml_http_request: true },
             success: function(html) {
+                if (!html.length) {
+                    return;
+                }
+
                 jQuery('#field_container_{{ id }}').replaceWith(html); // replace the html
                 if(jQuery('input[type="file"]', form).length > 0) {
                     jQuery(form).attr('enctype', 'multipart/form-data');
