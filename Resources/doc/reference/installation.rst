@@ -1,9 +1,14 @@
 Installation
 ============
 
-First install the SonataAdminBundle which provides Core functionalities.
-Follow `these <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_ instructions to do so.
+SonataDoctrineORMAdminBundle is part of a set of bundles aimed at abstracting 
+storage connectivity for SonataAdminBundle. As such, SonataDoctrineORMAdminBundle
+depends on SonataAdminBundle, and will not work without it. 
 
+.. note::
+    These installation instructions are meant to be used only as part of SonataAdminBundle's
+    installation process, which is documented `here <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_.
+    
 Download the bundle
 -------------------
 
@@ -13,9 +18,9 @@ Use composer:
 
     php composer.phar require sonata-project/doctrine-orm-admin-bundle
 
-You'll be asked to type in a version constraint. 'dev-master' will usually get you the latest
+You'll be asked to type in a version constraint. 'dev-master' will usually get you the latest, bleeding edge
 version. Check `packagist <https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle>`_
-for older versions:
+for stable and legacy versions:
 
 .. code-block:: bash
 
@@ -35,7 +40,13 @@ Next, be sure to enable the bundle in your AppKernel.php file:
     {
         return array(
             // ...
+            // set up basic sonata requirements
+            // ...
             new Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle(),
             // ...
         );
     }
+
+.. note::
+    Don't forget that, as part of `SonataAdminBundle's installation instructions <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_,
+    you need to enable additional bundles on AppKernel.php
