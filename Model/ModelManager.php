@@ -449,7 +449,8 @@ class ModelManager implements ModelManagerInterface
         return array(
             '_sort_order' => 'ASC',
             '_sort_by'    => implode(',', $this->getModelIdentifier($class)),
-            '_page'       => 1
+            '_page'       => 1,
+            '_per_page'   => 25,
         );
     }
 
