@@ -19,7 +19,7 @@
     "require": {
         "doctrine/orm": "~2.3",
         "sonata-project/admin-bundle": ">=2.2.2",
-        "symfony/symfony": ">=2.2,<2.4-dev"
+        "symfony/symfony": ">=~2.2,<=~2.4"
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
