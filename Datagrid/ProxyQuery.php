@@ -252,7 +252,7 @@ class ProxyQuery implements ProxyQueryInterface
             $newAlias .= '_' . $associationMapping['fieldName'];
             if (!in_array($newAlias, $this->entityJoinAliases)) {
                 $this->entityJoinAliases[] = $newAlias;
-                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
+                $this->queryBuilder->innerJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
             }
 
             $alias = $newAlias;
