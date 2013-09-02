@@ -60,20 +60,19 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $field->mergeOptions(array('final' => 'test'));
 
         $expected = array (
-          'misc' => 'foobar',
-          'array' =>
-          array (
-            'key1' => 'key_1',
-            'key2' => 'key_2',
-            'key3' => 'key_3'
-          ),
-          'non_existant' =>
-          array (
-            'key1' => 'key_1',
-            'key2' => 'key_2',
-          ),
-          'integer' => 1,
-          'final' => 'test',
+            'misc' => 'foobar',
+            'array' => array (
+                'key1' => 'key_1',
+                'key2' => 'key_2',
+                'key3' => 'key_3'
+            ),
+            'non_existant' => array (
+                'key1' => 'key_1',
+                'key2' => 'key_2',
+            ),
+            'integer' => 1,
+            'final' => 'test',
+            'placeholder' => 'short_object_description_placeholder'
         );
 
         $this->assertEquals($expected, $field->getOptions());
