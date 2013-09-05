@@ -412,18 +412,17 @@ class ModelManager implements ModelManagerInterface
     {
         $values = $datagrid->getValues();
 
-        if ($fieldDescription->getName() == $values['_sort_by']->getName()) {
+        if ($fieldDescription->getName() == $values['_sort_by']->getName() || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable')) {
             if ($values['_sort_order'] == 'ASC') {
                 $values['_sort_order'] = 'DESC';
             } else {
                 $values['_sort_order'] = 'ASC';
             }
-
-            $values['_sort_by']    = $fieldDescription->getName();
         } else {
             $values['_sort_order'] = 'ASC';
-            $values['_sort_by']    = $fieldDescription->getName();
         }
+
+        $values['_sort_by'] = is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') :  $fieldDescription->getName();
 
         return array('filter' => $values);
     }
