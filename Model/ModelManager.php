@@ -384,7 +384,7 @@ class ModelManager implements ModelManagerInterface
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
-        return new DoctrineORMQuerySourceIterator($query instanceof ProxyQuery ? $query->getQuery() : $query, $fields);
+        return new DoctrineORMQuerySourceIterator($query instanceof ProxyQueryInterface ? $query->getQuery() : $query, $fields);
     }
 
     /**
