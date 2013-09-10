@@ -52,7 +52,8 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             $oids = array();
 
             foreach ($qb->getQuery()->iterate() as $row) {
-                $oids[] = ObjectIdentity::fromDomainObject($row[0]);
+                $objectIds[]      = ObjectIdentity::fromDomainObject($row[0]);
+                $objectIdIterator = new \ArrayIterator($objectIds);
 
                 // detach from Doctrine, so that it can be Garbage-Collected immediately
                 $em->detach($row[0]);
@@ -60,10 +61,10 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 $count++;
 
                 if (($count % $batchSize) == 0) {
-                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $oids, $securityIdentity);
-                    $countAdded += $batchAdded;
+                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
+                    $countAdded   += $batchAdded;
                     $countUpdated += $batchUpdated;
-                    $oids = array();
+                    $objectIds     = array();
                 }
 
                 if (($count % $batchSizeOutput) == 0) {
@@ -71,9 +72,9 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 }
             }
 
-            if (count($oids) > 0) {
-                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $oids, $securityIdentity);
-                $countAdded += $batchAdded;
+            if (count($objectIds) > 0) {
+                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
+                $countAdded   += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
         } catch (\PDOException $e) {
