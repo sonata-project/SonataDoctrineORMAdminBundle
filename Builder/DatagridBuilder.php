@@ -30,16 +30,20 @@ class DatagridBuilder implements DatagridBuilderInterface
 
     protected $guesser;
 
+    protected $csrfTokenEnabled;
+
     /**
-     * @param \Symfony\Component\Form\FormFactory               $formFactory
-     * @param \Sonata\AdminBundle\Filter\FilterFactoryInterface $filterFactory
-     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface  $guesser
+     * @param FormFactory            $formFactory
+     * @param FilterFactoryInterface $filterFactory
+     * @param TypeGuesserInterface   $guesser
+     * @param boolean                $csrfTokenEnabled
      */
-    public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser)
+    public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
     {
-        $this->formFactory   = $formFactory;
-        $this->filterFactory = $filterFactory;
-        $this->guesser       = $guesser;
+        $this->formFactory      = $formFactory;
+        $this->filterFactory    = $filterFactory;
+        $this->guesser          = $guesser;
+        $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
     /**
@@ -128,7 +132,12 @@ class DatagridBuilder implements DatagridBuilderInterface
         $pager = new Pager;
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), array('csrf_protection' => false));
+        $defaultOptions = array();
+        if ($this->csrfTokenEnabled) {
+            $defaultOptions['csrf_protection'] = false;
+        }
+
+        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), $defaultOptions);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }
