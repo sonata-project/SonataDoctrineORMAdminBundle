@@ -241,17 +241,11 @@ This code manage the many-to-[one|many] association field popup
             type: type,
             data: data,
             success: function(data) {
-
                 Admin.log('[{{ id }}|field_dialog_form_action] ajax success');
-
-                if (typeof data == 'string') {
-                    field_dialog_{{ id }}.html(data);
-                    return;
-                };
 
                 // if the crud action return ok, then the element has been added
                 // so the widget container must be refresh with the last option available
-                if (data.result == 'ok') {
+                if (typeof data != 'string' && data.result == 'ok') {
                     field_dialog_{{ id }}.dialog('close');
 
                     {% if sonata_admin.edit == 'list' %}
@@ -295,7 +289,7 @@ This code manage the many-to-[one|many] association field popup
                 }
 
                 // otherwise, display form error
-                field_dialog_{{ id }}.html(html);
+                field_dialog_{{ id }}.html(data);
 
                 Admin.add_pretty_errors(field_dialog_{{ id }});
 
