@@ -18,7 +18,7 @@ file that was distributed with this source code.
         <span id="field_actions_{{ id }}" class="field-actions">
             {% if sonata_admin.field_description.associationadmin.hasRoute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
                 <a
-                    href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
+                    href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
                     onclick="return start_field_dialog_form_add_{{ id }}(this);"
                     class="btn sonata-ba-action"
                     title="{{ btn_add|trans({}, btn_catalogue) }}"
