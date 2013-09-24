@@ -55,14 +55,33 @@ file that was distributed with this source code.
                 {% endif %}
 
                 {% if sonata_admin.edit != 'admin' and sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
-                    <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
-                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
-                        class="btn sonata-ba-action"
-                        title="{{ btn_add|trans({}, btn_catalogue) }}"
-                        >
-                        <i class="icon-plus"></i>
-                        {{ btn_add|trans({}, btn_catalogue) }}
-                    </a>
+                    {% if sonata_admin.field_description.associationadmin.subclasses is empty %}
+                        <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
+                            onclick="return start_field_dialog_form_add_{{ id }}(this);"
+                            class="btn sonata-ba-action"
+                            title="{{ btn_add|trans({}, btn_catalogue) }}"
+                            >
+                            <i class="icon-plus"></i>
+                            {{ btn_add|trans({}, btn_catalogue) }}
+                        </a>
+                    {% else %}
+                        <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                            <i class="icon-plus"></i>
+                            {{ btn_add|trans({}, btn_catalogue) }}
+                            <span class="caret"></span>
+                        </a>
+                        <ul class="dropdown-menu">
+                            {% for subclass in sonata_admin.field_description.associationadmin.subclasses|keys %}
+                                <li>
+                                    <a 
+                                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
+                                        accesskey=""
+                                        title="{{ subclass|trans({}, sonata_admin.field_description.associationadmin.translationdomain) }}"
+                                        href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', {'subclass': subclass}) }}">{{ subclass|trans({}, sonata_admin.field_description.associationadmin.translationdomain) }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                   {% endif %}
                 {% endif %}
             </span>
 
