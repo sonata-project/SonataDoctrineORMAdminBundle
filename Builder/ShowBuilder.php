@@ -47,7 +47,7 @@ class ShowBuilder implements ShowBuilderInterface
 
     /**
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionCollection $list
-     * @param null                                                 $type
+     * @param string|null                                          $type
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface  $fieldDescription
      * @param \Sonata\AdminBundle\Admin\AdminInterface             $admin
      *
