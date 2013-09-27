@@ -29,7 +29,7 @@ class ListBuilder implements ListBuilderInterface
      * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
      * @param array                                            $templates
      */
-    public function __construct(TypeGuesserInterface $guesser, $templates = array())
+    public function __construct(TypeGuesserInterface $guesser, array $templates = array())
     {
         $this->guesser   = $guesser;
         $this->templates = $templates;
