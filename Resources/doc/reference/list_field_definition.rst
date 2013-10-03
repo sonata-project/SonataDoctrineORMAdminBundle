@@ -176,16 +176,27 @@ Default route for an link is edit (many_to_one, one_to_one etc.). Using this, th
 
 .. code-block:: php
 
-	class MediaAdmin extends Admin
-	{
-		protected function configureListFields(ListMapper $listMapper)
-		{
-			$listMapper
-				->add('field', null, array(
-					'route' => array(
-						'name' => 'show'
-					)
-				))
-    		;
-		}
-	}
+    <?php
+    namespace Sonata\MediaBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Datagrid\ListMapper;
+    use Sonata\AdminBundle\Show\ShowMapper;
+
+
+    class MediaAdmin extends Admin
+    {
+        protected function configureListFields(ListMapper $listMapper)
+        {
+            $listMapper
+                ->add('field', null, array(
+                    'route' => array(
+                        'name' => 'show'
+                    )
+                ))
+                ;
+        }
+   }
+
