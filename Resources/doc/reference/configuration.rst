@@ -33,6 +33,9 @@ Full Configuration Options
                     integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
                     decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
                     identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+                    currency:   SonataAdminBundle:CRUD:list_currency.html.twig
+                    percent:    SonataAdminBundle:CRUD:list_percent.html.twig'
+                    choice:     SonataAdminBundle:CRUD:list_choice.html.twig
 
                 show:
                     array:      SonataAdminBundle:CRUD:show_array.html.twig
@@ -47,3 +50,6 @@ Full Configuration Options
                     bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
                     integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
                     decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                    currency:   SonataAdminBundle:CRUD:base_currency.html.twig
+                    percent:    SonataAdminBundle:CRUD:base_percent.html.twig
+                    choice:     SonataAdminBundle:CRUD:show_choice.html.twig
