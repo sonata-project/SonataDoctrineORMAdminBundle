@@ -39,13 +39,13 @@ file that was distributed with this source code.
 
     {% if sonata_admin.field_description is empty %}
         {{ block('choice_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 1 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') %}
         {{ block('sonata_admin_orm_one_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 2 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_ONE') %}
         {{ block('sonata_admin_orm_many_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 8 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
         {{ block('sonata_admin_orm_many_to_many_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 4 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_MANY') %}
         {{ block('sonata_admin_orm_one_to_many_widget') }}
     {% else %}
         {#INVALID MODE : {{ id }}#}
@@ -122,13 +122,13 @@ file that was distributed with this source code.
 
 {% block sonata_type_admin_widget %}
     {#admin {{ sonata_admin.field_description.mappingtype }}#}
-    {% if sonata_admin.field_description.mappingtype == 1 %}
+    {% if sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_ONE') %}
         {{ block('sonata_admin_orm_one_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 2 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_ONE') %}
         {{ block('sonata_admin_orm_many_to_one_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 8 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
         {{ block('sonata_admin_orm_many_to_many_widget') }}
-    {% elseif sonata_admin.field_description.mappingtype == 4 %}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_MANY') %}
         {{ block('sonata_admin_orm_one_to_many_widget') }}
     {% else %}
         INVALID MODE : {{ id }}
@@ -136,8 +136,10 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block sonata_type_collection_widget %}
-    {% if sonata_admin.field_description.mappingtype == 4 %}
+    {% if sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::ONE_TO_MANY') %}
         {{ block('sonata_admin_orm_one_to_many_widget') }}
+    {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
+        {{ block('sonata_admin_orm_many_to_many_widget') }}
     {% else %}
         INVALID MODE : {{ id }} - type : sonata_type_collection - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
