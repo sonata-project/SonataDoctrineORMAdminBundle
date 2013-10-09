@@ -34,7 +34,7 @@ Full Configuration Options
                     decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
                     identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
                     currency:   SonataAdminBundle:CRUD:list_currency.html.twig
-                    percent:    SonataAdminBundle:CRUD:list_percent.html.twig'
+                    percent:    SonataAdminBundle:CRUD:list_percent.html.twig
                     choice:     SonataAdminBundle:CRUD:list_choice.html.twig
 
                 show:
