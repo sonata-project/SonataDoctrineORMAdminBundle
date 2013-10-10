@@ -40,6 +40,15 @@ abstract class AbstractDateFilter extends Filter
                 return;
             }
 
+            if (!$this->time) {
+                if ($data['value']['start'] instanceof \DateTime) {
+                    $data['value']['start']->setTime(0,0,0);
+                }
+                if ($data['value']['end'] instanceof \DateTime) {
+                    $data['value']['end']->setTime(23,59,59);
+                }
+            }
+
             //transform types
             if ($this->getOption('input_type') == 'timestamp') {
                 $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
