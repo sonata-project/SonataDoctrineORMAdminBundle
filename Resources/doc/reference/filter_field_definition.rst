@@ -14,7 +14,7 @@ A filter instance is always linked to a Form Type, there are 3 types available :
 The Form Type configuration is provided by the filter itself. But they can be tweaked in the ``configureDatagridFilters``
 process with the ``add`` method.
 
-The ``add`` method accepts 4 arguments :
+The ``add`` method accepts 5 arguments :
 
   - the field name
   - the filter type     : the filter name
