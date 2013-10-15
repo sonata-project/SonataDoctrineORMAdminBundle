@@ -83,7 +83,7 @@ class ProxyQuery implements ProxyQueryInterface
         $queryBuilderId->resetDQLPart('select');
         $queryBuilderId->add('select', 'DISTINCT ' . $select);
 
-        //for SELECT DISTINCT, ORDER BY expressions must appear in select list
+        // for SELECT DISTINCT, ORDER BY expressions must appear in select list
         /* Consider
             SELECT DISTINCT x FROM tab ORDER BY y;
         For any particular x-value in the table there might be many different y
