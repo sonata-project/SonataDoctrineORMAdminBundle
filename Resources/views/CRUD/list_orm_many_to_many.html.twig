@@ -12,9 +12,14 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
-    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('edit') and field_description.associationadmin.isGranted('edit')%}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('edit') %}
+        {% set global_permission = field_description.associationadmin.isGranted('edit') %}
         {% for element in value%}
-            <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a>{% if not loop.last %}, {% endif %}
+            {% if global_permission or field_description.associationadmin.isGranted('EDIT', element) %}
+                <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a>{% if not loop.last %}, {% endif %}
+            {% else %}
+                {{ element|render_relation_element(field_description) }}{% if not loop.last %}, {% endif %}
+            {% endif %}
         {% endfor %}
     {% else %}
         {% for element in value%}
