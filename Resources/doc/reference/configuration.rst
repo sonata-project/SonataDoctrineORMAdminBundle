@@ -36,6 +36,7 @@ Full Configuration Options
                     currency:   SonataAdminBundle:CRUD:list_currency.html.twig
                     percent:    SonataAdminBundle:CRUD:list_percent.html.twig
                     choice:     SonataAdminBundle:CRUD:list_choice.html.twig
+                    url:        SonataAdminBundle:CRUD:list_url.html.twig
 
                 show:
                     array:      SonataAdminBundle:CRUD:show_array.html.twig
@@ -53,3 +54,4 @@ Full Configuration Options
                     currency:   SonataAdminBundle:CRUD:base_currency.html.twig
                     percent:    SonataAdminBundle:CRUD:base_percent.html.twig
                     choice:     SonataAdminBundle:CRUD:show_choice.html.twig
+                    url:        SonataAdminBundle:CRUD:show_url.html.twig
