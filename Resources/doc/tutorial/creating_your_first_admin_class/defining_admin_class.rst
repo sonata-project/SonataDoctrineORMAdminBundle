@@ -255,7 +255,7 @@ Tweak the CommentAdmin class
         protected function configureFormFields(FormMapper $formMapper)
         {
             if(!$this->isChild()) {
-                $formMapper->add('post', 'sonata_type_model', array(), array('edit' => 'list'));
+                $formMapper->add('post', 'sonata_type_model', array(), array('sonata_type_model_list'));
             }
 
             $formMapper
