@@ -88,7 +88,7 @@ class FormContractor implements FormContractorInterface
         $options                             = array();
         $options['sonata_field_description'] = $fieldDescription;
 
-        if ($type == 'sonata_type_model' || $type == 'sonata_type_model_list' || $type == 'sonata_type_model_hidden') {
+        if (in_array($type, array('sonata_type_model', 'sonata_type_model_list', 'sonata_type_model_hidden', 'sonata_type_model_autocomplete'))) {
 
             if ($fieldDescription->getOption('edit') == 'list') {
                 throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the UPGRADE-2.1.md file from the SonataAdminBundle');
@@ -96,6 +96,12 @@ class FormContractor implements FormContractorInterface
 
             $options['class']         = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
+
+            if ($type == 'sonata_type_model_autocomplete') {
+                if (!$fieldDescription->getAssociationAdmin()) {
+                    throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity: `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
+                }
+            }
 
         } elseif ($type == 'sonata_type_admin') {
 
