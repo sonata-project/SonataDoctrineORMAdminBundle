@@ -6,9 +6,12 @@ php:
   - 5.5
 
 env:
-  - SYMFONY_VERSION=origin/master
+  - SYMFONY_VERSION=2.2.*
+  - SYMFONY_VERSION=2.3.*
+  - SYMFONY_VERSION=dev-master
 
 before_script:
+  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
   - composer install --dev
 
 script: phpunit
