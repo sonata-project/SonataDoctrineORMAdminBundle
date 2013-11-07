@@ -39,7 +39,13 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
-        $loader->load('audit.xml');
+
+        $bundles = $container->getParameter('kernel.bundles');
+
+        if (isset($bundles['SimpleThingsEntityAuditBundle'])) {
+            $loader->load('audit.xml');
+        }
+
         $loader->load('security.xml');
 
         $configuration = new Configuration();
