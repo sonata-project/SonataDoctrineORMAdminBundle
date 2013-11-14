@@ -13,18 +13,18 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Doctrine\ORM\Mapping\MappingException;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 
 abstract class AbstractTypeGuesser implements TypeGuesserInterface
 {
     /**
-     * @param string                                            $baseClass
-     * @param string                                            $propertyFullName
-     * @param \Sonata\DoctrineORMAdminBundle\Model\ModelManager $modelManager
+     * @param string                                          $baseClass
+     * @param string                                          $propertyFullName
+     * @param \Sonata\AdminBundle\Model\ModelManagerInterface $modelManager
      *
      * @return array|null
      */
-    protected function getParentMetadataForProperty($baseClass, $propertyFullName, ModelManager $modelManager)
+    protected function getParentMetadataForProperty($baseClass, $propertyFullName, ModelManagerInterface $modelManager)
     {
         try {
             return $modelManager->getParentMetadataForProperty($baseClass, $propertyFullName);
