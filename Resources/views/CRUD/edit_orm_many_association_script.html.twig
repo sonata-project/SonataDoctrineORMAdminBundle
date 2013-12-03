@@ -409,7 +409,7 @@ This code manage the many-to-[one|many] association field popup
                 });
             } else {
                 // Object was deleted - clear label
-                jQuery('#field_widget_{{ id }}').html('');
+                jQuery('#field_widget_{{ id }}').html('{{ sonata_admin.field_description.options.placeholder|default('')|trans({}, 'SonataAdminBundle')|escape('js') }}');
             }
         });
         
