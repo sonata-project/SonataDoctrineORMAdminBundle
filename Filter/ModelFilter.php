@@ -13,7 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Sonata\AdminBundle\Form\Type\EqualType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ModelFilter extends Filter

@@ -11,7 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\AdminBundle\Form\Type\EqualType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 

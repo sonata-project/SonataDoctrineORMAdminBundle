@@ -11,7 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\EqualType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
