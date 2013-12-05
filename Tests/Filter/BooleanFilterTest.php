@@ -12,7 +12,7 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
-use Sonata\AdminBundle\Form\Type\BooleanType;
+use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
 class BooleanFilterTest extends \PHPUnit_Framework_TestCase
