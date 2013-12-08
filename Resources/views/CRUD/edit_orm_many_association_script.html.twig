@@ -378,7 +378,7 @@ This code manage the many-to-[one|many] association field popup
             }
 
             jQuery('#{{ id }}').val('');
-            jQuery('#{{ id }}').trigger('change');
+            jQuery('#field_widget_{{ id }}').html('');
 
             return false;
         }
