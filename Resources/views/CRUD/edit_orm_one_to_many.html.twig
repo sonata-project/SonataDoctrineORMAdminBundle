@@ -26,7 +26,7 @@ file that was distributed with this source code.
                                         {% if field_name == '_delete' %}
                                             <th>{{ 'action_delete'|trans({}, 'SonataAdminBundle') }}</th>
                                         {% else %}
-                                            <th {{ nested_field.vars['required']  ? 'class="required"' : '' }}>
+                                            <th {{ nested_field.vars['required']  ? 'class="required"' : '' }}{% if (nested_field.vars['attr']['hidden'] is defined) and (nested_field.vars['attr']['hidden']) %} style="display:none;"{% endif %}>
                                                 {{ nested_field.vars['sonata_admin'].admin.trans(nested_field.vars.label) }}
                                             </th>
                                         {% endif %}
@@ -37,7 +37,7 @@ file that was distributed with this source code.
                                 {% for nested_group_field_name, nested_group_field in form.children %}
                                     <tr>
                                         {% for field_name, nested_field in nested_group_field.children %}
-                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }} control-group{% if nested_field.vars.errors|length > 0 %} error{% endif %}">
+                                            <td class="sonata-ba-td-{{ id }}-{{ field_name  }} control-group{% if nested_field.vars.errors|length > 0 %} error{% endif %}"{% if (nested_field.vars['attr']['hidden'] is defined) and (nested_field.vars['attr']['hidden']) %} style="display:none;"{% endif %}>
                                                 {% if sonata_admin.field_description.associationadmin.formfielddescriptions[field_name] is defined %}
                                                     {{ form_widget(nested_field) }}
 
