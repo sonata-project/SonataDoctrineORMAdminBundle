@@ -239,3 +239,16 @@ defining one of these options:
             ;
         }
     }
+
+
+
+  - By default position row will be rendered, if you want to hide it - you will need to alter child 
+    admin class and add hidden position field. Use code like 
+
+.. code-block:: php
+
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+           ->add('position','hidden',array('attr'=>array("hidden" => true)))
+    }
