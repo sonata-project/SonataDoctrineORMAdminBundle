@@ -86,7 +86,7 @@ First, you need to create an Admin/PostAdmin.php file
                 ->add('tags')
                 ->add('_action', 'actions', array(
                     'actions' => array(
-                        'view' => array(),
+                        'show' => array(),
                         'edit' => array(),
                         'delete' => array(),
                     )
