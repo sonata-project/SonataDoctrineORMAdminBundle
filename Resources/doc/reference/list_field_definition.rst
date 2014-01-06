@@ -31,7 +31,7 @@ Example
                 // add custom action links
                 ->add('_action', 'actions', array(
                     'actions' => array(
-                        'view' => array(),
+                        'show' => array(),
                         'edit' => array(),
                     )
                 ))
@@ -70,7 +70,7 @@ You can set actions for the list items by adding an '_action' field in ``configu
     <?php
     $listMapper->add('_action', 'actions', array(
         'actions' => array(
-            'view' => array(),
+            'show' => array(),
             'edit' => array(),
         )
     ))
@@ -85,7 +85,7 @@ You can specify your own by setting up the 'template' option like so:
     <?php
     $listMapper->add('_action', 'actions', array(
         'actions' => array(
-            'view' => array(),
+            'show' => array(),
             'edit' => array(),
             'delete' => array('template' => 'MyBundle:MyController:my_partial.html.twig'),
         )
