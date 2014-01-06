@@ -391,21 +391,28 @@ This code manage the many-to-[one|many] association field popup
 
             Admin.log('[{{ id }}] update the label');
 
-            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
-            jQuery.ajax({
-                type: 'GET',
-                url: '{{ url('sonata_admin_short_object_information', {
-                    'objectId': 'OBJECT_ID',
-                    'uniqid': associationadmin.uniqid,
-                    'code': associationadmin.code
-                })}}'.replace('OBJECT_ID', jQuery(this).val()),
-                dataType: 'html',
-                success: function(html) {
-                    jQuery('#field_widget_{{ id }}').html(html);
-                }
-            });
+            var objectId = jQuery(this).val();
+            if (objectId != '') {
+                // Object was selected - update label via ajax request
+                jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
+                jQuery.ajax({
+                    type: 'GET',
+                    url: '{{ url('sonata_admin_short_object_information', {
+                        'objectId': 'OBJECT_ID',
+                        'uniqid': associationadmin.uniqid,
+                        'code': associationadmin.code
+                    })}}'.replace('OBJECT_ID', objectId),
+                    dataType: 'html',
+                    success: function(html) {
+                        jQuery('#field_widget_{{ id }}').html(html);
+                    }
+                });
+            } else {
+                // Object was deleted - clear label
+                jQuery('#field_widget_{{ id }}').html('{{ sonata_admin.field_description.options.placeholder|default('')|trans({}, 'SonataAdminBundle')|escape('js') }}');
+            }
         });
-
+        
     {% endif %}
 
 
