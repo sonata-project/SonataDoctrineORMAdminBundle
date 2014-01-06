@@ -408,6 +408,11 @@ class ModelManager implements ModelManagerInterface
      */
     public function getModelInstance($class)
     {
+        $r = new \ReflectionClass($class);
+        if ($r->isAbstract()) {
+            throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
+        }
+
         return new $class;
     }
 
