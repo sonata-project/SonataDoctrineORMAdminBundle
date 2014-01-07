@@ -397,7 +397,8 @@ This code manage the many-to-[one|many] association field popup
                 url: '{{ url('sonata_admin_short_object_information', {
                     'objectId': 'OBJECT_ID',
                     'uniqid': associationadmin.uniqid,
-                    'code': associationadmin.code
+                    'code': associationadmin.code,
+                    'linkParameters': sonata_admin.field_description.options.link_parameters
                 })}}'.replace('OBJECT_ID', jQuery(this).val()),
                 dataType: 'html',
                 success: function(html) {
