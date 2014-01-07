@@ -72,7 +72,8 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
             ),
             'integer' => 1,
             'final' => 'test',
-            'placeholder' => 'short_object_description_placeholder'
+            'placeholder' => 'short_object_description_placeholder',
+            'link_parameters' => array()
         );
 
         $this->assertEquals($expected, $field->getOptions());
