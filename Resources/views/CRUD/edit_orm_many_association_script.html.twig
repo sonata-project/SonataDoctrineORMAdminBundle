@@ -334,8 +334,9 @@ This code manage the many-to-[one|many] association field popup
         return false;
     }
 
-    Admin.add_pretty_errors(field_dialog_{{ id }});
-
+    if (field_dialog_{{ id }}) {
+        Admin.add_pretty_errors(field_dialog_{{ id }});
+    }
 
     {% if sonata_admin.edit == 'list' %}
         {#
