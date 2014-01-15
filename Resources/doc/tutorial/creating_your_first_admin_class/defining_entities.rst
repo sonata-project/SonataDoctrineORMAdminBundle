@@ -86,6 +86,7 @@ Post
         {
             return $this->getTitle();
         }
+    }
 
 Tag
 ~~~
@@ -137,6 +138,7 @@ Tag
         {
             return $this->getName();
         }
+    }
 
 Comment
 ~~~~~~~
@@ -198,6 +200,7 @@ Comment
         {
             return $this->getName();
         }
+    }
 
 
 Generate getters and setters
