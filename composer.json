@@ -18,9 +18,20 @@
     ],
     "require": {
         "doctrine/orm": "~2.3",
+        "symfony/form": "~2.2",
+        "symfony/security": "~2.2",
+        "symfony/console": "~2.2",
+        "symfony/doctrine-bridge": "~2.2",
+        "symfony/framework-bundle": "~2.2",
+        "sonata-project/exporter": "~1.3,>=1.3.1",
         "sonata-project/admin-bundle": "~2.2,>=2.2.2",
-        "symfony/symfony": "~2.2",
         "sonata-project/core-bundle": "~2.2@dev"
+    },
+    "require-dev": {
+        "simplethings/entity-audit-bundle": "~0.1"
+    },
+    "suggest": {
+        "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
     "autoload": {
         "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
