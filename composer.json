@@ -28,7 +28,8 @@
         "sonata-project/core-bundle": "~2.2@dev"
     },
     "require-dev": {
-        "simplethings/entity-audit-bundle": "~0.1"
+        "simplethings/entity-audit-bundle": "~0.1",
+        "sonata-project/admin-bundle": "~2.2@dev"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
