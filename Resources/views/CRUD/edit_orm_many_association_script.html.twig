@@ -39,7 +39,7 @@ This code manage the many-to-[one|many] association field popup
 
         var element = jQuery(this).parents('#field_dialog_{{ id }} .sonata-ba-list-field');
 
-        // the user does click on a row column
+        // the user does not click on a row column
         if (element.length == 0) {
             // make a recursive call (ie: reset the filter)
             jQuery.ajax({
