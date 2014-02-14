@@ -35,9 +35,8 @@
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
     "autoload": {
-        "psr-0": { "Sonata\\DoctrineORMAdminBundle": "" }
+        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\": "" }
     },
-    "target-dir": "Sonata/DoctrineORMAdminBundle",
     "extra": {
         "branch-alias": {
             "dev-master": "2.2.x-dev"
