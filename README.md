@@ -1,6 +1,8 @@
 Doctrine ORM Admin
 ==================
 
+[![Build Status](https://secure.travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.png?branch=master)](http://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
+
 This bundle integrates the SonataAdminBundle with the Doctrine ORM project.
 
 The online documentation of the bundle is in http://sonata-project.org/bundles/doctrine-orm-admin
