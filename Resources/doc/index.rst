@@ -24,6 +24,7 @@ Reference Guide
    reference/templates
    reference/audit
    reference/query_proxy
+   reference/command
    reference/troubleshootings
 
 Tutorial

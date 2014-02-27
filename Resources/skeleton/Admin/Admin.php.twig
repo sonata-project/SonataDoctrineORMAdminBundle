@@ -1,0 +1,62 @@
+<?php
+
+namespace {{ namespace }}\Admin{{ entity_namespace ? '\\' ~ entity_namespace : '' }};
+
+{% block use_statements %}
+use Sonata\AdminBundle\Admin\Admin;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\Datagrid\DatagridMapper;
+use Sonata\AdminBundle\Form\FormMapper;
+{% endblock use_statements %}
+
+{% block class_definition %}
+class {{ admin_class }} extends Admin
+{% endblock class_definition %}
+{
+{% block class_body %}
+    {% if fields|length > 0 %}
+  /**
+     * @param FormMapper $formMapper
+     */
+    protected function configureFormFields(FormMapper $formMapper)
+    {
+        $formMapper
+        {%- for field in fields %}
+
+            ->add('{{ field }}')
+         {%- endfor %}
+
+        ;
+    }
+
+    /**
+     * @param DatagridMapper $datagridMapper
+     */
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+        {%- for field in fields %}
+
+            ->add('{{ field }}')
+        {%- endfor %}
+
+        ;
+    }
+
+    /**
+     * @param ListMapper $listMapper
+     */
+    protected function configureListFields(ListMapper $listMapper)
+    {
+        $listMapper
+        {%- for field in fields %}
+
+            ->add('{{ field }}')
+        {%- endfor %}
+
+        ;
+    }
+    {% endif %}
+
+{% endblock class_body %}
+}
