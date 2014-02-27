@@ -19,8 +19,15 @@ class GenerateDoctrineORMAdminCommand extends GenerateDoctrineCommand
     {
         $this
             ->setName('doctrine:generate:admin')
+            ->setAliases(array('generate:doctrine:admin'))
             ->setDescription('Generates Admin class for specified ORM entity.')
-            ->addArgument('entity', InputArgument::REQUIRED, '', null)
+            ->addArgument('entity', InputArgument::REQUIRED, 'The entity class name to generate Admin')
+            ->setHelp(<<<EOT
+The <info>doctrine:generate:admin</info> command generates a Admin class based on a Doctrine entity.
+
+<info>php app/console doctrine:generate:admin AcmeBlogBundle:Post</info>
+EOT
+            )
         ;
     }
 
