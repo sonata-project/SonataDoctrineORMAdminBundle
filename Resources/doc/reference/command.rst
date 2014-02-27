@@ -1,7 +1,7 @@
 Command
 ===========================================================
 
-Now that you would know how to create Admin class for your entity class, but there is a command which help you to do it in a little easier way.
+Now that you would know how to create Admin class for your entity class, but you can do it a little easier with a command.
 
 Usage
 -----
