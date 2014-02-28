@@ -33,7 +33,6 @@ Tutorial
    :maxdepth: 1
    :numbered:
 
-   tutorial/creating_your_first_admin_class/installation
    tutorial/creating_your_first_admin_class/introduction
    tutorial/creating_your_first_admin_class/defining_entities
    tutorial/creating_your_first_admin_class/defining_routing
