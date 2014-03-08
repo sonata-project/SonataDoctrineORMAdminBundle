@@ -11,6 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
+use Doctrine\Common\Util\ClassUtils;
+use Doctrine\ORM\EntityManager;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
@@ -133,7 +135,9 @@ class ModelManager implements ModelManagerInterface
             $entityManager->persist($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException('', 0, $e);
+            throw new ModelManagerException(sprintf('Failed to create object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
+        } catch (DBALException $e) {
+            throw new ModelManagerException(sprintf('Failed to create object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -147,7 +151,9 @@ class ModelManager implements ModelManagerInterface
             $entityManager->persist($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException('', 0, $e);
+            throw new ModelManagerException(sprintf('Failed to update object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
+        } catch (DBALException $e) {
+            throw new ModelManagerException(sprintf('Failed to update object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -161,9 +167,9 @@ class ModelManager implements ModelManagerInterface
             $entityManager->remove($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException('', 0, $e);
+            throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         } catch (DBALException $e) {
-            throw new ModelManagerException('', 0, $e);
+            throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -200,7 +206,7 @@ class ModelManager implements ModelManagerInterface
     /**
      * @param string $class
      *
-     * @return null|\Symfony\Bridge\Doctrine\EntityManager
+     * @return EntityManager
      */
     public function getEntityManager($class)
     {
@@ -276,7 +282,24 @@ class ModelManager implements ModelManagerInterface
             throw new \RuntimeException('Entities passed to the choice field must be managed');
         }
 
-        return $entityManager->getUnitOfWork()->getEntityIdentifier($entity);
+        $class = $this->getMetadata(ClassUtils::getClass($entity));
+
+        $identifiers = array();
+
+        foreach ($class->getIdentifierValues($entity) as $value) {
+            if (!is_object($value)) {
+                $identifiers[] = $value;
+                continue;
+            }
+
+            $class = $this->getMetadata(ClassUtils::getClass($value));
+
+            foreach ($class->getIdentifierValues($value) as $value) {
+                $identifiers[] = $value;
+            }
+        }
+
+        return $identifiers;
     }
 
     /**
