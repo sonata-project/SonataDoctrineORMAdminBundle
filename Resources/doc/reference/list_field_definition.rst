@@ -191,7 +191,7 @@ Default route for an link is edit (many_to_one, one_to_one etc.). Using this, th
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
-                ->add('field', null, array(
+                ->addIdentifier('field', null, array(
                     'route' => array(
                         'name' => 'show'
                     )
