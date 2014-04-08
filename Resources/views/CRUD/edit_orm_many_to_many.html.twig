@@ -114,8 +114,7 @@ file that was distributed with this source code.
                     {% endif %}
                 </span>
 
-                <div style="display: none" id="field_dialog_{{ id }}">
-                </div>
+                {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
             </div>
 
             {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}

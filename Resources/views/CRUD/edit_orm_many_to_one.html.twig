@@ -80,9 +80,7 @@ file that was distributed with this source code.
             </span>
         </span>
 
-        <div class="container sonata-ba-modal sonata-ba-modal-edit-one-to-one" style="display: none" id="field_dialog_{{ id }}">
-
-        </div>
+        {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
     </div>
 
     {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
