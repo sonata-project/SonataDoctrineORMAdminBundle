@@ -246,7 +246,7 @@ This code manage the many-to-[one|many] association field popup
                             dataType: 'html',
                             type: 'POST',
                             success: function(html) {
-                                jQuery('#field_container_content_{{ id }}').replaceWith(html);
+                                jQuery('#field_container_{{ id }}').replaceWith(html);
                                 var newElement = jQuery('#{{ id }} [value="' + data.objectId + '"]');
                                 if (newElement.is("input")) {
                                     newElement.attr('checked', 'checked');
