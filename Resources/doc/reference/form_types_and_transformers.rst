@@ -1,25 +1,24 @@
+.. index::
+    double: Reference; Form types
+    single: Transformers
+
 Form types and data transformers
 ================================
 
-The AdminBundle is shipped with custom form types and data transfomers in order
-to handle the different model's workflows and lifecycle.
+The `AdminBundle` is shipped with custom form types and data transfomers in order to handle the different model's workflows and lifecycle.
 
 Form types
 ----------
 
-    - ``sonata_type_admin`` : this type is linked to an Admin class and the field construction is
-      delegated to an Admin class.
+* ``sonata_type_admin``: this type is linked to an `Admin` class and the field construction is delegated to an Admin class,
+* ``sonata_type_collection``: this type works like the native ``CollectionType`` but contains two extra features:
 
-    - ``sonata_type_collection`` : this type works like the native ``CollectionType`` but contains two extra
-      features : the data layer is abstracted to work with any implemented layer and a delete option is added
-      so a collection entry can be deleted.
+    * the data layer is abstracted to work with any implemented layer,
+    * a delete option is added so a collection entry can be deleted.
+* ``sonata_type_model``: this type works like the native ``EntityType`` but this internal is abstracted to work with any implemented layer.
+* ``sonata_type_immutable_array``: this type allows to edit a fixed array, like a settings array.
 
-    - ``sonata_type_model`` : this type works like the native ``EntityType`` but this internal is abstracted
-      to work with any implemented layer.
-
-    - ``sonata_type_immutable_array``: this type allows to edit a fixed array, like a settings array.
-
-Let's say, the object has settings properties
+Let's say, the object has settings properties:
 
 .. code-block:: php
 
@@ -33,7 +32,7 @@ Let's say, the object has settings properties
         );
     }
 
-Now you can edit the settings array with :
+Now you can edit the settings array with:
 
 .. code-block:: php
 
@@ -64,13 +63,13 @@ Now you can edit the settings array with :
         }
     ));
 
-the output will be :
+Then, the output will be:
 
 .. image:: ../images/sonata_type_immutable_array.png
            :alt: Immutable Array Type
            :width: 460
 
-Other options :
+Other options:
 
 .. code-block:: php
 
@@ -109,10 +108,9 @@ Other options :
         }
     }
 
-
 Datatransformer
 ---------------
 
-    - ``ArrayToModelTransformer`` : transform an array to an object
-    - ``ModelsToArrayTransformer`` : transform a collection of array into a collection of object
-    - ``ModelToIdTransformater`` : transform an ``id`` into an object
+* ``ArrayToModelTransformer``: transform an array to an object,
+* ``ModelsToArrayTransformer``: transform a collection of array into a collection of object,
+* ``ModelToIdTransformater``: transform an ``id`` into an object.

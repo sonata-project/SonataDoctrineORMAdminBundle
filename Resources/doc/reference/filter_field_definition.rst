@@ -1,43 +1,47 @@
-Filter Field Definition
+.. index::
+    double: Reference; Templates
+    single: Filter type
+    single: Filter field
+
+Filter field definition
 =======================
 
-These fields are displayed inside the filter box. They allow you to filter
-the list of entities by a number of different methods.
+These fields are displayed inside the filter box. They allow you to filter the list of entities by a number of different methods.
 
-A filter instance is always linked to a Form Type, there are 3 types available :
+A filter instance is always linked to a Form Type, there are 3 types available:
 
-  - sonata_type_filter_number  :  display 2 widgets, the operator ( >, >=, <= , <, =) and the value
-  - sonata_type_filter_choice  :  display 2 widgets, the operator (yes and no) and the value
-  - sonata_type_filter_default :  display 2 widgets, an hidden operator (can be changed on demand) and the value
-  - sonata_type_filter_date ( not implemented yet )
+* `sonata_type_filter_number`: display 2 widgets, the operator ( >, >=, <= , <, =) and the value,
+* `sonata_type_filter_choice`: display 2 widgets, the operator (yes and no) and the value,
+* `sonata_type_filter_default`: display 2 widgets, an hidden operator (can be changed on demand) and the value,
+* `sonata_type_filter_date`, not implemented yet!
 
-The Form Type configuration is provided by the filter itself. But they can be tweaked in the ``configureDatagridFilters``
-process with the ``add`` method.
+The `Form Type` configuration is provided by the filter itself.
+But they can be tweaked in the ``configureDatagridFilters`` process with the ``add`` method.
 
-The ``add`` method accepts 5 arguments :
+The ``add`` method accepts 5 arguments:
 
-  - the field name
-  - the filter type     : the filter name
-  - the filter options  : the options related to the filter
-  - the field type      : the type of widget used to render the value part
-  - the field options   : the type options
+* the `field name`,
+* the `filter type`, the filter name,
+* the `filter options`, the options related to the filter,
+* the `field type`, the type of widget used to render the value part,
+* the `field options`, the type options.
 
 Filter types available
 ----------------------
 
-For now, only Doctrine ORM filters are available
+For now, only `Doctrine ORM` filters are available:
 
-  - doctrine_orm_boolean        : depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field
-  - doctrine_orm_callback       : depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed
-  - doctrine_orm_choice         : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
-  - doctrine_orm_model          : depends on the ``sonata_type_filter_number`` Form Type
-  - doctrine_orm_string         : depends on the ``sonata_type_filter_choice``
-  - doctrine_orm_number         : depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field
-  - doctrine_orm_date           : depends on the ``sonata_type_filter_date`` Form Type, renders a date field
-  - doctrine_orm_date_range     : depends on the ``sonata_type_filter_date_range`` Form Type, renders a 2 date fields
-  - doctrine_orm_datetime       : depends on the ``sonata_type_filter_datetime`` Form Type, renders a datetime field
-  - doctrine_orm_datetime_range : depends on the ``sonata_type_filter_datetime_range`` Form Type, renders a 2 datetime fields
-  - doctrine_orm_class          : depends on the ``sonata_type_filter_default`` Form type, renders a choice list field
+* `doctrine_orm_boolean`: depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field,
+* `doctrine_orm_callback`: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
+* `doctrine_orm_choice`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
+* `doctrine_orm_model`: depends on the ``sonata_type_filter_number`` Form Type,
+* `doctrine_orm_string`: depends on the ``sonata_type_filter_choice``,
+* `doctrine_orm_number`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
+* `doctrine_orm_date`: depends on the ``sonata_type_filter_date`` Form Type, renders a date field,
+* `doctrine_orm_date_range`: depends on the ``sonata_type_filter_date_range`` Form Type, renders a 2 date fields,
+* `doctrine_orm_datetime`: depends on the ``sonata_type_filter_datetime`` Form Type, renders a datetime field,
+* `doctrine_orm_datetime_range`: depends on the ``sonata_type_filter_datetime_range`` Form Type, renders a 2 datetime fields,
+* `doctrine_orm_class`: depends on the ``sonata_type_filter_default`` Form type, renders a choice list field.
 
 Example
 -------
@@ -68,8 +72,7 @@ Example
 Timestamps
 ----------
 
-``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range`` support
-filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option:
+``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range`` support filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option:
 
 .. code-block:: php
 
@@ -115,9 +118,11 @@ Advanced usage
 Filtering by sub entity properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you need to filter your base entities by the value of a sub entity property,
-you can simply use the dot-separated notation (note that this only makes sense
-when the prefix path is made of entities, not collections):
+If you need to filter your base entities by the value of a sub entity property, you can simply use the dot-separated notation:
+
+.. note::
+
+    This only makes sense when the prefix path is made of entities, not collections.
 
 .. code-block:: php
 
@@ -149,7 +154,7 @@ when the prefix path is made of entities, not collections):
 Label
 ^^^^^
 
-You can customize the label which appears on the main widget by using a ``label`` option.
+You can customize the label which appears on the main widget by using a ``label`` option:
 
 .. code-block:: php
 
@@ -168,11 +173,13 @@ You can customize the label which appears on the main widget by using a ``label`
 Callback
 ^^^^^^^^
 
-To create a custom callback filter, two methods need to be implemented; one to
-define the field type and one to define how to use the field's value. The
-latter shall return wether the filter actually is applied to the queryBuilder
-or not. In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter``
-implement this functionality.
+To create a custom callback filter, two methods need to be implemented:
+
+* one to define the field type,
+* one to define how to use the field's value.
+
+The latter shall return whether the filter actually is applied to the queryBuilder or not.
+In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` implement this functionality:
 
 .. code-block:: php
 

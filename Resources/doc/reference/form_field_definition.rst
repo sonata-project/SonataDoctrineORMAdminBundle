@@ -1,3 +1,7 @@
+.. index::
+    double: Reference; Form field
+    single: Definition; Form field
+
 Form field definition
 =====================
 
@@ -51,34 +55,29 @@ Example
 
 .. note::
 
-    By default, the form framework always sets ``required=true`` for each
-    field. This can be an issue for HTML5 browsers as they provide client-side
-    validation.
-
+    By default, the form framework always sets ``required=true`` for each field.
+    This can be an issue for HTML5 browsers as they provide client-side validation.
 
 Types available
 ---------------
 
-    - array
-    - checkbox
-    - choice
-    - decimal
-    - integer
-    - text
-    - date
-    - time
-    - datetime
+* `array`,
+* `checkbox`,
+* `choice`,
+* `decimal`,
+* `integer`,
+* `text`,
+* `date`,
+* `time`,
+* `datetime`.
 
-If no type is set, the Admin class will use the one set in the doctrine mapping
-definition.
+If no type is set, the `Admin` class will use the one set in the doctrine mapping definition.
 
 Short Object Placeholder
 ------------------------
 
-When using Many-to-One or One-to-One relations with Sonata Type fields, a short
-object description is used to represent the target object. If no object is selected,
-a 'No selection' placeholder will be used. If you want to customize this placeholder,
-you can use the corresponding option in the form field definition:
+When using `Many-to-One` or `One-to-One` relations with `Sonata Type` fields, a short object description is used to represent the target object.
+If no object is selected, a `No selection` placeholder will be used. If you want to customize this placeholder, you can use the corresponding option in the form field definition:
 
 .. code-block:: php
 
@@ -104,14 +103,16 @@ you can use the corresponding option in the form field definition:
         }
     }
 
-This placeholder is translated using the SonataAdminBundle catalogue.
+This placeholder is translated using the ``SonataAdminBundle`` catalog.
 
-Advanced Usage: File Management
+Advanced usage: File management
 -------------------------------
 
-If you want to use custom types from the Form framework you must use the
-``addType`` method. (The ``add`` method uses the information provided by the
-model definition).
+If you want to use custom types from the Form framework you must use the ``addType`` method.
+
+.. note ::
+
+    The ``add`` method uses the information provided by the model definition.
 
 .. code-block:: php
 
@@ -141,20 +142,18 @@ model definition).
 
 .. note::
 
-    By setting ``type=false`` in the file definition, the Form framework will
-    provide an instance of ``UploadedFile`` for the ``Media::setBinaryContent``
-    method. Otherwise, the full path will be provided.
+    By setting ``type=false`` in the file definition, the Form framework will provide an instance of ``UploadedFile`` for the ``Media::setBinaryContent`` method.
+    Otherwise, the full path will be provided.
 
-Advanced Usage: Many-to-one
+Advanced usage: Many-to-one
 ---------------------------
 
-If you have many ``Post``s linked to one ``User``, then the ``Post`` form should
-display a ``User`` field.
+If you have many ``Post`` linked to one ``User``, then the ``Post`` form should display a ``User`` field.
 
 The AdminBundle provides 2 options:
 
- - ``sonata_type_model``: the ``User`` list is set in a select widget with an add button to create a new ``User``
- - ``sonata_type_model_list``: the ``User`` list is set in a model where you can search, select and delete a ``User``.
+* ``sonata_type_model``: the ``User`` list is set in a select widget with an `Add` button to create a new ``User``,
+* ``sonata_type_model_list``: the ``User`` list is set in a model where you can search, select and delete a ``User``.
 
 .. code-block:: php
 
@@ -198,19 +197,15 @@ The AdminBundle provides 2 options:
         }
     }
 
-
-
 Advanced Usage: One-to-many
 ---------------------------
 
-Let's say you have a ``Gallery`` that links to some ``Media``s with a join table
-``galleryHasMedias``. You can easily add a new ``galleryHasMedias`` row by
-defining one of these options:
+Let's say you have a ``Gallery`` that links to some ``Media``s with a join table ``galleryHasMedias``.
+You can easily add a new ``galleryHasMedias`` row by defining one of these options:
 
-  - ``edit``: ``inline|standard``, the inline mode allows you to add new rows
-  - ``inline``: ``table|standard``, the fields are displayed into table
-  - ``sortable``: if the model has a position field, you can enable a drag and
-    drop sortable effect by setting ``sortable=field_name``
+* ``edit``: ``inline|standard``, the inline mode allows you to add new rows,
+* ``inline``: ``table|standard``, the fields are displayed into table,
+* ``sortable``: if the model has a position field, you can enable a drag and drop sortable effect by setting ``sortable=field_name``.
 
 .. code-block:: php
 
@@ -240,10 +235,8 @@ defining one of these options:
         }
     }
 
-
-
-By default position row will be rendered, if you want to hide it - you will need to alter child 
-admin class and add hidden position field. Use code like 
+By default, position row will be rendered. If you want to hide it, you will need to alter child  admin class and add hidden position field.
+Use code like:
 
 .. code-block:: php
 
