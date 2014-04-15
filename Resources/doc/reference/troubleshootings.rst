@@ -1,10 +1,15 @@
+.. index::
+    double: Reference; Troubleshooting
+    single: One-to-many association
+    single: Ordered fields
+
 Troubleshooting
 ===============
 
 Deleted elements from a one-to-many association are not removed!
 ----------------------------------------------------------------
 
-Make sure the Orphan Removal option is set to ``true``
+Make sure the `Orphan Removal` option is set to ``true``:
 
 .. code-block:: xml
 
@@ -29,12 +34,12 @@ Make sure the Orphan Removal option is set to ``true``
 
 .. note::
 
-    The last Doctrine version requires to define the ``orphan-removal`` as an attribute and not as a node.
+    The last `Doctrine` version requires to define the ``orphan-removal`` as an attribute and not as a node.
 
 Ordered fields are not ordered!
 -------------------------------
 
-Make sure the ``order-by`` option is correctly set.
+Make sure the ``order-by`` option is correctly set:
 
 .. code-block:: xml
 
