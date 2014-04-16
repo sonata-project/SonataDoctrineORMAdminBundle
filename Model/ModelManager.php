@@ -282,11 +282,12 @@ class ModelManager implements ModelManagerInterface
      */
     public function getIdentifierValues($entity)
     {
-        $entityManager = $this->getEntityManager($entity);
+        // Fix code has an impact on performance, so disable it ...
+        //$entityManager = $this->getEntityManager($entity);
+        //if (!$entityManager->getUnitOfWork()->isInIdentityMap($entity)) {
+        //    throw new \RuntimeException('Entities passed to the choice field must be managed');
+        //}
 
-        if (!$entityManager->getUnitOfWork()->isInIdentityMap($entity)) {
-            throw new \RuntimeException('Entities passed to the choice field must be managed');
-        }
 
         $class = $this->getMetadata(ClassUtils::getClass($entity));
 
