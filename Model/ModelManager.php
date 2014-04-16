@@ -327,7 +327,7 @@ class ModelManager implements ModelManagerInterface
         }
 
         // the entities is not managed
-        if (!$entity || !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity)) {
+        if (!$entity /*|| !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity) // commented for perfomance concern */) {
             return null;
         }
 
