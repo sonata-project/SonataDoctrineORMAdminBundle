@@ -34,6 +34,8 @@ class ModelManager implements ModelManagerInterface
 {
     protected $registry;
 
+    protected $cache = array();
+
     const ID_SEPARATOR = '~';
 
     /**
@@ -214,13 +216,17 @@ class ModelManager implements ModelManagerInterface
             $class = get_class($class);
         }
 
-        $em = $this->registry->getManagerForClass($class);
+        if (!isset($this->cache[$class])) {
+            $em = $this->registry->getManagerForClass($class);
 
-        if (!$em) {
-            throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
+            if (!$em) {
+                throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
+            }
+
+            $this->cache[$class] = $em;
         }
 
-        return $em;
+        return $this->cache[$class];
     }
 
     /**
