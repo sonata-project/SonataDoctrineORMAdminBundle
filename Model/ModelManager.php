@@ -333,6 +333,10 @@ class ModelManager implements ModelManagerInterface
 
         $values = $this->getIdentifierValues($entity);
 
+        if (count($values) === 0) {
+            return null;
+        }
+
         return implode(self::ID_SEPARATOR, $values);
     }
 
