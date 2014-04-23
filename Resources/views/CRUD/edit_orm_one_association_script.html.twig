@@ -47,7 +47,8 @@ This code manage the one-to-many association field popup
                 }
 
                 jQuery('#field_container_{{ id }}').replaceWith(html); // replace the html
-                Admin.setup_select2(jQuery('#field_container_{{ id }}'));
+
+                Admin.shared_setup(jQuery('#field_container_{{ id }}'));
 
                 if(jQuery('input[type="file"]', form).length > 0) {
                     jQuery(form).attr('enctype', 'multipart/form-data');

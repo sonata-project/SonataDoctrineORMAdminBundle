@@ -129,6 +129,8 @@ This code manage the many-to-[one|many] association field popup
 
                 // open the dialog in modal mode
                 field_dialog_{{ id }}.modal();
+
+                Admin.setup_list_modal(field_dialog_{{ id }});
             }
         });
     };
@@ -165,6 +167,8 @@ This code manage the many-to-[one|many] association field popup
 
                 // open the dialog in modal mode
                 field_dialog_{{ id }}.modal();
+
+                Admin.setup_list_modal(field_dialog_{{ id }});
             }
         });
     };
@@ -266,7 +270,7 @@ This code manage the many-to-[one|many] association field popup
                 // otherwise, display form error
                 field_dialog_content_{{ id }}.html(data);
 
-                Admin.add_pretty_errors(field_dialog_{{ id }});
+                Admin.shared_setup(field_dialog_{{ id }});
 
                 // reattach the event
                 jQuery('form', field_dialog_{{ id }}).submit(field_dialog_form_action_{{ id }});
@@ -316,7 +320,7 @@ This code manage the many-to-[one|many] association field popup
     }
 
     if (field_dialog_{{ id }}) {
-        Admin.add_pretty_errors(field_dialog_{{ id }});
+        Admin.shared_setup(field_dialog_{{ id }});
     }
 
     {% if sonata_admin.edit == 'list' %}
