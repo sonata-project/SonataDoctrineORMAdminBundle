@@ -123,7 +123,7 @@ This code manage the many-to-[one|many] association field popup
 
                 field_dialog_title_{{ id }}.html("{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}");
 
-                Admin.add_filters(field_dialog_{{ id }});
+                Admin.shared_setup(field_dialog_{{ id }});
 
                 field_dialog_form_list_handle_action_{{ id }}();
 
@@ -159,6 +159,8 @@ This code manage the many-to-[one|many] association field popup
                 // populate the popup container
                 field_dialog_content_{{ id }}.html(html);
                 field_dialog_title_{{ id }}.html("{{ associationadmin.label|trans({}, associationadmin.translationdomain) }}");
+
+                Admin.shared_setup(field_dialog_{{ id }});
 
                 // capture the submit event to make an ajax call, ie : POST data to the
                 // related create admin
