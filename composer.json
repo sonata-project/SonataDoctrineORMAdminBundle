@@ -27,11 +27,13 @@
         "sonata-project/admin-bundle": "~2.3@dev"
     },
     "require-dev": {
-        "simplethings/entity-audit-bundle": "~0.1",
-        "sonata-project/admin-bundle": "~2.3@dev"
+        "simplethings/entity-audit-bundle": "~0.1"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
+    },
+    "provide": {
+        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "autoload": {
         "psr-4": { "Sonata\\DoctrineORMAdminBundle\\": "" }
