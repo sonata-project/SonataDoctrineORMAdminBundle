@@ -43,7 +43,11 @@ file that was distributed with this source code.
 
                                                     {% set dummy = nested_group_field.setrendered %}
                                                 {% else %}
-                                                    {{ form_widget(nested_field) }}
+                                                    {% if field_name == '_delete' %}
+                                                        {{ form_widget(nested_field, {'label_render': false}) }}
+                                                    {% else %}
+                                                        {{ form_widget(nested_field) }}
+                                                    {% endif %}
                                                 {% endif %}
                                                 {% if nested_field.vars.errors|length > 0 %}
                                                     <div class="help-inline sonata-ba-field-error-messages">
