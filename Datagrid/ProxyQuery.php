@@ -54,6 +54,8 @@ class ProxyQuery implements ProxyQueryInterface
                 $sortBy = $queryBuilder->getRootAlias() . '.' . $sortBy;
             }
             $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
+        } else {
+            $queryBuilder->resetDQLPart( 'orderBy' );
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
