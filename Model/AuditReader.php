@@ -57,4 +57,11 @@ class AuditReader implements AuditReaderInterface
     {
         return $this->auditReader->findRevisions($className, $id);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function diff($className, $id, $oldRevision, $newRevision){
+        return $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
+    }
 }
