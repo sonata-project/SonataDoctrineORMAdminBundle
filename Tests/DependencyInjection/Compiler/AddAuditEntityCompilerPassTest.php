@@ -71,7 +71,7 @@ class AddAuditEntityCompilerPassTest extends \PHPUnit_Framework_TestCase
                     $tags = array();
 
                     foreach ($services as $id => $service) {
-                        $attributes = ['manager_type' => 'orm'];
+                        $attributes = array('manager_type' => 'orm');
 
                         if (null !== $audit = $service['audit']) {
                             $attributes['audit'] = $audit;
