@@ -55,9 +55,16 @@ Next, be sure to enable the bundle in your `AppKernel.php` file:
 Configuration
 -------------
 
-If the ``EntityAuditBundle`` is enabled, then all entities managed by the ``DoctrineORMAdminBundle`` will be audited.
+If the ``EntityAuditBundle`` is enabled, then by default all entities managed by the ``DoctrineORMAdminBundle``
+will be audited. You can change this behavior by setting the ``force`` option to ``false`` :
 
-It is possible to disable an entity to be audited with the attribute `audit="false"` in `services.xml`.
+.. code-block:: yaml
+
+    sonata_doctrine_orm_admin:
+        audit:
+            force: false
+
+It is also possible to configure an entity audit with the attribute `audit` in `services.xml`.
 For instance :
 
 .. code-block:: xml

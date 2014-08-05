@@ -36,6 +36,10 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
     {
         $configs = $this->fixTemplatesConfiguration($configs, $container);
 
+        $configuration = new Configuration();
+        $processor     = new Processor();
+        $config        = $processor->processConfiguration($configuration, $configs);
+
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
@@ -44,13 +48,11 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 
         if (isset($bundles['SimpleThingsEntityAuditBundle'])) {
             $loader->load('audit.xml');
+
+            $container->setParameter('sonata_doctrine_orm_admin.audit.force', $config['audit']['force']);
         }
 
         $loader->load('security.xml');
-
-        $configuration = new Configuration();
-        $processor     = new Processor();
-        $config        = $processor->processConfiguration($configuration, $configs);
 
         $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
 

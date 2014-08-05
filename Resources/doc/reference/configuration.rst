@@ -17,6 +17,9 @@ Full configuration options
         # default value is null, so doctrine uses the value defined in the configuration
         entity_manager: ~
 
+        audit:
+            force: true
+
         templates:
             form:
                 - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig

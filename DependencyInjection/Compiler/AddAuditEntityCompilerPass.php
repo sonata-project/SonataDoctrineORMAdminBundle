@@ -31,6 +31,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         }
 
         $auditedEntities = $container->getParameter('simplethings.entityaudit.audited_entities');
+        $force = $container->getParameter('sonata_doctrine_orm_admin.audit.force');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
 
@@ -38,7 +39,11 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
                 continue;
             }
 
-            if (isset($attributes[0]['audit']) && $attributes[0]['audit'] == false) {
+            if (true === $force && isset($attributes[0]['audit']) && false === $attributes[0]['audit']) {
+                continue;
+            }
+
+            if (false === $force && (!isset($attributes[0]['audit']) || false === $attributes[0]['audit'])) {
                 continue;
             }
 
