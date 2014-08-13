@@ -81,10 +81,26 @@ For instance :
 Usage
 -----
 
-Once the ``EntityAuditBundle`` is set, then 2 new actions are available:
+Bundle
+^^^^^^
+
+Once the ``EntityAuditBundle`` is set, then 3 new actions are available:
 
 * `/admin/vendor/entity/{id}/history`: displays the history list
 * `/admin/vendor/entity/{id}/history/{revision}`: displays the object at a specific revision
+* `/admin/vendor/entity/{id}/history/{base_revision}/{compare_revision}`: displays a comparision of an object between two specified revisions
 
 These actions are available in the ``view`` and ``edit`` action.
 Please note the current implementation uses the ``show`` definition to display the revision.
+
+Entity compare
+^^^^^^^^^^^^^^
+
+.. versionadded:: 2.3
+    The history compare action was added in SonataAdminBundle 2.3.
+
+For making a comparison of two revisions, the ``show`` definition will be used for rendering both revisions. All rows where the output of the revisions doesn't match, the row is marked.
+
+The ``SonataAdminBundle:CRUD:base_show_field.html.twig`` accepts an optional parameter ``field_compare`` which should contain a secondary field to compare. When assigned, the ``field`` block will be rendered again with the ``field_compare`` value as input.
+
+This means all show_field views should extend ``SonataAdminBundle:CRUD:base_show_field.html.twig`` and should not contain a ``field_compare`` block, since it will automatically use the ``field`` block of the parent view.
