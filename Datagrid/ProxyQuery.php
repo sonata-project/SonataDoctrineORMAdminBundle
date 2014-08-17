@@ -25,7 +25,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     protected $sortOrder;
 
-    protected $parameterUniqueId;
+    protected $uniqueParameterId;
 
     protected $entityJoinAliases;
 
