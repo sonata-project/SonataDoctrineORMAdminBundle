@@ -173,7 +173,7 @@ The related template:
 
     {% extends 'SonataAdminBundle:CRUD:base_list_field.html.twig' %}
 
-    {% block field%}
+    {% block field %}
         <div>
             <strong>{{ object.name }}</strong> <br />
             {{ object.providername}} : {{ object.width }}x{{ object.height }} <br />
