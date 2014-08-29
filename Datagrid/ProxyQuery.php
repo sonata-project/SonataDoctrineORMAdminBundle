@@ -103,14 +103,14 @@ class ProxyQuery implements ProxyQueryInterface
 
         $results    = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
         $idx        = array();
-        $connection = $queryBuilder->getEntityManager()->getConnection();
         foreach ($results as $id) {
-            $idx[] = $connection->quote($id[$idName]);
+            $idx[] = $id[$idName];
         }
 
         // step 4 : alter the query to match the targeted ids
         if (count($idx) > 0) {
-            $queryBuilder->andWhere(sprintf('%s IN (%s)', $select, implode(',', $idx)));
+            $queryBuilder->andWhere(sprintf('%s IN (:sonata_ids)', $select));
+            $queryBuilder->setParameter('sonata_ids', $idx);
             $queryBuilder->setMaxResults(null);
             $queryBuilder->setFirstResult(null);
         }
