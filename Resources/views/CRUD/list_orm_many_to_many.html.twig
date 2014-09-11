@@ -14,7 +14,7 @@ file that was distributed with this source code.
 {% block field %}
     {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('edit') %}
         {% for element in value%}
-            {%- if field_description.associationadmin.isGranted('edit', value) -%}
+            {%- if field_description.associationadmin.isGranted('EDIT', value) -%}
                 {{ block('relation_link') }}
             {%- else -%}
                 {{ block('relation_value') }}
