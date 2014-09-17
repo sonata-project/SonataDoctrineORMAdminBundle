@@ -24,7 +24,7 @@ abstract class Filter extends BaseFilter
     public function apply($queryBuilder, $value)
     {
         $this->value = $value;
-        if(is_array($value) && array_key_exists("value", $value)) {
+        if(is_array($value) && array_key_exists('value', $value)) {
             list($alias, $field) = $this->association($queryBuilder, $value);
 
             $this->filter($queryBuilder, $alias, $field, $value);
