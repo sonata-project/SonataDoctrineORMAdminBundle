@@ -145,4 +145,12 @@ abstract class AbstractDateFilter extends Filter
             'label'         => $this->getLabel(),
         ));
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'sonata_type_datetime_range');
+    }
 }
