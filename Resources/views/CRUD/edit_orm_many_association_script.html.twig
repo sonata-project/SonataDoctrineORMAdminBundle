@@ -378,21 +378,30 @@ This code manage the many-to-[one|many] association field popup
         jQuery('#{{ id }}').on('change', function(event) {
 
             Admin.log('[{{ id }}] update the label');
-
-            jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
-            jQuery.ajax({
-                type: 'GET',
-                url: '{{ url('sonata_admin_short_object_information', {
-                    'objectId': 'OBJECT_ID',
-                    'uniqid': associationadmin.uniqid,
-                    'code': associationadmin.code,
-                    'linkParameters': sonata_admin.field_description.options.link_parameters
-                })}}'.replace('OBJECT_ID', jQuery(this).val()),
-                dataType: 'html',
-                success: function(html) {
-                    jQuery('#field_widget_{{ id }}').html(html);
-                }
-            });
+            
+            var field_widget = jQuery('#field_widget_{{ id }}');
+            var current_id   = jQuery(this).val();
+            
+            if (current_id == "") {
+                // Unselected the object
+                field_widget.html('<span class="inner-field-short-description">' + field_widget.data("placeholder") + '</span>');
+            } else {
+                // Selected a new object
+                field_widget.html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
+                jQuery.ajax({
+                    type: 'GET',
+                    url: '{{ url('sonata_admin_short_object_information', {
+                        'objectId': 'OBJECT_ID',
+                        'uniqid': associationadmin.uniqid,
+                        'code': associationadmin.code,
+                        'linkParameters': sonata_admin.field_description.options.link_parameters
+                    })}}'.replace('OBJECT_ID', current_id),
+                    dataType: 'html',
+                    success: function(html) {
+                        field_widget.html(html);
+                    }
+                });
+            }
         });
 
     {% endif %}
