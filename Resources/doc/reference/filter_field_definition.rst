@@ -223,7 +223,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
         public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
         {
-            if (!$value) {
+            if (!$value['value']) {
                 return;
             }
 
