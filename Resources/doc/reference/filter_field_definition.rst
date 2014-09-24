@@ -206,7 +206,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ->add('with_open_comments', 'doctrine_orm_callback', array(
     //                'callback'   => array($this, 'getWithOpenCommentFilter'),
                     'callback' => function($queryBuilder, $alias, $field, $value) {
-                        if (!$value) {
+                        if (!$value['value']) {
                             return;
                         }
 
