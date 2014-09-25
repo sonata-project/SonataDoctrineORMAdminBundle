@@ -29,8 +29,17 @@ This code manage the many-to-[one|many] association field popup
         - if the parent has an objectId defined then the related input get updated
         - if the parent has NO object then an ajax request is made to refresh the popup
     #}
+
     var field_dialog_form_list_link_{{ id }} = function(event) {
         initialize_popup_{{ id }}();
+
+        var target = jQuery(this);
+
+        // return if the link is an anchor inside the same page
+        if (this.nodeName == 'A' && (target.attr('href').length == 0 || target.attr('href')[0] == '#')) {
+            Admin.log('[{{ id }}|field_dialog_form_list_link] element is an anchor, skipping action', this);
+            return;
+        }
 
         event.preventDefault();
         event.stopPropagation();
@@ -41,6 +50,7 @@ This code manage the many-to-[one|many] association field popup
 
         // the user does not click on a row column
         if (element.length == 0) {
+            Admin.log('[{{ id }}|field_dialog_form_list_link] the user does not click on a row column, make ajax call to retrieve inner html');
             // make a recursive call (ie: reset the filter)
             jQuery.ajax({
                 type: 'GET',
@@ -51,24 +61,25 @@ This code manage the many-to-[one|many] association field popup
 
                     field_dialog_content_{{ id }}.html(html);
                     field_dialog_form_list_handle_action_{{ id }}();
+
+                    Admin.shared_setup(field_dialog_{{ id }});
                 }
             });
 
             return;
         }
 
+        Admin.log('[{{ id }}|field_dialog_form_list_link] the user select one element, update input and hide the modal');
+
         jQuery('#{{ id }}').val(element.attr('objectId'));
         jQuery('#{{ id }}').trigger('change');
 
         field_dialog_{{ id }}.modal('hide');
-    }
+    };
 
     // this function handle action on the modal list when inside a selected list
     var field_dialog_form_list_handle_action_{{ id }}  =  function() {
-
         Admin.log('[{{ id }}|field_dialog_form_list_handle_action] attaching valid js event');
-
-        Admin.add_filters(field_dialog_{{ id }});
 
         // capture the submit event to make an ajax call, ie : POST data to the
         // related create admin
@@ -91,10 +102,12 @@ This code manage the many-to-[one|many] association field popup
 
                     field_dialog_content_{{ id }}.html(html);
                     field_dialog_form_list_handle_action_{{ id }}();
+
+                    Admin.shared_setup(field_dialog_{{ id }});
                 }
             });
         });
-    }
+    };
 
     // handle the list link
     var field_dialog_form_list_{{ id }} = function(event) {
@@ -182,6 +195,7 @@ This code manage the many-to-[one|many] association field popup
 
         // return if the link is an anchor inside the same page
         if (this.nodeName == 'A' && (element.attr('href').length == 0 || element.attr('href')[0] == '#')) {
+            Admin.log('[{{ id }}|field_dialog_form_action] element is an anchor, skipping action', this);
             return;
         }
 
@@ -280,7 +294,7 @@ This code manage the many-to-[one|many] association field popup
         });
 
         return false;
-    }
+    };
 
     var field_dialog_{{ id }}         = false;
     var field_dialog_content_{{ id }} = false;
@@ -377,7 +391,7 @@ This code manage the many-to-[one|many] association field popup
         // update the label
         jQuery('#{{ id }}').on('change', function(event) {
 
-            Admin.log('[{{ id }}] update the label');
+            Admin.log('[{{ id }}|on:change] update the label');
 
             jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
             jQuery.ajax({
