@@ -36,6 +36,7 @@ For now, only `Doctrine ORM` filters are available:
 * `doctrine_orm_callback`: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
 * `doctrine_orm_choice`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
 * `doctrine_orm_model`: depends on the ``sonata_type_filter_number`` Form Type,
+* `doctrine_orm_model_autocomplete`: uses ``sonata_type_model_autocomplete`` form type, can be used as replacement of ``doctrine_orm_model`` to handle too many items that cannot be loaded into memory.
 * `doctrine_orm_string`: depends on the ``sonata_type_filter_choice``,
 * `doctrine_orm_number`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
 * `doctrine_orm_date`: depends on the ``sonata_type_filter_date`` Form Type, renders a date field,
@@ -68,6 +69,25 @@ Example
                 ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true))
             ;
         }
+    }
+
+doctrine_orm_model_autocomplete
+-------------------------------
+This filter type uses ``sonata_type_model_autocomplete`` form type. It renders an input with select2 autocomplete feature.
+Can be used as replacement of ``doctrine_orm_model`` to handle too many related items that cannot be loaded into memory.
+This form type requires ``property`` option. See documentation of ``sonata_type_model_autocomplete`` for all available options for this form type.
+
+.. code-block:: php
+
+    // ArticleAdmin
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper
+            ->add('category', 'doctrine_orm_model_autocomplete', array(), null, array(
+                // in related CategoryAdmin there must be datagrid filter on `title` field to make the autocompletion work
+                'property'=>'title',
+            ))
+        ;
     }
 
 Timestamps

@@ -22,6 +22,7 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\Datagrid\SimplePager;
 use Symfony\Component\Form\FormFactory;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -80,6 +81,10 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
+
+        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE ))) {
+            $admin->attachAdminClass($fieldDescription);
+    }
     }
 
     /**
@@ -116,6 +121,16 @@ class DatagridBuilder implements DatagridBuilderInterface
         $admin->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
 
         $fieldDescription->mergeOption('field_options', array('required' => false));
+
+        if ($type === 'doctrine_orm_model_autocomplete') {
+            $fieldDescription->mergeOption('field_options', array(
+                'class' => $fieldDescription->getTargetEntity(),
+                'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
+                'admin_code' => $admin->getCode(),
+                'context' => 'filter',
+            ));
+        }
+
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
 
         if (false !== $filter->getLabel() && !$filter->getLabel()) {
