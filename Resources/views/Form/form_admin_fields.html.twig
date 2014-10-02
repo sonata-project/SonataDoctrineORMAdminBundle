@@ -110,7 +110,8 @@ file that was distributed with this source code.
         </span>
 
         <span style="display: none" >
-            {{ form_widget(form) }}
+            {# Hidden text input cannot be required, because browser will throw error "An invalid form control with name='' is not focusable"  #}
+            {{ form_widget(form, {'required':false}) }}
         </span>
 
         <div class="modal fade" id="field_dialog_{{ id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
