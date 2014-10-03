@@ -93,9 +93,7 @@ file that was distributed with this source code.
                         {{ btn_add|trans({}, btn_catalogue) }}
                     </a>
                 {% endif %}
-            </span>
 
-            <span class="btn-group">
                 {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') and btn_delete %}
                     <a  href=""
                         onclick="return remove_selected_element_{{ id }}(this);"
