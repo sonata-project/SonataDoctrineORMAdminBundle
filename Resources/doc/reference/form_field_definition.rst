@@ -25,7 +25,7 @@ Example
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
-                ->add('author', 'sonata_type_model', array(), array('edit' => 'list'))
+                ->add('author', 'sonata_type_model_list', array())
                 ->add('enabled')
                 ->add('title')
                 ->add('abstract', null, array('required' => false))
