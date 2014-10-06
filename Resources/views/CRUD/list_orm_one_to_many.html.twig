@@ -12,9 +12,9 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
-    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('EDIT') %}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute(field_description.options.route.name|upper) %}
         {% for element in value%}
-            {%- if field_description.associationadmin.isGranted('edit', value) -%}
+            {%- if field_description.associationadmin.isGranted(field_description.options.route.name, value) -%}
                 {{ block('relation_link') }}
             {%- else -%}
                 {{ block('relation_value') }}

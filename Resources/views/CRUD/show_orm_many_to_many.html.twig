@@ -13,7 +13,7 @@ file that was distributed with this source code.
 
 {% block field%}
     <ul class="sonata-ba-show-many-to-many">
-    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('edit') and field_description.associationadmin.isGranted('EDIT')%}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute(field_description.options.route.name) and field_description.associationadmin.isGranted(field_description.options.route.name|upper)%}
         {% for element in value%}
             <li>
                 <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a>

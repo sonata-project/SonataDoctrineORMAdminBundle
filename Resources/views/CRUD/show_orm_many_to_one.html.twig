@@ -13,7 +13,7 @@ file that was distributed with this source code.
 
 {% block field %}
     {% if value %}
-        {% if field_description.hasAssociationAdmin and field_description.associationadmin.hasRoute('edit') and field_description.associationadmin.isGranted('EDIT') %}
+        {% if field_description.hasAssociationAdmin and field_description.associationadmin.hasRoute(field_description.options.route.name) and field_description.associationadmin.isGranted(field_description.options.route.name|upper) %}
             <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, value, field_description.options.route.parameters) }}">{{ value|render_relation_element(field_description) }}</a>
         {% else %}
             {{ value|render_relation_element(field_description) }}
