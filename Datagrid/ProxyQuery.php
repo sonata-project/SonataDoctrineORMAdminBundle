@@ -81,7 +81,13 @@ class ProxyQuery implements ProxyQueryInterface
         $idName = current($queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class)->getIdentifierFieldNames());
 
         // step 3 : retrieve the different subjects id
-        $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+        if ($metadata->hasAssociation($idName)) {
+            $select = sprintf('s_%s.%s %s', $metadata->associationMappings[$idName]['fieldName'], $metadata->associationMappings[$idName]['joinColumns'][0]['referencedColumnName'], $idName); // the "s_" prefix is hardcoded in entityJoin
+            $where = sprintf('s_%s.%s', $metadata->associationMappings[$idName]['fieldName'], $metadata->associationMappings[$idName]['joinColumns'][0]['referencedColumnName']);
+        } else {
+            $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+            $where = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+        }
         $queryBuilderId->resetDQLPart('select');
         $queryBuilderId->add('select', 'DISTINCT ' . $select);
 
@@ -109,7 +115,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         // step 4 : alter the query to match the targeted ids
         if (count($idx) > 0) {
-            $queryBuilder->andWhere(sprintf('%s IN (:sonata_ids)', $select));
+            $queryBuilder->andWhere(sprintf('%s IN (:sonata_ids)', $where));
             $queryBuilder->setParameter('sonata_ids', $idx);
             $queryBuilder->setMaxResults(null);
             $queryBuilder->setFirstResult(null);
