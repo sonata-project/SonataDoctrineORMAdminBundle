@@ -122,7 +122,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         }
 
         $datagrid->addFilter($filter);
-
     }
 
     /**
