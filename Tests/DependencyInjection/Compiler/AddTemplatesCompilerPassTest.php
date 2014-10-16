@@ -58,12 +58,14 @@ class AddTemplatesCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->will($this->returnValue($definition))
         ;
 
+        $definition->addMethodCall('setFilterTheme', array(array('custom_call.twig.html')));
+
         $compilerPass = new AddTemplatesCompilerPass();
         $compilerPass->process($container);
 
         $expected = array(
-            array('setFormTheme', array('default_form.twig.html', 'myform.twig.html',)),
-            array('setFilterTheme', array('default_filter.twig.html', 'myfilter.twig.html',))
+            array('setFilterTheme', array(array('custom_call.twig.html', 'myfilter.twig.html',))),
+            array('setFormTheme', array(array('default_form.twig.html', 'myform.twig.html',))),
         );
 
         $this->assertEquals($expected, $definition->getMethodCalls());

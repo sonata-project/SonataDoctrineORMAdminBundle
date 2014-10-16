@@ -73,7 +73,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
                     continue 1;
                 }
 
-                $call = array_merge($call[0], $value);
+                $call = array(array_merge($call[0], $value));
             }
         }
 
