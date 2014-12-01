@@ -20,13 +20,14 @@ But they can be tweaked in the ``configureDatagridFilters`` process with the ``a
 
 The ``add`` method accepts 5 arguments:
 
-* the `field name`,
+* the `field name`, fields of relations (of relations of relations … ) can be
+  specified with a dot-separated syntax.
 * the `filter type`, the filter name,
 * the `filter options`, the options related to the filter,
 * the `field type`, the type of widget used to render the value part,
 * the `field options`, the type options.
 
-Filter types available
+Available filter types
 ----------------------
 
 For now, only `Doctrine ORM` filters are available:
