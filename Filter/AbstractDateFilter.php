@@ -2,99 +2,173 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class AbstractDateFilter extends Filter
 {
     /**
-     * Flag indicating that filter will have range
-     * @var boolean
-     */
-    protected $range = false;
-
-    /**
-     * Flag indicating that filter will filter by datetime instead by date
-     * @var boolean
-     */
-    protected $time = false;
-
-    /**
      * {@inheritdoc}
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        // check data sanity
-        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
+        /** @var \Doctrine\ORM\QueryBuilder|ProxyQueryInterface $queryBuilder */
+        if (!is_array($data) || !array_key_exists('value', $data)) {
+            return;
+        }
+        $value = $data['value'];
+        if (!$this->isValidValue($value)) {
             return;
         }
 
-        if ($this->range) {
-            // additional data check for ranged items
-            if (!array_key_exists('start', $data['value']) || !array_key_exists('end', $data['value'])) {
-                return;
-            }
+        $aliasField = sprintf('%s.%s', $alias, $field);
+        $filterType = isset($data['type']) && is_numeric($data['type']) ? $data['type'] : null;
 
-            if (!$data['value']['start'] || !$data['value']['end']) {
-                return;
-            }
+        if($this->isRangedCondition($value, $filterType)) {
+            $filterType = $this->normalizeFilterType($filterType, $value, true);
 
-            // transform types
-            if ($this->getOption('input_type') == 'timestamp') {
-                $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
-                $data['value']['end'] = $data['value']['end'] instanceof \DateTime ? $data['value']['end']->getTimestamp() : 0;
-            }
+            list($start, $end) = $this->normalizeValue($value, true, $filterType);
 
-            // default type for range filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ?  DateRangeType::TYPE_BETWEEN : $data['type'];
-
-            $startDateParameterName = $this->getNewParameterName($queryBuilder);
-            $endDateParameterName = $this->getNewParameterName($queryBuilder);
-
-            if ($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
-            } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
-            }
-
-            $queryBuilder->setParameter($startDateParameterName,  $data['value']['start']);
-            $queryBuilder->setParameter($endDateParameterName,  $data['value']['end']);
+            $this->addRangeCondition($queryBuilder, $aliasField, $filterType, $start, $end);
         } else {
+            $filterType = $this->normalizeFilterType($filterType, $value, false);
 
-            if (!$data['value']) {
-                return;
-            }
+            $value = $this->normalizeValue($value, false, $filterType);
 
-            // default type for simple filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateType::TYPE_EQUAL : $data['type'];
-
-            // just find an operator and apply query
-            $operator = $this->getOperator($data['type']);
-
-            // transform types
-            if ($this->getOption('input_type') == 'timestamp') {
-                $data['value'] = $data['value'] instanceof \DateTime ? $data['value']->getTimestamp() : 0;
-            }
-
-            // null / not null only check for col
-            if (in_array($operator, array('NULL', 'NOT NULL'))) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
-            } else {
-                $parameterName = $this->getNewParameterName($queryBuilder);
-
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
-            }
+            $this->addCondition($queryBuilder, $aliasField, $filterType, $value);
         }
+    }
+
+    /**
+     * Indicates that the given value is valid.
+     *
+     * @param mixed $value The raw filter value
+     * @return bool
+     */
+    protected function isValidValue($value)
+    {
+        return $value instanceof \DateTime || $value === null;
+    }
+
+    /**
+     * Indicates if the filter will apply a ranged condition.
+     * Beware that if you override this method `normalizeValue` needs to be override as well.
+     *
+     * @param mixed $value The raw filter value
+     * @param int $filterType DateType::TYPE_* or DateRangeType::TYPE_*
+     * @return bool
+     */
+    protected function isRangedCondition($value, $filterType)
+    {
+        return false;
+    }
+
+    /**
+     * Normalize the data given to the filter.
+     *
+     * @param mixed $value The raw filter value
+     * @param bool $ranged Is this a ranged condition
+     * @param int $filterType DateType::TYPE_* or DateRangeType::TYPE_*
+     * @return mixed
+     */
+    protected function normalizeValue($value, $ranged, $filterType)
+    {
+        if ($ranged) {
+            throw new \LogicException('Did you override isRangedCondition and forget normalizeValue?');
+        }
+        if (in_array($filterType, array(DateType::TYPE_NULL, DateType::TYPE_NOT_NULL))) {
+            return null;
+        }
+        if ($this->getOption('input_type') === 'timestamp') {
+            return $value->getTimestamp();
+        }
+        return $value;
+    }
+
+    /**
+     * Normalize the filter type.
+     *
+     * @param int $filterType DateType::TYPE_* or DateRangeType::TYPE_*
+     * @param mixed $value The raw filter value
+     * @param bool $ranged Is this a ranged condition
+     * @return int A DateType::TYPE_*
+     */
+    protected function normalizeFilterType($filterType, $value, $ranged)
+    {
+        if ($value === null) {
+            return $filterType === DateType::TYPE_NOT_NULL ? $filterType : DateType::TYPE_NULL;
+        }
+        if ($ranged) {
+            return $filterType ?: DateRangeType::TYPE_BETWEEN;
+        }
+        return $filterType ?: DateType::TYPE_EQUAL;
+    }
+
+    /**
+     * @param ProxyQueryInterface $queryBuilder
+     * @param string $field
+     * @param int $type DateType::TYPE_* or DateRangeType::TYPE_*
+     * @param \DateTime|int $value
+     */
+    protected function addCondition(ProxyQueryInterface $queryBuilder, $field, $type, $value)
+    {
+        /** @var ProxyQueryInterface|\Doctrine\ORM\QueryBuilder $queryBuilder */
+        if (in_array($type, array(DateType::TYPE_NULL, DateType::TYPE_NOT_NULL))) {
+            $this->applyWhere($queryBuilder, sprintf('%s IS %s', $field, $this->getOperator($type)));
+            return;
+        }
+
+        $parameterName = $this->getNewParameterName($queryBuilder);
+        $this->applyWhere(
+            $queryBuilder,
+            sprintf('%s %s :%s', $field, $this->getOperator($type), $parameterName)
+        );
+        $queryBuilder->setParameter($parameterName, $value);
+    }
+
+    /**
+     * @param ProxyQueryInterface $queryBuilder
+     * @param string $field
+     * @param int $type DateType::TYPE_* or DateRangeType::TYPE_*
+     * @param \DateTime|int $start
+     * @param \DateTime|int $end
+     */
+    protected function addRangeCondition(ProxyQueryInterface $queryBuilder, $field, $type, $start, $end)
+    {
+        /** @var ProxyQueryInterface|\Doctrine\ORM\QueryBuilder $queryBuilder */
+        $startDateParameterName = $this->getNewParameterName($queryBuilder);
+        $endDateParameterName = $this->getNewParameterName($queryBuilder);
+
+        if ($type == DateRangeType::TYPE_NOT_BETWEEN) {
+            $this->applyWhere(
+                $queryBuilder,
+                sprintf(
+                    '(%s < :%s OR %s > :%s)',
+                    $field,
+                    $startDateParameterName,
+                    $field,
+                    $endDateParameterName
+                )
+            );
+        } else {
+            $this->applyWhere(
+                $queryBuilder,
+                sprintf('%s %s :%s', $field, '>=', $startDateParameterName)
+            );
+            $this->applyWhere(
+                $queryBuilder,
+                sprintf('%s %s :%s', $field, '<=', $endDateParameterName)
+            );
+        }
+        $queryBuilder->setParameter($startDateParameterName,  $start);
+        $queryBuilder->setParameter($endDateParameterName,  $end);
     }
 
     /**
      * Resolves DataType:: constants to SQL operators
      *
-     * @param integer $type
-     *
+     * @param int $type DateType::TYPE_* or DateRangeType::TYPE_*
      * @return string
      */
     protected function getOperator($type)
@@ -129,28 +203,23 @@ abstract class AbstractDateFilter extends Filter
      */
     public function getRenderSettings()
     {
-        $name = 'sonata_type_filter_date';
+        return array(
+            $this->getRenderName(),
+            array(
+                'field_type'    => $this->getFieldType(),
+                'field_options' => $this->getFieldOptions(),
+                'label'         => $this->getLabel(),
+            )
+        );
+    }
 
-        if ($this->time) {
-            $name .= 'time';
-        }
-
-        if ($this->range) {
-            $name .= '_range';
-        }
-
-        return array($name, array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel(),
-        ));
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'datetime');
     }
 
     /**
-     * {@inheritdoc}
+     * @return null|string
      */
-    public function getFieldType()
-    {
-        return $this->getOption('field_type', 'sonata_type_datetime_range');
-    }
+    protected abstract function getRenderName();
 }

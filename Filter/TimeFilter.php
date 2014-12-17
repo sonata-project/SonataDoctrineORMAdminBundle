@@ -14,16 +14,18 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 class TimeFilter extends AbstractDateFilter
 {
     /**
-     * This filter has no range
-     *
-     * @var boolean
+     * {@inheritdoc}
      */
-    protected $range = false;
+    protected function getRenderName()
+    {
+        return 'sonata_type_filter_time';
+    }
 
     /**
-     * This filter does not allow filtering by time
-     *
-     * @var boolean
+     * {@inheritdoc}
      */
-    protected $time = true;
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'time');
+    }
 }
