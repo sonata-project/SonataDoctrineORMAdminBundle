@@ -124,9 +124,10 @@ class ListBuilder implements ListBuilderInterface
         $fieldDescription->setOption('label', $fieldDescription->getOption('label', $fieldDescription->getName()));
 
         if (!$fieldDescription->getTemplate()) {
-
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
-
+        }
+        
+        if (!$fieldDescription->getTemplate()) {
             if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
                 $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig');
             }
