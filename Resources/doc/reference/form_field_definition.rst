@@ -250,12 +250,13 @@ To render child help messages you must use 'sonata_help' instead of 'help'. Exam
 
 .. code-block:: php
 
-class MediaAdmin extends Admin
-{    
-    protected function configureFormFields(FormMapper $formMapper)
-    {
-        $formMapper
-           ->add('image', 'file', array('sonata_help' => 'help message rendered in parent sonata_type_collection'))
-        ;
+    <?php
+    class MediaAdmin extends Admin
+    {    
+        protected function configureFormFields(FormMapper $formMapper)
+        {
+            $formMapper
+               ->add('image', 'file', array('sonata_help' => 'help message rendered in parent sonata_type_collection'))
+            ;
+        }
     }
-}
