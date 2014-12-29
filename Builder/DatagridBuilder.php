@@ -20,6 +20,7 @@ use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
+use Sonata\AdminBundle\Datagrid\SimplePager;
 use Symfony\Component\Form\FormFactory;
 
 class DatagridBuilder implements DatagridBuilderInterface
@@ -132,7 +133,8 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())
     {
-        $pager = new Pager;
+        $pager = $this->getPager($admin->getPagerType());
+
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
         $defaultOptions = array();
@@ -143,5 +145,28 @@ class DatagridBuilder implements DatagridBuilderInterface
         $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), $defaultOptions);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
+    }
+
+    /**
+     * Get pager by pagerType
+     *
+     * @param string $pagerType
+     *
+     * @return \Sonata\AdminBundle\Datagrid\PagerInterface
+     *
+     * @throws \RuntimeException If invalid pager type is set.
+     */
+    protected function getPager($pagerType)
+    {
+        switch ($pagerType) {
+            case Pager::TYPE_DEFAULT:
+                return new Pager();
+
+            case Pager::TYPE_SIMPLE:
+                return new SimplePager();
+
+            default:
+                throw new \RuntimeException(sprintf('Unknown pager type "%s".', $pagerType));
+        }
     }
 }
