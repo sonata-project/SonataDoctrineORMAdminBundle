@@ -119,9 +119,9 @@ class ShowBuilder implements ShowBuilderInterface
         if (!$fieldDescription->getTemplate()) {
 
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
-            
+
             if (!$fieldDescription->getTemplate()) {
-                
+
                 switch($fieldDescription->getMappingType()) {
                     case ClassMetadataInfo::MANY_TO_ONE:
                         $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
@@ -136,7 +136,7 @@ class ShowBuilder implements ShowBuilderInterface
                         $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
                         break;
                 }
-                
+
             }
         }
 
