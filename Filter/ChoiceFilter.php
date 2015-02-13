@@ -11,7 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
@@ -57,22 +56,6 @@ class ChoiceFilter extends Filter
 
             $queryBuilder->setParameter($parameterName, $data['value']);
         }
-    }
-
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
-    {
-        $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'IN',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT IN',
-            ChoiceType::TYPE_EQUAL            => '=',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
     }
 
     /**

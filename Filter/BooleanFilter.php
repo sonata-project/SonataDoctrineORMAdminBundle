@@ -57,7 +57,9 @@ class BooleanFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return array(
+            'field_type'  => 'sonata_type_boolean'
+        );
     }
 
     /**
