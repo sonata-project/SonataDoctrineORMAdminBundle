@@ -62,7 +62,6 @@ abstract class AbstractDateFilter extends Filter
             $queryBuilder->setParameter($startDateParameterName,  $data['value']['start']);
             $queryBuilder->setParameter($endDateParameterName,  $data['value']['end']);
         } else {
-
             if (!$data['value']) {
                 return;
             }
@@ -120,7 +119,7 @@ abstract class AbstractDateFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'input_type' => 'datetime'
+            'input_type' => 'datetime',
         );
     }
 
@@ -144,13 +143,5 @@ abstract class AbstractDateFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel(),
         ));
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getFieldType()
-    {
-        return $this->getOption('field_type', 'sonata_type_datetime_range');
     }
 }
