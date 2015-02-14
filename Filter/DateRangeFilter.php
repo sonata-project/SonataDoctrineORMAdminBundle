@@ -24,4 +24,12 @@ class DateRangeFilter extends AbstractDateFilter
      * @var boolean
      */
     protected $time = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'sonata_type_date_range');
+    }
 }

@@ -26,4 +26,12 @@ class DateTimeFilter extends AbstractDateFilter
      * @var boolean
      */
     protected $range = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'datetime');
+    }
 }
