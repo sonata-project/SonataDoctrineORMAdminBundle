@@ -21,6 +21,10 @@
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_model" />
         </service>
 
+        <service id="sonata.admin.orm.filter.type.model_autocomplete" class="Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_model_autocomplete" />
+        </service>
+
         <service id="sonata.admin.orm.filter.type.string" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_string" />
         </service>
