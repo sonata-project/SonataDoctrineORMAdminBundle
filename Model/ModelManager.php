@@ -47,7 +47,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return \Doctrine\ORM\Mapping\ClassMetadata $class
      */
     public function getMetadata($class)
     {
@@ -184,7 +184,14 @@ class ModelManager implements ModelManagerInterface
             return null;
         }
 
-        $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
+        if (is_string($id)) {
+            $values = array_combine(
+                $this->getIdentifierFieldNames($class),
+                is_string($id) ? explode(self::ID_SEPARATOR, $id) : array($id)
+            );
+        } else {
+            $values = $id;
+        }
 
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
@@ -213,9 +220,10 @@ class ModelManager implements ModelManagerInterface
     public function getEntityManager($class)
     {
         if (is_object($class)) {
-            $class = get_class($class);
+            $class = ClassUtils::getClass($class);
         }
 
+        $class = ltrim($class, '\\');
         if (!isset($this->cache[$class])) {
             $em = $this->registry->getManagerForClass($class);
 
@@ -282,27 +290,29 @@ class ModelManager implements ModelManagerInterface
      */
     public function getIdentifierValues($entity)
     {
-        // Fix code has an impact on performance, so disable it ...
-        //$entityManager = $this->getEntityManager($entity);
-        //if (!$entityManager->getUnitOfWork()->isInIdentityMap($entity)) {
-        //    throw new \RuntimeException('Entities passed to the choice field must be managed');
-        //}
+        $entityManager = $this->getEntityManager($entity);
+        $uow = $entityManager->getUnitOfWork();
 
+        if ($uow->isInIdentityMap($entity)) {
+            return $uow->getEntityIdentifier($entity);
+        }
 
         $class = $this->getMetadata(ClassUtils::getClass($entity));
-
+        $id = $class->getIdentifierValues($entity);
         $identifiers = array();
+        // The following code is based on \Doctrine\ORM\UnitOfWork::flattenIdentifier
+        foreach ($id as $idField => $idValue) {
+            if (isset($class->associationMappings[$idField]) && is_object($idValue)) {
+                /** @var \Doctrine\ORM\Mapping\ClassMetadata $targetClassMetadata */
+                $targetClassMetadata = $entityManager->getClassMetadata(
+                    $class->associationMappings[$idField]['targetEntity']
+                );
 
-        foreach ($class->getIdentifierValues($entity) as $value) {
-            if (!is_object($value)) {
-                $identifiers[] = $value;
-                continue;
-            }
+                $associatedId = $uow->getEntityIdentifier($idValue);
 
-            $class = $this->getMetadata(ClassUtils::getClass($value));
-
-            foreach ($class->getIdentifierValues($value) as $value) {
-                $identifiers[] = $value;
+                $identifiers[$idField] = $associatedId[$targetClassMetadata->identifier[0]];
+            } else {
+                $identifiers[$idField] = $idValue;
             }
         }
 
