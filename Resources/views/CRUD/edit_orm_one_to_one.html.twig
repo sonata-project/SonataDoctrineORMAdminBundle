@@ -47,7 +47,7 @@ file that was distributed with this source code.
 
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list', sonata_admin.field_description.getOption('link_parameters', {})) }}"
                         onclick="return start_field_dialog_form_list_{{ id }}(this);"
-                        class="btn btn-info btn-sm btn-outline sonata-ba-action"
+                        class="btn btn-info btn-sm sonata-ba-action"
                         title="{{ btn_list|trans({}, btn_catalogue) }}"
                         >
                         <i class="fa fa-list"></i>
@@ -58,7 +58,7 @@ file that was distributed with this source code.
                 {% if sonata_admin.edit != 'admin' and sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
                         onclick="return start_field_dialog_form_add_{{ id }}(this);"
-                        class="btn btn-success btn-sm btn-outline sonata-ba-action"
+                        class="btn btn-success btn-sm sonata-ba-action"
                         title="{{ btn_add|trans({}, btn_catalogue) }}"
                         >
                         <i class="fa fa-plus-circle"></i>
@@ -70,7 +70,7 @@ file that was distributed with this source code.
             {% if sonata_admin.edit == 'list' and sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') and btn_delete %}
                 <a  href=""
                     onclick="return remove_selected_element_{{ id }}(this);"
-                    class="btn btn-danger btn-sm btn-outline sonata-ba-action"
+                    class="btn btn-danger btn-sm sonata-ba-action"
                     title="{{ btn_delete|trans({}, btn_catalogue) }}"
                     >
                     <i class="fa fa-minus-circle"></i>

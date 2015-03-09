@@ -11,40 +11,41 @@ file that was distributed with this source code.
 {% extends 'SonataBlockBundle:Block:block_base.html.twig' %}
 
 {% block block %}
-    <div class="sonata-news-block-recent-post panel panel-default">
-        <div class="panel-heading">
-            <h3 class="sonata-news-block-recent-post panel-title"><i
-                        class="fa fa-history"></i> {{ "title_audit_log"|trans({}, 'SonataAdminBundle') }}</h3>
+    <div class="box box-primary">
+        <div class="box-header with-border">
+            <h3 class="box-title">
+                <i class="fa fa-history"></i> {{ "title_audit_log"|trans({}, 'SonataAdminBundle') }}
+            </h3>
         </div>
-        <h3></h3>
 
-
-        <div class="panel-group" id="accordion">
-            {% for revision in revisions %}
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h4 class="panel-title">
-                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index }}">
-                                {{ revision.revision.rev }} - {{ revision.revision.username }}
-                                - {{ revision.revision.timestamp | date }}
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapse{{ loop.index }}" class="panel-collapse collapse {{ loop.first ? "in" : "" }}">
-                        <div class="panel-body">
-                            <ul>
-                                {% for changedEntity in revision.entities %}
-                                    <li>
-                                        {{ changedEntity.entity }} / {{ changedEntity.revisionType }}
-                                        / {{ changedEntity.className }} - {{ changedEntity.id }}
-                                    </li>
-                                {% endfor %}
-                            </ul>
+        <div class="box-body">
+            <div class="panel-group" id="accordion">
+                {% for revision in revisions %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse{{ loop.index }}">
+                                    {{ revision.revision.rev }} - {{ revision.revision.username }}
+                                    - {{ revision.revision.timestamp | date }}
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapse{{ loop.index }}" class="panel-collapse collapse {{ loop.first ? "in" : "" }}">
+                            <div class="panel-body">
+                                <ul>
+                                    {% for changedEntity in revision.entities %}
+                                        <li>
+                                            {{ changedEntity.entity }} / {{ changedEntity.revisionType }}
+                                            / {{ changedEntity.className }} - {{ changedEntity.id.id }}
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </div>
                         </div>
                     </div>
-                </div>
-            {% endfor %}
+                {% endfor %}
+            </div>
         </div>
-
     </div>
+
 {% endblock %}
