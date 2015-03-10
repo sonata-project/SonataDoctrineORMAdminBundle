@@ -84,7 +84,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE ))) {
             $admin->attachAdminClass($fieldDescription);
-    }
+        }
     }
 
     /**

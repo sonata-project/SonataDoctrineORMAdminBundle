@@ -159,7 +159,7 @@ Tweak the TagAdmin class
     use Sonata\AdminBundle\Admin\Admin;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Validator\ErrorElement;
+    use Sonata\CoreBundle\Validator\ErrorElement;
     use Sonata\AdminBundle\Form\FormMapper;
 
     use Tutorial\BlogBundle\Entity\Tag;
@@ -203,7 +203,7 @@ Tweak the TagAdmin class
         }
 
         /**
-         * @param \Sonata\AdminBundle\Validator\ErrorElement $errorElement
+         * @param \Sonata\CoreBundle\Validator\ErrorElement $errorElement
          * @param mixed $object
          * @return void
          */

@@ -44,7 +44,7 @@ Now you can edit the settings array with:
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
-    use Sonata\AdminBundle\Validator\ErrorElement;
+    use Sonata\CoreBundle\Validator\ErrorElement;
 
     class PageAdmin extends Admin
     {
