@@ -434,7 +434,7 @@ class ModelManager implements ModelManagerInterface
     {
         $metadata = $this->getEntityManager($class)->getClassMetadata($class);
 
-        return $metadata->getFieldNames();
+        return array_merge($metadata->getFieldNames(),$metadata->getAssociationNames());
     }
 
     /**
