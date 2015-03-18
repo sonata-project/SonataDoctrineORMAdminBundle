@@ -55,22 +55,21 @@ file that was distributed with this source code.
 
 {% block sonata_type_model_list_widget %}
     <div id="field_container_{{ id }}" class="field-container">
+        <span id="field_widget_{{ id }}" class="field-short-description">
+            {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
+                {% render url('sonata_admin_short_object_information', {
+                    'code':     sonata_admin.field_description.associationadmin.code,
+                    'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
+                    'uniqid':   sonata_admin.field_description.associationadmin.uniqid,
+                    'linkParameters': sonata_admin.field_description.options.link_parameters
+                }) %}
+            {% elseif sonata_admin.field_description.options.placeholder is defined and sonata_admin.field_description.options.placeholder %}
+                <span class="inner-field-short-description">
+                    {{ sonata_admin.field_description.options.placeholder|trans({}, 'SonataAdminBundle') }}
+                </span>
+            {% endif %}
+        </span>
         <span id="field_actions_{{ id }}" class="field-actions">
-            <span id="field_widget_{{ id }}" class="field-short-description">
-                {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
-                    {% render url('sonata_admin_short_object_information', {
-                        'code':     sonata_admin.field_description.associationadmin.code,
-                        'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
-                        'uniqid':   sonata_admin.field_description.associationadmin.uniqid,
-                        'linkParameters': sonata_admin.field_description.options.link_parameters
-                    }) %}
-                {% elseif sonata_admin.field_description.options.placeholder is defined and sonata_admin.field_description.options.placeholder %}
-                    <span class="inner-field-short-description">
-                        {{ sonata_admin.field_description.options.placeholder|trans({}, 'SonataAdminBundle') }}
-                    </span>
-                {% endif %}
-            </span>
-
             <span class="btn-group">
                 {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') and btn_list %}
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
