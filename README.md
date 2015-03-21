@@ -8,7 +8,7 @@ This bundle integrates the SonataAdminBundle with the Doctrine ORM project.
 Documentation
 -------------
 
-The online documentation of the bundle is in http://sonata-project.org/bundles/doctrine-orm-admin
+The online documentation of the bundle is in https://sonata-project.org/bundles/doctrine-orm-admin
 
 **Warning**: documentation files are not rendering correctly in Github (reStructuredText format)
 and some content might be broken or hidden, make sure to read raw files.

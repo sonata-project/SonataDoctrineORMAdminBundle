@@ -8,8 +8,8 @@ Installation
 As such, ``SonataDoctrineORMAdminBundle`` depends on ``SonataAdminBundle`` and will not work without it.
 
 .. note::
-    These installation instructions are meant to be used only as part of SonataAdminBundle's installation process, which is documented `here <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_.
-    
+    These installation instructions are meant to be used only as part of SonataAdminBundle's installation process, which is documented `here <https://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_.
+
 Download the bundle
 -------------------
 
@@ -50,5 +50,5 @@ Next, be sure to enable the bundle in your `AppKernel.php` file:
 
 .. note::
 
-    Don't forget that, as part of `SonataAdminBundle's installation instructions <http://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_,
+    Don't forget that, as part of `SonataAdminBundle's installation instructions <https://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_,
     you need to enable additional bundles on `AppKernel.php`.
