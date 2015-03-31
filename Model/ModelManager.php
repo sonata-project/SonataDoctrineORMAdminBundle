@@ -25,6 +25,7 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\DBAL\DBALException;
 
+use Symfony\Component\DependencyInjection\Container;
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -564,7 +565,7 @@ class ModelManager implements ModelManagerInterface
      */
     protected function camelize($property)
     {
-        return preg_replace(array('/(^|_)+(.)/e', '/\.(.)/e'), array("strtoupper('\\2')", "'_'.strtoupper('\\1')"), $property);
+        return Container::camelize($property);
     }
 
     /**
