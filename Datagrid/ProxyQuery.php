@@ -51,11 +51,11 @@ class ProxyQuery implements ProxyQueryInterface
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilder->getRootAlias() . '.' . $sortBy;
+                $sortBy = $queryBuilder->getRootAlias().'.'.$sortBy;
             }
             $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
         } else {
-            $queryBuilder->resetDQLPart( 'orderBy' );
+            $queryBuilder->resetDQLPart('orderBy');
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
@@ -83,7 +83,7 @@ class ProxyQuery implements ProxyQueryInterface
         // step 3 : retrieve the different subjects id
         $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
         $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT ' . $select);
+        $queryBuilderId->add('select', 'DISTINCT '.$select);
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in select list
         /* Consider
@@ -95,7 +95,7 @@ class ProxyQuery implements ProxyQueryInterface
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilderId->getRootAlias() . '.' . $sortBy;
+                $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
             }
             $sortBy .= ' AS __order_by';
             $queryBuilderId->addSelect($sortBy);
@@ -140,7 +140,7 @@ class ProxyQuery implements ProxyQueryInterface
     public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
         $alias        = $this->entityJoin($parentAssociationMappings);
-        $this->sortBy = $alias . '.' . $fieldMapping['fieldName'];
+        $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
 
         return $this;
     }
@@ -250,8 +250,25 @@ class ProxyQuery implements ProxyQueryInterface
 
         $newAlias = 's';
 
+        $joinedEntities = $this->queryBuilder->getDQLPart('join');
+
         foreach ($associationMappings as $associationMapping) {
-            $newAlias .= '_' . $associationMapping['fieldName'];
+
+             // Do not add left join to already joined entities with custom query
+             foreach ($joinedEntities as $joinExprList) {
+                 foreach ($joinExprList as $joinExpr) {
+                     $newAliasTmp = $joinExpr->getAlias();
+
+                     if (sprintf('%s.%s', $alias, $associationMapping['fieldName']) === $joinExpr->getJoin()) {
+                         $this->entityJoinAliases[] = $newAliasTmp;
+                         $alias = $newAliasTmp;
+
+                         continue 3;
+                     }
+                 }
+             }
+
+            $newAlias .= '_'.$associationMapping['fieldName'];
             if (!in_array($newAlias, $this->entityJoinAliases)) {
                 $this->entityJoinAliases[] = $newAlias;
                 $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
