@@ -38,15 +38,24 @@ class StringFilter extends Filter
         if (!$operator) {
             $operator = 'LIKE';
         }
-
+        
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
-            $queryBuilder->setParameter($parameterName, $data['value']);
-        } else {
-            $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
+        // explode option specifies whether to split the string into individual words for comparison
+        // as opposed to comparing the string as a whole
+        $explode = (bool)$this->getOption('explode',false);
+        $values = $explode ? explode(" ", $data['value']) : array($data['value']);
+        
+        foreach( $values as $value )
+        {
+            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+    
+            if ($data['type'] == ChoiceType::TYPE_EQUAL) {
+                $queryBuilder->setParameter($parameterName, $value);
+            } else {
+                $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $value));
+            }
         }
     }
 
