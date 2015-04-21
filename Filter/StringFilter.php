@@ -47,8 +47,7 @@ class StringFilter extends Filter
         $explode = (bool)$this->getOption('explode',false);
         $values = $explode ? explode(" ", $data['value']) : array($data['value']);
         
-        foreach( $values as $value )
-        {
+        foreach( $values as $value ) {
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
     
             if ($data['type'] == ChoiceType::TYPE_EQUAL) {
