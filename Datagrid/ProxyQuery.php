@@ -77,11 +77,17 @@ class ProxyQuery implements ProxyQueryInterface
         $from  = $queryBuilderId->getDQLPart('from');
         $class = $from[0]->getFrom();
 
-        // step 2 : retrieve the column id
-        $idName = current($queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class)->getIdentifierFieldNames());
-
+       // step 2 : retrieve the column id
+        $metadata = $queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class);
+        $idName = current($metadata->getIdentifierFieldNames());
+        
         // step 3 : retrieve the different subjects id
-        $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+        $select = false;
+        if($metadata->hasAssociation($idName)){
+            $select = sprintf('IDENTITY(%s.%s)', $queryBuilderId->getRootAlias(), $idName);
+        }else{
+            $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+        }
         $queryBuilderId->resetDQLPart('select');
         $queryBuilderId->add('select', 'DISTINCT '.$select);
 
