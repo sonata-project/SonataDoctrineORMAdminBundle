@@ -113,6 +113,10 @@ class FormContractor implements FormContractorInterface
                 throw new \RuntimeException(sprintf('You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One. Maybe you want `sonata_model_list` instead?', $fieldDescription->getName()));
             }
 
+            // set sensitive default value to have a component working fine out of the box
+            $options['btn_add'] = false;
+            $options['delete'] = false;
+
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
 
