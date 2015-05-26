@@ -255,7 +255,7 @@ This code manage the many-to-[one|many] association field popup
 
                         // reload the form element
                         jQuery('#field_widget_{{ id }}').closest('form').ajaxSubmit({
-                            url: '{{ url('sonata_admin_retrieve_form_element', {
+                            url: '{{ path('sonata_admin_retrieve_form_element', {
                                 'elementId': id,
                                 'subclass':  sonata_admin.admin.getActiveSubclassCode(),
                                 'objectId':  sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
@@ -396,7 +396,7 @@ This code manage the many-to-[one|many] association field popup
             jQuery('#field_widget_{{ id }}').html("<span><img src=\"{{ asset('bundles/sonataadmin/ajax-loader.gif') }}\" style=\"vertical-align: middle; margin-right: 10px\"/>{{ 'loading_information'|trans([], 'SonataAdminBundle') }}</span>");
             jQuery.ajax({
                 type: 'GET',
-                url: '{{ url('sonata_admin_short_object_information', {
+                url: '{{ path('sonata_admin_short_object_information', {
                     'objectId': 'OBJECT_ID',
                     'uniqid': associationadmin.uniqid,
                     'code': associationadmin.code,
