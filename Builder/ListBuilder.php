@@ -147,7 +147,7 @@ class ListBuilder implements ListBuilderInterface
             }
         }
 
-        if (in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY])) {
+        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY))) {
             $admin->attachAdminClass($fieldDescription);
         }
     }
