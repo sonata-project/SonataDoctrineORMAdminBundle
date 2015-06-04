@@ -113,6 +113,8 @@ file that was distributed with this source code.
             {{ form_widget(form, {'required':false}) }}
         </span>
 
+        {{ block('sonata_help') }}
+
         <div class="modal fade" id="field_dialog_{{ id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg">
                 <div class="modal-content">
