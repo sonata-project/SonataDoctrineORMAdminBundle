@@ -41,7 +41,8 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => array('1', '2')));
 
-        $this->assertEquals(array('in_alias.field', 'alias.field IN ("1,2")'), $builder->query);
+        $this->assertEquals(array('in_alias.field', 'in_alias.field IN :field_name_0'), $builder->query);
+        $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
