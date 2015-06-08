@@ -18,6 +18,8 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 class ChoiceFilter extends Filter
 {
     /**
+     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
+     *
      * {@inheritdoc}
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -35,11 +37,15 @@ class ChoiceFilter extends Filter
                 return;
             }
 
+            // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
+            $completeField = sprintf('%s.%s', $alias, $field);
+            $parameterName = $this->getNewParameterName($queryBuilder);
             if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn(sprintf('%s.%s', $alias, $field ), $data['value']));
+                $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($completeField, ':'.$parameterName));
             } else {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field ), $data['value']));
+                $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($completeField, ':'.$parameterName));
             }
+            $queryBuilder->setParameter($parameterName, $data['value']);
 
         } else {
 
