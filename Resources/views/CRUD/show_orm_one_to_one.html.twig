@@ -12,8 +12,12 @@ file that was distributed with this source code.
 {% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
 
 {% block field %}
-    {% if field_description.hasAssociationAdmin and field_description.associationadmin.id(value) and field_description.associationadmin.isGranted('EDIT') and field_description.associationadmin.hasRoute('edit') %}
-        <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, value, field_description.options.route.parameters) }}">{{ value|render_relation_element(field_description) }}</a>
+    {% set route_name = field_description.options.route.name %}
+    {% set route_role = route_name | upper %}
+    {% if field_description.hasAssociationAdmin and field_description.associationadmin.id(value) and field_description.associationadmin.isGranted(route_role) and field_description.associationadmin.hasRoute(route_name) %}
+        <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, value, field_description.options.route.parameters) }}">
+            {{ value|render_relation_element(field_description) }}
+        </a>
     {% else %}
         {{ value|render_relation_element(field_description) }}
     {% endif %}
