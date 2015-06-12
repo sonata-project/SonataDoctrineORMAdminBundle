@@ -91,6 +91,11 @@ file that was distributed with this source code.
                 </span>
             {% endif %}
 
+            {# add code for the sortable options #}
+            {% if sonata_admin.field_description.options.sortable is defined %}
+                {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_sortable_script.html.twig '%}
+            {% endif %}
+
             {# include association code #}
             {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_association_script.html.twig' %}
 
