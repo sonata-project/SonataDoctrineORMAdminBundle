@@ -14,7 +14,7 @@ namespace Sonata\DoctrineORMAdminBundle\Builder;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
-use Sonata\AdminBundle\Datagrid\Datagrid;
+use Sonata\DoctrineORMAdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
