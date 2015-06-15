@@ -34,8 +34,8 @@ class FieldDescription extends BaseFieldDescription
 
         $this->associationMapping = $associationMapping;
 
-        $this->type        = $this->type ? : $associationMapping['type'];
-        $this->mappingType = $this->mappingType ? : $associationMapping['type'];
+        $this->type        = $this->type ?: $associationMapping['type'];
+        $this->mappingType = $this->mappingType ?: $associationMapping['type'];
         $this->fieldName   = $associationMapping['fieldName'];
     }
 
@@ -48,7 +48,7 @@ class FieldDescription extends BaseFieldDescription
             return $this->associationMapping['targetEntity'];
         }
 
-        return null;
+        return;
     }
 
     /**
@@ -62,9 +62,9 @@ class FieldDescription extends BaseFieldDescription
 
         $this->fieldMapping = $fieldMapping;
 
-        $this->type        = $this->type ? : $fieldMapping['type'];
-        $this->mappingType = $this->mappingType ? : $fieldMapping['type'];
-        $this->fieldName   = $this->fieldName ? : $fieldMapping['fieldName'];
+        $this->type        = $this->type ?: $fieldMapping['type'];
+        $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
+        $this->fieldName   = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
     /**

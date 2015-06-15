@@ -11,8 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class StringFilter extends Filter
 {
@@ -72,7 +72,7 @@ class StringFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'format'   => '%%%s%%'
+            'format'   => '%%%s%%',
         );
     }
 
@@ -84,7 +84,7 @@ class StringFilter extends Filter
         return array('sonata_type_filter_choice', array(
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
+            'label'         => $this->getLabel(),
         ));
     }
 }

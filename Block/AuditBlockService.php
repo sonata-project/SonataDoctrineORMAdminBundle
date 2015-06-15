@@ -11,21 +11,17 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Block;
 
-use Sonata\BlockBundle\Block\BlockContextInterface;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
-
-use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\CoreBundle\Validator\ErrorElement;
-
-use Sonata\BlockBundle\Model\BlockInterface;
-use Sonata\BlockBundle\Block\BaseBlockService;
-
 use SimpleThings\EntityAudit\AuditReader;
+use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\BlockBundle\Block\BaseBlockService;
+use Sonata\BlockBundle\Block\BlockContextInterface;
+use Sonata\BlockBundle\Model\BlockInterface;
+use Sonata\CoreBundle\Validator\ErrorElement;
+use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolverInterface;
 
 /**
- *
  * @author     Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class AuditBlockService extends BaseBlockService
@@ -54,7 +50,7 @@ class AuditBlockService extends BaseBlockService
         foreach ($this->auditReader->findRevisionHistory($blockContext->getSetting('limit'), 0) as $revision) {
             $revisions[] = array(
                 'revision' => $revision,
-                'entities' => $this->auditReader->findEntitesChangedAtRevision($revision->getRev())
+                'entities' => $this->auditReader->findEntitesChangedAtRevision($revision->getRev()),
             );
         }
 
@@ -78,7 +74,6 @@ class AuditBlockService extends BaseBlockService
      */
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
-
     }
 
     /**
@@ -96,7 +91,7 @@ class AuditBlockService extends BaseBlockService
     {
         $resolver->setDefaults(array(
             'limit'    => 10,
-            'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig'
+            'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig',
         ));
     }
 }

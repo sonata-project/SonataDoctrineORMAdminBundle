@@ -12,23 +12,19 @@
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use Doctrine\Common\Util\ClassUtils;
+use Doctrine\DBAL\DBALException;
 use Doctrine\ORM\EntityManager;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-
-use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Doctrine\ORM\QueryBuilder;
+use Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
-
-use Doctrine\ORM\QueryBuilder;
-use Doctrine\DBAL\DBALException;
-
-use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Bridge\Doctrine\RegistryInterface;
-
-use Exporter\Source\DoctrineORMQuerySourceIterator;
+use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
 class ModelManager implements ModelManagerInterface
 {
@@ -56,17 +52,17 @@ class ModelManager implements ModelManagerInterface
 
     /**
      * Returns the model's metadata holding the fully qualified property, and the last
-     * property name
+     * property name.
      *
      * @param string $baseClass        The base class of the model holding the fully qualified property.
      * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
      *                                 property string)
      *
      * @return array(
-     *     \Doctrine\ORM\Mapping\ClassMetadata $parentMetadata,
-     *     string $lastPropertyName,
-     *     array $parentAssociationMappings
-     * )
+     *                \Doctrine\ORM\Mapping\ClassMetadata $parentMetadata,
+     *                string $lastPropertyName,
+     *                array $parentAssociationMappings
+     *                )
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
@@ -111,7 +107,7 @@ class ModelManager implements ModelManagerInterface
 
         list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
 
-        $fieldDescription = new FieldDescription;
+        $fieldDescription = new FieldDescription();
         $fieldDescription->setName($name);
         $fieldDescription->setOptions($options);
         $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
@@ -181,7 +177,7 @@ class ModelManager implements ModelManagerInterface
     public function find($class, $id)
     {
         if (!isset($id)) {
-            return null;
+            return;
         }
 
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
@@ -328,13 +324,13 @@ class ModelManager implements ModelManagerInterface
 
         // the entities is not managed
         if (!$entity /*|| !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity) // commented for perfomance concern */) {
-            return null;
+            return;
         }
 
         $values = $this->getIdentifierValues($entity);
 
         if (count($values) === 0) {
-            return null;
+            return;
         }
 
         return implode(self::ID_SEPARATOR, $values);
@@ -414,7 +410,7 @@ class ModelManager implements ModelManagerInterface
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
-        $query->select('DISTINCT ' . $query->getRootAlias());
+        $query->select('DISTINCT '.$query->getRootAlias());
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
@@ -447,7 +443,7 @@ class ModelManager implements ModelManagerInterface
             throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
         }
 
-        return new $class;
+        return new $class();
     }
 
     /**
@@ -516,14 +512,11 @@ class ModelManager implements ModelManagerInterface
 
         $reflClass = $metadata->reflClass;
         foreach ($array as $name => $value) {
-
             $reflection_property = false;
             // property or association ?
             if (array_key_exists($name, $metadata->fieldMappings)) {
-
                 $property = $metadata->fieldMappings[$name]['fieldName'];
                 $reflection_property = $metadata->reflFields[$name];
-
             } elseif (array_key_exists($name, $metadata->associationMappings)) {
                 $property = $metadata->associationMappings[$name]['fieldName'];
             } else {
@@ -556,7 +549,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * method taken from PropertyPath
+     * method taken from PropertyPath.
      *
      * @param string $property
      *

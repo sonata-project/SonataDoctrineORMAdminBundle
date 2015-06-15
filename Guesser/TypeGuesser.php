@@ -11,10 +11,10 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Symfony\Component\Form\Guess\Guess;
-use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Symfony\Component\Form\Guess\Guess;
+use Symfony\Component\Form\Guess\TypeGuess;
 
 class TypeGuesser extends AbstractTypeGuesser
 {

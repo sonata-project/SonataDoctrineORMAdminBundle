@@ -66,8 +66,6 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('ASC', $parameters['filter']['_sort_order']);
         $this->assertEquals('field3sortBy', $parameters['filter']['_sort_by']);
 
-
-
         $parameters = $manager->getSortParameters($field3, $datagrid2);
 
         $this->assertEquals('DESC', $parameters['filter']['_sort_order']);

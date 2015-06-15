@@ -11,10 +11,10 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Symfony\Component\Form\Guess\Guess;
-use Symfony\Component\Form\Guess\TypeGuess;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Symfony\Component\Form\Guess\Guess;
+use Symfony\Component\Form\Guess\TypeGuess;
 
 class FilterTypeGuesser extends AbstractTypeGuesser
 {
@@ -51,7 +51,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
                     $options['field_type']    = 'entity';
                     $options['field_options'] = array(
-                        'class' => $mapping['targetEntity']
+                        'class' => $mapping['targetEntity'],
                     );
 
                     $options['field_name']   = $mapping['fieldName'];

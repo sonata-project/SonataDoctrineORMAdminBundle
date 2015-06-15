@@ -11,23 +11,23 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class CallbackFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterClosure()
     {
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter = new CallbackFilter;
+        $filter = new CallbackFilter();
         $filter->initialize('field_name', array(
-            'callback' => function($builder, $alias, $field, $value) {
+            'callback' => function ($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value);
 
                 return true;
-            }
+            },
         ));
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
@@ -39,11 +39,11 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterMethod()
     {
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter = new CallbackFilter;
+        $filter = new CallbackFilter();
         $filter->initialize('field_name', array(
-            'callback' => array($this, 'customCallback')
+            'callback' => array($this, 'customCallback'),
         ));
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
@@ -66,9 +66,9 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testFilterException()
     {
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter = new CallbackFilter;
+        $filter = new CallbackFilter();
         $filter->initialize('field_name', array());
 
         $filter->filter($builder, 'alias', 'field', 'myValue');

@@ -11,17 +11,15 @@
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection;
 
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Definition;
 use Sonata\AdminBundle\DependencyInjection\AbstractSonataAdminExtension;
-
-use Symfony\Component\Config\FileLocator;
 use Symfony\Component\Config\Definition\Processor;
+use Symfony\Component\Config\FileLocator;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
- * SonataAdminBundleExtension
+ * SonataAdminBundleExtension.
  *
  * @author      Thomas Rabaix <thomas.rabaix@sonata-project.org>
  * @author      Michael Williams <michael.williams@funsational.com>
@@ -29,7 +27,6 @@ use Symfony\Component\DependencyInjection\Reference;
 class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 {
     /**
-     *
      * @param array            $configs   An array of configuration settings
      * @param ContainerBuilder $container A ContainerBuilder instance
      */
@@ -41,7 +38,7 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $processor     = new Processor();
         $config        = $processor->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
+        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
 

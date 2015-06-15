@@ -12,8 +12,8 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\QueryBuilder;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class ChoiceFilter extends Filter
 {
@@ -46,9 +46,7 @@ class ChoiceFilter extends Filter
                 $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($completeField, ':'.$parameterName));
             }
             $queryBuilder->setParameter($parameterName, $data['value']);
-
         } else {
-
             if ($data['value'] === '' || $data['value'] === null || $data['value'] === false || $data['value'] === 'all') {
                 return;
             }
@@ -98,7 +96,7 @@ class ChoiceFilter extends Filter
             'operator_type' => 'sonata_type_equal',
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
+            'label'         => $this->getLabel(),
         ));
     }
 }

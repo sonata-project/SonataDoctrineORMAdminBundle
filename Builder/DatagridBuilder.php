@@ -11,18 +11,17 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Datagrid\DatagridInterface;
-use Sonata\AdminBundle\Datagrid\Datagrid;
-use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\AdminBundle\Filter\FilterFactoryInterface;
-
-use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
-use Sonata\AdminBundle\Datagrid\SimplePager;
-use Symfony\Component\Form\FormFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
+use Sonata\AdminBundle\Datagrid\Datagrid;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Sonata\AdminBundle\Datagrid\SimplePager;
+use Sonata\AdminBundle\Filter\FilterFactoryInterface;
+use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
+use Symfony\Component\Form\FormFactory;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -38,7 +37,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param FormFactory            $formFactory
      * @param FilterFactoryInterface $filterFactory
      * @param TypeGuesserInterface   $guesser
-     * @param boolean                $csrfTokenEnabled
+     * @param bool                   $csrfTokenEnabled
      */
     public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
     {
@@ -51,8 +50,6 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     *
-     * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -82,7 +79,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
 
-        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE ))) {
+        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE))) {
             $admin->attachAdminClass($fieldDescription);
         }
     }
@@ -92,8 +89,6 @@ class DatagridBuilder implements DatagridBuilderInterface
      * @param null                                                $type
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
      * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
-     *
-     * @return void
      */
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
@@ -124,10 +119,10 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         if ($type === 'doctrine_orm_model_autocomplete') {
             $fieldDescription->mergeOption('field_options', array(
-                'class' => $fieldDescription->getTargetEntity(),
+                'class'         => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
-                'admin_code' => $admin->getCode(),
-                'context' => 'filter',
+                'admin_code'    => $admin->getCode(),
+                'context'       => 'filter',
             ));
         }
 
@@ -163,7 +158,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * Get pager by pagerType
+     * Get pager by pagerType.
      *
      * @param string $pagerType
      *

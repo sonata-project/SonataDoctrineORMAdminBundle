@@ -11,9 +11,9 @@
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
+use Symfony\Component\DependencyInjection\Definition;
 
 /*
  *
@@ -30,7 +30,6 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
         $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
-
             if (!isset($attributes[0]['manager_type']) || $attributes[0]['manager_type'] != 'orm') {
                 continue;
             }
@@ -65,7 +64,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
         $methodCalls = $definition->getMethodCalls();
 
         foreach ($methodCalls as &$calls) {
-            foreach($calls as &$call) {
+            foreach ($calls as &$call) {
                 if (is_string($call)) {
                     if ($call !== $name) {
                         continue 2;
