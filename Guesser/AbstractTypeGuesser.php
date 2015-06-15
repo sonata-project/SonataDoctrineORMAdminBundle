@@ -11,8 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Doctrine\ORM\Mapping\MappingException;
+use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 
 abstract class AbstractTypeGuesser implements TypeGuesserInterface
@@ -30,7 +30,7 @@ abstract class AbstractTypeGuesser implements TypeGuesserInterface
             return $modelManager->getParentMetadataForProperty($baseClass, $propertyFullName);
         } catch (MappingException $e) {
             // no metadata not found.
-            return null;
+            return;
         }
     }
 }

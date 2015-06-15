@@ -11,18 +11,18 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 
 class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterEmpty()
     {
-        $filter = new ChoiceFilter;
+        $filter = new ChoiceFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'all');
@@ -34,10 +34,10 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterArray()
     {
-        $filter = new ChoiceFilter;
+        $filter = new ChoiceFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => array('1', '2')));
 
@@ -48,10 +48,10 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterScalar()
     {
-        $filter = new ChoiceFilter;
+        $filter = new ChoiceFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => '1'));
 
@@ -62,10 +62,10 @@ class ChoiceFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterZero()
     {
-        $filter = new ChoiceFilter;
+        $filter = new ChoiceFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => ChoiceType::TYPE_CONTAINS, 'value' => 0));
 

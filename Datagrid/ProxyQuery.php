@@ -1,4 +1,5 @@
 <?php
+
 /*
  * This file is part of the symfony package.
  * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
@@ -10,12 +11,12 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
-use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
- * This class try to unify the query usage with Doctrine
+ * This class try to unify the query usage with Doctrine.
  */
 class ProxyQuery implements ProxyQueryInterface
 {
@@ -63,7 +64,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     /**
      * This method alters the query to return a clean set of object with a working
-     * set of Object
+     * set of Object.
      *
      * @param \Doctrine\ORM\QueryBuilder $queryBuilder
      *
@@ -94,7 +95,7 @@ class ProxyQuery implements ProxyQueryInterface
             if ($metadata->hasAssociation($idName)) {
                 $idSelect = sprintf('IDENTITY(%s) as %s', $idSelect, $idName);
             }
-            $idxSelect .= ($idxSelect !== '' ? ', ' : '') . $idSelect;
+            $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
         }
         $queryBuilderId->resetDQLPart('select');
         $queryBuilderId->add('select', 'DISTINCT '.$idxSelect);

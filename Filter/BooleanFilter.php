@@ -41,7 +41,6 @@ class BooleanFilter extends Filter
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-
             if (!in_array($data['value'], array(BooleanType::TYPE_NO, BooleanType::TYPE_YES))) {
                 return;
             }
@@ -66,11 +65,11 @@ class BooleanFilter extends Filter
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'operator_type' => 'hidden',
+            'field_type'       => $this->getFieldType(),
+            'field_options'    => $this->getFieldOptions(),
+            'operator_type'    => 'hidden',
             'operator_options' => array(),
-            'label'         => $this->getLabel()
+            'label'            => $this->getLabel(),
         ));
     }
 }

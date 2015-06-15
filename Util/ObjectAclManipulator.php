@@ -11,14 +11,13 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Util;
 
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
+use Sonata\AdminBundle\Security\Handler\AclSecurityHandlerInterface;
+use Sonata\AdminBundle\Util\ObjectAclManipulator as BaseObjectAclManipulator;
+use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
-use Symfony\Component\Console\Output\OutputInterface;
-
-use Sonata\AdminBundle\Security\Handler\AclSecurityHandlerInterface;
-use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Util\ObjectAclManipulator as BaseObjectAclManipulator;
 
 class ObjectAclManipulator extends BaseObjectAclManipulator
 {
@@ -57,7 +56,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 // detach from Doctrine, so that it can be Garbage-Collected immediately
                 $em->detach($row[0]);
 
-                $count++;
+                ++$count;
 
                 if (($count % $batchSize) == 0) {
                     list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);

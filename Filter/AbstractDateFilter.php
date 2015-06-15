@@ -2,21 +2,23 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Form\Type\Filter\DateType;
-use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Form\Type\Filter\DateType;
 
 abstract class AbstractDateFilter extends Filter
 {
     /**
-     * Flag indicating that filter will have range
-     * @var boolean
+     * Flag indicating that filter will have range.
+     *
+     * @var bool
      */
     protected $range = false;
 
     /**
-     * Flag indicating that filter will filter by datetime instead by date
-     * @var boolean
+     * Flag indicating that filter will filter by datetime instead by date.
+     *
+     * @var bool
      */
     protected $time = false;
 
@@ -90,9 +92,9 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Resolves DataType:: constants to SQL operators
+     * Resolves DataType:: constants to SQL operators.
      *
-     * @param integer $type
+     * @param int $type
      *
      * @return string
      */

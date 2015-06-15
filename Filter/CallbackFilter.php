@@ -41,10 +41,10 @@ class CallbackFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'callback'    => null,
-            'field_type'  => 'text',
-            'operator_type' => 'hidden',
-            'operator_options' => array()
+            'callback'         => null,
+            'field_type'       => 'text',
+            'operator_type'    => 'hidden',
+            'operator_options' => array(),
         );
     }
 
@@ -54,11 +54,11 @@ class CallbackFilter extends Filter
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
-            'field_type'    => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'operator_type' => $this->getOption('operator_type'),
+            'field_type'       => $this->getFieldType(),
+            'field_options'    => $this->getFieldOptions(),
+            'operator_type'    => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
-            'label'         => $this->getLabel()
+            'label'            => $this->getLabel(),
         ));
     }
 }

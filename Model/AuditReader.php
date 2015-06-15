@@ -11,8 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
-use Sonata\AdminBundle\Model\AuditReaderInterface;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
+use Sonata\AdminBundle\Model\AuditReaderInterface;
 
 class AuditReader implements AuditReaderInterface
 {
@@ -61,7 +61,8 @@ class AuditReader implements AuditReaderInterface
     /**
      * {@inheritdoc}
      */
-    public function diff($className, $id, $oldRevision, $newRevision){
+    public function diff($className, $id, $oldRevision, $newRevision)
+    {
         return $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
     }
 }

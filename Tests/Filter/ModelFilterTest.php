@@ -11,15 +11,16 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 
 class ModelFilterTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param  array                                               $options
+     * @param array $options
+     *
      * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
      */
     public function getFieldDescription(array $options)
@@ -33,10 +34,10 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterEmpty()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', array());
@@ -47,14 +48,14 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterArray()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array(
-            'type' => EqualType::TYPE_IS_EQUAL,
-            'value' => array('1', '2')
+            'type'  => EqualType::TYPE_IS_EQUAL,
+            'value' => array('1', '2'),
         ));
 
         // the alias is now computer by the entityJoin method
@@ -64,10 +65,10 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterScalar()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 2));
 
@@ -81,10 +82,10 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAssociationWithInvalidMapping()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array('mapping_type' => 'foo'));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->apply($builder, array('value' => 'asd'));
     }
@@ -94,10 +95,10 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
      */
     public function testAssociationWithValidMappingAndEmptyFieldName()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array('mapping_type' => ClassMetadataInfo::ONE_TO_ONE));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->apply($builder, array('value' => 'asd'));
         $this->assertEquals(true, $filter->isActive());
@@ -105,16 +106,16 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociationWithValidMapping()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array(
-            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
-            'field_name' => 'field_name',
+            'mapping_type'        => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name'          => 'field_name',
             'association_mapping' => array(
-                'fieldName' => 'association_mapping'
-            )
+                'fieldName' => 'association_mapping',
+            ),
         ));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
@@ -124,24 +125,24 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociationWithValidParentAssociationMappings()
     {
-        $filter = new ModelFilter;
+        $filter = new ModelFilter();
         $filter->initialize('field_name', array(
-            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
-            'field_name' => 'field_name',
+            'mapping_type'                => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name'                  => 'field_name',
             'parent_association_mappings' => array(
                 array(
-                    'fieldName' => 'association_mapping'
+                    'fieldName' => 'association_mapping',
                 ),
                 array(
-                    'fieldName' => 'sub_association_mapping'
+                    'fieldName' => 'sub_association_mapping',
                 ),
             ),
             'association_mapping' => array(
-                'fieldName' => 'sub_sub_association_mapping'
-            )
+                'fieldName' => 'sub_sub_association_mapping',
+            ),
         ));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
@@ -149,7 +150,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
             'o.association_mapping',
             's_association_mapping.sub_association_mapping',
             's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
-            's_association_mapping_sub_association_mapping_sub_sub_association_mapping = :field_name_0'
+            's_association_mapping_sub_association_mapping_sub_sub_association_mapping = :field_name_0',
         ), $builder->query);
         $this->assertEquals(true, $filter->isActive());
     }

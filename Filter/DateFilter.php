@@ -14,16 +14,16 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 class DateFilter extends AbstractDateFilter
 {
     /**
-     * This filter has no range
+     * This filter has no range.
      *
-     * @var boolean
+     * @var bool
      */
     protected $range = false;
 
     /**
-     * This filter does not allow filtering by time
+     * This filter does not allow filtering by time.
      *
-     * @var boolean
+     * @var bool
      */
     protected $time = false;
 

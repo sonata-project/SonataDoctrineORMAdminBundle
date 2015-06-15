@@ -11,18 +11,18 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 
 class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterEmpty()
     {
-        $filter = new BooleanFilter;
+        $filter = new BooleanFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
@@ -38,10 +38,10 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterNo()
     {
-        $filter = new BooleanFilter;
+        $filter = new BooleanFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => BooleanType::TYPE_NO));
 
@@ -52,10 +52,10 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterYes()
     {
-        $filter = new BooleanFilter;
+        $filter = new BooleanFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => BooleanType::TYPE_YES));
 
@@ -66,10 +66,10 @@ class BooleanFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterArray()
     {
-        $filter = new BooleanFilter;
+        $filter = new BooleanFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => array(BooleanType::TYPE_NO)));
 
