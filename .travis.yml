@@ -1,7 +1,5 @@
 language: php
 
-cache: vendor
-
 php:
   - 5.3
   - 5.4
@@ -10,10 +8,22 @@ php:
   - 7.0
   - hhvm
 
+sudo: false
+
+cache:
+  directories:
+    - $HOME/.composer/cache
+    - $HOME/.cache/pip
+    - vendor
+
+env:
+  global:
+    - SYMFONY_DEPRECATIONS_HELPER=weak
+
 matrix:
   fast_finish: true
   include:
-    - php: 5.3.3
+    - php: 5.3
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: 5.6
       env: SYMFONY_VERSION=2.3.*
@@ -24,19 +34,24 @@ matrix:
     - php: 5.6
       env: SYMFONY_VERSION=2.8.*@dev
     - php: 5.6
-      env: SYMFONY_VERSION="3.0.x-dev as 2"
+      env: SYMFONY_VERSION="3.0.x-dev as 2.8"
   allow_failures:
     - php: 7.0
     - php: hhvm
     - env: SYMFONY_VERSION=2.8.*@dev
-    - env: SYMFONY_VERSION="3.0.x-dev as 2"
+    - env: SYMFONY_VERSION="3.0.x-dev as 2.8"
 
 before_script:
+  - mkdir -p ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d && echo "memory_limit=-1" >> ~/.phpenv/versions/$(phpenv version-name)/etc/conf.d/travis.ini
+  - composer selfupdate
+  - composer config -q github-oauth.github.com $GITHUB_OAUTH_TOKEN
+  - if [ "$SYMFONY_VERSION" = "2.8.*@dev" ] || [ "$SYMFONY_VERSION" = "3.0.x-dev as 2.8" ]; then SYMFONY_DEPRECATIONS_HELPER=strict; fi;
   - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
-  - composer update --prefer-source --no-interaction $COMPOSER_FLAGS
-  - sudo pip install -r Resources/doc/requirements.txt
+  - travis_wait composer update --prefer-dist --no-interaction $COMPOSER_FLAGS
+  - export PATH=$HOME/.local/bin:$PATH
+  - pip install -r Resources/doc/requirements.txt --user `whoami`
 
 script: make test
 
 notifications:
-    webhooks: https://sonata-project.org/bundles/doctrine-orm-admin/master/travis
+  webhooks: https://sonata-project.org/bundles/doctrine-orm-admin/master/travis
