@@ -34,7 +34,7 @@ First, you need to create an Admin/PostAdmin.php file
          *
          * @return void
          */
-        protected function configureShowField(ShowMapper $showMapper)
+        protected function configureShowFields(ShowMapper $showMapper)
         {
             $showMapper
                 ->add('enabled')
