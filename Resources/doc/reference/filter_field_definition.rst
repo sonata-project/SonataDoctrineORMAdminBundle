@@ -255,3 +255,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
             return true;
         }
     }
+
+.. note::
+
+    If you add a "groupBy" clause to your query, you will have incompatibility issue with the Pager. To prevent this, the easier way is to switch to the alternative "simple pager". See instruction at https://sonata-project.org/bundles/admin/master/doc/cookbook/recipe_improve_performance_large_datasets.html
