@@ -97,8 +97,12 @@ class ProxyQuery implements ProxyQueryInterface
             }
             $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
         }
+
+        $needsDistinct = (count($selects) > 1) ? true : false;
+        $distinct = ($needsDistinct === true) ? 'DISTINCT ' : '';
+
         $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT '.$idxSelect);
+        $queryBuilderId->add('select', $distinct.$idxSelect);
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
         /* Consider
@@ -107,7 +111,7 @@ class ProxyQuery implements ProxyQueryInterface
         values.  Which one will you use to sort that x-value in the output?
         */
         // todo : check how doctrine behave, potential SQL injection here ...
-        if ($this->getSortBy()) {
+        if ($needsDistinct === true && $this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
                 $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
