@@ -22,7 +22,7 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 class ObjectAclManipulator extends BaseObjectAclManipulator
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function batchConfigureAcls(OutputInterface $output, AdminInterface $admin, UserSecurityIdentity $securityIdentity = null)
     {

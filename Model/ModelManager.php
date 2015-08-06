@@ -337,7 +337,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      *
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.

@@ -22,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
 class AddTemplatesCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
