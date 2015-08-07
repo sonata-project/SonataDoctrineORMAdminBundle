@@ -84,9 +84,26 @@ abstract class AbstractDateFilter extends Filter
                 $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
             } else {
                 $parameterName = $this->getNewParameterName($queryBuilder);
+				
+				if($operator === '=') {
+					
+					$this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
+					$queryBuilder->setParameter($parameterName, $data['value']);
 
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
+					$end = clone $data['value'];
+					$endDateParameterName = $this->getNewParameterName($queryBuilder);
+					$this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
+					if ($this->getOption('input_type') == 'timestamp') {
+						$end = strtotime('+1 day', $end);
+					} else {
+						$end->add(new \DateInterval('P1D'));
+					}
+
+					$queryBuilder->setParameter($endDateParameterName, $end);
+				} else {
+					$this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+					$queryBuilder->setParameter($parameterName, $data['value']);
+				}
             }
         }
     }
