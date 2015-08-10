@@ -14,14 +14,24 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 class DateRangeFilter extends AbstractDateFilter
 {
     /**
-     * This is a range filter
-     * @var boolean
+     * This is a range filter.
+     *
+     * @var bool
      */
     protected $range = true;
 
     /**
-     * This filter has time
-     * @var boolean
+     * This filter has time.
+     *
+     * @var bool
      */
     protected $time = false;
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getFieldType()
+    {
+        return $this->getOption('field_type', 'sonata_type_date_range');
+    }
 }

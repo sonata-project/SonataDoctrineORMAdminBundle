@@ -43,7 +43,11 @@ file that was distributed with this source code.
 
                                                     {% set dummy = nested_group_field.setrendered %}
                                                 {% else %}
-                                                    {{ form_widget(nested_field) }}
+                                                    {% if field_name == '_delete' %}
+                                                        {{ form_widget(nested_field, {'label_render': false}) }}
+                                                    {% else %}
+                                                        {{ form_widget(nested_field) }}
+                                                    {% endif %}
                                                 {% endif %}
                                                 {% if nested_field.vars.errors|length > 0 %}
                                                     <div class="help-inline sonata-ba-field-error-messages">
@@ -115,10 +119,10 @@ file that was distributed with this source code.
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
                         onclick="return start_field_retrieve_{{ id }}(this);"
-                        class="btn sonata-ba-action"
+                        class="btn btn-success btn-sm sonata-ba-action"
                         title="{{ btn_add|trans({}, btn_catalogue) }}"
                         >
-                        <i class="icon-plus"></i>
+                        <i class="fa fa-plus-circle"></i>
                         {{ btn_add|trans({}, btn_catalogue) }}
                     </a>
                 </span>
@@ -130,7 +134,7 @@ file that was distributed with this source code.
                     jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody').sortable({
                         axis: 'y',
                         opacity: 0.6,
-                        items: 'tr',
+                        items: '> tr',
                         stop: apply_position_value_{{ id }}
                     });
 
@@ -168,18 +172,16 @@ file that was distributed with this source code.
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
                         onclick="return start_field_dialog_form_add_{{ id }}(this);"
-                        class="btn sonata-ba-action"
+                        class="btn btn-success btn-sm sonata-ba-action"
                         title="{{ btn_add|trans({}, btn_catalogue) }}"
                         >
-                        <i class="icon-plus"></i>
+                        <i class="fa fa-plus-circle"></i>
                         {{ btn_add|trans({}, btn_catalogue) }}
                     </a>
                 {% endif %}
             </span>
 
-            <div style="display: none" id="field_dialog_{{ id }}">
-
-            </div>
+            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
 
             {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
         {% endif %}

@@ -11,13 +11,12 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 
 class ShowBuilder implements ShowBuilderInterface
 {
@@ -42,7 +41,7 @@ class ShowBuilder implements ShowBuilderInterface
      */
     public function getBaseList(array $options = array())
     {
-        return new FieldDescriptionCollection;
+        return new FieldDescriptionCollection();
     }
 
     /**
@@ -76,19 +75,17 @@ class ShowBuilder implements ShowBuilderInterface
     private function getTemplate($type)
     {
         if (!isset($this->templates[$type])) {
-            return null;
+            return;
         }
 
         return $this->templates[$type];
     }
 
     /**
-     * The method defines the correct default settings for the provided FieldDescription
+     * The method defines the correct default settings for the provided FieldDescription.
      *
      * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
      * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     *
-     * @return void
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -117,40 +114,33 @@ class ShowBuilder implements ShowBuilderInterface
         $fieldDescription->setOption('label', $fieldDescription->getOption('label', $fieldDescription->getName()));
 
         if (!$fieldDescription->getTemplate()) {
-
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
 
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_ONE) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_MANY) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig');
-            }
-
-            if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_MANY) {
-                $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
+            if (!$fieldDescription->getTemplate()) {
+                switch ($fieldDescription->getMappingType()) {
+                    case ClassMetadataInfo::MANY_TO_ONE:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
+                        break;
+                    case ClassMetadataInfo::ONE_TO_ONE:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig');
+                        break;
+                    case ClassMetadataInfo::ONE_TO_MANY:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig');
+                        break;
+                    case ClassMetadataInfo::MANY_TO_MANY:
+                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
+                        break;
+                }
             }
         }
 
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_ONE) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_ONE) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::ONE_TO_MANY) {
-            $admin->attachAdminClass($fieldDescription);
-        }
-
-        if ($fieldDescription->getMappingType() == ClassMetadataInfo::MANY_TO_MANY) {
-            $admin->attachAdminClass($fieldDescription);
+        switch ($fieldDescription->getMappingType()) {
+            case ClassMetadataInfo::MANY_TO_ONE:
+            case ClassMetadataInfo::ONE_TO_ONE:
+            case ClassMetadataInfo::ONE_TO_MANY:
+            case ClassMetadataInfo::MANY_TO_MANY:
+                $admin->attachAdminClass($fieldDescription);
+                break;
         }
     }
 }

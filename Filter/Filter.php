@@ -11,8 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 
 abstract class Filter extends BaseFilter
 {
@@ -24,7 +24,7 @@ abstract class Filter extends BaseFilter
     public function apply($queryBuilder, $value)
     {
         $this->value = $value;
-        if(is_array($value) && array_key_exists("value", $value)) {
+        if (is_array($value) && array_key_exists('value', $value)) {
             list($alias, $field) = $this->association($queryBuilder, $value);
 
             $this->filter($queryBuilder, $alias, $field, $value);
@@ -66,7 +66,7 @@ abstract class Filter extends BaseFilter
     {
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.
-        return str_replace('.', '_', $this->getName()) . '_' . $queryBuilder->getUniqueParameterId();
+        return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
     }
 
     /**

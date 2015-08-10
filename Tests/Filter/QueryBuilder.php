@@ -11,8 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\Filter;
-
 class QueryBuilder
 {
     public $parameters = array();
@@ -45,8 +43,9 @@ class QueryBuilder
     }
 
     /**
-     * @param  string $name
-     * @param  string $value
+     * @param string $name
+     * @param string $value
+     *
      * @return string
      */
     public function in($name, $value)
@@ -58,6 +57,11 @@ class QueryBuilder
         }
 
         return sprintf('%s IN %s', 'in_'.$name, $value);
+    }
+
+    public function getDQLPart($queryPart)
+    {
+        return array();
     }
 
     /**

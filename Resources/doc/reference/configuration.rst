@@ -1,10 +1,14 @@
+.. index::
+    double: Reference; Configuration
+    single: Options
+
 Configuration
 =============
 
-The configuration section is only about the ``SonataDoctrineORMAdminBundle`` for more information about the
-global configuration of the ``SonataAdminBundle`` please refer to the dedicated documentation.
+The configuration section is only about the ``SonataDoctrineORMAdminBundle``.
+For more information about the global configuration of the ``SonataAdminBundle``, please refer to the dedicated documentation.
 
-Full Configuration Options
+Full configuration options
 ==========================
 
 .. code-block:: yaml
@@ -12,6 +16,9 @@ Full Configuration Options
     sonata_doctrine_orm_admin:
         # default value is null, so doctrine uses the value defined in the configuration
         entity_manager: ~
+
+        audit:
+            force: true
 
         templates:
             form:

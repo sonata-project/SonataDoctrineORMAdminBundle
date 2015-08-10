@@ -11,9 +11,9 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 class ClassFilter extends Filter
 {
@@ -78,7 +78,7 @@ class ClassFilter extends Filter
     public function getFieldOptions()
     {
         return $this->getOption('choices', array(
-            'required' => false,
+            'required'     => false,
             'choice_list'  => new ChoiceList(
                 \array_values($this->getOption('sub_classes')),
                 \array_keys($this->getOption('sub_classes'))
@@ -95,7 +95,7 @@ class ClassFilter extends Filter
             'operator_type' => 'sonata_type_equal',
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel()
+            'label'         => $this->getLabel(),
         ));
     }
 }

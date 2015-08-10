@@ -15,10 +15,9 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testOptions()
     {
-        $field = new FieldDescription;
+        $field = new FieldDescription();
         $field->setOptions(array(
             'template' => 'foo',
             'type'     => 'bar',
@@ -54,26 +53,25 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
             $field->mergeOption('integer', array());
             $this->fail('no exception raised !!');
         } catch (\RuntimeException $e) {
-
         }
 
         $field->mergeOptions(array('final' => 'test'));
 
-        $expected = array (
-            'misc' => 'foobar',
-            'array' => array (
+        $expected = array(
+            'misc'  => 'foobar',
+            'array' => array(
                 'key1' => 'key_1',
                 'key2' => 'key_2',
-                'key3' => 'key_3'
+                'key3' => 'key_3',
             ),
-            'non_existant' => array (
+            'non_existant' => array(
                 'key1' => 'key_1',
                 'key2' => 'key_2',
             ),
-            'integer' => 1,
-            'final' => 'test',
-            'placeholder' => 'short_object_description_placeholder',
-            'link_parameters' => array()
+            'integer'         => 1,
+            'final'           => 'test',
+            'placeholder'     => 'short_object_description_placeholder',
+            'link_parameters' => array(),
         );
 
         $this->assertEquals($expected, $field->getOptions());
@@ -81,10 +79,10 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testAssociationMapping()
     {
-        $field = new FieldDescription;
+        $field = new FieldDescription();
         $field->setAssociationMapping(array(
-            'type' => 'integer',
-            'fieldName' => 'position'
+            'type'      => 'integer',
+            'fieldName' => 'position',
         ));
 
         $this->assertEquals('integer', $field->getType());
@@ -93,8 +91,8 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
         // cannot overwrite defined definition
         $field->setAssociationMapping(array(
-            'type' => 'overwrite?',
-            'fieldName' => 'overwritten'
+            'type'      => 'overwrite?',
+            'fieldName' => 'overwritten',
         ));
 
         $this->assertEquals('integer', $field->getType());
@@ -222,7 +220,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $assocationMapping = array(
             'type'      => 'integer',
-            'fieldName' => 'position'
+            'fieldName' => 'position',
         );
 
         $field = new FieldDescription();
@@ -253,7 +251,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldMapping = array(
             'type'         => 'integer',
-            'fieldName'    => 'position'
+            'fieldName'    => 'position',
         );
 
         $field = new FieldDescription();
@@ -266,7 +264,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldMapping = array(
             'type'         => 'integer',
-            'fieldName'    => 'position'
+            'fieldName'    => 'position',
         );
 
         $field = new FieldDescription();
@@ -279,7 +277,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
     {
         $fieldMapping = array(
             'type'         => 'integer',
-            'fieldName'    => 'position'
+            'fieldName'    => 'position',
         );
 
         $field = new FieldDescription();
@@ -293,7 +291,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $assocationMapping = array(
             'type'         => 'integer',
             'fieldName'    => 'position',
-            'targetEntity' => 'someValue'
+            'targetEntity' => 'someValue',
         );
 
         $field = new FieldDescription();
@@ -310,7 +308,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $fieldMapping = array(
             'type'      => 'integer',
             'fieldName' => 'position',
-            'id'        => 'someId'
+            'id'        => 'someId',
         );
 
         $field = new FieldDescription();
@@ -324,7 +322,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $fieldMapping = array(
             'type'      => 'integer',
             'fieldName' => 'position',
-            'id'        => 'someId'
+            'id'        => 'someId',
         );
 
         $field = new FieldDescription();

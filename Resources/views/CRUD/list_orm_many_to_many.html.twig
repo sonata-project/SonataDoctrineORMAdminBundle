@@ -12,9 +12,11 @@ file that was distributed with this source code.
 {% extends admin.getTemplate('base_list_field') %}
 
 {% block field %}
-    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute('edit') %}
-        {% for element in value%}
-            {%- if field_description.associationadmin.isGranted('edit', value) -%}
+    {% set route_name = field_description.options.route.name %}
+    {% set route_role = route_name | upper %}
+    {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute(route_name) %}
+        {% for element in value %}
+            {%- if field_description.associationadmin.isGranted(route_role, value) -%}
                 {{ block('relation_link') }}
             {%- else -%}
                 {{ block('relation_value') }}
@@ -29,7 +31,9 @@ file that was distributed with this source code.
 {% endblock %}
 
 {%- block relation_link -%}
-    <a href="{{ field_description.associationadmin.generateObjectUrl(field_description.options.route.name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a>
+    <a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">
+        {{ element|render_relation_element(field_description) }}
+    </a>
 {%- endblock -%}
 
 {%- block relation_value -%}

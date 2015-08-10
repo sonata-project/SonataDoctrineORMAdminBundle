@@ -1,15 +1,17 @@
+.. index::
+    double: Tutorial; Controller
+    single: CRUD
+
 Defining the CRUD controller
 ============================
 
-A crud controller class is just an empty class with no methods. However, you can
-add new actions or overwrite the default CRUD actions to suit your application.
+A `CRUD controller` class is just an empty class with no methods. However, you can add new actions or overwrite the default CRUD actions to suit your application.
 
 .. note::
 
-    The controller declaration is optional, if none is defined, then the ``AdminBundle`` will use
-    the ``CRUDController``.
+    The controller declaration is optional, if none is defined, then the ``AdminBundle`` will use the ``CRUDController``.
 
-Just create 3 files inside the Controller directory
+Just create 3 files inside the Controller directory:
 
 CommentAdminController
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -17,6 +19,7 @@ CommentAdminController
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Controller/CommentAdminController.php
 
     namespace Tutorial\BlogBundle\Controller;
@@ -34,7 +37,9 @@ PostAdminController
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Controller/PostAdminController.php
+
     namespace Tutorial\BlogBundle\Controller;
 
     use Sonata\AdminBundle\Controller\CRUDController as Controller;
@@ -50,7 +55,9 @@ TagAdminController
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Controller/TagAdminController.php
+
     namespace Tutorial\BlogBundle\Controller;
 
     use Sonata\AdminBundle\Controller\CRUDController as Controller;
@@ -60,7 +67,6 @@ TagAdminController
 
     }
 
-When the controller class is instantiated, the admin class is attached to the
-controller.
+When the controller class is instantiated, the admin class is attached to the controller.
 
-Let's create the admin classes ...
+Now, let's create the admin classes.

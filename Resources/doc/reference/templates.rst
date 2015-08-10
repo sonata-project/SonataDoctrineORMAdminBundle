@@ -1,7 +1,10 @@
+.. index::
+    double: Reference; Templates
+
 Templates
 =========
 
-You can customize the global layout by tweaking the ``SonataAdminBundle`` configuration.
+You can customize the global layout by tweaking the ``SonataAdminBundle`` configuration:
 
 .. code-block:: yaml
 
@@ -17,7 +20,7 @@ You can customize the global layout by tweaking the ``SonataAdminBundle`` config
             edit:    SonataAdminBundle:CRUD:edit.html.twig
 
 
-You can also configure the templates used by the Form Framework while rendering the widget
+You can also configure the templates used by the `Form Framework` while rendering the widget:
 
 .. code-block:: yaml
 
@@ -27,7 +30,7 @@ You can also configure the templates used by the Form Framework while rendering 
             filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
 
 
-You can also customize field types by adding types in the ``config.yml`` file. The default values are :
+You can also customize field types by adding types in the ``config.yml`` file. The default values are:
 
 .. code-block:: yaml
 
@@ -65,5 +68,4 @@ You can also customize field types by adding types in the ``config.yml`` file. T
 
 .. note::
 
-    By default, if the ``SonataIntlBundle`` classes are available, then the numeric and date fields will be
-    localized with the current user locale.
+    By default, if the ``SonataIntlBundle`` classes are available, then the numeric and date fields will be localized with the current user locale.

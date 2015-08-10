@@ -11,18 +11,18 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 
 class NumberFilterTest extends \PHPUnit_Framework_TestCase
 {
     public function testFilterEmpty()
     {
-        $filter = new NumberFilter;
+        $filter = new NumberFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
@@ -33,10 +33,10 @@ class NumberFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilterInvalidOperator()
     {
-        $filter = new NumberFilter;
+        $filter = new NumberFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => 'foo'));
 
@@ -46,10 +46,10 @@ class NumberFilterTest extends \PHPUnit_Framework_TestCase
 
     public function testFilter()
     {
-        $filter = new NumberFilter;
+        $filter = new NumberFilter();
         $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
 
-        $builder = new ProxyQuery(new QueryBuilder);
+        $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_EQUAL, 'value' => 42));
         $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_GREATER_EQUAL, 'value' => 42));

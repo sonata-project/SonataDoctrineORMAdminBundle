@@ -11,9 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Definition;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /*
  *
@@ -22,7 +21,7 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 class AddAuditEntityCompilerPass implements CompilerPassInterface
 {
     /**
-     * {@inheritDoc}
+     * {@inheritdoc}
      */
     public function process(ContainerBuilder $container)
     {
@@ -31,14 +30,18 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         }
 
         $auditedEntities = $container->getParameter('simplethings.entityaudit.audited_entities');
+        $force = $container->getParameter('sonata_doctrine_orm_admin.audit.force');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
-
             if ($attributes[0]['manager_type'] != 'orm') {
                 continue;
             }
 
-            if (isset($attributes[0]['audit']) && $attributes[0]['audit'] == false) {
+            if (true === $force && isset($attributes[0]['audit']) && false === $attributes[0]['audit']) {
+                continue;
+            }
+
+            if (false === $force && (!isset($attributes[0]['audit']) || false === $attributes[0]['audit'])) {
                 continue;
             }
 

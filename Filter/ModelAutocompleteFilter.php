@@ -12,11 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
 
-class ModelFilter extends Filter
+class ModelAutocompleteFilter extends Filter
 {
     /**
      * {@inheritdoc}
@@ -94,17 +93,6 @@ class ModelFilter extends Filter
      */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
-        $types = array(
-            ClassMetadataInfo::ONE_TO_ONE,
-            ClassMetadataInfo::ONE_TO_MANY,
-            ClassMetadataInfo::MANY_TO_MANY,
-            ClassMetadataInfo::MANY_TO_ONE,
-        );
-
-        if (!in_array($this->getOption('mapping_type'), $types)) {
-            throw new \RunTimeException('Invalid mapping type');
-        }
-
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $queryBuilder->entityJoin($associationMappings);
@@ -118,9 +106,8 @@ class ModelFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'mapping_type'     => false,
             'field_name'       => false,
-            'field_type'       => 'entity',
+            'field_type'       => 'sonata_type_model_autocomplete',
             'field_options'    => array(),
             'operator_type'    => 'sonata_type_equal',
             'operator_options' => array(),

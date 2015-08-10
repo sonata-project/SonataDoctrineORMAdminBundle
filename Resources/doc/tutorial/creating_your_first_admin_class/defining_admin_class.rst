@@ -1,20 +1,25 @@
+.. index::
+    double: Tutorial; Admin Class
+
 Defining admin class
 ====================
 
-The admin class contains all the information required to generate the CRUD
-interface. Let's create the Post Admin class.
+The admin class contains all the information required to generate the CRUD interface.
+Let's create the Post Admin class.
 
 PostAdmin
 ---------
 
-By convention, Admin files are located in an Admin namespace.
+By convention, `Admin` files are located in an `Admin` namespace.
 
-First, you need to create an Admin/PostAdmin.php file
+First, you need to create an `Admin/PostAdmin.php` file:
 
 .. code-block:: php
 
     <?php
+
     // src/Tutorial/BlogBundle/Admin/PostAdmin.php
+
     namespace Tutorial\BlogBundle\Admin;
 
     use Sonata\AdminBundle\Admin\Admin;
@@ -109,19 +114,20 @@ First, you need to create an Admin/PostAdmin.php file
         }
     }
 
-Second, register the PostAdmin class inside the DIC in your config file:
+Second, register the `PostAdmin` class inside the DIC in your config file:
+
+.. configuration-block::
 
 .. code-block:: yaml
 
     # app/config/config.yml
+
     services:
        tutorial.blog.admin.post:
           class: Tutorial\BlogBundle\Admin\PostAdmin
           tags:
             - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: post }
           arguments: [null, Tutorial\BlogBundle\Entity\Post, TutorialBlogBundle:PostAdmin]
-
-Or if you're using a XML configuration file:
 
 .. code-block:: xml
 
@@ -133,16 +139,13 @@ Or if you're using a XML configuration file:
         <argument>TutorialBlogBundle:PostAdmin</argument>
     </service>
 
+These is the minimal configuration required to display the entity inside the dashboard and interact with the CRUD interface.
+Following this however, you will need to create an `Admin Controller`.
 
-These is the minimal configuration required to display the entity inside the
-dashboard and interact with the CRUD interface. Following this however, you will
-need to create an admin Controller.
+This interface will display too many fields as some of them are not relevant to a general overview.
+Next we'll see how to specify the fields we want to use and how we want to use them.
 
-This interface will display too many fields as some of them are not relevant to
-a general overview. Next we'll see how to specify the fields we want to use and
-how we want to use them.
-
-So same goes for the TagAdmin and CommentAdmin class.
+So same goes for the `TagAdmin` and `CommentAdmin` class.
 
 Tweak the TagAdmin class
 ------------------------
@@ -156,7 +159,7 @@ Tweak the TagAdmin class
     use Sonata\AdminBundle\Admin\Admin;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Validator\ErrorElement;
+    use Sonata\CoreBundle\Validator\ErrorElement;
     use Sonata\AdminBundle\Form\FormMapper;
 
     use Tutorial\BlogBundle\Entity\Tag;
@@ -200,7 +203,7 @@ Tweak the TagAdmin class
         }
 
         /**
-         * @param \Sonata\AdminBundle\Validator\ErrorElement $errorElement
+         * @param \Sonata\CoreBundle\Validator\ErrorElement $errorElement
          * @param mixed $object
          * @return void
          */
@@ -214,11 +217,12 @@ Tweak the TagAdmin class
         }
     }
 
-And register the TagAdmin class inside the DIC in your config file:
+And register the `TagAdmin` class inside the DIC in your config file:
 
 .. code-block:: yaml
 
     # app/config/config.yml
+
     services:
        #...
        tutorial.blog.admin.tag:
@@ -314,11 +318,12 @@ Tweak the CommentAdmin class
         }
     }
 
-And register the TagAdmin class inside the DIC in your config file:
+And register the `TagAdmin` class inside the DIC in your config file:
 
 .. code-block:: yaml
 
     # app/config/config.yml
+
     services:
        #...
        tutorial.blog.admin.comment:

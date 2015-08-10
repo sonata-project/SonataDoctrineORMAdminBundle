@@ -11,9 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
-use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
+use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
  * Doctrine pager class.
@@ -37,7 +36,7 @@ class Pager extends BasePager
 
         $countQuery->select(sprintf('count(DISTINCT %s.%s) as cnt', $countQuery->getRootAlias(), current($this->getCountColumn())));
 
-        return $countQuery->getSingleScalarResult();
+        return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
     }
 
     /**

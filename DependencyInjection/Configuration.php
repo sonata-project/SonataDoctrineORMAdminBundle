@@ -15,7 +15,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * This class contains the configuration information for the bundle
+ * This class contains the configuration information for the bundle.
  *
  * This information is solely responsible for how the different configuration
  * sections are normalized, and merged.
@@ -37,6 +37,12 @@ class Configuration implements ConfigurationInterface
         $rootNode
             ->children()
                 ->scalarNode('entity_manager')->defaultNull()->end()
+                ->arrayNode('audit')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->booleanNode('force')->defaultTrue()->end()
+                    ->end()
+                ->end()
                 ->arrayNode('templates')
                     ->addDefaultsIfNotSet()
                     ->children()

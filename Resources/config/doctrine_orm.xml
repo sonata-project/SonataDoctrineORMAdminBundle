@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <service id="sonata.admin.entity_manager" factory-service="doctrine" factory-method="getEntityManager" class="Doctrine\ORM\EntityManager" public="false">
+        <service id="sonata.admin.entity_manager" class="Doctrine\ORM\EntityManager" public="false">
             <argument>%sonata_doctrine_orm_admin.entity_manager%</argument>
         </service>
 

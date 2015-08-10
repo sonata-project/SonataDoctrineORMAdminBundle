@@ -11,19 +11,18 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 
 class FilterTest_Filter extends Filter
 {
     /**
-     * Apply the filter to the QueryBuilder instance
+     * Apply the filter to the QueryBuilder instance.
      *
      * @param $queryBuilder
-     * @param  string $alias
-     * @param  string $field
-     * @param  string $value
-     * @return void
+     * @param string $alias
+     * @param string $field
+     * @param string $value
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
@@ -39,7 +38,7 @@ class FilterTest_Filter extends Filter
     {
         return array('sonata_type_filter_default', array(
             'type'    => $this->getFieldType(),
-            'options' => $this->getFieldOptions()
+            'options' => $this->getFieldOptions(),
         ));
     }
 
