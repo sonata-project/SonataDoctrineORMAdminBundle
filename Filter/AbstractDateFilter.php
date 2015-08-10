@@ -1,5 +1,14 @@
 <?php
 
+/*
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -42,8 +51,18 @@ abstract class AbstractDateFilter extends Filter
                 return;
             }
 
+            // date filter should filter records for the whole days
+            if ($this->time === false) {
+                if ($data['value']['start'] instanceof \DateTime) {
+                    $data['value']['start']->setTime(0, 0, 0);
+                }
+                if ($data['value']['end'] instanceof \DateTime) {
+                    $data['value']['end']->setTime(23, 59, 59);
+                }
+            }
+
             // transform types
-            if ($this->getOption('input_type') == 'timestamp') {
+            if ($this->getOption('input_type') === 'timestamp') {
                 $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
                 $data['value']['end'] = $data['value']['end'] instanceof \DateTime ? $data['value']['end']->getTimestamp() : 0;
             }
@@ -75,19 +94,39 @@ abstract class AbstractDateFilter extends Filter
             $operator = $this->getOperator($data['type']);
 
             // transform types
-            if ($this->getOption('input_type') == 'timestamp') {
+            if ($this->getOption('input_type') === 'timestamp') {
                 $data['value'] = $data['value'] instanceof \DateTime ? $data['value']->getTimestamp() : 0;
             }
 
             // null / not null only check for col
             if (in_array($operator, array('NULL', 'NOT NULL'))) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
-            } else {
-                $parameterName = $this->getNewParameterName($queryBuilder);
 
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
+                return;
             }
+
+            $parameterName = $this->getNewParameterName($queryBuilder);
+
+            // date filter should filter records for the whole day
+            if ($this->time === false && $data['type'] == DateType::TYPE_EQUAL) {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
+                $queryBuilder->setParameter($parameterName, $data['value']);
+
+                $endDateParameterName = $this->getNewParameterName($queryBuilder);
+                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
+                if ($this->getOption('input_type') === 'timestamp') {
+                    $endValue = strtotime('+1 day', $data['value']);
+                } else {
+                    $endValue = clone $data['value'];
+                    $endValue->add(new \DateInterval('P1D'));
+                }
+                $queryBuilder->setParameter($endDateParameterName, $endValue);
+
+                return;
+            }
+
+            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+            $queryBuilder->setParameter($parameterName, $data['value']);
         }
     }
 
