@@ -13,20 +13,25 @@ namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\LockMode;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
+use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
-class ModelManager implements ModelManagerInterface
+class ModelManager implements ModelManagerInterface, LockInterface
 {
     protected $registry;
 
@@ -43,7 +48,7 @@ class ModelManager implements ModelManagerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @return ClassMetadata
      */
     public function getMetadata($class)
     {
@@ -168,6 +173,39 @@ class ModelManager implements ModelManagerInterface
             throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         } catch (DBALException $e) {
             throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getLockVersion($object)
+    {
+        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+
+        if (!$metadata->isVersioned) {
+            return;
+        }
+
+        return $metadata->reflFields[$metadata->versionField]->getValue($object);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function lock($object, $expectedVersion)
+    {
+        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+
+        if (!$metadata->isVersioned) {
+            return;
+        }
+
+        try {
+            $entityManager = $this->getEntityManager($object);
+            $entityManager->lock($object, LockMode::OPTIMISTIC, $expectedVersion);
+        } catch (OptimisticLockException $e) {
+            throw new LockException($e->getMessage(), $e->getCode(), $e);
         }
     }
 
