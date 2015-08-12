@@ -11,8 +11,11 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\OptimisticLockException;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 
 class ModelManagerTest extends \PHPUnit_Framework_TestCase
 {
@@ -70,5 +73,101 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals('DESC', $parameters['filter']['_sort_order']);
         $this->assertEquals('field3sortBy', $parameters['filter']['_sort_by']);
+    }
+
+    public function getVersionDataProvider()
+    {
+        return array(
+            array(true),
+            array(false),
+        );
+    }
+
+    /**
+     * @dataProvider getVersionDataProvider
+     */
+    public function testGetVersion($isVersioned)
+    {
+        $object = new VersionedEntity();
+
+        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getMetadata'))
+            ->getMock();
+
+        $metadata = $this->getMetadata(get_class($object), $isVersioned);
+
+        $modelManager->expects($this->any())
+            ->method('getMetadata')
+            ->will($this->returnValue($metadata));
+
+        if ($isVersioned) {
+            $object->version = 123;
+
+            $this->assertNotNull($modelManager->getLockVersion($object));
+        } else {
+            $this->assertNull($modelManager->getLockVersion($object));
+        }
+    }
+
+    public function lockDataProvider()
+    {
+        return array(
+            array(true,  false),
+            array(true,  true),
+            array(false, false),
+        );
+    }
+
+    /**
+     * @dataProvider lockDataProvider
+     */
+    public function testLock($isVersioned, $expectsException)
+    {
+        $object = new VersionedEntity();
+
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->setMethods(array('lock'))
+            ->getMock();
+
+        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
+            ->disableOriginalConstructor()
+            ->setMethods(array('getMetadata', 'getEntityManager'))
+            ->getMock();
+
+        $modelManager->expects($this->any())
+            ->method('getEntityManager')
+            ->will($this->returnValue($em));
+
+        $metadata = $this->getMetadata(get_class($object), $isVersioned);
+
+        $modelManager->expects($this->any())
+            ->method('getMetadata')
+            ->will($this->returnValue($metadata));
+
+        if ($expectsException) {
+            $em->expects($this->once())
+                ->method('lock')
+                ->will($this->throwException(OptimisticLockException::lockFailed($object)));
+
+            $this->setExpectedException('Sonata\AdminBundle\Exception\LockException');
+        }
+
+        $modelManager->lock($object, 123);
+    }
+
+    private function getMetadata($class, $isVersioned)
+    {
+        $metadata = new ClassMetadata($class);
+        $metadata->isVersioned = $isVersioned;
+
+        if ($isVersioned) {
+            $versionField = 'version';
+            $metadata->versionField = $versionField;
+            $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
+        }
+
+        return $metadata;
     }
 }
