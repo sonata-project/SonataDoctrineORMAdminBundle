@@ -20,7 +20,9 @@ class CallbackFilter extends Filter
      */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
-        return array($this->getOption('alias', $queryBuilder->getRootAlias()), false);
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($this->getOption('alias', $alias), $this->getFieldName());
     }
 
     /**

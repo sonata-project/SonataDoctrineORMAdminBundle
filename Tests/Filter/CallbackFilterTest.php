@@ -73,4 +73,26 @@ class CallbackFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
     }
+
+    public function testApplyMethod()
+    {
+        $builder = new ProxyQuery(new QueryBuilder());
+
+        $filter = new CallbackFilter();
+        $filter->initialize('field_name_test', array(
+            'callback' => function ($builder, $alias, $field, $value) {
+                $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $builder->setParameter('value', $value['value']);
+
+                return true;
+            },
+            'field_name' => 'field_name_test',
+        ));
+
+        $filter->apply($builder, array('value' => 'myValue'));
+
+        $this->assertEquals(array('CUSTOM QUERY o.field_name_test'), $builder->query);
+        $this->assertEquals(array('value' => 'myValue'), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
+    }
 }
