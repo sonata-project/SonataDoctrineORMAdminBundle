@@ -65,21 +65,23 @@ file that was distributed with this source code.
                     {% set associationAdmin = sonata_admin.field_description.associationadmin %}
 
                     <div>
-                        {% for nested_group_field in form.children %}
-                            <ul class="nav nav-tabs">
+                        <ul class="nav nav-tabs">
+                            {% for nested_group_field in form.children %}
                                 {% for name, form_group in associationAdmin.formgroups %}
-                                    <li class="{% if loop.first %}active{% endif %}">
+                                    <li class="{% if loop.parent.loop.last %}active{% endif %}">
                                         <a href="#{{ associationAdmin.uniqid }}_{{ loop.parent.loop.index }}_{{ loop.index }}" data-toggle="tab">
                                             <i class="icon-exclamation-sign has-errors hide"></i>
-                                            {{ associationAdmin.trans(name, {}, form_group.translation_domain) }}
+                                            {{ associationAdmin.trans(name, {'index': loop.parent.loop.index}, form_group.translation_domain) }}
                                         </a>
                                     </li>
                                 {% endfor %}
-                            </ul>
+                            {% endfor %}
+                        </ul>
 
-                            <div class="tab-content">
+                        <div class="tab-content">
+                            {% for nested_group_field in form.children %}
                                 {% for name, form_group in associationAdmin.formgroups %}
-                                    <div class="tab-pane {% if loop.first %}active{% endif %}" id="{{ associationAdmin.uniqid }}_{{ loop.parent.loop.index }}_{{ loop.index }}">
+                                    <div class="tab-pane {% if loop.parent.loop.last %}active{% endif %}" id="{{ associationAdmin.uniqid }}_{{ loop.parent.loop.index }}_{{ loop.index }}">
                                         <fieldset>
                                             <div class="sonata-ba-collapsed-fields">
                                                 {% for field_name in form_group.fields %}
@@ -96,14 +98,14 @@ file that was distributed with this source code.
                                                 {% endfor %}
                                             </div>
                                         </fieldset>
+
+                                        {% if nested_group_field['_delete'] is defined %}
+                                            {{ form_row(nested_group_field['_delete']) }}
+                                        {% endif %}
                                     </div>
                                 {% endfor %}
-                            </div>
-
-                            {% if nested_group_field['_delete'] is defined %}
-                                {{ form_row(nested_group_field['_delete']) }}
-                            {% endif %}
-                        {% endfor %}
+                            {% endfor %}
+                        </div>
                     </div>
                 {% endif %}
             {% else %}
