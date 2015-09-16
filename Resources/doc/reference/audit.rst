@@ -64,7 +64,7 @@ will be audited. You can change this behavior by setting the ``force`` option to
         audit:
             force: false
 
-It is also possible to configure an entity audit with the attribute `audit` in `services.xml`.
+It is also possible to configure an entity audit with the attribute `audit` in `admin.xml`.
 For instance :
 
 .. code-block:: xml
