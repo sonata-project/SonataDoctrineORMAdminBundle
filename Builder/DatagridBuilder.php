@@ -21,6 +21,7 @@ use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
+use Sonata\DoctrineORMAdminBundle\Datagrid\SimpleQueryPagerInterface;
 use Symfony\Component\Form\FormFactory;
 
 class DatagridBuilder implements DatagridBuilderInterface
@@ -144,6 +145,10 @@ class DatagridBuilder implements DatagridBuilderInterface
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())
     {
         $pager = $this->getPager($admin->getPagerType());
+
+        if ($pager instanceof SimpleQueryPagerInterface) {
+            $pager->setSimpleQueryEnabled($admin->getModelManager()->isSimpleQueryEnabled());
+        }
 
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
