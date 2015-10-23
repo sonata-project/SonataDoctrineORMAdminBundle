@@ -20,18 +20,33 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
  */
 class ProxyQuery implements ProxyQueryInterface
 {
+    /**
+     * @var QueryBuilder
+     */
     protected $queryBuilder;
 
+    /**
+     * @var string
+     */
     protected $sortBy;
 
+    /**
+     * @var mixed
+     */
     protected $sortOrder;
 
+    /**
+     * @var int
+     */
     protected $uniqueParameterId;
 
+    /**
+     * @var string[]
+     */
     protected $entityJoinAliases;
 
     /**
-     * @param mixed $queryBuilder
+     * @param QueryBuilder $queryBuilder
      */
     public function __construct($queryBuilder)
     {
@@ -66,9 +81,9 @@ class ProxyQuery implements ProxyQueryInterface
      * This method alters the query to return a clean set of object with a working
      * set of Object.
      *
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @param QueryBuilder $queryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder
      */
     private function getFixedQueryBuilder(QueryBuilder $queryBuilder)
     {

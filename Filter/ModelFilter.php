@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
 
@@ -42,9 +43,9 @@ class ModelFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param string                                           $alias
-     * @param mixed                                            $data
+     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
+     * @param string                           $alias
+     * @param mixed                            $data
      *
      * @return mixed
      */
@@ -66,9 +67,9 @@ class ModelFilter extends Filter
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param string                                           $alias
-     * @param mixed                                            $data
+     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
+     * @param string                           $alias
+     * @param mixed                            $data
      *
      * @return mixed
      */

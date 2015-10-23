@@ -26,12 +26,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
  */
 class AuditBlockService extends BaseBlockService
 {
+    /**
+     * @var AuditReader
+     */
     protected $auditReader;
 
     /**
-     * @param string                                                     $name
-     * @param \Symfony\Bundle\FrameworkBundle\Templating\EngineInterface $templating
-     * @param \SimpleThings\EntityAudit\AuditReader                      $auditReader
+     * @param string          $name
+     * @param EngineInterface $templating
+     * @param AuditReader     $auditReader
      */
     public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
     {

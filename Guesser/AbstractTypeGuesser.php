@@ -18,9 +18,9 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 abstract class AbstractTypeGuesser implements TypeGuesserInterface
 {
     /**
-     * @param string                                          $baseClass
-     * @param string                                          $propertyFullName
-     * @param \Sonata\AdminBundle\Model\ModelManagerInterface $modelManager
+     * @param string                $baseClass
+     * @param string                $propertyFullName
+     * @param ModelManagerInterface $modelManager
      *
      * @return array|null
      */

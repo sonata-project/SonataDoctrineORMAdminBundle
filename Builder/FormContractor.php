@@ -19,10 +19,13 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 class FormContractor implements FormContractorInterface
 {
+    /**
+     * @var FormFactoryInterface
+     */
     protected $fieldFactory;
 
     /**
-     * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
+     * @param FormFactoryInterface $formFactory
      */
     public function __construct(FormFactoryInterface $formFactory)
     {
@@ -61,7 +64,7 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @return \Symfony\Component\Form\FormFactoryInterface
+     * @return FormFactoryInterface
      */
     public function getFormFactory()
     {

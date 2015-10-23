@@ -16,7 +16,7 @@ use Sonata\AdminBundle\Admin\BaseFieldDescription;
 class FieldDescription extends BaseFieldDescription
 {
     /**
-     * {@inheritdoc}
+     * Constructor.
      */
     public function __construct()
     {
