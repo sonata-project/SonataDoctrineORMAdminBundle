@@ -78,8 +78,15 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         foreach ($nameElements as $nameElement) {
             $metadata = $this->getMetadata($class);
-            $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
-            $class = $metadata->getAssociationTargetClass($nameElement);
+
+            if (isset($metadata->associationMappings[$nameElement])) {
+                $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
+                $class = $metadata->getAssociationTargetClass($nameElement);
+            } elseif (isset($metadata->embeddedClasses[$nameElement])) {
+                $parentAssociationMappings = array();
+                $lastPropertyName = $propertyFullName;
+                $class = $baseClass;
+            }
         }
 
         return array($this->getMetadata($class), $lastPropertyName, $parentAssociationMappings);

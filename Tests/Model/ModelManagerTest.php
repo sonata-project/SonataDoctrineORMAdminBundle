@@ -13,8 +13,12 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Version;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 
 class ModelManagerTest extends \PHPUnit_Framework_TestCase
@@ -160,6 +164,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
     private function getMetadata($class, $isVersioned)
     {
         $metadata = new ClassMetadata($class);
+
         $metadata->isVersioned = $isVersioned;
 
         if ($isVersioned) {
@@ -167,6 +172,126 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             $metadata->versionField = $versionField;
             $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
         }
+
+        return $metadata;
+    }
+
+    public function testGetParentMetadataForProperty()
+    {
+        if (version_compare(Version::VERSION, '2.5') < 0) {
+            $this->markTestSkipped('Test for embeddables needs to run on Doctrine >= 2.5');
+
+            return;
+        }
+
+        $containerEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity';
+        $associatedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity';
+        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
+        $modelManagerClass = 'Sonata\DoctrineORMAdminBundle\Model\ModelManager';
+
+        $object = new ContainerEntity(new AssociatedEntity(), new EmbeddedEntity());
+
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        /** @var \PHPUnit_Framework_MockObject_MockObject|ModelManager $modelManager */
+        $modelManager = $this->getMockBuilder($modelManagerClass)
+            ->disableOriginalConstructor()
+            ->setMethods(array('getMetadata', 'getEntityManager'))
+            ->getMock();
+
+        $modelManager->expects($this->any())
+            ->method('getEntityManager')
+            ->will($this->returnValue($em));
+
+        $containerEntityMetadata = $this->getMetadataForContainerEntity();
+        $associatedEntityMetadata = $this->getMetadataForAssociatedEntity();
+        $embeddedEntityMetadata = $this->getMetadataForEmbeddedEntity();
+
+        $modelManager->expects($this->any())->method('getMetadata')
+            ->will(
+                $this->returnValueMap(
+                    array(
+                        array($containerEntityClass, $containerEntityMetadata),
+                        array($embeddedEntityClass, $embeddedEntityMetadata),
+                        array($associatedEntityClass, $associatedEntityMetadata),
+                    )
+                )
+            );
+
+        /** @var ClassMetadata $metadata */
+        list($metadata, $lastPropertyName) = $modelManager
+            ->getParentMetadataForProperty($containerEntityClass, 'plainField');
+        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'integer');
+
+        list($metadata, $lastPropertyName) = $modelManager
+            ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.plainField');
+        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'string');
+
+        list($metadata, $lastPropertyName) = $modelManager
+            ->getParentMetadataForProperty($containerEntityClass, 'embeddedEntity.plainField');
+        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+    }
+
+    public function getMetadataForEmbeddedEntity()
+    {
+        $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity');
+
+        $metadata->fieldMappings = array(
+            'plainField' => array(
+                'fieldName'  => 'plainField',
+                'columnName' => 'plainField',
+                'type'       => 'boolean',
+            ),
+        );
+
+        return $metadata;
+    }
+
+    public function getMetadataForAssociatedEntity()
+    {
+        $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity');
+
+        $metadata->fieldMappings = array(
+            'plainField' => array(
+                'fieldName'  => 'plainField',
+                'columnName' => 'plainField',
+                'type'       => 'string',
+            ),
+        );
+
+        return $metadata;
+    }
+
+    public function getMetadataForContainerEntity()
+    {
+        $containerEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity';
+        $associatedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity';
+        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
+
+        $metadata = new ClassMetadata($containerEntityClass);
+
+        $metadata->fieldMappings = array(
+            'plainField' => array(
+                'fieldName'  => 'plainField',
+                'columnName' => 'plainField',
+                'type'       => 'integer',
+            ),
+        );
+
+        $metadata->associationMappings['associatedEntity'] = array(
+            'fieldName'    => 'associatedEntity',
+            'targetEntity' => $associatedEntityClass,
+            'sourceEntity' => $containerEntityClass,
+        );
+
+        $metadata->embeddedClasses['embeddedEntity'] = array(
+            'class'        => $embeddedEntityClass,
+            'columnPrefix' => 'embeddedEntity',
+        );
+
+        $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
 
         return $metadata;
     }
