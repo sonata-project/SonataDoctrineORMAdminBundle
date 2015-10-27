@@ -31,13 +31,31 @@ class ProxyQuery implements ProxyQueryInterface
     protected $entityJoinAliases;
 
     /**
-     * @param mixed $queryBuilder
+     * @var bool
+     */
+    protected $simpleQueryEnabled;
+
+    /**
+     * @param QueryBuilder $queryBuilder
      */
     public function __construct($queryBuilder)
     {
-        $this->queryBuilder      = $queryBuilder;
-        $this->uniqueParameterId = 0;
-        $this->entityJoinAliases = array();
+        $this->queryBuilder       = $queryBuilder;
+        $this->uniqueParameterId  = 0;
+        $this->entityJoinAliases  = array();
+        $this->simpleQueryEnabled = false;
+    }
+
+    /**
+     * If set to true, the generated query will not contain any duplicate identifier check (e.g. DISTINCT keyword).
+     * Enabling simple qurery will improve query performance, but can also return duplicate items. It depends on the query and the database schema.
+     * Please enable the simple query only if you are sure that the duplicate identifier check in the query is useless.
+     *
+     * @param bool $simpleQueryEnabled
+     */
+    public function setSimpleQueryEnabled($simpleQueryEnabled)
+    {
+        $this->simpleQueryEnabled = $simpleQueryEnabled;
     }
 
     /**
@@ -59,16 +77,24 @@ class ProxyQuery implements ProxyQueryInterface
             $queryBuilder->resetDQLPart('orderBy');
         }
 
-        return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
+        $fixedQueryBuilder = $this->getFixedQueryBuilder($queryBuilder);
+
+        // Query builder returns no result.
+        // No more queries needed.
+        if (null === $fixedQueryBuilder) {
+            return array();
+        }
+
+        return $fixedQueryBuilder->getQuery()->execute($params, $hydrationMode);
     }
 
     /**
      * This method alters the query to return a clean set of object with a working
      * set of Object.
      *
-     * @param \Doctrine\ORM\QueryBuilder $queryBuilder
+     * @param QueryBuilder $queryBuilder
      *
-     * @return \Doctrine\ORM\QueryBuilder
+     * @return QueryBuilder|null
      */
     private function getFixedQueryBuilder(QueryBuilder $queryBuilder)
     {
@@ -98,7 +124,8 @@ class ProxyQuery implements ProxyQueryInterface
             $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
         }
         $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT '.$idxSelect);
+        $distinct = (!$this->simpleQueryEnabled) ? 'DISTINCT ' : '';
+        $queryBuilderId->add('select', $distinct.$idxSelect);
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
         /* Consider
@@ -116,13 +143,23 @@ class ProxyQuery implements ProxyQueryInterface
             $queryBuilderId->addSelect($sortBy);
         }
 
-        $results    = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+        $results = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+
+        // If no item available, no more queries needed.
+        if (empty($results)) {
+            return;
+        }
+
         $idxMatrix  = array();
         foreach ($results as $id) {
             foreach ($idNames as $idName) {
                 $idxMatrix[$idName][] = $id[$idName];
             }
         }
+
+        // reset 'where' annd remove parameters to improve query performance
+        $queryBuilder->resetDQLPart('where');
+        $queryBuilder->setParameters(array());
 
         // step 4 : alter the query to match the targeted ids
         foreach ($idxMatrix as $idName => $idx) {
