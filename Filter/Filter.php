@@ -11,11 +11,15 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 
 abstract class Filter extends BaseFilter
 {
+    /**
+     * @var bool
+     */
     protected $active = false;
 
     /**
@@ -42,8 +46,8 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
-     * @param mixed                                            $parameter
+     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
+     * @param mixed                            $parameter
      */
     protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
     {
@@ -58,7 +62,7 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\ProxyQueryInterface $queryBuilder
+     * @param ProxyQueryInterface $queryBuilder
      *
      * @return string
      */

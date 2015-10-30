@@ -14,8 +14,7 @@ namespace Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-/*
- *
+/**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class AddAuditEntityCompilerPass implements CompilerPassInterface
@@ -56,8 +55,8 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param \Symfony\Component\DependencyInjection\ContainerBuilder $container
-     * @param string                                                  $name
+     * @param ContainerBuilder $container
+     * @param string           $name
      *
      * @return string
      */

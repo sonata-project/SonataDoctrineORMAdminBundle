@@ -33,14 +33,20 @@ use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
 class ModelManager implements ModelManagerInterface, LockInterface
 {
+    /**
+     * @var RegistryInterface
+     */
     protected $registry;
 
+    /**
+     * @var EntityManager[]
+     */
     protected $cache = array();
 
     const ID_SEPARATOR = '~';
 
     /**
-     * @param \Symfony\Bridge\Doctrine\RegistryInterface $registry
+     * @param RegistryInterface $registry
      */
     public function __construct(RegistryInterface $registry)
     {
@@ -48,6 +54,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * @param string $class
+     *
      * @return ClassMetadata
      */
     public function getMetadata($class)
@@ -71,9 +79,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
-        $nameElements = explode('.', $propertyFullName);
-        $lastPropertyName = array_pop($nameElements);
-        $class = $baseClass;
+        $nameElements              = explode('.', $propertyFullName);
+        $lastPropertyName          = array_pop($nameElements);
+        $class                     = $baseClass;
         $parentAssociationMappings = array();
 
         foreach ($nameElements as $nameElement) {
@@ -93,7 +101,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @param string $class
+     *
+     * @return bool
      */
     public function hasMetadata($class)
     {
@@ -398,17 +408,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
-        $qb = $queryProxy->getQueryBuilder();
+        $qb         = $queryProxy->getQueryBuilder();
 
         $prefix = uniqid();
-        $sqls = array();
+        $sqls   = array();
         foreach ($idx as $pos => $id) {
-            $ids     = explode(self::ID_SEPARATOR, $id);
+            $ids = explode(self::ID_SEPARATOR, $id);
 
             $ands = array();
             foreach ($fieldNames as $posName => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
+                $ands[]        = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
                 $qb->setParameter($parameterName, $ids[$posName]);
             }
 
@@ -508,7 +518,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $values['_sort_order'] = 'ASC';
         }
 
-        $values['_sort_by'] = is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') :  $fieldDescription->getName();
+        $values['_sort_by'] = is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') : $fieldDescription->getName();
 
         return array('filter' => $values);
     }
@@ -521,7 +531,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $values = $datagrid->getValues();
 
         $values['_sort_by'] = $values['_sort_by']->getName();
-        $values['_page'] = $page;
+        $values['_page']    = $page;
 
         return array('filter' => $values);
     }
@@ -560,7 +570,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $reflection_property = false;
             // property or association ?
             if (array_key_exists($name, $metadata->fieldMappings)) {
-                $property = $metadata->fieldMappings[$name]['fieldName'];
+                $property            = $metadata->fieldMappings[$name]['fieldName'];
                 $reflection_property = $metadata->reflFields[$name];
             } elseif (array_key_exists($name, $metadata->associationMappings)) {
                 $property = $metadata->associationMappings[$name]['fieldName'];
@@ -581,7 +591,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 $instance->$property = $value;
             } elseif ($reflClass->hasProperty($property)) {
                 if (!$reflClass->getProperty($property)->isPublic()) {
-                    throw new PropertyAccessDeniedException(sprintf('Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?', $property, $reflClass->getName(), ucfirst($property)));
+                    throw new PropertyAccessDeniedException(
+                        sprintf('Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?', $property, $reflClass->getName(), ucfirst($property))
+                    );
                 }
 
                 $instance->$property = $value;

@@ -20,13 +20,19 @@ use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 
 class ListBuilder implements ListBuilderInterface
 {
+    /**
+     * @var TypeGuesserInterface
+     */
     protected $guesser;
 
+    /**
+     * @var string[]
+     */
     protected $templates = array();
 
     /**
-     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
-     * @param array                                            $templates
+     * @param TypeGuesserInterface $guesser
+     * @param string[]             $templates
      */
     public function __construct(TypeGuesserInterface $guesser, array $templates = array())
     {
@@ -149,9 +155,9 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     * @param FieldDescriptionInterface $fieldDescription
      *
-     * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
+     * @return FieldDescriptionInterface
      */
     public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription)
     {

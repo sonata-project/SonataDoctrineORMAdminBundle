@@ -17,6 +17,7 @@ use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Sonata\AdminBundle\Datagrid\PagerInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
@@ -25,12 +26,24 @@ use Symfony\Component\Form\FormFactory;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
+    /**
+     * @var FilterFactoryInterface
+     */
     protected $filterFactory;
 
+    /**
+     * @var FormFactory
+     */
     protected $formFactory;
 
+    /**
+     * @var TypeGuesserInterface
+     */
     protected $guesser;
 
+    /**
+     * @var bool
+     */
     protected $csrfTokenEnabled;
 
     /**
@@ -48,8 +61,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
@@ -85,10 +97,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Datagrid\DatagridInterface      $datagrid
-     * @param null                                                $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
+     * {@inheritdoc}
      */
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
@@ -136,10 +145,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\AdminInterface $admin
-     * @param array                                    $values
-     *
-     * @return \Sonata\AdminBundle\Datagrid\DatagridInterface
+     * {@inheritdoc}
      */
     public function getBaseDatagrid(AdminInterface $admin, array $values = array())
     {
@@ -162,7 +168,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      *
      * @param string $pagerType
      *
-     * @return \Sonata\AdminBundle\Datagrid\PagerInterface
+     * @return PagerInterface
      *
      * @throws \RuntimeException If invalid pager type is set.
      */

@@ -16,10 +16,13 @@ use Sonata\AdminBundle\Model\AuditReaderInterface;
 
 class AuditReader implements AuditReaderInterface
 {
+    /**
+     * @var SimpleThingsAuditReader
+     */
     protected $auditReader;
 
     /**
-     * @param \SimpleThings\EntityAudit\AuditReader $auditReader
+     * @param SimpleThingsAuditReader $auditReader
      */
     public function __construct(SimpleThingsAuditReader $auditReader)
     {

@@ -20,13 +20,19 @@ use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 
 class ShowBuilder implements ShowBuilderInterface
 {
+    /**
+     * @var TypeGuesserInterface
+     */
     protected $guesser;
 
+    /**
+     * @var string[]
+     */
     protected $templates;
 
     /**
-     * @param \Sonata\AdminBundle\Guesser\TypeGuesserInterface $guesser
-     * @param array                                            $templates
+     * @param TypeGuesserInterface $guesser
+     * @param string[]             $templates
      */
     public function __construct(TypeGuesserInterface $guesser, array $templates)
     {
@@ -35,9 +41,7 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * @param array $options
-     *
-     * @return \Sonata\AdminBundle\Admin\FieldDescriptionCollection
+     * {@inheritdoc}
      */
     public function getBaseList(array $options = array())
     {
@@ -45,12 +49,7 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionCollection $list
-     * @param string|null                                          $type
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface  $fieldDescription
-     * @param \Sonata\AdminBundle\Admin\AdminInterface             $admin
-     *
-     * @return mixed
+     * {@inheritdoc}
      */
     public function addField(FieldDescriptionCollection $list, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
@@ -82,10 +81,7 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * The method defines the correct default settings for the provided FieldDescription.
-     *
-     * @param \Sonata\AdminBundle\Admin\AdminInterface            $admin
-     * @param \Sonata\AdminBundle\Admin\FieldDescriptionInterface $fieldDescription
+     * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
