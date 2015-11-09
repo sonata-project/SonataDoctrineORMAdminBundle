@@ -400,7 +400,7 @@ This code manage the many-to-[one|many] association field popup
                     'objectId': 'OBJECT_ID',
                     'uniqid': associationadmin.uniqid,
                     'code': associationadmin.code,
-                    'linkParameters': sonata_admin.field_description.options.link_parameters
+                    'linkParameters': sonata_admin.field_description.options.link_parameters|merge({'fieldId': id})
                 })}}'.replace('OBJECT_ID', jQuery(this).val()),
                 dataType: 'html',
                 success: function(html) {
