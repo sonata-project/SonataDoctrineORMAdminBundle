@@ -143,6 +143,7 @@ class ProxyQuery implements ProxyQueryInterface
         foreach ($idxMatrix as $idName => $idx) {
             if (count($idx) > 0) {
                 $idxParamName = sprintf('%s_idx', $idName);
+                $idxParamName = preg_replace('/[^\w]+/', '_', $idxParamName);
                 $queryBuilder->andWhere(sprintf('%s IN (:%s)', $selects[$idName], $idxParamName));
                 $queryBuilder->setParameter($idxParamName, $idx);
                 $queryBuilder->setMaxResults(null);
