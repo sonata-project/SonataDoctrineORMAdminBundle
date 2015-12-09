@@ -25,6 +25,10 @@ class StringFilter extends Filter
             return;
         }
 
+        if (is_array($data['value'])) {
+            $data['value'] = array_shift($data['value']);
+        }
+
         $data['value'] = trim($data['value']);
 
         if (strlen($data['value']) == 0) {
