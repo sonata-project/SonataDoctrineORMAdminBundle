@@ -339,7 +339,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         //    throw new \RuntimeException('Entities passed to the choice field must be managed');
         //}
 
-
         $class = $this->getMetadata(ClassUtils::getClass($entity));
 
         $identifiers = array();
