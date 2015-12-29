@@ -70,7 +70,7 @@ class NumberFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_number', array(
+        return array('Sonata\AdminBundle\Form\Type\Filter\NumberType', array(
             'field_type'    => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label'         => $this->getLabel(),
