@@ -74,6 +74,25 @@ class ProxyQuery implements ProxyQueryInterface
             $queryBuilder->resetDQLPart('orderBy');
         }
 
+        /* By default, always add a sort on the identifier fields of the first
+         * used entity in the query, because RDBMS do not guarantee a
+         * particular order when no ORDER BY clause is specified, or when
+         * the field used for sorting is not unique.
+         */
+
+        $identifierFields = $queryBuilder
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($queryBuilder->getRootEntities()))
+            ->getIdentifierFieldNames();
+
+        foreach ($identifierFields as $identifierField) {
+            $queryBuilder->addOrderBy(
+                $queryBuilder->getRootAlias().'.'.$identifierField,
+                $this->getSortOrder() // reusing the sort order is the most natural way to go
+            );
+        }
+
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
     }
 
