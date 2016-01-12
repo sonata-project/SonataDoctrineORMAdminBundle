@@ -85,7 +85,7 @@ class ProxyQuery implements ProxyQueryInterface
      *
      * @return QueryBuilder
      */
-    private function getFixedQueryBuilder(QueryBuilder $queryBuilder)
+    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilderId = clone $queryBuilder;
 
