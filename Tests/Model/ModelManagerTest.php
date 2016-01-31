@@ -11,18 +11,29 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Version;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 
 class ModelManagerTest extends \PHPUnit_Framework_TestCase
 {
+    public static function setUpBeforeClass()
+    {
+        if (!Type::hasType('uuid')) {
+            Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
+        }
+    }
+
     public function testSortParameters()
     {
         $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
@@ -279,6 +290,62 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
 
         return $metadata;
+    }
+
+    public function testNonIntegerIdentifierType()
+    {
+        $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
+        $entity = new UuidEntity($uuid);
+
+        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataInfo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meta->expects($this->any())
+            ->method('getIdentifierValues')
+            ->willReturn(array($entity->getId()));
+        $meta->expects($this->any())
+            ->method('getTypeOfField')
+            ->willReturn(UuidType::NAME);
+
+        $mf = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mf->expects($this->any())
+            ->method('getMetadataFor')
+            ->willReturn($meta);
+
+        $platform = $this->getMockBuilder('Doctrine\DBAL\Platforms\PostgreSqlPlatform')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $conn = $this->getMockBuilder('Doctrine\DBAL\Connection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $conn->expects($this->any())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
+
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
+        $em->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($conn);
+
+        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturn($em);
+
+        $manager = new ModelManager($registry);
+        $result = $manager->getIdentifierValues($entity);
+
+        $this->assertEquals($entity->getId()->toString(), $result[0]);
     }
 
     private function getMetadata($class, $isVersioned)
