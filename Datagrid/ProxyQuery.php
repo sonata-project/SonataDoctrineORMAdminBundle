@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -132,10 +133,17 @@ class ProxyQuery implements ProxyQueryInterface
         }
 
         $results    = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+        $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
         $idxMatrix  = array();
         foreach ($results as $id) {
             foreach ($idNames as $idName) {
-                $idxMatrix[$idName][] = $id[$idName];
+                $phpValue = $id[$idName];
+                // Convert ids to database value in case of custom type
+                $fieldType = $metadata->getTypeOfField($idName);
+                $type = Type::getType($fieldType);
+                $dbValue = $type->convertToDatabaseValue($phpValue, $platform);
+
+                $idxMatrix[$idName][] = $dbValue;
             }
         }
 

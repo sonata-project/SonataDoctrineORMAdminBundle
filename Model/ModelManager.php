@@ -14,6 +14,7 @@ namespace Sonata\DoctrineORMAdminBundle\Model;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
@@ -339,19 +340,28 @@ class ModelManager implements ModelManagerInterface, LockInterface
         //    throw new \RuntimeException('Entities passed to the choice field must be managed');
         //}
 
-        $class = $this->getMetadata(ClassUtils::getClass($entity));
+        $class = ClassUtils::getClass($entity);
+        $metadata = $this->getMetadata($class);
+        $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
         $identifiers = array();
 
-        foreach ($class->getIdentifierValues($entity) as $value) {
+        foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
             if (!is_object($value)) {
                 $identifiers[] = $value;
                 continue;
             }
 
-            $class = $this->getMetadata(ClassUtils::getClass($value));
+            $fieldType = $metadata->getTypeOfField($name);
+            $type = Type::getType($fieldType);
+            if ($type) {
+                $identifiers[] = $type->convertToDatabaseValue($value, $platform);
+                continue;
+            }
 
-            foreach ($class->getIdentifierValues($value) as $value) {
+            $metadata = $this->getMetadata(ClassUtils::getClass($value));
+
+            foreach ($metadata->getIdentifierValues($value) as $value) {
                 $identifiers[] = $value;
             }
         }
@@ -377,7 +387,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         // the entities is not managed
-        if (!$entity /*|| !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity) // commented for perfomance concern */) {
+        if (!$entity || !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity)) {
             return;
         }
 
