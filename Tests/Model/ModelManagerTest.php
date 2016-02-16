@@ -234,6 +234,46 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
     }
 
+    public function testHasMetadata()
+    {
+        $metaDataFactory = $this->getMock('Doctrine\Common\Persistence\Mapping\ClassMetadataFactory');
+        $metaDataFactory
+            ->expects($this->any())
+            ->method('hasMetadataFor')
+            ->willReturnMap(array(
+                array('myEntity', true),
+                array('mySecondEntity', true),
+                array('objectWithNoMetadata', false),
+            ))
+        ;
+
+        $entityManager = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $entityManager
+            ->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($metaDataFactory);
+
+        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturnMap(array(
+                array('stdClass', null),
+                array('myEntity', $entityManager),
+                array('mySecondEntity', $entityManager),
+                array('objectWithNoMetadata', $entityManager),
+            ))
+        ;
+
+        $manager = new ModelManager($registry);
+
+        $this->assertFalse($manager->hasMetadata('stdClass'));
+        $this->assertTrue($manager->hasMetadata('myEntity'));
+        $this->assertTrue($manager->hasMetadata('mySecondEntity'));
+        $this->assertFalse($manager->hasMetadata('objectWithNoMetadata'));
+    }
+
     public function getMetadataForEmbeddedEntity()
     {
         $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity');
