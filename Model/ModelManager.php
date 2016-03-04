@@ -359,7 +359,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $identifiers = array();
 
         foreach ($class->getIdentifierValues($entity) as $value) {
-            if (!is_object($value)) {
+            if (!is_object($value) || !$this->hasMetadata($value)) {
                 $identifiers[] = $value;
                 continue;
             }
