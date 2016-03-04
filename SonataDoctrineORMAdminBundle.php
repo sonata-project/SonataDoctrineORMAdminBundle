@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle;
 
+use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAssetsCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
@@ -27,5 +28,6 @@ class SonataDoctrineORMAdminBundle extends Bundle
         $container->addCompilerPass(new AddGuesserCompilerPass());
         $container->addCompilerPass(new AddTemplatesCompilerPass());
         $container->addCompilerPass(new AddAuditEntityCompilerPass());
+        $container->addCompilerPass(new AddAssetsCompilerPass());
     }
 }
