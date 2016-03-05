@@ -81,24 +81,63 @@ file that was distributed with this source code.
 
         {% if sonata_admin.edit == 'inline' %}
 
+            {% set json_field_description = {
+                id: id,
+                formType: sonata_admin.field_description.type,
+                editMode: sonata_admin.edit,
+                label: sonata_admin.field_description.associationadmin.label|trans({}, sonata_admin.field_description.associationadmin.translationdomain),
+                routes: {
+                    appendFormElement: path('sonata_admin_append_form_element', {
+                        code: sonata_admin.admin.root.code,
+                        elementId: id,
+                        objectId: sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
+                        uniqid: sonata_admin.admin.root.uniqid,
+                        subclass: app.request.query.get('subclass'),
+                    } + sonata_admin.field_description.getOption('link_parameters', {}))
+                }
+            }|json_encode %}
+
             {% if sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
                 <span id="field_actions_{{ id }}" >
                     <a
                         href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
-                        onclick="return start_field_retrieve_{{ id }}(this);"
                         class="btn btn-success btn-sm sonata-ba-action"
+                        data-field-action="append-form-element"
+                        data-field-description="{{ json_field_description }}"
                         title="{{ btn_add|trans({}, btn_catalogue) }}"
-                        >
+                    >
                         <i class="fa fa-plus-circle"></i>
                         {{ btn_add|trans({}, btn_catalogue) }}
                     </a>
                 </span>
             {% endif %}
 
-            {# include association code #}
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_association_script.html.twig' %}
-
         {% else %}
+            {% set field_description = sonata_admin.field_description %}
+            {% set associationadmin = field_description.associationadmin %}
+            {# prepare the JSON data for the action buttons #}
+            {% set json_field_description = {
+                id: id,
+                formType: field_description.type,
+                editMode: sonata_admin.edit,
+                label: associationadmin.label|trans({}, associationadmin.translationdomain),
+                routes: {
+                    shortObjectDescription: path('sonata_admin_short_object_information', {
+                        objectId: 'OBJECT_ID',
+                        uniqid: associationadmin.uniqid,
+                        code: associationadmin.code,
+                        linkParameters: field_description.options.link_parameters
+                    }),
+                    retrieveFormElement: path('sonata_admin_retrieve_form_element', {
+                        elementId: id,
+                        subclass: sonata_admin.admin.getActiveSubclassCode(),
+                        objectId: sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
+                        uniqid: sonata_admin.admin.root.uniqid,
+                        code: sonata_admin.admin.root.code
+                    })
+                }
+            }|json_encode %}
+
             <div id="field_container_{{ id }}" class="field-container">
                 <span id="field_widget_{{ id }}" >
                     {{ form_widget(form) }}
@@ -108,20 +147,19 @@ file that was distributed with this source code.
                     {% if sonata_admin.field_description.associationadmin.hasRoute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
                         <a
                             href="{{ sonata_admin.field_description.associationadmin.generateUrl('create', sonata_admin.field_description.getOption('link_parameters', {})) }}"
-                            onclick="return start_field_dialog_form_add_{{ id }}(this);"
                             class="btn btn-success btn-sm sonata-ba-action"
+                            data-field-action="create-association"
+                            data-field-description="{{ json_field_description }}"
                             title="{{ btn_add|trans({}, btn_catalogue) }}"
-                            >
+                        >
                             <i class="fa fa-plus-circle"></i>
                             {{ btn_add|trans({}, btn_catalogue) }}
                         </a>
                     {% endif %}
                 </span>
 
-                {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
             </div>
 
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
         {% endif %}
     </div>
 {% endif %}

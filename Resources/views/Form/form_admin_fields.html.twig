@@ -54,40 +54,69 @@ file that was distributed with this source code.
 {% endblock %}
 
 {% block sonata_type_model_list_widget %}
+    {% set field_description = sonata_admin.field_description %}
+    {% set associationadmin = field_description.associationadmin %}
+    {# prepare the JSON data for the action buttons #}
+    {% set json_field_description = {
+        id: id,
+        formType: field_description.type,
+        editMode: sonata_admin.edit,
+        label: associationadmin.label|trans({}, associationadmin.translationdomain),
+        routes: {
+            shortObjectDescription: path('sonata_admin_short_object_information', {
+                objectId: 'OBJECT_ID',
+                uniqid: associationadmin.uniqid,
+                code: associationadmin.code,
+                linkParameters: field_description.options.link_parameters
+            }),
+            retrieveFormElement: path('sonata_admin_retrieve_form_element', {
+                elementId: id,
+                subclass: sonata_admin.admin.getActiveSubclassCode(),
+                objectId: sonata_admin.admin.root.id(sonata_admin.admin.root.subject),
+                uniqid: sonata_admin.admin.root.uniqid,
+                code: sonata_admin.admin.root.code
+            })
+        }
+    }|json_encode %}
+
     <div id="field_container_{{ id }}" class="field-container">
+
         <span id="field_widget_{{ id }}" class="field-short-description">
-            {% if sonata_admin.field_description.associationadmin.id(sonata_admin.value) %}
+            {% if associationadmin.id(sonata_admin.value) %}
                 {{ render(path('sonata_admin_short_object_information', {
-                    'code':     sonata_admin.field_description.associationadmin.code,
-                    'objectId': sonata_admin.field_description.associationadmin.id(sonata_admin.value),
-                    'uniqid':   sonata_admin.field_description.associationadmin.uniqid,
-                    'linkParameters': sonata_admin.field_description.options.link_parameters
+                    'code':     associationadmin.code,
+                    'objectId': associationadmin.id(sonata_admin.value),
+                    'uniqid':   associationadmin.uniqid,
+                    'linkParameters': field_description.options.link_parameters
                 })) }}
-            {% elseif sonata_admin.field_description.options.placeholder is defined and sonata_admin.field_description.options.placeholder %}
+            {% elseif field_description.options.placeholder is defined and field_description.options.placeholder %}
                 <span class="inner-field-short-description">
-                    {{ sonata_admin.field_description.options.placeholder|trans({}, 'SonataAdminBundle') }}
+                    {{ field_description.options.placeholder|trans({}, 'SonataAdminBundle') }}
                 </span>
             {% endif %}
         </span>
+
         <span id="field_actions_{{ id }}" class="field-actions">
             <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') and btn_list %}
-                    <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
-                        onclick="return start_field_dialog_form_list_{{ id }}(this);"
+                {% if associationadmin.hasroute('list') and associationadmin.isGranted('LIST') and btn_list %}
+                    <a  href="{{ associationadmin.generateUrl('list') }}"
                         class="btn btn-info btn-sm sonata-ba-action"
+                        data-field-action="list-association"
+                        data-field-description="{{ json_field_description }}"
                         title="{{ btn_list|trans({}, btn_catalogue) }}"
-                            >
+                    >
                         <i class="fa fa-list"></i>
                         {{ btn_list|trans({}, btn_catalogue) }}
                     </a>
                 {% endif %}
 
-                {% if sonata_admin.field_description.associationadmin.hasroute('create') and sonata_admin.field_description.associationadmin.isGranted('CREATE') and btn_add %}
-                    <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
-                        onclick="return start_field_dialog_form_add_{{ id }}(this);"
+                {% if associationadmin.hasroute('create') and associationadmin.isGranted('CREATE') and btn_add %}
+                    <a  href="{{ associationadmin.generateUrl('create') }}"
                         class="btn btn-success btn-sm sonata-ba-action"
+                        data-field-action="create-association"
+                        data-field-description="{{ json_field_description }}"
                         title="{{ btn_add|trans({}, btn_catalogue) }}"
-                            >
+                    >
                         <i class="fa fa-plus-circle"></i>
                         {{ btn_add|trans({}, btn_catalogue) }}
                     </a>
@@ -95,12 +124,13 @@ file that was distributed with this source code.
             </span>
 
             <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') and btn_delete %}
+                {% if associationadmin.hasRoute('delete') and associationadmin.isGranted('DELETE') and btn_delete %}
                     <a  href=""
-                        onclick="return remove_selected_element_{{ id }}(this);"
                         class="btn btn-danger btn-sm sonata-ba-action"
+                        data-field-action="remove-association"
+                        data-field-description="{{ json_field_description }}"
                         title="{{ btn_delete|trans({}, btn_catalogue) }}"
-                            >
+                    >
                         <i class="fa fa-minus-circle"></i>
                         {{ btn_delete|trans({}, btn_catalogue) }}
                     </a>
@@ -115,21 +145,8 @@ file that was distributed with this source code.
 
         {{ block('sonata_help') }}
 
-        <div class="modal fade" id="field_dialog_{{ id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title"></h4>
-                    </div>
-                    <div class="modal-body">
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
 
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
 {% endblock %}
 
 {% block sonata_type_admin_widget %}
