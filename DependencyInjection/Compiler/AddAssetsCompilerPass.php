@@ -14,15 +14,15 @@ class AddAssetsCompilerPass implements CompilerPassInterface
     {
         $pool = $container->getDefinition('sonata.admin.pool');
         $options = $pool->getArgument(3);
-        $options = array_merge_recursive($options, [
-            'javascripts' => [
+        $options = array_merge_recursive($options, array(
+            'javascripts' => array(
                 '/bundles/sonatadoctrineormadmin/spinner.js',
-                '/bundles/sonatadoctrineormadmin/edit-associations.js'
-            ],
-            'stylesheets' => [
-                '/bundles/sonatadoctrineormadmin/styles.css'
-            ]
-        ]);
+                '/bundles/sonatadoctrineormadmin/edit-associations.js',
+            ),
+            'stylesheets' => array(
+                '/bundles/sonatadoctrineormadmin/styles.css',
+            ),
+        ));
         $pool->replaceArgument(3, $options);
     }
 }
