@@ -36,7 +36,11 @@ file that was distributed with this source code.
                                     {% for changedEntity in revision.entities %}
                                         <li>
                                             {{ changedEntity.entity }} / {{ changedEntity.revisionType }}
-                                            / {{ changedEntity.className }} - {{ changedEntity.id.id }}
+                                            / {{ changedEntity.className }} 
+                                            
+                                            {% if changedEntity.id.id is defined %}
+                                            - {{ changedEntity.id.id }}
+                                            {% endif %}
                                         </li>
                                     {% endfor %}
                                 </ul>
