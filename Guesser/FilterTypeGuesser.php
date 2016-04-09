@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\CoreBundle\Form\Type\BooleanType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -65,7 +66,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type']    = 'sonata_type_boolean';
+                $options['field_type']    = BooleanType::class;
                 $options['field_options'] = array();
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
