@@ -7,15 +7,28 @@ php:
   - 5.6
   - hhvm
 
-env:
-  - SYMFONY_VERSION=2.3.*
-  - SYMFONY_VERSION=2.4.*
-  - SYMFONY_VERSION=2.5.*
-  - SYMFONY_VERSION=2.6.*
-  - SYMFONY_VERSION=2.7.*@dev
+matrix:
+  include:
+    - php: 5.6
+      env: SYMFONY_VERSION=2.3.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.4.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.5.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.6.*
+    - php: 5.6
+      env: SYMFONY_VERSION=2.7.*@dev
+    - php: 5.6
+      env: SONATA_ADMIN_VERSION=2.3.*
+    - php: 5.6
+      env: SONATA_ADMIN_VERSION=2.4.*@dev
+  allow_failures:
+    - php: hhvm
 
 before_script:
-  - composer require symfony/symfony:${SYMFONY_VERSION} --prefer-source
+  - if [ "$SYMFONY_VERSION" != "" ]; then composer require "symfony/symfony:${SYMFONY_VERSION}" --no-update; fi;
+  - if [ "$SONATA_ADMIN_VERSION" != "" ]; then composer require "sonata-project/admin-bundle:${SONATA_ADMIN_VERSION}" --no-update; fi;
   - composer install --dev --prefer-source
   - sudo pip install -r Resources/doc/requirements.txt
 
@@ -23,7 +36,3 @@ script: make test
 
 notifications:
     webhooks: http://sonata-project.org/bundles/doctrine-orm-admin/master/travis
-
-matrix:
-  allow_failures:
-    - php: hhvm
