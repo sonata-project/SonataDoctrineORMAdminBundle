@@ -63,7 +63,11 @@ file that was distributed with this source code.
                                     }) }}
                                     {% set dummy = nested_group_field.setrendered %}
                                 {% else %}
-                                    {{ form_row(nested_field) }}
+                                    {% if nested_field.vars.name == '_delete' %}
+                                        {{ form_row(nested_field, { 'label': ('action_delete'|trans({}, 'SonataAdminBundle')) }) }}
+                                    {% else %}
+                                        {{ form_row(nested_field) }}
+                                    {% endif %}
                                 {% endif %}
                             {% endfor %}
                         {% endfor %}
