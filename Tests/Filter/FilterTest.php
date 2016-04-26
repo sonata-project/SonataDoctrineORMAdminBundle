@@ -63,7 +63,6 @@ class FilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals('bar', $filter->getOption('foo', 'bar'));
 
         $this->assertEquals('field_name', $filter->getName());
-        $this->assertEquals('text', $filter->getFieldType());
         $this->assertEquals(array('class' => 'FooBar'), $filter->getFieldOptions());
     }
 
