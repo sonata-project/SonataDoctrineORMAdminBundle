@@ -17,7 +17,7 @@ file that was distributed with this source code.
     {% endfor %}
 {% else %}
     <div id="field_container_{{ id }}"
-        class="field-container {{ form.vars["attr"]["class"] is defined ? form.vars["attr"]["class"] }}">
+        class="field-container {{ form.vars['attr']['class'] is defined ? form.vars['attr']['class'] }}">
         {% if sonata_admin.edit == 'list' %}
             <span id="field_widget_{{ id }}" class="field-short-description">
                 {% if sonata_admin.admin.id(sonata_admin.value) %}
