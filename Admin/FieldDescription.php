@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -34,9 +34,9 @@ class FieldDescription extends BaseFieldDescription
 
         $this->associationMapping = $associationMapping;
 
-        $this->type        = $this->type ?: $associationMapping['type'];
+        $this->type = $this->type ?: $associationMapping['type'];
         $this->mappingType = $this->mappingType ?: $associationMapping['type'];
-        $this->fieldName   = $associationMapping['fieldName'];
+        $this->fieldName = $associationMapping['fieldName'];
     }
 
     /**
@@ -62,9 +62,9 @@ class FieldDescription extends BaseFieldDescription
 
         $this->fieldMapping = $fieldMapping;
 
-        $this->type        = $this->type ?: $fieldMapping['type'];
+        $this->type = $this->type ?: $fieldMapping['type'];
         $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
-        $this->fieldName   = $this->fieldName ?: $fieldMapping['fieldName'];
+        $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
     /**

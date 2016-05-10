@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -27,7 +27,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
     {
         $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
 
-        $manager  = new ModelManager($registry);
+        $manager = new ModelManager($registry);
 
         $datagrid1 = $this->getMockBuilder('\Sonata\AdminBundle\Datagrid\Datagrid')->disableOriginalConstructor()->getMock();
         $datagrid2 = $this->getMockBuilder('\Sonata\AdminBundle\Datagrid\Datagrid')->disableOriginalConstructor()->getMock();
@@ -46,7 +46,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getValues')
             ->will($this->returnValue(array(
-                '_sort_by'    => $field1,
+                '_sort_by' => $field1,
                 '_sort_order' => 'ASC',
             )));
 
@@ -54,7 +54,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getValues')
             ->will($this->returnValue(array(
-                '_sort_by'    => $field3,
+                '_sort_by' => $field3,
                 '_sort_order' => 'ASC',
             )));
 
@@ -240,9 +240,9 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
         $metadata->fieldMappings = array(
             'plainField' => array(
-                'fieldName'  => 'plainField',
+                'fieldName' => 'plainField',
                 'columnName' => 'plainField',
-                'type'       => 'boolean',
+                'type' => 'boolean',
             ),
         );
 
@@ -255,9 +255,9 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
         $metadata->fieldMappings = array(
             'plainField' => array(
-                'fieldName'  => 'plainField',
+                'fieldName' => 'plainField',
                 'columnName' => 'plainField',
-                'type'       => 'string',
+                'type' => 'string',
             ),
         );
 
@@ -274,20 +274,20 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
         $metadata->fieldMappings = array(
             'plainField' => array(
-                'fieldName'  => 'plainField',
+                'fieldName' => 'plainField',
                 'columnName' => 'plainField',
-                'type'       => 'integer',
+                'type' => 'integer',
             ),
         );
 
         $metadata->associationMappings['associatedEntity'] = array(
-            'fieldName'    => 'associatedEntity',
+            'fieldName' => 'associatedEntity',
             'targetEntity' => $associatedEntityClass,
             'sourceEntity' => $containerEntityClass,
         );
 
         $metadata->embeddedClasses['embeddedEntity'] = array(
-            'class'        => $embeddedEntityClass,
+            'class' => $embeddedEntityClass,
             'columnPrefix' => 'embeddedEntity',
         );
 

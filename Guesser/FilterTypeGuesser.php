@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -28,9 +28,9 @@ class FilterTypeGuesser extends AbstractTypeGuesser
         }
 
         $options = array(
-            'field_type'     => null,
-            'field_options'  => array(),
-            'options'        => array(),
+            'field_type' => null,
+            'field_options' => array(),
+            'options' => array(),
         );
 
         list($metadata, $propertyName, $parentAssociationMappings) = $ret;
@@ -46,15 +46,15 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
 
-                    $options['operator_type']    = 'sonata_type_equal';
+                    $options['operator_type'] = 'sonata_type_equal';
                     $options['operator_options'] = array();
 
-                    $options['field_type']    = 'entity';
+                    $options['field_type'] = 'entity';
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity'],
                     );
 
-                    $options['field_name']   = $mapping['fieldName'];
+                    $options['field_name'] = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
 
                     return new TypeGuess('doctrine_orm_model', $options, Guess::HIGH_CONFIDENCE);
@@ -65,7 +65,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type']    = 'sonata_type_boolean';
+                $options['field_type'] = 'sonata_type_boolean';
                 $options['field_options'] = array();
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);

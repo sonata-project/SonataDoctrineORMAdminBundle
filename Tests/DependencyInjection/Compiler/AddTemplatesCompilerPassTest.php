@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -28,7 +28,7 @@ class AddTemplatesCompilerPassTest extends \PHPUnit_Framework_TestCase
                     return array(
                         'my.admin' => array(
                             'templates' => array(
-                                'form'   => array('myform.twig.html'),
+                                'form' => array('myform.twig.html'),
                                 'filter' => array('myfilter.twig.html'),
                             ),
                         ),
@@ -37,7 +37,7 @@ class AddTemplatesCompilerPassTest extends \PHPUnit_Framework_TestCase
 
                 if ($value == 'sonata_doctrine_orm_admin.templates') {
                     return array(
-                        'form'   => array('default_form.twig.html'),
+                        'form' => array('default_form.twig.html'),
                         'filter' => array('default_filter.twig.html'),
                     );
                 }
