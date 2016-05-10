@@ -55,7 +55,7 @@ class StringFilter extends Filter
      *
      * @return bool
      */
-    private function getOperator($type)
+    protected function getOperator($type)
     {
         $choices = array(
             ChoiceType::TYPE_CONTAINS => 'LIKE',

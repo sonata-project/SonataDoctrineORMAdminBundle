@@ -4,3 +4,6 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+
+### Changed
+- StringFilter::getOperator to protected instead of private
