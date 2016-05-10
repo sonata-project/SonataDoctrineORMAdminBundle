@@ -1,29 +1,28 @@
-Doctrine ORM Admin
-==================
+# Sonata Doctrine Orm Admin Bundle
 
-[![Build Status](https://secure.travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.png?branch=master)](http://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
+Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle
 
-This bundle integrates the SonataAdminBundle with the Doctrine ORM project.
+[![Latest Stable Version](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/v/stable)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
+[![Latest Unstable Version](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/v/unstable)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
+[![License](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/license)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 
-Documentation
--------------
+[![Total Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/downloads)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
+[![Monthly Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/monthly)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
+[![Daily Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/daily)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 
-The online documentation of the bundle is in https://sonata-project.org/bundles/doctrine-orm-admin
+[![Build Status](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=master)](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
 
-**Warning**: documentation files are not rendering correctly in Github (reStructuredText format)
-and some content might be broken or hidden, make sure to read raw files.
+## Documentation
 
-**Google Groups**: For questions and proposals you can post on these google groups
+Check out the documentation on the [official website](https://sonata-project.org/bundles/doctrine-orm-admin).
 
-* [Sonata Users](https://groups.google.com/group/sonata-users): For questions on how to use Sonata bundles on your project
-* [Sonata Devs](https://groups.google.com/group/sonata-devs): For questions regarding the development of Sonata bundles
+## Support
 
-Contribution
-------------
+For general support and questions, please use [StackOverflow](http://stackoverflow.com/questions/tagged/sonata).
 
-For contribution to the documentation you cand find it on [Resources/doc](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/tree/master/Resources/doc).
+If you think you find a bug or you have a feature idea to propose, feel free to open a issue
+**after looking** at the [contributing guide](CONTRIBUTING.md).
 
-License
--------
+## License
 
-This bundle is available under the [MIT license](Resources/meta/LICENSE).
+This package is available under the [MIT license](LICENSE).

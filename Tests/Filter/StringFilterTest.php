@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -84,8 +84,8 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', array(
-            'format'                      => '%s',
-            'field_name'                  => 'field_name',
+            'format' => '%s',
+            'field_name' => 'field_name',
             'parent_association_mappings' => array(
                 array(
                     'fieldName' => 'association_mapping',
