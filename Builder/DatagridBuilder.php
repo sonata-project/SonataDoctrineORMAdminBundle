@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -54,9 +54,9 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
     {
-        $this->formFactory      = $formFactory;
-        $this->filterFactory    = $filterFactory;
-        $this->guesser          = $guesser;
+        $this->formFactory = $formFactory;
+        $this->filterFactory = $filterFactory;
+        $this->guesser = $guesser;
         $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
@@ -99,7 +99,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function addFilter(DatagridInterface $datagrid, $type = null, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
+    public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if ($type == null) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
@@ -128,10 +128,10 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         if ($type === 'doctrine_orm_model_autocomplete') {
             $fieldDescription->mergeOption('field_options', array(
-                'class'         => $fieldDescription->getTargetEntity(),
+                'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
-                'admin_code'    => $admin->getCode(),
-                'context'       => 'filter',
+                'admin_code' => $admin->getCode(),
+                'context' => 'filter',
             ));
         }
 

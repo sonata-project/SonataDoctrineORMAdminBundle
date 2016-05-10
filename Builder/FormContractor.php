@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -84,7 +84,7 @@ class FormContractor implements FormContractorInterface
      */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
-        $options                             = array();
+        $options = array();
         $options['sonata_field_description'] = $fieldDescription;
 
         if (in_array($type, array('sonata_type_model', 'sonata_type_model_list', 'sonata_type_model_hidden', 'sonata_type_model_autocomplete'))) {
@@ -92,7 +92,7 @@ class FormContractor implements FormContractorInterface
                 throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the UPGRADE-2.1.md file from the SonataAdminBundle');
             }
 
-            $options['class']         = $fieldDescription->getTargetEntity();
+            $options['class'] = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
             if ($type == 'sonata_type_model_autocomplete') {
@@ -120,11 +120,11 @@ class FormContractor implements FormContractorInterface
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
 
-            $options['type']         = 'sonata_type_admin';
-            $options['modifiable']   = true;
+            $options['type'] = 'sonata_type_admin';
+            $options['modifiable'] = true;
             $options['type_options'] = array(
                 'sonata_field_description' => $fieldDescription,
-                'data_class'               => $fieldDescription->getAssociationAdmin()->getClass(),
+                'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
             );
         }
 

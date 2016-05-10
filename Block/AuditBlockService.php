@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -57,8 +57,8 @@ class AuditBlockService extends BaseBlockService
         }
 
         return $this->renderResponse($blockContext->getTemplate(), array(
-            'block'     => $blockContext->getBlock(),
-            'settings'  => $blockContext->getSettings(),
+            'block' => $blockContext->getBlock(),
+            'settings' => $blockContext->getSettings(),
             'revisions' => $revisions,
         ), $response);
     }
@@ -84,7 +84,7 @@ class AuditBlockService extends BaseBlockService
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults(array(
-            'limit'    => 10,
+            'limit' => 10,
             'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig',
         ));
     }
