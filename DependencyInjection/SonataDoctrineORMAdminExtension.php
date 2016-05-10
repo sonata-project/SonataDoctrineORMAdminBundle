@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -35,8 +35,8 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $configs = $this->fixTemplatesConfiguration($configs, $container);
 
         $configuration = new Configuration();
-        $processor     = new Processor();
-        $config        = $processor->processConfiguration($configuration, $configs);
+        $processor = new Processor();
+        $config = $processor->processConfiguration($configuration, $configs);
 
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('doctrine_orm.xml');
