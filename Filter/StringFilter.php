@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -58,9 +58,9 @@ class StringFilter extends Filter
     private function getOperator($type)
     {
         $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL            => '=',
+            ChoiceType::TYPE_CONTAINS => 'LIKE',
+            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+            ChoiceType::TYPE_EQUAL => '=',
         );
 
         return isset($choices[$type]) ? $choices[$type] : false;
@@ -72,7 +72,7 @@ class StringFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'format'   => '%%%s%%',
+            'format' => '%%%s%%',
         );
     }
 
@@ -82,9 +82,9 @@ class StringFilter extends Filter
     public function getRenderSettings()
     {
         return array('sonata_type_filter_choice', array(
-            'field_type'    => $this->getFieldType(),
+            'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel(),
+            'label' => $this->getLabel(),
         ));
     }
 }
