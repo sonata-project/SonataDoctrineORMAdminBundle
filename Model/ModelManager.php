@@ -107,7 +107,22 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function hasMetadata($class)
     {
-        return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
+        if (is_object($class)) {
+            $class = get_class($class);
+        }
+
+        if (isset($this->cache[$class])) {
+            $em = $this->cache[$class];
+        } else {
+            $em = $this->registry->getManagerForClass($class);
+        }
+
+        if ($em === null) {
+            return false;
+        }
+        $this->cache[$class] = $em;
+
+        return $em->getMetadataFactory()->hasMetadataFor($class);
     }
 
     /**
@@ -344,7 +359,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $identifiers = array();
 
         foreach ($class->getIdentifierValues($entity) as $value) {
-            if (!is_object($value)) {
+            if (!is_object($value) || !$this->hasMetadata($value)) {
                 $identifiers[] = $value;
                 continue;
             }
