@@ -30,6 +30,7 @@
         "sonata-project/core-bundle": "^3.0"
     },
     "require-dev": {
+        "rhumsaa/uuid": "^2.8",
         "simplethings/entity-audit-bundle": "~0.1",
         "symfony/phpunit-bridge": "^2.7 || ^3.0"
     },
