@@ -64,22 +64,6 @@ class ChoiceFilter extends Filter
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
-    {
-        $choices = array(
-            ChoiceType::TYPE_CONTAINS         => 'IN',
-            ChoiceType::TYPE_NOT_CONTAINS     => 'NOT IN',
-            ChoiceType::TYPE_EQUAL            => '=',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultOptions()
