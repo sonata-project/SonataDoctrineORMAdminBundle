@@ -4,3 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [Unreleased]
 ### Added
+
+### Fixed
+
+- Added missing default sort by primary key(s).
