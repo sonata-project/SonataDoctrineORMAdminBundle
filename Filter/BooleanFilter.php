@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -57,7 +57,7 @@ class BooleanFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'field_type'  => 'sonata_type_boolean',
+            'field_type' => 'sonata_type_boolean',
         );
     }
 
@@ -67,11 +67,11 @@ class BooleanFilter extends Filter
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
-            'field_type'       => $this->getFieldType(),
-            'field_options'    => $this->getFieldOptions(),
-            'operator_type'    => 'hidden',
+            'field_type' => $this->getFieldType(),
+            'field_options' => $this->getFieldOptions(),
+            'operator_type' => 'hidden',
             'operator_options' => array(),
-            'label'            => $this->getLabel(),
+            'label' => $this->getLabel(),
         ));
     }
 }

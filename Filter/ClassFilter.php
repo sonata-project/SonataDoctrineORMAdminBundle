@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -49,7 +49,7 @@ class ClassFilter extends Filter
     private function getOperator($type)
     {
         $choices = array(
-            EqualType::TYPE_IS_EQUAL     => 'INSTANCE OF',
+            EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
             EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
         );
 
@@ -78,8 +78,8 @@ class ClassFilter extends Filter
     public function getFieldOptions()
     {
         return $this->getOption('choices', array(
-            'required'     => false,
-            'choice_list'  => new ChoiceList(
+            'required' => false,
+            'choice_list' => new ChoiceList(
                 \array_values($this->getOption('sub_classes')),
                 \array_keys($this->getOption('sub_classes'))
             ),
@@ -93,9 +93,9 @@ class ClassFilter extends Filter
     {
         return array('sonata_type_filter_default', array(
             'operator_type' => 'sonata_type_equal',
-            'field_type'    => $this->getFieldType(),
+            'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel(),
+            'label' => $this->getLabel(),
         ));
     }
 }

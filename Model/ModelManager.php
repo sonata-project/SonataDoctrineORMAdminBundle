@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -79,9 +79,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
-        $nameElements              = explode('.', $propertyFullName);
-        $lastPropertyName          = array_pop($nameElements);
-        $class                     = $baseClass;
+        $nameElements = explode('.', $propertyFullName);
+        $lastPropertyName = array_pop($nameElements);
+        $class = $baseClass;
         $parentAssociationMappings = array();
 
         foreach ($nameElements as $nameElement) {
@@ -407,17 +407,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
-        $qb         = $queryProxy->getQueryBuilder();
+        $qb = $queryProxy->getQueryBuilder();
 
         $prefix = uniqid();
-        $sqls   = array();
+        $sqls = array();
         foreach ($idx as $pos => $id) {
             $ids = explode(self::ID_SEPARATOR, $id);
 
             $ands = array();
             foreach ($fieldNames as $posName => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[]        = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
+                $ands[] = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
                 $qb->setParameter($parameterName, $ids[$posName]);
             }
 
@@ -530,7 +530,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $values = $datagrid->getValues();
 
         $values['_sort_by'] = $values['_sort_by']->getName();
-        $values['_page']    = $page;
+        $values['_page'] = $page;
 
         return array('filter' => $values);
     }
@@ -542,9 +542,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         return array(
             '_sort_order' => 'ASC',
-            '_sort_by'    => implode(',', $this->getModelIdentifier($class)),
-            '_page'       => 1,
-            '_per_page'   => 25,
+            '_sort_by' => implode(',', $this->getModelIdentifier($class)),
+            '_page' => 1,
+            '_per_page' => 25,
         );
     }
 
@@ -569,7 +569,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $reflection_property = false;
             // property or association ?
             if (array_key_exists($name, $metadata->fieldMappings)) {
-                $property            = $metadata->fieldMappings[$name]['fieldName'];
+                $property = $metadata->fieldMappings[$name]['fieldName'];
                 $reflection_property = $metadata->reflFields[$name];
             } elseif (array_key_exists($name, $metadata->associationMappings)) {
                 $property = $metadata->associationMappings[$name]['fieldName'];

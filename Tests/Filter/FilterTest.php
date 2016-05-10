@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -37,7 +37,7 @@ class FilterTest_Filter extends Filter
     public function getRenderSettings()
     {
         return array('sonata_type_filter_default', array(
-            'type'    => $this->getFieldType(),
+            'type' => $this->getFieldType(),
             'options' => $this->getFieldOptions(),
         ));
     }

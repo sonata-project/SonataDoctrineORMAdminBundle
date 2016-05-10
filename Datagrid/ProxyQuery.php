@@ -1,9 +1,9 @@
 <?php
 
 /*
- * This file is part of the symfony package.
- * (c) Fabien Potencier <fabien.potencier@symfony-project.com>
- * (c) Jonathan H. Wage <jonwage@gmail.com>
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
@@ -50,7 +50,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function __construct($queryBuilder)
     {
-        $this->queryBuilder      = $queryBuilder;
+        $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
         $this->entityJoinAliases = array();
     }
@@ -90,7 +90,7 @@ class ProxyQuery implements ProxyQueryInterface
         $queryBuilderId = clone $queryBuilder;
 
         // step 1 : retrieve the targeted class
-        $from  = $queryBuilderId->getDQLPart('from');
+        $from = $queryBuilderId->getDQLPart('from');
         $class = $from[0]->getFrom();
         $metadata = $queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class);
 
@@ -131,8 +131,8 @@ class ProxyQuery implements ProxyQueryInterface
             $queryBuilderId->addSelect($sortBy);
         }
 
-        $results    = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
-        $idxMatrix  = array();
+        $results = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+        $idxMatrix = array();
         foreach ($results as $id) {
             foreach ($idNames as $idName) {
                 $idxMatrix[$idName][] = $id[$idName];
@@ -175,7 +175,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function setSortBy($parentAssociationMappings, $fieldMapping)
     {
-        $alias        = $this->entityJoin($parentAssociationMappings);
+        $alias = $this->entityJoin($parentAssociationMappings);
         $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
 
         return $this;

@@ -80,8 +80,8 @@ abstract class AbstractDateFilter extends Filter
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
             }
 
-            $queryBuilder->setParameter($startDateParameterName,  $data['value']['start']);
-            $queryBuilder->setParameter($endDateParameterName,  $data['value']['end']);
+            $queryBuilder->setParameter($startDateParameterName, $data['value']['start']);
+            $queryBuilder->setParameter($endDateParameterName, $data['value']['end']);
         } else {
             if (!$data['value']) {
                 return;
@@ -142,13 +142,13 @@ abstract class AbstractDateFilter extends Filter
         $type = intval($type);
 
         $choices = array(
-            DateType::TYPE_EQUAL            => '=',
-            DateType::TYPE_GREATER_EQUAL    => '>=',
-            DateType::TYPE_GREATER_THAN     => '>',
-            DateType::TYPE_LESS_EQUAL       => '<=',
-            DateType::TYPE_LESS_THAN        => '<',
-            DateType::TYPE_NULL             => 'NULL',
-            DateType::TYPE_NOT_NULL         => 'NOT NULL',
+            DateType::TYPE_EQUAL => '=',
+            DateType::TYPE_GREATER_EQUAL => '>=',
+            DateType::TYPE_GREATER_THAN => '>',
+            DateType::TYPE_LESS_EQUAL => '<=',
+            DateType::TYPE_LESS_THAN => '<',
+            DateType::TYPE_NULL => 'NULL',
+            DateType::TYPE_NOT_NULL => 'NOT NULL',
         );
 
         return isset($choices[$type]) ? $choices[$type] : '=';
@@ -180,9 +180,9 @@ abstract class AbstractDateFilter extends Filter
         }
 
         return array($name, array(
-            'field_type'    => $this->getFieldType(),
+            'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'label'         => $this->getLabel(),
+            'label' => $this->getLabel(),
         ));
     }
 }

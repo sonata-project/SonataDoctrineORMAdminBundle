@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata package.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -54,7 +54,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', array(
-            'type'  => EqualType::TYPE_IS_EQUAL,
+            'type' => EqualType::TYPE_IS_EQUAL,
             'value' => array('1', '2'),
         ));
 
@@ -108,8 +108,8 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', array(
-            'mapping_type'        => ClassMetadataInfo::ONE_TO_ONE,
-            'field_name'          => 'field_name',
+            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name' => 'field_name',
             'association_mapping' => array(
                 'fieldName' => 'association_mapping',
             ),
@@ -127,8 +127,8 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', array(
-            'mapping_type'                => ClassMetadataInfo::ONE_TO_ONE,
-            'field_name'                  => 'field_name',
+            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'field_name' => 'field_name',
             'parent_association_mappings' => array(
                 array(
                     'fieldName' => 'association_mapping',

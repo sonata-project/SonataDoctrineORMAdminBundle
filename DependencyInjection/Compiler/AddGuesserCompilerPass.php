@@ -1,7 +1,7 @@
 <?php
 
 /*
- * This file is part of the Sonata project.
+ * This file is part of the Sonata Project package.
  *
  * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
  *
@@ -28,7 +28,7 @@ class AddGuesserCompilerPass implements CompilerPassInterface
 
         // ListBuilder
         $definition = $container->getDefinition('sonata.admin.guesser.orm_list_chain');
-        $services   = array();
+        $services = array();
         foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_list') as $id => $attributes) {
             $services[] = new Reference($id);
         }
@@ -37,7 +37,7 @@ class AddGuesserCompilerPass implements CompilerPassInterface
 
         // DatagridBuilder
         $definition = $container->getDefinition('sonata.admin.guesser.orm_datagrid_chain');
-        $services   = array();
+        $services = array();
         foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_datagrid') as $id => $attributes) {
             $services[] = new Reference($id);
         }
@@ -46,7 +46,7 @@ class AddGuesserCompilerPass implements CompilerPassInterface
 
         // ShowBuilder
         $definition = $container->getDefinition('sonata.admin.guesser.orm_show_chain');
-        $services   = array();
+        $services = array();
         foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_show') as $id => $attributes) {
             $services[] = new Reference($id);
         }
