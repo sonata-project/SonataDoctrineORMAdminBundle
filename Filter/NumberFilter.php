@@ -40,24 +40,6 @@ class NumberFilter extends Filter
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
-    {
-        $choices = array(
-            NumberType::TYPE_EQUAL => '=',
-            NumberType::TYPE_GREATER_EQUAL => '>=',
-            NumberType::TYPE_GREATER_THAN => '>',
-            NumberType::TYPE_LESS_EQUAL => '<=',
-            NumberType::TYPE_LESS_THAN => '<',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultOptions()
@@ -75,5 +57,23 @@ class NumberFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
         ));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function getOperator($type)
+    {
+        $choices = array(
+            NumberType::TYPE_EQUAL => '=',
+            NumberType::TYPE_GREATER_EQUAL => '>=',
+            NumberType::TYPE_GREATER_THAN => '>',
+            NumberType::TYPE_LESS_EQUAL => '<=',
+            NumberType::TYPE_LESS_THAN => '<',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : false;
     }
 }
