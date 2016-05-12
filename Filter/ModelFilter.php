@@ -40,6 +40,35 @@ class ModelFilter extends Filter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function getDefaultOptions()
+    {
+        return array(
+            'mapping_type' => false,
+            'field_name' => false,
+            'field_type' => 'entity',
+            'field_options' => array(),
+            'operator_type' => 'sonata_type_equal',
+            'operator_options' => array(),
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getRenderSettings()
+    {
+        return array('sonata_type_filter_default', array(
+            'field_type' => $this->getFieldType(),
+            'field_options' => $this->getFieldOptions(),
+            'operator_type' => $this->getOption('operator_type'),
+            'operator_options' => $this->getOption('operator_options'),
+            'label' => $this->getLabel(),
+        ));
+    }
+
+    /**
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
@@ -111,34 +140,5 @@ class ModelFilter extends Filter
         $alias = $queryBuilder->entityJoin($associationMappings);
 
         return array($alias, false);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getDefaultOptions()
-    {
-        return array(
-            'mapping_type' => false,
-            'field_name' => false,
-            'field_type' => 'entity',
-            'field_options' => array(),
-            'operator_type' => 'sonata_type_equal',
-            'operator_options' => array(),
-        );
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function getRenderSettings()
-    {
-        return array('sonata_type_filter_default', array(
-            'field_type' => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
-            'operator_type' => $this->getOption('operator_type'),
-            'operator_options' => $this->getOption('operator_options'),
-            'label' => $this->getLabel(),
-        ));
     }
 }

@@ -20,6 +20,11 @@ class SonataDoctrineORMAdminExtensionTest extends \PHPUnit_Framework_TestCase
      */
     protected $configuration;
 
+    protected function tearDown()
+    {
+        unset($this->configuration);
+    }
+
     public function testEntityManagerSetFactory()
     {
         $this->configuration = new ContainerBuilder();
@@ -37,10 +42,5 @@ class SonataDoctrineORMAdminExtensionTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals($doctrineServiceId, $definition->getFactoryService());
             $this->assertEquals($doctrineFactoryMethod, $definition->getFactoryMethod());
         }
-    }
-
-    protected function tearDown()
-    {
-        unset($this->configuration);
     }
 }

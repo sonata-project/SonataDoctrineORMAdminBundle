@@ -42,21 +42,6 @@ class ClassFilter extends Filter
     }
 
     /**
-     * @param int $type
-     *
-     * @return mixed
-     */
-    private function getOperator($type)
-    {
-        $choices = array(
-            EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
-            EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultOptions()
@@ -97,5 +82,20 @@ class ClassFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
         ));
+    }
+
+    /**
+     * @param int $type
+     *
+     * @return mixed
+     */
+    private function getOperator($type)
+    {
+        $choices = array(
+            EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
+            EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : false;
     }
 }
