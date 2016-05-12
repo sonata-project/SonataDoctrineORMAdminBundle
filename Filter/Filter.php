@@ -38,6 +38,14 @@ abstract class Filter extends BaseFilter
     /**
      * {@inheritdoc}
      */
+    public function isActive()
+    {
+        return $this->active;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
@@ -71,13 +79,5 @@ abstract class Filter extends BaseFilter
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.
         return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function isActive()
-    {
-        return $this->active;
     }
 }
