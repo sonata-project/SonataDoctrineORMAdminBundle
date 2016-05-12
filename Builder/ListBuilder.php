@@ -75,20 +75,6 @@ class ListBuilder implements ListBuilderInterface
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
-     */
-    private function getTemplate($type)
-    {
-        if (!isset($this->templates[$type])) {
-            return;
-        }
-
-        return $this->templates[$type];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -189,5 +175,19 @@ class ListBuilder implements ListBuilderInterface
         }
 
         return $fieldDescription;
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    private function getTemplate($type)
+    {
+        if (!isset($this->templates[$type])) {
+            return;
+        }
+
+        return $this->templates[$type];
     }
 }

@@ -161,21 +161,6 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $modelManager->lock($object, 123);
     }
 
-    private function getMetadata($class, $isVersioned)
-    {
-        $metadata = new ClassMetadata($class);
-
-        $metadata->isVersioned = $isVersioned;
-
-        if ($isVersioned) {
-            $versionField = 'version';
-            $metadata->versionField = $versionField;
-            $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
-        }
-
-        return $metadata;
-    }
-
     public function testGetParentMetadataForProperty()
     {
         if (version_compare(Version::VERSION, '2.5') < 0) {
@@ -292,6 +277,21 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         );
 
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
+
+        return $metadata;
+    }
+
+    private function getMetadata($class, $isVersioned)
+    {
+        $metadata = new ClassMetadata($class);
+
+        $metadata->isVersioned = $isVersioned;
+
+        if ($isVersioned) {
+            $versionField = 'version';
+            $metadata->versionField = $versionField;
+            $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
+        }
 
         return $metadata;
     }

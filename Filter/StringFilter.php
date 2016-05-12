@@ -51,22 +51,6 @@ class StringFilter extends Filter
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
-    {
-        $choices = array(
-            ChoiceType::TYPE_CONTAINS => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL => '=',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : false;
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultOptions()
@@ -86,5 +70,21 @@ class StringFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
         ));
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return bool
+     */
+    private function getOperator($type)
+    {
+        $choices = array(
+            ChoiceType::TYPE_CONTAINS => 'LIKE',
+            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+            ChoiceType::TYPE_EQUAL => '=',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : false;
     }
 }

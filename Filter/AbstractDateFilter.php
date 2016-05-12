@@ -131,30 +131,6 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Resolves DataType:: constants to SQL operators.
-     *
-     * @param int $type
-     *
-     * @return string
-     */
-    protected function getOperator($type)
-    {
-        $type = intval($type);
-
-        $choices = array(
-            DateType::TYPE_EQUAL => '=',
-            DateType::TYPE_GREATER_EQUAL => '>=',
-            DateType::TYPE_GREATER_THAN => '>',
-            DateType::TYPE_LESS_EQUAL => '<=',
-            DateType::TYPE_LESS_THAN => '<',
-            DateType::TYPE_NULL => 'NULL',
-            DateType::TYPE_NOT_NULL => 'NOT NULL',
-        );
-
-        return isset($choices[$type]) ? $choices[$type] : '=';
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getDefaultOptions()
@@ -184,5 +160,29 @@ abstract class AbstractDateFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
         ));
+    }
+
+    /**
+     * Resolves DataType:: constants to SQL operators.
+     *
+     * @param int $type
+     *
+     * @return string
+     */
+    protected function getOperator($type)
+    {
+        $type = intval($type);
+
+        $choices = array(
+            DateType::TYPE_EQUAL => '=',
+            DateType::TYPE_GREATER_EQUAL => '>=',
+            DateType::TYPE_GREATER_THAN => '>',
+            DateType::TYPE_LESS_EQUAL => '<=',
+            DateType::TYPE_LESS_THAN => '<',
+            DateType::TYPE_NULL => 'NULL',
+            DateType::TYPE_NOT_NULL => 'NOT NULL',
+        );
+
+        return isset($choices[$type]) ? $choices[$type] : '=';
     }
 }
