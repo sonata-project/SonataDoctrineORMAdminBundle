@@ -67,20 +67,6 @@ class ShowBuilder implements ShowBuilderInterface
     }
 
     /**
-     * @param string $type
-     *
-     * @return string
-     */
-    private function getTemplate($type)
-    {
-        if (!isset($this->templates[$type])) {
-            return;
-        }
-
-        return $this->templates[$type];
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
@@ -138,5 +124,19 @@ class ShowBuilder implements ShowBuilderInterface
                 $admin->attachAdminClass($fieldDescription);
                 break;
         }
+    }
+
+    /**
+     * @param string $type
+     *
+     * @return string
+     */
+    private function getTemplate($type)
+    {
+        if (!isset($this->templates[$type])) {
+            return;
+        }
+
+        return $this->templates[$type];
     }
 }

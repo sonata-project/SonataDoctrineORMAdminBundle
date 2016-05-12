@@ -18,16 +18,6 @@ class CallbackFilter extends Filter
     /**
      * {@inheritdoc}
      */
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
-    {
-        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
-
-        return array($this->getOption('alias', $alias), $this->getFieldName());
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!is_callable($this->getOption('callback'))) {
@@ -62,5 +52,15 @@ class CallbackFilter extends Filter
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
         ));
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    {
+        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+
+        return array($this->getOption('alias', $alias), $this->getFieldName());
     }
 }
