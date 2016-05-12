@@ -33,6 +33,7 @@ use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
 class ModelManager implements ModelManagerInterface, LockInterface
 {
+    const ID_SEPARATOR = '~';
     /**
      * @var RegistryInterface
      */
@@ -42,8 +43,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @var EntityManager[]
      */
     protected $cache = array();
-
-    const ID_SEPARATOR = '~';
 
     /**
      * @param RegistryInterface $registry
@@ -605,18 +604,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * method taken from PropertyPath.
-     *
-     * @param string $property
-     *
-     * @return mixed
-     */
-    protected function camelize($property)
-    {
-        return preg_replace(array('/(^|_)+(.)/e', '/\.(.)/e'), array("strtoupper('\\2')", "'_'.strtoupper('\\1')"), $property);
-    }
-
-    /**
      * {@inheritdoc}
      */
     public function getModelCollectionInstance($class)
@@ -654,5 +641,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function collectionRemoveElement(&$collection, &$element)
     {
         return $collection->removeElement($element);
+    }
+
+    /**
+     * method taken from PropertyPath.
+     *
+     * @param string $property
+     *
+     * @return mixed
+     */
+    protected function camelize($property)
+    {
+        return preg_replace(array('/(^|_)+(.)/e', '/\.(.)/e'), array("strtoupper('\\2')", "'_'.strtoupper('\\1')"), $property);
     }
 }
