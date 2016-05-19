@@ -87,15 +87,36 @@ class ProxyQuery implements ProxyQueryInterface
         // always clone the original queryBuilder
         $queryBuilder = clone $this->queryBuilder;
 
+        $rootAlias = current($queryBuilder->getRootAliases());
+
         // todo : check how doctrine behave, potential SQL injection here ...
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilder->getRootAlias().'.'.$sortBy;
+                $sortBy = $rootAlias.'.'.$sortBy;
             }
             $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
         } else {
             $queryBuilder->resetDQLPart('orderBy');
+        }
+
+        /* By default, always add a sort on the identifier fields of the first
+         * used entity in the query, because RDBMS do not guarantee a
+         * particular order when no ORDER BY clause is specified, or when
+         * the field used for sorting is not unique.
+         */
+
+        $identifierFields = $queryBuilder
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($queryBuilder->getRootEntities()))
+            ->getIdentifierFieldNames();
+
+        foreach ($identifierFields as $identifierField) {
+            $queryBuilder->addOrderBy(
+                $rootAlias.'.'.$identifierField,
+                $this->getSortOrder() // reusing the sort order is the most natural way to go
+            );
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
@@ -250,6 +271,7 @@ class ProxyQuery implements ProxyQueryInterface
     protected function getFixedQueryBuilder(QueryBuilder $queryBuilder)
     {
         $queryBuilderId = clone $queryBuilder;
+        $rootAlias = current($queryBuilderId->getRootAliases());
 
         // step 1 : retrieve the targeted class
         $from = $queryBuilderId->getDQLPart('from');
@@ -263,7 +285,7 @@ class ProxyQuery implements ProxyQueryInterface
         $selects = array();
         $idxSelect = '';
         foreach ($idNames as $idName) {
-            $select = sprintf('%s.%s', $queryBuilderId->getRootAlias(), $idName);
+            $select = sprintf('%s.%s', $rootAlias, $idName);
             // Put the ID select on this array to use it on results QB
             $selects[$idName] = $select;
             // Use IDENTITY if id is a relation too. See: http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
@@ -287,7 +309,7 @@ class ProxyQuery implements ProxyQueryInterface
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
             if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $queryBuilderId->getRootAlias().'.'.$sortBy;
+                $sortBy = $rootAlias.'.'.$sortBy;
             }
             $sortBy .= ' AS __order_by';
             $queryBuilderId->addSelect($sortBy);

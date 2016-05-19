@@ -75,6 +75,12 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
             ->method('getDQLPart')
             ->with($this->equalTo('from'))
             ->willReturn(array(new From($class, $alias)));
+        $qb->expects($this->once())
+            ->method('getRootEntities')
+            ->willReturn(array($class));
+        $qb->expects($this->exactly(2))
+            ->method('getRootAliases')
+            ->willReturn(array($alias));
 
         $pq = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
             ->setConstructorArgs(array($qb))
