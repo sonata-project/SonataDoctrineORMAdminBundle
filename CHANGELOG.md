@@ -8,3 +8,4 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Added missing default sort by primary key(s).
+- Allow non integer/string types as identifier (ex. uuid)

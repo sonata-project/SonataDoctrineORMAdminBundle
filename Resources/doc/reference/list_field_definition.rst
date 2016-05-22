@@ -67,6 +67,30 @@ The most important option for each field is the ``type``. The available `types` 
 
     For the `many_to_one` type, a link will be added to the related `Edit` action.
 
+.. note::
+
+    Entities with a class as identifier value (ex. `uuid <https://github.com/ramsey/uuid>`_) will resolve to the correct supported type.
+
+    .. code-block:: php
+
+        <?php
+        use Ramsey\Uuid\Uuid;
+
+        class Example
+        {
+            /**
+             * @var \Ramsey\Uuid\Uuid
+             *
+             * @ORM\Column(type="uuid")
+             * @ORM\Id
+             */
+            private $id;
+
+            public function __construct()
+            {
+                $this->id = Uuid::uuid4();
+            }
+        }
 
 If no type is set, the ``Admin`` class will use the type defined in the Doctrine mapping definition.
 
