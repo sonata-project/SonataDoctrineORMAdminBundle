@@ -158,7 +158,9 @@ class DatagridBuilder implements DatagridBuilderInterface
             $defaultOptions['csrf_protection'] = false;
         }
 
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), $defaultOptions);
+        $formtype = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ?
+                                    'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form';
+        $formBuilder = $this->formFactory->createNamedBuilder('filter', $type, array(), $defaultOptions);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }
