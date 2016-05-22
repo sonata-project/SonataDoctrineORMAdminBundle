@@ -8,3 +8,5 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ### Fixed
 
 - Added missing default sort by primary key(s).
+- Replaced deprecated 'form' type by full class name
+
