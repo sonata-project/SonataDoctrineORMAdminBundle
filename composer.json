@@ -19,7 +19,6 @@
     "require": {
         "php": "^5.3 || ^7.0",
         "doctrine/orm": "^2.3",
-        "knplabs/knp-menu-bundle": "^2.1.1",
         "symfony/form": "^2.3 || ^3.0",
         "symfony/security": "^2.3 || ^3.0",
         "symfony/console": "^2.3 || ^3.0",
@@ -31,6 +30,7 @@
         "sonata-project/core-bundle": "^3.0"
     },
     "require-dev": {
+        "knplabs/knp-menu-bundle": "^2.1.1",
         "simplethings/entity-audit-bundle": "~0.1",
         "symfony/phpunit-bridge": "^2.7 || ^3.0"
     },
