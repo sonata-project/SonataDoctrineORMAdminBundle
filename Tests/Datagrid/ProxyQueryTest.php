@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Query\Expr\From;
+use Doctrine\ORM\Query\Expr\OrderBy;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 
@@ -99,10 +100,19 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
         $qb->expects($this->once())
             ->method('setParameter')
             ->with($this->equalTo($expectedId), $this->equalTo(array($value)));
-        $qb->expects($this->once())
+        $qb->expects($this->any())
             ->method('getDQLPart')
-            ->with($this->equalTo('from'))
-            ->willReturn(array(new From($class, $alias)));
+            ->will($this->returnCallBack(function ($part) use ($class, $alias) {
+                $parts = array(
+                    'from' => array(new From($class, $alias)),
+                    'orderBy' => array(new OrderBy('whatever', 'DESC')),
+                );
+
+                return $parts[$part];
+            }));
+        $qb->expects($this->once())
+            ->method('addOrderBy')
+            ->with("$alias.$id", null);
         $qb->expects($this->once())
             ->method('getRootEntities')
             ->willReturn(array($class));
