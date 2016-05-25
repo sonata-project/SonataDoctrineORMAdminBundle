@@ -124,7 +124,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         foreach ($identifierFields as $identifierField) {
             $order = $rootAlias.'.'.$identifierField;
-            if (!in_array($order, $existingOrders)){
+            if (!in_array($order, $existingOrders)) {
                 $queryBuilder->addOrderBy(
                     $order,
                     $this->getSortOrder() // reusing the sort order is the most natural way to go
