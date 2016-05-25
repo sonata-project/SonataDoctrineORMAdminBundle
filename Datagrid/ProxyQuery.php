@@ -113,11 +113,20 @@ class ProxyQuery implements ProxyQueryInterface
             ->getMetadataFor(current($queryBuilder->getRootEntities()))
             ->getIdentifierFieldNames();
 
+        $existsOrder = [];
+        /** @var Query\Expr\OrderBy $order */
+        foreach ($queryBuilder->getDQLPart('orderBy') as $order){
+            $existsOrder = array_merge($existsOrder, $order->getParts());
+        }
+
         foreach ($identifierFields as $identifierField) {
-            $queryBuilder->addOrderBy(
-                $rootAlias.'.'.$identifierField,
-                $this->getSortOrder() // reusing the sort order is the most natural way to go
-            );
+            $order = $rootAlias.'.'.$identifierField;
+            if(!in_array(($order.' '.$this->getSortOrder()), $existsOrder)){
+                $queryBuilder->addOrderBy(
+                    $order,
+                    $this->getSortOrder() // reusing the sort order is the most natural way to go
+                );
+            }
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
