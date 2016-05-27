@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
+use Doctrine\Common\Collections\Criteria;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -113,11 +114,22 @@ class ProxyQuery implements ProxyQueryInterface
             ->getMetadataFor(current($queryBuilder->getRootEntities()))
             ->getIdentifierFieldNames();
 
+        $existingOrders = array();
+        /** @var Query\Expr\OrderBy $order */
+        foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
+            foreach ($order->getParts() as $part) {
+                $existingOrders[] = trim(str_replace(array(Criteria::DESC, Criteria::ASC), '', $part));
+            }
+        }
+
         foreach ($identifierFields as $identifierField) {
-            $queryBuilder->addOrderBy(
-                $rootAlias.'.'.$identifierField,
-                $this->getSortOrder() // reusing the sort order is the most natural way to go
-            );
+            $order = $rootAlias.'.'.$identifierField;
+            if (!in_array($order, $existingOrders)) {
+                $queryBuilder->addOrderBy(
+                    $order,
+                    $this->getSortOrder() // reusing the sort order is the most natural way to go
+                );
+            }
         }
 
         return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
