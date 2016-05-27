@@ -10,7 +10,9 @@ Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle
 [![Monthly Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/monthly)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 [![Daily Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/daily)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 
-[![Build Status](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=master)](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
+3.x status: [![Build Status](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=3.x)](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
+
+master status: [![Build Status](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle.svg?branch=master)](https://travis-ci.org/sonata-project/SonataDoctrineORMAdminBundle)
 
 ## Documentation
 
