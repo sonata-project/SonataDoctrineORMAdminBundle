@@ -330,4 +330,26 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals($fieldMapping, $field->getFieldMapping());
     }
+
+    public function testGetValueForEmbeddedObject()
+    {
+        $mockedEmbeddedObject = $this->getMock('MockedTestObject', array('myMethod'));
+        $mockedEmbeddedObject->expects($this->once())
+                    ->method('myMethod')
+                    ->will($this->returnValue('myMethodValue'));
+
+        $mockedObject = $this->getMock('MockedTestObject', array('getMyEmbeddedObject'));
+        $mockedObject->expects($this->once())
+            ->method('getMyEmbeddedObject')
+            ->will($this->returnValue($mockedEmbeddedObject));
+
+        $field = new FieldDescription();
+        $field->setFieldMapping(array(
+            'declaredField' => 'myEmbeddedObject', 'type' => 'string', 'fieldName' => 'myEmbeddedObject.myMethod',
+        ));
+        $field->setFieldName('myMethod');
+        $field->setOption('code', 'myMethod');
+
+        $this->assertEquals('myMethodValue', $field->getValue($mockedObject));
+    }
 }

@@ -131,7 +131,7 @@ Advance Usage
 Displaying sub entity properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you need to display only one field from a sub entity in a dedicated column, you can simply use the dot-separated notation:
+If you need to display only one field from a sub entity or embedded object in a dedicated column, you can simply use the dot-separated notation:
 
 .. note::
     This only makes sense when the prefix path is made of entities, not collections.
