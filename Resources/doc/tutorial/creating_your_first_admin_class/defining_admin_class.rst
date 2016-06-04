@@ -44,6 +44,7 @@ First, you need to create an `Admin/PostAdmin.php` file:
             $showMapper
                 ->add('enabled')
                 ->add('title')
+                ->add('author.name')
                 ->add('abstract')
                 ->add('content')
                 ->add('tags')
@@ -85,6 +86,7 @@ First, you need to create an `Admin/PostAdmin.php` file:
         {
             $listMapper
                 ->addIdentifier('title')
+                ->add('author.name')
                 ->add('enabled')
                 ->add('abstract')
                 ->add('content')

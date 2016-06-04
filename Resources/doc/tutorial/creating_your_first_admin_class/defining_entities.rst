@@ -16,6 +16,38 @@ Model definition
 
 Now we need to create the entities that will be used in the blog:
 
+Author
+~~~~~~
+
+.. code-block:: php
+
+    <?php
+    // src/Tutorial/BlogBundle/Entity/Author.php
+    namespace Tutorial\BlogBundle\Entity;
+
+    use Doctrine\ORM\Mapping as ORM;
+
+    /**
+     * @ORM\Embeddable
+     */
+    class Author
+    {
+        /**
+         * @ORM\Column(type = "string")
+         */
+        protected $name;
+
+        public function __construct($name)
+        {
+            $this->name = $name;
+        }
+
+        public function getName()
+        {
+            return $this->name;
+        }
+    }
+
 Post
 ~~~~
 
@@ -81,16 +113,27 @@ Post
          */
         protected $tags;
 
+        /**
+         * @ORM\Embedded(class="Author")
+         */
+        protected $author;
+
         public function __construct()
         {
             $this->tags     = new \Doctrine\Common\Collections\ArrayCollection();
             $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
             $this->created_at = new \DateTime("now");
+            $this->author = new Author('admin');
         }
 
         public function __toString()
         {
             return $this->getTitle();
+        }
+
+        public function getAuthor()
+        {
+            return $this->author;
         }
     }
 
