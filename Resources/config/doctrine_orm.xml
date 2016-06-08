@@ -1,65 +1,50 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sonata.admin.entity_manager" class="Doctrine\ORM\EntityManager" public="false">
             <argument>%sonata_doctrine_orm_admin.entity_manager%</argument>
         </service>
-
         <service id="sonata.admin.manager.orm" class="Sonata\DoctrineORMAdminBundle\Model\ModelManager">
-            <argument type="service" id="doctrine" />
+            <argument type="service" id="doctrine"/>
         </service>
-
         <!-- FormBuilder -->
         <service id="sonata.admin.builder.orm_form" class="Sonata\DoctrineORMAdminBundle\Builder\FormContractor">
-            <argument type="service" id="form.factory" />
+            <argument type="service" id="form.factory"/>
         </service>
-
         <!-- ListBuilder -->
-        <service id="sonata.admin.builder.orm_list" class="Sonata\DoctrineORMAdminBundle\Builder\ListBuilder" >
-            <argument type="service" id="sonata.admin.guesser.orm_list_chain" />
-            <argument />
+        <service id="sonata.admin.builder.orm_list" class="Sonata\DoctrineORMAdminBundle\Builder\ListBuilder">
+            <argument type="service" id="sonata.admin.guesser.orm_list_chain"/>
+            <argument/>
         </service>
-
         <service id="sonata.admin.guesser.orm_list" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
-            <tag name="sonata.admin.guesser.orm_list" />
+            <tag name="sonata.admin.guesser.orm_list"/>
         </service>
-
         <service id="sonata.admin.guesser.orm_list_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
-            <argument />
+            <argument/>
         </service>
-
         <!-- ShowBuilder  -->
-        <service id="sonata.admin.builder.orm_show" class="Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder" >
-            <argument type="service" id="sonata.admin.guesser.orm_show_chain" />
-            <argument />
+        <service id="sonata.admin.builder.orm_show" class="Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder">
+            <argument type="service" id="sonata.admin.guesser.orm_show_chain"/>
+            <argument/>
         </service>
-
         <service id="sonata.admin.guesser.orm_show" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
-            <tag name="sonata.admin.guesser.orm_show" />
+            <tag name="sonata.admin.guesser.orm_show"/>
         </service>
-
         <service id="sonata.admin.guesser.orm_show_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
-            <argument />
+            <argument/>
         </service>
-
         <!-- DatagridBuilder guesser -->
         <service id="sonata.admin.builder.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder">
-            <argument type="service" id="form.factory" />
-            <argument type="service" id="sonata.admin.builder.filter.factory" />
-            <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain" />
+            <argument type="service" id="form.factory"/>
+            <argument type="service" id="sonata.admin.builder.filter.factory"/>
+            <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain"/>
             <argument>%form.type_extension.csrf.enabled%</argument>
         </service>
-
         <service id="sonata.admin.guesser.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser">
-            <tag name="sonata.admin.guesser.orm_datagrid" />
+            <tag name="sonata.admin.guesser.orm_datagrid"/>
         </service>
-
         <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
-            <argument />
+            <argument/>
         </service>
     </services>
 </container>
