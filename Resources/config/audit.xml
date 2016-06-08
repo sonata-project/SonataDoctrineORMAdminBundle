@@ -1,20 +1,14 @@
-<?xml version="1.0" encoding="UTF-8" ?>
-
-<container xmlns="http://symfony.com/schema/dic/services"
-           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
-
+<?xml version="1.0" encoding="UTF-8"?>
+<container xmlns="http://symfony.com/schema/dic/services" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
     <services>
         <service id="sonata.admin.audit.orm.reader" class="Sonata\DoctrineORMAdminBundle\Model\AuditReader">
-            <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore" />
+            <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore"/>
         </service>
-
         <service id="sonata.admin_doctrine_orm.block.audit" class="Sonata\DoctrineORMAdminBundle\Block\AuditBlockService">
-            <tag name="sonata.block" />
-
+            <tag name="sonata.block"/>
             <argument>sonata.admin_doctrine_orm.block.audit</argument>
-            <argument type="service" id="templating" />
-            <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore" />
+            <argument type="service" id="templating"/>
+            <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore"/>
         </service>
     </services>
 </container>
