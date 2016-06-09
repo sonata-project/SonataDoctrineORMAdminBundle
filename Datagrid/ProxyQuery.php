@@ -333,13 +333,11 @@ class ProxyQuery implements ProxyQueryInterface
         $idxMatrix = array();
         foreach ($results as $id) {
             foreach ($idNames as $idName) {
-                $phpValue = $id[$idName];
-                // Convert ids to database value in case of custom type
+                // Convert ids to database value in case of custom type, if provided.
                 $fieldType = $metadata->getTypeOfField($idName);
-                $type = Type::getType($fieldType);
-                $dbValue = $type->convertToDatabaseValue($phpValue, $platform);
-
-                $idxMatrix[$idName][] = $dbValue;
+                $idxMatrix[$idName][] = $fieldType && Type::hasType($fieldType)
+                    ? Type::getType($fieldType)->convertToDatabaseValue($id[$idName], $platform)
+                    : $id[$idName];
             }
         }
 

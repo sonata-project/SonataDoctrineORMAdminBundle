@@ -30,6 +30,7 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
     {
         return array(
             array('aaa', 'bbb', 'id', 'id_idx', 33, Type::INTEGER),
+            array('aaa', 'bbb', 'associatedId', 'associatedId_idx', 33, null),
             array('aaa', 'bbb', 'id.value', 'id_value_idx', 33, Type::INTEGER),
             array('aaa', 'bbb', 'id.uuid', 'id_uuid_idx', new NonIntegerIdentifierTestClass('80fb6f91-bba1-4d35-b3d4-e06b24494e85'), UuidType::NAME),
         );

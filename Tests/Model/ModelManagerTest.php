@@ -348,6 +348,61 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($entity->getId()->toString(), $result[0]);
     }
 
+    public function testAssociationIdentifierType()
+    {
+        $entity = new ContainerEntity(new AssociatedEntity(42), new EmbeddedEntity());
+
+        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataInfo')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $meta->expects($this->any())
+            ->method('getIdentifierValues')
+            ->willReturn(array($entity->getAssociatedEntity()->getPlainField()));
+        $meta->expects($this->any())
+            ->method('getTypeOfField')
+            ->willReturn(null);
+
+        $mf = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $mf->expects($this->any())
+            ->method('getMetadataFor')
+            ->willReturn($meta);
+
+        $platform = $this->getMockBuilder('Doctrine\DBAL\Platforms\PostgreSqlPlatform')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $conn = $this->getMockBuilder('Doctrine\DBAL\Connection')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $conn->expects($this->any())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
+
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $em->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
+        $em->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($conn);
+
+        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturn($em);
+
+        $manager = new ModelManager($registry);
+        $result = $manager->getIdentifierValues($entity);
+
+        $this->assertSame(42, $result[0]);
+    }
+
     private function getMetadata($class, $isVersioned)
     {
         $metadata = new ClassMetadata($class);
