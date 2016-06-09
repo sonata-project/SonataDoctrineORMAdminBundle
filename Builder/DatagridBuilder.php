@@ -22,7 +22,7 @@ use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
-use Symfony\Component\Form\FormFactory;
+use Symfony\Component\Form\FormFactoryInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -32,7 +32,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $filterFactory;
 
     /**
-     * @var FormFactory
+     * @var FormFactoryInterface
      */
     protected $formFactory;
 
@@ -47,12 +47,12 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $csrfTokenEnabled;
 
     /**
-     * @param FormFactory            $formFactory
+     * @param FormFactoryInterface   $formFactory
      * @param FilterFactoryInterface $filterFactory
      * @param TypeGuesserInterface   $guesser
      * @param bool                   $csrfTokenEnabled
      */
-    public function __construct(FormFactory $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
+    public function __construct(FormFactoryInterface $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
     {
         $this->formFactory = $formFactory;
         $this->filterFactory = $filterFactory;
@@ -158,7 +158,10 @@ class DatagridBuilder implements DatagridBuilderInterface
             $defaultOptions['csrf_protection'] = false;
         }
 
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', 'form', array(), $defaultOptions);
+        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
+        $formType = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form';
+        $formBuilder = $this->formFactory->createNamedBuilder('filter', $formType, array(), $defaultOptions);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }
