@@ -20,9 +20,16 @@ use Symfony\Component\Form\FormFactoryInterface;
 class FormContractor implements FormContractorInterface
 {
     /**
+     * @deprecated since version 3.x, to be removed in 4.0
+     *
      * @var FormFactoryInterface
      */
     protected $fieldFactory;
+
+    /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
 
     /**
      * @param FormFactoryInterface $formFactory
