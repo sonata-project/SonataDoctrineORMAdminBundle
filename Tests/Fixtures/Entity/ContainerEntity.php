@@ -28,4 +28,12 @@ class ContainerEntity
         $this->associatedEntity = $associatedEntity;
         $this->embeddedEntity = $embeddedEntity;
     }
+
+    /**
+     * @return AssociatedEntity
+     */
+    public function getAssociatedEntity()
+    {
+        return $this->associatedEntity;
+    }
 }

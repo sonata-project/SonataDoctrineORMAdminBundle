@@ -352,7 +352,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             }
 
             $fieldType = $metadata->getTypeOfField($name);
-            $type = Type::getType($fieldType);
+            $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
             if ($type) {
                 $identifiers[] = $type->convertToDatabaseValue($value, $platform);
                 continue;
