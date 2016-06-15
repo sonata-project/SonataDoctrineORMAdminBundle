@@ -34,6 +34,10 @@ This code manage the many-to-[one|many] association field popup
         initialize_popup_{{ id }}();
 
         var target = jQuery(this);
+        
+        if (target.attr('href').length === 0 || target.attr('href') === '#') {
+            return;
+        }
 
         event.preventDefault();
         event.stopPropagation();
