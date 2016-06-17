@@ -20,7 +20,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 class FormContractor implements FormContractorInterface
 {
     /**
-     * @deprecated since version 3.x, to be removed in 4.0
+     * @deprecated since version 3.0.4, to be removed in 4.0
      *
      * @var FormFactoryInterface
      */
