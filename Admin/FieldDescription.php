@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Admin;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\BaseFieldDescription;
 
 class FieldDescription extends BaseFieldDescription
@@ -106,5 +107,21 @@ class FieldDescription extends BaseFieldDescription
         }
 
         return $this->getFieldValue($object, $this->fieldName);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function describesSingleValuedAssociation()
+    {
+        return $this->mappingType === ($this->mappingType & ClassMetadata::TO_ONE);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    final public function describesCollectionValuedAssociation()
+    {
+        return $this->mappingType === ($this->mappingType & ClassMetadata::TO_MANY);
     }
 }

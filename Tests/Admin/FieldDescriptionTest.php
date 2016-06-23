@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
@@ -157,7 +158,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssociationAdmin()
     {
-        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\Admin')
+        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\AbstractAdmin')
             ->disableOriginalConstructor()
             ->getMock();
         $adminMock->expects($this->once())
@@ -172,7 +173,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAssociationAdmin()
     {
-        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\Admin')
+        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\AbstractAdmin')
             ->disableOriginalConstructor()
             ->getMock();
         $adminMock->expects($this->once())
@@ -351,5 +352,61 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
         $field->setOption('code', 'myMethod');
 
         $this->assertEquals('myMethodValue', $field->getValue($mockedObject));
+    }
+
+    /**
+     * @dataProvider testDescribesSingleValuedAssociationProvider
+     *
+     * @param mixed $mappingType
+     * @param bool  $expected
+     */
+    public function testDescribesSingleValuedAssociation($mappingType, $expected)
+    {
+        $fd = new FieldDescription();
+        $fd->setAssociationMapping(array(
+            'fieldName' => 'foo',
+            'type' => $mappingType,
+        ));
+        $this->assertSame($expected, $fd->describesSingleValuedAssociation());
+    }
+
+    public function testDescribesSingleValuedAssociationProvider()
+    {
+        return array(
+            'one to one' => array(ClassMetadata::ONE_TO_ONE, true),
+            'many to one' => array(ClassMetadata::MANY_TO_ONE, true),
+            'one to many' => array(ClassMetadata::ONE_TO_MANY, false),
+            'many to many' => array(ClassMetadata::MANY_TO_MANY, false),
+            'string' => array('string', false),
+            'null' => array(null, false),
+        );
+    }
+
+    /**
+     * @dataProvider testDescribesCollectionValuedAssociationProvider
+     *
+     * @param mixed $mappingType
+     * @param bool  $expected
+     */
+    public function testDescribesCollectionValuedAssociation($mappingType, $expected)
+    {
+        $fd = new FieldDescription();
+        $fd->setAssociationMapping(array(
+            'fieldName' => 'foo',
+            'type' => $mappingType,
+        ));
+        $this->assertSame($expected, $fd->describesCollectionValuedAssociation());
+    }
+
+    public function testDescribesCollectionValuedAssociationProvider()
+    {
+        return array(
+            'one to one' => array(ClassMetadata::ONE_TO_ONE, false),
+            'many to one' => array(ClassMetadata::MANY_TO_ONE, false),
+            'one to many' => array(ClassMetadata::ONE_TO_MANY, true),
+            'many to many' => array(ClassMetadata::MANY_TO_MANY, true),
+            'string' => array('string', false),
+            'null' => array(null, false),
+        );
     }
 }

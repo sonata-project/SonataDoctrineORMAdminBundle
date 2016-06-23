@@ -11,7 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
@@ -99,30 +98,16 @@ class ShowBuilder implements ShowBuilderInterface
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
 
             if (!$fieldDescription->getTemplate()) {
-                switch ($fieldDescription->getMappingType()) {
-                    case ClassMetadataInfo::MANY_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig');
-                        break;
-                    case ClassMetadataInfo::ONE_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig');
-                        break;
-                    case ClassMetadataInfo::ONE_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig');
-                        break;
-                    case ClassMetadataInfo::MANY_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig');
-                        break;
+                if ($fieldDescription->describesSingleValuedAssociation()) {
+                    $fieldDescription->setTemplate('SonataAdminBundle:CRUD/Association:show_single.html.twig');
+                } elseif ($fieldDescription->describesCollectionValuedAssociation()) {
+                    $fieldDescription->setTemplate('SonataAdminBundle:CRUD/Association:show_collection.html.twig');
                 }
             }
         }
 
-        switch ($fieldDescription->getMappingType()) {
-            case ClassMetadataInfo::MANY_TO_ONE:
-            case ClassMetadataInfo::ONE_TO_ONE:
-            case ClassMetadataInfo::ONE_TO_MANY:
-            case ClassMetadataInfo::MANY_TO_MANY:
-                $admin->attachAdminClass($fieldDescription);
-                break;
+        if ($fieldDescription->describesAssociation()) {
+            $admin->attachAdminClass($fieldDescription);
         }
     }
 

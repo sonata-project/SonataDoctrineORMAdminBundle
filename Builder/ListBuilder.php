@@ -11,7 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
@@ -118,24 +117,15 @@ class ListBuilder implements ListBuilderInterface
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
 
             if (!$fieldDescription->getTemplate()) {
-                switch ($fieldDescription->getMappingType()) {
-                    case ClassMetadataInfo::MANY_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig');
-                        break;
-                    case ClassMetadataInfo::ONE_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig');
-                        break;
-                    case ClassMetadataInfo::ONE_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig');
-                        break;
-                    case ClassMetadataInfo::MANY_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig');
-                        break;
+                if ($fieldDescription->describesSingleValuedAssociation()) {
+                    $fieldDescription->setTemplate('SonataAdminBundle:CRUD/Association:list_single.html.twig');
+                } elseif ($fieldDescription->describesCollectionValuedAssociation()) {
+                    $fieldDescription->setTemplate('SonataAdminBundle:CRUD/Association:list_collection.html.twig');
                 }
             }
         }
 
-        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY))) {
+        if ($fieldDescription->describesAssociation()) {
             $admin->attachAdminClass($fieldDescription);
         }
     }
