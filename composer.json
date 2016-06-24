@@ -16,6 +16,13 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/ju1ius/SonataAdminBundle.git"
+
+        }
+    ],
     "require": {
         "php": "^5.3 || ^7.0",
         "doctrine/orm": "^2.3",
@@ -26,7 +33,7 @@
         "symfony/framework-bundle": "^2.2 || ^3.0",
         "symfony/security-acl": "^2.2 || ^3.0",
         "sonata-project/exporter": "^1.3.1",
-        "sonata-project/admin-bundle": "^3.1",
+        "sonata-project/admin-bundle": "dev-refactor/bring-templates-back as 3.1",
         "sonata-project/core-bundle": "^3.0"
     },
     "require-dev": {
