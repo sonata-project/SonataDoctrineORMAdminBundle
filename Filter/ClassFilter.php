@@ -30,7 +30,7 @@ class ClassFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ?  EqualType::TYPE_IS_EQUAL : $data['type'];
+        $data['type'] = !isset($data['type']) ? EqualType::TYPE_IS_EQUAL : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
