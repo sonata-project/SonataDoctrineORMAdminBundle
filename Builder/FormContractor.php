@@ -71,21 +71,6 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param FieldDescriptionInterface $fieldDescription
-     *
-     * @return bool
-     */
-    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
-    {
-        return in_array($fieldDescription->getMappingType(), [
-            ClassMetadataInfo::ONE_TO_MANY,
-            ClassMetadataInfo::MANY_TO_MANY,
-            ClassMetadataInfo::MANY_TO_ONE,
-            ClassMetadataInfo::ONE_TO_ONE
-        ]);
-    }
-
-    /**
      * @return FormFactoryInterface
      */
     public function getFormFactory()
@@ -174,5 +159,20 @@ class FormContractor implements FormContractorInterface
         }
 
         return $options;
+    }
+
+    /**
+     * @param FieldDescriptionInterface $fieldDescription
+     *
+     * @return bool
+     */
+    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
+    {
+        return in_array($fieldDescription->getMappingType(), array(
+            ClassMetadataInfo::ONE_TO_MANY,
+            ClassMetadataInfo::MANY_TO_MANY,
+            ClassMetadataInfo::MANY_TO_ONE,
+            ClassMetadataInfo::ONE_TO_ONE,
+        ));
     }
 }
