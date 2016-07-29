@@ -65,9 +65,24 @@ class FormContractor implements FormContractorInterface
         $fieldDescription->setAdmin($admin);
         $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'standard'));
 
-        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE))) {
+        if ($this->hasAssociation($fieldDescription) || $fieldDescription->getOption('admin_code')) {
             $admin->attachAdminClass($fieldDescription);
         }
+    }
+
+    /**
+     * @param FieldDescriptionInterface $fieldDescription
+     *
+     * @return bool
+     */
+    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
+    {
+        return in_array($fieldDescription->getMappingType(), [
+            ClassMetadataInfo::ONE_TO_MANY,
+            ClassMetadataInfo::MANY_TO_MANY,
+            ClassMetadataInfo::MANY_TO_ONE,
+            ClassMetadataInfo::ONE_TO_ONE
+        ]);
     }
 
     /**
