@@ -142,5 +142,4 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
         // When
         $this->formContractor->fixFieldDescription($admin, $fieldDescription);
     }
-
 }
