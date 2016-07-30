@@ -112,4 +112,34 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
             $this->assertSame($modelClass, $options['type_options']['data_class']);
         }
     }
+
+    public function testAdminClassAttachForNotMappedField()
+    {
+        // Given
+        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+        $modelManager->method('hasMetadata')->willReturn(false);
+
+        $admin = $this->getMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $admin->method('getModelManager')->willReturn($modelManager);
+
+        $fieldDescription = $this->getMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription->method('getMappingType')->willReturn('simple');
+        $fieldDescription->method('getType')->willReturn('sonata_type_model_list');
+        $fieldDescription->method('getOption')->with($this->logicalOr(
+            $this->equalTo('edit'),
+            $this->equalTo('admin_code')
+        ))->willReturn('sonata.admin.code');
+
+        // Then
+        $admin
+            ->expects($this->once())
+            ->method('attachAdminClass')
+            ->with($fieldDescription)
+        ;
+
+        // When
+        $this->formContractor->fixFieldDescription($admin, $fieldDescription);
+    }
 }
