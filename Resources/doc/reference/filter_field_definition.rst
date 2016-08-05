@@ -90,6 +90,19 @@ This form type requires ``property`` option. See documentation of ``sonata_type_
         ;
     }
 
+doctrine_orm_date_range
+-----------------------
+The ``doctrine_orm_date_range`` filter renders two fields to filter all records between two dates.
+If only one date is set it will filter for all records until or since the given date.
+
+.. code-block:: php
+
+    // ArticleAdmin
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    {
+        $datagridMapper->add('created', 'doctrine_orm_date_range');
+    }
+
 Timestamps
 ----------
 
