@@ -50,8 +50,8 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                     $options['operator_options'] = array();
 
                     $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ?
-            			'Symfony\Bridge\Doctrine\Form\Type\EntityType' :
-            			'entity';
+                        'Symfony\Bridge\Doctrine\Form\Type\EntityType' :
+                        'entity';
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity'],
                     );
