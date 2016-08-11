@@ -47,7 +47,7 @@ abstract class AbstractDateFilter extends Filter
                 return;
             }
 
-            if (!$data['value']['start'] || !$data['value']['end']) {
+            if (!$data['value']['start'] && !$data['value']['end']) {
                 return;
             }
 
@@ -76,12 +76,22 @@ abstract class AbstractDateFilter extends Filter
             if ($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
+                if ($data['value']['start']) {
+                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
+                }
+
+                if ($data['value']['end']) {
+                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
+                }
             }
 
-            $queryBuilder->setParameter($startDateParameterName, $data['value']['start']);
-            $queryBuilder->setParameter($endDateParameterName, $data['value']['end']);
+            if ($data['value']['start']) {
+                $queryBuilder->setParameter($startDateParameterName, $data['value']['start']);
+            }
+
+            if ($data['value']['end']) {
+                $queryBuilder->setParameter($endDateParameterName, $data['value']['end']);
+            }
         } else {
             if (!$data['value']) {
                 return;
