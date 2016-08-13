@@ -76,7 +76,12 @@ class ClassFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_default', array(
+        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
+            : 'sonata_type_filter_default';
+
+        return array($type, array(
             'operator_type' => 'sonata_type_equal',
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
