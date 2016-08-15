@@ -104,6 +104,7 @@ class FormContractor implements FormContractorInterface
             'Sonata\AdminBundle\Form\Type\ModelType',
             'sonata_type_model_list',
             'Sonata\AdminBundle\Form\Type\ModelTypeList',
+            'Sonata\AdminBundle\Form\Type\ModelListType',
             'sonata_type_model_hidden',
             'Sonata\AdminBundle\Form\Type\ModelHiddenType',
             'sonata_type_model_autocomplete',
