@@ -65,7 +65,12 @@ class StringFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_choice', array(
+        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Sonata\AdminBundle\Form\Type\Filter\ChoiceType'
+            : 'sonata_type_filter_choice';
+
+        return array($type, array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),

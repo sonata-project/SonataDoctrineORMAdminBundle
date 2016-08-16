@@ -52,7 +52,12 @@ class NumberFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_number', array(
+        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
+        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Sonata\AdminBundle\Form\Type\Filter\NumberType'
+            : 'sonata_type_filter_number';
+
+        return array($type, array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
