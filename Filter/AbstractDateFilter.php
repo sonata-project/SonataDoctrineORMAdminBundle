@@ -165,6 +165,17 @@ abstract class AbstractDateFilter extends Filter
             $name .= '_range';
         }
 
+        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
+        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
+            $classnames = array(
+                'sonata_type_filter_date' => 'Sonata\AdminBundle\Form\Type\Filter\DateType',
+                'sonata_type_filter_date_range' => 'Sonata\AdminBundle\Form\Type\Filter\DateRangeType',
+                'sonata_type_filter_datetime' => 'Sonata\AdminBundle\Form\Type\Filter\DateTimeType',
+                'sonata_type_filter_datetime_range' => 'Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType',
+            );
+            $name = $classnames[$name];
+        }
+
         return array($name, array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
