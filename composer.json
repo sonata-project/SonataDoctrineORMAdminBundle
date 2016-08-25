@@ -31,6 +31,8 @@
     },
     "require-dev": {
         "knplabs/knp-menu-bundle": "^2.1.1",
+        "phpunit/phpunit": "^4.7 || ^5.5",
+        "phpunit/phpunit-mock-objects": "!=3.2.4,!=3.2.5",
         "simplethings/entity-audit-bundle": "0.1 - 0.9",
         "sllh/php-cs-fixer-styleci-bridge": "^2.0",
         "symfony/phpunit-bridge": "^2.7 || ^3.0"
