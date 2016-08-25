@@ -190,7 +190,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue()
     {
-        $mockedObject = $this->getMock('MockedTestObject', array('myMethod'));
+        $mockedObject = $this->getMock('stdClass', array('myMethod'));
         $mockedObject->expects($this->once())
             ->method('myMethod')
             ->will($this->returnValue('myMethodValue'));
@@ -206,7 +206,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValueWhenCannotRetrieve()
     {
-        $mockedObject = $this->getMock('MockedTestObject', array('myMethod'));
+        $mockedObject = $this->getMock('stdClass', array('myMethod'));
         $mockedObject->expects($this->never())
             ->method('myMethod')
             ->will($this->returnValue('myMethodValue'));
@@ -333,12 +333,12 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueForEmbeddedObject()
     {
-        $mockedEmbeddedObject = $this->getMock('MockedTestObject', array('myMethod'));
+        $mockedEmbeddedObject = $this->getMock('stdClass', array('myMethod'));
         $mockedEmbeddedObject->expects($this->once())
                     ->method('myMethod')
                     ->will($this->returnValue('myMethodValue'));
 
-        $mockedObject = $this->getMock('MockedTestObject', array('getMyEmbeddedObject'));
+        $mockedObject = $this->getMock('stdClass', array('getMyEmbeddedObject'));
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
             ->will($this->returnValue($mockedEmbeddedObject));
