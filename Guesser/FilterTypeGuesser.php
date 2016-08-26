@@ -49,7 +49,9 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                     $options['operator_type'] = 'sonata_type_equal';
                     $options['operator_options'] = array();
 
-                    $options['field_type'] = 'entity';
+                    $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix') ?
+                        'Symfony\Bridge\Doctrine\Form\Type\EntityType' :
+                        'entity';
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity'],
                     );
