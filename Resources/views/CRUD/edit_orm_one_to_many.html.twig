@@ -62,9 +62,9 @@ file that was distributed with this source code.
             {# add code for the sortable options #}
             {% if sonata_admin.field_description.options.sortable is defined %}
                 {% if sonata_admin.inline == 'table' %}
-                    {% include 'SonataDoctrineORMAdminBundle:CRUD:sortable_script_table.html.twig' %}
+                    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_sortable_script_table.html.twig' %}
                 {% else %}
-                    {% include 'SonataDoctrineORMAdminBundle:CRUD:sortable_script_tabs.html.twig' %}
+                    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_sortable_script_tabs.html.twig' %}
                 {% endif %}
             {% endif %}
 
