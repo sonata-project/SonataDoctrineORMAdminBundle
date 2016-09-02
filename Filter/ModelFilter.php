@@ -47,9 +47,13 @@ class ModelFilter extends Filter
         return array(
             'mapping_type' => false,
             'field_name' => false,
-            'field_type' => 'entity',
+            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
+                : 'entity', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'field_options' => array(),
-            'operator_type' => 'sonata_type_equal',
+            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Sonata\CoreBundle\Form\Type\EqualType'
+                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'operator_options' => array(),
         );
     }
