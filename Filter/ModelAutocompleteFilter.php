@@ -45,9 +45,13 @@ class ModelAutocompleteFilter extends Filter
     {
         return array(
             'field_name' => false,
-            'field_type' => 'sonata_type_model_autocomplete',
+            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Sonata\AdminBundle\Form\Type\ModelAutocompleteType'
+                : 'sonata_type_model_autocomplete', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'field_options' => array(),
-            'operator_type' => 'sonata_type_equal',
+            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Sonata\CoreBundle\Form\Type\EqualType'
+                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'operator_options' => array(),
         );
     }

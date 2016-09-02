@@ -45,11 +45,16 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
-
-                    $options['operator_type'] = 'sonata_type_equal';
+                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                    $options['operator_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                        ? 'Sonata\CoreBundle\Form\Type\EqualType'
+                        : 'sonata_type_equal';
                     $options['operator_options'] = array();
 
-                    $options['field_type'] = 'entity';
+                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                    $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                        ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
+                        : 'entity';
                     $options['field_options'] = array(
                         'class' => $mapping['targetEntity'],
                     );
@@ -65,7 +70,10 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type'] = 'sonata_type_boolean';
+                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                    ? 'Sonata\CoreBundle\Form\Type\BooleanType'
+                    : 'sonata_type_boolean';
                 $options['field_options'] = array();
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
@@ -77,18 +85,21 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
-                $options['field_type'] = 'number';
-
-                return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
-                $options['field_type'] = 'number';
+                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                    ? 'Symfony\Component\Form\Extension\Core\Type\NumberType'
+                    : 'number';
 
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
             case 'text':
-                $options['field_type'] = 'text';
+                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                    ? 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                    : 'text';
 
                 return new TypeGuess('doctrine_orm_string', $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':

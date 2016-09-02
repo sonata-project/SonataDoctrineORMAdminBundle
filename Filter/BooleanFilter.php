@@ -57,7 +57,9 @@ class BooleanFilter extends Filter
     public function getDefaultOptions()
     {
         return array(
-            'field_type' => 'sonata_type_boolean',
+            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Sonata\CoreBundle\Form\Type\BooleanType'
+                : 'sonata_type_boolean', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
         );
     }
 
@@ -74,7 +76,9 @@ class BooleanFilter extends Filter
         return array($type, array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'operator_type' => 'hidden',
+            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
+                : 'hidden', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'operator_options' => array(),
             'label' => $this->getLabel(),
         ));

@@ -82,7 +82,9 @@ class ChoiceFilter extends Filter
             : 'sonata_type_filter_default';
 
         return array($type, array(
-            'operator_type' => 'sonata_type_equal',
+            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Sonata\CoreBundle\Form\Type\EqualType'
+                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),

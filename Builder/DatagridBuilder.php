@@ -126,7 +126,8 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->mergeOption('field_options', array('required' => false));
 
-        if ($type === 'doctrine_orm_model_autocomplete') {
+        // NEXT_MAJOR: Remove first check (when requirement of Symfony is >= 2.8)
+        if ($type === 'doctrine_orm_model_autocomplete' || $type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
             $fieldDescription->mergeOption('field_options', array(
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),

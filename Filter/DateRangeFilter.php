@@ -32,6 +32,10 @@ class DateRangeFilter extends AbstractDateFilter
      */
     public function getFieldType()
     {
-        return $this->getOption('field_type', 'sonata_type_date_range');
+        // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+        return $this->getOption('field_type', method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+            ? 'Sonata\CoreBundle\Form\Type\DateRangeType'
+            : 'sonata_type_date_range'
+        );
     }
 }
