@@ -34,8 +34,12 @@ class CallbackFilter extends Filter
     {
         return array(
             'callback' => null,
-            'field_type' => 'text',
-            'operator_type' => 'hidden',
+            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Symfony\Component\Form\Extension\Core\Type\TextType'
+                : 'text', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
+                ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
+                : 'hidden', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'operator_options' => array(),
         );
     }
