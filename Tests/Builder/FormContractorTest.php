@@ -72,13 +72,27 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
         $collectionTypes = array('sonata_type_collection');
         // NEXT_MAJOR: Use only FQCNs when dropping support for Symfony <2.8
         if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-            array_push(
-                $modelTypes,
+            $classTypes = array(
                 'Sonata\AdminBundle\Form\Type\ModelType',
                 'Sonata\AdminBundle\Form\Type\ModelTypeList',
                 'Sonata\AdminBundle\Form\Type\ModelHiddenType',
-                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType'
+                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
             );
+
+            foreach ($classTypes as $classType) {
+                array_push(
+                    $modelTypes,
+                    // add class type.
+                    $classType,
+                    // add instance of class type.
+                    get_class(
+                        $this->getMockBuilder($classType)
+                            ->disableOriginalConstructor()
+                            ->getMock()
+                    )
+                );
+            }
+
             $adminTypes[] = 'Sonata\AdminBundle\Form\Type\AdminType';
             $collectionTypes[] = 'Sonata\CoreBundle\Form\Type\CollectionType';
         }

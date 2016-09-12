@@ -99,17 +99,18 @@ class FormContractor implements FormContractorInterface
         $options['sonata_field_description'] = $fieldDescription;
 
         // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony <2.8
-        if (in_array($type, array(
-            'sonata_type_model',
-            'Sonata\AdminBundle\Form\Type\ModelType',
-            'sonata_type_model_list',
-            'Sonata\AdminBundle\Form\Type\ModelTypeList',
-            'Sonata\AdminBundle\Form\Type\ModelListType',
-            'sonata_type_model_hidden',
-            'Sonata\AdminBundle\Form\Type\ModelHiddenType',
-            'sonata_type_model_autocomplete',
-            'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-        ), true)) {
+        if ($this->checkFormType($type, array(
+                'sonata_type_model',
+                'sonata_type_model_list',
+                'sonata_type_model_hidden',
+                'sonata_type_model_autocomplete',
+            )) || $this->checkFormClass($type, array(
+                'Sonata\AdminBundle\Form\Type\ModelType',
+                'Sonata\AdminBundle\Form\Type\ModelTypeList',
+                'Sonata\AdminBundle\Form\Type\ModelListType',
+                'Sonata\AdminBundle\Form\Type\ModelHiddenType',
+                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
+            ))) {
             if ($fieldDescription->getOption('edit') === 'list') {
                 throw new \LogicException('The ``sonata_type_model`` type does not accept an ``edit`` option anymore, please review the UPGRADE-2.1.md file from the SonataAdminBundle');
             }
@@ -117,18 +118,14 @@ class FormContractor implements FormContractorInterface
             $options['class'] = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
-            if (in_array($type, array(
-                'sonata_type_model_autocomplete',
-                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-            ), true)) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony <2.8
+            if ($this->checkFormType($type, array('sonata_type_model_autocomplete')) || $this->checkFormClass($type, array('Sonata\AdminBundle\Form\Type\ModelAutocompleteType'))) {
                 if (!$fieldDescription->getAssociationAdmin()) {
                     throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity: `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
                 }
             }
-        } elseif (in_array($type, array(
-            'sonata_type_admin',
-            'Sonata\AdminBundle\Form\Type\AdminType',
-        ), true)) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony <2.8
+        } elseif ($this->checkFormType($type, array('sonata_type_admin')) || $this->checkFormClass($type, array('Sonata\AdminBundle\Form\Type\AdminType'))) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
@@ -143,10 +140,8 @@ class FormContractor implements FormContractorInterface
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        } elseif (in_array($type, array(
-            'sonata_type_collection',
-            'Sonata\CoreBundle\Form\Type\CollectionType',
-        ), true)) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony <2.8
+        } elseif ($this->checkFormType($type, array('sonata_type_collection')) || $this->checkFormClass($type, array('Sonata\CoreBundle\Form\Type\CollectionType'))) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf('The current field `%s` is not linked to an admin. Please create one for the target entity : `%s`', $fieldDescription->getName(), $fieldDescription->getTargetEntity()));
             }
@@ -175,5 +170,31 @@ class FormContractor implements FormContractorInterface
             ClassMetadataInfo::MANY_TO_ONE,
             ClassMetadataInfo::ONE_TO_ONE,
         ));
+    }
+
+    /**
+     * NEXT_MAJOR: See next major comments above, this method should be removed when dropping support for Symfony <2.8.
+     *
+     * @param string $type
+     * @param array  $types
+     *
+     * @return bool
+     */
+    private function checkFormType($type, $types)
+    {
+        return in_array($type, $types, true);
+    }
+
+    /**
+     * @param string $type
+     * @param array  $classes
+     *
+     * @return array
+     */
+    private function checkFormClass($type, $classes)
+    {
+        return array_filter($classes, function ($subclass) use ($type) {
+            return is_a($type, $subclass, true);
+        });
     }
 }
