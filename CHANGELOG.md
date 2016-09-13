@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.0.5...3.1.0) - 2016-09-12
+### Changed
+- Date range filter can now be used with only one side defined
+- Use class names for filters when using symfony 2.8+
+- Changed how `FormContractor::getDefaultOptions` checks which type is used. Instead of checking for an array of available types, we improve this by checking for the class instance or parents.
+
+### Fixed
+- Allow not mapped field to use `admin_code` option for `sonata_type_model_list`
+- `FormContractor` supports the new `Sonata\AdminBundle\Form\Type\ModelListType`
+- Add missing translation of 'Delete' in edit view
+- Use class name when referencing `Form Type` to be compatible with Symfony 2.8+
+
+### Removed
+- internal test classes are now excluded from the autoloader
+
 ## [3.0.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.0.4...3.0.5) - 2016-06-05
 ### Fixed
 - Fix `FormContractor::getDefaultOptions` not checking against form types FQCNs
