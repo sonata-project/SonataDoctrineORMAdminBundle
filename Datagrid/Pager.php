@@ -22,6 +22,8 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 class Pager extends BasePager
 {
     /**
+     * NEXT_MAJOR: remove this property.
+     *
      * @deprecated This property is deprecated since version 2.4 and will be removed in 3.0
      */
     protected $queryBuilder = null;
