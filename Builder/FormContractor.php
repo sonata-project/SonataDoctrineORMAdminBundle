@@ -20,6 +20,8 @@ use Symfony\Component\Form\FormFactoryInterface;
 class FormContractor implements FormContractorInterface
 {
     /**
+     * NEXT_MAJOR: remove this property.
+     *
      * @deprecated since version 3.0.4, to be removed in 4.0
      *
      * @var FormFactoryInterface
