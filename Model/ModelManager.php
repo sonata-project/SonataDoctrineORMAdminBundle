@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\UnitOfWork;
 use Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -385,9 +386,13 @@ class ModelManager implements ModelManagerInterface, LockInterface
             throw new \RunTimeException('Invalid argument, object or null required');
         }
 
-        // the entities is not managed
-        if (!$entity || !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity)) {
+        if (!$entity) {
             return;
+        }
+
+        $entityState = $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity);
+        if (UnitOfWork::STATE_NEW == $entityState || UnitOfWork::STATE_REMOVED == $entityState) {
+            return null;
         }
 
         $values = $this->getIdentifierValues($entity);
