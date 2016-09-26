@@ -387,12 +387,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if (!$entity) {
-            return null;
+            return;
         }
 
         $entityState = $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity);
         if (UnitOfWork::STATE_NEW == $entityState || UnitOfWork::STATE_REMOVED == $entityState) {
-            return null;
+            return;
         }
 
         $values = $this->getIdentifierValues($entity);
