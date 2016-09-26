@@ -60,7 +60,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
 
                 if (($count % $batchSize) == 0) {
                     list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
-                    $countAdded   += $batchAdded;
+                    $countAdded += $batchAdded;
                     $countUpdated += $batchUpdated;
                     $objectIds = array();
                 }
@@ -72,7 +72,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
 
             if (count($objectIds) > 0) {
                 list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
-                $countAdded   += $batchAdded;
+                $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
         } catch (\PDOException $e) {
