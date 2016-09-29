@@ -9,7 +9,7 @@ file that was distributed with this source code.
 
 #}
 <script type="text/javascript">
-    jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody').sortable({
+    jQuery('div#field_container_{{ id }} tbody.sonata-ba-tbody').first().sortable({
         axis: 'y',
         opacity: 0.6,
         items: '> tr',
