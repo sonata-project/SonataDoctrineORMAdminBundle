@@ -141,7 +141,7 @@ class ModelFilter extends Filter
         );
 
         if (!in_array($this->getOption('mapping_type'), $types)) {
-            throw new \RunTimeException('Invalid mapping type');
+            throw new \RuntimeException('Invalid mapping type');
         }
 
         $associationMappings = $this->getParentAssociationMappings();
