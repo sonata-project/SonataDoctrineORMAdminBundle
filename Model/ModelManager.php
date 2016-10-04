@@ -117,7 +117,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function getNewFieldDescriptionInstance($class, $name, array $options = array())
     {
         if (!is_string($name)) {
-            throw new \RunTimeException('The name argument must be a string');
+            throw new \RuntimeException('The name argument must be a string');
         }
 
         if (!isset($options['route']['name'])) {
@@ -383,7 +383,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function getNormalizedIdentifier($entity)
     {
         if (is_scalar($entity)) {
-            throw new \RunTimeException('Invalid argument, object or null required');
+            throw new \RuntimeException('Invalid argument, object or null required');
         }
 
         if (!$entity) {
