@@ -391,7 +391,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         $entityState = $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity);
-        if (UnitOfWork::STATE_NEW == $entityState || UnitOfWork::STATE_REMOVED == $entityState) {
+        if (in_array($entityState, array(UnitOfWork::STATE_NEW, UnitOfWork::STATE_REMOVED), true)) {
             return;
         }
 
