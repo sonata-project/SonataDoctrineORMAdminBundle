@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.0...3.1.1) - 2016-10-04
+### Fixed
+- Use mor reliable `UnitOfWork::getEntityState()` method to detect persisted entities.
+- Typo on `RuntimeException` usages
+
 ## [3.1.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.0.5...3.1.0) - 2016-09-12
 ### Changed
 - Date range filter can now be used with only one side defined
