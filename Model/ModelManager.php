@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\UnitOfWork;
 use Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -116,7 +117,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function getNewFieldDescriptionInstance($class, $name, array $options = array())
     {
         if (!is_string($name)) {
-            throw new \RunTimeException('The name argument must be a string');
+            throw new \RuntimeException('The name argument must be a string');
         }
 
         if (!isset($options['route']['name'])) {
@@ -382,11 +383,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function getNormalizedIdentifier($entity)
     {
         if (is_scalar($entity)) {
-            throw new \RunTimeException('Invalid argument, object or null required');
+            throw new \RuntimeException('Invalid argument, object or null required');
         }
 
-        // the entities is not managed
-        if (!$entity || !$this->getEntityManager($entity)->getUnitOfWork()->isInIdentityMap($entity)) {
+        if (!$entity) {
+            return;
+        }
+
+        if (in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), array(
+            UnitOfWork::STATE_NEW,
+            UnitOfWork::STATE_REMOVED,
+        ), true)) {
             return;
         }
 
