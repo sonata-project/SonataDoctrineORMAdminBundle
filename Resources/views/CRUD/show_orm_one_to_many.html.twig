@@ -14,15 +14,12 @@ file that was distributed with this source code.
 {% block field%}
     <ul class="sonata-ba-show-one-to-many">
     {% set route_name = field_description.options.route.name %}
-    {% set route_role = route_name | upper %}
-    {% if field_description.hasassociationadmin and field_description.associationadmin.isGranted(route_role) and field_description.associationadmin.hasRoute(route_name) %}
-        {% for element in value%}
+    {% for element in value%}
+        {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute(route_name) and field_description.associationadmin.hasAccess(route_name, value) %}
             <li><a href="{{ field_description.associationadmin.generateObjectUrl(route_name, element, field_description.options.route.parameters) }}">{{ element|render_relation_element(field_description) }}</a></li>
-        {% endfor %}
-    {% else %}
-        {% for element in value%}
+        {% else %}
             <li>{{ element|render_relation_element(field_description) }}</li>
-        {% endfor %}
-    {% endif %}
+        {% endif %}
+    {% endfor %}
     </ul>
 {% endblock %}
