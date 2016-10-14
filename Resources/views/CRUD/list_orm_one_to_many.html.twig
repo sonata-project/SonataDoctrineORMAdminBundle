@@ -13,10 +13,9 @@ file that was distributed with this source code.
 
 {% block field %}
     {% set route_name = field_description.options.route.name %}
-    {% set route_role = route_name | upper %}
     {% if field_description.hasassociationadmin and field_description.associationadmin.hasRoute(route_name) %}
         {% for element in value %}
-            {%- if field_description.associationadmin.isGranted(route_role, value) -%}
+            {%- if field_description.associationadmin.hasAccess(route_name, value) -%}
                 {{ block('relation_link') }}
             {%- else -%}
                 {{ block('relation_value') }}
