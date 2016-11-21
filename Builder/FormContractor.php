@@ -133,7 +133,7 @@ class FormContractor implements FormContractorInterface
             }
 
             if (!in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE))) {
-                throw new \RuntimeException(sprintf('You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One. Maybe you want `sonata_model_list` instead?', $fieldDescription->getName()));
+                throw new \RuntimeException(sprintf('You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One. Maybe you want `sonata_type_collection` instead?', $fieldDescription->getName()));
             }
 
             // set sensitive default value to have a component working fine out of the box
