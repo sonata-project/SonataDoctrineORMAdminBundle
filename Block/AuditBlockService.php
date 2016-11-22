@@ -13,7 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Block;
 
 use SimpleThings\EntityAudit\AuditReader;
 use Sonata\AdminBundle\Form\FormMapper;
-use Sonata\BlockBundle\Block\Block\Service\AbstractBlockService;
+use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Model\BlockInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
