@@ -16,7 +16,7 @@ lint:
 	git diff --exit-code
 
 test:
-	phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
+	vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover build/logs/clover.xml
 
 docs:
 	cd Resources/doc && sphinx-build -W -b html -d _build/doctrees . _build/html
