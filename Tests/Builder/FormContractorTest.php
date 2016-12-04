@@ -62,39 +62,26 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
 
-        $modelTypes = array(
-            'sonata_type_model',
-            'sonata_type_model_list',
-            'sonata_type_model_hidden',
-            'sonata_type_model_autocomplete',
+        $modelTypes = array();
+        $classTypes = array(
+            'Sonata\AdminBundle\Form\Type\ModelType',
+            'Sonata\AdminBundle\Form\Type\ModelTypeList',
+            'Sonata\AdminBundle\Form\Type\ModelHiddenType',
+            'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
         );
-        $adminTypes = array('sonata_type_admin');
-        $collectionTypes = array('sonata_type_collection');
-        // NEXT_MAJOR: Use only FQCNs when dropping support for Symfony <2.8
-        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-            $classTypes = array(
-                'Sonata\AdminBundle\Form\Type\ModelType',
-                'Sonata\AdminBundle\Form\Type\ModelTypeList',
-                'Sonata\AdminBundle\Form\Type\ModelHiddenType',
-                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
+
+        foreach ($classTypes as $classType) {
+            array_push(
+                $modelTypes,
+                // add class type.
+                $classType,
+                // add instance of class type.
+                get_class(
+                    $this->getMockBuilder($classType)
+                        ->disableOriginalConstructor()
+                        ->getMock()
+                )
             );
-
-            foreach ($classTypes as $classType) {
-                array_push(
-                    $modelTypes,
-                    // add class type.
-                    $classType,
-                    // add instance of class type.
-                    get_class(
-                        $this->getMockBuilder($classType)
-                            ->disableOriginalConstructor()
-                            ->getMock()
-                    )
-                );
-            }
-
-            $adminTypes[] = 'Sonata\AdminBundle\Form\Type\AdminType';
-            $collectionTypes[] = 'Sonata\CoreBundle\Form\Type\CollectionType';
         }
 
         // model types
@@ -107,24 +94,26 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
 
         // admin type
         $fieldDescription->method('getMappingType')->willReturn(ClassMetadata::ONE_TO_ONE);
-        foreach ($adminTypes as $formType) {
-            $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
-            $this->assertSame($fieldDescription, $options['sonata_field_description']);
-            $this->assertSame($modelClass, $options['data_class']);
-            $this->assertSame(false, $options['btn_add']);
-            $this->assertSame(false, $options['delete']);
-        }
+        $options = $this->formContractor->getDefaultOptions(
+            'Sonata\AdminBundle\Form\Type\AdminType',
+            $fieldDescription
+        );
+        $this->assertSame($fieldDescription, $options['sonata_field_description']);
+        $this->assertSame($modelClass, $options['data_class']);
+        $this->assertSame(false, $options['btn_add']);
+        $this->assertSame(false, $options['delete']);
 
         // collection type
         $fieldDescription->method('getMappingType')->willReturn(ClassMetadata::ONE_TO_MANY);
-        foreach ($collectionTypes as $formType) {
-            $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
-            $this->assertSame($fieldDescription, $options['sonata_field_description']);
-            $this->assertSame('sonata_type_admin', $options['type']);
-            $this->assertSame(true, $options['modifiable']);
-            $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
-            $this->assertSame($modelClass, $options['type_options']['data_class']);
-        }
+        $options = $this->formContractor->getDefaultOptions(
+            'Sonata\CoreBundle\Form\Type\CollectionType',
+            $fieldDescription
+        );
+        $this->assertSame($fieldDescription, $options['sonata_field_description']);
+        $this->assertSame('sonata_type_admin', $options['type']);
+        $this->assertSame(true, $options['modifiable']);
+        $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
+        $this->assertSame($modelClass, $options['type_options']['data_class']);
     }
 
     public function testAdminClassAttachForNotMappedField()

@@ -56,11 +56,7 @@ class BooleanFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
-            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Sonata\CoreBundle\Form\Type\BooleanType'
-                : 'sonata_type_boolean', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-        );
+        return array('field_type' => 'Sonata\CoreBundle\Form\Type\BooleanType');
     }
 
     /**
@@ -68,17 +64,10 @@ class BooleanFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return array($type, array(
+        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
-                : 'hidden', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'operator_type' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
             'operator_options' => array(),
             'label' => $this->getLabel(),
         ));
