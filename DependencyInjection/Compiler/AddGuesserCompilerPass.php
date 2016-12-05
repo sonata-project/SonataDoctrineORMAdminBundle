@@ -25,7 +25,6 @@ class AddGuesserCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-
         // ListBuilder
         $definition = $container->getDefinition('sonata.admin.guesser.orm_list_chain');
         $services = array();

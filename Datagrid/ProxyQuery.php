@@ -246,8 +246,7 @@ class ProxyQuery implements ProxyQueryInterface
         $joinedEntities = $this->queryBuilder->getDQLPart('join');
 
         foreach ($associationMappings as $associationMapping) {
-
-             // Do not add left join to already joined entities with custom query
+            // Do not add left join to already joined entities with custom query
              foreach ($joinedEntities as $joinExprList) {
                  foreach ($joinExprList as $joinExpr) {
                      $newAliasTmp = $joinExpr->getAlias();
