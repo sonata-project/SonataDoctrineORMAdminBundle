@@ -96,7 +96,12 @@ class ModelFilter extends Filter
         $parameterName = $this->getNewParameterName($queryBuilder);
 
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
+            $or = $queryBuilder->expr()->orX();
+
+            $or->add($queryBuilder->expr()->notIn($alias, ':' . $parameterName));
+            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $queryBuilder->getAllAliases()[0], $this->getFieldName())));
+
+            $this->applyWhere($queryBuilder, $or);
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
@@ -120,7 +125,12 @@ class ModelFilter extends Filter
         $parameterName = $this->getNewParameterName($queryBuilder);
 
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
+            $or = $queryBuilder->expr()->orX();
+
+            $or->add($queryBuilder->expr()->neq($alias, ':' . $parameterName));
+            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $queryBuilder->getAllAliases()[0], $this->getFieldName())));
+
+            $this->applyWhere($queryBuilder, $or);
         } else {
             $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
         }
