@@ -41,8 +41,15 @@ class StringFilter extends Filter
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
+        $whereCondition = sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName);
+
+        if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+            $whereCondition .= sprintf(' OR %s.%s IS NULL', $alias, $field);
+        }
+        
+        $this->applyWhere($queryBuilder, $whereCondition);
+        
         if ($data['type'] == ChoiceType::TYPE_EQUAL) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
