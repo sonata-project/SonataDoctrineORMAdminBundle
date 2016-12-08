@@ -46,8 +46,7 @@ class StringFilter extends Filter
         
         $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
         
-        if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS)
-        {
+        if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
         
