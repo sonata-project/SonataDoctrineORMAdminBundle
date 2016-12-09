@@ -99,7 +99,9 @@ class ModelFilter extends Filter
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->notIn($alias, ':' . $parameterName));
-            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $queryBuilder->getAllAliases()[0], $this->getFieldName())));
+            
+            $allAliases = $queryBuilder->getAllAliases();
+            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $allAliases[0], $this->getFieldName())));
 
             $this->applyWhere($queryBuilder, $or);
         } else {
@@ -128,7 +130,9 @@ class ModelFilter extends Filter
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->neq($alias, ':' . $parameterName));
-            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $queryBuilder->getAllAliases()[0], $this->getFieldName())));
+            
+            $allAliases = $queryBuilder->getAllAliases();
+            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $allAliases[0], $this->getFieldName())));
 
             $this->applyWhere($queryBuilder, $or);
         } else {
