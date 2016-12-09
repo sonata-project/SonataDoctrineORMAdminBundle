@@ -98,8 +98,8 @@ class ModelFilter extends Filter
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $or = $queryBuilder->expr()->orX();
 
-            $or->add($queryBuilder->expr()->notIn($alias, ':' . $parameterName));
-            
+            $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
+
             $allAliases = $queryBuilder->getAllAliases();
             $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $allAliases[0], $this->getFieldName())));
 
@@ -129,8 +129,8 @@ class ModelFilter extends Filter
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
             $or = $queryBuilder->expr()->orX();
 
-            $or->add($queryBuilder->expr()->neq($alias, ':' . $parameterName));
-            
+            $or->add($queryBuilder->expr()->neq($alias, ':'.$parameterName));
+
             $allAliases = $queryBuilder->getAllAliases();
             $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $allAliases[0], $this->getFieldName())));
 
