@@ -50,7 +50,7 @@ class StringFilter extends Filter
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
-        $this->applyWhere($queryBuilder, $or);        
+        $this->applyWhere($queryBuilder, $or);
 
         if ($data['type'] == ChoiceType::TYPE_EQUAL) {
             $queryBuilder->setParameter($parameterName, $data['value']);
