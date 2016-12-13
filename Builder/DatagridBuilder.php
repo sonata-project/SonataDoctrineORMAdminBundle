@@ -126,8 +126,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->mergeOption('field_options', array('required' => false));
 
-        // NEXT_MAJOR: Remove first check (when requirement of Symfony is >= 2.8)
-        if ($type === 'doctrine_orm_model_autocomplete' || $type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
+        if ($type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
             $fieldDescription->mergeOption('field_options', array(
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
@@ -159,10 +158,12 @@ class DatagridBuilder implements DatagridBuilderInterface
             $defaultOptions['csrf_protection'] = false;
         }
 
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $formType = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form';
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', $formType, array(), $defaultOptions);
+        $formBuilder = $this->formFactory->createNamedBuilder(
+            'filter',
+            'Symfony\Component\Form\Extension\Core\Type\FormType',
+            array(),
+            $defaultOptions
+        );
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }

@@ -47,13 +47,9 @@ class ModelFilter extends Filter
         return array(
             'mapping_type' => false,
             'field_name' => false,
-            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
-                : 'entity', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'field_type' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
             'field_options' => array(),
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Sonata\CoreBundle\Form\Type\EqualType'
-                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
             'operator_options' => array(),
         );
     }
@@ -63,12 +59,7 @@ class ModelFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return array($type, array(
+        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),

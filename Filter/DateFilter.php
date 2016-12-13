@@ -32,10 +32,6 @@ class DateFilter extends AbstractDateFilter
      */
     public function getFieldType()
     {
-        // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-        return $this->getOption('field_type', method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Symfony\Component\Form\Extension\Core\Type\DateType'
-            : 'date'
-        );
+        return $this->getOption('field_type', 'Symfony\Component\Form\Extension\Core\Type\DateType');
     }
 }
