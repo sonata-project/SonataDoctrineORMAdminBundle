@@ -75,7 +75,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
             'type' => EqualType::TYPE_IS_NOT_EQUAL,
             'value' => array('1', '2'),
         ));
-        
+
         // the alias is now computer by the entityJoin method
         $this->assertEquals(array('alias NOT IN :field_name_0', 'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
