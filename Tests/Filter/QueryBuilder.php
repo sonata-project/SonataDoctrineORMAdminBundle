@@ -11,6 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Doctrine\ORM\Query\Expr\Orx;
+
 class QueryBuilder
 {
     public $parameters = array();
@@ -79,5 +81,53 @@ class QueryBuilder
     public function leftJoin($parameter, $alias)
     {
         $this->query[] = $parameter;
+    }
+
+    /**
+     * @return Orx
+     */
+    public function orX($x = null)
+    {
+        return new Orx(func_get_args());
+    }
+
+    /**
+     * @param string $alias
+     * @param string $parameter
+     *
+     * @return string
+     */
+    public function neq($alias, $parameter)
+    {
+        return sprintf('%s <> %s', $alias, $parameter);
+    }
+
+    /**
+     * @param string $queryPart
+     *
+     * @return string
+     */
+    public function isNull($queryPart)
+    {
+        return $queryPart.' IS NULL';
+    }
+
+    /**
+     * @param string $alias
+     * @param string $parameter
+     *
+     * @return string
+     */
+    public function notIn($alias, $parameter)
+    {
+        return sprintf('%s NOT IN %s', $alias, $parameter);
+    }
+
+    /**
+     * @return array
+     */
+    public function getAllAliases()
+    {
+        return array($this->getRootAlias());
     }
 }
