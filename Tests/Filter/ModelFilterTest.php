@@ -43,7 +43,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array());
 
         $this->assertEquals(array(), $builder->query);
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterArray()
@@ -61,7 +61,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         // the alias is now computer by the entityJoin method
         $this->assertEquals(array('in_alias', 'in_alias IN :field_name_0'), $builder->query);
         $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterArrayTypeIsNotEqual()
@@ -77,9 +77,12 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         ));
 
         // the alias is now computer by the entityJoin method
-        $this->assertEquals(array('alias NOT IN :field_name_0', 'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'), $builder->query[0]->getParts());
+        $this->assertEquals(array(
+            'alias NOT IN :field_name_0', 
+            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'
+        ), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterScalar()
@@ -93,7 +96,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $this->assertEquals(array('alias = :field_name_0'), $builder->query);
         $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterScalarTypeIsNotEqual()
@@ -105,9 +108,12 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 2));
 
-        $this->assertEquals(array('alias <> :field_name_0', 'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'), $builder->query[0]->getParts());
+        $this->assertEquals(array(
+            'alias <> :field_name_0', 
+            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'
+        ), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     /**
@@ -134,7 +140,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->apply($builder, array('value' => 'asd'));
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testAssociationWithValidMapping()
@@ -152,8 +158,11 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
-        $this->assertEquals(array('o.association_mapping', 's_association_mapping = :field_name_0'), $builder->query);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertEquals(array(
+            'o.association_mapping', 
+            's_association_mapping = :field_name_0'
+        ), $builder->query);
+        $this->assertTrue($filter->isActive());
     }
 
     public function testAssociationWithValidParentAssociationMappings()
@@ -185,6 +194,6 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
             's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
             's_association_mapping_sub_association_mapping_sub_sub_association_mapping = :field_name_0',
         ), $builder->query);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 }
