@@ -78,8 +78,8 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         // the alias is now computer by the entityJoin method
         $this->assertEquals(array(
-            'alias NOT IN :field_name_0', 
-            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'
+            'alias NOT IN :field_name_0',
+            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL',
         ), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -109,8 +109,8 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 2));
 
         $this->assertEquals(array(
-            'alias <> :field_name_0', 
-            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'
+            'alias <> :field_name_0',
+            'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL',
         ), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -159,8 +159,8 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->apply($builder, array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd'));
 
         $this->assertEquals(array(
-            'o.association_mapping', 
-            's_association_mapping = :field_name_0'
+            'o.association_mapping',
+            's_association_mapping = :field_name_0',
         ), $builder->query);
         $this->assertTrue($filter->isActive());
     }
