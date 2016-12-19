@@ -43,7 +43,7 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array());
 
         $this->assertEquals(array(), $builder->query);
-        $this->assertTrue($filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 
     public function testFilterArray()
