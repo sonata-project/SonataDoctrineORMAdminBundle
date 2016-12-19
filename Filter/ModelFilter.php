@@ -132,8 +132,9 @@ class ModelFilter extends Filter
 
             $or->add($queryBuilder->expr()->neq($alias, ':'.$parameterName));
 
-            $allAliases = $queryBuilder->getAllAliases();
-            $or->add($queryBuilder->expr()->isNull(sprintf('IDENTITY(%s.%s)', $allAliases[0], $this->getFieldName())));
+            $or->add($queryBuilder->expr()->isNull(
+                sprintf('IDENTITY(%s.%s)', $queryBuilder->getRootAlias(), $this->getFieldName())
+            ));
 
             $this->applyWhere($queryBuilder, $or);
         } else {
