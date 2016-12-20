@@ -61,7 +61,7 @@ class StringFilterTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals(array(), $builder->query);
 
         $filter->filter($builder, 'alias', 'field', array('value' => 'asd', 'type' => ChoiceType::TYPE_NOT_CONTAINS));
-        $this->assertEquals(array('alias.field NOT LIKE :field_name_0'), $builder->query);
+        $this->assertEquals(array('alias.field NOT LIKE :field_name_0', 'alias.field IS NULL'), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => 'asd'), $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
