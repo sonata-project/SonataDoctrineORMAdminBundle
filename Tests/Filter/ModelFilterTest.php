@@ -60,6 +60,25 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
 
         // the alias is now computer by the entityJoin method
         $this->assertEquals(array('in_alias', 'in_alias IN :field_name_0'), $builder->query);
+        $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
+    }
+
+    public function testFilterArrayTypeIsNotEqual()
+    {
+        $filter = new ModelFilter();
+        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar'), 'field_name' => 'field_name'));
+
+        $builder = new ProxyQuery(new QueryBuilder());
+
+        $filter->filter($builder, 'alias', 'field', array(
+            'type' => EqualType::TYPE_IS_NOT_EQUAL,
+            'value' => array('1', '2'),
+        ));
+        
+        // the alias is now computer by the entityJoin method
+        $this->assertEquals(array('alias NOT IN :field_name_0', 'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'), $builder->query[0]->getParts());
+        $this->assertEquals(array('field_name_0' => array('1', '2')), $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
@@ -73,6 +92,20 @@ class ModelFilterTest extends \PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 2));
 
         $this->assertEquals(array('alias = :field_name_0'), $builder->query);
+        $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
+        $this->assertEquals(true, $filter->isActive());
+    }
+
+    public function testFilterScalarTypeIsNotEqual()
+    {
+        $filter = new ModelFilter();
+        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar'), 'field_name' => 'field_name'));
+
+        $builder = new ProxyQuery(new QueryBuilder());
+
+        $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 2));
+
+        $this->assertEquals(array('alias <> :field_name_0', 'IDENTITY('.$builder->getRootAlias().'.field_name) IS NULL'), $builder->query[0]->getParts());
         $this->assertEquals(array('field_name_0' => 2), $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
