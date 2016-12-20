@@ -71,7 +71,7 @@ class QueryBuilder
      */
     public function getRootAlias()
     {
-        return 'o';
+        return current(($this->getRootAliases()));
     }
 
     /**
@@ -128,6 +128,14 @@ class QueryBuilder
      */
     public function getAllAliases()
     {
-        return array($this->getRootAlias());
+        return $this->getRootAliases();
+    }
+
+    /**
+     * @return array
+     */
+    public function getRootAliases()
+    {
+        return array('o');
     }
 }
