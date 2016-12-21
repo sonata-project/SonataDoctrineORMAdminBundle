@@ -24,7 +24,7 @@ class ModelFilter extends Filter
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
+        if (!$data || !is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
             return;
         }
 
@@ -32,11 +32,11 @@ class ModelFilter extends Filter
             $data['value'] = $data['value']->toArray();
         }
 
-        if (is_array($data['value'])) {
-            $this->handleMultiple($queryBuilder, $alias, $data);
-        } else {
-            $this->handleModel($queryBuilder, $alias, $data);
+        if (!is_array($data['value'])) {
+            $data['value'] = (array) $data['value'];
         }
+
+        $this->handleMultiple($queryBuilder, $alias, $data);
     }
 
     /**
@@ -87,33 +87,17 @@ class ModelFilter extends Filter
         $parameterName = $this->getNewParameterName($queryBuilder);
 
         if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
+            $or = $queryBuilder->expr()->orX();
+
+            $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
+
+            $or->add($queryBuilder->expr()->isNull(
+                sprintf('IDENTITY(%s.%s)', current(($queryBuilder->getRootAliases())), $this->getFieldName())
+            ));
+
+            $this->applyWhere($queryBuilder, $or);
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
-        }
-
-        $queryBuilder->setParameter($parameterName, $data['value']);
-    }
-
-    /**
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     * @param string                           $alias
-     * @param mixed                            $data
-     *
-     * @return mixed
-     */
-    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data)
-    {
-        if (empty($data['value'])) {
-            return;
-        }
-
-        $parameterName = $this->getNewParameterName($queryBuilder);
-
-        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
-            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
-        } else {
-            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
         }
 
         $queryBuilder->setParameter($parameterName, $data['value']);
