@@ -33,7 +33,7 @@ class ModelFilter extends Filter
         }
 
         if (!is_array($data['value'])) {
-            $data['value'] = (array) $data['value'];
+            $data['value'] = array($data['value']);
         }
 
         $this->handleMultiple($queryBuilder, $alias, $data);
