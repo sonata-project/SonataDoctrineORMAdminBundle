@@ -56,10 +56,7 @@ file that was distributed with this source code.
             </div>
 
             {% if nested_group_field['_delete'] is defined %}
-                {{ form_row(
-                    nested_group_field['_delete'],
-                    {'label': ('action_delete'|trans({}, 'SonataAdminBundle'))}
-                ) }}
+                {{ form_row(nested_group_field['_delete'], {'label': 'action_delete', 'translation_domain': 'SonataAdminBundle'}) }}
             {% endif %}
         </div>
     {% endfor %}
