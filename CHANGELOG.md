@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.2...3.1.3) - 2017-01-17
+### Fixed
+- Consider NULL values when using 'is not equal' advanced model filter
+- Use the right array conversion for filter value
+- Fixed wrong link generation when calling `DatagridMapper::addIdentifier` on mapped field
+- Fixed duplicate translation of "Delete" in edit tab view
+
+### Changed
+- Translation in twig templates uses the twig translation filter
+
 ## [3.1.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.1...3.1.2) - 2016-12-05
 ### Changed
 - ORM any-to-any list and show templates now use `hasAccess`
