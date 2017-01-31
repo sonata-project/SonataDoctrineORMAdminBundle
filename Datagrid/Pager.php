@@ -17,7 +17,7 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 /**
  * Doctrine pager class.
  *
- * @author     Jonathan H. Wage <jonwage@gmail.com>
+ * @author Jonathan H. Wage <jonwage@gmail.com>
  */
 class Pager extends BasePager
 {
