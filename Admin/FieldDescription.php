@@ -15,9 +15,6 @@ use Sonata\AdminBundle\Admin\BaseFieldDescription;
 
 class FieldDescription extends BaseFieldDescription
 {
-    /**
-     * Constructor.
-     */
     public function __construct()
     {
         $this->parentAssociationMappings = array();
