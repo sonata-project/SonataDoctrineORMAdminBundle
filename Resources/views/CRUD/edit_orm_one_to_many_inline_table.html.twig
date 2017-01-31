@@ -23,7 +23,9 @@ file that was distributed with this source code.
                             style="display:none;"
                         {% endif %}
                     >
-                        {{ nested_field.vars.label|trans({}, nested_field.vars.translation_domain) }}
+                        {{ nested_field.vars.label|trans({}, nested_field.vars['sonata_admin'].admin.translationDomain
+                            |default(nested_field.vars.translation_domain)
+                        ) }}
                     </th>
                 {% endif %}
             {% endfor %}
