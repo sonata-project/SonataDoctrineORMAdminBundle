@@ -300,7 +300,8 @@ class ProxyQuery implements ProxyQueryInterface
             $select = sprintf('%s.%s', $rootAlias, $idName);
             // Put the ID select on this array to use it on results QB
             $selects[$idName] = $select;
-            // Use IDENTITY if id is a relation too. See: http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
+            // Use IDENTITY if id is a relation too.
+            // See: http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
             // Should work only with doctrine/orm: ~2.2
             $idSelect = $select;
             if ($metadata->hasAssociation($idName)) {
