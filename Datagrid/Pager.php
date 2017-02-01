@@ -17,7 +17,7 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 /**
  * Doctrine pager class.
  *
- * @author     Jonathan H. Wage <jonwage@gmail.com>
+ * @author Jonathan H. Wage <jonwage@gmail.com>
  */
 class Pager extends BasePager
 {
@@ -39,7 +39,11 @@ class Pager extends BasePager
             $countQuery->setParameters($this->getParameters());
         }
 
-        $countQuery->select(sprintf('count(DISTINCT %s.%s) as cnt', $countQuery->getRootAlias(), current($this->getCountColumn())));
+        $countQuery->select(sprintf(
+            'count(DISTINCT %s.%s) as cnt',
+            $countQuery->getRootAlias(),
+            current($this->getCountColumn())
+        ));
 
         return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
     }

@@ -108,7 +108,11 @@ class ListBuilder implements ListBuilderInterface
         }
 
         if (!$fieldDescription->getType()) {
-            throw new \RuntimeException(sprintf('Please define a type for field `%s` in `%s`', $fieldDescription->getName(), get_class($admin)));
+            throw new \RuntimeException(sprintf(
+                'Please define a type for field `%s` in `%s`',
+                $fieldDescription->getName(),
+                get_class($admin)
+            ));
         }
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
@@ -120,16 +124,24 @@ class ListBuilder implements ListBuilderInterface
             if (!$fieldDescription->getTemplate()) {
                 switch ($fieldDescription->getMappingType()) {
                     case ClassMetadataInfo::MANY_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig');
+                        $fieldDescription->setTemplate(
+                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig'
+                        );
                         break;
                     case ClassMetadataInfo::ONE_TO_ONE:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig');
+                        $fieldDescription->setTemplate(
+                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig'
+                        );
                         break;
                     case ClassMetadataInfo::ONE_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig');
+                        $fieldDescription->setTemplate(
+                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig'
+                        );
                         break;
                     case ClassMetadataInfo::MANY_TO_MANY:
-                        $fieldDescription->setTemplate('SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig');
+                        $fieldDescription->setTemplate(
+                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig'
+                        );
                         break;
                 }
             }
