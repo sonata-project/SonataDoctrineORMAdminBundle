@@ -50,7 +50,7 @@ file that was distributed with this source code.
                             {% set dummy = nested_group_field.setrendered %}
                         {% else %}
                             {% if field_name == '_delete' %}
-                                {{ form_widget(nested_field, {'label_render': false}) }}
+                                {{ form_widget(nested_field, { label: false }) }}
                             {% else %}
                                 {{ form_widget(nested_field) }}
                             {% endif %}
