@@ -200,8 +200,8 @@ The AdminBundle provides 2 options:
 Advanced Usage: One-to-many
 ---------------------------
 
-Let's say you have a ``Gallery`` that links to some ``Media``s with a join table ``galleryHasMedias``.
-You can easily add a new ``galleryHasMedias`` row by defining one of these options:
+Let's say you have a ``Gallery`` that links to some ``Media``.
+You can easily add a new ``Media`` row by defining one of these options:
 
 * ``edit``: ``inline|standard``, the inline mode allows you to add new rows,
 * ``inline``: ``table|standard``, the fields are displayed into table,
@@ -227,16 +227,23 @@ You can easily add a new ``galleryHasMedias`` row by defining one of these optio
                 ->add('enabled')
                 ->add('name')
                 ->add('defaultFormat')
-                ->add('galleryHasMedias', 'sonata_type_collection', array(), array(
-                    'edit' => 'inline',
-                    'inline' => 'table',
-                    'sortable' => 'position',
-                    'limit' => 3
+                ->add('galleryHasMedias', 'sonata_type_collection', array(
+                        'by_reference' => false
+                    ), 
+                    array(
+                        'edit' => 'inline',
+                        'inline' => 'table',
+                        'sortable' => 'position',
+                        'limit' => 3
                 ))
             ;
         }
     }
+    
+.. note:: 
 
+    You have to define ``setMedias`` method into your ``Gallery`` class and manually attach each ``media`` to the current ``gallery`` and define the media's relation into ``gallery`` as cascade persist.
+    
 By default, position row will be rendered. If you want to hide it, you will need to alter child  admin class and add hidden position field.
 Use code like:
 
