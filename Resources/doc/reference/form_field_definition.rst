@@ -242,7 +242,7 @@ You can easily add a new ``Media`` row by defining one of these options:
     
 .. note:: 
 
-    You have to define ``setMedias`` method into your ``Gallery`` class and manually attach each ``media`` to the current ``gallery`` and define the media's relation into ``gallery`` as cascade persist.
+    You have to define the ``setMedias`` method into your ``Gallery`` class and manually attach each ``media`` to the current ``gallery`` and define cascading persistence for the relationship from media to gallery.
     
 By default, position row will be rendered. If you want to hide it, you will need to alter child  admin class and add hidden position field.
 Use code like:
