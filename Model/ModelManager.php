@@ -509,7 +509,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $query->setMaxResults($maxResult);
 
         if ($query instanceof ProxyQueryInterface) {
-            $query->addOrderBy($query->getSortBy(), $query->getSortOrder());
+            if ($query->getSortBy()) {
+                $query->addOrderBy($query->getSortBy(), $query->getSortOrder());
+            }
 
             $query = $query->getQuery();
         }
