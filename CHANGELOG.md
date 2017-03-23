@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.3...3.1.4) - 2017-03-23
+### Fixed
+- Fixed broken translation in oneToMany table view
+- Fixed wrong translation in delete checkbox in `edit_orm_one_to_many_inline_table.html.twig`
+
+### Security
+- Fixed view - check specific item collection, not to the whole collection.
+
 ## [3.1.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.2...3.1.3) - 2017-01-17
 ### Fixed
 - Consider NULL values when using 'is not equal' advanced model filter
