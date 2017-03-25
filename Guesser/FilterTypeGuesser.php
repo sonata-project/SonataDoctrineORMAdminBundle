@@ -45,7 +45,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
-                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8).
                     $options['operator_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                         ? 'Sonata\CoreBundle\Form\Type\EqualType'
                         : 'sonata_type_equal';
