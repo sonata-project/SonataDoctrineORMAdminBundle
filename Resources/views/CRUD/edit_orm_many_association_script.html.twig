@@ -117,7 +117,7 @@ This code manage the many-to-[one|many] association field popup
 
         Admin.log('[{{ id }}|field_dialog_form_list] open the list modal');
 
-        var a = jQuery(this);
+        var a = jQuery(event.currentTarget);
 
         field_dialog_content_{{ id }}.html('');
 
@@ -153,7 +153,7 @@ This code manage the many-to-[one|many] association field popup
         event.preventDefault();
         event.stopPropagation();
 
-        var a = jQuery(this);
+        var a = jQuery(event.currentTarget);
 
         field_dialog_content_{{ id }}.html('');
 
@@ -189,7 +189,7 @@ This code manage the many-to-[one|many] association field popup
     // handle the post data
     var field_dialog_form_action_{{ id }} = function(event) {
 
-        var element = jQuery(this);
+        var element = jQuery(event.currentTarget);
 
         // return if the link is an anchor inside the same page
         if (this.nodeName == 'A' && (element.attr('href').length == 0 || element.attr('href')[0] == '#')) {
@@ -317,20 +317,10 @@ This code manage the many-to-[one|many] association field popup
     #}
     // this function initialize the popup
     // this can be only done this way has popup can be cascaded
-    function start_field_dialog_form_add_{{ id }}(link) {
-
-        // remove the html event
-        link.onclick = null;
-
+    function start_field_dialog_form_add_{{ id }}(event) {
+        event.preventDefault();
         initialize_popup_{{ id }}();
-
-        // add the jQuery event to the a element
-        jQuery(link)
-            .click(field_dialog_form_add_{{ id }})
-            .trigger('click')
-        ;
-
-        return false;
+        field_dialog_form_add_{{ id }}(event);
     }
 
     if (field_dialog_{{ id }}) {
@@ -343,31 +333,15 @@ This code manage the many-to-[one|many] association field popup
         #}
         // this function initialize the popup
         // this can be only done this way has popup can be cascaded
-        function start_field_dialog_form_list_{{ id }}(link) {
-
-            link.onclick = null;
-
+        function start_field_dialog_form_list_{{ id }}(event) {
+            event.preventDefault();
             initialize_popup_{{ id }}();
-
-            // add the jQuery event to the a element
-            jQuery(link)
-                .click(field_dialog_form_list_{{ id }})
-                .trigger('click')
-            ;
-
-            return false;
+            field_dialog_form_list_{{ id }}(event);
         }
 
-        function remove_selected_element_{{ id }}(link) {
-
-            link.onclick = null;
-
-            jQuery(link)
-                .click(field_remove_element_{{ id}})
-                .trigger('click')
-            ;
-
-            return false;
+        function remove_selected_element_{{ id }}(event) {
+            event.preventDefault();
+            field_remove_element_{{ id}}(event);
         }
 
         function field_remove_element_{{ id }}(event) {
