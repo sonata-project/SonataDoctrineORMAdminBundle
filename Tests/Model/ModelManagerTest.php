@@ -36,12 +36,12 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
     public function testSortParameters()
     {
-        $registry = $this->getMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
 
         $manager = new ModelManager($registry);
 
-        $datagrid1 = $this->getMockBuilder('\Sonata\AdminBundle\Datagrid\Datagrid')->disableOriginalConstructor()->getMock();
-        $datagrid2 = $this->getMockBuilder('\Sonata\AdminBundle\Datagrid\Datagrid')->disableOriginalConstructor()->getMock();
+        $datagrid1 = $this->createMock('Sonata\AdminBundle\Datagrid\Datagrid');
+        $datagrid2 = $this->createMock('Sonata\AdminBundle\Datagrid\Datagrid');
 
         $field1 = new FieldDescription();
         $field1->setName('field1');
@@ -187,9 +187,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
 
         $object = new ContainerEntity(new AssociatedEntity(), new EmbeddedEntity());
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ModelManager $modelManager */
         $modelManager = $this->getMockBuilder($modelManagerClass)
@@ -297,9 +295,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
         $entity = new UuidEntity($uuid);
 
-        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn(array($entity->getId()));
@@ -307,27 +303,19 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
-        $mf = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->willReturn($meta);
 
-        $platform = $this->getMockBuilder('Doctrine\DBAL\Platforms\PostgreSqlPlatform')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
 
-        $conn = $this->getMockBuilder('Doctrine\DBAL\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conn = $this->createMock('Doctrine\DBAL\Connection');
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -335,9 +323,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -352,9 +338,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
     {
         $entity = new ContainerEntity(new AssociatedEntity(42), new EmbeddedEntity());
 
-        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn(array($entity->getAssociatedEntity()->getPlainField()));
@@ -362,27 +346,19 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeOfField')
             ->willReturn(null);
 
-        $mf = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->willReturn($meta);
 
-        $platform = $this->getMockBuilder('Doctrine\DBAL\Platforms\PostgreSqlPlatform')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
 
-        $conn = $this->getMockBuilder('Doctrine\DBAL\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conn = $this->createMock('Doctrine\DBAL\Connection');
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -390,9 +366,7 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);

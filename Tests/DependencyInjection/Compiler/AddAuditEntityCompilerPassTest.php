@@ -37,7 +37,7 @@ class AddAuditEntityCompilerPassTest extends \PHPUnit_Framework_TestCase
      */
     public function testProcess($force, array $services)
     {
-        $container = $this->getMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 
         $container
             ->expects($this->any())

@@ -32,7 +32,7 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
 
         $this->formContractor = new FormContractor($this->formFactory);
     }
@@ -40,7 +40,7 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
     public function testGetFormBuilder()
     {
         $this->formFactory->expects($this->once())->method('createNamedBuilder')
-            ->willReturn($this->getMock('Symfony\Component\Form\FormBuilderInterface'));
+            ->willReturn($this->createMock('Symfony\Component\Form\FormBuilderInterface'));
 
         $this->assertInstanceOf(
             'Symfony\Component\Form\FormBuilderInterface',
@@ -50,14 +50,14 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
 
     public function testDefaultOptionsForSonataFormTypes()
     {
-        $admin = $this->getMock('Sonata\AdminBundle\Admin\AdminInterface');
-        $modelManager = $this->getMock('Sonata\AdminBundle\Model\ModelManagerInterface');
+        $admin = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');
         $modelClass = 'FooEntity';
 
         $admin->method('getModelManager')->willReturn($modelManager);
         $admin->method('getClass')->willReturn($modelClass);
 
-        $fieldDescription = $this->getMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
         $fieldDescription->method('getAdmin')->willReturn($admin);
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
@@ -85,11 +85,7 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
                     // add class type.
                     $classType,
                     // add instance of class type.
-                    get_class(
-                        $this->getMockBuilder($classType)
-                            ->disableOriginalConstructor()
-                            ->getMock()
-                    )
+                    get_class($this->createMock($classType))
                 );
             }
 
@@ -130,15 +126,13 @@ final class FormContractorTest extends \PHPUnit_Framework_TestCase
     public function testAdminClassAttachForNotMappedField()
     {
         // Given
-        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $modelManager = $this->createMock('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
         $modelManager->method('hasMetadata')->willReturn(false);
 
-        $admin = $this->getMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $admin = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
         $admin->method('getModelManager')->willReturn($modelManager);
 
-        $fieldDescription = $this->getMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
         $fieldDescription->method('getMappingType')->willReturn('simple');
         $fieldDescription->method('getType')->willReturn('sonata_type_model_list');
         $fieldDescription->method('getOption')->with($this->logicalOr(
