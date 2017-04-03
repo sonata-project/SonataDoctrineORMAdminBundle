@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 class FilterTest_Filter extends Filter
 {
@@ -48,7 +49,7 @@ class FilterTest_Filter extends Filter
     }
 }
 
-class FilterTest extends \PHPUnit_Framework_TestCase
+class FilterTest extends PHPUnit_Framework_TestCase
 {
     public function testFieldDescription()
     {

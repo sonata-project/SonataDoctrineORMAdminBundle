@@ -15,12 +15,13 @@ use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
  */
-final class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
+final class DatagridBuilderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var TypeGuesserInterface|\PHPUnit_Framework_MockObject_MockObject

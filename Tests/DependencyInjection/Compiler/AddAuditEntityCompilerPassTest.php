@@ -12,9 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\Definition;
 
-class AddAuditEntityCompilerPassTest extends \PHPUnit_Framework_TestCase
+class AddAuditEntityCompilerPassTest extends PHPUnit_Framework_TestCase
 {
     public function processDataProvider()
     {

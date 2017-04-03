@@ -12,8 +12,9 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
+class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 {
     public function testOptions()
     {

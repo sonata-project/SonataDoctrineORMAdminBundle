@@ -13,12 +13,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
  */
-final class FormContractorTest extends \PHPUnit_Framework_TestCase
+final class FormContractorTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject

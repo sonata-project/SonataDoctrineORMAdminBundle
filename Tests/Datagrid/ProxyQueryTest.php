@@ -16,8 +16,9 @@ use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ProxyQueryTest extends \PHPUnit_Framework_TestCase
+class ProxyQueryTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
