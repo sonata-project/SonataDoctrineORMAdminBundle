@@ -246,6 +246,9 @@ This code manage the many-to-[one|many] association field popup
                            in this case we update the hidden input, and call the change event to
                            retrieve the post information
                         #}
+                        if (jQuery('#{{ id }}').is('select')) {
+                            jQuery('#{{ id }}').append('<option value="'+data.objectId+'">dummy</option>');
+                        }
                         jQuery('#{{ id }}').val(data.objectId);
                         jQuery('#{{ id }}').change();
 
