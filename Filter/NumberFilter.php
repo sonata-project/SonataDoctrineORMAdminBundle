@@ -30,7 +30,7 @@ class NumberFilter extends Filter
         $operator = $this->getOperator($type);
 
         if (!$operator) {
-            $operator = '=';
+            return;
         }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
