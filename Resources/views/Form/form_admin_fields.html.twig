@@ -156,3 +156,42 @@ file that was distributed with this source code.
         INVALID MODE : {{ id }} - type : sonata_type_collection - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
 {% endblock %}
+
+{% block choice_field_mask_widget %}
+    {{ block('choice_widget') }}
+    {% set main_form_name = id|slice(0, id|length - name|length) %}
+    <script type="text/javascript">
+        $(document).ready(function() {
+            var allFields = {{ all_fields|json_encode|raw }};
+            var map = {{ map|json_encode|raw }};
+            showMaskChoiceEl = $('#{{ main_form_name }}{{ name }}');
+
+            showMaskChoiceEl.on('change', function () {
+                choice_field_mask_show($(this).val());
+            });
+
+            function choice_field_mask_show(val)
+            {
+                var controlGroupIdFunc = function (field) {
+                    return '#sonata-ba-field-container-{{ main_form_name }}' + field;
+
+                };
+                if (map[val] == undefined) {
+                    $.each(allFields, function (i, field) {
+                        console.log("Allshow : "+ field );
+                        $(controlGroupIdFunc(field)).show();
+                    });
+                    return;
+                }
+
+                $.each(allFields, function (i, field) {
+                    $(controlGroupIdFunc(field)).hide();
+                });
+                $.each(map[val], function (i, field) {
+                    $(controlGroupIdFunc(field)).show();
+                });
+            }
+            choice_field_mask_show(showMaskChoiceEl.val());
+        });
+    </script>
+{% endblock %}

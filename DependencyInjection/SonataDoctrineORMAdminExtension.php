@@ -39,6 +39,7 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
+        $loader->load('forms.xml');
 
         // TODO: Go back on xml configuration when bumping requirements to SF 2.6+
         $doctrineEMDefinition = $container->getDefinition('sonata.admin.entity_manager');
