@@ -260,7 +260,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return;
         }
 
-        $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
+
+        $values = array_combine(
+            $this->getIdentifierFieldNames($class),
+            is_string($id) ? explode(self::ID_SEPARATOR, $id) : array($id)
+        );
 
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
