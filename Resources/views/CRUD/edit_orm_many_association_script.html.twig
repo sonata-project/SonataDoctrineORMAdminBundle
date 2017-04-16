@@ -57,10 +57,10 @@ This code manage the many-to-[one|many] association field popup
                 success: function(html) {
                     Admin.log('[{{ id }}|field_dialog_form_list_link] callback success, attach valid js event');
 
+                    Admin.shared_setup(field_dialog_{{ id }});
+
                     field_dialog_content_{{ id }}.html(html);
                     field_dialog_form_list_handle_action_{{ id }}();
-
-                    Admin.shared_setup(field_dialog_{{ id }});
                 }
             });
 
