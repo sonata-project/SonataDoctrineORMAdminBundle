@@ -35,10 +35,6 @@ class StringFilter extends Filter
 
         $operator = $this->getOperator((int) $data['type']);
 
-        if (!$operator) {
-            $operator = 'LIKE';
-        }
-
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
 
