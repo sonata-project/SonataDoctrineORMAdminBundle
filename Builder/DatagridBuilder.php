@@ -147,7 +147,7 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseDatagrid(AdminInterface $admin, array $values = array())
+    public function getBaseDatagrid(AdminInterface $admin, array $values = array(), $context = 'list')
     {
         $pager = $this->getPager($admin->getPagerType());
 
@@ -165,7 +165,7 @@ class DatagridBuilder implements DatagridBuilderInterface
             $defaultOptions
         );
 
-        return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
+        return new Datagrid($admin->createQuery($context), $admin->getList(), $pager, $formBuilder, $values);
     }
 
     /**
