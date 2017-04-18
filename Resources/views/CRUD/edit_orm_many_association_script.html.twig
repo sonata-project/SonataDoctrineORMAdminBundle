@@ -192,7 +192,14 @@ This code manage the many-to-[one|many] association field popup
         var element = jQuery(this);
 
         // return if the link is an anchor inside the same page
-        if (this.nodeName == 'A' && (element.attr('href').length == 0 || element.attr('href')[0] == '#')) {
+        if (
+            this.nodeName === 'A'
+            && (
+                element.attr('href').length === 0
+                || element.attr('href')[0] === '#'
+                || element.attr('href').substr(0, 11) === 'javascript:'
+            )
+        ) {
             Admin.log('[{{ id }}|field_dialog_form_action] element is an anchor, skipping action', this);
             return;
         }
