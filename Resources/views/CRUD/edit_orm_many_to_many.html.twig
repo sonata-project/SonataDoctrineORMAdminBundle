@@ -9,7 +9,8 @@ file that was distributed with this source code.
 
 #}
 {% if sonata_admin.field_description.hasassociationadmin %}
-    <div id="field_container_{{ id }}" class="field-container">
+    <div id="field_container_{{ id }}"
+        class="field-container {{ form.vars['attr']['class'] is defined ? form.vars['attr']['class'] }}">
         <span id="field_widget_{{ id }}" >
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
