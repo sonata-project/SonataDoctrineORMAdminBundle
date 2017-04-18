@@ -200,7 +200,7 @@ This code manage the many-to-[one|many] association field popup
                 || element.attr('href').substr(0, 11) === 'javascript:'
             )
         ) {
-            Admin.log('[{{ id }}|field_dialog_form_action] element is an anchor, skipping action', this);
+            Admin.log('[{{ id }}|field_dialog_form_action] element is an anchor or a script, skipping action', this);
             return;
         }
 
