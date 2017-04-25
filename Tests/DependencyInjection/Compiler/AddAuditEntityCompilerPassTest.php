@@ -43,7 +43,7 @@ class AddAuditEntityCompilerPassTest extends \PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('hasDefinition')
             ->will($this->returnCallback(function ($id) {
-                if ('simplethings_entityaudit.config' === $id) {
+                if ('simplethings_entityaudit.config' === $id || 'simplethings.entityaudit.audited_entities' === $id) {
                     return true;
                 }
             }))

@@ -11,7 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler;
 
-use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 
@@ -26,7 +25,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
      */
     public function process(ContainerBuilder $container)
     {
-        if (!$container->hasDefinition('simplethings_entityaudit.config')) {
+        if (!$container->hasDefinition('simplethings_entityaudit.config') || !$container->hasDefinition('simplethings.entityaudit.audited_entities')) {
             return;
         }
 
