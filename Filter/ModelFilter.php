@@ -24,7 +24,6 @@ class ModelFilter extends Filter
      */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-
         if (!$data || !is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
             return;
         }
@@ -114,12 +113,15 @@ class ModelFilter extends Filter
     }
 
     /**
+     * Retrieve the parent alias for given alias.
+     * Root alias for direct association or entity joined alias for association depth >= 2
+     *
      * @param ProxyQueryInterface $queryBuilder
      * @param $alias
      *
      * @return mixed
      */
-    protected function getParentAlias(ProxyQueryInterface $queryBuilder, $alias)
+    private function getParentAlias(ProxyQueryInterface $queryBuilder, $alias)
     {
         $parentAlias = $rootAlias = current($queryBuilder->getRootAliases());
         $joins = $queryBuilder->getDQLPart('join');
