@@ -113,6 +113,29 @@ class ModelFilter extends Filter
     }
 
     /**
+     * {@inheritdoc}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    {
+        $types = array(
+            ClassMetadataInfo::ONE_TO_ONE,
+            ClassMetadataInfo::ONE_TO_MANY,
+            ClassMetadataInfo::MANY_TO_MANY,
+            ClassMetadataInfo::MANY_TO_ONE,
+        );
+
+        if (!in_array($this->getOption('mapping_type'), $types)) {
+            throw new \RuntimeException('Invalid mapping type');
+        }
+
+        $associationMappings = $this->getParentAssociationMappings();
+        $associationMappings[] = $this->getAssociationMapping();
+        $alias = $queryBuilder->entityJoin($associationMappings);
+
+        return array($alias, false);
+    }
+
+    /**
      * Retrieve the parent alias for given alias.
      * Root alias for direct association or entity joined alias for association depth >= 2
      *
@@ -136,28 +159,5 @@ class ModelFilter extends Filter
         }
 
         return $parentAlias;
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
-    {
-        $types = array(
-            ClassMetadataInfo::ONE_TO_ONE,
-            ClassMetadataInfo::ONE_TO_MANY,
-            ClassMetadataInfo::MANY_TO_MANY,
-            ClassMetadataInfo::MANY_TO_ONE,
-        );
-
-        if (!in_array($this->getOption('mapping_type'), $types)) {
-            throw new \RuntimeException('Invalid mapping type');
-        }
-
-        $associationMappings = $this->getParentAssociationMappings();
-        $associationMappings[] = $this->getAssociationMapping();
-        $alias = $queryBuilder->entityJoin($associationMappings);
-
-        return array($alias, false);
     }
 }
