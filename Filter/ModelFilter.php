@@ -137,7 +137,7 @@ class ModelFilter extends Filter
 
     /**
      * Retrieve the parent alias for given alias.
-     * Root alias for direct association or entity joined alias for association depth >= 2
+     * Root alias for direct association or entity joined alias for association depth >= 2.
      *
      * @param ProxyQueryInterface $queryBuilder
      * @param $alias
