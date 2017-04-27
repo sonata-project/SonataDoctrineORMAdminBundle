@@ -140,7 +140,7 @@ class ModelFilter extends Filter
      * Root alias for direct association or entity joined alias for association depth >= 2.
      *
      * @param ProxyQueryInterface $queryBuilder
-     * @param string $alias
+     * @param string              $alias
      *
      * @return string
      */
