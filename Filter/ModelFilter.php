@@ -101,7 +101,7 @@ class ModelFilter extends Filter
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
 
             $or->add($queryBuilder->expr()->isNull(
-                sprintf('IDENTITY(%s.%s)', current(($queryBuilder->getRootAliases())), $this->getFieldName())
+                sprintf('IDENTITY(%s.%s)', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
             ));
 
             $this->applyWhere($queryBuilder, $or);
@@ -133,5 +133,31 @@ class ModelFilter extends Filter
         $alias = $queryBuilder->entityJoin($associationMappings);
 
         return array($alias, false);
+    }
+
+    /**
+     * Retrieve the parent alias for given alias.
+     * Root alias for direct association or entity joined alias for association depth >= 2.
+     *
+     * @param ProxyQueryInterface $queryBuilder
+     * @param string              $alias
+     *
+     * @return string
+     */
+    private function getParentAlias(ProxyQueryInterface $queryBuilder, $alias)
+    {
+        $parentAlias = $rootAlias = current($queryBuilder->getRootAliases());
+        $joins = $queryBuilder->getDQLPart('join');
+        if (isset($joins[$rootAlias])) {
+            foreach ($joins[$rootAlias] as $join) {
+                if ($join->getAlias() == $alias) {
+                    $parts = explode('.', $join->getJoin());
+                    $parentAlias = $parts[0];
+                    break;
+                }
+            }
+        }
+
+        return $parentAlias;
     }
 }
