@@ -700,8 +700,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     protected function camelize($property)
     {
-        $result = preg_replace_callback('/(^|_)+(.)/', function($matches){ return strtoupper($matches[2]); }, $property);
-        $result = preg_replace_callback('/\.(.)/', function($matches){ return '_'.strtoupper($matches[1]); }, $result);
+        $result = preg_replace_callback('/(^|_)+(.)/', function ($matches) {
+            return strtoupper($matches[2]);
+        }, $property);
+
+        $result = preg_replace_callback('/\.(.)/', function ($matches) {
+            return '_'.strtoupper($matches[1]);
+        }, $result);
+
         return $result;
     }
 }
