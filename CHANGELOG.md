@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.4...3.1.5) - 2017-06-16
+### Fixed
+- A list field with `actions` type will get all the required field options just like the `_action` field.
+- `_action` field will get a proper `actions` type.
+- `ModelFilter::handleMultiple` fix method to retrieve parent alias for building IDENTITY query part
+- One-to-many and many-to-many association script will not try to load links with "javascript:" hrefs via XHR.
+- Fixed `AddAuditEntityCompilerPass::process()` when definition `simplethings.entityaudit.audited_entities` is not present, as of `2.x` version for `simplethings/entity-audit-bundle`.
+
 ## [3.1.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.3...3.1.4) - 2017-03-23
 ### Fixed
 - Fixed broken translation in oneToMany table view
