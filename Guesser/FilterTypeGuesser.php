@@ -65,6 +65,11 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                     return new TypeGuess('doctrine_orm_model', $options, Guess::HIGH_CONFIDENCE);
             }
         }
+        
+        if (!isset($metadata->fieldMappings[$propertyName]))
+        {
+            throw new \Exception('Property ' . $propertyName . ' not found in class' . $class . '!');
+        }
 
         $options['field_name'] = $metadata->fieldMappings[$propertyName]['fieldName'];
 
