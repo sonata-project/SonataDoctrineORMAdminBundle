@@ -66,7 +66,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             }
         }
 
-        if( ! $metadata->hasField($propertyName)){
+        if (!$metadata->hasField($propertyName)){
             throw new \RuntimeException("No mapping found for field '$propertyName' in $class");
         }
         $options['field_name'] = $metadata->fieldMappings[$propertyName]['fieldName'];
