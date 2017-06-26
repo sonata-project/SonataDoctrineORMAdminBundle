@@ -100,9 +100,15 @@ class ModelFilter extends Filter
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
 
-            $or->add($queryBuilder->expr()->isNull(
-                sprintf('IDENTITY(%s.%s)', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
-            ));
+            if ($this->getOption('mapping_type') === ClassMetadataInfo::MANY_TO_MANY) {
+                $or->add(
+                    sprintf('%s.%s IS EMPTY', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
+                );
+            } else {
+                $or->add($queryBuilder->expr()->isNull(
+                    sprintf('IDENTITY(%s.%s)', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
+                ));
+            }
 
             $this->applyWhere($queryBuilder, $or);
         } else {
