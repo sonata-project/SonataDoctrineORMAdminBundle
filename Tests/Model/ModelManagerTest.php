@@ -14,6 +14,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Version;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -401,6 +402,78 @@ class ModelManagerTest extends \PHPUnit_Framework_TestCase
         $result = $manager->getIdentifierValues($entity);
 
         $this->assertSame(42, $result[0]);
+    }
+
+    /**
+     * [sortBy, sortOrder, isAddOrderBy].
+     *
+     * @return array
+     */
+    public function getSortableInDataSourceIteratorDataProvider()
+    {
+        return array(
+            array(null, null, false),
+            array('', 'ASC', false),
+            array('field', 'ASC', true),
+            array('field', null, true),
+        );
+    }
+
+    /**
+     * @dataProvider getSortableInDataSourceIteratorDataProvider
+     *
+     * @param string|null $sortBy
+     * @param string|null $sortOrder
+     * @param bool        $isAddOrderBy
+     */
+    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy)
+    {
+        $datagrid = $this->getMockForAbstractClass('Sonata\AdminBundle\Datagrid\DatagridInterface');
+        $configuration = $this->getMockBuilder('Doctrine\ORM\Configuration')->getMock();
+        $configuration->expects($this->any())
+            ->method('getDefaultQueryHints')
+            ->willReturn(array());
+
+        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $em->expects($this->any())
+            ->method('getConfiguration')
+            ->willReturn($configuration);
+
+        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+            ->setConstructorArgs(array($em))
+            ->getMock();
+        $query = new Query($em);
+
+        $proxyQuery = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
+            ->setConstructorArgs(array($queryBuilder))
+            ->setMethods(array('getSortBy', 'getSortOrder'))
+            ->getMock();
+
+        $proxyQuery->expects($this->any())
+            ->method('getSortOrder')
+            ->willReturn($sortOrder);
+
+        $proxyQuery->expects($this->any())
+            ->method('getSortBy')
+            ->willReturn($sortBy);
+
+        $queryBuilder->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())
+            ->method('addOrderBy');
+
+        $queryBuilder->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($query);
+
+        $datagrid->expects($this->any())
+            ->method('getQuery')
+            ->willReturn($proxyQuery);
+
+        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')->getMock();
+        $manager = new ModelManager($registry);
+        $manager->getDataSourceIterator($datagrid, array());
     }
 
     private function getMetadata($class, $isVersioned)
