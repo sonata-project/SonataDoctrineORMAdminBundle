@@ -27,7 +27,7 @@ class FilterTypeGuesserTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectException Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException
+     * @expectedException \Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException
      */
     public function testThrowsOnMissingField()
     {
