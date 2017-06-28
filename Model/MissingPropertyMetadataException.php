@@ -11,7 +11,10 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
-class MissingPropertyMetadataException extends \LogicException
+/**
+ * @author Oskar Stark <oskarstark@googlemail.com>
+ */
+final class MissingPropertyMetadataException extends \LogicException
 {
     public function __construct($class, $property)
     {
