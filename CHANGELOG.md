@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.6](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.5...3.1.6) - 2017-07-05
+### Fixed
+- Throw an exception if property name is not found in field mappings
+- Fixed `ModelManager::getDataSourceIterator` when` getSortBy` is empty
+- Wrong DQL generated for many to many relationship when filtering with not equals
+- Fixed ClassFilter for Symfony 3+. Remove deprecated for Symfony > 2.7
+
 ## [3.1.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.4...3.1.5) - 2017-06-16
 ### Fixed
 - A list field with `actions` type will get all the required field options just like the `_action` field.
