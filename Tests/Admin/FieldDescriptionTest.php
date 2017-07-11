@@ -12,8 +12,9 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
+class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 {
     public function testOptions()
     {
@@ -131,7 +132,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetParent()
     {
-        $adminMock = $this->getMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
         $field = new FieldDescription();
         $field->setParent($adminMock);
 
@@ -148,7 +149,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAdmin()
     {
-        $adminMock = $this->getMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
         $field = new FieldDescription();
         $field->setAdmin($adminMock);
 
@@ -157,9 +158,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetAssociationAdmin()
     {
-        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\Admin')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
@@ -172,9 +171,7 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testHasAssociationAdmin()
     {
-        $adminMock = $this->getMockBuilder('Sonata\AdminBundle\Admin\Admin')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
@@ -190,7 +187,9 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValue()
     {
-        $mockedObject = $this->getMock('stdClass', array('myMethod'));
+        $mockedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('myMethod'))
+            ->getMock();
         $mockedObject->expects($this->once())
             ->method('myMethod')
             ->will($this->returnValue('myMethodValue'));
@@ -206,7 +205,9 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetValueWhenCannotRetrieve()
     {
-        $mockedObject = $this->getMock('stdClass', array('myMethod'));
+        $mockedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('myMethod'))
+            ->getMock();
         $mockedObject->expects($this->never())
             ->method('myMethod')
             ->will($this->returnValue('myMethodValue'));
@@ -333,12 +334,16 @@ class FieldDescriptionTest extends \PHPUnit_Framework_TestCase
 
     public function testGetValueForEmbeddedObject()
     {
-        $mockedEmbeddedObject = $this->getMock('stdClass', array('myMethod'));
+        $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('myMethod'))
+            ->getMock();
         $mockedEmbeddedObject->expects($this->once())
                     ->method('myMethod')
                     ->will($this->returnValue('myMethodValue'));
 
-        $mockedObject = $this->getMock('stdClass', array('getMyEmbeddedObject'));
+        $mockedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('getMyEmbeddedObject'))
+            ->getMock();
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
             ->will($this->returnValue($mockedEmbeddedObject));

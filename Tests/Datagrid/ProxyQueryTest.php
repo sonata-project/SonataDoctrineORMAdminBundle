@@ -16,8 +16,9 @@ use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ProxyQueryTest extends \PHPUnit_Framework_TestCase
+class ProxyQueryTest extends PHPUnit_Framework_TestCase
 {
     public static function setUpBeforeClass()
     {
@@ -45,9 +46,7 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
      */
     public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType)
     {
-        $meta = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataInfo')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierFieldNames')
             ->willReturn(array($id));
@@ -55,28 +54,20 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
             ->method('getTypeOfField')
             ->willReturn($identifierType);
 
-        $mf = $this->getMockBuilder('Doctrine\ORM\Mapping\ClassMetadataFactory')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->with($this->equalTo($class))
             ->willReturn($meta);
 
-        $platform = $this->getMockBuilder('Doctrine\DBAL\Platforms\PostgreSqlPlatform')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
 
-        $conn = $this->getMockBuilder('Doctrine\DBAL\Connection')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $conn = $this->createMock('Doctrine\DBAL\Connection');
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
-            ->disableOriginalConstructor()
-            ->getMock();
+        $em = $this->createMock('Doctrine\ORM\EntityManager');
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -84,7 +75,11 @@ class ProxyQueryTest extends \PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $q = $this->getMock('PDOStatement');
+        // NEXT MAJOR: Replace this when dropping PHP < 5.6
+        // $q = $this->createMock('PDOStatement');
+        $q = $this->getMockBuilder('stdClass')
+            ->setMethods(array('execute'))
+            ->getMock();
         $q->expects($this->any())
             ->method('execute')
             ->willReturn(array(array($id => $value)));

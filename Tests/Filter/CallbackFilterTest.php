@@ -13,8 +13,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class CallbackFilterTest extends \PHPUnit_Framework_TestCase
+class CallbackFilterTest extends PHPUnit_Framework_TestCase
 {
     public function testFilterClosure()
     {

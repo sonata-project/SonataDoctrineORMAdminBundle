@@ -10,10 +10,11 @@
  */
 
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\SonataDoctrineORMAdminExtension;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class SonataDoctrineORMAdminExtensionTest extends \PHPUnit_Framework_TestCase
+class SonataDoctrineORMAdminExtensionTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var ContainerBuilder
