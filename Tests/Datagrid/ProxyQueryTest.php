@@ -75,7 +75,11 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $q = $this->createMock('PDOStatement');
+        // NEXT MAJOR: Replace this when dropping PHP < 5.6
+        // $q = $this->createMock('PDOStatement');
+        $q = $this->getMockBuilder('stdClass')
+            ->setMethods(array('execute'))
+            ->getMock();
         $q->expects($this->any())
             ->method('execute')
             ->willReturn(array(array($id => $value)));

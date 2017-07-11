@@ -75,7 +75,7 @@ final class FormContractorTest extends PHPUnit_Framework_TestCase
         if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
             $classTypes = array(
                 'Sonata\AdminBundle\Form\Type\ModelType',
-                'Sonata\AdminBundle\Form\Type\ModelTypeList',
+                'Sonata\AdminBundle\Form\Type\ModelListType',
                 'Sonata\AdminBundle\Form\Type\ModelHiddenType',
                 'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
             );

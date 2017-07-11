@@ -158,7 +158,7 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testGetAssociationAdmin()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\Admin');
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
@@ -171,7 +171,7 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testHasAssociationAdmin()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\Admin');
+        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
