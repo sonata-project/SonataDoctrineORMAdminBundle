@@ -2,6 +2,29 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.6](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.5...3.1.6) - 2017-07-05
+### Fixed
+- Throw an exception if property name is not found in field mappings
+- Fixed `ModelManager::getDataSourceIterator` when` getSortBy` is empty
+- Wrong DQL generated for many to many relationship when filtering with not equals
+- Fixed ClassFilter for Symfony 3+. Remove deprecated for Symfony > 2.7
+
+## [3.1.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.4...3.1.5) - 2017-06-16
+### Fixed
+- A list field with `actions` type will get all the required field options just like the `_action` field.
+- `_action` field will get a proper `actions` type.
+- `ModelFilter::handleMultiple` fix method to retrieve parent alias for building IDENTITY query part
+- One-to-many and many-to-many association script will not try to load links with "javascript:" hrefs via XHR.
+- Fixed `AddAuditEntityCompilerPass::process()` when definition `simplethings.entityaudit.audited_entities` is not present, as of `2.x` version for `simplethings/entity-audit-bundle`.
+
+## [3.1.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.3...3.1.4) - 2017-03-23
+### Fixed
+- Fixed broken translation in oneToMany table view
+- Fixed wrong translation in delete checkbox in `edit_orm_one_to_many_inline_table.html.twig`
+
+### Security
+- Fixed view - check specific item collection, not to the whole collection.
+
 ## [3.1.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.2...3.1.3) - 2017-01-17
 ### Fixed
 - Consider NULL values when using 'is not equal' advanced model filter

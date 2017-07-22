@@ -13,7 +13,6 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
-use Symfony\Component\Form\Extension\Core\ChoiceList\ChoiceList;
 
 class ClassFilter extends Filter
 {
@@ -62,13 +61,20 @@ class ClassFilter extends Filter
      */
     public function getFieldOptions()
     {
-        return $this->getOption('choices', array(
+        $choiceOptions = array(
             'required' => false,
-            'choice_list' => new ChoiceList(
-                \array_values($this->getOption('sub_classes')),
-                \array_keys($this->getOption('sub_classes'))
-            ),
-        ));
+            'choices' => $this->getOption('sub_classes'),
+        );
+
+        // NEXT_MAJOR: Remove (when requirement of Symfony is >= 2.7)
+        if (!method_exists('Symfony\Component\Form\AbstractType', 'configureOptions')) {
+            $choiceOptions['choices'] = array_flip($this->getOption('sub_classes'));
+            // NEXT_MAJOR: Remove (when requirement of Symfony is >= 3.0)
+        } elseif (method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions')) {
+            $choiceOptions['choices_as_values'] = true;
+        }
+
+        return $this->getOption('choices', $choiceOptions);
     }
 
     /**

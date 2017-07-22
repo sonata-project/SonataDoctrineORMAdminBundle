@@ -15,8 +15,9 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ModelFilterTest extends \PHPUnit_Framework_TestCase
+class ModelFilterTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @param array $options
