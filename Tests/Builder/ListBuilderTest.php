@@ -1,0 +1,98 @@
+<?php
+
+/*
+ * This file is part of the Sonata Project package.
+ *
+ * (c) Thomas Rabaix <thomas.rabaix@sonata-project.org>
+ *
+ * For the full copyright and license information, please view the LICENSE
+ * file that was distributed with this source code.
+ */
+
+namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
+
+use Prophecy\Argument;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Builder\ListBuilder;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\Form\Guess\Guess;
+use Symfony\Component\Form\Guess\TypeGuess;
+
+/**
+ * @author Andrew Mor-Yaroslavtsev <andrejs@gmail.com>
+ */
+class ListBuilderTest extends \PHPUnit_Framework_TestCase
+{
+    /**
+     * @var TypeGuesserInterface|\Prophecy\Prophecy\ObjectProphecy
+     */
+    protected $typeGuesser;
+
+    /**
+     * @var ListBuilder
+     */
+    protected $listBuilder;
+
+    /**
+     * @var AdminInterface|\Prophecy\Prophecy\ObjectProphecy
+     */
+    protected $admin;
+
+    /**
+     * @var ModelManager|\Prophecy\Prophecy\ObjectProphecy
+     */
+    protected $modelManager;
+
+    protected function setUp()
+    {
+        $this->typeGuesser = $this->prophesize('Sonata\AdminBundle\Guesser\TypeGuesserInterface');
+
+        $this->modelManager = $this->prophesize('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
+        $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
+
+        $this->admin = $this->prophesize('Sonata\AdminBundle\Admin\AbstractAdmin');
+        $this->admin->getClass()->willReturn('Foo');
+        $this->admin->getModelManager()->willReturn($this->modelManager);
+        $this->admin->addListFieldDescription(Argument::any(), Argument::any())
+            ->willReturn();
+
+        $this->listBuilder = new ListBuilder($this->typeGuesser->reveal());
+    }
+
+    public function testAddListActionField()
+    {
+        $fieldDescription = new FieldDescription();
+        $fieldDescription->setName('foo');
+        $list = $this->listBuilder->getBaseList();
+        $this->listBuilder
+            ->addField($list, 'actions', $fieldDescription, $this->admin->reveal());
+
+        $this->assertSame(
+            'SonataAdminBundle:CRUD:list__action.html.twig',
+            $list->get('foo')->getTemplate(),
+            'Custom list action field has a default list action template assigned'
+        );
+    }
+
+    public function testCorrectFixedActionsFieldType()
+    {
+        $this->typeGuesser->guessType(
+            Argument::any(), Argument::any(), Argument::any()
+        )->willReturn(
+            new TypeGuess(null, array(), Guess::LOW_CONFIDENCE)
+        );
+
+        $fieldDescription = new FieldDescription();
+        $fieldDescription->setName('_action');
+        $list = $this->listBuilder->getBaseList();
+        $this->listBuilder->addField($list, null, $fieldDescription, $this->admin->reveal());
+
+        $this->assertSame(
+            'actions',
+            $list->get('_action')->getType(),
+            'Standard list _action field has "actions" type'
+        );
+    }
+}

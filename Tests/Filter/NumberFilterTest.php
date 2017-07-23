@@ -14,8 +14,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class NumberFilterTest extends \PHPUnit_Framework_TestCase
+class NumberFilterTest extends PHPUnit_Framework_TestCase
 {
     public function testFilterEmpty()
     {

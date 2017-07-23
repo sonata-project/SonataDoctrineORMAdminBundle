@@ -15,12 +15,13 @@ use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
+use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * @author Sullivan Senechal <soullivaneuh@gmail.com>
  */
-final class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
+final class DatagridBuilderTest extends PHPUnit_Framework_TestCase
 {
     /**
      * @var TypeGuesserInterface|\PHPUnit_Framework_MockObject_MockObject
@@ -43,30 +44,29 @@ final class DatagridBuilderTest extends \PHPUnit_Framework_TestCase
 
     protected function setUp()
     {
-        $this->formFactory = $this->getMock('Symfony\Component\Form\FormFactoryInterface');
-        $this->filterFactory = $this->getMock('Sonata\AdminBundle\Filter\FilterFactoryInterface');
-        $this->typeGuesser = $this->getMock('Sonata\AdminBundle\Guesser\TypeGuesserInterface');
+        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->filterFactory = $this->createMock('Sonata\AdminBundle\Filter\FilterFactoryInterface');
+        $this->typeGuesser = $this->createMock('Sonata\AdminBundle\Guesser\TypeGuesserInterface');
 
         $this->datagridBuilder = new DatagridBuilder($this->formFactory, $this->filterFactory, $this->typeGuesser);
     }
 
     public function testGetBaseDatagrid()
     {
-        $admin = $this->getMockBuilder('Sonata\AdminBundle\Admin\AbstractAdmin')
-            ->disableOriginalConstructor()->getMock();
+        $admin = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $admin->expects($this->once())->method('getPagerType')->willReturn(Pager::TYPE_SIMPLE);
         $admin->expects($this->once())->method('getClass')->willReturn('Foo\Bar');
         $admin->expects($this->once())->method('createQuery')
-            ->willReturn($this->getMock('Sonata\AdminBundle\Datagrid\ProxyQueryInterface'));
+            ->willReturn($this->createMock('Sonata\AdminBundle\Datagrid\ProxyQueryInterface'));
         $admin->expects($this->once())->method('getList')
-            ->willReturn($this->getMock('Sonata\AdminBundle\Admin\FieldDescriptionCollection'));
+            ->willReturn($this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionCollection'));
 
-        $modelManager = $this->getMock('Sonata\AdminBundle\Model\ModelManagerInterface');
+        $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');
         $modelManager->expects($this->once())->method('getIdentifierFieldNames')->willReturn(array('id'));
         $admin->expects($this->once())->method('getModelManager')->willReturn($modelManager);
 
         $this->formFactory->expects($this->once())->method('createNamedBuilder')
-            ->willReturn($this->getMock('Symfony\Component\Form\FormBuilderInterface'));
+            ->willReturn($this->createMock('Symfony\Component\Form\FormBuilderInterface'));
 
         $this->assertInstanceOf('Sonata\AdminBundle\Datagrid\Datagrid', $this->datagridBuilder->getBaseDatagrid($admin));
     }
