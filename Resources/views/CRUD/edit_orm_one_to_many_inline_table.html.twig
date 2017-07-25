@@ -38,7 +38,7 @@ file that was distributed with this source code.
                     <td class="
                         sonata-ba-td-{{ id }}-{{ field_name  }}
                         control-group
-                        {% if nested_field.vars.errors|length > 0 %} error{% endif %}
+                        {% if nested_field.vars.errors|length > 0 %} error sonata-ba-field-error{% endif %}
                         "
                         {% if (nested_field.vars['attr']['hidden'] is defined) and (nested_field.vars['attr']['hidden']) %}
                             style="display:none;"
