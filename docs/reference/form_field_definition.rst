@@ -177,6 +177,7 @@ The AdminBundle provides 2 options:
                         'btn_add'       => 'Add author',      //Specify a custom label
                         'btn_list'      => 'button.list',     //which will be translated
                         'btn_delete'    => false,             //or hide the button.
+                        'btn_edit'      => 'Edit',            //Hide add and show edit button when value is set
                         'btn_catalogue' => 'SonataNewsBundle' //Custom translation domain for buttons
                     ), array(
                         'placeholder' => 'No author selected'
