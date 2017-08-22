@@ -104,21 +104,25 @@ class ShowBuilder implements ShowBuilderInterface
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_one.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_one.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:show_orm_one_to_many.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:show_orm_many_to_many.html.twig'
                         );
+
                         break;
                 }
             }
@@ -130,6 +134,7 @@ class ShowBuilder implements ShowBuilderInterface
             case ClassMetadataInfo::ONE_TO_MANY:
             case ClassMetadataInfo::MANY_TO_MANY:
                 $admin->attachAdminClass($fieldDescription);
+
                 break;
         }
     }
