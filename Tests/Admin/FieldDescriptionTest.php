@@ -50,6 +50,7 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals(array('key1' => 'key_1', 'key2' => 'key_2', 'key3' => 'key_3'), $field->getOption('array'));
 
         $field->setOption('integer', 1);
+
         try {
             $field->mergeOption('integer', array());
             $this->fail('no exception raised !!');
