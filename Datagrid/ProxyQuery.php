@@ -247,18 +247,18 @@ class ProxyQuery implements ProxyQueryInterface
 
         foreach ($associationMappings as $associationMapping) {
             // Do not add left join to already joined entities with custom query
-             foreach ($joinedEntities as $joinExprList) {
-                 foreach ($joinExprList as $joinExpr) {
-                     $newAliasTmp = $joinExpr->getAlias();
+            foreach ($joinedEntities as $joinExprList) {
+                foreach ($joinExprList as $joinExpr) {
+                    $newAliasTmp = $joinExpr->getAlias();
 
-                     if (sprintf('%s.%s', $alias, $associationMapping['fieldName']) === $joinExpr->getJoin()) {
-                         $this->entityJoinAliases[] = $newAliasTmp;
-                         $alias = $newAliasTmp;
+                    if (sprintf('%s.%s', $alias, $associationMapping['fieldName']) === $joinExpr->getJoin()) {
+                        $this->entityJoinAliases[] = $newAliasTmp;
+                        $alias = $newAliasTmp;
 
-                         continue 3;
-                     }
-                 }
-             }
+                        continue 3;
+                    }
+                }
+            }
 
             $newAlias .= '_'.$associationMapping['fieldName'];
             if (!in_array($newAlias, $this->entityJoinAliases)) {
