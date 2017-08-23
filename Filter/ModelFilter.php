@@ -150,6 +150,7 @@ class ModelFilter extends Filter
                 if ($join->getAlias() == $alias) {
                     $parts = explode('.', $join->getJoin());
                     $parentAlias = $parts[0];
+
                     break;
                 }
             }
