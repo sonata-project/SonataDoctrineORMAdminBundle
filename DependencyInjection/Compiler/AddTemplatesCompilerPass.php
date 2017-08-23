@@ -68,6 +68,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
                     if ($call !== $name) {
                         continue 2;
                     }
+
                     continue 1;
                 }
 
