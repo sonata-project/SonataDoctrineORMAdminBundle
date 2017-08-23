@@ -373,6 +373,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
             if (!is_object($value)) {
                 $identifiers[] = $value;
+
                 continue;
             }
 
@@ -380,6 +381,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
             if ($type) {
                 $identifiers[] = $type->convertToDatabaseValue($value, $platform);
+
                 continue;
             }
 

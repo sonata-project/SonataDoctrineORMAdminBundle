@@ -127,21 +127,25 @@ class ListBuilder implements ListBuilderInterface
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig'
                         );
+
                         break;
                     case ClassMetadataInfo::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig'
                         );
+
                         break;
                 }
             }
