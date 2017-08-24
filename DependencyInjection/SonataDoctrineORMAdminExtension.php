@@ -42,11 +42,15 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 
         // TODO: Go back on xml configuration when bumping requirements to SF 2.6+
         $doctrineEMDefinition = $container->getDefinition('sonata.admin.entity_manager');
+        // NEXT_MAJOR: remove when dropping Symfony <2.1 support
+        $doctrineFactoryMethod = method_exists('Doctrine\Bundle\DoctrineBundle\Registry', 'getManager')
+            ? 'getManager'
+            : 'getEntityManager';
         if (method_exists($doctrineEMDefinition, 'setFactory')) {
-            $doctrineEMDefinition->setFactory(array(new Reference('doctrine'), 'getEntityManager'));
+            $doctrineEMDefinition->setFactory(array(new Reference('doctrine'), $doctrineFactoryMethod));
         } else {
             $doctrineEMDefinition->setFactoryService('doctrine');
-            $doctrineEMDefinition->setFactoryMethod('getEntityManager');
+            $doctrineEMDefinition->setFactoryMethod($doctrineFactoryMethod);
         }
 
         $bundles = $container->getParameter('kernel.bundles');
