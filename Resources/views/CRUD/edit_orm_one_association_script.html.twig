@@ -46,7 +46,7 @@ This code manage the one-to-many association field popup
                 if (!html.length) {
                     return;
                 }
-                var $newForm = jQuery(jQuery.parseHTML(html));
+                var $newForm = jQuery(html);
                 var $oldForm = jQuery('#field_container_{{ id }}');
 
                 // Maintain state of file inputs
