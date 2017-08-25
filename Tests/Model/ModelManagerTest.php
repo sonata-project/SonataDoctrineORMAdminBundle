@@ -187,7 +187,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
         $modelManagerClass = 'Sonata\DoctrineORMAdminBundle\Model\ModelManager';
 
-        $object = new ContainerEntity(new AssociatedEntity(), new EmbeddedEntity());
+        $object = new ContainerEntity(new AssociatedEntity(null, new EmbeddedEntity()), new EmbeddedEntity());
 
         $em = $this->createMock('Doctrine\ORM\EntityManager');
 
@@ -228,6 +228,10 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'embeddedEntity.plainField');
         $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+
+        list($metadata, $lastPropertyName) = $modelManager
+            ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.embeddedEntity.plainField');
+        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
     }
 
     public function getMetadataForEmbeddedEntity()
@@ -247,6 +251,8 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
     public function getMetadataForAssociatedEntity()
     {
+        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
+
         $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity');
 
         $metadata->fieldMappings = array(
@@ -256,6 +262,13 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
                 'type' => 'string',
             ),
         );
+
+        $metadata->embeddedClasses['embeddedEntity'] = array(
+            'class' => $embeddedEntityClass,
+            'columnPrefix' => 'embeddedEntity',
+        );
+
+        $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
 
         return $metadata;
     }
@@ -338,7 +351,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
     public function testAssociationIdentifierType()
     {
-        $entity = new ContainerEntity(new AssociatedEntity(42), new EmbeddedEntity());
+        $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
 
         $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())

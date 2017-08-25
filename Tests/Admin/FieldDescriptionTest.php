@@ -358,4 +358,33 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
         $this->assertEquals('myMethodValue', $field->getValue($mockedObject));
     }
+
+    public function testGetValueForMultiLevelEmbeddedObject()
+    {
+        $mockedChildEmbeddedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('myMethod'))
+            ->getMock();
+        $mockedChildEmbeddedObject->expects($this->once())
+            ->method('myMethod')
+            ->will($this->returnValue('myMethodValue'));
+        $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('getChild'))
+            ->getMock();
+        $mockedEmbeddedObject->expects($this->once())
+            ->method('getChild')
+            ->will($this->returnValue($mockedChildEmbeddedObject));
+        $mockedObject = $this->getMockBuilder('stdClass')
+            ->setMethods(array('getMyEmbeddedObject'))
+            ->getMock();
+        $mockedObject->expects($this->once())
+            ->method('getMyEmbeddedObject')
+            ->will($this->returnValue($mockedEmbeddedObject));
+        $field = new FieldDescription();
+        $field->setFieldMapping(array(
+            'declaredField' => 'myEmbeddedObject.child', 'type' => 'string', 'fieldName' => 'myMethod',
+        ));
+        $field->setFieldName('myMethod');
+        $field->setOption('code', 'myMethod');
+        $this->assertEquals('myMethodValue', $field->getValue($mockedObject));
+    }
 }
