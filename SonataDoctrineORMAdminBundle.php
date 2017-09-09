@@ -17,6 +17,7 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompi
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
+// trigger a complete build
 class SonataDoctrineORMAdminBundle extends Bundle
 {
     /**

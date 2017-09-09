@@ -33,7 +33,7 @@
         "knplabs/knp-menu-bundle": "^2.1.1",
         "simplethings/entity-audit-bundle": "0.1 - 0.9 || ^1.0",
         "sllh/php-cs-fixer-styleci-bridge": "^2.0",
-        "symfony/phpunit-bridge": "^2.7 || ^3.0"
+        "symfony/phpunit-bridge": "^3.3"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
