@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.1.7](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.6...3.1.7) - 2017-09-14
+### Fixed
+- added the missing `sonata-ba-field-error` class to table fields with errors
+- Replaced deprecated `getEntityManager` with `getManager`
+- Patched collection form handling script to maintain File input state when new items are added to collections
+- Fixed invalid FieldDescription for association embedded properties
+
 ## [3.1.6](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.5...3.1.6) - 2017-07-05
 ### Fixed
 - Throw an exception if property name is not found in field mappings
