@@ -310,6 +310,7 @@ class ProxyQuery implements ProxyQueryInterface
             $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
         }
         $queryBuilderId->resetDQLPart('select');
+        $queryBuilderId->resetDQLPart('orderBy');
         $queryBuilderId->add('select', 'DISTINCT '.$idxSelect);
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
