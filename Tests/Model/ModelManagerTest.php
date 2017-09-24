@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Version;
@@ -462,6 +463,41 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')->getMock();
         $manager = new ModelManager($registry);
         $manager->getDataSourceIterator($datagrid, array());
+    }
+
+    public function testModelReverseTransform()
+    {
+        $class = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity';
+
+        $metadataFactory = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
+        $modelManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
+        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+
+        $classMetadata = new ClassMetadataInfo($class);
+        $classMetadata->reflClass = new \ReflectionClass($class);
+
+        $modelManager->expects($this->once())
+            ->method('getMetadataFactory')
+            ->willReturn($metadataFactory);
+        $metadataFactory->expects($this->once())
+            ->method('getMetadataFor')
+            ->with($class)
+            ->willReturn($classMetadata);
+        $registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with($class)
+            ->willReturn($modelManager);
+
+        $manager = new ModelManager($registry);
+        $this->assertInstanceOf($class, $object = $manager->modelReverseTransform(
+            $class,
+            array(
+                'schmeckles' => 42,
+                'multi_word_property' => 'hello',
+            )
+        ));
+        $this->assertSame(42, $object->getSchmeckles());
+        $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
     private function getMetadata($class, $isVersioned)
