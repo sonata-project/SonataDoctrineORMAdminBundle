@@ -328,6 +328,17 @@ class ProxyQuery implements ProxyQueryInterface
             $queryBuilderId->addSelect($sortBy);
         }
 
+        /* For each ORDER BY clause defined directly in the DQL parts of the query,
+           we add an entry in the SELECT clause. */
+        $dqlParts = $queryBuilderId->getDqlParts();
+        if ($dqlParts['orderBy'] && count($dqlParts['orderBy'])) {
+            foreach ($dqlParts['orderBy'] as $part) {
+                foreach ($part->getParts() as $orderBy) {
+                    $queryBuilderId->addSelect(preg_replace("/\s+(ASC|DESC)$/i", '', $orderBy));
+                }
+            }
+        }
+
         $results = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
         $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
         $idxMatrix = array();
