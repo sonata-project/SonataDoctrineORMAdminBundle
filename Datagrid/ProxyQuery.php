@@ -309,8 +309,8 @@ class ProxyQuery implements ProxyQueryInterface
             }
             $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
         }
-        $queryBuilderId->resetDQLPart('select');
-        $queryBuilderId->add('select', 'DISTINCT '.$idxSelect);
+        $queryBuilderId->select($idxSelect);
+        $queryBuilderId->distinct();
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
         /* Consider
@@ -318,15 +318,7 @@ class ProxyQuery implements ProxyQueryInterface
         For any particular x-value in the table there might be many different y
         values.  Which one will you use to sort that x-value in the output?
         */
-        // todo : check how doctrine behave, potential SQL injection here ...
-        if ($this->getSortBy()) {
-            $sortBy = $this->getSortBy();
-            if (strpos($sortBy, '.') === false) { // add the current alias
-                $sortBy = $rootAlias.'.'.$sortBy;
-            }
-            $sortBy .= ' AS __order_by';
-            $queryBuilderId->addSelect($sortBy);
-        }
+        $this->addOrderedColumns($queryBuilderId);
 
         $results = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
         $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
@@ -354,5 +346,16 @@ class ProxyQuery implements ProxyQueryInterface
         }
 
         return $queryBuilder;
+    }
+
+    private function addOrderedColumns(QueryBuilder $queryBuilder)
+    {
+        /* For each ORDER BY clause defined directly in the DQL parts of the query,
+           we add an entry in the SELECT clause. */
+        foreach ((array) $queryBuilder->getDqlPart('orderBy') as $part) {
+            foreach ($part->getParts() as $orderBy) {
+                $queryBuilder->addSelect(preg_replace("/\s+(ASC|DESC)$/i", '', $orderBy));
+            }
+        }
     }
 }
