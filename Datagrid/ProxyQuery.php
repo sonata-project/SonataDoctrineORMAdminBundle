@@ -48,6 +48,13 @@ class ProxyQuery implements ProxyQueryInterface
     protected $entityJoinAliases;
 
     /**
+     * The map of query hints.
+     *
+     * @var array<string,mixed>
+     */
+    private $hints = array();
+
+    /**
      * @param QueryBuilder $queryBuilder
      */
     public function __construct($queryBuilder)
@@ -132,7 +139,12 @@ class ProxyQuery implements ProxyQueryInterface
             }
         }
 
-        return $this->getFixedQueryBuilder($queryBuilder)->getQuery()->execute($params, $hydrationMode);
+        $query = $this->getFixedQueryBuilder($queryBuilder)->getQuery();
+        foreach ($this->hints as $name => $value) {
+            $query->setHint($name, $value);
+        }
+
+        return $query->execute($params, $hydrationMode);
     }
 
     /**
@@ -270,6 +282,24 @@ class ProxyQuery implements ProxyQueryInterface
         }
 
         return $alias;
+    }
+
+    /**
+     * Sets a {@see \Doctrine\ORM\Query} hint. If the hint name is not recognized, it is silently ignored.
+     *
+     * @param string $name  the name of the hint
+     * @param mixed  $value the value of the hint
+     *
+     * @return ProxyQueryInterface
+     *
+     * @see \Doctrine\ORM\Query::setHint
+     * @see \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER
+     */
+    final public function setHint($name, $value)
+    {
+        $this->hints[$name] = $value;
+
+        return $this;
     }
 
     /**

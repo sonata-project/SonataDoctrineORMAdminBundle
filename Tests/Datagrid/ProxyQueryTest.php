@@ -16,10 +16,12 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\Tools\SchemaTool;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 
 class ProxyQueryTest extends PHPUnit_Framework_TestCase
 {
@@ -184,5 +186,30 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('o.id', $dqlPart[0]);
         $this->assertEquals('o.name', $dqlPart[1]);
         $this->assertEquals('o.name2', $dqlPart[2]);
+    }
+
+    public function testSetHint()
+    {
+        $entity1 = new DoubleNameEntity(1, 'Foo', null);
+        $entity2 = new DoubleNameEntity(2, 'Bar', null);
+
+        $this->em->persist($entity1);
+        $this->em->persist($entity2);
+        $this->em->flush();
+
+        $qb = $this->em->createQueryBuilder()
+                       ->select('o.id')
+                       ->from(self::DOUBLE_NAME_CLASS, 'o');
+
+        $pq = new ProxyQuery($qb);
+        $pq->setHint(
+            \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,
+            'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker'
+        );
+        $pq->setHint('hint', 'value');
+
+        $result = $pq->execute();
+
+        $this->assertEquals(2, $result[0]['id']);
     }
 }
