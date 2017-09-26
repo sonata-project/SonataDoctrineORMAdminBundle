@@ -12,19 +12,54 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
+use Doctrine\ORM\Tools\SchemaTool;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
+use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 class ProxyQueryTest extends PHPUnit_Framework_TestCase
 {
+    const DOUBLE_NAME_CLASS = 'Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity';
+
+    /**
+     * @var EntityManager
+     */
+    private $em;
+
     public static function setUpBeforeClass()
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
         }
+    }
+
+    protected function setUp()
+    {
+        $this->em = DoctrineTestHelper::createTestEntityManager();
+
+        $schemaTool = new SchemaTool($this->em);
+        $classes = array(
+            $this->em->getClassMetadata(self::DOUBLE_NAME_CLASS),
+        );
+
+        try {
+            $schemaTool->dropSchema($classes);
+        } catch (\Exception $e) {
+        }
+
+        try {
+            $schemaTool->createSchema($classes);
+        } catch (\Exception $e) {
+        }
+    }
+
+    protected function tearDown()
+    {
+        $this->em = null;
     }
 
     public function dataGetFixedQueryBuilder()
@@ -124,5 +159,30 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
         /* Work */
 
         $pq->execute();
+    }
+
+    public function testAddOrderedColumns()
+    {
+        $qb = $this->em->createQueryBuilder()
+                       ->select('o.id')
+                       ->distinct()
+                       ->from(self::DOUBLE_NAME_CLASS, 'o')
+                       ->orderBy('o.name', 'ASC')
+                       ->addOrderBy('o.name2', 'DESC');
+
+        $pq = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
+                   ->disableOriginalConstructor()
+                   ->getMock();
+
+        $reflection = new \ReflectionClass(get_class($pq));
+        $method = $reflection->getMethod('addOrderedColumns');
+        $method->setAccessible(true);
+        $method->invoke($pq, $qb);
+
+        $dqlPart = $qb->getDqlPart('select');
+        $this->assertCount(3, $dqlPart);
+        $this->assertEquals('o.id', $dqlPart[0]);
+        $this->assertEquals('o.name', $dqlPart[1]);
+        $this->assertEquals('o.name2', $dqlPart[2]);
     }
 }
