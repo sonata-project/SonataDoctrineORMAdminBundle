@@ -28,11 +28,11 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             return false;
         }
 
-        $options = array(
+        $options = [
             'field_type' => null,
-            'field_options' => array(),
-            'options' => array(),
-        );
+            'field_options' => [],
+            'options' => [],
+        ];
 
         list($metadata, $propertyName, $parentAssociationMappings) = $ret;
 
@@ -50,15 +50,15 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                     $options['operator_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                         ? 'Sonata\CoreBundle\Form\Type\EqualType'
                         : 'sonata_type_equal';
-                    $options['operator_options'] = array();
+                    $options['operator_options'] = [];
 
                     // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
                     $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                         ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
                         : 'entity';
-                    $options['field_options'] = array(
+                    $options['field_options'] = [
                         'class' => $mapping['targetEntity'],
-                    );
+                    ];
 
                     $options['field_name'] = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
@@ -79,7 +79,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                     ? 'Sonata\CoreBundle\Form\Type\BooleanType'
                     : 'sonata_type_boolean';
-                $options['field_options'] = array();
+                $options['field_options'] = [];
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':

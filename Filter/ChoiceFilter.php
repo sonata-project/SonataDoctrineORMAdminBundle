@@ -68,7 +68,7 @@ class ChoiceFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -81,13 +81,13 @@ class ChoiceFilter extends Filter
             ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
             : 'sonata_type_filter_default';
 
-        return array($type, array(
+        return [$type, [
             'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                 ? 'Sonata\CoreBundle\Form\Type\EqualType'
                 : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 }
