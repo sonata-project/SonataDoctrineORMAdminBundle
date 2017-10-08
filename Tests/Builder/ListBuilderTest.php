@@ -81,7 +81,7 @@ class ListBuilderTest extends \PHPUnit_Framework_TestCase
         $this->typeGuesser->guessType(
             Argument::any(), Argument::any(), Argument::any()
         )->willReturn(
-            new TypeGuess(null, array(), Guess::LOW_CONFIDENCE)
+            new TypeGuess(null, [], Guess::LOW_CONFIDENCE)
         );
 
         $fieldDescription = new FieldDescription();

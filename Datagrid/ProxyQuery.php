@@ -52,7 +52,7 @@ class ProxyQuery implements ProxyQueryInterface
      *
      * @var array<string,mixed>
      */
-    private $hints = array();
+    private $hints = [];
 
     /**
      * @param QueryBuilder $queryBuilder
@@ -61,7 +61,7 @@ class ProxyQuery implements ProxyQueryInterface
     {
         $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
-        $this->entityJoinAliases = array();
+        $this->entityJoinAliases = [];
     }
 
     /**
@@ -69,7 +69,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function __call($name, $args)
     {
-        return call_user_func_array(array($this->queryBuilder, $name), $args);
+        return call_user_func_array([$this->queryBuilder, $name], $args);
     }
 
     /**
@@ -91,7 +91,7 @@ class ProxyQuery implements ProxyQueryInterface
     /**
      * {@inheritdoc}
      */
-    public function execute(array $params = array(), $hydrationMode = null)
+    public function execute(array $params = [], $hydrationMode = null)
     {
         // always clone the original queryBuilder
         $queryBuilder = clone $this->queryBuilder;
@@ -121,11 +121,11 @@ class ProxyQuery implements ProxyQueryInterface
             ->getMetadataFor(current($queryBuilder->getRootEntities()))
             ->getIdentifierFieldNames();
 
-        $existingOrders = array();
+        $existingOrders = [];
         /** @var Query\Expr\OrderBy $order */
         foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
             foreach ($order->getParts() as $part) {
-                $existingOrders[] = trim(str_replace(array(Criteria::DESC, Criteria::ASC), '', $part));
+                $existingOrders[] = trim(str_replace([Criteria::DESC, Criteria::ASC], '', $part));
             }
         }
 
@@ -324,7 +324,7 @@ class ProxyQuery implements ProxyQueryInterface
         $idNames = $metadata->getIdentifierFieldNames();
 
         // step 3 : retrieve the different subjects ids
-        $selects = array();
+        $selects = [];
         $idxSelect = '';
         foreach ($idNames as $idName) {
             $select = sprintf('%s.%s', $rootAlias, $idName);
@@ -350,9 +350,9 @@ class ProxyQuery implements ProxyQueryInterface
         */
         $this->addOrderedColumns($queryBuilderId);
 
-        $results = $queryBuilderId->getQuery()->execute(array(), Query::HYDRATE_ARRAY);
+        $results = $queryBuilderId->getQuery()->execute([], Query::HYDRATE_ARRAY);
         $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
-        $idxMatrix = array();
+        $idxMatrix = [];
         foreach ($results as $id) {
             foreach ($idNames as $idName) {
                 // Convert ids to database value in case of custom type, if provided.

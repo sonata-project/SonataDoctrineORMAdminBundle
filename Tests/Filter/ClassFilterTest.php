@@ -21,46 +21,46 @@ class ClassFilterTest extends PHPUnit_Framework_TestCase
     public function testFilterEmpty()
     {
         $filter = new ClassFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
 
-        $this->assertEquals(array(), $builder->query);
+        $this->assertEquals([], $builder->query);
         $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterInvalidOperator()
     {
         $filter = new ClassFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => 'foo'));
+        $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertEquals(array(), $builder->query);
+        $this->assertEquals([], $builder->query);
         $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilter()
     {
         $filter = new ClassFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_EQUAL, 'value' => 'type'));
-        $filter->filter($builder, 'alias', 'field', array('type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 'type'));
-        $filter->filter($builder, 'alias', 'field', array('value' => 'type'));
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 'type']);
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 'type']);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'type']);
 
-        $expected = array(
+        $expected = [
             'alias INSTANCE OF type',
             'alias NOT INSTANCE OF type',
             'alias INSTANCE OF type',
-        );
+        ];
 
         $this->assertEquals($expected, $builder->query);
         $this->assertEquals(true, $filter->isActive());

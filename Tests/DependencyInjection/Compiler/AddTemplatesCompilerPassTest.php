@@ -26,21 +26,21 @@ class AddTemplatesCompilerPassTest extends PHPUnit_Framework_TestCase
             ->method('getParameter')
             ->will($this->returnCallback(function ($value) {
                 if ($value == 'sonata.admin.configuration.admin_services') {
-                    return array(
-                        'my.admin' => array(
-                            'templates' => array(
-                                'form' => array('myform.twig.html'),
-                                'filter' => array('myfilter.twig.html'),
-                            ),
-                        ),
-                    );
+                    return [
+                        'my.admin' => [
+                            'templates' => [
+                                'form' => ['myform.twig.html'],
+                                'filter' => ['myfilter.twig.html'],
+                            ],
+                        ],
+                    ];
                 }
 
                 if ($value == 'sonata_doctrine_orm_admin.templates') {
-                    return array(
-                        'form' => array('default_form.twig.html'),
-                        'filter' => array('default_filter.twig.html'),
-                    );
+                    return [
+                        'form' => ['default_form.twig.html'],
+                        'filter' => ['default_filter.twig.html'],
+                    ];
                 }
             }))
         ;
@@ -48,7 +48,7 @@ class AddTemplatesCompilerPassTest extends PHPUnit_Framework_TestCase
         $container
             ->expects($this->any())
             ->method('findTaggedServiceIds')
-            ->will($this->returnValue(array('my.admin' => array(array('manager_type' => 'orm')))))
+            ->will($this->returnValue(['my.admin' => [['manager_type' => 'orm']]]))
         ;
 
         $definition = new Definition(null);
@@ -59,15 +59,15 @@ class AddTemplatesCompilerPassTest extends PHPUnit_Framework_TestCase
             ->will($this->returnValue($definition))
         ;
 
-        $definition->addMethodCall('setFilterTheme', array(array('custom_call.twig.html')));
+        $definition->addMethodCall('setFilterTheme', [['custom_call.twig.html']]);
 
         $compilerPass = new AddTemplatesCompilerPass();
         $compilerPass->process($container);
 
-        $expected = array(
-            array('setFilterTheme', array(array('custom_call.twig.html', 'myfilter.twig.html'))),
-            array('setFormTheme', array(array('default_form.twig.html', 'myform.twig.html'))),
-        );
+        $expected = [
+            ['setFilterTheme', [['custom_call.twig.html', 'myfilter.twig.html']]],
+            ['setFormTheme', [['default_form.twig.html', 'myform.twig.html']]],
+        ];
 
         $this->assertEquals($expected, $definition->getMethodCalls());
     }

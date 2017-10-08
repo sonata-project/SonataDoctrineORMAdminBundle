@@ -50,7 +50,7 @@ abstract class Filter extends BaseFilter
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 
-        return array($alias, $this->getFieldName());
+        return [$alias, $this->getFieldName()];
     }
 
     /**

@@ -29,16 +29,16 @@ class SonataDoctrineORMAdminExtensionTest extends PHPUnit_Framework_TestCase
     public function testEntityManagerSetFactory()
     {
         $this->configuration = new ContainerBuilder();
-        $this->configuration->setParameter('kernel.bundles', array());
+        $this->configuration->setParameter('kernel.bundles', []);
         $loader = new SonataDoctrineORMAdminExtension();
-        $loader->load(array(), $this->configuration);
+        $loader->load([], $this->configuration);
 
         $definition = $this->configuration->getDefinition('sonata.admin.entity_manager');
         $doctrineServiceId = 'doctrine';
         $doctrineFactoryMethod = 'getEntityManager';
 
         if (method_exists($definition, 'getFactory')) {
-            $this->assertEquals(array(new Reference($doctrineServiceId), $doctrineFactoryMethod), $definition->getFactory());
+            $this->assertEquals([new Reference($doctrineServiceId), $doctrineFactoryMethod], $definition->getFactory());
         } else {
             $this->assertEquals($doctrineServiceId, $definition->getFactoryService());
             $this->assertEquals($doctrineFactoryMethod, $definition->getFactoryMethod());

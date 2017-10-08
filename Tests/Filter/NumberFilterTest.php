@@ -21,52 +21,52 @@ class NumberFilterTest extends PHPUnit_Framework_TestCase
     public function testFilterEmpty()
     {
         $filter = new NumberFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
 
-        $this->assertEquals(array(), $builder->query);
+        $this->assertEquals([], $builder->query);
         $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterInvalidOperator()
     {
         $filter = new NumberFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => 'foo'));
+        $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertEquals(array(), $builder->query);
+        $this->assertEquals([], $builder->query);
         $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilter()
     {
         $filter = new NumberFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_EQUAL, 'value' => 42));
-        $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_GREATER_EQUAL, 'value' => 42));
-        $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_GREATER_THAN, 'value' => 42));
-        $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_LESS_EQUAL, 'value' => 42));
-        $filter->filter($builder, 'alias', 'field', array('type' => NumberType::TYPE_LESS_THAN, 'value' => 42));
-        $filter->filter($builder, 'alias', 'field', array('value' => 42));
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_GREATER_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_GREATER_THAN, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_LESS_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_LESS_THAN, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 42]);
 
-        $expected = array(
+        $expected = [
             'alias.field = :field_name_0',
             'alias.field >= :field_name_1',
             'alias.field > :field_name_2',
             'alias.field <= :field_name_3',
             'alias.field < :field_name_4',
             'alias.field = :field_name_5',
-        );
+        ];
 
         $this->assertEquals($expected, $builder->query);
         $this->assertEquals(true, $filter->isActive());

@@ -32,15 +32,15 @@ class FilterTest_Filter extends Filter
 
     public function getDefaultOptions()
     {
-        return array('option1' => 2);
+        return ['option1' => 2];
     }
 
     public function getRenderSettings()
     {
-        return array('sonata_type_filter_default', array(
+        return ['sonata_type_filter_default', [
             'type' => $this->getFieldType(),
             'options' => $this->getFieldOptions(),
-        ));
+        ]];
     }
 
     public function testAssociation(ProxyQueryInterface $queryBuilder, $value)
@@ -54,17 +54,17 @@ class FilterTest extends PHPUnit_Framework_TestCase
     public function testFieldDescription()
     {
         $filter = new FilterTest_Filter();
-        $this->assertEquals(array('option1' => 2), $filter->getDefaultOptions());
+        $this->assertEquals(['option1' => 2], $filter->getDefaultOptions());
         $this->assertEquals(null, $filter->getOption('1'));
 
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $this->assertEquals(2, $filter->getOption('option1'));
         $this->assertEquals(null, $filter->getOption('foo'));
         $this->assertEquals('bar', $filter->getOption('foo', 'bar'));
 
         $this->assertEquals('field_name', $filter->getName());
-        $this->assertEquals(array('class' => 'FooBar'), $filter->getFieldOptions());
+        $this->assertEquals(['class' => 'FooBar'], $filter->getFieldOptions());
     }
 
     public function testValues()

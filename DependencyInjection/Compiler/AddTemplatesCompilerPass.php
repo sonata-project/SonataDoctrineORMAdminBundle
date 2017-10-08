@@ -36,7 +36,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
             $definition = $container->getDefinition($id);
 
             if (!$definition->hasMethodCall('setFormTheme')) {
-                $definition->addMethodCall('setFormTheme', array($templates['form']));
+                $definition->addMethodCall('setFormTheme', [$templates['form']]);
             }
 
             if (isset($overwrite[$id]['templates']['form'])) {
@@ -44,7 +44,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
             }
 
             if (!$definition->hasMethodCall('setFilterTheme')) {
-                $definition->addMethodCall('setFilterTheme', array($templates['filter']));
+                $definition->addMethodCall('setFilterTheme', [$templates['filter']]);
             }
 
             if (isset($overwrite[$id]['templates']['filter'])) {
@@ -72,7 +72,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
                     continue 1;
                 }
 
-                $call = array(array_merge($call[0], $value));
+                $call = [array_merge($call[0], $value)];
             }
         }
 

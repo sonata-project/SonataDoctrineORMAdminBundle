@@ -44,9 +44,9 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
         $this->em = DoctrineTestHelper::createTestEntityManager();
 
         $schemaTool = new SchemaTool($this->em);
-        $classes = array(
+        $classes = [
             $this->em->getClassMetadata(self::DOUBLE_NAME_CLASS),
-        );
+        ];
 
         try {
             $schemaTool->dropSchema($classes);
@@ -66,12 +66,12 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
 
     public function dataGetFixedQueryBuilder()
     {
-        return array(
-            array('aaa', 'bbb', 'id', 'id_idx', 33, Type::INTEGER),
-            array('aaa', 'bbb', 'associatedId', 'associatedId_idx', 33, null),
-            array('aaa', 'bbb', 'id.value', 'id_value_idx', 33, Type::INTEGER),
-            array('aaa', 'bbb', 'id.uuid', 'id_uuid_idx', new NonIntegerIdentifierTestClass('80fb6f91-bba1-4d35-b3d4-e06b24494e85'), UuidType::NAME),
-        );
+        return [
+            ['aaa', 'bbb', 'id', 'id_idx', 33, Type::INTEGER],
+            ['aaa', 'bbb', 'associatedId', 'associatedId_idx', 33, null],
+            ['aaa', 'bbb', 'id.value', 'id_value_idx', 33, Type::INTEGER],
+            ['aaa', 'bbb', 'id.uuid', 'id_uuid_idx', new NonIntegerIdentifierTestClass('80fb6f91-bba1-4d35-b3d4-e06b24494e85'), UuidType::NAME],
+        ];
     }
 
     /**
@@ -86,7 +86,7 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
         $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierFieldNames')
-            ->willReturn(array($id));
+            ->willReturn([$id]);
         $meta->expects($this->any())
             ->method('getTypeOfField')
             ->willReturn($identifierType);
@@ -115,14 +115,14 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
         // NEXT MAJOR: Replace this when dropping PHP < 5.6
         // $q = $this->createMock('PDOStatement');
         $q = $this->getMockBuilder('stdClass')
-            ->setMethods(array('execute'))
+            ->setMethods(['execute'])
             ->getMock();
         $q->expects($this->any())
             ->method('execute')
-            ->willReturn(array(array($id => $value)));
+            ->willReturn([[$id => $value]]);
 
         $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setConstructorArgs(array($em))
+            ->setConstructorArgs([$em])
             ->getMock();
         $qb->expects($this->any())
             ->method('getEntityManager')
@@ -132,14 +132,14 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
             ->willReturn($q);
         $qb->expects($this->once())
             ->method('setParameter')
-            ->with($this->equalTo($expectedId), $this->equalTo(array($value)));
+            ->with($this->equalTo($expectedId), $this->equalTo([$value]));
         $qb->expects($this->any())
             ->method('getDQLPart')
             ->will($this->returnCallBack(function ($part) use ($class, $alias) {
-                $parts = array(
-                    'from' => array(new From($class, $alias)),
-                    'orderBy' => array(new OrderBy('whatever', 'DESC')),
-                );
+                $parts = [
+                    'from' => [new From($class, $alias)],
+                    'orderBy' => [new OrderBy('whatever', 'DESC')],
+                ];
 
                 return $parts[$part];
             }));
@@ -148,14 +148,14 @@ class ProxyQueryTest extends PHPUnit_Framework_TestCase
             ->with("$alias.$id", null);
         $qb->expects($this->once())
             ->method('getRootEntities')
-            ->willReturn(array($class));
+            ->willReturn([$class]);
         $qb->expects($this->exactly(2))
             ->method('getRootAliases')
-            ->willReturn(array($alias));
+            ->willReturn([$alias]);
 
         $pq = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
-            ->setConstructorArgs(array($qb))
-            ->setMethods(array('a'))
+            ->setConstructorArgs([$qb])
+            ->setMethods(['a'])
             ->getMock();
 
         /* Work */
