@@ -55,7 +55,10 @@ class StringFilter extends Filter
         if ($data['type'] == ChoiceType::TYPE_EQUAL) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
+            $queryBuilder->setParameter($parameterName, sprintf(
+                $this->getOption('format'),
+                addcslashes($data['value'], '%_')
+            ));
         }
     }
 
