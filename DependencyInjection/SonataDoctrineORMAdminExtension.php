@@ -47,7 +47,7 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
             ? 'getManager'
             : 'getEntityManager';
         if (method_exists($doctrineEMDefinition, 'setFactory')) {
-            $doctrineEMDefinition->setFactory(array(new Reference('doctrine'), $doctrineFactoryMethod));
+            $doctrineEMDefinition->setFactory([new Reference('doctrine'), $doctrineFactoryMethod]);
         } else {
             $doctrineEMDefinition->setFactoryService('doctrine');
             $doctrineEMDefinition->setFactoryMethod($doctrineFactoryMethod);

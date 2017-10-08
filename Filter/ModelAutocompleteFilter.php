@@ -43,17 +43,17 @@ class ModelAutocompleteFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'field_name' => false,
             'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                 ? 'Sonata\AdminBundle\Form\Type\ModelAutocompleteType'
                 : 'sonata_type_model_autocomplete', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-            'field_options' => array(),
+            'field_options' => [],
             'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
                 ? 'Sonata\CoreBundle\Form\Type\EqualType'
                 : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-            'operator_options' => array(),
-        );
+            'operator_options' => [],
+        ];
     }
 
     /**
@@ -66,13 +66,13 @@ class ModelAutocompleteFilter extends Filter
             ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
             : 'sonata_type_filter_default';
 
-        return array($type, array(
+        return [$type, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -135,6 +135,6 @@ class ModelAutocompleteFilter extends Filter
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $queryBuilder->entityJoin($associationMappings);
 
-        return array($alias, false);
+        return [$alias, false];
     }
 }

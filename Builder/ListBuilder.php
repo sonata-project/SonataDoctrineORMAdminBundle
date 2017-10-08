@@ -28,13 +28,13 @@ class ListBuilder implements ListBuilderInterface
     /**
      * @var string[]
      */
-    protected $templates = array();
+    protected $templates = [];
 
     /**
      * @param TypeGuesserInterface $guesser
      * @param string[]             $templates
      */
-    public function __construct(TypeGuesserInterface $guesser, array $templates = array())
+    public function __construct(TypeGuesserInterface $guesser, array $templates = [])
     {
         $this->guesser = $guesser;
         $this->templates = $templates;
@@ -43,7 +43,7 @@ class ListBuilder implements ListBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseList(array $options = array())
+    public function getBaseList(array $options = [])
     {
         return new FieldDescriptionCollection();
     }
@@ -151,7 +151,7 @@ class ListBuilder implements ListBuilderInterface
             }
         }
 
-        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY))) {
+        if (in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY])) {
             $admin->attachAdminClass($fieldDescription);
         }
     }

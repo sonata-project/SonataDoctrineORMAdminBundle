@@ -64,9 +64,9 @@ class StringFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'format' => '%%%s%%',
-        );
+        ];
     }
 
     /**
@@ -79,11 +79,11 @@ class StringFilter extends Filter
             ? 'Sonata\AdminBundle\Form\Type\Filter\ChoiceType'
             : 'sonata_type_filter_choice';
 
-        return array($type, array(
+        return [$type, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -93,11 +93,11 @@ class StringFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = array(
+        $choices = [
             ChoiceType::TYPE_CONTAINS => 'LIKE',
             ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
             ChoiceType::TYPE_EQUAL => '=',
-        );
+        ];
 
         return isset($choices[$type]) ? $choices[$type] : false;
     }

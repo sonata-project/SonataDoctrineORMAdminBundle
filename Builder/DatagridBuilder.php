@@ -91,7 +91,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
 
-        if (in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE))) {
+        if (in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY, ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE])) {
             $admin->attachAdminClass($fieldDescription);
         }
     }
@@ -112,7 +112,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
             foreach ($options as $name => $value) {
                 if (is_array($value)) {
-                    $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, array())));
+                    $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, [])));
                 } else {
                     $fieldDescription->setOption($name, $fieldDescription->getOption($name, $value));
                 }
@@ -124,16 +124,16 @@ class DatagridBuilder implements DatagridBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
         $admin->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
 
-        $fieldDescription->mergeOption('field_options', array('required' => false));
+        $fieldDescription->mergeOption('field_options', ['required' => false]);
 
         // NEXT_MAJOR: Remove first check (when requirement of Symfony is >= 2.8)
         if ($type === 'doctrine_orm_model_autocomplete' || $type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
-            $fieldDescription->mergeOption('field_options', array(
+            $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
                 'admin_code' => $admin->getCode(),
                 'context' => 'filter',
-            ));
+            ]);
         }
 
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
@@ -148,13 +148,13 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * {@inheritdoc}
      */
-    public function getBaseDatagrid(AdminInterface $admin, array $values = array())
+    public function getBaseDatagrid(AdminInterface $admin, array $values = [])
     {
         $pager = $this->getPager($admin->getPagerType());
 
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
-        $defaultOptions = array();
+        $defaultOptions = [];
         if ($this->csrfTokenEnabled) {
             $defaultOptions['csrf_protection'] = false;
         }
@@ -162,7 +162,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
         $formType = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
             ? 'Symfony\Component\Form\Extension\Core\Type\FormType' : 'form';
-        $formBuilder = $this->formFactory->createNamedBuilder('filter', $formType, array(), $defaultOptions);
+        $formBuilder = $this->formFactory->createNamedBuilder('filter', $formType, [], $defaultOptions);
 
         return new Datagrid($admin->createQuery(), $admin->getList(), $pager, $formBuilder, $values);
     }

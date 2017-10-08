@@ -22,19 +22,19 @@ class CallbackFilterTest extends PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter = new CallbackFilter();
-        $filter->initialize('field_name', array(
+        $filter->initialize('field_name', [
             'callback' => function ($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value);
 
                 return true;
             },
-        ));
+        ]);
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
 
-        $this->assertEquals(array('CUSTOM QUERY alias.field'), $builder->query);
-        $this->assertEquals(array('value' => 'myValue'), $builder->parameters);
+        $this->assertEquals(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertEquals(['value' => 'myValue'], $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
@@ -43,14 +43,14 @@ class CallbackFilterTest extends PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter = new CallbackFilter();
-        $filter->initialize('field_name', array(
-            'callback' => array($this, 'customCallback'),
-        ));
+        $filter->initialize('field_name', [
+            'callback' => [$this, 'customCallback'],
+        ]);
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
 
-        $this->assertEquals(array('CUSTOM QUERY alias.field'), $builder->query);
-        $this->assertEquals(array('value' => 'myValue'), $builder->parameters);
+        $this->assertEquals(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertEquals(['value' => 'myValue'], $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
@@ -70,7 +70,7 @@ class CallbackFilterTest extends PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter = new CallbackFilter();
-        $filter->initialize('field_name', array());
+        $filter->initialize('field_name', []);
 
         $filter->filter($builder, 'alias', 'field', 'myValue');
     }
@@ -80,7 +80,7 @@ class CallbackFilterTest extends PHPUnit_Framework_TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter = new CallbackFilter();
-        $filter->initialize('field_name_test', array(
+        $filter->initialize('field_name_test', [
             'callback' => function ($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value['value']);
@@ -88,12 +88,12 @@ class CallbackFilterTest extends PHPUnit_Framework_TestCase
                 return true;
             },
             'field_name' => 'field_name_test',
-        ));
+        ]);
 
-        $filter->apply($builder, array('value' => 'myValue'));
+        $filter->apply($builder, ['value' => 'myValue']);
 
-        $this->assertEquals(array('CUSTOM QUERY o.field_name_test'), $builder->query);
-        $this->assertEquals(array('value' => 'myValue'), $builder->parameters);
+        $this->assertEquals(['CUSTOM QUERY o.field_name_test'], $builder->query);
+        $this->assertEquals(['value' => 'myValue'], $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 }

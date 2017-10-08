@@ -21,7 +21,7 @@ class BooleanFilterTest extends PHPUnit_Framework_TestCase
     public function testFilterEmpty()
     {
         $filter = new BooleanFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
@@ -30,51 +30,51 @@ class BooleanFilterTest extends PHPUnit_Framework_TestCase
         $filter->filter($builder, 'alias', 'field', 'test');
         $filter->filter($builder, 'alias', 'field', false);
 
-        $filter->filter($builder, 'alias', 'field', array());
-        $filter->filter($builder, 'alias', 'field', array(null, 'test'));
+        $filter->filter($builder, 'alias', 'field', []);
+        $filter->filter($builder, 'alias', 'field', [null, 'test']);
 
-        $this->assertEquals(array(), $builder->query);
+        $this->assertEquals([], $builder->query);
         $this->assertEquals(false, $filter->isActive());
     }
 
     public function testFilterNo()
     {
         $filter = new BooleanFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => BooleanType::TYPE_NO));
+        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_NO]);
 
-        $this->assertEquals(array('alias.field = :field_name_0'), $builder->query);
-        $this->assertEquals(array('field_name_0' => 0), $builder->parameters);
+        $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
+        $this->assertEquals(['field_name_0' => 0], $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
     public function testFilterYes()
     {
         $filter = new BooleanFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => BooleanType::TYPE_YES));
+        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_YES]);
 
-        $this->assertEquals(array('alias.field = :field_name_0'), $builder->query);
-        $this->assertEquals(array('field_name_0' => 1), $builder->parameters);
+        $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
+        $this->assertEquals(['field_name_0' => 1], $builder->parameters);
         $this->assertEquals(true, $filter->isActive());
     }
 
     public function testFilterArray()
     {
         $filter = new BooleanFilter();
-        $filter->initialize('field_name', array('field_options' => array('class' => 'FooBar')));
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', array('type' => null, 'value' => array(BooleanType::TYPE_NO)));
+        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
-        $this->assertEquals(array('in_alias.field', 'alias.field IN ("0")'), $builder->query);
+        $this->assertEquals(['in_alias.field', 'alias.field IN ("0")'], $builder->query);
         $this->assertEquals(true, $filter->isActive());
     }
 }
