@@ -15,9 +15,9 @@ use Doctrine\ORM\Query\Expr\Orx;
 
 class QueryBuilder
 {
-    public $parameters = array();
+    public $parameters = [];
 
-    public $query = array();
+    public $query = [];
 
     /**
      * @param string $name
@@ -63,7 +63,7 @@ class QueryBuilder
 
     public function getDQLPart($queryPart)
     {
-        return array();
+        return [];
     }
 
     /**
@@ -136,6 +136,6 @@ class QueryBuilder
      */
     public function getRootAliases()
     {
-        return array('o');
+        return ['o'];
     }
 }

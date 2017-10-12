@@ -109,7 +109,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // null / not null only check for col
-            if (in_array($operator, array('NULL', 'NOT NULL'))) {
+            if (in_array($operator, ['NULL', 'NOT NULL'])) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
 
                 return;
@@ -145,9 +145,9 @@ abstract class AbstractDateFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'input_type' => 'datetime',
-        );
+        ];
     }
 
     /**
@@ -167,11 +167,11 @@ abstract class AbstractDateFilter extends Filter
 
         $name .= 'Type';
 
-        return array($name, array(
+        return [$name, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -185,7 +185,7 @@ abstract class AbstractDateFilter extends Filter
     {
         $type = intval($type);
 
-        $choices = array(
+        $choices = [
             DateType::TYPE_EQUAL => '=',
             DateType::TYPE_GREATER_EQUAL => '>=',
             DateType::TYPE_GREATER_THAN => '>',
@@ -193,7 +193,7 @@ abstract class AbstractDateFilter extends Filter
             DateType::TYPE_LESS_THAN => '<',
             DateType::TYPE_NULL => 'NULL',
             DateType::TYPE_NOT_NULL => 'NOT NULL',
-        );
+        ];
 
         return isset($choices[$type]) ? $choices[$type] : '=';
     }

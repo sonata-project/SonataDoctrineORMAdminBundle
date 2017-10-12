@@ -24,7 +24,7 @@ class TypeGuesser extends AbstractTypeGuesser
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
-            return new TypeGuess('text', array(), Guess::LOW_CONFIDENCE);
+            return new TypeGuess('text', [], Guess::LOW_CONFIDENCE);
         }
 
         list($metadata, $propertyName, $parentAssociationMappings) = $ret;
@@ -34,46 +34,46 @@ class TypeGuesser extends AbstractTypeGuesser
 
             switch ($mapping['type']) {
                 case ClassMetadataInfo::ONE_TO_MANY:
-                    return new TypeGuess('orm_one_to_many', array(), Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess('orm_one_to_many', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadataInfo::MANY_TO_MANY:
-                    return new TypeGuess('orm_many_to_many', array(), Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess('orm_many_to_many', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadataInfo::MANY_TO_ONE:
-                    return new TypeGuess('orm_many_to_one', array(), Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess('orm_many_to_one', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadataInfo::ONE_TO_ONE:
-                    return new TypeGuess('orm_one_to_one', array(), Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess('orm_one_to_one', [], Guess::HIGH_CONFIDENCE);
             }
         }
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'array':
             case 'json':
-                return new TypeGuess('array', array(), Guess::HIGH_CONFIDENCE);
+                return new TypeGuess('array', [], Guess::HIGH_CONFIDENCE);
             case 'boolean':
-                return new TypeGuess('boolean', array(), Guess::HIGH_CONFIDENCE);
+                return new TypeGuess('boolean', [], Guess::HIGH_CONFIDENCE);
             case 'datetime':
             case 'vardatetime':
             case 'datetimetz':
-                return new TypeGuess('datetime', array(), Guess::HIGH_CONFIDENCE);
+                return new TypeGuess('datetime', [], Guess::HIGH_CONFIDENCE);
             case 'date':
-                return new TypeGuess('date', array(), Guess::HIGH_CONFIDENCE);
+                return new TypeGuess('date', [], Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
-                return new TypeGuess('number', array(), Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess('number', [], Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
-                return new TypeGuess('integer', array(), Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess('integer', [], Guess::MEDIUM_CONFIDENCE);
             case 'string':
-                return new TypeGuess('text', array(), Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess('text', [], Guess::MEDIUM_CONFIDENCE);
             case 'text':
-                return new TypeGuess('textarea', array(), Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess('textarea', [], Guess::MEDIUM_CONFIDENCE);
             case 'time':
-                return new TypeGuess('time', array(), Guess::HIGH_CONFIDENCE);
+                return new TypeGuess('time', [], Guess::HIGH_CONFIDENCE);
             default:
-                return new TypeGuess('text', array(), Guess::LOW_CONFIDENCE);
+                return new TypeGuess('text', [], Guess::LOW_CONFIDENCE);
         }
     }
 }

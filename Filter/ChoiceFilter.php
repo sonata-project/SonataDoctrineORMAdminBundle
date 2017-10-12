@@ -68,7 +68,7 @@ class ChoiceFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -76,11 +76,11 @@ class ChoiceFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 }

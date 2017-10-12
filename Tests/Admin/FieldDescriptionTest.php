@@ -19,11 +19,11 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testOptions()
     {
         $field = new FieldDescription();
-        $field->setOptions(array(
+        $field->setOptions([
             'template' => 'foo',
             'type' => 'bar',
             'misc' => 'foobar',
-        ));
+        ]);
 
         // test method shortcut
         $this->assertEquals(null, $field->getOption('template'));
@@ -36,45 +36,45 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
         $this->assertEquals('default', $field->getOption('template', 'default'));
 
         // test the merge options
-        $field->setOption('array', array('key1' => 'val1'));
-        $field->mergeOption('array', array('key1' => 'key_1', 'key2' => 'key_2'));
+        $field->setOption('array', ['key1' => 'val1']);
+        $field->mergeOption('array', ['key1' => 'key_1', 'key2' => 'key_2']);
 
-        $this->assertEquals(array('key1' => 'key_1', 'key2' => 'key_2'), $field->getOption('array'));
+        $this->assertEquals(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
-        $field->mergeOption('non_existant', array('key1' => 'key_1', 'key2' => 'key_2'));
+        $field->mergeOption('non_existant', ['key1' => 'key_1', 'key2' => 'key_2']);
 
-        $this->assertEquals(array('key1' => 'key_1', 'key2' => 'key_2'), $field->getOption('array'));
+        $this->assertEquals(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
-        $field->mergeOptions(array('array' => array('key3' => 'key_3')));
+        $field->mergeOptions(['array' => ['key3' => 'key_3']]);
 
-        $this->assertEquals(array('key1' => 'key_1', 'key2' => 'key_2', 'key3' => 'key_3'), $field->getOption('array'));
+        $this->assertEquals(['key1' => 'key_1', 'key2' => 'key_2', 'key3' => 'key_3'], $field->getOption('array'));
 
         $field->setOption('integer', 1);
 
         try {
-            $field->mergeOption('integer', array());
+            $field->mergeOption('integer', []);
             $this->fail('no exception raised !!');
         } catch (\RuntimeException $e) {
         }
 
-        $field->mergeOptions(array('final' => 'test'));
+        $field->mergeOptions(['final' => 'test']);
 
-        $expected = array(
+        $expected = [
             'misc' => 'foobar',
-            'array' => array(
+            'array' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
                 'key3' => 'key_3',
-            ),
-            'non_existant' => array(
+            ],
+            'non_existant' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
-            ),
+            ],
             'integer' => 1,
             'final' => 'test',
             'placeholder' => 'short_object_description_placeholder',
-            'link_parameters' => array(),
-        );
+            'link_parameters' => [],
+        ];
 
         $this->assertEquals($expected, $field->getOptions());
     }
@@ -82,20 +82,20 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testAssociationMapping()
     {
         $field = new FieldDescription();
-        $field->setAssociationMapping(array(
+        $field->setAssociationMapping([
             'type' => 'integer',
             'fieldName' => 'position',
-        ));
+        ]);
 
         $this->assertEquals('integer', $field->getType());
         $this->assertEquals('integer', $field->getMappingType());
         $this->assertEquals('position', $field->getFieldName());
 
         // cannot overwrite defined definition
-        $field->setAssociationMapping(array(
+        $field->setAssociationMapping([
             'type' => 'overwrite?',
             'fieldName' => 'overwritten',
-        ));
+        ]);
 
         $this->assertEquals('integer', $field->getType());
         $this->assertEquals('integer', $field->getMappingType());
@@ -189,7 +189,7 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testGetValue()
     {
         $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('myMethod'))
+            ->setMethods(['myMethod'])
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('myMethod')
@@ -207,7 +207,7 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testGetValueWhenCannotRetrieve()
     {
         $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('myMethod'))
+            ->setMethods(['myMethod'])
             ->getMock();
         $mockedObject->expects($this->never())
             ->method('myMethod')
@@ -220,10 +220,10 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testGetAssociationMapping()
     {
-        $assocationMapping = array(
+        $assocationMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setAssociationMapping($assocationMapping);
@@ -251,10 +251,10 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testSetFieldMappingSetType()
     {
-        $fieldMapping = array(
+        $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
@@ -264,10 +264,10 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testSetFieldMappingSetMappingType()
     {
-        $fieldMapping = array(
+        $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
@@ -277,10 +277,10 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testSetFieldMappingSetFieldName()
     {
-        $fieldMapping = array(
+        $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
@@ -290,11 +290,11 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testGetTargetEntity()
     {
-        $assocationMapping = array(
+        $assocationMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
             'targetEntity' => 'someValue',
-        );
+        ];
 
         $field = new FieldDescription();
 
@@ -307,11 +307,11 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testIsIdentifierFromFieldMapping()
     {
-        $fieldMapping = array(
+        $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
             'id' => 'someId',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
@@ -321,11 +321,11 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
 
     public function testGetFieldMapping()
     {
-        $fieldMapping = array(
+        $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
             'id' => 'someId',
-        );
+        ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
@@ -336,23 +336,23 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testGetValueForEmbeddedObject()
     {
         $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('myMethod'))
+            ->setMethods(['myMethod'])
             ->getMock();
         $mockedEmbeddedObject->expects($this->once())
                     ->method('myMethod')
                     ->will($this->returnValue('myMethodValue'));
 
         $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('getMyEmbeddedObject'))
+            ->setMethods(['getMyEmbeddedObject'])
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
             ->will($this->returnValue($mockedEmbeddedObject));
 
         $field = new FieldDescription();
-        $field->setFieldMapping(array(
+        $field->setFieldMapping([
             'declaredField' => 'myEmbeddedObject', 'type' => 'string', 'fieldName' => 'myEmbeddedObject.myMethod',
-        ));
+        ]);
         $field->setFieldName('myMethod');
         $field->setOption('code', 'myMethod');
 
@@ -362,27 +362,27 @@ class FieldDescriptionTest extends PHPUnit_Framework_TestCase
     public function testGetValueForMultiLevelEmbeddedObject()
     {
         $mockedChildEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('myMethod'))
+            ->setMethods(['myMethod'])
             ->getMock();
         $mockedChildEmbeddedObject->expects($this->once())
             ->method('myMethod')
             ->will($this->returnValue('myMethodValue'));
         $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('getChild'))
+            ->setMethods(['getChild'])
             ->getMock();
         $mockedEmbeddedObject->expects($this->once())
             ->method('getChild')
             ->will($this->returnValue($mockedChildEmbeddedObject));
         $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(array('getMyEmbeddedObject'))
+            ->setMethods(['getMyEmbeddedObject'])
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
             ->will($this->returnValue($mockedEmbeddedObject));
         $field = new FieldDescription();
-        $field->setFieldMapping(array(
+        $field->setFieldMapping([
             'declaredField' => 'myEmbeddedObject.child', 'type' => 'string', 'fieldName' => 'myMethod',
-        ));
+        ]);
         $field->setFieldName('myMethod');
         $field->setOption('code', 'myMethod');
         $this->assertEquals('myMethodValue', $field->getValue($mockedObject));

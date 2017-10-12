@@ -43,13 +43,13 @@ class ModelAutocompleteFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'field_name' => false,
             'field_type' => 'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-            'field_options' => array(),
+            'field_options' => [],
             'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
-            'operator_options' => array(),
-        );
+            'operator_options' => [],
+        ];
     }
 
     /**
@@ -57,13 +57,13 @@ class ModelAutocompleteFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -126,6 +126,6 @@ class ModelAutocompleteFilter extends Filter
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $queryBuilder->entityJoin($associationMappings);
 
-        return array($alias, false);
+        return [$alias, false];
     }
 }

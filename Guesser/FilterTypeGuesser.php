@@ -28,11 +28,11 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             return false;
         }
 
-        $options = array(
+        $options = [
             'field_type' => null,
-            'field_options' => array(),
-            'options' => array(),
-        );
+            'field_options' => [],
+            'options' => [],
+        ];
 
         list($metadata, $propertyName, $parentAssociationMappings) = $ret;
 
@@ -47,12 +47,12 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
                     $options['operator_type'] = 'Sonata\CoreBundle\Form\Type\EqualType';
-                    $options['operator_options'] = array();
+                    $options['operator_options'] = [];
 
                     $options['field_type'] = 'Symfony\Bridge\Doctrine\Form\Type\EntityType';
-                    $options['field_options'] = array(
+                    $options['field_options'] = [
                         'class' => $mapping['targetEntity'],
-                    );
+                    ];
 
                     $options['field_name'] = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
@@ -70,7 +70,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
                 $options['field_type'] = 'Sonata\CoreBundle\Form\Type\BooleanType';
-                $options['field_options'] = array();
+                $options['field_options'] = [];
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':

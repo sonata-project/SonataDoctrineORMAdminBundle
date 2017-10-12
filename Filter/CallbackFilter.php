@@ -32,12 +32,12 @@ class CallbackFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'callback' => null,
             'field_type' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
             'operator_type' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-            'operator_options' => array(),
-        );
+            'operator_options' => [],
+        ];
     }
 
     /**
@@ -45,13 +45,13 @@ class CallbackFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -61,6 +61,6 @@ class CallbackFilter extends Filter
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 
-        return array($this->getOption('alias', $alias), $this->getFieldName());
+        return [$this->getOption('alias', $alias), $this->getFieldName()];
     }
 }

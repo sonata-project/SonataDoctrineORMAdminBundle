@@ -44,7 +44,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @var EntityManager[]
      */
-    protected $cache = array();
+    protected $cache = [];
 
     /**
      * @param RegistryInterface $registry
@@ -84,8 +84,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $lastPropertyName = array_pop($nameElements);
         $propertyName = $lastPropertyName;
         $class = $baseClass;
-        $parentAssociationMappings = array();
-        $parentEmbeddedMappings = array();
+        $parentAssociationMappings = [];
+        $parentEmbeddedMappings = [];
 
         foreach ($nameElements as $nameElement) {
             $metadata = $this->getMetadata($class);
@@ -94,10 +94,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
                 $class = $metadata->getAssociationTargetClass($nameElement);
             } elseif (isset($metadata->embeddedClasses[$nameElement])) {
-                $parentEmbeddedMappings[] = array(
+                $parentEmbeddedMappings[] = [
                     'class' => $class,
                     'field' => $nameElement,
-                );
+                ];
                 $class = $metadata->embeddedClasses[$nameElement]['class'];
             }
         }
@@ -114,7 +114,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $propertyName .= $lastPropertyName;
         }
 
-        return array($this->getMetadata($class), $propertyName, $parentAssociationMappings);
+        return [$this->getMetadata($class), $propertyName, $parentAssociationMappings];
     }
 
     /**
@@ -130,7 +130,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * {@inheritdoc}
      */
-    public function getNewFieldDescriptionInstance($class, $name, array $options = array())
+    public function getNewFieldDescriptionInstance($class, $name, array $options = [])
     {
         if (!is_string($name)) {
             throw new \RuntimeException('The name argument must be a string');
@@ -141,7 +141,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if (!isset($options['route']['parameters'])) {
-            $options['route']['parameters'] = array();
+            $options['route']['parameters'] = [];
         }
 
         list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
@@ -284,7 +284,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * {@inheritdoc}
      */
-    public function findBy($class, array $criteria = array())
+    public function findBy($class, array $criteria = [])
     {
         return $this->getEntityManager($class)->getRepository($class)->findBy($criteria);
     }
@@ -292,7 +292,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * {@inheritdoc}
      */
-    public function findOneBy($class, array $criteria = array())
+    public function findOneBy($class, array $criteria = [])
     {
         return $this->getEntityManager($class)->getRepository($class)->findOneBy($criteria);
     }
@@ -384,7 +384,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $metadata = $this->getMetadata($class);
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
-        $identifiers = array();
+        $identifiers = [];
 
         foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
             if (!is_object($value)) {
@@ -432,10 +432,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return;
         }
 
-        if (in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), array(
+        if (in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
-        ), true)) {
+        ], true)) {
             return;
         }
 
@@ -468,11 +468,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb = $queryProxy->getQueryBuilder();
 
         $prefix = uniqid();
-        $sqls = array();
+        $sqls = [];
         foreach ($idx as $pos => $id) {
             $ids = explode(self::ID_SEPARATOR, $id);
 
-            $ands = array();
+            $ands = [];
             foreach ($fieldNames as $posName => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
                 $ands[] = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
@@ -581,7 +581,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         $values['_sort_by'] = is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') : $fieldDescription->getName();
 
-        return array('filter' => $values);
+        return ['filter' => $values];
     }
 
     /**
@@ -594,7 +594,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $values['_sort_by'] = $values['_sort_by']->getName();
         $values['_page'] = $page;
 
-        return array('filter' => $values);
+        return ['filter' => $values];
     }
 
     /**
@@ -602,12 +602,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getDefaultSortValues($class)
     {
-        return array(
+        return [
             '_sort_order' => 'ASC',
             '_sort_by' => implode(',', $this->getModelIdentifier($class)),
             '_page' => 1,
             '_per_page' => 25,
-        );
+        ];
     }
 
     /**
@@ -621,7 +621,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * {@inheritdoc}
      */
-    public function modelReverseTransform($class, array $array = array())
+    public function modelReverseTransform($class, array $array = [])
     {
         $instance = $this->getModelInstance($class);
         $metadata = $this->getMetadata($class);

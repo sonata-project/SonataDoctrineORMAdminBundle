@@ -45,7 +45,7 @@ class ClassFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -61,10 +61,10 @@ class ClassFilter extends Filter
      */
     public function getFieldOptions()
     {
-        $choiceOptions = array(
+        $choiceOptions = [
             'required' => false,
             'choices' => $this->getOption('sub_classes'),
-        );
+        ];
 
         // NEXT_MAJOR: Remove (when requirement of Symfony is >= 2.7)
         if (!method_exists('Symfony\Component\Form\AbstractType', 'configureOptions')) {
@@ -82,12 +82,12 @@ class ClassFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -97,10 +97,10 @@ class ClassFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = array(
+        $choices = [
             EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
             EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
-        );
+        ];
 
         return isset($choices[$type]) ? $choices[$type] : false;
     }

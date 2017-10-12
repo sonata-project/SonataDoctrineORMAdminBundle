@@ -33,7 +33,7 @@ class ModelFilter extends Filter
         }
 
         if (!is_array($data['value'])) {
-            $data['value'] = array($data['value']);
+            $data['value'] = [$data['value']];
         }
 
         $this->handleMultiple($queryBuilder, $alias, $data);
@@ -44,14 +44,14 @@ class ModelFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array(
+        return [
             'mapping_type' => false,
             'field_name' => false,
             'field_type' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
-            'field_options' => array(),
+            'field_options' => [],
             'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
-            'operator_options' => array(),
-        );
+            'operator_options' => [],
+        ];
     }
 
     /**
@@ -59,13 +59,13 @@ class ModelFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -114,12 +114,12 @@ class ModelFilter extends Filter
      */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
-        $types = array(
+        $types = [
             ClassMetadataInfo::ONE_TO_ONE,
             ClassMetadataInfo::ONE_TO_MANY,
             ClassMetadataInfo::MANY_TO_MANY,
             ClassMetadataInfo::MANY_TO_ONE,
-        );
+        ];
 
         if (!in_array($this->getOption('mapping_type'), $types)) {
             throw new \RuntimeException('Invalid mapping type');
@@ -129,7 +129,7 @@ class ModelFilter extends Filter
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $queryBuilder->entityJoin($associationMappings);
 
-        return array($alias, false);
+        return [$alias, false];
     }
 
     /**

@@ -62,7 +62,7 @@ final class DatagridBuilderTest extends PHPUnit_Framework_TestCase
             ->willReturn($this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionCollection'));
 
         $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');
-        $modelManager->expects($this->once())->method('getIdentifierFieldNames')->willReturn(array('id'));
+        $modelManager->expects($this->once())->method('getIdentifierFieldNames')->willReturn(['id']);
         $admin->expects($this->once())->method('getModelManager')->willReturn($modelManager);
 
         $this->formFactory->expects($this->once())->method('createNamedBuilder')

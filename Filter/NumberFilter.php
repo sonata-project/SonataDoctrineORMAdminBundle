@@ -44,7 +44,7 @@ class NumberFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array();
+        return [];
     }
 
     /**
@@ -52,11 +52,11 @@ class NumberFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\NumberType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\NumberType', [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 
     /**
@@ -66,13 +66,13 @@ class NumberFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = array(
+        $choices = [
             NumberType::TYPE_EQUAL => '=',
             NumberType::TYPE_GREATER_EQUAL => '>=',
             NumberType::TYPE_GREATER_THAN => '>',
             NumberType::TYPE_LESS_EQUAL => '<=',
             NumberType::TYPE_LESS_THAN => '<',
-        );
+        ];
 
         return isset($choices[$type]) ? $choices[$type] : false;
     }

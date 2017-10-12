@@ -47,20 +47,20 @@ class AuditBlockService extends AbstractBlockService
      */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
-        $revisions = array();
+        $revisions = [];
 
         foreach ($this->auditReader->findRevisionHistory($blockContext->getSetting('limit'), 0) as $revision) {
-            $revisions[] = array(
+            $revisions[] = [
                 'revision' => $revision,
                 'entities' => $this->auditReader->findEntitesChangedAtRevision($revision->getRev()),
-            );
+            ];
         }
 
-        return $this->renderResponse($blockContext->getTemplate(), array(
+        return $this->renderResponse($blockContext->getTemplate(), [
             'block' => $blockContext->getBlock(),
             'settings' => $blockContext->getSettings(),
             'revisions' => $revisions,
-        ), $response);
+        ], $response);
     }
 
     /**
@@ -83,9 +83,9 @@ class AuditBlockService extends AbstractBlockService
      */
     public function configureSettings(OptionsResolver $resolver)
     {
-        $resolver->setDefaults(array(
+        $resolver->setDefaults([
             'limit' => 10,
             'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig',
-        ));
+        ]);
     }
 }

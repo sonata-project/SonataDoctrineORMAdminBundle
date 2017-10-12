@@ -26,9 +26,9 @@ class BooleanFilter extends Filter
         }
 
         if (is_array($data['value'])) {
-            $values = array();
+            $values = [];
             foreach ($data['value'] as $v) {
-                if (!in_array($v, array(BooleanType::TYPE_NO, BooleanType::TYPE_YES))) {
+                if (!in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
                     continue;
                 }
 
@@ -41,7 +41,7 @@ class BooleanFilter extends Filter
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!in_array($data['value'], array(BooleanType::TYPE_NO, BooleanType::TYPE_YES))) {
+            if (!in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
                 return;
             }
 
@@ -56,7 +56,7 @@ class BooleanFilter extends Filter
      */
     public function getDefaultOptions()
     {
-        return array('field_type' => 'Sonata\CoreBundle\Form\Type\BooleanType');
+        return ['field_type' => 'Sonata\CoreBundle\Form\Type\BooleanType'];
     }
 
     /**
@@ -64,12 +64,12 @@ class BooleanFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return array('Sonata\AdminBundle\Form\Type\Filter\DefaultType', array(
+        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
-            'operator_options' => array(),
+            'operator_options' => [],
             'label' => $this->getLabel(),
-        ));
+        ]];
     }
 }

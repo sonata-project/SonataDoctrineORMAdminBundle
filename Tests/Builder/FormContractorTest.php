@@ -45,7 +45,7 @@ final class FormContractorTest extends PHPUnit_Framework_TestCase
 
         $this->assertInstanceOf(
             'Symfony\Component\Form\FormBuilderInterface',
-            $this->formContractor->getFormBuilder('test', array('foo' => 'bar'))
+            $this->formContractor->getFormBuilder('test', ['foo' => 'bar'])
         );
     }
 
@@ -63,13 +63,13 @@ final class FormContractorTest extends PHPUnit_Framework_TestCase
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
 
-        $modelTypes = array();
-        $classTypes = array(
+        $modelTypes = [];
+        $classTypes = [
             'Sonata\AdminBundle\Form\Type\ModelType',
             'Sonata\AdminBundle\Form\Type\ModelListType',
             'Sonata\AdminBundle\Form\Type\ModelHiddenType',
             'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-        );
+        ];
 
         foreach ($classTypes as $classType) {
             array_push(

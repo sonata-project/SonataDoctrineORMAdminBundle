@@ -19,18 +19,18 @@ class AddAuditEntityCompilerPassTest extends PHPUnit_Framework_TestCase
 {
     public function processDataProvider()
     {
-        return array(
-            array(true, array(
-                'admin1' => array('audit' => null,  'audited' => true),
-                'admin2' => array('audit' => true,  'audited' => true),
-                'admin3' => array('audit' => false, 'audited' => false),
-            )),
-            array(false, array(
-                'admin1' => array('audit' => null,  'audited' => false),
-                'admin2' => array('audit' => true,  'audited' => true),
-                'admin3' => array('audit' => false, 'audited' => false),
-            )),
-        );
+        return [
+            [true, [
+                'admin1' => ['audit' => null,  'audited' => true],
+                'admin2' => ['audit' => true,  'audited' => true],
+                'admin3' => ['audit' => false, 'audited' => false],
+            ]],
+            [false, [
+                'admin1' => ['audit' => null,  'audited' => false],
+                'admin2' => ['audit' => true,  'audited' => true],
+                'admin3' => ['audit' => false, 'audited' => false],
+            ]],
+        ];
     }
 
     /**
@@ -59,7 +59,7 @@ class AddAuditEntityCompilerPassTest extends PHPUnit_Framework_TestCase
                 }
 
                 if ('simplethings.entityaudit.audited_entities' === $id) {
-                    return array();
+                    return [];
                 }
             }))
         ;
@@ -69,16 +69,16 @@ class AddAuditEntityCompilerPassTest extends PHPUnit_Framework_TestCase
             ->method('findTaggedServiceIds')
             ->will($this->returnCallback(function ($id) use ($services) {
                 if ('sonata.admin' === $id) {
-                    $tags = array();
+                    $tags = [];
 
                     foreach ($services as $id => $service) {
-                        $attributes = array('manager_type' => 'orm');
+                        $attributes = ['manager_type' => 'orm'];
 
                         if (null !== $audit = $service['audit']) {
                             $attributes['audit'] = $audit;
                         }
 
-                        $tags[$id] = array(0 => $attributes);
+                        $tags[$id] = [0 => $attributes];
                     }
 
                     return $tags;
@@ -90,11 +90,11 @@ class AddAuditEntityCompilerPassTest extends PHPUnit_Framework_TestCase
             ->expects($this->any())
             ->method('getDefinition')
             ->will($this->returnCallback(function ($id) {
-                return new Definition(null, array(null, $id));
+                return new Definition(null, [null, $id]);
             }))
         ;
 
-        $expectedAuditedEntities = array();
+        $expectedAuditedEntities = [];
 
         foreach ($services as $id => $service) {
             if ($service['audited']) {

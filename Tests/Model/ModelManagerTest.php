@@ -59,18 +59,18 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $datagrid1
             ->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 '_sort_by' => $field1,
                 '_sort_order' => 'ASC',
-            )));
+            ]));
 
         $datagrid2
             ->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue(array(
+            ->will($this->returnValue([
                 '_sort_by' => $field3,
                 '_sort_order' => 'ASC',
-            )));
+            ]));
 
         $parameters = $manager->getSortParameters($field1, $datagrid1);
 
@@ -95,10 +95,10 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
     public function getVersionDataProvider()
     {
-        return array(
-            array(true),
-            array(false),
-        );
+        return [
+            [true],
+            [false],
+        ];
     }
 
     /**
@@ -110,7 +110,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
         $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
             ->disableOriginalConstructor()
-            ->setMethods(array('getMetadata'))
+            ->setMethods(['getMetadata'])
             ->getMock();
 
         $metadata = $this->getMetadata(get_class($object), $isVersioned);
@@ -130,11 +130,11 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
     public function lockDataProvider()
     {
-        return array(
-            array(true,  false),
-            array(true,  true),
-            array(false, false),
-        );
+        return [
+            [true,  false],
+            [true,  true],
+            [false, false],
+        ];
     }
 
     /**
@@ -146,12 +146,12 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
-            ->setMethods(array('lock'))
+            ->setMethods(['lock'])
             ->getMock();
 
         $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
             ->disableOriginalConstructor()
-            ->setMethods(array('getMetadata', 'getEntityManager'))
+            ->setMethods(['getMetadata', 'getEntityManager'])
             ->getMock();
 
         $modelManager->expects($this->any())
@@ -195,7 +195,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         /** @var \PHPUnit_Framework_MockObject_MockObject|ModelManager $modelManager */
         $modelManager = $this->getMockBuilder($modelManagerClass)
             ->disableOriginalConstructor()
-            ->setMethods(array('getMetadata', 'getEntityManager'))
+            ->setMethods(['getMetadata', 'getEntityManager'])
             ->getMock();
 
         $modelManager->expects($this->any())
@@ -209,11 +209,11 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $modelManager->expects($this->any())->method('getMetadata')
             ->will(
                 $this->returnValueMap(
-                    array(
-                        array($containerEntityClass, $containerEntityMetadata),
-                        array($embeddedEntityClass, $embeddedEntityMetadata),
-                        array($associatedEntityClass, $associatedEntityMetadata),
-                    )
+                    [
+                        [$containerEntityClass, $containerEntityMetadata],
+                        [$embeddedEntityClass, $embeddedEntityMetadata],
+                        [$associatedEntityClass, $associatedEntityMetadata],
+                    ]
                 )
             );
 
@@ -239,13 +239,13 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
     {
         $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity');
 
-        $metadata->fieldMappings = array(
-            'plainField' => array(
+        $metadata->fieldMappings = [
+            'plainField' => [
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'boolean',
-            ),
-        );
+            ],
+        ];
 
         return $metadata;
     }
@@ -256,18 +256,18 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
         $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity');
 
-        $metadata->fieldMappings = array(
-            'plainField' => array(
+        $metadata->fieldMappings = [
+            'plainField' => [
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'string',
-            ),
-        );
+            ],
+        ];
 
-        $metadata->embeddedClasses['embeddedEntity'] = array(
+        $metadata->embeddedClasses['embeddedEntity'] = [
             'class' => $embeddedEntityClass,
             'columnPrefix' => 'embeddedEntity',
-        );
+        ];
 
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
 
@@ -282,24 +282,24 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
         $metadata = new ClassMetadata($containerEntityClass);
 
-        $metadata->fieldMappings = array(
-            'plainField' => array(
+        $metadata->fieldMappings = [
+            'plainField' => [
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'integer',
-            ),
-        );
+            ],
+        ];
 
-        $metadata->associationMappings['associatedEntity'] = array(
+        $metadata->associationMappings['associatedEntity'] = [
             'fieldName' => 'associatedEntity',
             'targetEntity' => $associatedEntityClass,
             'sourceEntity' => $containerEntityClass,
-        );
+        ];
 
-        $metadata->embeddedClasses['embeddedEntity'] = array(
+        $metadata->embeddedClasses['embeddedEntity'] = [
             'class' => $embeddedEntityClass,
             'columnPrefix' => 'embeddedEntity',
-        );
+        ];
 
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
 
@@ -314,7 +314,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierValues')
-            ->willReturn(array($entity->getId()));
+            ->willReturn([$entity->getId()]);
         $meta->expects($this->any())
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
@@ -357,7 +357,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
             ->method('getIdentifierValues')
-            ->willReturn(array($entity->getAssociatedEntity()->getPlainField()));
+            ->willReturn([$entity->getAssociatedEntity()->getPlainField()]);
         $meta->expects($this->any())
             ->method('getTypeOfField')
             ->willReturn(null);
@@ -400,12 +400,12 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
      */
     public function getSortableInDataSourceIteratorDataProvider()
     {
-        return array(
-            array(null, null, false),
-            array('', 'ASC', false),
-            array('field', 'ASC', true),
-            array('field', null, true),
-        );
+        return [
+            [null, null, false],
+            ['', 'ASC', false],
+            ['field', 'ASC', true],
+            ['field', null, true],
+        ];
     }
 
     /**
@@ -421,7 +421,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $configuration = $this->getMockBuilder('Doctrine\ORM\Configuration')->getMock();
         $configuration->expects($this->any())
             ->method('getDefaultQueryHints')
-            ->willReturn(array());
+            ->willReturn([]);
 
         $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
             ->disableOriginalConstructor()
@@ -432,13 +432,13 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
             ->willReturn($configuration);
 
         $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
-            ->setConstructorArgs(array($em))
+            ->setConstructorArgs([$em])
             ->getMock();
         $query = new Query($em);
 
         $proxyQuery = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
-            ->setConstructorArgs(array($queryBuilder))
-            ->setMethods(array('getSortBy', 'getSortOrder'))
+            ->setConstructorArgs([$queryBuilder])
+            ->setMethods(['getSortBy', 'getSortOrder'])
             ->getMock();
 
         $proxyQuery->expects($this->any())
@@ -462,7 +462,7 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
 
         $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')->getMock();
         $manager = new ModelManager($registry);
-        $manager->getDataSourceIterator($datagrid, array());
+        $manager->getDataSourceIterator($datagrid, []);
     }
 
     public function testModelReverseTransform()
@@ -491,10 +491,10 @@ class ModelManagerTest extends PHPUnit_Framework_TestCase
         $manager = new ModelManager($registry);
         $this->assertInstanceOf($class, $object = $manager->modelReverseTransform(
             $class,
-            array(
+            [
                 'schmeckles' => 42,
                 'multi_word_property' => 'hello',
-            )
+            ]
         ));
         $this->assertSame(42, $object->getSchmeckles());
         $this->assertSame('hello', $object->getMultiWordProperty());

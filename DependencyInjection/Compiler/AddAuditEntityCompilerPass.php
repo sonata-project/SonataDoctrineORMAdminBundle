@@ -53,7 +53,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         $container->setParameter('simplethings.entityaudit.audited_entities', $auditedEntities);
 
         $auditManager = $container->getDefinition('sonata.admin.audit.manager');
-        $auditManager->addMethodCall('setReader', array('sonata.admin.audit.orm.reader', $auditedEntities));
+        $auditManager->addMethodCall('setReader', ['sonata.admin.audit.orm.reader', $auditedEntities]);
     }
 
     /**

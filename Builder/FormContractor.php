@@ -87,7 +87,7 @@ class FormContractor implements FormContractorInterface
     /**
      * {@inheritdoc}
      */
-    public function getFormBuilder($name, array $options = array())
+    public function getFormBuilder($name, array $options = [])
     {
         return $this->getFormFactory()->createNamedBuilder(
             $name,
@@ -102,16 +102,16 @@ class FormContractor implements FormContractorInterface
      */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
-        $options = array();
+        $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
-        if ($this->checkFormClass($type, array(
+        if ($this->checkFormClass($type, [
             'Sonata\AdminBundle\Form\Type\ModelType',
             'Sonata\AdminBundle\Form\Type\ModelTypeList',
             'Sonata\AdminBundle\Form\Type\ModelListType',
             'Sonata\AdminBundle\Form\Type\ModelHiddenType',
             'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-        ))) {
+        ])) {
             if ($fieldDescription->getOption('edit') === 'list') {
                 throw new \LogicException(
                     'The `sonata_type_model` type does not accept an `edit` option anymore,'
@@ -122,7 +122,7 @@ class FormContractor implements FormContractorInterface
             $options['class'] = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
-            if ($this->checkFormClass($type, array('Sonata\AdminBundle\Form\Type\ModelAutocompleteType'))) {
+            if ($this->checkFormClass($type, ['Sonata\AdminBundle\Form\Type\ModelAutocompleteType'])) {
                 if (!$fieldDescription->getAssociationAdmin()) {
                     throw new \RuntimeException(sprintf(
                         'The current field `%s` is not linked to an admin.'
@@ -132,7 +132,7 @@ class FormContractor implements FormContractorInterface
                     ));
                 }
             }
-        } elseif ($this->checkFormClass($type, array('Sonata\AdminBundle\Form\Type\AdminType'))) {
+        } elseif ($this->checkFormClass($type, ['Sonata\AdminBundle\Form\Type\AdminType'])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -142,7 +142,7 @@ class FormContractor implements FormContractorInterface
                 ));
             }
 
-            if (!in_array($fieldDescription->getMappingType(), array(ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE))) {
+            if (!in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE])) {
                 throw new \RuntimeException(sprintf(
                     'You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One.'
                     .' Maybe you want `sonata_type_collection` instead?',
@@ -156,7 +156,7 @@ class FormContractor implements FormContractorInterface
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        } elseif ($this->checkFormClass($type, array('Sonata\CoreBundle\Form\Type\CollectionType'))) {
+        } elseif ($this->checkFormClass($type, ['Sonata\CoreBundle\Form\Type\CollectionType'])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -168,10 +168,10 @@ class FormContractor implements FormContractorInterface
 
             $options['type'] = 'sonata_type_admin';
             $options['modifiable'] = true;
-            $options['type_options'] = array(
+            $options['type_options'] = [
                 'sonata_field_description' => $fieldDescription,
                 'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
-            );
+            ];
         }
 
         return $options;
@@ -184,12 +184,12 @@ class FormContractor implements FormContractorInterface
      */
     private function hasAssociation(FieldDescriptionInterface $fieldDescription)
     {
-        return in_array($fieldDescription->getMappingType(), array(
+        return in_array($fieldDescription->getMappingType(), [
             ClassMetadataInfo::ONE_TO_MANY,
             ClassMetadataInfo::MANY_TO_MANY,
             ClassMetadataInfo::MANY_TO_ONE,
             ClassMetadataInfo::ONE_TO_ONE,
-        ));
+        ]);
     }
 
     /**
