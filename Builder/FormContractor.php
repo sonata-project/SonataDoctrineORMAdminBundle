@@ -104,7 +104,6 @@ class FormContractor implements FormContractorInterface
     {
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
-
         if ($this->checkFormClass($type, [
             'Sonata\AdminBundle\Form\Type\ModelType',
             'Sonata\AdminBundle\Form\Type\ModelTypeList',
