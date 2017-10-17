@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Version;
+use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
@@ -26,9 +27,8 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntit
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ModelManagerTest extends PHPUnit_Framework_TestCase
+class ModelManagerTest extends TestCase
 {
     public static function setUpBeforeClass()
     {

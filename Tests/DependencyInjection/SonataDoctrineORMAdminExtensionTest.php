@@ -1,4 +1,5 @@
 <?php
+use PHPUnit\Framework\TestCase;
 
 /*
  * This file is part of the Sonata Project package.
@@ -10,11 +11,10 @@
  */
 
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\SonataDoctrineORMAdminExtension;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
-class SonataDoctrineORMAdminExtensionTest extends PHPUnit_Framework_TestCase
+class SonataDoctrineORMAdminExtensionTest extends TestCase
 {
     /**
      * @var ContainerBuilder

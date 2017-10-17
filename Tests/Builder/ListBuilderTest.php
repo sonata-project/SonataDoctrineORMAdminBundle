@@ -11,6 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
+use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
@@ -23,7 +24,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
 /**
  * @author Andrew Mor-Yaroslavtsev <andrejs@gmail.com>
  */
-class ListBuilderTest extends \PHPUnit_Framework_TestCase
+class ListBuilderTest extends TestCase
 {
     /**
      * @var TypeGuesserInterface|\Prophecy\Prophecy\ObjectProphecy
