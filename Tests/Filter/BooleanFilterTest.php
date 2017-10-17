@@ -11,12 +11,12 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class BooleanFilterTest extends PHPUnit_Framework_TestCase
+class BooleanFilterTest extends TestCase
 {
     public function testFilterEmpty()
     {
