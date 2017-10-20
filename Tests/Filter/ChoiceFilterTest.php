@@ -11,12 +11,12 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ChoiceFilterTest extends PHPUnit_Framework_TestCase
+class ChoiceFilterTest extends TestCase
 {
     public function testFilterEmpty()
     {

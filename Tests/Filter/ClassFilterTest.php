@@ -11,12 +11,12 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
-class ClassFilterTest extends PHPUnit_Framework_TestCase
+class ClassFilterTest extends TestCase
 {
     public function testFilterEmpty()
     {

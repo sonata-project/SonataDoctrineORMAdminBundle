@@ -11,14 +11,14 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
-use Sonata\DoctrineORMAdminBundle\Tests\Helpers\PHPUnit_Framework_TestCase;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-class DateRangeFilterTest extends PHPUnit_Framework_TestCase
+class DateRangeFilterTest extends TestCase
 {
     public function testFilterEmpty()
     {
