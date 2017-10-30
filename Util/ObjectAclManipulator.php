@@ -58,14 +58,14 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
 
                 ++$count;
 
-                if (($count % $batchSize) == 0) {
+                if (0 == ($count % $batchSize)) {
                     list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
                     $countAdded += $batchAdded;
                     $countUpdated += $batchUpdated;
                     $objectIds = [];
                 }
 
-                if (($count % $batchSizeOutput) == 0) {
+                if (0 == ($count % $batchSizeOutput)) {
                     $output->writeln(sprintf('   - generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
                 }
             }
