@@ -441,7 +441,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         $values = $this->getIdentifierValues($entity);
 
-        if (count($values) === 0) {
+        if (0 === count($values)) {
             return;
         }
 
@@ -499,7 +499,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             foreach ($queryProxy->getQuery()->iterate() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
-                if ((++$i % 20) == 0) {
+                if (0 == (++$i % 20)) {
                     $entityManager->flush();
                     $entityManager->clear();
                 }
@@ -570,7 +570,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $values = $datagrid->getValues();
 
         if ($fieldDescription->getName() == $values['_sort_by']->getName() || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable')) {
-            if ($values['_sort_order'] == 'ASC') {
+            if ('ASC' == $values['_sort_order']) {
                 $values['_sort_order'] = 'DESC';
             } else {
                 $values['_sort_order'] = 'ASC';
