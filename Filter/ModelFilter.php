@@ -89,18 +89,18 @@ class ModelFilter extends Filter
      */
     protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
-        if (count($data['value']) == 0) {
+        if (0 == count($data['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
+        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL == $data['type']) {
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
 
-            if ($this->getOption('mapping_type') === ClassMetadataInfo::MANY_TO_MANY) {
+            if (ClassMetadataInfo::MANY_TO_MANY === $this->getOption('mapping_type')) {
                 $or->add(
                     sprintf('%s.%s IS EMPTY', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
                 );
