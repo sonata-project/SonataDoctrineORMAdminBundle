@@ -101,7 +101,7 @@ class ProxyQuery implements ProxyQueryInterface
         // todo : check how doctrine behave, potential SQL injection here ...
         if ($this->getSortBy()) {
             $sortBy = $this->getSortBy();
-            if (strpos($sortBy, '.') === false) { // add the current alias
+            if (false === strpos($sortBy, '.')) { // add the current alias
                 $sortBy = $rootAlias.'.'.$sortBy;
             }
             $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
@@ -337,7 +337,7 @@ class ProxyQuery implements ProxyQueryInterface
             if ($metadata->hasAssociation($idName)) {
                 $idSelect = sprintf('IDENTITY(%s) as %s', $idSelect, $idName);
             }
-            $idxSelect .= ($idxSelect !== '' ? ', ' : '').$idSelect;
+            $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
         }
         $queryBuilderId->select($idxSelect);
         $queryBuilderId->distinct();
