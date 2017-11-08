@@ -475,7 +475,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $ands = [];
             foreach ($fieldNames as $posName => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', $qb->getRootAlias(), $name, $parameterName);
+                $ands[] = sprintf('%s.%s = :%s', current($qb->getRootAliases()), $name, $parameterName);
                 $qb->setParameter($parameterName, $ids[$posName]);
             }
 
@@ -490,7 +490,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function batchDelete($class, ProxyQueryInterface $queryProxy)
     {
-        $queryProxy->select('DISTINCT '.$queryProxy->getRootAlias());
+        $queryProxy->select('DISTINCT '.current($queryProxy->getRootAliases()));
 
         try {
             $entityManager = $this->getEntityManager($class);
@@ -522,7 +522,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
-        $query->select('DISTINCT '.$query->getRootAlias());
+        $query->select('DISTINCT '.current($query->getRootAliases()));
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
