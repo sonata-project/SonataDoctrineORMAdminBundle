@@ -251,7 +251,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     public function entityJoin(array $associationMappings)
     {
-        $alias = $this->queryBuilder->getRootAlias();
+        $alias = current($this->queryBuilder->getRootAliases());
 
         $newAlias = 's';
 

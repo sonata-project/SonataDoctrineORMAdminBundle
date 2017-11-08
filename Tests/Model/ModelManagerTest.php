@@ -438,7 +438,7 @@ class ModelManagerTest extends TestCase
 
         $proxyQuery = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
             ->setConstructorArgs([$queryBuilder])
-            ->setMethods(['getSortBy', 'getSortOrder'])
+            ->setMethods(['getSortBy', 'getSortOrder', 'getRootAliases'])
             ->getMock();
 
         $proxyQuery->expects($this->any())
@@ -451,6 +451,10 @@ class ModelManagerTest extends TestCase
 
         $queryBuilder->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())
             ->method('addOrderBy');
+
+        $proxyQuery->expects($this->any())
+            ->method('getRootAliases')
+            ->willReturn(['a']);
 
         $queryBuilder->expects($this->any())
             ->method('getQuery')
