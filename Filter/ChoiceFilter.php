@@ -29,7 +29,7 @@ class ChoiceFilter extends Filter
         }
 
         if (is_array($data['value'])) {
-            if (count($data['value']) == 0) {
+            if (0 == count($data['value'])) {
                 return;
             }
 
@@ -40,20 +40,20 @@ class ChoiceFilter extends Filter
             // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
             $completeField = sprintf('%s.%s', $alias, $field);
             $parameterName = $this->getNewParameterName($queryBuilder);
-            if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+            if (ChoiceType::TYPE_NOT_CONTAINS == $data['type']) {
                 $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($completeField, ':'.$parameterName));
             } else {
                 $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($completeField, ':'.$parameterName));
             }
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            if ($data['value'] === '' || $data['value'] === null || $data['value'] === false || $data['value'] === 'all') {
+            if ('' === $data['value'] || null === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
                 return;
             }
 
             $parameterName = $this->getNewParameterName($queryBuilder);
 
-            if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+            if (ChoiceType::TYPE_NOT_CONTAINS == $data['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
             } else {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));

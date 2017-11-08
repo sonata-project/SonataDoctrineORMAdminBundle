@@ -101,7 +101,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
-        if ($type == null) {
+        if (null == $type) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
 
             $type = $guessType->getType();
@@ -127,7 +127,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->mergeOption('field_options', ['required' => false]);
 
         // NEXT_MAJOR: Remove first check (when requirement of Symfony is >= 2.8)
-        if ($type === 'doctrine_orm_model_autocomplete' || $type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
+        if ('doctrine_orm_model_autocomplete' === $type || 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter' === $type) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),

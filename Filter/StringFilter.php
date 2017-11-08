@@ -27,7 +27,7 @@ class StringFilter extends Filter
 
         $data['value'] = trim($data['value']);
 
-        if (strlen($data['value']) == 0) {
+        if (0 == strlen($data['value'])) {
             return;
         }
 
@@ -46,13 +46,13 @@ class StringFilter extends Filter
 
         $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
-        if ($data['type'] == ChoiceType::TYPE_NOT_CONTAINS) {
+        if (ChoiceType::TYPE_NOT_CONTAINS == $data['type']) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($queryBuilder, $or);
 
-        if ($data['type'] == ChoiceType::TYPE_EQUAL) {
+        if (ChoiceType::TYPE_EQUAL == $data['type']) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
             $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
