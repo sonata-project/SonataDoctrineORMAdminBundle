@@ -64,7 +64,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
      */
     private function getModelName(ContainerBuilder $container, $name)
     {
-        if ($name[0] == '%') {
+        if ('%' == $name[0]) {
             return $container->getParameter(substr($name, 1, -1));
         }
 

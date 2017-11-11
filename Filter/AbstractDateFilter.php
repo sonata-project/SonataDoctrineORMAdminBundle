@@ -52,7 +52,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // date filter should filter records for the whole days
-            if ($this->time === false) {
+            if (false === $this->time) {
                 if ($data['value']['start'] instanceof \DateTime) {
                     $data['value']['start']->setTime(0, 0, 0);
                 }
@@ -62,7 +62,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // transform types
-            if ($this->getOption('input_type') === 'timestamp') {
+            if ('timestamp' === $this->getOption('input_type')) {
                 $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
                 $data['value']['end'] = $data['value']['end'] instanceof \DateTime ? $data['value']['end']->getTimestamp() : 0;
             }
@@ -73,7 +73,7 @@ abstract class AbstractDateFilter extends Filter
             $startDateParameterName = $this->getNewParameterName($queryBuilder);
             $endDateParameterName = $this->getNewParameterName($queryBuilder);
 
-            if ($data['type'] == DateRangeType::TYPE_NOT_BETWEEN) {
+            if (DateRangeType::TYPE_NOT_BETWEEN == $data['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
                 if ($data['value']['start']) {
@@ -104,7 +104,7 @@ abstract class AbstractDateFilter extends Filter
             $operator = $this->getOperator($data['type']);
 
             // transform types
-            if ($this->getOption('input_type') === 'timestamp') {
+            if ('timestamp' === $this->getOption('input_type')) {
                 $data['value'] = $data['value'] instanceof \DateTime ? $data['value']->getTimestamp() : 0;
             }
 
@@ -118,13 +118,13 @@ abstract class AbstractDateFilter extends Filter
             $parameterName = $this->getNewParameterName($queryBuilder);
 
             // date filter should filter records for the whole day
-            if ($this->time === false && $data['type'] == DateType::TYPE_EQUAL) {
+            if (false === $this->time && DateType::TYPE_EQUAL == $data['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
                 $queryBuilder->setParameter($parameterName, $data['value']);
 
                 $endDateParameterName = $this->getNewParameterName($queryBuilder);
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
-                if ($this->getOption('input_type') === 'timestamp') {
+                if ('timestamp' === $this->getOption('input_type')) {
                     $endValue = strtotime('+1 day', $data['value']);
                 } else {
                     $endValue = clone $data['value'];
