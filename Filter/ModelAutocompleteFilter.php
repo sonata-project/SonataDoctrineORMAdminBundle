@@ -78,13 +78,13 @@ class ModelAutocompleteFilter extends Filter
      */
     protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
-        if (count($data['value']) == 0) {
+        if (0 == count($data['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
+        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL == $data['type']) {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
@@ -108,7 +108,7 @@ class ModelAutocompleteFilter extends Filter
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && $data['type'] == EqualType::TYPE_IS_NOT_EQUAL) {
+        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL == $data['type']) {
             $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
         } else {
             $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
