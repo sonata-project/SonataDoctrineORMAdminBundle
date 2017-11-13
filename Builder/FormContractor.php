@@ -111,7 +111,7 @@ class FormContractor implements FormContractorInterface
             'Sonata\AdminBundle\Form\Type\ModelHiddenType',
             'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
         ])) {
-            if ($fieldDescription->getOption('edit') === 'list') {
+            if ('list' === $fieldDescription->getOption('edit')) {
                 throw new \LogicException(
                     'The `sonata_type_model` type does not accept an `edit` option anymore,'
                     .' please review the UPGRADE-2.1.md file from the SonataAdminBundle'

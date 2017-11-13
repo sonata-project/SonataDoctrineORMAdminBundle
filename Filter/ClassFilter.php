@@ -25,7 +25,7 @@ class ClassFilter extends Filter
             return;
         }
 
-        if (strlen($data['value']) == 0) {
+        if (0 == strlen($data['value'])) {
             return;
         }
 

@@ -101,7 +101,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
-        if ($type == null) {
+        if (null == $type) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
 
             $type = $guessType->getType();
@@ -126,7 +126,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->mergeOption('field_options', ['required' => false]);
 
-        if ($type === 'Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter') {
+        if ('Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter' === $type) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
