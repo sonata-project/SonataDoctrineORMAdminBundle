@@ -45,13 +45,10 @@
         "simplethings/entity-audit-bundle": ">=2.0"
     },
     "autoload": {
-        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\": "" },
-        "exclude-from-classmap": [
-            "Tests/"
-        ]
+        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\": "src/" }
     },
     "autoload-dev": {
-        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\Tests\\": "Tests/" }
+        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\Tests\\": "tests/" }
     },
     "config": {
         "sort-packages": true
