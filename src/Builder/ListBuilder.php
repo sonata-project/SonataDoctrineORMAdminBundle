@@ -59,7 +59,7 @@ class ListBuilder implements ListBuilderInterface
                 $fieldDescription->getName(),
                 $admin->getModelManager()
             );
-            $fieldDescription->setType($guessType->getType());
+            $fieldDescription->setType($guessType->getType() ? $guessType->getType() : '_action');
         } else {
             $fieldDescription->setType($type);
         }
@@ -171,7 +171,7 @@ class ListBuilder implements ListBuilderInterface
             $fieldDescription->setTemplate('SonataAdminBundle:CRUD:list__action.html.twig');
         }
 
-        if (null === $fieldDescription->getType()) {
+        if (in_array($fieldDescription->getType(), [null, '_action'], true)) {
             $fieldDescription->setType('actions');
         }
 

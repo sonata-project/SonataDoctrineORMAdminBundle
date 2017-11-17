@@ -82,7 +82,7 @@ class ListBuilderTest extends TestCase
         $this->typeGuesser->guessType(
             Argument::any(), Argument::any(), Argument::any()
         )->willReturn(
-            new TypeGuess(null, [], Guess::LOW_CONFIDENCE)
+            new TypeGuess('_action', [], Guess::LOW_CONFIDENCE)
         );
 
         $fieldDescription = new FieldDescription();
