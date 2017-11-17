@@ -54,7 +54,11 @@ class ListBuilder implements ListBuilderInterface
     public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if (null == $type) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
+            $guessType = $this->guesser->guessType(
+                $admin->getClass(),
+                $fieldDescription->getName(),
+                $admin->getModelManager()
+            );
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
