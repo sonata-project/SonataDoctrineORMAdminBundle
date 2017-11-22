@@ -22,6 +22,7 @@ use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class DatagridBuilder implements DatagridBuilderInterface
@@ -126,7 +127,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->mergeOption('field_options', ['required' => false]);
 
-        if ('Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter' === $type) {
+        if (ModelAutocompleteFilter::class === $type) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),

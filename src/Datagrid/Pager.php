@@ -41,7 +41,7 @@ class Pager extends BasePager
 
         $countQuery->select(sprintf(
             'count(DISTINCT %s.%s) as cnt',
-            $countQuery->getRootAlias(),
+            current($countQuery->getRootAliases()),
             current($this->getCountColumn())
         ));
 

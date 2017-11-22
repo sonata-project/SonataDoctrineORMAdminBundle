@@ -15,6 +15,11 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Form\Type\ModelHiddenType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Form\Type\ModelTypeList;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class FormContractor implements FormContractorInterface
@@ -105,11 +110,11 @@ class FormContractor implements FormContractorInterface
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
         if ($this->checkFormClass($type, [
-            'Sonata\AdminBundle\Form\Type\ModelType',
-            'Sonata\AdminBundle\Form\Type\ModelTypeList',
-            'Sonata\AdminBundle\Form\Type\ModelListType',
-            'Sonata\AdminBundle\Form\Type\ModelHiddenType',
-            'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
+            ModelType::class,
+            ModelTypeList::class,
+            ModelListType::class,
+            ModelHiddenType::class,
+            ModelAutocompleteType::class,
         ])) {
             if ('list' === $fieldDescription->getOption('edit')) {
                 throw new \LogicException(
