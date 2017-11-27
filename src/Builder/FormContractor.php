@@ -15,6 +15,7 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
+use Sonata\AdminBundle\Form\Type\AdminType;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class FormContractor implements FormContractorInterface
@@ -174,7 +175,7 @@ class FormContractor implements FormContractorInterface
                 ));
             }
 
-            $options['type'] = 'sonata_type_admin';
+            $options['type'] = AdminType::class;
             $options['modifiable'] = true;
             $options['type_options'] = [
                 'sonata_field_description' => $fieldDescription,

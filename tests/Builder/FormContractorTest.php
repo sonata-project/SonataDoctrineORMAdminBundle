@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Form\Type\AdminType;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -117,7 +118,7 @@ final class FormContractorTest extends TestCase
         foreach ($collectionTypes as $formType) {
             $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
             $this->assertSame($fieldDescription, $options['sonata_field_description']);
-            $this->assertSame('sonata_type_admin', $options['type']);
+            $this->assertSame(AdminType::class, $options['type']);
             $this->assertSame(true, $options['modifiable']);
             $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
             $this->assertSame($modelClass, $options['type_options']['data_class']);
