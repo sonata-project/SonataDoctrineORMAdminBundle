@@ -13,7 +13,12 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\CoreBundle\Form\Type\BooleanType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -46,16 +51,9 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
-                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8).
-                    $options['operator_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                        ? 'Sonata\CoreBundle\Form\Type\EqualType'
-                        : 'sonata_type_equal';
+                    $options['operator_type'] = EqualType::class;
                     $options['operator_options'] = [];
-
-                    // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-                    $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                        ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
-                        : 'entity';
+                    $options['field_type'] = EntityType::class;
                     $options['field_options'] = [
                         'class' => $mapping['targetEntity'],
                     ];
@@ -75,11 +73,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                    ? 'Sonata\CoreBundle\Form\Type\BooleanType'
-                    : 'sonata_type_boolean';
-                $options['field_options'] = [];
+                $options['field_type'] = BooleanType::class;
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':
@@ -93,18 +87,12 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             case 'integer':
             case 'bigint':
             case 'smallint':
-                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                    ? 'Symfony\Component\Form\Extension\Core\Type\NumberType'
-                    : 'number';
+                $options['field_type'] = NumberType::class;
 
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
             case 'text':
-                // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-                $options['field_type'] = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                    ? 'Symfony\Component\Form\Extension\Core\Type\TextType'
-                    : 'text';
+                $options['field_type'] = TextType::class;
 
                 return new TypeGuess('doctrine_orm_string', $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':

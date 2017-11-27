@@ -12,7 +12,6 @@
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\SonataDoctrineORMAdminExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Reference;
 
 class SonataDoctrineORMAdminExtensionTest extends TestCase
 {
@@ -34,14 +33,7 @@ class SonataDoctrineORMAdminExtensionTest extends TestCase
         $loader->load([], $this->configuration);
 
         $definition = $this->configuration->getDefinition('sonata.admin.entity_manager');
-        $doctrineServiceId = 'doctrine';
-        $doctrineFactoryMethod = 'getEntityManager';
 
-        if (method_exists($definition, 'getFactory')) {
-            $this->assertEquals([new Reference($doctrineServiceId), $doctrineFactoryMethod], $definition->getFactory());
-        } else {
-            $this->assertEquals($doctrineServiceId, $definition->getFactoryService());
-            $this->assertEquals($doctrineFactoryMethod, $definition->getFactoryMethod());
-        }
+        $this->assertNotNull($definition->getFactory());
     }
 }

@@ -14,6 +14,11 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\AdminType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Form\Type\ModelHiddenType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\CoreBundle\Form\Type\CollectionType;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -64,36 +69,25 @@ final class FormContractorTest extends TestCase
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
 
+        // NEXT_MAJOR: Use only FQCNs when dropping support for Symfony 2.8
         $modelTypes = [
             'sonata_type_model',
             'sonata_type_model_list',
             'sonata_type_model_hidden',
             'sonata_type_model_autocomplete',
+            ModelType::class,
+            ModelListType::class,
+            ModelHiddenType::class,
+            ModelAutocompleteType::class,
         ];
-        $adminTypes = ['sonata_type_admin'];
-        $collectionTypes = ['sonata_type_collection'];
-        // NEXT_MAJOR: Use only FQCNs when dropping support for Symfony <2.8
-        if (method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')) {
-            $classTypes = [
-                'Sonata\AdminBundle\Form\Type\ModelType',
-                'Sonata\AdminBundle\Form\Type\ModelListType',
-                'Sonata\AdminBundle\Form\Type\ModelHiddenType',
-                'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
-            ];
-
-            foreach ($classTypes as $classType) {
-                array_push(
-                    $modelTypes,
-                    // add class type.
-                    $classType,
-                    // add instance of class type.
-                    get_class($this->createMock($classType))
-                );
-            }
-
-            $adminTypes[] = 'Sonata\AdminBundle\Form\Type\AdminType';
-            $collectionTypes[] = 'Sonata\CoreBundle\Form\Type\CollectionType';
-        }
+        $adminTypes = [
+            'sonata_type_admin',
+            AdminType::class,
+        ];
+        $collectionTypes = [
+            'sonata_type_collection',
+            CollectionType::class,
+        ];
 
         // model types
         foreach ($modelTypes as $formType) {

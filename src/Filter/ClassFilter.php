@@ -12,7 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormTypeInterface;
 
 class ClassFilter extends Filter
 {
@@ -53,11 +56,7 @@ class ClassFilter extends Filter
      */
     public function getFieldType()
     {
-        // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-        return $this->getOption('field_type', method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Symfony\Component\Form\Extension\Core\Type\ChoiceType'
-            : 'choice'
-        );
+        return $this->getOption('field_type', ChoiceType::class);
     }
 
     /**
@@ -70,11 +69,7 @@ class ClassFilter extends Filter
             'choices' => $this->getOption('sub_classes'),
         ];
 
-        // NEXT_MAJOR: Remove (when requirement of Symfony is >= 2.7)
-        if (!method_exists('Symfony\Component\Form\AbstractType', 'configureOptions')) {
-            $choiceOptions['choices'] = array_flip($this->getOption('sub_classes'));
-            // NEXT_MAJOR: Remove (when requirement of Symfony is >= 3.0)
-        } elseif (method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions')) {
+        if (method_exists(FormTypeInterface::class, 'setDefaultOptions')) {
             $choiceOptions['choices_as_values'] = true;
         }
 
@@ -86,15 +81,8 @@ class ClassFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return [$type, [
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Sonata\CoreBundle\Form\Type\EqualType'
-                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+        return [DefaultType::class, [
+            'operator_type' => EqualType::class,
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
