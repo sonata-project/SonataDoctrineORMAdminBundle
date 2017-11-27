@@ -15,7 +15,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter
 {
@@ -47,13 +49,9 @@ class ModelFilter extends Filter
         return [
             'mapping_type' => false,
             'field_name' => false,
-            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Bridge\Doctrine\Form\Type\EntityType'
-                : 'entity', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'field_type' => EntityType::class,
             'field_options' => [],
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Sonata\CoreBundle\Form\Type\EqualType'
-                : 'sonata_type_equal', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'operator_type' => EqualType::class,
             'operator_options' => [],
         ];
     }
@@ -63,12 +61,7 @@ class ModelFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return [$type, [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),

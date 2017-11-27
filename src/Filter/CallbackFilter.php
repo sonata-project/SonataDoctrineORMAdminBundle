@@ -12,6 +12,9 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CallbackFilter extends Filter
 {
@@ -34,12 +37,8 @@ class CallbackFilter extends Filter
     {
         return [
             'callback' => null,
-            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Component\Form\Extension\Core\Type\TextType'
-                : 'text', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
-                : 'hidden', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'field_type' => TextType::class,
+            'operator_type' => HiddenType::class,
             'operator_options' => [],
         ];
     }
@@ -49,12 +48,7 @@ class CallbackFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return [$type, [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),

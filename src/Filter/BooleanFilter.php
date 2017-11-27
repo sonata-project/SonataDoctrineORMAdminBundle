@@ -12,7 +12,9 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\BooleanType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class BooleanFilter extends Filter
 {
@@ -57,9 +59,7 @@ class BooleanFilter extends Filter
     public function getDefaultOptions()
     {
         return [
-            'field_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Sonata\CoreBundle\Form\Type\BooleanType'
-                : 'sonata_type_boolean', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'field_type' => BooleanType::class,
         ];
     }
 
@@ -68,17 +68,10 @@ class BooleanFilter extends Filter
      */
     public function getRenderSettings()
     {
-        // NEXT_MAJOR: Remove this line when drop Symfony <2.8 support
-        $type = method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-            ? 'Sonata\AdminBundle\Form\Type\Filter\DefaultType'
-            : 'sonata_type_filter_default';
-
-        return [$type, [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'operator_type' => method_exists('Symfony\Component\Form\AbstractType', 'getBlockPrefix')
-                ? 'Symfony\Component\Form\Extension\Core\Type\HiddenType'
-                : 'hidden', // NEXT_MAJOR: Remove ternary (when requirement of Symfony is >= 2.8)
+            'operator_type' => HiddenType::class,
             'operator_options' => [],
             'label' => $this->getLabel(),
         ]];

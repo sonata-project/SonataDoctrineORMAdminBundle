@@ -16,7 +16,6 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
-use Symfony\Component\DependencyInjection\Reference;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -39,19 +38,6 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
         $loader->load('doctrine_orm.xml');
         $loader->load('doctrine_orm_filter_types.xml');
-
-        // TODO: Go back on xml configuration when bumping requirements to SF 2.6+
-        $doctrineEMDefinition = $container->getDefinition('sonata.admin.entity_manager');
-        // NEXT_MAJOR: remove when dropping Symfony <2.1 support
-        $doctrineFactoryMethod = method_exists('Doctrine\Bundle\DoctrineBundle\Registry', 'getManager')
-            ? 'getManager'
-            : 'getEntityManager';
-        if (method_exists($doctrineEMDefinition, 'setFactory')) {
-            $doctrineEMDefinition->setFactory([new Reference('doctrine'), $doctrineFactoryMethod]);
-        } else {
-            $doctrineEMDefinition->setFactoryService('doctrine');
-            $doctrineEMDefinition->setFactoryMethod($doctrineFactoryMethod);
-        }
 
         $bundles = $container->getParameter('kernel.bundles');
 
