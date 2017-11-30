@@ -2,6 +2,25 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.2.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.7...3.2.0) - 2017-11-30
+### Added
+- Added edit button that opens in dialog instead of add if there is object already in sonata type model list
+- Added `ProxyQuery::setHint` which allow to pass Query hint in createQuery
+
+### Changed
+- Change minimum doctrine/orm version to 2.4.5 because QueryBuilder bug on PHP7 and HHVM
+
+### Fixed
+- don't display fields that are missing in child classes
+- warning about deprecate "e" modifier for `preg_replace`
+- Fix sorting by multiple columns in custom createQuery in PostgreSQL and MySQL 5.7
+- compatibility with Symfony 4
+- Fix CollectionType on Symfony 3 when no type is specified
+- It is now allowed to install Symfony 4
+
+### Removed
+- Support for old versions of PHP and Symfony.
+
 ## [3.1.7](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.6...3.1.7) - 2017-09-14
 ### Fixed
 - added the missing `sonata-ba-field-error` class to table fields with errors
