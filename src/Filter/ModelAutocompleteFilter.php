@@ -14,6 +14,8 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\CoreBundle\Form\Type\EqualType;
 
 class ModelAutocompleteFilter extends Filter
@@ -45,9 +47,9 @@ class ModelAutocompleteFilter extends Filter
     {
         return [
             'field_name' => false,
-            'field_type' => 'Sonata\AdminBundle\Form\Type\ModelAutocompleteType',
+            'field_type' => ModelAutocompleteType::class,
             'field_options' => [],
-            'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
+            'operator_type' => EqualType::class,
             'operator_options' => [],
         ];
     }
@@ -57,7 +59,7 @@ class ModelAutocompleteFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),

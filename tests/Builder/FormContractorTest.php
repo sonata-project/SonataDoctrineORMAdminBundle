@@ -13,6 +13,12 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Form\Type\AdminType;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\AdminBundle\Form\Type\ModelHiddenType;
+use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\CoreBundle\Form\Type\CollectionType;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -85,6 +91,26 @@ final class FormContractorTest extends TestCase
             );
         }
 
+        // NEXT_MAJOR: Use only FQCNs when dropping support for form mapping
+        $modelTypes = [
+            'sonata_type_model',
+            'sonata_type_model_list',
+            'sonata_type_model_hidden',
+            'sonata_type_model_autocomplete',
+            ModelType::class,
+            ModelListType::class,
+            ModelHiddenType::class,
+            ModelAutocompleteType::class,
+        ];
+        $adminTypes = [
+            'sonata_type_admin',
+            AdminType::class,
+        ];
+        $collectionTypes = [
+            'sonata_type_collection',
+            CollectionType::class,
+        ];
+
         // model types
         foreach ($modelTypes as $formType) {
             $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
@@ -106,15 +132,14 @@ final class FormContractorTest extends TestCase
 
         // collection type
         $fieldDescription->method('getMappingType')->willReturn(ClassMetadata::ONE_TO_MANY);
-        $options = $this->formContractor->getDefaultOptions(
-            'Sonata\CoreBundle\Form\Type\CollectionType',
-            $fieldDescription
-        );
-        $this->assertSame($fieldDescription, $options['sonata_field_description']);
-        $this->assertSame('sonata_type_admin', $options['type']);
-        $this->assertSame(true, $options['modifiable']);
-        $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
-        $this->assertSame($modelClass, $options['type_options']['data_class']);
+        foreach ($collectionTypes as $formType) {
+            $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
+            $this->assertSame($fieldDescription, $options['sonata_field_description']);
+            $this->assertSame(AdminType::class, $options['type']);
+            $this->assertSame(true, $options['modifiable']);
+            $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
+            $this->assertSame($modelClass, $options['type_options']['data_class']);
+        }
     }
 
     public function testAdminClassAttachForNotMappedField()

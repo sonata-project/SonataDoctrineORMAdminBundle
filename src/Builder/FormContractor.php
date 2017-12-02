@@ -15,11 +15,14 @@ use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
+use Sonata\AdminBundle\Form\Type\AdminType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelTypeList;
+use Sonata\CoreBundle\Form\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class FormContractor implements FormContractorInterface
@@ -94,12 +97,7 @@ class FormContractor implements FormContractorInterface
      */
     public function getFormBuilder($name, array $options = [])
     {
-        return $this->getFormFactory()->createNamedBuilder(
-            $name,
-            'Symfony\Component\Form\Extension\Core\Type\FormType',
-            null,
-            $options
-        );
+        return $this->getFormFactory()->createNamedBuilder($name, FormType::class, null, $options);
     }
 
     /**
@@ -109,7 +107,14 @@ class FormContractor implements FormContractorInterface
     {
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
-        if ($this->checkFormClass($type, [
+
+        // NEXT_MAJOR: Check only against FQCNs when dropping support for form mapping
+        if (in_array($type, [
+            'sonata_type_model',
+            'sonata_type_model_list',
+            'sonata_type_model_hidden',
+            'sonata_type_model_autocomplete',
+        ], true) || $this->checkFormClass($type, [
             ModelType::class,
             ModelTypeList::class,
             ModelListType::class,
@@ -126,7 +131,8 @@ class FormContractor implements FormContractorInterface
             $options['class'] = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
-            if ($this->checkFormClass($type, ['Sonata\AdminBundle\Form\Type\ModelAutocompleteType'])) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for form mapping
+            if ('sonata_type_model_autocomplete' === $type || $this->checkFormClass($type, [ModelAutocompleteType::class])) {
                 if (!$fieldDescription->getAssociationAdmin()) {
                     throw new \RuntimeException(sprintf(
                         'The current field `%s` is not linked to an admin.'
@@ -136,7 +142,8 @@ class FormContractor implements FormContractorInterface
                     ));
                 }
             }
-        } elseif ($this->checkFormClass($type, ['Sonata\AdminBundle\Form\Type\AdminType'])) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for form mapping
+        } elseif ('sonata_type_admin' === $type || $this->checkFormClass($type, [AdminType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -160,7 +167,8 @@ class FormContractor implements FormContractorInterface
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        } elseif ($this->checkFormClass($type, ['Sonata\CoreBundle\Form\Type\CollectionType'])) {
+            // NEXT_MAJOR: Check only against FQCNs when dropping support for form mapping
+        } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, [CollectionType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -170,7 +178,7 @@ class FormContractor implements FormContractorInterface
                 ));
             }
 
-            $options['type'] = 'sonata_type_admin';
+            $options['type'] = AdminType::class;
             $options['modifiable'] = true;
             $options['type_options'] = [
                 'sonata_field_description' => $fieldDescription,

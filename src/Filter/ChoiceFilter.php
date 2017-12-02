@@ -14,6 +14,8 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 
 class ChoiceFilter extends Filter
 {
@@ -76,8 +78,8 @@ class ChoiceFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
-            'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
+        return [DefaultType::class, [
+            'operator_type' => EqualType::class,
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),

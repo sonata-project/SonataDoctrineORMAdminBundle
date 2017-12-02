@@ -12,7 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormTypeInterface;
 
 class ClassFilter extends Filter
 {
@@ -53,7 +56,7 @@ class ClassFilter extends Filter
      */
     public function getFieldType()
     {
-        return $this->getOption('field_type', 'Symfony\Component\Form\Extension\Core\Type\ChoiceType');
+        return $this->getOption('field_type', ChoiceType::class);
     }
 
     /**
@@ -66,11 +69,7 @@ class ClassFilter extends Filter
             'choices' => $this->getOption('sub_classes'),
         ];
 
-        // NEXT_MAJOR: Remove (when requirement of Symfony is >= 2.7)
-        if (!method_exists('Symfony\Component\Form\AbstractType', 'configureOptions')) {
-            $choiceOptions['choices'] = array_flip($this->getOption('sub_classes'));
-            // NEXT_MAJOR: Remove (when requirement of Symfony is >= 3.0)
-        } elseif (method_exists('Symfony\Component\Form\FormTypeInterface', 'setDefaultOptions')) {
+        if (method_exists(FormTypeInterface::class, 'setDefaultOptions')) {
             $choiceOptions['choices_as_values'] = true;
         }
 
@@ -82,8 +81,8 @@ class ClassFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
-            'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
+        return [DefaultType::class, [
+            'operator_type' => EqualType::class,
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),

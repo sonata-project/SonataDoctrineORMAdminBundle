@@ -52,7 +52,7 @@ class NumberFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\NumberType', [
+        return [NumberType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),

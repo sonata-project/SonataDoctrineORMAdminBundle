@@ -12,6 +12,9 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CallbackFilter extends Filter
 {
@@ -34,8 +37,8 @@ class CallbackFilter extends Filter
     {
         return [
             'callback' => null,
-            'field_type' => 'Symfony\Component\Form\Extension\Core\Type\TextType',
-            'operator_type' => 'Symfony\Component\Form\Extension\Core\Type\HiddenType',
+            'field_type' => TextType::class,
+            'operator_type' => HiddenType::class,
             'operator_options' => [],
         ];
     }
@@ -45,7 +48,7 @@ class CallbackFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),

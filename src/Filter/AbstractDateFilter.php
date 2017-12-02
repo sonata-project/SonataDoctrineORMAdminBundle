@@ -13,6 +13,8 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
+use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
+use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
 
 abstract class AbstractDateFilter extends Filter
@@ -155,17 +157,15 @@ abstract class AbstractDateFilter extends Filter
      */
     public function getRenderSettings()
     {
-        $name = 'Sonata\AdminBundle\Form\Type\Filter\Date';
+        $name = DateType::class;
 
-        if ($this->time) {
-            $name .= 'Time';
+        if ($this->time && $this->range) {
+            $name = DateTimeRangeType::class;
+        } elseif ($this->time) {
+            $name = DateTimeType::class;
+        } elseif ($this->range) {
+            $name = DateRangeType::class;
         }
-
-        if ($this->range) {
-            $name .= 'Range';
-        }
-
-        $name .= 'Type';
 
         return [$name, [
             'field_type' => $this->getFieldType(),

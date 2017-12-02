@@ -11,6 +11,8 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\CoreBundle\Form\Type\DateRangeType;
+
 class DateRangeFilter extends AbstractDateFilter
 {
     /**
@@ -32,6 +34,6 @@ class DateRangeFilter extends AbstractDateFilter
      */
     public function getFieldType()
     {
-        return $this->getOption('field_type', 'Sonata\CoreBundle\Form\Type\DateRangeType');
+        return $this->getOption('field_type', DateRangeType::class);
     }
 }

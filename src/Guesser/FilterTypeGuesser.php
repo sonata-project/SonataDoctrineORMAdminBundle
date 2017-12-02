@@ -13,7 +13,12 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\CoreBundle\Form\Type\BooleanType;
+use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -46,10 +51,9 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadataInfo::ONE_TO_MANY:
                 case ClassMetadataInfo::MANY_TO_ONE:
                 case ClassMetadataInfo::MANY_TO_MANY:
-                    $options['operator_type'] = 'Sonata\CoreBundle\Form\Type\EqualType';
+                    $options['operator_type'] = EqualType::class;
                     $options['operator_options'] = [];
-
-                    $options['field_type'] = 'Symfony\Bridge\Doctrine\Form\Type\EntityType';
+                    $options['field_type'] = EntityType::class;
                     $options['field_options'] = [
                         'class' => $mapping['targetEntity'],
                     ];
@@ -69,7 +73,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type'] = 'Sonata\CoreBundle\Form\Type\BooleanType';
+                $options['field_type'] = BooleanType::class;
                 $options['field_options'] = [];
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
@@ -84,12 +88,12 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             case 'integer':
             case 'bigint':
             case 'smallint':
-                $options['field_type'] = 'Symfony\Component\Form\Extension\Core\Type\NumberType';
+                $options['field_type'] = NumberType::class;
 
                 return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
             case 'text':
-                $options['field_type'] = 'Symfony\Component\Form\Extension\Core\Type\TextType';
+                $options['field_type'] = TextType::class;
 
                 return new TypeGuess('doctrine_orm_string', $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':

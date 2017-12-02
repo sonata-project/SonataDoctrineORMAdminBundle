@@ -15,7 +15,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter
 {
@@ -47,9 +49,9 @@ class ModelFilter extends Filter
         return [
             'mapping_type' => false,
             'field_name' => false,
-            'field_type' => 'Symfony\Bridge\Doctrine\Form\Type\EntityType',
+            'field_type' => EntityType::class,
             'field_options' => [],
-            'operator_type' => 'Sonata\CoreBundle\Form\Type\EqualType',
+            'operator_type' => EqualType::class,
             'operator_options' => [],
         ];
     }
@@ -59,7 +61,7 @@ class ModelFilter extends Filter
      */
     public function getRenderSettings()
     {
-        return ['Sonata\AdminBundle\Form\Type\Filter\DefaultType', [
+        return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'operator_type' => $this->getOption('operator_type'),
