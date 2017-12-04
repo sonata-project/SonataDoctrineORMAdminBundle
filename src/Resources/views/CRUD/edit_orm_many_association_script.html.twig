@@ -473,6 +473,14 @@ This code manage the many-to-[one|many] association field popup
                     jQuery('#field_widget_{{ id }}').html(html);
                 }
             });
+
+            {% if btn_edit %}
+                var edit_button_url = '{{
+                    associationadmin.generateUrl('edit', {'id' : 'OBJECT_ID'})
+                }}'.replace('OBJECT_ID', jQuery(this).val());
+
+                jQuery('#field_actions_{{ id }} a.btn-warning').attr('href', edit_button_url);
+            {% endif %}
         });
 
     {% endif %}
