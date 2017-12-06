@@ -27,11 +27,10 @@ class FilterTypeGuesserTest extends TestCase
         $this->metadata = $this->prophesize('Doctrine\ORM\Mapping\ClassMetadata');
     }
 
-    /**
-     * @expectedException \Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException
-     */
     public function testThrowsOnMissingField()
     {
+        $this->expectException(\Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException::class);
+
         $class = 'My\Model';
         $property = 'whatever';
         $this->modelManager->getParentMetadataForProperty($class, $property)->willReturn([

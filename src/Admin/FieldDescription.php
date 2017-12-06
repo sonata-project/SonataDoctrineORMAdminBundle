@@ -44,8 +44,6 @@ class FieldDescription extends BaseFieldDescription
         if ($this->associationMapping) {
             return $this->associationMapping['targetEntity'];
         }
-
-        return;
     }
 
     /**

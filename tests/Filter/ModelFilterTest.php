@@ -118,11 +118,10 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testAssociationWithInvalidMapping()
     {
+        $this->expectException(\RuntimeException::class);
+
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['mapping_type' => 'foo']);
 
@@ -131,11 +130,10 @@ class ModelFilterTest extends TestCase
         $filter->apply($builder, ['value' => 'asd']);
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testAssociationWithValidMappingAndEmptyFieldName()
     {
+        $this->expectException(\RuntimeException::class);
+
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['mapping_type' => ClassMetadataInfo::ONE_TO_ONE]);
 

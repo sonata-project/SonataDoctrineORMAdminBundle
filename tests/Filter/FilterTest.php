@@ -55,12 +55,12 @@ class FilterTest extends TestCase
     {
         $filter = new FilterTest_Filter();
         $this->assertEquals(['option1' => 2], $filter->getDefaultOptions());
-        $this->assertEquals(null, $filter->getOption('1'));
+        $this->assertNull($filter->getOption('1'));
 
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $this->assertEquals(2, $filter->getOption('option1'));
-        $this->assertEquals(null, $filter->getOption('foo'));
+        $this->assertNull($filter->getOption('foo'));
         $this->assertEquals('bar', $filter->getOption('foo', 'bar'));
 
         $this->assertEquals('field_name', $filter->getName());
@@ -76,11 +76,10 @@ class FilterTest extends TestCase
         $this->assertEquals(42, $filter->getValue());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testExceptionOnEmptyFieldName()
     {
+        $this->expectException(\RuntimeException::class);
+
         $filter = new FilterTest_Filter();
         $filter->getFieldName();
     }
@@ -88,6 +87,6 @@ class FilterTest extends TestCase
     public function testIsActive()
     {
         $filter = new FilterTest_Filter();
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 }
