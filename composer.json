@@ -32,7 +32,6 @@
     "require-dev": {
         "knplabs/knp-menu-bundle": "^2.1.1",
         "simplethings/entity-audit-bundle": "0.1 - 0.9 || ^1.0",
-        "sllh/php-cs-fixer-styleci-bridge": "^2.0",
         "symfony/phpunit-bridge": "^3.3 || ^4.0"
     },
     "suggest": {
