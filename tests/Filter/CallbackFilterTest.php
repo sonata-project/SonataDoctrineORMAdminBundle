@@ -35,7 +35,7 @@ class CallbackFilterTest extends TestCase
 
         $this->assertEquals(['CUSTOM QUERY alias.field'], $builder->query);
         $this->assertEquals(['value' => 'myValue'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterMethod()
@@ -51,7 +51,7 @@ class CallbackFilterTest extends TestCase
 
         $this->assertEquals(['CUSTOM QUERY alias.field'], $builder->query);
         $this->assertEquals(['value' => 'myValue'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function customCallback($builder, $alias, $field, $value)
@@ -62,11 +62,10 @@ class CallbackFilterTest extends TestCase
         return true;
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testFilterException()
     {
+        $this->expectException(\RuntimeException::class);
+
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter = new CallbackFilter();
@@ -94,6 +93,6 @@ class CallbackFilterTest extends TestCase
 
         $this->assertEquals(['CUSTOM QUERY o.field_name_test'], $builder->query);
         $this->assertEquals(['value' => 'myValue'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 }

@@ -29,7 +29,7 @@ class ClassFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'asds');
 
         $this->assertEquals([], $builder->query);
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator()
@@ -42,7 +42,7 @@ class ClassFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
         $this->assertEquals([], $builder->query);
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 
     public function testFilter()
@@ -63,6 +63,6 @@ class ClassFilterTest extends TestCase
         ];
 
         $this->assertEquals($expected, $builder->query);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 }

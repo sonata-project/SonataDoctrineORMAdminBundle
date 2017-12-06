@@ -30,7 +30,7 @@ class ChoiceFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', []);
 
         $this->assertEquals([], $builder->query);
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 
     public function testFilterArray()
@@ -44,7 +44,7 @@ class ChoiceFilterTest extends TestCase
 
         $this->assertEquals(['in_alias.field', 'in_alias.field IN :field_name_0'], $builder->query);
         $this->assertEquals(['field_name_0' => ['1', '2']], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterScalar()
@@ -58,7 +58,7 @@ class ChoiceFilterTest extends TestCase
 
         $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
         $this->assertEquals(['field_name_0' => '1'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testFilterZero()
@@ -72,6 +72,6 @@ class ChoiceFilterTest extends TestCase
 
         $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
         $this->assertEquals(['field_name_0' => 0], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 }

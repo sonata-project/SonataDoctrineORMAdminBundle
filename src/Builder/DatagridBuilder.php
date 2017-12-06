@@ -171,9 +171,9 @@ class DatagridBuilder implements DatagridBuilderInterface
      *
      * @param string $pagerType
      *
-     * @return PagerInterface
-     *
      * @throws \RuntimeException If invalid pager type is set
+     *
+     * @return PagerInterface
      */
     protected function getPager($pagerType)
     {

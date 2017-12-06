@@ -169,7 +169,7 @@ class ModelManagerTest extends TestCase
                 ->method('lock')
                 ->will($this->throwException(OptimisticLockException::lockFailed($object)));
 
-            $this->setExpectedException('Sonata\AdminBundle\Exception\LockException');
+            $this->expectException('Sonata\AdminBundle\Exception\LockException');
         }
 
         $modelManager->lock($object, 123);
