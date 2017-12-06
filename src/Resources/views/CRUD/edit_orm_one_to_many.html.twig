@@ -8,6 +8,9 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 
 #}
+
+{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_one_to_many.html.twig' %}
+
 {% if not sonata_admin.field_description.hasassociationadmin %}
     {% for element in value %}
         {{ element|render_relation_element(sonata_admin.field_description) }}
