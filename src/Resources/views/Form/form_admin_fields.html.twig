@@ -14,19 +14,19 @@ file that was distributed with this source code.
 
 {# Custom Sonata Admin Extension #}
 {% block sonata_admin_orm_one_to_one_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_one.html.twig' %}
+    {% include 'SonataAdminBundle:CRUD/Association:edit_one_to_one.html.twig' %}
 {% endblock %}
 
 {% block sonata_admin_orm_many_to_many_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_to_many.html.twig' %}
+    {% include 'SonataAdminBundle:CRUD/Association:edit_many_to_many.html.twig' %}
 {% endblock %}
 
 {% block sonata_admin_orm_many_to_one_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_to_one.html.twig' %}
+    {% include 'SonataAdminBundle:CRUD/Association:edit_many_to_one.html.twig' %}
 {% endblock %}
 
 {% block sonata_admin_orm_one_to_many_widget %}
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many.html.twig' %}
+    {% include 'SonataAdminBundle:CRUD/Association:edit_one_to_many.html.twig' %}
 {% endblock %}
 
 {% block sonata_type_model_widget %}
@@ -146,7 +146,7 @@ file that was distributed with this source code.
         </div>
     </div>
 
-    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
+    {% include 'SonataAdminBundle:CRUD/Association:edit_many_script.html.twig' %}
 {% endblock %}
 
 {% block sonata_type_admin_widget %}

@@ -16,6 +16,8 @@ This code manage the many-to-[one|many] association field popup
 
 #}
 
+{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_many_script.html.twig' %}
+
 {% autoescape false %}
 
 {% set associationadmin = sonata_admin.field_description.associationadmin %}

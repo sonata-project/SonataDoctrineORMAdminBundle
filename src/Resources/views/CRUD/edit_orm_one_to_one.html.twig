@@ -9,6 +9,8 @@ file that was distributed with this source code.
 
 #}
 
+{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_one_to_one.html.twig' %}
+
 {% if not sonata_admin.field_description.hasassociationadmin%}
     {{ value|render_relation_element(sonata_admin.field_description) }}
 {% elseif sonata_admin.edit == 'inline' %}
