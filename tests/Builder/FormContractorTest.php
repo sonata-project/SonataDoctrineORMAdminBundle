@@ -121,14 +121,13 @@ final class FormContractorTest extends TestCase
 
         // admin type
         $fieldDescription->method('getMappingType')->willReturn(ClassMetadata::ONE_TO_ONE);
-        $options = $this->formContractor->getDefaultOptions(
-            'Sonata\AdminBundle\Form\Type\AdminType',
-            $fieldDescription
-        );
-        $this->assertSame($fieldDescription, $options['sonata_field_description']);
-        $this->assertSame($modelClass, $options['data_class']);
-        $this->assertSame(false, $options['btn_add']);
-        $this->assertSame(false, $options['delete']);
+        foreach ($adminTypes as $formType) {
+            $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
+            $this->assertSame($fieldDescription, $options['sonata_field_description']);
+            $this->assertSame($modelClass, $options['data_class']);
+            $this->assertFalse($options['btn_add']);
+            $this->assertFalse($options['delete']);
+        }
 
         // collection type
         $fieldDescription->method('getMappingType')->willReturn(ClassMetadata::ONE_TO_MANY);
@@ -136,7 +135,7 @@ final class FormContractorTest extends TestCase
             $options = $this->formContractor->getDefaultOptions($formType, $fieldDescription);
             $this->assertSame($fieldDescription, $options['sonata_field_description']);
             $this->assertSame(AdminType::class, $options['type']);
-            $this->assertSame(true, $options['modifiable']);
+            $this->assertTrue($options['modifiable']);
             $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
             $this->assertSame($modelClass, $options['type_options']['data_class']);
         }

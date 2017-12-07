@@ -26,8 +26,8 @@ class FieldDescriptionTest extends TestCase
         ]);
 
         // test method shortcut
-        $this->assertEquals(null, $field->getOption('template'));
-        $this->assertEquals(null, $field->getOption('type'));
+        $this->assertNull($field->getOption('template'));
+        $this->assertNull($field->getOption('type'));
 
         $this->assertEquals('foo', $field->getTemplate());
         $this->assertEquals('bar', $field->getType());
@@ -201,11 +201,10 @@ class FieldDescriptionTest extends TestCase
         $this->assertEquals($field->getValue($mockedObject), 'myMethodValue');
     }
 
-    /**
-     * @expectedException \Sonata\AdminBundle\Exception\NoValueException
-     */
     public function testGetValueWhenCannotRetrieve()
     {
+        $this->expectException(\Sonata\AdminBundle\Exception\NoValueException::class);
+
         $mockedObject = $this->getMockBuilder('stdClass')
             ->setMethods(['myMethod'])
             ->getMock();
@@ -231,20 +230,18 @@ class FieldDescriptionTest extends TestCase
         $this->assertEquals($assocationMapping, $field->getAssociationMapping());
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testSetAssociationMappingAllowOnlyForArray()
     {
+        $this->expectException(\RuntimeException::class);
+
         $field = new FieldDescription();
         $field->setAssociationMapping('test');
     }
 
-    /**
-     * @expectedException \RuntimeException
-     */
     public function testSetFieldMappingAllowOnlyForArray()
     {
+        $this->expectException(\RuntimeException::class);
+
         $field = new FieldDescription();
         $field->setFieldMapping('test');
     }

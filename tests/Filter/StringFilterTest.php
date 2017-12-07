@@ -29,7 +29,7 @@ class StringFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', '');
 
         $this->assertEquals([], $builder->query);
-        $this->assertEquals(false, $filter->isActive());
+        $this->assertFalse($filter->isActive());
     }
 
     public function testContains()
@@ -50,7 +50,7 @@ class StringFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => null]);
         $this->assertEquals(['alias.field LIKE :field_name_0'], $builder->query);
         $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testNotContains()
@@ -64,7 +64,7 @@ class StringFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_NOT_CONTAINS]);
         $this->assertEquals(['alias.field NOT LIKE :field_name_0', 'alias.field IS NULL'], $builder->query[0]->getParts());
         $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testEquals()
@@ -78,7 +78,7 @@ class StringFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_EQUAL]);
         $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
         $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 
     public function testEqualsWithValidParentAssociationMappings()
@@ -112,6 +112,6 @@ class StringFilterTest extends TestCase
             's_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
         ], $builder->query);
         $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertEquals(true, $filter->isActive());
+        $this->assertTrue($filter->isActive());
     }
 }
