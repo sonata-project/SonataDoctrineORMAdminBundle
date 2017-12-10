@@ -18,9 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CallbackFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!is_callable($this->getOption('callback'))) {
@@ -30,9 +27,6 @@ class CallbackFilter extends Filter
         $this->active = call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -43,9 +37,6 @@ class CallbackFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [
@@ -57,9 +48,6 @@ class CallbackFilter extends Filter
         ]];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());

@@ -40,17 +40,11 @@ class ListBuilder implements ListBuilderInterface
         $this->templates = $templates;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBaseList(array $options = [])
     {
         return new FieldDescriptionCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if (null == $type) {
@@ -67,9 +61,6 @@ class ListBuilder implements ListBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addField(FieldDescriptionCollection $list, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         $this->buildField($type, $fieldDescription, $admin);
@@ -78,9 +69,6 @@ class ListBuilder implements ListBuilderInterface
         $list->add($fieldDescription);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
         if ('_action' === $fieldDescription->getName() || 'actions' === $fieldDescription->getType()) {

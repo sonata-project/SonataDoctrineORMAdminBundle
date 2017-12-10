@@ -21,9 +21,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
@@ -41,9 +38,6 @@ class ModelFilter extends Filter
         $this->handleMultiple($queryBuilder, $alias, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -56,9 +50,6 @@ class ModelFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [
@@ -111,9 +102,6 @@ class ModelFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $types = [

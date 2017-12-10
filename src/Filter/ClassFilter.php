@@ -19,9 +19,6 @@ use Symfony\Component\Form\FormTypeInterface;
 
 class ClassFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -43,25 +40,16 @@ class ClassFilter extends Filter
         $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $data['value']));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldType()
     {
         return $this->getOption('field_type', ChoiceType::class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldOptions()
     {
         $choiceOptions = [
@@ -76,9 +64,6 @@ class ClassFilter extends Filter
         return $this->getOption('choices', $choiceOptions);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [

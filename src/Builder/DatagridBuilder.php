@@ -62,9 +62,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
         // set default values
@@ -98,9 +95,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if (null == $type) {
@@ -147,9 +141,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         $datagrid->addFilter($filter);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBaseDatagrid(AdminInterface $admin, array $values = [])
     {
         $pager = $this->getPager($admin->getPagerType());
