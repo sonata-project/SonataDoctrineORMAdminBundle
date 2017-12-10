@@ -29,9 +29,6 @@ class DateRangeFilter extends AbstractDateFilter
      */
     protected $time = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFieldType()
     {
         return $this->getOption('field_type', DateRangeType::class);

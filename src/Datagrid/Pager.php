@@ -28,9 +28,6 @@ class Pager extends BasePager
      */
     protected $queryBuilder = null;
 
-    /**
-     * {@inheritdoc}
-     */
     public function computeNbResult()
     {
         $countQuery = clone $this->getQuery();
@@ -48,25 +45,16 @@ class Pager extends BasePager
         return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
     {
         return $this->getQuery()->execute([], $hydrationMode);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getQuery()
     {
         return $this->query;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function init()
     {
         $this->resetIterator();

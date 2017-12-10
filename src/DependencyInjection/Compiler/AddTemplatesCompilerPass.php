@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class AddTemplatesCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
