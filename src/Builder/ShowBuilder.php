@@ -31,8 +31,7 @@ class ShowBuilder implements ShowBuilderInterface
     protected $templates;
 
     /**
-     * @param TypeGuesserInterface $guesser
-     * @param string[]             $templates
+     * @param string[] $templates
      */
     public function __construct(TypeGuesserInterface $guesser, array $templates)
     {

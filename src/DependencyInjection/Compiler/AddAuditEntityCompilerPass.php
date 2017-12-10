@@ -54,8 +54,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $name
+     * @param string $name
      *
      * @return string
      */

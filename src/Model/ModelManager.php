@@ -46,9 +46,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     protected $cache = [];
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;

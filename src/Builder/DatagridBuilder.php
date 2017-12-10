@@ -49,13 +49,14 @@ class DatagridBuilder implements DatagridBuilderInterface
     protected $csrfTokenEnabled;
 
     /**
-     * @param FormFactoryInterface   $formFactory
-     * @param FilterFactoryInterface $filterFactory
-     * @param TypeGuesserInterface   $guesser
-     * @param bool                   $csrfTokenEnabled
+     * @param bool $csrfTokenEnabled
      */
-    public function __construct(FormFactoryInterface $formFactory, FilterFactoryInterface $filterFactory, TypeGuesserInterface $guesser, $csrfTokenEnabled = true)
-    {
+    public function __construct(
+        FormFactoryInterface $formFactory,
+        FilterFactoryInterface $filterFactory,
+        TypeGuesserInterface $guesser,
+        $csrfTokenEnabled = true
+    ) {
         $this->formFactory = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->guesser = $guesser;
