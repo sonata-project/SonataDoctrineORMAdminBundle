@@ -31,9 +31,7 @@ class AuditBlockService extends AbstractBlockService
     protected $auditReader;
 
     /**
-     * @param string          $name
-     * @param EngineInterface $templating
-     * @param AuditReader     $auditReader
+     * @param string $name
      */
     public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
     {

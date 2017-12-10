@@ -61,8 +61,6 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param ProxyQueryInterface $queryBuilder
-     *
      * @return string
      */
     protected function getNewParameterName(ProxyQueryInterface $queryBuilder)

@@ -21,9 +21,6 @@ class AuditReader implements AuditReaderInterface
      */
     protected $auditReader;
 
-    /**
-     * @param SimpleThingsAuditReader $auditReader
-     */
     public function __construct(SimpleThingsAuditReader $auditReader)
     {
         $this->auditReader = $auditReader;
