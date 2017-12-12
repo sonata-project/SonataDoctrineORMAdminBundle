@@ -19,9 +19,6 @@ use Symfony\Component\HttpKernel\Bundle\Bundle;
 
 class SonataDoctrineORMAdminBundle extends Bundle
 {
-    /**
-     * {@inheritdoc}
-     */
     public function build(ContainerBuilder $container)
     {
         $container->addCompilerPass(new AddGuesserCompilerPass());

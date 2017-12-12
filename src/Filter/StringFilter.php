@@ -16,9 +16,6 @@ use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class StringFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -59,9 +56,6 @@ class StringFilter extends Filter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -69,9 +63,6 @@ class StringFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [ChoiceType::class, [

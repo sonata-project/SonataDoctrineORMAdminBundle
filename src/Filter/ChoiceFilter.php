@@ -11,7 +11,6 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
@@ -19,11 +18,6 @@ use Sonata\CoreBundle\Form\Type\EqualType;
 
 class ChoiceFilter extends Filter
 {
-    /**
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     *
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
@@ -65,17 +59,11 @@ class ChoiceFilter extends Filter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [

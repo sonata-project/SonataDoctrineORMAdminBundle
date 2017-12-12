@@ -22,9 +22,6 @@ abstract class Filter extends BaseFilter
      */
     protected $active = false;
 
-    /**
-     * {@inheritdoc}
-     */
     public function apply($queryBuilder, $value)
     {
         $this->value = $value;
@@ -35,17 +32,11 @@ abstract class Filter extends BaseFilter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function isActive()
     {
         return $this->active;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
@@ -70,8 +61,6 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param ProxyQueryInterface $queryBuilder
-     *
      * @return string
      */
     protected function getNewParameterName(ProxyQueryInterface $queryBuilder)

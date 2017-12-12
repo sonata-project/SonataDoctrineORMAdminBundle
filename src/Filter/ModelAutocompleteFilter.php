@@ -20,9 +20,6 @@ use Sonata\CoreBundle\Form\Type\EqualType;
 
 class ModelAutocompleteFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
@@ -40,9 +37,6 @@ class ModelAutocompleteFilter extends Filter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -54,9 +48,6 @@ class ModelAutocompleteFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [
@@ -119,9 +110,6 @@ class ModelAutocompleteFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $associationMappings = $this->getParentAssociationMappings();

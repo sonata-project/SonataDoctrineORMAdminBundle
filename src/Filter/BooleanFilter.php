@@ -18,9 +18,6 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class BooleanFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
@@ -53,9 +50,6 @@ class BooleanFilter extends Filter
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -63,9 +57,6 @@ class BooleanFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [

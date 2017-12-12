@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class AddTemplatesCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
@@ -54,9 +51,8 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param Definition $definition
-     * @param string     $name
-     * @param mixed      $value
+     * @param string $name
+     * @param mixed  $value
      */
     public function mergeMethodCall(Definition $definition, $name, $value)
     {

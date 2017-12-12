@@ -20,9 +20,6 @@ use Symfony\Component\DependencyInjection\Reference;
  */
 class AddGuesserCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         // ListBuilder

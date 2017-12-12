@@ -13,7 +13,6 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
-use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
@@ -21,9 +20,6 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter
 {
-    /**
-     * {@inheritdoc}
-     */
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
@@ -41,9 +37,6 @@ class ModelFilter extends Filter
         $this->handleMultiple($queryBuilder, $alias, $data);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions()
     {
         return [
@@ -56,9 +49,6 @@ class ModelFilter extends Filter
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getRenderSettings()
     {
         return [DefaultType::class, [
@@ -74,9 +64,8 @@ class ModelFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     * @param string                           $alias
-     * @param mixed                            $data
+     * @param string $alias
+     * @param mixed  $data
      *
      * @return mixed
      */
@@ -111,9 +100,6 @@ class ModelFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $types = [
@@ -138,8 +124,7 @@ class ModelFilter extends Filter
      * Retrieve the parent alias for given alias.
      * Root alias for direct association or entity joined alias for association depth >= 2.
      *
-     * @param ProxyQueryInterface $queryBuilder
-     * @param string              $alias
+     * @param string $alias
      *
      * @return string
      */

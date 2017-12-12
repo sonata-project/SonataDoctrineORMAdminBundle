@@ -31,9 +31,7 @@ class AuditBlockService extends AbstractBlockService
     protected $auditReader;
 
     /**
-     * @param string          $name
-     * @param EngineInterface $templating
-     * @param AuditReader     $auditReader
+     * @param string $name
      */
     public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
     {
@@ -42,9 +40,6 @@ class AuditBlockService extends AbstractBlockService
         $this->auditReader = $auditReader;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function execute(BlockContextInterface $blockContext, Response $response = null)
     {
         $revisions = [];
@@ -63,24 +58,15 @@ class AuditBlockService extends AbstractBlockService
         ], $response);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function buildEditForm(FormMapper $formMapper, BlockInterface $block)
     {
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getName()
     {
         return 'Audit List';
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function configureSettings(OptionsResolver $resolver)
     {
         $resolver->setDefaults([

@@ -19,9 +19,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class AddAuditEntityCompilerPass implements CompilerPassInterface
 {
-    /**
-     * {@inheritdoc}
-     */
     public function process(ContainerBuilder $container)
     {
         if (!$container->hasDefinition('simplethings_entityaudit.config')) {
@@ -57,8 +54,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param ContainerBuilder $container
-     * @param string           $name
+     * @param string $name
      *
      * @return string
      */

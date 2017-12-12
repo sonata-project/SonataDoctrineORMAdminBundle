@@ -31,8 +31,7 @@ class ShowBuilder implements ShowBuilderInterface
     protected $templates;
 
     /**
-     * @param TypeGuesserInterface $guesser
-     * @param string[]             $templates
+     * @param string[] $templates
      */
     public function __construct(TypeGuesserInterface $guesser, array $templates)
     {
@@ -40,17 +39,11 @@ class ShowBuilder implements ShowBuilderInterface
         $this->templates = $templates;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getBaseList(array $options = [])
     {
         return new FieldDescriptionCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addField(FieldDescriptionCollection $list, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
         if (null == $type) {
@@ -66,9 +59,6 @@ class ShowBuilder implements ShowBuilderInterface
         $list->add($fieldDescription);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
         $fieldDescription->setAdmin($admin);

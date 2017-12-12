@@ -23,10 +23,6 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  */
 class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 {
-    /**
-     * @param array            $configs   An array of configuration settings
-     * @param ContainerBuilder $container A ContainerBuilder instance
-     */
     public function load(array $configs, ContainerBuilder $container)
     {
         $configs = $this->fixTemplatesConfiguration($configs, $container);

@@ -46,9 +46,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     protected $cache = [];
 
-    /**
-     * @param RegistryInterface $registry
-     */
     public function __construct(RegistryInterface $registry)
     {
         $this->registry = $registry;
@@ -127,9 +124,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNewFieldDescriptionInstance($class, $name, array $options = [])
     {
         if (!is_string($name)) {
@@ -162,9 +156,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $fieldDescription;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function create($object)
     {
         try {
@@ -186,9 +177,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function update($object)
     {
         try {
@@ -210,9 +198,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function delete($object)
     {
         try {
@@ -234,9 +219,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getLockVersion($object)
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
@@ -248,9 +230,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $metadata->reflFields[$metadata->versionField]->getValue($object);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function lock($object, $expectedVersion)
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
@@ -267,9 +246,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function find($class, $id)
     {
         if (!isset($id)) {
@@ -281,17 +257,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findBy($class, array $criteria = [])
     {
         return $this->getEntityManager($class)->getRepository($class)->findBy($criteria);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function findOneBy($class, array $criteria = [])
     {
         return $this->getEntityManager($class)->getRepository($class)->findOneBy($criteria);
@@ -321,9 +291,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->cache[$class];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getParentFieldDescription($parentAssociationMapping, $class)
     {
         $fieldName = $parentAssociationMapping['fieldName'];
@@ -339,9 +306,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $fieldDescription;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function createQuery($class, $alias = 'o')
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
@@ -349,9 +313,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function executeQuery($query)
     {
         if ($query instanceof QueryBuilder) {
@@ -361,17 +322,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $query->execute();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getModelIdentifier($class)
     {
         return $this->getMetadata($class)->identifier;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIdentifierValues($entity)
     {
         // Fix code has an impact on performance, so disable it ...
@@ -411,17 +366,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $identifiers;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getIdentifierFieldNames($class)
     {
         return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getNormalizedIdentifier($entity)
     {
         if (is_scalar($entity)) {
@@ -459,9 +408,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
@@ -485,9 +431,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function batchDelete($class, ProxyQueryInterface $queryProxy)
     {
         $queryProxy->select('DISTINCT '.current($queryProxy->getRootAliases()));
@@ -514,9 +457,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
     {
         $datagrid->buildPager();
@@ -539,9 +479,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new DoctrineORMQuerySourceIterator($query, $fields);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getExportFields($class)
     {
         $metadata = $this->getEntityManager($class)->getClassMetadata($class);
@@ -549,9 +486,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $metadata->getFieldNames();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getModelInstance($class)
     {
         $r = new \ReflectionClass($class);
@@ -562,9 +496,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new $class();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getSortParameters(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid)
     {
         $values = $datagrid->getValues();
@@ -584,9 +515,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return ['filter' => $values];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getPaginationParameters(DatagridInterface $datagrid, $page)
     {
         $values = $datagrid->getValues();
@@ -597,9 +525,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return ['filter' => $values];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultSortValues($class)
     {
         return [
@@ -610,17 +535,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         ];
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function modelTransform($class, $instance)
     {
         return $instance;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function modelReverseTransform($class, array $array = [])
     {
         $instance = $this->getModelInstance($class);
@@ -673,41 +592,26 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $instance;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getModelCollectionInstance($class)
     {
         return new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function collectionClear(&$collection)
     {
         return $collection->clear();
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function collectionHasElement(&$collection, &$element)
     {
         return $collection->contains($element);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function collectionAddElement(&$collection, &$element)
     {
         return $collection->add($element);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function collectionRemoveElement(&$collection, &$element)
     {
         return $collection->removeElement($element);

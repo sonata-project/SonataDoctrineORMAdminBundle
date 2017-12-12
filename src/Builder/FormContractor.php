@@ -41,17 +41,11 @@ class FormContractor implements FormContractorInterface
      */
     protected $formFactory;
 
-    /**
-     * @param FormFactoryInterface $formFactory
-     */
     public function __construct(FormFactoryInterface $formFactory)
     {
         $this->formFactory = $formFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
     {
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
@@ -92,17 +86,11 @@ class FormContractor implements FormContractorInterface
         return $this->formFactory;
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getFormBuilder($name, array $options = [])
     {
         return $this->getFormFactory()->createNamedBuilder($name, FormType::class, null, $options);
     }
 
-    /**
-     * {@inheritdoc}
-     */
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
         $options = [];
@@ -190,8 +178,6 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param FieldDescriptionInterface $fieldDescription
-     *
      * @return bool
      */
     private function hasAssociation(FieldDescriptionInterface $fieldDescription)
