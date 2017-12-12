@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -42,7 +44,7 @@ final class DatagridBuilderTest extends TestCase
      */
     private $filterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
         $this->filterFactory = $this->createMock('Sonata\AdminBundle\Filter\FilterFactoryInterface');
@@ -51,7 +53,7 @@ final class DatagridBuilderTest extends TestCase
         $this->datagridBuilder = new DatagridBuilder($this->formFactory, $this->filterFactory, $this->typeGuesser);
     }
 
-    public function testGetBaseDatagrid()
+    public function testGetBaseDatagrid(): void
     {
         $admin = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
         $admin->expects($this->once())->method('getPagerType')->willReturn(Pager::TYPE_SIMPLE);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -331,7 +333,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $queryBuilder;
     }
 
-    private function addOrderedColumns(QueryBuilder $queryBuilder)
+    private function addOrderedColumns(QueryBuilder $queryBuilder): void
     {
         /* For each ORDER BY clause defined directly in the DQL parts of the query,
            we add an entry in the SELECT clause. */

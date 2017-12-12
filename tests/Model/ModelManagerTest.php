@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -30,14 +32,14 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestCl
 
 class ModelManagerTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
         }
     }
 
-    public function testSortParameters()
+    public function testSortParameters(): void
     {
         $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
 
@@ -104,7 +106,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider getVersionDataProvider
      */
-    public function testGetVersion($isVersioned)
+    public function testGetVersion($isVersioned): void
     {
         $object = new VersionedEntity();
 
@@ -140,7 +142,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider lockDataProvider
      */
-    public function testLock($isVersioned, $expectsException)
+    public function testLock($isVersioned, $expectsException): void
     {
         $object = new VersionedEntity();
 
@@ -175,7 +177,7 @@ class ModelManagerTest extends TestCase
         $modelManager->lock($object, 123);
     }
 
-    public function testGetParentMetadataForProperty()
+    public function testGetParentMetadataForProperty(): void
     {
         if (version_compare(Version::VERSION, '2.5') < 0) {
             $this->markTestSkipped('Test for embeddables needs to run on Doctrine >= 2.5');
@@ -306,7 +308,7 @@ class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function testNonIntegerIdentifierType()
+    public function testNonIntegerIdentifierType(): void
     {
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
         $entity = new UuidEntity($uuid);
@@ -350,7 +352,7 @@ class ModelManagerTest extends TestCase
         $this->assertEquals($entity->getId()->toString(), $result[0]);
     }
 
-    public function testAssociationIdentifierType()
+    public function testAssociationIdentifierType(): void
     {
         $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
 
@@ -415,7 +417,7 @@ class ModelManagerTest extends TestCase
      * @param string|null $sortOrder
      * @param bool        $isAddOrderBy
      */
-    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy)
+    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy): void
     {
         $datagrid = $this->getMockForAbstractClass('Sonata\AdminBundle\Datagrid\DatagridInterface');
         $configuration = $this->getMockBuilder('Doctrine\ORM\Configuration')->getMock();
@@ -469,7 +471,7 @@ class ModelManagerTest extends TestCase
         $manager->getDataSourceIterator($datagrid, []);
     }
 
-    public function testModelReverseTransform()
+    public function testModelReverseTransform(): void
     {
         $class = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity';
 

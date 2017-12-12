@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,7 +22,7 @@ class FieldDescription extends BaseFieldDescription
         $this->parentAssociationMappings = [];
     }
 
-    public function setAssociationMapping($associationMapping)
+    public function setAssociationMapping($associationMapping): void
     {
         if (!is_array($associationMapping)) {
             throw new \RuntimeException('The association mapping must be an array');
@@ -40,7 +42,7 @@ class FieldDescription extends BaseFieldDescription
         }
     }
 
-    public function setFieldMapping($fieldMapping)
+    public function setFieldMapping($fieldMapping): void
     {
         if (!is_array($fieldMapping)) {
             throw new \RuntimeException('The field mapping must be an array');
@@ -53,7 +55,7 @@ class FieldDescription extends BaseFieldDescription
         $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
-    public function setParentAssociationMappings(array $parentAssociationMappings)
+    public function setParentAssociationMappings(array $parentAssociationMappings): void
     {
         foreach ($parentAssociationMappings as $parentAssociationMapping) {
             if (!is_array($parentAssociationMapping)) {

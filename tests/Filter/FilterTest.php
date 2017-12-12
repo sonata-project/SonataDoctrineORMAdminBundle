@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -25,7 +27,7 @@ class FilterTest_Filter extends Filter
      * @param string $field
      * @param string $value
      */
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
         // TODO: Implement filter() method.
     }
@@ -51,7 +53,7 @@ class FilterTest_Filter extends Filter
 
 class FilterTest extends TestCase
 {
-    public function testFieldDescription()
+    public function testFieldDescription(): void
     {
         $filter = new FilterTest_Filter();
         $this->assertEquals(['option1' => 2], $filter->getDefaultOptions());
@@ -67,7 +69,7 @@ class FilterTest extends TestCase
         $this->assertEquals(['class' => 'FooBar'], $filter->getFieldOptions());
     }
 
-    public function testValues()
+    public function testValues(): void
     {
         $filter = new FilterTest_Filter();
         $this->assertEmpty($filter->getValue());
@@ -76,7 +78,7 @@ class FilterTest extends TestCase
         $this->assertEquals(42, $filter->getValue());
     }
 
-    public function testExceptionOnEmptyFieldName()
+    public function testExceptionOnEmptyFieldName(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -84,7 +86,7 @@ class FilterTest extends TestCase
         $filter->getFieldName();
     }
 
-    public function testIsActive()
+    public function testIsActive(): void
     {
         $filter = new FilterTest_Filter();
         $this->assertFalse($filter->isActive());
