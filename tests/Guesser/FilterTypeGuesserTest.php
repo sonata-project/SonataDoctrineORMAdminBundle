@@ -13,8 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser;
+use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 
 class FilterTypeGuesserTest extends TestCase
 {
@@ -25,13 +28,13 @@ class FilterTypeGuesserTest extends TestCase
     protected function setUp(): void
     {
         $this->guesser = new FilterTypeGuesser();
-        $this->modelManager = $this->prophesize('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
-        $this->metadata = $this->prophesize('Doctrine\ORM\Mapping\ClassMetadata');
+        $this->modelManager = $this->prophesize(ModelManager::class);
+        $this->metadata = $this->prophesize(ClassMetadata::class);
     }
 
     public function testThrowsOnMissingField(): void
     {
-        $this->expectException(\Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException::class);
+        $this->expectException(MissingPropertyMetadataException::class);
 
         $class = 'My\Model';
         $property = 'whatever';

@@ -13,21 +13,30 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
+use Doctrine\ORM\Query\Expr\Select;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Symfony\Bridge\Doctrine\Tests\Fixtures\CompositeIntIdEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 
 class ProxyQueryTest extends TestCase
 {
-    public const DOUBLE_NAME_CLASS = 'Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity';
+    public const DOUBLE_NAME_CLASS = DoubleNameEntity::class;
 
     /**
      * @var EntityManager
@@ -37,7 +46,7 @@ class ProxyQueryTest extends TestCase
     public static function setUpBeforeClass(): void
     {
         if (!Type::hasType('uuid')) {
-            Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
+            Type::addType('uuid', UuidType::class);
         }
     }
 
@@ -85,7 +94,7 @@ class ProxyQueryTest extends TestCase
      */
     public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType): void
     {
-        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $meta = $this->createMock(ClassMetadataInfo::class);
         $meta->expects($this->any())
             ->method('getIdentifierFieldNames')
             ->willReturn([$id]);
@@ -93,20 +102,20 @@ class ProxyQueryTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn($identifierType);
 
-        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
+        $mf = $this->createMock(ClassMetadataFactory::class);
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->with($this->equalTo($class))
             ->willReturn($meta);
 
-        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
+        $platform = $this->createMock(PostgreSqlPlatform::class);
 
-        $conn = $this->createMock('Doctrine\DBAL\Connection');
+        $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->createMock('Doctrine\ORM\EntityManager');
+        $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -123,7 +132,7 @@ class ProxyQueryTest extends TestCase
             ->method('execute')
             ->willReturn([[$id => $value]]);
 
-        $qb = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+        $qb = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
             ->getMock();
         $qb->expects($this->any())
@@ -155,7 +164,7 @@ class ProxyQueryTest extends TestCase
             ->method('getRootAliases')
             ->willReturn([$alias]);
 
-        $pq = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
+        $pq = $this->getMockBuilder(ProxyQuery::class)
             ->setConstructorArgs([$qb])
             ->setMethods(['a'])
             ->getMock();
@@ -174,14 +183,14 @@ class ProxyQueryTest extends TestCase
                        ->orderBy('o.name', 'ASC')
                        ->addOrderBy('o.name2', 'DESC');
 
-        $pq = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
+        $pq = $this->getMockBuilder(ProxyQuery::class)
                    ->disableOriginalConstructor()
                    ->getMock();
 
         $reflection = new \ReflectionClass(get_class($pq));
         $method = $reflection->getMethod('addOrderedColumns');
         $method->setAccessible(true);
-        $method->invoke($pq, $qb);
+        $method->invoke($pq, $qb, []);
 
         $dqlPart = $qb->getDqlPart('select');
         $this->assertCount(3, $dqlPart);
@@ -205,13 +214,37 @@ class ProxyQueryTest extends TestCase
 
         $pq = new ProxyQuery($qb);
         $pq->setHint(
-            \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER,
-            'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker'
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            FooWalker::class
         );
         $pq->setHint('hint', 'value');
 
         $result = $pq->execute();
 
         $this->assertEquals(2, $result[0]['id']);
+    }
+
+    public function testAddOrderedColumnsCompositeId()
+    {
+        $qb = $this->em->createQueryBuilder()
+            ->select('IDENTITY(o.id1) as id1, IDENTITY(o.id2) as id2')
+            ->distinct()
+            ->from(CompositeIntIdEntity::class, 'o')
+            ->orderBy('o.id1', 'ASC')
+            ->addOrderBy('o.id2', 'ASC');
+
+        $pq = $this->createMock(ProxyQuery::class);
+
+        $reflection = new \ReflectionClass(get_class($pq));
+        $method = $reflection->getMethod('addOrderedColumns');
+        $method->setAccessible(true);
+        $method->invoke($pq, $qb, ['o.id1', 'o.id2']);
+
+        $dqlPart = $qb->getDqlPart('select');
+        $this->assertCount(1, $dqlPart);
+        /** @var Select $select */
+        $select = $dqlPart[0];
+        $this->assertInstanceOf(Select::class, $select);
+        $this->assertEquals('IDENTITY(o.id1) as id1, IDENTITY(o.id2) as id2', $select->getParts()[0]);
     }
 }

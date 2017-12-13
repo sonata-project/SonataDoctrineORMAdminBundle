@@ -281,6 +281,7 @@ class ProxyQuery implements ProxyQueryInterface
         // step 3 : retrieve the different subjects ids
         $selects = [];
         $idxSelect = '';
+        $idSelects = [];
         foreach ($idNames as $idName) {
             $select = sprintf('%s.%s', $rootAlias, $idName);
             // Put the ID select on this array to use it on results QB
@@ -290,6 +291,7 @@ class ProxyQuery implements ProxyQueryInterface
             // Should work only with doctrine/orm: ~2.2
             $idSelect = $select;
             if ($metadata->hasAssociation($idName)) {
+                $idSelects[] = $idSelect;
                 $idSelect = sprintf('IDENTITY(%s) as %s', $idSelect, $idName);
             }
             $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
@@ -303,7 +305,7 @@ class ProxyQuery implements ProxyQueryInterface
         For any particular x-value in the table there might be many different y
         values.  Which one will you use to sort that x-value in the output?
         */
-        $this->addOrderedColumns($queryBuilderId);
+        $this->addOrderedColumns($queryBuilderId, $idSelects);
 
         $results = $queryBuilderId->getQuery()->execute([], Query::HYDRATE_ARRAY);
         $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
@@ -333,13 +335,20 @@ class ProxyQuery implements ProxyQueryInterface
         return $queryBuilder;
     }
 
-    private function addOrderedColumns(QueryBuilder $queryBuilder): void
+    /**
+     * @param array $idSelects List of column identifiers to skip
+     */
+    private function addOrderedColumns(QueryBuilder $queryBuilder, array $idSelects): void
     {
         /* For each ORDER BY clause defined directly in the DQL parts of the query,
-           we add an entry in the SELECT clause. */
+           we add an entry in the SELECT clause. Skip ids that have already been added
+           to the SELECT as IDENTITY(id) */
         foreach ((array) $queryBuilder->getDqlPart('orderBy') as $part) {
             foreach ($part->getParts() as $orderBy) {
-                $queryBuilder->addSelect(preg_replace("/\s+(ASC|DESC)$/i", '', $orderBy));
+                $id = preg_replace("/\s+(ASC|DESC)$/i", '', $orderBy);
+                if (!in_array($id, $idSelects, true)) {
+                    $queryBuilder->addSelect($id);
+                }
             }
         }
     }
