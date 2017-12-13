@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
@@ -48,12 +49,12 @@ class ListBuilderTest extends TestCase
 
     protected function setUp()
     {
-        $this->typeGuesser = $this->prophesize('Sonata\AdminBundle\Guesser\TypeGuesserInterface');
+        $this->typeGuesser = $this->prophesize(TypeGuesserInterface::class);
 
-        $this->modelManager = $this->prophesize('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
+        $this->modelManager = $this->prophesize(ModelManager::class);
         $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
 
-        $this->admin = $this->prophesize('Sonata\AdminBundle\Admin\AbstractAdmin');
+        $this->admin = $this->prophesize(AbstractAdmin::class);
         $this->admin->getClass()->willReturn('Foo');
         $this->admin->getModelManager()->willReturn($this->modelManager);
         $this->admin->addListFieldDescription(Argument::any(), Argument::any())

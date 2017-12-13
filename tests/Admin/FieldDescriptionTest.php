@@ -12,6 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Exception\NoValueException;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class FieldDescriptionTest extends TestCase
@@ -133,7 +137,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetParent()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $adminMock = $this->createMock(AdminInterface::class);
         $field = new FieldDescription();
         $field->setParent($adminMock);
 
@@ -150,7 +154,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetAdmin()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $adminMock = $this->createMock(AdminInterface::class);
         $field = new FieldDescription();
         $field->setAdmin($adminMock);
 
@@ -159,10 +163,10 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetAssociationAdmin()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
+        $adminMock = $this->createMock(AbstractAdmin::class);
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
-            ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
+            ->with($this->isInstanceOf(FieldDescriptionInterface::class));
 
         $field = new FieldDescription();
         $field->setAssociationAdmin($adminMock);
@@ -172,10 +176,10 @@ class FieldDescriptionTest extends TestCase
 
     public function testHasAssociationAdmin()
     {
-        $adminMock = $this->createMock('Sonata\AdminBundle\Admin\AbstractAdmin');
+        $adminMock = $this->createMock(AbstractAdmin::class);
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
-            ->with($this->isInstanceOf('Sonata\AdminBundle\Admin\FieldDescriptionInterface'));
+            ->with($this->isInstanceOf(FieldDescriptionInterface::class));
 
         $field = new FieldDescription();
 
@@ -203,7 +207,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetValueWhenCannotRetrieve()
     {
-        $this->expectException(\Sonata\AdminBundle\Exception\NoValueException::class);
+        $this->expectException(NoValueException::class);
 
         $mockedObject = $this->getMockBuilder('stdClass')
             ->setMethods(['myMethod'])

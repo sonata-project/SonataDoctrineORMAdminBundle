@@ -11,40 +11,53 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
+use Doctrine\Common\Persistence\ObjectManager;
+use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Version;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Datagrid\Datagrid;
+use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Sonata\AdminBundle\Exception\LockException;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ModelManagerTest extends TestCase
 {
     public static function setUpBeforeClass()
     {
         if (!Type::hasType('uuid')) {
-            Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
+            Type::addType('uuid', UuidType::class);
         }
     }
 
     public function testSortParameters()
     {
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock(RegistryInterface::class);
 
         $manager = new ModelManager($registry);
 
-        $datagrid1 = $this->createMock('Sonata\AdminBundle\Datagrid\Datagrid');
-        $datagrid2 = $this->createMock('Sonata\AdminBundle\Datagrid\Datagrid');
+        $datagrid1 = $this->createMock(Datagrid::class);
+        $datagrid2 = $this->createMock(Datagrid::class);
 
         $field1 = new FieldDescription();
         $field1->setName('field1');
@@ -108,7 +121,7 @@ class ModelManagerTest extends TestCase
     {
         $object = new VersionedEntity();
 
-        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
+        $modelManager = $this->getMockBuilder(ModelManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMetadata'])
             ->getMock();
@@ -144,12 +157,12 @@ class ModelManagerTest extends TestCase
     {
         $object = new VersionedEntity();
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $em = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['lock'])
             ->getMock();
 
-        $modelManager = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Model\ModelManager')
+        $modelManager = $this->getMockBuilder(ModelManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getMetadata', 'getEntityManager'])
             ->getMock();
@@ -169,7 +182,7 @@ class ModelManagerTest extends TestCase
                 ->method('lock')
                 ->will($this->throwException(OptimisticLockException::lockFailed($object)));
 
-            $this->expectException('Sonata\AdminBundle\Exception\LockException');
+            $this->expectException(LockException::class);
         }
 
         $modelManager->lock($object, 123);
@@ -183,14 +196,14 @@ class ModelManagerTest extends TestCase
             return;
         }
 
-        $containerEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity';
-        $associatedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity';
-        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
-        $modelManagerClass = 'Sonata\DoctrineORMAdminBundle\Model\ModelManager';
+        $containerEntityClass = ContainerEntity::class;
+        $associatedEntityClass = AssociatedEntity::class;
+        $embeddedEntityClass = EmbeddedEntity::class;
+        $modelManagerClass = ModelManager::class;
 
         $object = new ContainerEntity(new AssociatedEntity(null, new EmbeddedEntity()), new EmbeddedEntity());
 
-        $em = $this->createMock('Doctrine\ORM\EntityManager');
+        $em = $this->createMock(EntityManager::class);
 
         /** @var \PHPUnit_Framework_MockObject_MockObject|ModelManager $modelManager */
         $modelManager = $this->getMockBuilder($modelManagerClass)
@@ -237,7 +250,7 @@ class ModelManagerTest extends TestCase
 
     public function getMetadataForEmbeddedEntity()
     {
-        $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity');
+        $metadata = new ClassMetadata(EmbeddedEntity::class);
 
         $metadata->fieldMappings = [
             'plainField' => [
@@ -252,9 +265,9 @@ class ModelManagerTest extends TestCase
 
     public function getMetadataForAssociatedEntity()
     {
-        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
+        $embeddedEntityClass = EmbeddedEntity::class;
 
-        $metadata = new ClassMetadata('Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity');
+        $metadata = new ClassMetadata(AssociatedEntity::class);
 
         $metadata->fieldMappings = [
             'plainField' => [
@@ -276,9 +289,9 @@ class ModelManagerTest extends TestCase
 
     public function getMetadataForContainerEntity()
     {
-        $containerEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity';
-        $associatedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity';
-        $embeddedEntityClass = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity';
+        $containerEntityClass = ContainerEntity::class;
+        $associatedEntityClass = AssociatedEntity::class;
+        $embeddedEntityClass = EmbeddedEntity::class;
 
         $metadata = new ClassMetadata($containerEntityClass);
 
@@ -311,7 +324,7 @@ class ModelManagerTest extends TestCase
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
         $entity = new UuidEntity($uuid);
 
-        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $meta = $this->createMock(ClassMetadataInfo::class);
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getId()]);
@@ -319,19 +332,19 @@ class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
-        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
+        $mf = $this->createMock(ClassMetadataFactory::class);
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->willReturn($meta);
 
-        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
+        $platform = $this->createMock(PostgreSqlPlatform::class);
 
-        $conn = $this->createMock('Doctrine\DBAL\Connection');
+        $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->createMock('Doctrine\ORM\EntityManager');
+        $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -339,7 +352,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock(RegistryInterface::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -354,7 +367,7 @@ class ModelManagerTest extends TestCase
     {
         $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
 
-        $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
+        $meta = $this->createMock(ClassMetadataInfo::class);
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getAssociatedEntity()->getPlainField()]);
@@ -362,19 +375,19 @@ class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(null);
 
-        $mf = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
+        $mf = $this->createMock(ClassMetadataFactory::class);
         $mf->expects($this->any())
             ->method('getMetadataFor')
             ->willReturn($meta);
 
-        $platform = $this->createMock('Doctrine\DBAL\Platforms\PostgreSqlPlatform');
+        $platform = $this->createMock(PostgreSqlPlatform::class);
 
-        $conn = $this->createMock('Doctrine\DBAL\Connection');
+        $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
-        $em = $this->createMock('Doctrine\ORM\EntityManager');
+        $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
             ->method('getMetadataFactory')
             ->willReturn($mf);
@@ -382,7 +395,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $registry = $this->createMock(RegistryInterface::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -417,13 +430,13 @@ class ModelManagerTest extends TestCase
      */
     public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy)
     {
-        $datagrid = $this->getMockForAbstractClass('Sonata\AdminBundle\Datagrid\DatagridInterface');
-        $configuration = $this->getMockBuilder('Doctrine\ORM\Configuration')->getMock();
+        $datagrid = $this->getMockForAbstractClass(DatagridInterface::class);
+        $configuration = $this->getMockBuilder(Configuration::class)->getMock();
         $configuration->expects($this->any())
             ->method('getDefaultQueryHints')
             ->willReturn([]);
 
-        $em = $this->getMockBuilder('Doctrine\ORM\EntityManager')
+        $em = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -431,12 +444,12 @@ class ModelManagerTest extends TestCase
             ->method('getConfiguration')
             ->willReturn($configuration);
 
-        $queryBuilder = $this->getMockBuilder('Doctrine\ORM\QueryBuilder')
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
             ->getMock();
         $query = new Query($em);
 
-        $proxyQuery = $this->getMockBuilder('Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery')
+        $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
             ->setConstructorArgs([$queryBuilder])
             ->setMethods(['getSortBy', 'getSortOrder', 'getRootAliases'])
             ->getMock();
@@ -464,18 +477,18 @@ class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
-        $registry = $this->getMockBuilder('Symfony\Bridge\Doctrine\RegistryInterface')->getMock();
+        $registry = $this->getMockBuilder(RegistryInterface::class)->getMock();
         $manager = new ModelManager($registry);
         $manager->getDataSourceIterator($datagrid, []);
     }
 
     public function testModelReverseTransform()
     {
-        $class = 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity';
+        $class = SimpleEntity::class;
 
-        $metadataFactory = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataFactory');
-        $modelManager = $this->createMock('Doctrine\Common\Persistence\ObjectManager');
-        $registry = $this->createMock('Symfony\Bridge\Doctrine\RegistryInterface');
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $modelManager = $this->createMock(ObjectManager::class);
+        $registry = $this->createMock(RegistryInterface::class);
 
         $classMetadata = new ClassMetadataInfo($class);
         $classMetadata->reflClass = new \ReflectionClass($class);

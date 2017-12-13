@@ -334,7 +334,7 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * @param array $idSelects List of column identifiers to skip.
+     * @param array $idSelects List of column identifiers to skip
      */
     private function addOrderedColumns(QueryBuilder $queryBuilder, array $idSelects)
     {
