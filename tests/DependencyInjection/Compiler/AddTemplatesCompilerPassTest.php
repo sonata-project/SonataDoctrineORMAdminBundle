@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -17,7 +19,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class AddTemplatesCompilerPassTest extends TestCase
 {
-    public function testDefaultBehavior()
+    public function testDefaultBehavior(): void
     {
         $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
 

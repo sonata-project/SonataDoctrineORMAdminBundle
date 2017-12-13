@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -18,7 +20,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 class CallbackFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         if (!is_callable($this->getOption('callback'))) {
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,7 +25,7 @@ use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
  */
 class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 {
-    public function load(array $configs, ContainerBuilder $container)
+    public function load(array $configs, ContainerBuilder $container): void
     {
         $configs = $this->fixTemplatesConfiguration($configs, $container);
 

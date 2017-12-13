@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -25,21 +27,21 @@ use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 
 class ProxyQueryTest extends TestCase
 {
-    const DOUBLE_NAME_CLASS = 'Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity';
+    public const DOUBLE_NAME_CLASS = 'Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity';
 
     /**
      * @var EntityManager
      */
     private $em;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', 'Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType');
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = DoctrineTestHelper::createTestEntityManager();
 
@@ -59,7 +61,7 @@ class ProxyQueryTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->em = null;
     }
@@ -81,7 +83,7 @@ class ProxyQueryTest extends TestCase
      * @param $alias
      * @param $id
      */
-    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType)
+    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType): void
     {
         $meta = $this->createMock('Doctrine\ORM\Mapping\ClassMetadataInfo');
         $meta->expects($this->any())
@@ -163,7 +165,7 @@ class ProxyQueryTest extends TestCase
         $pq->execute();
     }
 
-    public function testAddOrderedColumns()
+    public function testAddOrderedColumns(): void
     {
         $qb = $this->em->createQueryBuilder()
                        ->select('o.id')
@@ -188,7 +190,7 @@ class ProxyQueryTest extends TestCase
         $this->assertEquals('o.name2', $dqlPart[2]);
     }
 
-    public function testSetHint()
+    public function testSetHint(): void
     {
         $entity1 = new DoubleNameEntity(1, 'Foo', null);
         $entity2 = new DoubleNameEntity(2, 'Bar', null);

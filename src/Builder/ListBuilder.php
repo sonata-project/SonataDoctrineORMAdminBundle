@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -44,7 +46,7 @@ class ListBuilder implements ListBuilderInterface
         return new FieldDescriptionCollection();
     }
 
-    public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
+    public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null == $type) {
             $guessType = $this->guesser->guessType(
@@ -60,7 +62,7 @@ class ListBuilder implements ListBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
     }
 
-    public function addField(FieldDescriptionCollection $list, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
+    public function addField(FieldDescriptionCollection $list, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         $this->buildField($type, $fieldDescription, $admin);
         $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
@@ -68,7 +70,7 @@ class ListBuilder implements ListBuilderInterface
         $list->add($fieldDescription);
     }
 
-    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription)
+    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
         if ('_action' === $fieldDescription->getName() || 'actions' === $fieldDescription->getType()) {
             $this->buildActionFieldDescription($fieldDescription);

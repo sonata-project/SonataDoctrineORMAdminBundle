@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,7 +25,7 @@ class QueryBuilder
      * @param string $name
      * @param mixed  $value
      */
-    public function setParameter($name, $value)
+    public function setParameter($name, $value): void
     {
         $this->parameters[$name] = $value;
     }
@@ -31,7 +33,7 @@ class QueryBuilder
     /**
      * @param string $query
      */
-    public function andWhere($query)
+    public function andWhere($query): void
     {
         $this->query[] = $query;
     }
@@ -78,7 +80,7 @@ class QueryBuilder
      * @param string $parameter
      * @param string $alias
      */
-    public function leftJoin($parameter, $alias)
+    public function leftJoin($parameter, $alias): void
     {
         $this->query[] = $parameter;
     }

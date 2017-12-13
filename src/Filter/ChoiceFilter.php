@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -18,7 +20,7 @@ use Sonata\CoreBundle\Form\Type\EqualType;
 
 class ChoiceFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;

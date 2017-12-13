@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -16,13 +18,13 @@ use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 
 class NumberFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         if (!$data || !is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return;
         }
 
-        $type = isset($data['type']) ? $data['type'] : false;
+        $type = $data['type'] ?? false;
 
         $operator = $this->getOperator($type);
 
@@ -65,6 +67,6 @@ class NumberFilter extends Filter
             NumberType::TYPE_LESS_THAN => '<',
         ];
 
-        return isset($choices[$type]) ? $choices[$type] : false;
+        return $choices[$type] ?? false;
     }
 }

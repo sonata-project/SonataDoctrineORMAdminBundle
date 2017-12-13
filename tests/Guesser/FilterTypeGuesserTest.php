@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,14 +22,14 @@ class FilterTypeGuesserTest extends TestCase
     private $modelManager;
     private $metadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->guesser = new FilterTypeGuesser();
         $this->modelManager = $this->prophesize('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
         $this->metadata = $this->prophesize('Doctrine\ORM\Mapping\ClassMetadata');
     }
 
-    public function testThrowsOnMissingField()
+    public function testThrowsOnMissingField(): void
     {
         $this->expectException(\Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException::class);
 

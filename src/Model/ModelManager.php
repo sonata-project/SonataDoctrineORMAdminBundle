@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -35,7 +37,7 @@ use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
 class ModelManager implements ModelManagerInterface, LockInterface
 {
-    const ID_SEPARATOR = '~';
+    public const ID_SEPARATOR = '~';
     /**
      * @var RegistryInterface
      */
@@ -156,7 +158,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $fieldDescription;
     }
 
-    public function create($object)
+    public function create($object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -177,7 +179,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function update($object)
+    public function update($object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -198,7 +200,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function delete($object)
+    public function delete($object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -230,7 +232,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $metadata->reflFields[$metadata->versionField]->getValue($object);
     }
 
-    public function lock($object, $expectedVersion)
+    public function lock($object, $expectedVersion): void
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
@@ -408,7 +410,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
-    public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
+    public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx): void
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $queryProxy->getQueryBuilder();
@@ -431,7 +433,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    public function batchDelete($class, ProxyQueryInterface $queryProxy)
+    public function batchDelete($class, ProxyQueryInterface $queryProxy): void
     {
         $queryProxy->select('DISTINCT '.current($queryProxy->getRootAliases()));
 

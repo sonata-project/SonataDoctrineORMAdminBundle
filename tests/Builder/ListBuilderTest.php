@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -46,7 +48,7 @@ class ListBuilderTest extends TestCase
      */
     protected $modelManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeGuesser = $this->prophesize('Sonata\AdminBundle\Guesser\TypeGuesserInterface');
 
@@ -62,7 +64,7 @@ class ListBuilderTest extends TestCase
         $this->listBuilder = new ListBuilder($this->typeGuesser->reveal());
     }
 
-    public function testAddListActionField()
+    public function testAddListActionField(): void
     {
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('foo');
@@ -77,7 +79,7 @@ class ListBuilderTest extends TestCase
         );
     }
 
-    public function testCorrectFixedActionsFieldType()
+    public function testCorrectFixedActionsFieldType(): void
     {
         $this->typeGuesser->guessType(
             Argument::any(), Argument::any(), Argument::any()

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,7 +22,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
  */
 class DateRangeFilterTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -48,7 +50,7 @@ class DateRangeFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterStartDateAndEndDate()
+    public function testFilterStartDateAndEndDate(): void
     {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -74,7 +76,7 @@ class DateRangeFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterStartDate()
+    public function testFilterStartDate(): void
     {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -96,7 +98,7 @@ class DateRangeFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterEndDate()
+    public function testFilterEndDate(): void
     {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
