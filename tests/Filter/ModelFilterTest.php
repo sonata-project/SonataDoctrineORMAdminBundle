@@ -11,7 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
@@ -136,7 +136,7 @@ class ModelFilterTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['mapping_type' => ClassMetadataInfo::ONE_TO_ONE]);
+        $filter->initialize('field_name', ['mapping_type' => ClassMetadata::ONE_TO_ONE]);
 
         $builder = new ProxyQuery(new QueryBuilder());
 
@@ -148,7 +148,7 @@ class ModelFilterTest extends TestCase
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', [
-            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'mapping_type' => ClassMetadata::ONE_TO_ONE,
             'field_name' => 'field_name',
             'association_mapping' => [
                 'fieldName' => 'association_mapping',
@@ -171,7 +171,7 @@ class ModelFilterTest extends TestCase
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', [
-            'mapping_type' => ClassMetadataInfo::ONE_TO_ONE,
+            'mapping_type' => ClassMetadata::ONE_TO_ONE,
             'field_name' => 'field_name',
             'parent_association_mappings' => [
                 [

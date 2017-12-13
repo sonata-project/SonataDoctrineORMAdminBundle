@@ -12,7 +12,7 @@
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\CoreBundle\Form\Type\EqualType;
@@ -82,7 +82,7 @@ class ModelFilter extends Filter
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
 
-            if (ClassMetadataInfo::MANY_TO_MANY === $this->getOption('mapping_type')) {
+            if (ClassMetadata::MANY_TO_MANY === $this->getOption('mapping_type')) {
                 $or->add(
                     sprintf('%s.%s IS EMPTY', $this->getParentAlias($queryBuilder, $alias), $this->getFieldName())
                 );
@@ -103,10 +103,10 @@ class ModelFilter extends Filter
     protected function association(ProxyQueryInterface $queryBuilder, $data)
     {
         $types = [
-            ClassMetadataInfo::ONE_TO_ONE,
-            ClassMetadataInfo::ONE_TO_MANY,
-            ClassMetadataInfo::MANY_TO_MANY,
-            ClassMetadataInfo::MANY_TO_ONE,
+            ClassMetadata::ONE_TO_ONE,
+            ClassMetadata::ONE_TO_MANY,
+            ClassMetadata::MANY_TO_MANY,
+            ClassMetadata::MANY_TO_ONE,
         ];
 
         if (!in_array($this->getOption('mapping_type'), $types)) {

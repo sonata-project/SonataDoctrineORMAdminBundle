@@ -15,8 +15,8 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
@@ -92,7 +92,7 @@ class ProxyQueryTest extends TestCase
      */
     public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType)
     {
-        $meta = $this->createMock(ClassMetadataInfo::class);
+        $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
             ->method('getIdentifierFieldNames')
             ->willReturn([$id]);
