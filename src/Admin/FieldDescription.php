@@ -35,7 +35,7 @@ class FieldDescription extends BaseFieldDescription
         $this->fieldName = $associationMapping['fieldName'];
     }
 
-    public function getTargetEntity()
+    public function getTargetEntity(): ?string
     {
         if ($this->associationMapping) {
             return $this->associationMapping['targetEntity'];

@@ -139,6 +139,10 @@ final class FormContractorTest extends TestCase
 
         $admin = $this->createMock(AdminInterface::class);
         $admin->method('getModelManager')->willReturn($modelManager);
+        $admin
+            ->expects($this->any())
+            ->method('getClass')
+            ->willReturn('Whatever');
 
         $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->method('getMappingType')->willReturn('simple');

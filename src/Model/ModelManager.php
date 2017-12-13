@@ -56,12 +56,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $this->registry = $registry;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return ClassMetadata
-     */
-    public function getMetadata($class)
+    public function getMetadata(string $class): ClassMetadata
     {
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
@@ -80,7 +75,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      *                array $parentAssociationMappings
      *                )
      */
-    public function getParentMetadataForProperty($baseClass, $propertyFullName)
+    public function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
         $nameElements = explode('.', $propertyFullName);
         $lastPropertyName = array_pop($nameElements);
@@ -106,17 +101,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return [$this->getMetadata($class), implode('.', $properties), $parentAssociationMappings];
     }
 
-    /**
-     * @param string $class
-     *
-     * @return bool
-     */
-    public function hasMetadata($class)
+    public function hasMetadata(string $class): bool
     {
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
-    public function getNewFieldDescriptionInstance($class, $name, array $options = [])
+    public function getNewFieldDescriptionInstance($class, $name, array $options = []): FieldDescription
     {
         if (!\is_string($name)) {
             throw new \RuntimeException('The name argument must be a string');
@@ -260,11 +250,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @param string $class
-     *
-     * @return EntityManager
+     * @param string|object $class
      */
-    public function getEntityManager($class)
+    public function getEntityManager($class): EntityManager
     {
         if (\is_object($class)) {
             $class = \get_class($class);
@@ -283,7 +271,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->cache[$class];
     }
 
-    public function getParentFieldDescription($parentAssociationMapping, $class)
+    public function getParentFieldDescription($parentAssociationMapping, $class): FieldDescription
     {
         $fieldName = $parentAssociationMapping['fieldName'];
 
@@ -298,13 +286,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $fieldDescription;
     }
 
-    public function createQuery($class, $alias = 'o')
+    /**
+     * @param string|object $class
+     */
+    public function createQuery($class, $alias = 'o'): ProxyQuery
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
 
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
 
+    /**
+     * @param QueryBuilder|Query $class
+     */
     public function executeQuery($query)
     {
         if ($query instanceof QueryBuilder) {
@@ -319,7 +313,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getMetadata($class)->identifier;
     }
 
-    public function getIdentifierValues($entity)
+    public function getIdentifierValues($entity): array
     {
         // Fix code has an impact on performance, so disable it ...
         //$entityManager = $this->getEntityManager($entity);
@@ -358,32 +352,32 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $identifiers;
     }
 
-    public function getIdentifierFieldNames($class)
+    public function getIdentifierFieldNames($class): array
     {
         return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
-    public function getNormalizedIdentifier($entity)
+    public function getNormalizedIdentifier($entity): ?string
     {
         if (is_scalar($entity)) {
             throw new \RuntimeException('Invalid argument, object or null required');
         }
 
         if (!$entity) {
-            return;
+            return null;
         }
 
         if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
-            return;
+            return null;
         }
 
         $values = $this->getIdentifierValues($entity);
 
         if (0 === \count($values)) {
-            return;
+            return null;
         }
 
         return implode(self::ID_SEPARATOR, $values);
@@ -394,6 +388,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      *
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
+     *
+     * @return string|null
      */
     public function getUrlsafeIdentifier($entity)
     {

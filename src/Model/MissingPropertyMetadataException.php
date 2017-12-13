@@ -18,11 +18,7 @@ namespace Sonata\DoctrineORMAdminBundle\Model;
  */
 final class MissingPropertyMetadataException extends \LogicException
 {
-    /**
-     * @param string $class
-     * @param string $property
-     */
-    public function __construct($class, $property)
+    public function __construct(string $class, string $property)
     {
         parent::__construct(sprintf(
             'No metadata found for property `%s::$%s`.'
