@@ -19,7 +19,6 @@ use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -324,7 +323,7 @@ class ModelManagerTest extends TestCase
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
         $entity = new UuidEntity($uuid);
 
-        $meta = $this->createMock(ClassMetadataInfo::class);
+        $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getId()]);
@@ -367,7 +366,7 @@ class ModelManagerTest extends TestCase
     {
         $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
 
-        $meta = $this->createMock(ClassMetadataInfo::class);
+        $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getAssociatedEntity()->getPlainField()]);
@@ -490,7 +489,7 @@ class ModelManagerTest extends TestCase
         $modelManager = $this->createMock(ObjectManager::class);
         $registry = $this->createMock(RegistryInterface::class);
 
-        $classMetadata = new ClassMetadataInfo($class);
+        $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
 
         $modelManager->expects($this->once())
