@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
@@ -26,7 +27,7 @@ class ModelFilterTest extends TestCase
      */
     public function getFieldDescription(array $options)
     {
-        $fieldDescription = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->expects($this->once())->method('getOptions')->will($this->returnValue($options));
         $fieldDescription->expects($this->once())->method('getName')->will($this->returnValue('field_name'));
 

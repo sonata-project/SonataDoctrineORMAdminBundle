@@ -13,6 +13,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 class AddAuditEntityCompilerPassTest extends TestCase
@@ -38,7 +39,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
      */
     public function testProcess($force, array $services)
     {
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container = $this->createMock(ContainerBuilder::class);
 
         $container
             ->expects($this->any())

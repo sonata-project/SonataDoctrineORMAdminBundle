@@ -13,13 +13,14 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 class AddTemplatesCompilerPassTest extends TestCase
 {
     public function testDefaultBehavior()
     {
-        $container = $this->createMock('Symfony\Component\DependencyInjection\ContainerBuilder');
+        $container = $this->createMock(ContainerBuilder::class);
 
         $container
             ->expects($this->any())

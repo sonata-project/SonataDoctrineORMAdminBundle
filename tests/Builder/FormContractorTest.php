@@ -13,13 +13,18 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\AdminType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\CoreBundle\Form\Type\CollectionType;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
 /**
@@ -39,7 +44,7 @@ final class FormContractorTest extends TestCase
 
     protected function setUp()
     {
-        $this->formFactory = $this->createMock('Symfony\Component\Form\FormFactoryInterface');
+        $this->formFactory = $this->createMock(FormFactoryInterface::class);
 
         $this->formContractor = new FormContractor($this->formFactory);
     }
@@ -47,24 +52,24 @@ final class FormContractorTest extends TestCase
     public function testGetFormBuilder()
     {
         $this->formFactory->expects($this->once())->method('createNamedBuilder')
-            ->willReturn($this->createMock('Symfony\Component\Form\FormBuilderInterface'));
+            ->willReturn($this->createMock(FormBuilderInterface::class));
 
         $this->assertInstanceOf(
-            'Symfony\Component\Form\FormBuilderInterface',
+            FormBuilderInterface::class,
             $this->formContractor->getFormBuilder('test', ['foo' => 'bar'])
         );
     }
 
     public function testDefaultOptionsForSonataFormTypes()
     {
-        $admin = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
-        $modelManager = $this->createMock('Sonata\AdminBundle\Model\ModelManagerInterface');
+        $admin = $this->createMock(AdminInterface::class);
+        $modelManager = $this->createMock(ModelManagerInterface::class);
         $modelClass = 'FooEntity';
 
         $admin->method('getModelManager')->willReturn($modelManager);
         $admin->method('getClass')->willReturn($modelClass);
 
-        $fieldDescription = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->method('getAdmin')->willReturn($admin);
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
@@ -122,13 +127,13 @@ final class FormContractorTest extends TestCase
     public function testAdminClassAttachForNotMappedField()
     {
         // Given
-        $modelManager = $this->createMock('Sonata\DoctrineORMAdminBundle\Model\ModelManager');
+        $modelManager = $this->createMock(ModelManager::class);
         $modelManager->method('hasMetadata')->willReturn(false);
 
-        $admin = $this->createMock('Sonata\AdminBundle\Admin\AdminInterface');
+        $admin = $this->createMock(AdminInterface::class);
         $admin->method('getModelManager')->willReturn($modelManager);
 
-        $fieldDescription = $this->createMock('Sonata\AdminBundle\Admin\FieldDescriptionInterface');
+        $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->method('getMappingType')->willReturn('simple');
         $fieldDescription->method('getType')->willReturn('sonata_type_model_list');
         $fieldDescription->method('getOption')->with($this->logicalOr(
