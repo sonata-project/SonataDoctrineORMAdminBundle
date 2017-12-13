@@ -224,7 +224,7 @@ class ProxyQueryTest extends TestCase
         $this->assertEquals(2, $result[0]['id']);
     }
 
-    public function testAddOrderedColumnsCompositeId()
+    public function testAddOrderedColumnsCompositeId(): void
     {
         $qb = $this->em->createQueryBuilder()
             ->select('IDENTITY(o.id1) as id1, IDENTITY(o.id2) as id2')
