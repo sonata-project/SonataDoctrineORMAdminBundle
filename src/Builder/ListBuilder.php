@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
@@ -116,25 +116,25 @@ class ListBuilder implements ListBuilderInterface
 
             if (!$fieldDescription->getTemplate()) {
                 switch ($fieldDescription->getMappingType()) {
-                    case ClassMetadataInfo::MANY_TO_ONE:
+                    case ClassMetadata::MANY_TO_ONE:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig'
                         );
 
                         break;
-                    case ClassMetadataInfo::ONE_TO_ONE:
+                    case ClassMetadata::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig'
                         );
 
                         break;
-                    case ClassMetadataInfo::ONE_TO_MANY:
+                    case ClassMetadata::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig'
                         );
 
                         break;
-                    case ClassMetadataInfo::MANY_TO_MANY:
+                    case ClassMetadata::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
                             'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig'
                         );
@@ -144,7 +144,12 @@ class ListBuilder implements ListBuilderInterface
             }
         }
 
-        if (in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::MANY_TO_ONE, ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::ONE_TO_MANY, ClassMetadataInfo::MANY_TO_MANY])) {
+        if (in_array($fieldDescription->getMappingType(), [
+            ClassMetadata::MANY_TO_ONE,
+            ClassMetadata::ONE_TO_ONE,
+            ClassMetadata::ONE_TO_MANY,
+            ClassMetadata::MANY_TO_MANY,
+        ])) {
             $admin->attachAdminClass($fieldDescription);
         }
     }

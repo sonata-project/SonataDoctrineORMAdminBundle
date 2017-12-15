@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
@@ -32,16 +32,16 @@ class TypeGuesser extends AbstractTypeGuesser
             $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
-                case ClassMetadataInfo::ONE_TO_MANY:
+                case ClassMetadata::ONE_TO_MANY:
                     return new TypeGuess('orm_one_to_many', [], Guess::HIGH_CONFIDENCE);
 
-                case ClassMetadataInfo::MANY_TO_MANY:
+                case ClassMetadata::MANY_TO_MANY:
                     return new TypeGuess('orm_many_to_many', [], Guess::HIGH_CONFIDENCE);
 
-                case ClassMetadataInfo::MANY_TO_ONE:
+                case ClassMetadata::MANY_TO_ONE:
                     return new TypeGuess('orm_many_to_one', [], Guess::HIGH_CONFIDENCE);
 
-                case ClassMetadataInfo::ONE_TO_ONE:
+                case ClassMetadata::ONE_TO_ONE:
                     return new TypeGuess('orm_one_to_one', [], Guess::HIGH_CONFIDENCE);
             }
         }

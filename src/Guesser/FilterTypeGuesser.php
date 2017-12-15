@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\CoreBundle\Form\Type\EqualType;
@@ -46,10 +46,10 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
-                case ClassMetadataInfo::ONE_TO_ONE:
-                case ClassMetadataInfo::ONE_TO_MANY:
-                case ClassMetadataInfo::MANY_TO_ONE:
-                case ClassMetadataInfo::MANY_TO_MANY:
+                case ClassMetadata::ONE_TO_ONE:
+                case ClassMetadata::ONE_TO_MANY:
+                case ClassMetadata::MANY_TO_ONE:
+                case ClassMetadata::MANY_TO_MANY:
                     $options['operator_type'] = EqualType::class;
                     $options['operator_options'] = [];
                     $options['field_type'] = EntityType::class;

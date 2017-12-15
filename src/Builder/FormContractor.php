@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
@@ -143,7 +143,10 @@ class FormContractor implements FormContractorInterface
                 ));
             }
 
-            if (!in_array($fieldDescription->getMappingType(), [ClassMetadataInfo::ONE_TO_ONE, ClassMetadataInfo::MANY_TO_ONE])) {
+            if (!in_array($fieldDescription->getMappingType(), [
+                ClassMetadata::ONE_TO_ONE,
+                ClassMetadata::MANY_TO_ONE,
+            ])) {
                 throw new \RuntimeException(sprintf(
                     'You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One.'
                     .' Maybe you want `sonata_type_collection` instead?',
@@ -185,10 +188,10 @@ class FormContractor implements FormContractorInterface
     private function hasAssociation(FieldDescriptionInterface $fieldDescription)
     {
         return in_array($fieldDescription->getMappingType(), [
-            ClassMetadataInfo::ONE_TO_MANY,
-            ClassMetadataInfo::MANY_TO_MANY,
-            ClassMetadataInfo::MANY_TO_ONE,
-            ClassMetadataInfo::ONE_TO_ONE,
+            ClassMetadata::ONE_TO_MANY,
+            ClassMetadata::MANY_TO_MANY,
+            ClassMetadata::MANY_TO_ONE,
+            ClassMetadata::ONE_TO_ONE,
         ]);
     }
 
