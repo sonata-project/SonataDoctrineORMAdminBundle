@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.3.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.2.0...3.3.0) - 2017-12-16
+### Added
+- Added refresh of edit button URL if item was replaced by add/list action
+
+### Fixed
+- Allow to `add` a new Model even if one is already selected
+- Fixed invalid PathExpression error in ProxyQuery
+- Issue with edit button always showing initial item in popup
+- Replaced FQCN strings with `::class` constants
+- deprecation about `Doctrine\ORM\Mapping\ClassMetadataInfo`
+
 ## [3.2.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.1.7...3.2.0) - 2017-11-30
 ### Added
 - Added edit button that opens in dialog instead of add if there is object already in sonata type model list
