@@ -8,6 +8,9 @@ For the full copyright and license information, please view the LICENSE
 file that was distributed with this source code.
 
 #}
+
+{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_many_to_many.html.twig' %}
+
 {% if sonata_admin.field_description.hasassociationadmin %}
     <div id="field_container_{{ id }}" class="field-container">
         <span id="field_widget_{{ id }}" >

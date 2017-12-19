@@ -118,25 +118,25 @@ class ListBuilder implements ListBuilderInterface
                 switch ($fieldDescription->getMappingType()) {
                     case ClassMetadata::MANY_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_one.html.twig'
+                            'SonataAdminBundle:CRUD/Association:list_many_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_one.html.twig'
+                            'SonataAdminBundle:CRUD/Association:list_one_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_one_to_many.html.twig'
+                            'SonataAdminBundle:CRUD/Association:list_one_to_many.html.twi'
                         );
 
                         break;
                     case ClassMetadata::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataDoctrineORMAdminBundle:CRUD:list_orm_many_to_many.html.twig'
+                            'SonataAdminBundle:CRUD/Association:list_many_to_many.html.twig'
                         );
 
                         break;
