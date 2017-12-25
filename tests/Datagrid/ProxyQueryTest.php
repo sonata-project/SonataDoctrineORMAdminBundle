@@ -20,7 +20,6 @@ use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
-use Doctrine\ORM\Query\Expr\Select;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
@@ -29,13 +28,10 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
-use Symfony\Bridge\Doctrine\Tests\Fixtures\CompositeIntIdEntity;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 
 class ProxyQueryTest extends TestCase
 {
-    const DOUBLE_NAME_CLASS = DoubleNameEntity::class;
-
     /**
      * @var EntityManager
      */
@@ -54,7 +50,7 @@ class ProxyQueryTest extends TestCase
 
         $schemaTool = new SchemaTool($this->em);
         $classes = [
-            $this->em->getClassMetadata(self::DOUBLE_NAME_CLASS),
+            $this->em->getClassMetadata(DoubleNameEntity::class),
         ];
 
         try {
@@ -124,8 +120,11 @@ class ProxyQueryTest extends TestCase
         // NEXT MAJOR: Replace this when dropping PHP < 5.6
         // $q = $this->createMock('PDOStatement');
         $q = $this->getMockBuilder('stdClass')
-            ->setMethods(['execute'])
+            ->setMethods(['execute', 'setHint'])
             ->getMock();
+        $q->expects($this->once())
+           ->method('setHint')
+           ->willReturn($q);
         $q->expects($this->any())
             ->method('execute')
             ->willReturn([[$id => $value]]);
@@ -172,31 +171,6 @@ class ProxyQueryTest extends TestCase
         $pq->execute();
     }
 
-    public function testAddOrderedColumns()
-    {
-        $qb = $this->em->createQueryBuilder()
-                       ->select('o.id')
-                       ->distinct()
-                       ->from(self::DOUBLE_NAME_CLASS, 'o')
-                       ->orderBy('o.name', 'ASC')
-                       ->addOrderBy('o.name2', 'DESC');
-
-        $pq = $this->getMockBuilder(ProxyQuery::class)
-                   ->disableOriginalConstructor()
-                   ->getMock();
-
-        $reflection = new \ReflectionClass(get_class($pq));
-        $method = $reflection->getMethod('addOrderedColumns');
-        $method->setAccessible(true);
-        $method->invoke($pq, $qb, []);
-
-        $dqlPart = $qb->getDqlPart('select');
-        $this->assertCount(3, $dqlPart);
-        $this->assertEquals('o.id', $dqlPart[0]);
-        $this->assertEquals('o.name', $dqlPart[1]);
-        $this->assertEquals('o.name2', $dqlPart[2]);
-    }
-
     public function testSetHint()
     {
         $entity1 = new DoubleNameEntity(1, 'Foo', null);
@@ -207,8 +181,8 @@ class ProxyQueryTest extends TestCase
         $this->em->flush();
 
         $qb = $this->em->createQueryBuilder()
-                       ->select('o.id')
-                       ->from(self::DOUBLE_NAME_CLASS, 'o');
+            ->select('o.id')
+            ->from(DoubleNameEntity::class, 'o');
 
         $pq = new ProxyQuery($qb);
         $pq->setHint(
@@ -220,29 +194,5 @@ class ProxyQueryTest extends TestCase
         $result = $pq->execute();
 
         $this->assertEquals(2, $result[0]['id']);
-    }
-
-    public function testAddOrderedColumnsCompositeId()
-    {
-        $qb = $this->em->createQueryBuilder()
-            ->select('IDENTITY(o.id1) as id1, IDENTITY(o.id2) as id2')
-            ->distinct()
-            ->from(CompositeIntIdEntity::class, 'o')
-            ->orderBy('o.id1', 'ASC')
-            ->addOrderBy('o.id2', 'ASC');
-
-        $pq = $this->createMock(ProxyQuery::class);
-
-        $reflection = new \ReflectionClass(get_class($pq));
-        $method = $reflection->getMethod('addOrderedColumns');
-        $method->setAccessible(true);
-        $method->invoke($pq, $qb, ['o.id1', 'o.id2']);
-
-        $dqlPart = $qb->getDqlPart('select');
-        $this->assertCount(1, $dqlPart);
-        /** @var Select $select */
-        $select = $dqlPart[0];
-        $this->assertInstanceOf(Select::class, $select);
-        $this->assertEquals('IDENTITY(o.id1) as id1, IDENTITY(o.id2) as id2', $select->getParts()[0]);
     }
 }
