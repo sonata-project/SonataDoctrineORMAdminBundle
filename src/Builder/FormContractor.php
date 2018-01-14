@@ -158,7 +158,7 @@ class FormContractor implements FormContractorInterface
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
+        // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
         } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, [CollectionType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
