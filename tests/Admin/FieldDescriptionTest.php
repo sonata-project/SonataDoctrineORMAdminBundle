@@ -202,6 +202,7 @@ class FieldDescriptionTest extends TestCase
             ->will($this->returnValue('myMethodValue'));
 
         $field = new FieldDescription();
+        $field->setFieldName('any string, but not null');
         $field->setOption('code', 'myMethod');
 
         $this->assertEquals($field->getValue($mockedObject), 'myMethodValue');
@@ -219,6 +220,7 @@ class FieldDescriptionTest extends TestCase
             ->will($this->returnValue('myMethodValue'));
 
         $field = new FieldDescription();
+        $field->setFieldName('any string, but not null');
 
         $this->assertEquals($field->getValue($mockedObject), 'myMethodValue');
     }
