@@ -116,25 +116,25 @@ class ListBuilder implements ListBuilderInterface
                 switch ($fieldDescription->getMappingType()) {
                     case ClassMetadata::MANY_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:list_many_to_one.html.twig'
+                            '@SonataAdmin/CRUD/Association/list_many_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:list_one_to_one.html.twig'
+                            '@SonataAdmin/CRUD/Association/list_one_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:list_one_to_many.html.twig'
+                            '@SonataAdmin/CRUD/Association/list_one_to_many.html.twig'
                         );
 
                         break;
                     case ClassMetadata::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:list_many_to_many.html.twig'
+                            '@SonataAdmin/CRUD/Association/list_many_to_many.html.twig'
                         );
 
                         break;
@@ -158,7 +158,7 @@ class ListBuilder implements ListBuilderInterface
     public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription)
     {
         if (null === $fieldDescription->getTemplate()) {
-            $fieldDescription->setTemplate('SonataAdminBundle:CRUD:list__action.html.twig');
+            $fieldDescription->setTemplate('@SonataAdmin/CRUD/list__action.html.twig');
         }
 
         if (in_array($fieldDescription->getType(), [null, '_action'], true)) {
@@ -177,7 +177,7 @@ class ListBuilder implements ListBuilderInterface
             $actions = $fieldDescription->getOption('actions');
             foreach ($actions as $k => $action) {
                 if (!isset($action['template'])) {
-                    $actions[$k]['template'] = sprintf('SonataAdminBundle:CRUD:list__action_%s.html.twig', $k);
+                    $actions[$k]['template'] = sprintf('@SonataAdmin/CRUD/list__action_%s.html.twig', $k);
                 }
             }
 

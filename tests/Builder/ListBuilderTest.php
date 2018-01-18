@@ -72,7 +72,7 @@ class ListBuilderTest extends TestCase
             ->addField($list, 'actions', $fieldDescription, $this->admin->reveal());
 
         $this->assertSame(
-            'SonataAdminBundle:CRUD:list__action.html.twig',
+            '@SonataAdmin/CRUD/list__action.html.twig',
             $list->get('foo')->getTemplate(),
             'Custom list action field has a default list action template assigned'
         );

@@ -71,7 +71,7 @@ class AuditBlockService extends AbstractBlockService
     {
         $resolver->setDefaults([
             'limit' => 10,
-            'template' => 'SonataDoctrineORMAdminBundle:Block:block_audit.html.twig',
+            'template' => '@SonataDoctrineORMAdmin/Block/block_audit.html.twig',
         ]);
     }
 }
