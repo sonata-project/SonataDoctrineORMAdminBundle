@@ -128,7 +128,7 @@ class ListBuilder implements ListBuilderInterface
                         break;
                     case ClassMetadata::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:list_one_to_many.html.twi'
+                            'SonataAdminBundle:CRUD/Association:list_one_to_many.html.twig'
                         );
 
                         break;
