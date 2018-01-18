@@ -9,7 +9,7 @@ file that was distributed with this source code.
 
 #}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_one_to_many.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/edit_one_to_many.html.twig' %}
 
 {% if not sonata_admin.field_description.hasassociationadmin %}
     {% for element in value %}
@@ -22,11 +22,11 @@ file that was distributed with this source code.
             {% if sonata_admin.edit == 'inline' %}
                 {% if sonata_admin.inline == 'table' %}
                     {% if form.children|length > 0 %}
-                        {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_inline_table.html.twig' %}
+                        {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_to_many_inline_table.html.twig' %}
                     {% endif %}
                 {% elseif form.children|length > 0 %}
                     {% set associationAdmin = sonata_admin.field_description.associationadmin %}
-                    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_inline_tabs.html.twig' %}
+                    {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_to_many_inline_tabs.html.twig' %}
 
                 {% endif %}
             {% else %}
@@ -65,14 +65,14 @@ file that was distributed with this source code.
             {# add code for the sortable options #}
             {% if sonata_admin.field_description.options.sortable is defined %}
                 {% if sonata_admin.inline == 'table' %}
-                    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_sortable_script_table.html.twig' %}
+                    {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_to_many_sortable_script_table.html.twig' %}
                 {% else %}
-                    {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_to_many_sortable_script_tabs.html.twig' %}
+                    {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_to_many_sortable_script_tabs.html.twig' %}
                 {% endif %}
             {% endif %}
 
             {# include association code #}
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_association_script.html.twig' %}
+            {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_association_script.html.twig' %}
 
         {% else %}
             <span id="field_actions_{{ id }}" >
@@ -92,9 +92,9 @@ file that was distributed with this source code.
                 {% endif %}
             </span>
 
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
+            {% include '@SonataDoctrineORMAdmin/CRUD/edit_modal.html.twig' %}
 
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
+            {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_many_association_script.html.twig' %}
         {% endif %}
     </div>
 {% endif %}

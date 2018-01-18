@@ -9,7 +9,7 @@ file that was distributed with this source code.
 
 #}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_many_to_many.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/edit_many_to_many.html.twig' %}
 
 {% if sonata_admin.field_description.hasassociationadmin %}
     <div id="field_container_{{ id }}" class="field-container">
@@ -99,7 +99,7 @@ file that was distributed with this source code.
             {% endif %}
 
             {# include association code #}
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_one_association_script.html.twig' %}
+            {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_one_association_script.html.twig' %}
 
         {% else %}
             <div id="field_container_{{ id }}" class="field-container">
@@ -121,10 +121,10 @@ file that was distributed with this source code.
                     {% endif %}
                 </span>
 
-                {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_modal.html.twig' %}
+                {% include '@SonataDoctrineORMAdmin/CRUD/edit_modal.html.twig' %}
             </div>
 
-            {% include 'SonataDoctrineORMAdminBundle:CRUD:edit_orm_many_association_script.html.twig' %}
+            {% include '@SonataDoctrineORMAdmin/CRUD/edit_orm_many_association_script.html.twig' %}
         {% endif %}
     </div>
 {% endif %}

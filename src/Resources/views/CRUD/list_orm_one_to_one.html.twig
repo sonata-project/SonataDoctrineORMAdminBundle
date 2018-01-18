@@ -11,7 +11,7 @@ file that was distributed with this source code.
 
 {% extends admin.getTemplate('base_list_field') %}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/list_one_to_one.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/list_one_to_one.html.twig' %}
 
 {% block field %}
     {% set route_name = field_description.options.route.name %}

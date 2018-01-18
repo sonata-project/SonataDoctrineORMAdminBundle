@@ -9,9 +9,9 @@ file that was distributed with this source code.
 
 #}
 
-{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/show_one_to_many.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig' %}
 
 {% block field %}
     <ul class="sonata-ba-show-one-to-many">

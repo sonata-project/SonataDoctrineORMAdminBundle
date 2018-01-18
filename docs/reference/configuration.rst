@@ -22,43 +22,43 @@ Full configuration options
 
         templates:
             form:
-                - SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig
+                - "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig"
             filter:
-                - SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig
+                - "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig"
             types:
                 list:
-                    array:      SonataAdminBundle:CRUD:list_array.html.twig
-                    boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
-                    date:       SonataAdminBundle:CRUD:list_date.html.twig
-                    time:       SonataAdminBundle:CRUD:list_time.html.twig
-                    datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
-                    text:       SonataAdminBundle:CRUD:base_list_field.html.twig
-                    trans:      SonataAdminBundle:CRUD:list_trans.html.twig
-                    string:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                    smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
-                    bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                    integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                    decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                    identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
-                    currency:   SonataAdminBundle:CRUD:list_currency.html.twig
-                    percent:    SonataAdminBundle:CRUD:list_percent.html.twig
-                    choice:     SonataAdminBundle:CRUD:list_choice.html.twig
-                    url:        SonataAdminBundle:CRUD:list_url.html.twig
+                    array:      "@SonataAdmin/CRUD/list_array.html.twig"
+                    boolean:    "@SonataAdmin/CRUD/list_boolean.html.twig"
+                    date:       "@SonataAdmin/CRUD/list_date.html.twig"
+                    time:       "@SonataAdmin/CRUD/list_time.html.twig"
+                    datetime:   "@SonataAdmin/CRUD/list_datetime.html.twig"
+                    text:       "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    trans:      "@SonataAdmin/CRUD/list_trans.html.twig"
+                    string:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    smallint:   "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    bigint:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    integer:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    decimal:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    identifier: "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    currency:   "@SonataAdmin/CRUD/list_currency.html.twig"
+                    percent:    "@SonataAdmin/CRUD/list_percent.html.twig"
+                    choice:     "@SonataAdmin/CRUD/list_choice.html.twig"
+                    url:        "@SonataAdmin/CRUD/list_url.html.twig"
 
                 show:
-                    array:      SonataAdminBundle:CRUD:show_array.html.twig
-                    boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
-                    date:       SonataAdminBundle:CRUD:show_date.html.twig
-                    time:       SonataAdminBundle:CRUD:show_time.html.twig
-                    datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
-                    text:       SonataAdminBundle:CRUD:base_show_field.html.twig
-                    trans:      SonataAdminBundle:CRUD:show_trans.html.twig
-                    string:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                    smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
-                    bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                    integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                    decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                    currency:   SonataAdminBundle:CRUD:base_currency.html.twig
-                    percent:    SonataAdminBundle:CRUD:base_percent.html.twig
-                    choice:     SonataAdminBundle:CRUD:show_choice.html.twig
-                    url:        SonataAdminBundle:CRUD:show_url.html.twig
+                    array:      "@SonataAdmin/CRUD/show_array.html.twig"
+                    boolean:    "@SonataAdmin/CRUD/show_boolean.html.twig"
+                    date:       "@SonataAdmin/CRUD/show_date.html.twig"
+                    time:       "@SonataAdmin/CRUD/show_time.html.twig"
+                    datetime:   "@SonataAdmin/CRUD/show_datetime.html.twig"
+                    text:       "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    trans:      "@SonataAdmin/CRUD/show_trans.html.twig"
+                    string:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    smallint:   "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    bigint:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    integer:    "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    decimal:    "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    currency:   "@SonataAdmin/CRUD/base_currency.html.twig"
+                    percent:    "@SonataAdmin/CRUD/base_percent.html.twig"
+                    choice:     "@SonataAdmin/CRUD/show_choice.html.twig"
+                    url:        "@SonataAdmin/CRUD/show_url.html.twig"

@@ -9,9 +9,9 @@ file that was distributed with this source code.
 
 #}
 
-{% extends 'SonataAdminBundle:CRUD:base_show_field.html.twig' %}
+{% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/show_one_to_one.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig' %}
 
 {% block field %}
     {% set route_name = field_description.options.route.name %}

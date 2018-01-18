@@ -11,13 +11,13 @@ You can customize the global layout by tweaking the ``SonataAdminBundle`` config
     sonata_admin:
         templates:
             # default global templates
-            layout:  SonataAdminBundle::standard_layout.html.twig
-            ajax:    SonataAdminBundle::ajax_layout.html.twig
+            layout:  "@SonataAdmin/standard_layout.html.twig"
+            ajax:    "@SonataAdmin/ajax_layout.html.twig"
 
             # default value if done set, actions templates, should extend global templates
-            list:    SonataAdminBundle:CRUD:list.html.twig
-            show:    SonataAdminBundle:CRUD:show.html.twig
-            edit:    SonataAdminBundle:CRUD:edit.html.twig
+            list:    "@SonataAdmin/CRUD/list.html.twig"
+            show:    "@SonataAdmin/CRUD/show.html.twig"
+            edit:    "@SonataAdmin/CRUD/edit.html.twig"
 
 
 You can also configure the templates used by the `Form Framework` while rendering the widget:
@@ -26,8 +26,8 @@ You can also configure the templates used by the `Form Framework` while renderin
 
     sonata_doctrine_orm_admin:
         templates:
-            form: [ SonataDoctrineORMAdminBundle:Form:form_admin_fields.html.twig ]
-            filter: [ SonataDoctrineORMAdminBundle:Form:filter_admin_fields.html.twig ]
+            form: [ "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig" ]
+            filter: [ "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig" ]
 
 
 You can also customize field types by adding types in the ``config.yml`` file. The default values are:
@@ -38,33 +38,33 @@ You can also customize field types by adding types in the ``config.yml`` file. T
         templates:
             types:
                 list:
-                    array:      SonataAdminBundle:CRUD:list_array.html.twig
-                    boolean:    SonataAdminBundle:CRUD:list_boolean.html.twig
-                    date:       SonataAdminBundle:CRUD:list_date.html.twig
-                    time:       SonataAdminBundle:CRUD:list_time.html.twig
-                    datetime:   SonataAdminBundle:CRUD:list_datetime.html.twig
-                    text:       SonataAdminBundle:CRUD:base_list_field.html.twig
-                    trans:      SonataAdminBundle:CRUD:list_trans.html.twig
-                    string:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                    smallint:   SonataAdminBundle:CRUD:base_list_field.html.twig
-                    bigint:     SonataAdminBundle:CRUD:base_list_field.html.twig
-                    integer:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                    decimal:    SonataAdminBundle:CRUD:base_list_field.html.twig
-                    identifier: SonataAdminBundle:CRUD:base_list_field.html.twig
+                    array:      "@SonataAdmin/CRUD/list_array.html.twig"
+                    boolean:    "@SonataAdmin/CRUD/list_boolean.html.twig"
+                    date:       "@SonataAdmin/CRUD/list_date.html.twig"
+                    time:       "@SonataAdmin/CRUD/list_time.html.twig"
+                    datetime:   "@SonataAdmin/CRUD/list_datetime.html.twig"
+                    text:       "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    trans:      "@SonataAdmin/CRUD/list_trans.html.twig"
+                    string:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    smallint:   "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    bigint:     "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    integer:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    decimal:    "@SonataAdmin/CRUD/base_list_field.html.twig"
+                    identifier: "@SonataAdmin/CRUD/base_list_field.html.twig"
 
                 show:
-                    array:      SonataAdminBundle:CRUD:show_array.html.twig
-                    boolean:    SonataAdminBundle:CRUD:show_boolean.html.twig
-                    date:       SonataAdminBundle:CRUD:show_date.html.twig
-                    time:       SonataAdminBundle:CRUD:show_time.html.twig
-                    datetime:   SonataAdminBundle:CRUD:show_datetime.html.twig
-                    text:       SonataAdminBundle:CRUD:base_show_field.html.twig
-                    trans:      SonataAdminBundle:CRUD:show_trans.html.twig
-                    string:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                    smallint:   SonataAdminBundle:CRUD:base_show_field.html.twig
-                    bigint:     SonataAdminBundle:CRUD:base_show_field.html.twig
-                    integer:    SonataAdminBundle:CRUD:base_show_field.html.twig
-                    decimal:    SonataAdminBundle:CRUD:base_show_field.html.twig
+                    array:      "@SonataAdmin/CRUD/show_array.html.twig"
+                    boolean:    "@SonataAdmin/CRUD/show_boolean.html.twig"
+                    date:       "@SonataAdmin/CRUD/show_date.html.twig"
+                    time:       "@SonataAdmin/CRUD/show_time.html.twig"
+                    datetime:   "@SonataAdmin/CRUD/show_datetime.html.twig"
+                    text:       "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    trans:      "@SonataAdmin/CRUD/show_trans.html.twig"
+                    string:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    smallint:   "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    bigint:     "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    integer:    "@SonataAdmin/CRUD/base_show_field.html.twig"
+                    decimal:    "@SonataAdmin/CRUD/base_show_field.html.twig"
 
 .. note::
 
