@@ -2,7 +2,13 @@
     "name": "sonata-project/doctrine-orm-admin-bundle",
     "type": "symfony-bundle",
     "description": "Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle",
-    "keywords": ["Admin Generator", "admin", "sonata", "bootstrap", "generator"],
+    "keywords": [
+        "Admin Generator",
+        "admin",
+        "sonata",
+        "bootstrap",
+        "generator"
+    ],
     "homepage": "https://sonata-project.org/bundles/admin",
     "license": "MIT",
     "authors": [
@@ -29,6 +35,12 @@
         "symfony/security": "^2.8 || ^3.2 || ^4.0",
         "symfony/security-acl": "^2.8 || ^3.0"
     },
+    "conflict": {
+        "simplethings/entity-audit-bundle": ">=2.0"
+    },
+    "provide": {
+        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
+    },
     "require-dev": {
         "knplabs/knp-menu-bundle": "^2.1.1",
         "simplethings/entity-audit-bundle": "0.1 - 0.9 || ^1.0",
@@ -37,24 +49,22 @@
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
-    "provide": {
-        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
-    },
-    "conflict": {
-        "simplethings/entity-audit-bundle": ">=2.0"
-    },
-    "autoload": {
-        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\": "src/" }
-    },
-    "autoload-dev": {
-        "psr-4": { "Sonata\\DoctrineORMAdminBundle\\Tests\\": "tests/" }
-    },
     "config": {
         "sort-packages": true
     },
     "extra": {
         "branch-alias": {
             "dev-master": "3.x-dev"
+        }
+    },
+    "autoload": {
+        "psr-4": {
+            "Sonata\\DoctrineORMAdminBundle\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Sonata\\DoctrineORMAdminBundle\\Tests\\": "tests/"
         }
     }
 }
