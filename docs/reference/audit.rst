@@ -33,8 +33,8 @@ The audit functionality is provided by an optional, separated bundle that you ne
 .. code-block:: bash
 
     php composer.phar require simplethings/entity-audit-bundle
-    
-    
+
+
 Next, be sure to enable the bundle in your `AppKernel.php` file:
 
 .. code-block:: php
@@ -101,6 +101,6 @@ Entity compare
 
 For making a comparison of two revisions, the ``show`` definition will be used for rendering both revisions. All rows where the output of the revisions doesn't match, the row is marked.
 
-The ``SonataAdminBundle:CRUD:base_show_field.html.twig`` accepts an optional parameter ``field_compare`` which should contain a secondary field to compare. When assigned, the ``field`` block will be rendered again with the ``field_compare`` value as input.
+The ``@SonataAdmin/CRUD/base_show_field.html.twig`` accepts an optional parameter ``field_compare`` which should contain a secondary field to compare. When assigned, the ``field`` block will be rendered again with the ``field_compare`` value as input.
 
-This means all show_field views should extend ``SonataAdminBundle:CRUD:base_show_field.html.twig`` and should not contain a ``field_compare`` block, since it will automatically use the ``field`` block of the parent view.
+This means all show_field views should extend ``@SonataAdmin/CRUD/base_show_field.html.twig`` and should not contain a ``field_compare`` block, since it will automatically use the ``field`` block of the parent view.

@@ -16,7 +16,7 @@ This code manage the many-to-[one|many] association field popup
 
 #}
 
-{% sonata_template_deprecate '@SonataAdminBundle/CRUD/Association/edit_many_script.html.twig' %}
+{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/edit_many_script.html.twig' %}
 
 {% autoescape false %}
 
@@ -36,7 +36,7 @@ This code manage the many-to-[one|many] association field popup
         initialize_popup_{{ id }}();
 
         var target = jQuery(this);
-        
+
         if (target.attr('href').length === 0 || target.attr('href') === '#') {
             return;
         }
@@ -381,7 +381,7 @@ This code manage the many-to-[one|many] association field popup
 
         return false;
     }
-    
+
     {#
         This code is used to define the "edit" popup
     #}

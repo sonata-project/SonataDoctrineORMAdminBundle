@@ -94,25 +94,25 @@ class ShowBuilder implements ShowBuilderInterface
                 switch ($fieldDescription->getMappingType()) {
                     case ClassMetadata::MANY_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:show_many_to_one.html.twig'
+                            '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_ONE:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:show_one_to_one.html.twig'
+                            '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig'
                         );
 
                         break;
                     case ClassMetadata::ONE_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:show_one_to_many.html.twig'
+                            '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig'
                         );
 
                         break;
                     case ClassMetadata::MANY_TO_MANY:
                         $fieldDescription->setTemplate(
-                            'SonataAdminBundle:CRUD/Association:show_many_to_many.html.twig'
+                            '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig'
                         );
 
                         break;

@@ -7,7 +7,7 @@
         <service id="sonata.admin_doctrine_orm.block.audit" class="Sonata\DoctrineORMAdminBundle\Block\AuditBlockService">
             <tag name="sonata.block"/>
             <argument>sonata.admin_doctrine_orm.block.audit</argument>
-            <argument type="service" id="templating"/>
+            <argument type="service" id="sonata.templating"/>
             <argument type="service" id="simplethings_entityaudit.reader" on-invalid="ignore"/>
         </service>
     </services>
