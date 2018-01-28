@@ -17,7 +17,7 @@ Use `Composer`:
 
 .. code-block:: bash
 
-    php composer.phar require sonata-project/doctrine-orm-admin-bundle
+    composer require sonata-project/doctrine-orm-admin-bundle
 
 You'll be asked to type in a version constraint. `dev-master` will usually get you the latest, bleeding edge version.
 Check `packagist <https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle>`_ for stable and legacy versions:
@@ -29,7 +29,23 @@ Check `packagist <https://packagist.org/packages/sonata-project/doctrine-orm-adm
 Enable the bundle
 -----------------
 
-Next, be sure to enable the bundle in your `AppKernel.php` file:
+Next, be sure to enable the bundles in your ``bundles.php`` file if they
+are not already enabled:
+
+.. code-block:: php
+
+    <?php
+
+    // config/bundles.php
+
+    return [
+        //...
+        Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle::class => ['all' => true],
+    ];
+
+.. note::
+    If you are not using Symfony Flex, you should enable bundles in your
+    ``AppKernel.php``.
 
 .. code-block:: php
 
