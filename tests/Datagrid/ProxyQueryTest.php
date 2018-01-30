@@ -195,4 +195,36 @@ class ProxyQueryTest extends TestCase
 
         $this->assertEquals(2, $result[0]['id']);
     }
+
+    public function testSortOrderValidatesItsInput()
+    {
+        $query = new ProxyQuery($this->em->createQueryBuilder());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            '"ASC,injection" is not a valid sort order, valid values are "ASC, DESC"'
+        );
+        $query->setSortOrder('ASC,injection');
+    }
+
+    public function validSortOrders()
+    {
+        return [
+            ['ASC'],
+            ['DESC'],
+            ['asc'],
+            ['desc'],
+            ['AsC'],
+            ['deSc'],
+        ];
+    }
+
+    /**
+     * @dataProvider validSortOrders
+     */
+    public function testItAllowsSortOrdersWithStrangeCase($validValue)
+    {
+        $query = new ProxyQuery($this->em->createQueryBuilder());
+        $query->setSortOrder($validValue);
+        $this->assertSame($validValue, $query->getSortOrder());
+    }
 }
