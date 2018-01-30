@@ -150,6 +150,13 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function setSortOrder($sortOrder)
     {
+        if (!in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'])) {
+            throw new \InvalidArgumentException(sprintf(
+                '"%s" is not a valid sort order, valid values are "%s"',
+                $sortOrder,
+                implode(', ', $validSortOrders)
+            ));
+        }
         $this->sortOrder = $sortOrder;
 
         return $this;
