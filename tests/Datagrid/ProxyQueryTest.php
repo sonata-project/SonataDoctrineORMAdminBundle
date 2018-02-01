@@ -19,6 +19,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\Query\Expr\From;
 use Doctrine\ORM\Query\Expr\OrderBy;
 use Doctrine\ORM\QueryBuilder;
@@ -26,6 +27,7 @@ use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
@@ -169,5 +171,62 @@ class ProxyQueryTest extends TestCase
         /* Work */
 
         $pq->execute();
+    }
+
+    public function testSetHint(): void
+    {
+        $entity1 = new DoubleNameEntity(1, 'Foo', null);
+        $entity2 = new DoubleNameEntity(2, 'Bar', null);
+
+        $this->em->persist($entity1);
+        $this->em->persist($entity2);
+        $this->em->flush();
+
+        $qb = $this->em->createQueryBuilder()
+            ->select('o.id')
+            ->from(DoubleNameEntity::class, 'o');
+
+        $pq = new ProxyQuery($qb);
+        $pq->setHint(
+            Query::HINT_CUSTOM_OUTPUT_WALKER,
+            FooWalker::class
+        );
+        $pq->setHint('hint', 'value');
+
+        $result = $pq->execute();
+
+        $this->assertEquals(2, $result[0]['id']);
+    }
+
+    public function testSortOrderValidatesItsInput(): void
+    {
+        $query = new ProxyQuery($this->em->createQueryBuilder());
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage(
+            '"ASC,injection" is not a valid sort order, valid values are "ASC, DESC"'
+        );
+        $query->setSortOrder('ASC,injection');
+    }
+
+    public function validSortOrders()
+    {
+        return [
+            ['ASC'],
+            ['DESC'],
+            ['asc'],
+            ['desc'],
+            ['AsC'],
+            ['deSc'],
+        ];
+    }
+
+    /**
+     * @dataProvider validSortOrders
+     */
+    public function testItAllowsSortOrdersWithStrangeCase($validValue): void
+    {
+        $query = new ProxyQuery($this->em->createQueryBuilder());
+        $query->setSortOrder($validValue);
+        $this->assertSame($validValue, $query->getSortOrder());
     }
 }
