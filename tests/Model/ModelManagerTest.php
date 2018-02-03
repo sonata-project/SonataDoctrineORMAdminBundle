@@ -28,6 +28,7 @@ use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
@@ -479,6 +480,11 @@ class ModelManagerTest extends TestCase
         $registry = $this->getMockBuilder(RegistryInterface::class)->getMock();
         $manager = new ModelManager($registry);
         $manager->getDataSourceIterator($datagrid, []);
+
+        if ($isAddOrderBy) {
+            $this->assertArrayHasKey($key = 'doctrine.customTreeWalkers', $hints = $query->getHints());
+            $this->assertContains(OrderByToSelectWalker::class, $hints[$key]);
+        }
     }
 
     public function testModelReverseTransform()
