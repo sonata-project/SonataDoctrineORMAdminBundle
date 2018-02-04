@@ -27,6 +27,7 @@ class ClassFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
+        $filter->filter($builder, 'alias', 'field', ['value' => '']);
 
         $this->assertEquals([], $builder->query);
         $this->assertFalse($filter->isActive());
