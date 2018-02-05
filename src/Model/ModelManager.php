@@ -20,6 +20,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Exporter\Source\DoctrineORMQuerySourceIterator;
@@ -31,6 +32,7 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
@@ -473,9 +475,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
             if (!empty($sortBy)) {
                 $query->addOrderBy($sortBy, $query->getSortOrder());
+                $query = $query->getQuery();
+                $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
+            } else {
+                $query = $query->getQuery();
             }
-
-            $query = $query->getQuery();
         }
 
         return new DoctrineORMQuerySourceIterator($query, $fields);
