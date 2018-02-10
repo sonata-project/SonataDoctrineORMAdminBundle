@@ -51,7 +51,7 @@
         "knplabs/knp-menu-bundle": "^2.1.1",
         "simplethings/entity-audit-bundle": "0.1 - 0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.11",
-        "symfony/phpunit-bridge": "^3.3 || ^4.0"
+        "symfony/phpunit-bridge": "^4.0"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
