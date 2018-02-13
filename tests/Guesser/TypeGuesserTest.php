@@ -16,41 +16,22 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
-use Sonata\CoreBundle\Form\Type\BooleanType;
-use Sonata\CoreBundle\Form\Type\EqualType;
-use Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser;
-use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
+use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
-use Symfony\Bridge\Doctrine\Form\Type\EntityType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
 
-class FilterTypeGuesserTest extends TestCase
+/**
+ * @author Marko Kunic <kunicmarko20@gmail.com>
+ */
+class TypeGuesserTest extends TestCase
 {
-    private $guesser;
     private $modelManager;
-    private $metadata;
+    private $guesser;
 
-    protected function setUp(): void
+    public function setUp(): void
     {
-        $this->guesser = new FilterTypeGuesser();
         $this->modelManager = $this->prophesize(ModelManager::class);
-        $this->metadata = $this->prophesize(ClassMetadata::class);
-    }
-
-    public function testThrowsOnMissingField(): void
-    {
-        $this->expectException(MissingPropertyMetadataException::class);
-
-        $class = 'My\Model';
-        $property = 'whatever';
-        $this->modelManager->getParentMetadataForProperty($class, $property)->willReturn([
-            $this->metadata->reveal(),
-            $property,
-            'parent mappings, no idea what it looks like',
-        ]);
-        $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->guesser = new TypeGuesser();
     }
 
     public function testGuessTypeNoMetadata(): void
@@ -62,51 +43,62 @@ class FilterTypeGuesserTest extends TestCase
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
 
-        $this->assertFalse($result);
+        $this->assertSame('text', $result->getType());
+        $this->assertSame(Guess::LOW_CONFIDENCE, $result->getConfidence());
     }
 
-    public function testGuessTypeWithAssociation(): void
+    /**
+     * @dataProvider associationData
+     */
+    public function testGuessTypeWithAssociation($mappingType, $type): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
         $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(true);
         $classMetadata->getAssociationMapping($property)
-            ->willReturn([
-                'type' => ClassMetadata::MANY_TO_ONE,
-                'targetEntity' => $targetEntity = 'FakeEntity',
-                'fieldName' => $fieldName = 'fakeName',
-            ]);
+            ->willReturn(['type' => $mappingType]);
 
         $this->modelManager->getParentMetadataForProperty(
             $class = 'FakeClass',
             $property
-        )->willReturn([$classMetadata, $property, $parentAssociation = 'parentAssociation']);
+        )->willReturn([$classMetadata, $property, 'notUsed']);
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
 
-        $options = $result->getOptions();
-
-        $this->assertSame('doctrine_orm_model', $result->getType());
+        $this->assertSame($type, $result->getType());
         $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
-        $this->assertSame($parentAssociation, $options['parent_association_mappings']);
-        $this->assertSame(ClassMetadata::MANY_TO_ONE, $options['mapping_type']);
-        $this->assertSame(EqualType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
-        $this->assertSame($fieldName, $options['field_name']);
-        $this->assertSame(EntityType::class, $options['field_type']);
-        $this->assertSame($targetEntity, $options['field_options']['class']);
+    }
+
+    public function associationData(): array
+    {
+        return [
+            'many-to-one' => [
+                ClassMetadata::MANY_TO_ONE,
+                'orm_many_to_one',
+            ],
+            'one-to-many' => [
+                ClassMetadata::ONE_TO_MANY,
+                'orm_one_to_many',
+            ],
+            'one-to-one' => [
+                ClassMetadata::ONE_TO_ONE,
+                'orm_one_to_one',
+            ],
+            'many-to-many' => [
+                ClassMetadata::MANY_TO_MANY,
+                'orm_many_to_many',
+            ],
+        ];
     }
 
     /**
      * @dataProvider noAssociationData
      */
-    public function testGuessTypeNoAssociation($type, $resultType, $confidence, $fieldType = null): void
+    public function testGuessTypeNoAssociation($type, $resultType, $confidence): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
         $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(false);
-
-        $classMetadata->fieldMappings = [$property => ['fieldName' => $type]];
         $classMetadata->getTypeOfField($property)->willReturn($type);
 
         $this->modelManager->getParentMetadataForProperty(
@@ -116,98 +108,91 @@ class FilterTypeGuesserTest extends TestCase
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
 
-        $options = $result->getOptions();
-
         $this->assertSame($resultType, $result->getType());
-        $this->assertSame($type, $options['field_name']);
         $this->assertSame($confidence, $result->getConfidence());
-        $this->assertSame([], $options['options']);
-        $this->assertSame([], $options['field_options']);
-
-        if ($fieldType) {
-            $this->assertSame($fieldType, $options['field_type']);
-        }
     }
 
     public function noAssociationData(): array
     {
         return [
-            'boolean' => [
-                'boolean',
-                'doctrine_orm_boolean',
+            'array' => [
+                $array = 'array',
+                $array,
                 Guess::HIGH_CONFIDENCE,
-                BooleanType::class,
+            ],
+            'json' => [
+                'json',
+                $array,
+                Guess::HIGH_CONFIDENCE,
+            ],
+            'boolean' => [
+                $boolean = 'boolean',
+                $boolean,
+                Guess::HIGH_CONFIDENCE,
             ],
             'datetime' => [
-                'datetime',
-                $datetimeType = 'doctrine_orm_datetime',
+                $datetime = 'datetime',
+                $datetime,
                 Guess::HIGH_CONFIDENCE,
             ],
             'vardatetime' => [
                 'vardatetime',
-                $datetimeType,
+                $datetime,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz' => [
                 'datetimetz',
-                $datetimeType,
+                $datetime,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date' => [
-                'date',
-                'doctrine_orm_date',
+                $date = 'date',
+                $date,
                 Guess::HIGH_CONFIDENCE,
             ],
             'decimal' => [
                 'decimal',
-                $numberType = 'doctrine_orm_number',
+                $number = 'number',
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'float' => [
                 'float',
-                $numberType,
+                $number,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'integer' => [
-                'integer',
-                $numberType,
+                $integer = 'integer',
+                $integer,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'bigint' => [
                 'bigint',
-                $numberType,
+                $integer,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'smallint' => [
                 'smallint',
-                $numberType,
+                $integer,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'string' => [
                 'string',
-                $stringType = 'doctrine_orm_string',
+                $text = 'text',
                 Guess::MEDIUM_CONFIDENCE,
-                TextType::class,
             ],
             'text' => [
                 'text',
-                $stringType,
+                'textarea',
                 Guess::MEDIUM_CONFIDENCE,
-                TextType::class,
             ],
             'time' => [
-                'time',
-                'doctrine_orm_time',
+                $time = 'time',
+                $time,
                 Guess::HIGH_CONFIDENCE,
             ],
             'somefake' => [
                 'somefake',
-                $stringType,
+                $text,
                 Guess::LOW_CONFIDENCE,
             ],
         ];

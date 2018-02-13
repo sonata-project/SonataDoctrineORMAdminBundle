@@ -30,12 +30,13 @@ class SonataDoctrineORMAdminExtensionTest extends TestCase
     public function testEntityManagerSetFactory(): void
     {
         $this->configuration = new ContainerBuilder();
-        $this->configuration->setParameter('kernel.bundles', []);
+        $this->configuration->setParameter('kernel.bundles', ['SimpleThingsEntityAuditBundle' => true]);
         $loader = new SonataDoctrineORMAdminExtension();
         $loader->load([], $this->configuration);
 
         $definition = $this->configuration->getDefinition('sonata.admin.entity_manager');
 
         $this->assertNotNull($definition->getFactory());
+        $this->assertNotFalse($this->configuration->getParameter('sonata_doctrine_orm_admin.audit.force'));
     }
 }

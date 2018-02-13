@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
+use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
@@ -29,11 +31,14 @@ use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Exception\LockException;
+use Sonata\AdminBundle\Exception\ModelManagerException;
+use Sonata\AdminBundle\Filter\FilterInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
@@ -108,7 +113,7 @@ class ModelManagerTest extends TestCase
         $this->assertEquals('field3sortBy', $parameters['filter']['_sort_by']);
     }
 
-    public function getVersionDataProvider()
+    public function getVersionDataProvider(): array
     {
         return [
             [true],
@@ -143,7 +148,7 @@ class ModelManagerTest extends TestCase
         }
     }
 
-    public function lockDataProvider()
+    public function lockDataProvider(): array
     {
         return [
             [true,  false],
@@ -202,8 +207,6 @@ class ModelManagerTest extends TestCase
         $associatedEntityClass = AssociatedEntity::class;
         $embeddedEntityClass = EmbeddedEntity::class;
         $modelManagerClass = ModelManager::class;
-
-        $object = new ContainerEntity(new AssociatedEntity(null, new EmbeddedEntity()), new EmbeddedEntity());
 
         $em = $this->createMock(EntityManager::class);
 
@@ -413,7 +416,7 @@ class ModelManagerTest extends TestCase
      *
      * @return array
      */
-    public function getSortableInDataSourceIteratorDataProvider()
+    public function getSortableInDataSourceIteratorDataProvider(): array
     {
         return [
             [null, null, false],
@@ -522,6 +525,217 @@ class ModelManagerTest extends TestCase
         ));
         $this->assertSame(42, $object->getSchmeckles());
         $this->assertSame('hello', $object->getMultiWordProperty());
+    }
+
+    public function testCollections(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+        $model = new ModelManager($registry);
+
+        $collection = $model->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
+        $this->assertInstanceOf(ArrayCollection::class, $collection);
+
+        $item1 = 'item1';
+        $item2 = 'item2';
+        $model->collectionAddElement($collection, $item1);
+        $model->collectionAddElement($collection, $item2);
+
+        $this->assertTrue($model->collectionHasElement($collection, $item1));
+
+        $model->collectionRemoveElement($collection, $item1);
+
+        $this->assertFalse($model->collectionHasElement($collection, $item1));
+
+        $model->collectionClear($collection);
+
+        $this->assertTrue($collection->isEmpty());
+    }
+
+    public function testModelTransform(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+        $model = new ModelManager($registry);
+
+        $result = $model->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
+
+        $this->assertSame('doWeNeedThisMethod', $result);
+    }
+
+    public function testGetPaginationParameters(): void
+    {
+        $datagrid = $this->createMock(DatagridInterface::class);
+        $filter = $this->createMock(FilterInterface::class);
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $datagrid->expects($this->once())
+            ->method('getValues')
+            ->willReturn(['_sort_by' => $filter]);
+
+        $filter->expects($this->once())
+            ->method('getName')
+            ->willReturn($name = 'test');
+
+        $model = new ModelManager($registry);
+
+        $result = $model->getPaginationParameters($datagrid, $page = 5);
+
+        $this->assertSame($page, $result['filter']['_page']);
+        $this->assertSame($name, $result['filter']['_sort_by']);
+    }
+
+    public function testGetModelInstanceException(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(\RuntimeException::class);
+
+        $model->getModelInstance(AbstractEntity::class);
+    }
+
+    public function testGetEntityManagerException(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(\RuntimeException::class);
+
+        $model->getEntityManager(VersionedEntity::class);
+    }
+
+    public function testGetNewFieldDescriptionInstanceException(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(\RuntimeException::class);
+
+        $model->getNewFieldDescriptionInstance(VersionedEntity::class, [], []);
+    }
+
+    /**
+     * @dataProvider createUpdateRemoveData
+     */
+    public function testCreate($exception): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $entityManger = $this->createMock(EntityManager::class);
+
+        $registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManger);
+
+        $entityManger->expects($this->once())
+            ->method('persist');
+
+        $entityManger->expects($this->once())
+            ->method('flush')
+            ->willThrowException($exception);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(ModelManagerException::class);
+
+        $model->create(new VersionedEntity());
+    }
+
+    public function createUpdateRemoveData(): array
+    {
+        return [
+            'PDOException' => [
+                new \PDOException(),
+            ],
+            'DBALException' => [
+                new DBALException(),
+            ],
+        ];
+    }
+
+    /**
+     * @dataProvider createUpdateRemoveData
+     */
+    public function testUpdate($exception): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $entityManger = $this->createMock(EntityManager::class);
+
+        $registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManger);
+
+        $entityManger->expects($this->once())
+            ->method('persist');
+
+        $entityManger->expects($this->once())
+            ->method('flush')
+            ->willThrowException($exception);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(ModelManagerException::class);
+
+        $model->update(new VersionedEntity());
+    }
+
+    /**
+     * @dataProvider createUpdateRemoveData
+     */
+    public function testRemove($exception): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $entityManger = $this->createMock(EntityManager::class);
+
+        $registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->willReturn($entityManger);
+
+        $entityManger->expects($this->once())
+            ->method('remove');
+
+        $entityManger->expects($this->once())
+            ->method('flush')
+            ->willThrowException($exception);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(ModelManagerException::class);
+
+        $model->delete(new VersionedEntity());
+    }
+
+    public function testFindBadId(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->assertNull($model->find('notImportant', null));
+    }
+
+    public function testGetUrlsafeIdentifierException(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->expectException(\RuntimeException::class);
+
+        $model->getNormalizedIdentifier('test');
+    }
+
+    public function testGetUrlsafeIdentifierNull(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->assertNull($model->getNormalizedIdentifier(null));
     }
 
     private function getMetadata($class, $isVersioned)

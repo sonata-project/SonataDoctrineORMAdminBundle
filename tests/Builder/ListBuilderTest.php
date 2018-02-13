@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
@@ -26,41 +26,25 @@ use Symfony\Component\Form\Guess\TypeGuess;
 
 /**
  * @author Andrew Mor-Yaroslavtsev <andrejs@gmail.com>
+ * @author Marko Kunic <kunicmarko20@gmail.com>
  */
 class ListBuilderTest extends TestCase
 {
-    /**
-     * @var TypeGuesserInterface|\Prophecy\Prophecy\ObjectProphecy
-     */
-    protected $typeGuesser;
-
-    /**
-     * @var ListBuilder
-     */
-    protected $listBuilder;
-
-    /**
-     * @var AdminInterface|\Prophecy\Prophecy\ObjectProphecy
-     */
-    protected $admin;
-
-    /**
-     * @var ModelManager|\Prophecy\Prophecy\ObjectProphecy
-     */
-    protected $modelManager;
+    private $typeGuesser;
+    private $listBuilder;
+    private $admin;
+    private $modelManager;
 
     protected function setUp(): void
     {
         $this->typeGuesser = $this->prophesize(TypeGuesserInterface::class);
 
         $this->modelManager = $this->prophesize(ModelManager::class);
-        $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
 
-        $this->admin = $this->prophesize(AbstractAdmin::class);
+        $this->admin = $this->prophesize(AdminInterface::class);
         $this->admin->getClass()->willReturn('Foo');
         $this->admin->getModelManager()->willReturn($this->modelManager);
-        $this->admin->addListFieldDescription(Argument::any(), Argument::any())
-            ->willReturn();
+        $this->admin->addListFieldDescription(Argument::cetera())->willReturn();
 
         $this->listBuilder = new ListBuilder($this->typeGuesser->reveal());
     }
@@ -82,14 +66,12 @@ class ListBuilderTest extends TestCase
 
     public function testCorrectFixedActionsFieldType(): void
     {
-        $this->typeGuesser->guessType(
-            Argument::any(), Argument::any(), Argument::any()
-        )->willReturn(
-            new TypeGuess('_action', [], Guess::LOW_CONFIDENCE)
-        );
+        $this->typeGuesser->guessType(Argument::cetera())
+            ->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('_action');
+        $fieldDescription->setOption('actions', ['test' => []]);
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, null, $fieldDescription, $this->admin->reveal());
 
@@ -98,5 +80,64 @@ class ListBuilderTest extends TestCase
             $list->get('_action')->getType(),
             'Standard list _action field has "actions" type'
         );
+
+        $this->assertSame(
+            '@SonataAdmin/CRUD/list__action_test.html.twig',
+            $fieldDescription->getOption('actions')['test']['template']
+        );
+    }
+
+    /**
+     * @dataProvider fixFieldDescriptionData
+     */
+    public function testFixFieldDescription($type, $template): void
+    {
+        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
+        $fieldDescription = new FieldDescription();
+        $fieldDescription->setName('test');
+        $fieldDescription->setOption('sortable', true);
+        $fieldDescription->setType('fakeType');
+        $fieldDescription->setMappingType($type);
+
+        $this->admin->attachAdminClass(Argument::any())->shouldBeCalledTimes(1);
+
+        $classMetadata->fieldMappings = [2 => [1 => 'test', 'type' => 'string']];
+        $this->modelManager->getParentMetadataForProperty(Argument::cetera())
+            ->willReturn([$classMetadata, 2, $parentAssociationMapping = []]);
+
+        $classMetadata->associationMappings = [2 => ['fieldName' => 'fake']];
+
+        $this->listBuilder->fixFieldDescription($this->admin->reveal(), $fieldDescription);
+
+        $this->assertSame($template, $fieldDescription->getTemplate());
+    }
+
+    public function fixFieldDescriptionData(): array
+    {
+        return [
+            'one-to-one' => [
+                ClassMetadata::ONE_TO_ONE,
+                '@SonataAdmin/CRUD/Association/list_one_to_one.html.twig',
+            ],
+            'many-to-one' => [
+                ClassMetadata::MANY_TO_ONE,
+                '@SonataAdmin/CRUD/Association/list_many_to_one.html.twig',
+            ],
+            'one-to-many' => [
+                ClassMetadata::ONE_TO_MANY,
+                '@SonataAdmin/CRUD/Association/list_one_to_many.html.twig',
+            ],
+            'many-to-many' => [
+                ClassMetadata::MANY_TO_MANY,
+                '@SonataAdmin/CRUD/Association/list_many_to_many.html.twig',
+            ],
+        ];
+    }
+
+    public function testFixFieldDescriptionException(): void
+    {
+        $this->expectException(\RuntimeException::class);
+        $this->listBuilder->fixFieldDescription($this->admin->reveal(), new FieldDescription());
     }
 }
