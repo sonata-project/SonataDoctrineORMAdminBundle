@@ -69,23 +69,49 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setAdmin($admin);
 
         if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
-            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
+            list($metadata, $lastPropertyName, $parentAssociationMappings) = $admin->getModelManager()
+                ->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
 
             // set the default field mapping
             if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $metadata->fieldMappings[$lastPropertyName]));
+                $fieldDescription->setOption(
+                    'field_mapping',
+                    $fieldDescription->getOption(
+                        'field_mapping',
+                        $fieldMapping = $metadata->fieldMappings[$lastPropertyName]
+                    )
+                );
 
-                if ($metadata->fieldMappings[$lastPropertyName]['type'] == 'string') {
+                if ('string' == $fieldMapping['type']) {
                     $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
+                }
+
+                if (!empty($embeddedClasses = $metadata->embeddedClasses)
+                    && isset($fieldMapping['declaredField'])
+                    && array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
+                ) {
+                    $fieldDescription->setOption(
+                        'field_name',
+                        $fieldMapping['fieldName']
+                    );
                 }
             }
 
             // set the default association mapping
             if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $metadata->associationMappings[$lastPropertyName]));
+                $fieldDescription->setOption(
+                    'association_mapping',
+                    $fieldDescription->getOption(
+                        'association_mapping',
+                        $metadata->associationMappings[$lastPropertyName]
+                    )
+                );
             }
 
-            $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings));
+            $fieldDescription->setOption(
+                'parent_association_mappings',
+                $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings)
+            );
         }
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));

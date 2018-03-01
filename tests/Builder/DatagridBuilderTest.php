@@ -127,11 +127,18 @@ final class DatagridBuilderTest extends TestCase
         $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
 
         $this->modelManager->getParentMetadataForProperty(Argument::cetera())
-            ->willReturn([$classMetadata, 2, $parentAssociationMapping = []])
+            ->willReturn([$classMetadata, 'someField', $parentAssociationMapping = []])
             ->shouldBeCalledTimes(1);
 
-        $classMetadata->fieldMappings = [2 => [1 => 'test', 'type' => 'string']];
-        $classMetadata->associationMappings = [2 => ['fieldName' => 'fakeField']];
+        $classMetadata->fieldMappings = [
+            'someField' => [
+                'type' => 'string',
+                'declaredField' => 'someFieldDeclared',
+                'fieldName' => 'fakeField',
+            ],
+        ];
+        $classMetadata->associationMappings = ['someField' => ['fieldName' => 'fakeField']];
+        $classMetadata->embeddedClasses = ['someFieldDeclared' => ['fieldName' => 'fakeField']];
 
         $this->datagridBuilder->fixFieldDescription($this->admin->reveal(), $fieldDescription);
     }
