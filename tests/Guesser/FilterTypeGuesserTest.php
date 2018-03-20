@@ -141,6 +141,11 @@ class FilterTypeGuesserTest extends TestCase
                 $datetimeType = 'doctrine_orm_datetime',
                 Guess::HIGH_CONFIDENCE,
             ],
+            'datetime_immutable' => [
+                'datetime_immutable',
+                $datetimeType,
+                Guess::HIGH_CONFIDENCE,
+            ],
             'vardatetime' => [
                 'vardatetime',
                 $datetimeType,
@@ -151,9 +156,19 @@ class FilterTypeGuesserTest extends TestCase
                 $datetimeType,
                 Guess::HIGH_CONFIDENCE,
             ],
+            'datetimetz_immutable' => [
+                'datetimetz_immutable',
+                $datetimeType,
+                Guess::HIGH_CONFIDENCE,
+            ],
             'date' => [
                 'date',
-                'doctrine_orm_date',
+                $dateType = 'doctrine_orm_date',
+                Guess::HIGH_CONFIDENCE,
+            ],
+            'date_immutable' => [
+                'date_immutable',
+                $dateType,
                 Guess::HIGH_CONFIDENCE,
             ],
             'decimal' => [
@@ -200,7 +215,12 @@ class FilterTypeGuesserTest extends TestCase
             ],
             'time' => [
                 'time',
-                'doctrine_orm_time',
+                $timeType = 'doctrine_orm_time',
+                Guess::HIGH_CONFIDENCE,
+            ],
+            'time_immutable' => [
+                'time_immutable',
+                $timeType,
                 Guess::HIGH_CONFIDENCE,
             ],
             'somefake' => [

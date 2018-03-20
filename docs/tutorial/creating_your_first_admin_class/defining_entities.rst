@@ -104,6 +104,11 @@ Post
         protected $created_at;
 
         /**
+         * @ORM\Column(type="datetime_immutable")
+         */
+        protected $updated_at;
+
+        /**
          * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
          */
         protected $comments;
