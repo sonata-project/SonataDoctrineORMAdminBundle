@@ -74,10 +74,13 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
                 return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':
+            case 'datetime_immutable':
             case 'vardatetime':
             case 'datetimetz':
+            case 'datetimetz_immutable':
                 return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
             case 'date':
+            case 'date_immutable':
                 return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
@@ -93,6 +96,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
                 return new TypeGuess('doctrine_orm_string', $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':
+            case 'time_immutable':
                 return new TypeGuess('doctrine_orm_time', $options, Guess::HIGH_CONFIDENCE);
             default:
                 return new TypeGuess('doctrine_orm_string', $options, Guess::LOW_CONFIDENCE);
