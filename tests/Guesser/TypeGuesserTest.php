@@ -135,6 +135,11 @@ class TypeGuesserTest extends TestCase
                 $datetime,
                 Guess::HIGH_CONFIDENCE,
             ],
+            'datetime_immutable' => [
+                'datetime_immutable',
+                $datetime,
+                Guess::HIGH_CONFIDENCE,
+            ],
             'vardatetime' => [
                 'vardatetime',
                 $datetime,
@@ -145,8 +150,18 @@ class TypeGuesserTest extends TestCase
                 $datetime,
                 Guess::HIGH_CONFIDENCE,
             ],
+            'datetimetz_immutable' => [
+                'datetimetz_immutable',
+                $datetime,
+                Guess::HIGH_CONFIDENCE,
+            ],
             'date' => [
                 $date = 'date',
+                $date,
+                Guess::HIGH_CONFIDENCE,
+            ],
+            'date_immutable' => [
+                'date_immutable',
                 $date,
                 Guess::HIGH_CONFIDENCE,
             ],
@@ -187,6 +202,11 @@ class TypeGuesserTest extends TestCase
             ],
             'time' => [
                 $time = 'time',
+                $time,
+                Guess::HIGH_CONFIDENCE,
+            ],
+            'time_immutable' => [
+                'time_immutable',
                 $time,
                 Guess::HIGH_CONFIDENCE,
             ],
