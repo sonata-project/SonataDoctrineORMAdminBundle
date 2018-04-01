@@ -49,6 +49,7 @@ class TypeGuesser extends AbstractTypeGuesser
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'array':
             case 'json':
+            case 'json_array':
                 return new TypeGuess('array', [], Guess::HIGH_CONFIDENCE);
             case 'boolean':
                 return new TypeGuess('boolean', [], Guess::HIGH_CONFIDENCE);
