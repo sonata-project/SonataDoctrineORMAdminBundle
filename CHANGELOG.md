@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.4.2...3.5.0) - 2018-04-09
+### Added
+- Support for "datetime_immutable", "datetimetz_immutable", "date_immutable" and "time_immutable" Doctrine types at `TypeGuesser::guessType()` and `FilterTypeGuesser::guessType()`.
+- Added json_array to type guesser
+
+### Changed
+- Added doctrine/doctrine-bundle to composer.json
+
+### Fixed
+- embedded fields not working as filters
+- "nl2br() expects parameter 1 to be string, object given" error caused at `base_show_field.html.twig`.
+
 ## [3.4.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.4.1...3.4.2) - 2018-02-08
 ### Changed
 - Switch all templates references to Twig namespaced syntax
