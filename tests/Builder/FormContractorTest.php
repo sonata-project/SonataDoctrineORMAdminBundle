@@ -66,6 +66,7 @@ final class FormContractorTest extends TestCase
     {
         $admin = $this->createMock(AdminInterface::class);
         $modelManager = $this->createMock(ModelManagerInterface::class);
+        $model = $this->createMock(\stdClass::class);
         $modelClass = 'FooEntity';
 
         $admin->method('getModelManager')->willReturn($modelManager);
@@ -75,6 +76,7 @@ final class FormContractorTest extends TestCase
         $fieldDescription->method('getAdmin')->willReturn($admin);
         $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
+        $admin->method('getNewInstance')->willReturn($model);
 
         $modelTypes = [];
         $classTypes = [
@@ -134,6 +136,7 @@ final class FormContractorTest extends TestCase
             $this->assertSame($modelClass, $options['data_class']);
             $this->assertFalse($options['btn_add']);
             $this->assertFalse($options['delete']);
+            $this->assertSame($model, $options['empty_data']());
         }
 
         // collection type
@@ -145,6 +148,7 @@ final class FormContractorTest extends TestCase
             $this->assertTrue($options['modifiable']);
             $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
             $this->assertSame($modelClass, $options['type_options']['data_class']);
+            $this->assertSame($model, $options['type_options']['empty_data']());
         }
     }
 

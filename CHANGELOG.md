@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.5.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.5.0...3.5.1) - 2018-04-10
+### Fixed
+- Now it is possible to use entities with arguments on the constructor on the Collection and Admin types.
+
 ## [3.5.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.4.2...3.5.0) - 2018-04-09
 ### Added
 - Support for "datetime_immutable", "datetimetz_immutable", "date_immutable" and "time_immutable" Doctrine types at `TypeGuesser::guessType()` and `FilterTypeGuesser::guessType()`.

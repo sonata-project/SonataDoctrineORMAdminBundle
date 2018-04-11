@@ -159,6 +159,9 @@ class FormContractor implements FormContractorInterface
             $options['delete'] = false;
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
+            $options['empty_data'] = function () use ($fieldDescription) {
+                return $fieldDescription->getAssociationAdmin()->getNewInstance();
+            };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
         // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
         } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, [CollectionType::class])) {
@@ -176,6 +179,9 @@ class FormContractor implements FormContractorInterface
             $options['type_options'] = [
                 'sonata_field_description' => $fieldDescription,
                 'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
+                'empty_data' => function () use ($fieldDescription) {
+                    return $fieldDescription->getAssociationAdmin()->getNewInstance();
+                },
             ];
         }
 
