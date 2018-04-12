@@ -72,21 +72,17 @@ class ProxyQueryTest extends TestCase
     public function dataGetFixedQueryBuilder()
     {
         return [
-            ['aaa', 'bbb', 'id', 'id_idx', 33, Type::INTEGER],
-            ['aaa', 'bbb', 'associatedId', 'associatedId_idx', 33, null],
-            ['aaa', 'bbb', 'id.value', 'id_value_idx', 33, Type::INTEGER],
-            ['aaa', 'bbb', 'id.uuid', 'id_uuid_idx', new NonIntegerIdentifierTestClass('80fb6f91-bba1-4d35-b3d4-e06b24494e85'), UuidType::NAME],
+            ['aaa', 'bbb', 'id', 'id_idx', 33, Type::INTEGER, true],
+            ['aaa', 'bbb', 'associatedId', 'associatedId_idx', 33, null, true],
+            ['aaa', 'bbb', 'id.value', 'id_value_idx', 33, Type::INTEGER, false],
+            ['aaa', 'bbb', 'id.uuid', 'id_uuid_idx', new NonIntegerIdentifierTestClass('80fb6f91-bba1-4d35-b3d4-e06b24494e85'), UuidType::NAME, false],
         ];
     }
 
     /**
      * @dataProvider dataGetFixedQueryBuilder
-     *
-     * @param $class
-     * @param $alias
-     * @param $id
      */
-    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType)
+    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType, $distinct)
     {
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
@@ -132,6 +128,9 @@ class ProxyQueryTest extends TestCase
         $qb = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
             ->getMock();
+        $qb->expects($this->once())
+            ->method('distinct')
+            ->with($this->equalTo($distinct));
         $qb->expects($this->any())
             ->method('getEntityManager')
             ->willReturn($em);
@@ -166,8 +165,9 @@ class ProxyQueryTest extends TestCase
             ->setMethods(['a'])
             ->getMock();
 
-        /* Work */
+        $pq->setDistinct($distinct);
 
+        /* Work */
         $pq->execute();
     }
 
