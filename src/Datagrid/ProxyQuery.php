@@ -48,6 +48,13 @@ class ProxyQuery implements ProxyQueryInterface
     protected $entityJoinAliases;
 
     /**
+     * For BC reasons, this property is true by default.
+     *
+     * @var bool
+     */
+    private $distinct = true;
+
+    /**
      * The map of query hints.
      *
      * @var array<string,mixed>
@@ -77,6 +84,33 @@ class ProxyQuery implements ProxyQueryInterface
     public function __clone()
     {
         $this->queryBuilder = clone $this->queryBuilder;
+    }
+
+    /**
+     * Optimize queries with a lot of rows.
+     * It is not recommended to use "false" with left joins.
+     *
+     * @param bool $distinct
+     *
+     * @return self
+     */
+    final public function setDistinct($distinct)
+    {
+        if (!is_bool($distinct)) {
+            throw new \InvalidArgumentException('$distinct is not a boolean');
+        }
+
+        $this->distinct = $distinct;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    final public function isDistinct()
+    {
+        return $this->distinct;
     }
 
     public function execute(array $params = [], $hydrationMode = null)
@@ -300,7 +334,7 @@ class ProxyQuery implements ProxyQueryInterface
             $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
         }
         $queryBuilderId->select($idxSelect);
-        $queryBuilderId->distinct();
+        $queryBuilderId->distinct($this->isDistinct());
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
         /* Consider
