@@ -81,10 +81,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $nameElements = explode('.', $propertyFullName);
         $lastPropertyName = array_pop($nameElements);
-        $propertyName = $lastPropertyName;
         $class = $baseClass;
         $parentAssociationMappings = [];
-        $parentEmbeddedMappings = [];
 
         foreach ($nameElements as $nameElement) {
             $metadata = $this->getMetadata($class);
@@ -92,28 +90,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
             if (isset($metadata->associationMappings[$nameElement])) {
                 $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
                 $class = $metadata->getAssociationTargetClass($nameElement);
-            } elseif (isset($metadata->embeddedClasses[$nameElement])) {
-                $parentEmbeddedMappings[] = [
-                    'class' => $class,
-                    'field' => $nameElement,
-                ];
-                $class = $metadata->embeddedClasses[$nameElement]['class'];
+
+                continue;
             }
+
+            break;
         }
 
-        // Support for multi-level embedded properties
-        if (!empty($parentEmbeddedMappings)) {
-            $baseEmbeddedMapping = current($parentEmbeddedMappings);
-            $class = $baseEmbeddedMapping['class'];
+        $properties = array_slice($nameElements, count($parentAssociationMappings));
+        $properties[] = $lastPropertyName;
 
-            $propertyName = '';
-            foreach ($parentEmbeddedMappings as $embeddedMapping) {
-                $propertyName .= $embeddedMapping['field'].'.';
-            }
-            $propertyName .= $lastPropertyName;
-        }
-
-        return [$this->getMetadata($class), $propertyName, $parentAssociationMappings];
+        return [$this->getMetadata($class), implode('.', $properties), $parentAssociationMappings];
     }
 
     /**
