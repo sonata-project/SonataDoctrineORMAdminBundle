@@ -13,7 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
@@ -38,13 +40,14 @@ class Pager extends BasePager
             $countQuery->setParameters($this->getParameters());
         }
 
-        $countQuery->select(sprintf(
-            'count(DISTINCT %s.%s) as cnt',
-            current($countQuery->getRootAliases()),
-            current($this->getCountColumn())
-        ));
+        $query = $countQuery->getQuery();
+        $query->setHint(
+            CountWalker::HINT_DISTINCT,
+            $countQuery instanceof ProxyQuery ? $countQuery->isDistinct() : true
+        );
+        $this->appendTreeWalker($query, CountWalker::class);
 
-        return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
+        return $query->getSingleScalarResult();
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
@@ -80,5 +83,22 @@ class Pager extends BasePager
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
+    }
+
+    /**
+     * Appends a custom tree walker to the tree walkers hint.
+     *
+     * @param string $walkerClass
+     */
+    private function appendTreeWalker(AbstractQuery $query, $walkerClass): void
+    {
+        $hints = $query->getHint(Query::HINT_CUSTOM_TREE_WALKERS);
+
+        if (false === $hints) {
+            $hints = [];
+        }
+
+        $hints[] = $walkerClass;
+        $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, $hints);
     }
 }

@@ -35,7 +35,7 @@ For now, only `Doctrine ORM` filters are available:
 * `doctrine_orm_boolean`: depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field,
 * `doctrine_orm_callback`: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
 * `doctrine_orm_choice`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
-* `doctrine_orm_model`: depends on the ``sonata_type_filter_number`` Form Type,
+* `doctrine_orm_number`: depends on the ``sonata_type_filter_number`` Form Type,
 * `doctrine_orm_model_autocomplete`: uses ``sonata_type_model_autocomplete`` form type, can be used as replacement of ``doctrine_orm_model`` to handle too many items that cannot be loaded into memory.
 * `doctrine_orm_string`: depends on the ``sonata_type_filter_choice``,
 * `doctrine_orm_number`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
