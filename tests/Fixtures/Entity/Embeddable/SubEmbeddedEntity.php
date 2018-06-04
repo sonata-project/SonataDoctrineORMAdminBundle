@@ -2,14 +2,10 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable;
 
-class EmbeddedEntity
+class SubEmbeddedEntity
 {
     /**
      * @var bool
      */
     protected $plainField;
-    /**
-     * @var SubEmbeddedEntity
-     */
-    protected $subEmbeddedEntity;
 }
