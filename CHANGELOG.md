@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.6.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.0...3.6.1) - 2018-06-04
+
+### Fixed
+
+- Fix FieldDescription for multi-level embedded properties
+- marked `sonata.admin.manager.orm` as public service
+
 ## [3.6.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.5.1...3.6.0) - 2018-04-23
 ### Added
 - Added `ProxyQuery::setDistinct` and `ProxyQuery::isDistinct`.

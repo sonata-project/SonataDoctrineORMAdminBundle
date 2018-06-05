@@ -42,6 +42,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\SubEmbeddedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
@@ -251,6 +252,13 @@ class ModelManagerTest extends TestCase
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.embeddedEntity.plainField');
         $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+
+        list($metadata, $lastPropertyName) = $modelManager
+            ->getParentMetadataForProperty(
+                $containerEntityClass,
+                'associatedEntity.embeddedEntity.subEmbeddedEntity.plainField'
+            );
+        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
     }
 
     public function getMetadataForEmbeddedEntity()
@@ -268,9 +276,25 @@ class ModelManagerTest extends TestCase
         return $metadata;
     }
 
+    public function getMetadataForSubEmbeddedEntity()
+    {
+        $metadata = new ClassMetadata(SubEmbeddedEntity::class);
+
+        $metadata->fieldMappings = [
+            'plainField' => [
+                'fieldName' => 'plainField',
+                'columnName' => 'plainField',
+                'type' => 'boolean',
+            ],
+        ];
+
+        return $metadata;
+    }
+
     public function getMetadataForAssociatedEntity()
     {
         $embeddedEntityClass = EmbeddedEntity::class;
+        $subEmbeddedEntityClass = SubEmbeddedEntity::class;
 
         $metadata = new ClassMetadata(AssociatedEntity::class);
 
@@ -284,10 +308,17 @@ class ModelManagerTest extends TestCase
 
         $metadata->embeddedClasses['embeddedEntity'] = [
             'class' => $embeddedEntityClass,
-            'columnPrefix' => 'embeddedEntity',
+            'columnPrefix' => 'embedded_entity_',
+        ];
+        $metadata->embeddedClasses['embeddedEntity.subEmbeddedEntity'] = [
+            'class' => $subEmbeddedEntityClass,
+            'columnPrefix' => 'embedded_entity_sub_embedded_entity_',
+            'declaredField' => 'embeddedEntity',
+            'originalField' => 'subEmbeddedEntity',
         ];
 
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
+        $metadata->inlineEmbeddable('embeddedEntity.subEmbeddedEntity', $this->getMetadataForSubEmbeddedEntity());
 
         return $metadata;
     }
@@ -297,6 +328,7 @@ class ModelManagerTest extends TestCase
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;
         $embeddedEntityClass = EmbeddedEntity::class;
+        $subEmbeddedEntityClass = SubEmbeddedEntity::class;
 
         $metadata = new ClassMetadata($containerEntityClass);
 
@@ -318,8 +350,15 @@ class ModelManagerTest extends TestCase
             'class' => $embeddedEntityClass,
             'columnPrefix' => 'embeddedEntity',
         ];
+        $metadata->embeddedClasses['embeddedEntity.subEmbeddedEntity'] = [
+            'class' => $subEmbeddedEntityClass,
+            'columnPrefix' => 'embedded_entity_sub_embedded_entity_',
+            'declaredField' => 'embeddedEntity',
+            'originalField' => 'subEmbeddedEntity',
+        ];
 
         $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
+        $metadata->inlineEmbeddable('embeddedEntity.subEmbeddedEntity', $this->getMetadataForSubEmbeddedEntity());
 
         return $metadata;
     }
