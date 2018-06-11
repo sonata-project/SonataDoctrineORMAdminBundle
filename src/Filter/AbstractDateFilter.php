@@ -75,7 +75,22 @@ abstract class AbstractDateFilter extends Filter
             $endDateParameterName = $this->getNewParameterName($queryBuilder);
 
             if (DateRangeType::TYPE_NOT_BETWEEN === $data['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
+                if ($data['value']['start'] || $data['value']['end']) {
+                    $filterStartParameter = $filterEndParameter = null;
+
+                    if ($data['value']['start']) {
+                        $filterStartParameter = sprintf('%s.%s < :%s', $alias, $field, $startDateParameterName);
+                    }
+
+                    if ($data['value']['end']) {
+                        $filterEndParameter = sprintf('%s.%s > :%s', $alias, $field, $endDateParameterName);
+                    }
+
+                    $queryBuilder->orWhere(
+                        $filterStartParameter,
+                        $filterEndParameter
+                    );
+                }
             } else {
                 if ($data['value']['start']) {
                     $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
