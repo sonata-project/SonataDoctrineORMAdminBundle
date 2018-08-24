@@ -29,7 +29,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         $force = $container->getParameter('sonata_doctrine_orm_admin.audit.force');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
-            if ($attributes[0]['manager_type'] != 'orm') {
+            if ('orm' != $attributes[0]['manager_type']) {
                 continue;
             }
 

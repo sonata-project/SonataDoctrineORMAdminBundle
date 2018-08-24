@@ -20,27 +20,27 @@ class BooleanFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
-        if (!$data || !is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
+        if (!$data || !\is_array($data) || !array_key_exists('type', $data) || !array_key_exists('value', $data)) {
             return;
         }
 
-        if (is_array($data['value'])) {
+        if (\is_array($data['value'])) {
             $values = [];
             foreach ($data['value'] as $v) {
-                if (!in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
+                if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
                     continue;
                 }
 
                 $values[] = (BooleanType::TYPE_YES == $v) ? 1 : 0;
             }
 
-            if (0 == count($values)) {
+            if (0 == \count($values)) {
                 return;
             }
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
+            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
                 return;
             }
 
