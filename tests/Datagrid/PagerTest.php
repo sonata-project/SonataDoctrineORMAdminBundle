@@ -12,8 +12,6 @@
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\ORM\AbstractQuery;
-use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\CountWalker;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -36,39 +34,35 @@ class PagerTest extends TestCase
      */
     public function testComputeNbResult($distinct)
     {
-        $q = $this->getMockBuilder(AbstractQuery::class)
+        $query = $this->getMockBuilder(AbstractQuery::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getSingleScalarResult', 'getHint', 'setHint'])
+            ->setMethods(['getSingleScalarResult'])
             ->getMockForAbstractClass();
 
-        $q->expects($this->once())
+        $query->expects($this->once())
             ->method('getSingleScalarResult');
 
-        $q->expects($this->once())
-            ->method('getHint')
-            ->willReturn(null);
-
-        $q->expects($this->exactly(2))
-            ->method('setHint')
-            ->withConsecutive(
-                [$this->equalTo(CountWalker::HINT_DISTINCT), $this->equalTo($distinct)],
-                [$this->equalTo(Query::HINT_CUSTOM_TREE_WALKERS), $this->equalTo([CountWalker::class])]
-            );
-
-        $qb = $this->getMockBuilder(QueryBuilder::class)
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getQuery'])
+            ->setMethods(['getQuery', 'select', 'resetDQLPart'])
             ->getMock();
 
-        $qb->expects($this->once())
+        $queryBuilder->expects($this->once())
             ->method('getQuery')
-            ->willReturn($q);
+            ->willReturn($query);
 
-        $pq = new ProxyQuery($qb);
-        $pq->setDistinct($distinct);
+        $queryBuilder->expects($this->once())
+            ->method('select');
+
+        $proxyQuery = new ProxyQuery($queryBuilder);
+        $proxyQuery->setDistinct($distinct);
+
+        $queryBuilder->expects($this->once())
+            ->method('resetDQLPart')
+            ->willReturn($proxyQuery);
 
         $pager = new Pager();
-        $pager->setQuery($pq);
+        $pager->setQuery($proxyQuery);
         $pager->computeNbResult();
     }
 }
