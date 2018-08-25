@@ -102,7 +102,7 @@ class ListBuilder implements ListBuilderInterface
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
-                get_class($admin)
+                \get_class($admin)
             ));
         }
 
@@ -142,7 +142,7 @@ class ListBuilder implements ListBuilderInterface
             }
         }
 
-        if (in_array($fieldDescription->getMappingType(), [
+        if (\in_array($fieldDescription->getMappingType(), [
             ClassMetadata::MANY_TO_ONE,
             ClassMetadata::ONE_TO_ONE,
             ClassMetadata::ONE_TO_MANY,
@@ -161,7 +161,7 @@ class ListBuilder implements ListBuilderInterface
             $fieldDescription->setTemplate('@SonataAdmin/CRUD/list__action.html.twig');
         }
 
-        if (in_array($fieldDescription->getType(), [null, '_action'], true)) {
+        if (\in_array($fieldDescription->getType(), [null, '_action'], true)) {
             $fieldDescription->setType('actions');
         }
 

@@ -54,7 +54,7 @@ class QueryBuilder
     {
         $this->query[] = 'in_'.$name;
 
-        if (is_array($value)) {
+        if (\is_array($value)) {
             return sprintf('%s IN ("%s")', $name, implode(',', $value));
         }
 
@@ -88,7 +88,7 @@ class QueryBuilder
      */
     public function orX($x = null)
     {
-        return new Orx(func_get_args());
+        return new Orx(\func_get_args());
     }
 
     /**
