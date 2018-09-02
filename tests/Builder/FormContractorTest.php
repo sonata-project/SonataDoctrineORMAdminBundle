@@ -92,7 +92,7 @@ final class FormContractorTest extends TestCase
                 // add class type.
                 $classType,
                 // add instance of class type.
-                get_class(
+                \get_class(
                     $this->getMockBuilder($classType)
                         ->disableOriginalConstructor()
                         ->getMock()

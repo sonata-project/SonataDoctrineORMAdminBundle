@@ -20,7 +20,7 @@ class NumberFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
+        if (!$data || !\is_array($data) || !array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return;
         }
 

@@ -24,7 +24,7 @@ class ModelAutocompleteFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data)) {
+        if (!$data || !\is_array($data) || !array_key_exists('value', $data)) {
             return;
         }
 
@@ -32,7 +32,7 @@ class ModelAutocompleteFilter extends Filter
             $data['value'] = $data['value']->toArray();
         }
 
-        if (is_array($data['value'])) {
+        if (\is_array($data['value'])) {
             $this->handleMultiple($queryBuilder, $alias, $data);
         } else {
             $this->handleModel($queryBuilder, $alias, $data);
@@ -73,7 +73,7 @@ class ModelAutocompleteFilter extends Filter
      */
     protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
-        if (0 == count($data['value'])) {
+        if (0 == \count($data['value'])) {
             return;
         }
 

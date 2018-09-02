@@ -75,7 +75,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function __call($name, $args)
     {
-        return call_user_func_array([$this->queryBuilder, $name], $args);
+        return \call_user_func_array([$this->queryBuilder, $name], $args);
     }
 
     public function __get($name)
@@ -98,7 +98,7 @@ class ProxyQuery implements ProxyQueryInterface
      */
     final public function setDistinct($distinct)
     {
-        if (!is_bool($distinct)) {
+        if (!\is_bool($distinct)) {
             throw new \InvalidArgumentException('$distinct is not a boolean');
         }
 
@@ -155,7 +155,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         foreach ($identifierFields as $identifierField) {
             $order = $rootAlias.'.'.$identifierField;
-            if (!in_array($order, $existingOrders)) {
+            if (!\in_array($order, $existingOrders)) {
                 $queryBuilder->addOrderBy(
                     $order,
                     $this->getSortOrder() // reusing the sort order is the most natural way to go
@@ -186,7 +186,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function setSortOrder($sortOrder)
     {
-        if (!in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'])) {
+        if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'])) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" is not a valid sort order, valid values are "%s"',
                 $sortOrder,
@@ -271,7 +271,7 @@ class ProxyQuery implements ProxyQueryInterface
             }
 
             $newAlias .= '_'.$associationMapping['fieldName'];
-            if (!in_array($newAlias, $this->entityJoinAliases)) {
+            if (!\in_array($newAlias, $this->entityJoinAliases)) {
                 $this->entityJoinAliases[] = $newAlias;
                 $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
             }
@@ -361,7 +361,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         // step 4 : alter the query to match the targeted ids
         foreach ($idxMatrix as $idName => $idx) {
-            if (count($idx) > 0) {
+            if (\count($idx) > 0) {
                 $idxParamName = sprintf('%s_idx', $idName);
                 $idxParamName = preg_replace('/[^\w]+/', '_', $idxParamName);
                 $queryBuilder->andWhere(sprintf('%s IN (:%s)', $selects[$idName], $idxParamName));

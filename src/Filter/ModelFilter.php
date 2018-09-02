@@ -24,7 +24,7 @@ class ModelFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
-        if (!$data || !is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
+        if (!$data || !\is_array($data) || !array_key_exists('value', $data) || empty($data['value'])) {
             return;
         }
 
@@ -32,7 +32,7 @@ class ModelFilter extends Filter
             $data['value'] = $data['value']->toArray();
         }
 
-        if (!is_array($data['value'])) {
+        if (!\is_array($data['value'])) {
             $data['value'] = [$data['value']];
         }
 
@@ -73,7 +73,7 @@ class ModelFilter extends Filter
      */
     protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
     {
-        if (0 == count($data['value'])) {
+        if (0 == \count($data['value'])) {
             return;
         }
 
@@ -111,7 +111,7 @@ class ModelFilter extends Filter
             ClassMetadata::MANY_TO_ONE,
         ];
 
-        if (!in_array($this->getOption('mapping_type'), $types)) {
+        if (!\in_array($this->getOption('mapping_type'), $types)) {
             throw new \RuntimeException('Invalid mapping type');
         }
 

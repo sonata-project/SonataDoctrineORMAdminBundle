@@ -60,7 +60,7 @@ final class OrderByToSelectWalker extends TreeWalkerAdapter
                 if ($idVar instanceof IdentityFunction) {
                     $idVar = $idVar->pathExpression->identificationVariable;
                 }
-                if (!is_string($idVar)) {
+                if (!\is_string($idVar)) {
                     continue;
                 }
                 $field = $selectExpression->fieldIdentificationVariable;

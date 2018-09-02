@@ -99,7 +99,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             break;
         }
 
-        $properties = array_slice($nameElements, count($parentAssociationMappings));
+        $properties = \array_slice($nameElements, \count($parentAssociationMappings));
         $properties[] = $lastPropertyName;
 
         return [$this->getMetadata($class), implode('.', $properties), $parentAssociationMappings];
@@ -117,7 +117,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getNewFieldDescriptionInstance($class, $name, array $options = [])
     {
-        if (!is_string($name)) {
+        if (!\is_string($name)) {
             throw new \RuntimeException('The name argument must be a string');
         }
 
@@ -265,8 +265,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getEntityManager($class)
     {
-        if (is_object($class)) {
-            $class = get_class($class);
+        if (\is_object($class)) {
+            $class = \get_class($class);
         }
 
         if (!isset($this->cache[$class])) {
@@ -333,7 +333,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $identifiers = [];
 
         foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
-            if (!is_object($value)) {
+            if (!\is_object($value)) {
                 $identifiers[] = $value;
 
                 continue;
@@ -372,7 +372,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return;
         }
 
-        if (in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
+        if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
@@ -381,7 +381,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         $values = $this->getIdentifierValues($entity);
 
-        if (0 === count($values)) {
+        if (0 === \count($values)) {
             return;
         }
 
@@ -503,7 +503,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $values['_sort_order'] = 'ASC';
         }
 
-        $values['_sort_by'] = is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') : $fieldDescription->getName();
+        $values['_sort_by'] = \is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') : $fieldDescription->getName();
 
         return ['filter' => $values];
     }

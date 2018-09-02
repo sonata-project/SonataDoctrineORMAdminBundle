@@ -134,7 +134,7 @@ class ModelManagerTest extends TestCase
             ->setMethods(['getMetadata'])
             ->getMock();
 
-        $metadata = $this->getMetadata(get_class($object), $isVersioned);
+        $metadata = $this->getMetadata(\get_class($object), $isVersioned);
 
         $modelManager->expects($this->any())
             ->method('getMetadata')
@@ -179,7 +179,7 @@ class ModelManagerTest extends TestCase
             ->method('getEntityManager')
             ->will($this->returnValue($em));
 
-        $metadata = $this->getMetadata(get_class($object), $isVersioned);
+        $metadata = $this->getMetadata(\get_class($object), $isVersioned);
 
         $modelManager->expects($this->any())
             ->method('getMetadata')

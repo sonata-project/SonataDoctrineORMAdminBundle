@@ -69,7 +69,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 }
             }
 
-            if (count($objectIds) > 0) {
+            if (\count($objectIds) > 0) {
                 list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;

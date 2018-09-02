@@ -13,9 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
@@ -36,18 +34,17 @@ class Pager extends BasePager
     {
         $countQuery = clone $this->getQuery();
 
-        if (count($this->getParameters()) > 0) {
+        if (\count($this->getParameters()) > 0) {
             $countQuery->setParameters($this->getParameters());
         }
 
-        $query = $countQuery->getQuery();
-        $query->setHint(
-            CountWalker::HINT_DISTINCT,
-            $countQuery instanceof ProxyQuery ? $countQuery->isDistinct() : true
-        );
-        $this->appendTreeWalker($query, CountWalker::class);
+        $countQuery->select(sprintf(
+            'count(%s %s) as cnt',
+            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
+            $this->getColumnsForQuery(current($countQuery->getRootAliases()))
+        ));
 
-        return $query->getSingleScalarResult();
+        return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
@@ -69,7 +66,7 @@ class Pager extends BasePager
         $this->getQuery()->setFirstResult(null);
         $this->getQuery()->setMaxResults(null);
 
-        if (count($this->getParameters()) > 0) {
+        if (\count($this->getParameters()) > 0) {
             $this->getQuery()->setParameters($this->getParameters());
         }
 
@@ -85,20 +82,16 @@ class Pager extends BasePager
         }
     }
 
-    /**
-     * Appends a custom tree walker to the tree walkers hint.
-     *
-     * @param string $walkerClass
-     */
-    private function appendTreeWalker(AbstractQuery $query, $walkerClass): void
+    private function getColumnsForQuery(string $rootAlias): string
     {
-        $hints = $query->getHint(Query::HINT_CUSTOM_TREE_WALKERS);
-
-        if (false === $hints) {
-            $hints = [];
+        if (1 === \count($countColumns = $this->getCountColumn())) {
+            return $rootAlias.'.'.current($countColumns);
         }
 
-        $hints[] = $walkerClass;
-        $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, $hints);
+        $columns = implode(",'-',", array_map(function ($column) use ($rootAlias) {
+            return "$rootAlias.$column";
+        }, $countColumns));
+
+        return "concat($columns)";
     }
 }

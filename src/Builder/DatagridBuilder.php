@@ -119,7 +119,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
 
-        if (in_array($fieldDescription->getMappingType(), [
+        if (\in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
             ClassMetadata::MANY_TO_MANY,
             ClassMetadata::MANY_TO_ONE,
@@ -141,7 +141,7 @@ class DatagridBuilder implements DatagridBuilderInterface
             $options = $guessType->getOptions();
 
             foreach ($options as $name => $value) {
-                if (is_array($value)) {
+                if (\is_array($value)) {
                     $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, [])));
                 } else {
                     $fieldDescription->setOption($name, $fieldDescription->getOption($name, $value));
