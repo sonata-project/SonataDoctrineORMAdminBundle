@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.6.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.1...3.6.2) - 2018-10-01
+### Fixed
+- Composite key not working
+- Block `sonata_type_model_list_widget` in template `Form/form_admin_fields.html.twig` now determines the object identifier correctly when building a link to the associated admin
+
 ## [3.6.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.0...3.6.1) - 2018-06-04
 
 ### Fixed
