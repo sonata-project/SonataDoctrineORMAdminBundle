@@ -225,6 +225,8 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
+    use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
+
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
@@ -250,7 +252,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
                         return true;
                     },
-                    'field_type' => 'checkbox'
+                    'field_type' => CheckboxType::class
                 ))
             ;
         }
