@@ -250,7 +250,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
                         return true;
                     },
-                    'field_type' => 'checkbox'
+                    'field_type' => CheckboxType::class
                 ))
             ;
         }
