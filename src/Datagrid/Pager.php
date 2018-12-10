@@ -50,6 +50,14 @@ class Pager extends BasePager
         return $this->getQuery()->execute([], $hydrationMode);
     }
 
+    /**
+     * @return ProxyQueryInterface
+     */
+    public function getQuery()
+    {
+        return $this->query;
+    }
+
     public function init()
     {
         $this->resetIterator();
