@@ -13,7 +13,6 @@ namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\CountOutputWalker;
-use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
