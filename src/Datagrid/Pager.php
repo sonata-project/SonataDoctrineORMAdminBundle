@@ -12,7 +12,10 @@
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\CountOutputWalker;
+use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * Doctrine pager class.
@@ -30,29 +33,22 @@ class Pager extends BasePager
 
     public function computeNbResult()
     {
-        $countQuery = clone $this->getQuery();
+        $countQuery = $this->getClonedQuery()->getQuery();
 
-        if (\count($this->getParameters()) > 0) {
-            $countQuery->setParameters($this->getParameters());
-        }
+        $platform = $countQuery->getEntityManager()->getConnection()->getDatabasePlatform();
+        $rsm = new Query\ResultSetMapping();
+        $rsm->addScalarResult($platform->getSQLResultCasing('dctrn_count'), 'count');
+        $countQuery->setHint(Query::HINT_CUSTOM_OUTPUT_WALKER, CountOutputWalker::class);
+        $countQuery->setResultSetMapping($rsm);
 
-        $countQuery->select(sprintf(
-            'count(%s %s) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            $this->getColumnsForQuery(current($countQuery->getRootAliases()))
-        ));
+        $countQuery->setFirstResult(null)->setMaxResults(null);
 
-        return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
+        return $countQuery->getSingleScalarResult();
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
     {
         return $this->getQuery()->execute([], $hydrationMode);
-    }
-
-    public function getQuery()
-    {
-        return $this->query;
     }
 
     public function init()
@@ -80,16 +76,18 @@ class Pager extends BasePager
         }
     }
 
-    private function getColumnsForQuery($rootAlias)
+    /**
+     * @return ProxyQueryInterface
+     */
+    private function getClonedQuery()
     {
-        if (1 === \count($countColumns = $this->getCountColumn())) {
-            return $rootAlias.'.'.current($countColumns);
+        /** @var ProxyQueryInterface $cloneQuery */
+        $cloneQuery = clone $this->getQuery();
+
+        if (\count($this->getParameters()) > 0) {
+            $countQuery->setParameters($this->getParameters());
         }
 
-        $columns = implode(",'-',", array_map(function ($column) use ($rootAlias) {
-            return "$rootAlias.$column";
-        }, $countColumns));
-
-        return "concat($columns)";
+        return $cloneQuery;
     }
 }
