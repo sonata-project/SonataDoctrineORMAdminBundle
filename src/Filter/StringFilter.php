@@ -41,7 +41,11 @@ class StringFilter extends Filter
 
         $or = $queryBuilder->expr()->orX();
 
-        $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        if ($this->getOption('case_sensitive')) {
+            $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        } else {
+            $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+        }
 
         if (ChoiceType::TYPE_NOT_CONTAINS == $data['type']) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
@@ -52,7 +56,12 @@ class StringFilter extends Filter
         if (ChoiceType::TYPE_EQUAL == $data['type']) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            $queryBuilder->setParameter($parameterName, sprintf($this->getOption('format'), $data['value']));
+            $queryBuilder->setParameter($parameterName,
+                sprintf(
+                    $this->getOption('format'),
+                    $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+                )
+            );
         }
     }
 
@@ -60,6 +69,7 @@ class StringFilter extends Filter
     {
         return [
             'format' => '%%%s%%',
+            'case_sensitive' => true,
         ];
     }
 
