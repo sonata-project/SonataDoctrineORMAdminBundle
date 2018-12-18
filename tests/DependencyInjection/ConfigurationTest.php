@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ use Symfony\Component\Config\Definition\Processor;
 
 class ConfigurationTest extends TestCase
 {
-    public function testDefaultOptions()
+    public function testDefaultOptions(): void
     {
         $config = $this->process([]);
 
@@ -30,7 +32,7 @@ class ConfigurationTest extends TestCase
         $this->assertArrayNotHasKey('types', $config['templates']);
     }
 
-    public function testAuditForceWithInvalidFormat()
+    public function testAuditForceWithInvalidFormat(): void
     {
         $this->expectException(InvalidTypeException::class);
 
@@ -41,7 +43,7 @@ class ConfigurationTest extends TestCase
         ]]);
     }
 
-    public function testCustomTemplates()
+    public function testCustomTemplates(): void
     {
         $config = $this->process([[
             'templates' => [
@@ -70,7 +72,7 @@ class ConfigurationTest extends TestCase
         ], $config['templates']['types']);
     }
 
-    public function testTemplateTypesWithInvalidValues()
+    public function testTemplateTypesWithInvalidValues(): void
     {
         $this->expectException(InvalidConfigurationException::class);
 
