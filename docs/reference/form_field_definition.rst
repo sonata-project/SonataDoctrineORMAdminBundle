@@ -218,7 +218,7 @@ You can easily add a new ``Media`` row by defining one of these options:
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\CoreBundle\Form\Type\CollectionType;
+    use Sonata\Form\Type\CollectionType;
 
     class GalleryAdmin extends Admin
     {
