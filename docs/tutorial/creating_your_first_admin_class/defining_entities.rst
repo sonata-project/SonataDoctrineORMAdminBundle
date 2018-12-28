@@ -256,6 +256,35 @@ Comment
         }
     }
 
+.. note::
+
+    For advanced usage, ``$id`` might be implemented as an object. The bundle will automatically resolve its string
+    representation from the ID object using ``$entity->getId()->__toString()`` (if implemented) when needed
+    (e.g., for generating url / rendering).
+
+    For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented:
+
+    .. code-block:: php
+
+        <?php
+
+        class Comment
+        {
+            /**
+             * @var \Ramsey\Uuid\UuidInterface
+             * @Id
+             * @Column(type="uuid_binary_ordered_time", unique=true)
+             * @GeneratedValue(strategy="CUSTOM")
+             * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+             */
+            protected $id;
+
+            // ...
+        }
+
+    As ``$comment->getId()`` returns an object of ``\Ramsey\Uuid\UuidInterface`` and the bundle recognizes
+    that it has offered a ``__toString`` method, ``$comment->getId()->__toString()`` is called to resolve
+    the ID string value as part of the entity url generation.
 
 Generate getters and setters
 ----------------------------
@@ -275,3 +304,5 @@ Create the database related to the entities and the mapping by running the follo
 .. code-block:: bash
 
     php app/console doctrine:schema:update --force
+
+.. _`InnoDB-optimised binary UUIDs`: https://github.com/ramsey/uuid-doctrine#innodb-optimised-binary-uuids

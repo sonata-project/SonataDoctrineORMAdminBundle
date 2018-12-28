@@ -44,6 +44,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\SubEmbeddedEn
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\ClassWithToStringSupport;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -359,6 +360,48 @@ class ModelManagerTest extends TestCase
         $metadata->inlineEmbeddable('embeddedEntity.subEmbeddedEntity', $this->getMetadataForSubEmbeddedEntity());
 
         return $metadata;
+    }
+
+    public function testGetIdentifierValuesForIdInObjectTypeWithToStringSupport()
+    {
+        $entityId = new ClassWithToStringSupport('to-string-id');
+
+        $entity = new \stdClass();
+
+        $meta = $this->createMock(ClassMetadata::class);
+        $meta->expects($this->any())
+            ->method('getIdentifierValues')
+            ->willReturn([$entityId]);
+
+        $mf = $this->createMock(ClassMetadataFactory::class);
+        $mf->expects($this->any())
+            ->method('getMetadataFor')
+            ->willReturn($meta);
+
+        $platform = $this->createMock(PostgreSqlPlatform::class);
+
+        $conn = $this->createMock(Connection::class);
+        $conn->expects($this->any())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
+
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
+        $em->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($conn);
+
+        $registry = $this->createMock(RegistryInterface::class);
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturn($em);
+
+        $manager = new ModelManager($registry);
+        $result = $manager->getIdentifierValues($entity);
+
+        $this->assertEquals('to-string-id', $result[0]);
     }
 
     public function testNonIntegerIdentifierType()
