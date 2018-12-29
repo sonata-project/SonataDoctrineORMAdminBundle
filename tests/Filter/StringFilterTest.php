@@ -114,4 +114,32 @@ class StringFilterTest extends TestCase
         $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
+
+    public function testCaseSensitiveFalse()
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['case_sensitive' => false]);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertEquals([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+        $this->assertEquals(['LOWER(alias.field) LIKE :field_name_0'], $builder->query);
+        $this->assertEquals(['field_name_0' => '%foobar%'], $builder->parameters);
+        $this->assertTrue($filter->isActive());
+    }
+
+    public function testCaseSensitiveTrue()
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['case_sensitive' => true]);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertEquals([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+        $this->assertEquals(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertEquals(['field_name_0' => '%FooBar%'], $builder->parameters);
+        $this->assertTrue($filter->isActive());
+    }
 }
