@@ -337,7 +337,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
-            if (\method_exists($value, '__toString')) {
+            if (method_exists($value, '__toString')) {
                 $identifiers[] = (string) $value;
 
                 continue;
