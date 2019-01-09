@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -22,7 +24,7 @@ abstract class Filter extends BaseFilter
      */
     protected $active = false;
 
-    public function apply($queryBuilder, $value)
+    public function apply($queryBuilder, $value): void
     {
         $this->value = $value;
         if (\is_array($value) && array_key_exists('value', $value)) {
@@ -48,7 +50,7 @@ abstract class Filter extends BaseFilter
      * @param ProxyQueryInterface|QueryBuilder $queryBuilder
      * @param mixed                            $parameter
      */
-    protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
+    protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter): void
     {
         if (self::CONDITION_OR == $this->getCondition()) {
             $queryBuilder->orWhere($parameter);

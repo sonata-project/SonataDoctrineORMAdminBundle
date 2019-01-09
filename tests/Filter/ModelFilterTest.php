@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -34,7 +36,7 @@ class ModelFilterTest extends TestCase
         return $fieldDescription;
     }
 
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -48,7 +50,7 @@ class ModelFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterArray()
+    public function testFilterArray(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -66,7 +68,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterArrayTypeIsNotEqual()
+    public function testFilterArrayTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
@@ -87,7 +89,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterScalar()
+    public function testFilterScalar(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -101,7 +103,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterScalarTypeIsNotEqual()
+    public function testFilterScalarTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
@@ -119,7 +121,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testAssociationWithInvalidMapping()
+    public function testAssociationWithInvalidMapping(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -131,7 +133,7 @@ class ModelFilterTest extends TestCase
         $filter->apply($builder, ['value' => 'asd']);
     }
 
-    public function testAssociationWithValidMappingAndEmptyFieldName()
+    public function testAssociationWithValidMappingAndEmptyFieldName(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -144,7 +146,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testAssociationWithValidMapping()
+    public function testAssociationWithValidMapping(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', [
@@ -167,7 +169,7 @@ class ModelFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testAssociationWithValidParentAssociationMappings()
+    public function testAssociationWithValidParentAssociationMappings(): void
     {
         $filter = new ModelFilter();
         $filter->initialize('field_name', [

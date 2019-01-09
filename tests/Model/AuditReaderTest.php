@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -23,13 +25,13 @@ class AuditReaderTest extends TestCase
     private $simpleThingsAuditReader;
     private $auditReader;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
         $this->auditReader = new AuditReader($this->simpleThingsAuditReader->reveal());
     }
 
-    public function testFind()
+    public function testFind(): void
     {
         $this->simpleThingsAuditReader
             ->find($className = 'fakeClass', $id = 1, $revision = 2)
@@ -38,7 +40,7 @@ class AuditReaderTest extends TestCase
         $this->auditReader->find($className, $id, $revision);
     }
 
-    public function testFindRevisionHistory()
+    public function testFindRevisionHistory(): void
     {
         $this->simpleThingsAuditReader
             ->findRevisionHistory($limit = 20, $offset = 0)
@@ -47,7 +49,7 @@ class AuditReaderTest extends TestCase
         $this->auditReader->findRevisionHistory(null, $limit, $offset);
     }
 
-    public function testFindRevision()
+    public function testFindRevision(): void
     {
         $this->simpleThingsAuditReader
             ->findRevision($revision = 2)
@@ -56,7 +58,7 @@ class AuditReaderTest extends TestCase
         $this->auditReader->findRevision(null, $revision);
     }
 
-    public function testFindRevisions()
+    public function testFindRevisions(): void
     {
         $this->simpleThingsAuditReader
             ->findRevisions($className = 'fakeClass', $id = 2)
@@ -65,7 +67,7 @@ class AuditReaderTest extends TestCase
         $this->auditReader->findRevisions($className, $id);
     }
 
-    public function testDiff()
+    public function testDiff(): void
     {
         $this->simpleThingsAuditReader
             ->diff($className = 'fakeClass', $id = 1, $oldRevision = 1, $newRevision = 2);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -18,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 
 class ChoiceFilterTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -33,7 +35,7 @@ class ChoiceFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterArray()
+    public function testFilterArray(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -47,7 +49,7 @@ class ChoiceFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterScalar()
+    public function testFilterScalar(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -61,7 +63,7 @@ class ChoiceFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterZero()
+    public function testFilterZero(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);

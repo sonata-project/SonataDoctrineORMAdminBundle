@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -33,7 +35,7 @@ class ListBuilderTest extends TestCase
     private $admin;
     private $modelManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->typeGuesser = $this->prophesize(TypeGuesserInterface::class);
 
@@ -47,7 +49,7 @@ class ListBuilderTest extends TestCase
         $this->listBuilder = new ListBuilder($this->typeGuesser->reveal());
     }
 
-    public function testAddListActionField()
+    public function testAddListActionField(): void
     {
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('foo');
@@ -62,7 +64,7 @@ class ListBuilderTest extends TestCase
         );
     }
 
-    public function testCorrectFixedActionsFieldType()
+    public function testCorrectFixedActionsFieldType(): void
     {
         $this->typeGuesser->guessType(Argument::cetera())
             ->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
@@ -88,7 +90,7 @@ class ListBuilderTest extends TestCase
     /**
      * @dataProvider fixFieldDescriptionData
      */
-    public function testFixFieldDescription($type, $template)
+    public function testFixFieldDescription($type, $template): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
         $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
@@ -133,7 +135,7 @@ class ListBuilderTest extends TestCase
         ];
     }
 
-    public function testFixFieldDescriptionException()
+    public function testFixFieldDescriptionException(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->listBuilder->fixFieldDescription($this->admin->reveal(), new FieldDescription());

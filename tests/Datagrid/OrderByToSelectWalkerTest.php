@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -30,17 +32,17 @@ final class OrderByToSelectWalkerTest extends TestCase
      */
     private $em;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = DoctrineTestHelper::createTestEntityManager();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->em = null;
     }
 
-    public function testOrderByCompositeId()
+    public function testOrderByCompositeId(): void
     {
         $qb = $this->em->createQueryBuilder()
             ->select('IDENTITY(o.store) as store, IDENTITY(o.product) as product')
@@ -61,7 +63,7 @@ final class OrderByToSelectWalkerTest extends TestCase
         );
     }
 
-    public function testOrderByCompositeIdWholeObject()
+    public function testOrderByCompositeIdWholeObject(): void
     {
         $qb = $this->em->createQueryBuilder()
             ->select('o')
@@ -82,7 +84,7 @@ final class OrderByToSelectWalkerTest extends TestCase
         );
     }
 
-    public function testOrderByAssociation()
+    public function testOrderByAssociation(): void
     {
         $qb = $this->em->createQueryBuilder()
             ->select('m.id')

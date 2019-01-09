@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -43,14 +45,14 @@ final class FormContractorTest extends TestCase
      */
     private $formContractor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->createMock(FormFactoryInterface::class);
 
         $this->formContractor = new FormContractor($this->formFactory);
     }
 
-    public function testGetFormBuilder()
+    public function testGetFormBuilder(): void
     {
         $this->formFactory->expects($this->once())->method('createNamedBuilder')
             ->willReturn($this->createMock(FormBuilderInterface::class));
@@ -61,7 +63,7 @@ final class FormContractorTest extends TestCase
         );
     }
 
-    public function testDefaultOptionsForSonataFormTypes()
+    public function testDefaultOptionsForSonataFormTypes(): void
     {
         $admin = $this->createMock(AdminInterface::class);
         $modelManager = $this->createMock(ModelManagerInterface::class);
@@ -133,7 +135,7 @@ final class FormContractorTest extends TestCase
         }
     }
 
-    public function testAdminClassAttachForNotMappedField()
+    public function testAdminClassAttachForNotMappedField(): void
     {
         // Given
         $modelManager = $this->createMock(ModelManager::class);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -21,7 +23,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
  */
 class DateTimeRangeFilterTest extends TestCase
 {
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $filter = new DateTimeRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -35,7 +37,7 @@ class DateTimeRangeFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertSame(DateTimeRangeType::class, (new DateTimeRangeFilter())->getFieldType());
     }

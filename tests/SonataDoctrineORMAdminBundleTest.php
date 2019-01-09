@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -24,7 +26,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
  */
 class SonataDoctrineORMAdminBundleTest extends TestCase
 {
-    public function testBuild()
+    public function testBuild(): void
     {
         $containerBuilder = $this->prophesize(ContainerBuilder::class);
 

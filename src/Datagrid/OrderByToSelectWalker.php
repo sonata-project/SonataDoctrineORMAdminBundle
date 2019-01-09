@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -28,7 +30,7 @@ use Doctrine\ORM\Query\TreeWalkerAdapter;
  */
 final class OrderByToSelectWalker extends TreeWalkerAdapter
 {
-    public function walkSelectStatement(SelectStatement $AST)
+    public function walkSelectStatement(SelectStatement $AST): void
     {
         if (!$AST->orderByClause instanceof OrderByClause) {
             return;

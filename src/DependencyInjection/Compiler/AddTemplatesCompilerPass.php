@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -20,7 +22,7 @@ use Symfony\Component\DependencyInjection\Definition;
  */
 class AddTemplatesCompilerPass implements CompilerPassInterface
 {
-    public function process(ContainerBuilder $container)
+    public function process(ContainerBuilder $container): void
     {
         $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
         $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
@@ -54,7 +56,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
      * @param string $name
      * @param mixed  $value
      */
-    public function mergeMethodCall(Definition $definition, $name, $value)
+    public function mergeMethodCall(Definition $definition, $name, $value): void
     {
         $methodCalls = $definition->getMethodCalls();
 

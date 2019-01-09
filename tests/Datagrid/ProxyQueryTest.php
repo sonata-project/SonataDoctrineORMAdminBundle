@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -37,14 +39,14 @@ class ProxyQueryTest extends TestCase
      */
     private $em;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', UuidType::class);
         }
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->em = DoctrineTestHelper::createTestEntityManager();
 
@@ -64,7 +66,7 @@ class ProxyQueryTest extends TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->em = null;
     }
@@ -82,7 +84,7 @@ class ProxyQueryTest extends TestCase
     /**
      * @dataProvider dataGetFixedQueryBuilder
      */
-    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType, $distinct)
+    public function testGetFixedQueryBuilder($class, $alias, $id, $expectedId, $value, $identifierType, $distinct): void
     {
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
@@ -171,7 +173,7 @@ class ProxyQueryTest extends TestCase
         $pq->execute();
     }
 
-    public function testSetHint()
+    public function testSetHint(): void
     {
         $entity1 = new DoubleNameEntity(1, 'Foo', null);
         $entity2 = new DoubleNameEntity(2, 'Bar', null);
@@ -196,7 +198,7 @@ class ProxyQueryTest extends TestCase
         $this->assertEquals(2, $result[0]['id']);
     }
 
-    public function testSortOrderValidatesItsInput()
+    public function testSortOrderValidatesItsInput(): void
     {
         $query = new ProxyQuery($this->em->createQueryBuilder());
         $this->expectException(\InvalidArgumentException::class);
@@ -221,7 +223,7 @@ class ProxyQueryTest extends TestCase
     /**
      * @dataProvider validSortOrders
      */
-    public function testItAllowsSortOrdersWithStrangeCase($validValue)
+    public function testItAllowsSortOrdersWithStrangeCase($validValue): void
     {
         $query = new ProxyQuery($this->em->createQueryBuilder());
         $query->setSortOrder($validValue);

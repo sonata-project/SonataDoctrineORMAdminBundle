@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -30,14 +32,14 @@ class FilterTypeGuesserTest extends TestCase
     private $modelManager;
     private $metadata;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->guesser = new FilterTypeGuesser();
         $this->modelManager = $this->prophesize(ModelManager::class);
         $this->metadata = $this->prophesize(ClassMetadata::class);
     }
 
-    public function testThrowsOnMissingField()
+    public function testThrowsOnMissingField(): void
     {
         $this->expectException(MissingPropertyMetadataException::class);
 
@@ -51,7 +53,7 @@ class FilterTypeGuesserTest extends TestCase
         $this->guesser->guessType($class, $property, $this->modelManager->reveal());
     }
 
-    public function testGuessTypeNoMetadata()
+    public function testGuessTypeNoMetadata(): void
     {
         $this->modelManager->getParentMetadataForProperty(
             $class = 'FakeClass',
@@ -63,7 +65,7 @@ class FilterTypeGuesserTest extends TestCase
         $this->assertFalse($result);
     }
 
-    public function testGuessTypeWithAssociation()
+    public function testGuessTypeWithAssociation(): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
@@ -98,7 +100,7 @@ class FilterTypeGuesserTest extends TestCase
     /**
      * @dataProvider noAssociationData
      */
-    public function testGuessTypeNoAssociation($type, $resultType, $confidence, $fieldType = null)
+    public function testGuessTypeNoAssociation($type, $resultType, $confidence, $fieldType = null): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 

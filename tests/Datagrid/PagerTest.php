@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -32,7 +34,7 @@ class PagerTest extends TestCase
      *
      * @param bool $distinct
      */
-    public function testComputeNbResult($distinct)
+    public function testComputeNbResult($distinct): void
     {
         $query = $this->getMockBuilder(AbstractQuery::class)
             ->disableOriginalConstructor()

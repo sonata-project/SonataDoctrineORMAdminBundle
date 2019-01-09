@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -21,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
  */
 class DateTimeFilterTest extends TestCase
 {
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $filter = new DateTimeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -36,7 +38,7 @@ class DateTimeFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertSame(DateTimeType::class, (new DateTimeFilter())->getFieldType());
     }

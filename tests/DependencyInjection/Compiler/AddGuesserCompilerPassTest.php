@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -19,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AddGuesserCompilerPassTest extends TestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $containerBuilder = $this->prophesize(ContainerBuilder::class);
         $definition = $this->prophesize(Definition::class);

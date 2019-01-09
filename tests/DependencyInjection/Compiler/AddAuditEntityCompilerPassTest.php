@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -37,7 +39,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
     /**
      * @dataProvider processDataProvider
      */
-    public function testProcess($force, array $services)
+    public function testProcess($force, array $services): void
     {
         $container = $this->createMock(ContainerBuilder::class);
 

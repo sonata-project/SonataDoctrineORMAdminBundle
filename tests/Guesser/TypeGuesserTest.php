@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -26,13 +28,13 @@ class TypeGuesserTest extends TestCase
     private $modelManager;
     private $guesser;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->modelManager = $this->prophesize(ModelManager::class);
         $this->guesser = new TypeGuesser();
     }
 
-    public function testGuessTypeNoMetadata()
+    public function testGuessTypeNoMetadata(): void
     {
         $this->modelManager->getParentMetadataForProperty(
             $class = 'FakeClass',
@@ -48,7 +50,7 @@ class TypeGuesserTest extends TestCase
     /**
      * @dataProvider associationData
      */
-    public function testGuessTypeWithAssociation($mappingType, $type)
+    public function testGuessTypeWithAssociation($mappingType, $type): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
@@ -92,7 +94,7 @@ class TypeGuesserTest extends TestCase
     /**
      * @dataProvider noAssociationData
      */
-    public function testGuessTypeNoAssociation($type, $resultType, $confidence)
+    public function testGuessTypeNoAssociation($type, $resultType, $confidence): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -27,7 +29,7 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
     private $simpleThingsAuditReader;
     private $blockService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
@@ -42,7 +44,7 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
     /**
      * @group legacy
      */
-    public function testExecute()
+    public function testExecute(): void
     {
         $blockContext = $this->prophesize(BlockContext::class);
 
@@ -68,7 +70,7 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
         $this->assertSame($block, $this->templating->parameters['block']);
     }
 
-    public function testDefaultSettings()
+    public function testDefaultSettings(): void
     {
         $blockContext = $this->getBlockContext($this->blockService);
 
