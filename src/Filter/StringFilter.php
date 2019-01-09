@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -95,6 +97,6 @@ class StringFilter extends Filter
             ChoiceType::TYPE_EQUAL => '=',
         ];
 
-        return isset($choices[$type]) ? $choices[$type] : false;
+        return $choices[$type] ?? false;
     }
 }
