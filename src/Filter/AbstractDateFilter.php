@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -186,6 +188,6 @@ abstract class AbstractDateFilter extends Filter
             DateType::TYPE_NOT_NULL => 'NOT NULL',
         ];
 
-        return isset($choices[$type]) ? $choices[$type] : '=';
+        return $choices[$type] ?? '=';
     }
 }
