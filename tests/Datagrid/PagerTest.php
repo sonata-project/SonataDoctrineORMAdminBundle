@@ -14,13 +14,39 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Filter\QueryBuilder;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\Product;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\Store;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\StoreProduct;
+use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 class PagerTest extends TestCase
 {
+    public function testComputeNbResultFoCompositeId()
+    {
+        $em = DoctrineTestHelper::createTestEntityManager();
+        $classes = [
+            $em->getClassMetadata(Product::class),
+            $em->getClassMetadata(StoreProduct::class),
+            $em->getClassMetadata(Store::class),
+        ];
+        $schemaTool = new SchemaTool($em);
+        $schemaTool->createSchema($classes);
+
+        $qb = $em->createQueryBuilder()
+            ->select('o')
+            ->from(StoreProduct::class, 'o');
+        $pq = new ProxyQuery($qb);
+        $pager = new Pager();
+        $pager->setCountColumn($em->getClassMetadata(StoreProduct::class)->getIdentifierFieldNames());
+        $pager->setQuery($pq);
+        $this->assertEquals(0, $pager->computeNbResult());
+    }
+
     public function dataGetComputeNbResult()
     {
         return [

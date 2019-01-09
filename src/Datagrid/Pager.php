@@ -89,7 +89,7 @@ class Pager extends BasePager
         }
 
         $columns = implode(",'-',", array_map(function ($column) use ($rootAlias) {
-            return "$rootAlias.$column";
+            return "IDENTITY($rootAlias.$column)";
         }, $countColumns));
 
         return "concat($columns)";
