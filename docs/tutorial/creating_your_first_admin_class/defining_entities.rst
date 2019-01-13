@@ -21,8 +21,8 @@ Author
 
 .. code-block:: php
 
-    <?php
     // src/Tutorial/BlogBundle/Entity/Author.php
+
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
@@ -53,9 +53,8 @@ Post
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Entity/Post.php
+
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
@@ -125,7 +124,7 @@ Post
 
         public function __construct()
         {
-            $this->tags     = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
             $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
             $this->created_at = new \DateTime("now");
             $this->author = new Author('admin');
@@ -147,9 +146,8 @@ Tag
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Entity/Tag.php
+
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
@@ -199,9 +197,8 @@ Comment
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Entity/Comment.php
+
     namespace Tutorial\BlogBundle\Entity;
 
     use Doctrine\ORM\Mapping as ORM;
@@ -225,7 +222,6 @@ Comment
          * @Assert\NotBlank()
          */
         private $name;
-
 
         /**
          * @ORM\Column(type="string")
@@ -266,8 +262,6 @@ Comment
 
     .. code-block:: php
 
-        <?php
-
         class Comment
         {
             /**
@@ -291,10 +285,9 @@ Generate getters and setters
 
 Fill the entities with getters and setters by running the following command:
 
-
 .. code-block:: bash
 
-    php app/console doctrine:generate:entities Tutorial
+    bin/console doctrine:generate:entities Tutorial
 
 Creating the Database
 ---------------------
@@ -303,6 +296,6 @@ Create the database related to the entities and the mapping by running the follo
 
 .. code-block:: bash
 
-    php app/console doctrine:schema:update --force
+    bin/console doctrine:schema:update --force
 
 .. _`InnoDB-optimised binary UUIDs`: https://github.com/ramsey/uuid-doctrine#innodb-optimised-binary-uuids
