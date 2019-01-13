@@ -53,7 +53,7 @@ Make sure the ``order-by`` option is correctly set:
                 mapped-by="gallery"
                 >
                 <order-by>
-                    <order-by-field name="position" direction="ASC" />
+                    <order-by-field name="position" direction="ASC"/>
                 </order-by>
 
             </one-to-many>

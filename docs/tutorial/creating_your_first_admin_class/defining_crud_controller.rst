@@ -18,15 +18,13 @@ CommentAdminController
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Controller/CommentAdminController.php
 
     namespace Tutorial\BlogBundle\Controller;
 
-    use Sonata\AdminBundle\Controller\CRUDController as Controller;
+    use Sonata\AdminBundle\Controller\CRUDController;
     
-    class CommentAdminController extends Controller
+    final class CommentAdminController extends CRUDController
     {
 
     }
@@ -36,15 +34,13 @@ PostAdminController
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Controller/PostAdminController.php
 
     namespace Tutorial\BlogBundle\Controller;
 
-    use Sonata\AdminBundle\Controller\CRUDController as Controller;
+    use Sonata\AdminBundle\Controller\CRUDController;
 
-    class PostAdminController extends Controller
+    final class PostAdminController extends CRUDController
     {
 
     }
@@ -54,15 +50,13 @@ TagAdminController
 
 .. code-block:: php
 
-    <?php
-
     // src/Tutorial/BlogBundle/Controller/TagAdminController.php
 
     namespace Tutorial\BlogBundle\Controller;
 
-    use Sonata\AdminBundle\Controller\CRUDController as Controller;
+    use Sonata\AdminBundle\Controller\CRUDController;
 
-    class TagAdminController extends Controller
+    final class TagAdminController extends CRUDController
     {
 
     }

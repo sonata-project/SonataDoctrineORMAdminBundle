@@ -50,54 +50,44 @@ Example
 
 .. code-block:: php
 
-    <?php
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
-    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Admin\Abstractdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\AdminBundle\Show\ShowMapper;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
-            $datagrid
+            $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true))
-            ;
+                ->add('tags', null, [] null, ['expanded' => true, 'multiple' => true]);
         }
     }
 
 doctrine_orm_model_autocomplete
 -------------------------------
+
 This filter type uses ``sonata_type_model_autocomplete`` form type. It renders an input with select2 autocomplete feature.
 Can be used as replacement of ``doctrine_orm_model`` to handle too many related items that cannot be loaded into memory.
-This form type requires ``property`` option. See documentation of ``sonata_type_model_autocomplete`` for all available options for this form type.
+This form type requires ``property`` option. See documentation of ``sonata_type_model_autocomplete`` for all available options for this form type::
 
-.. code-block:: php
-
-    // ArticleAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('category', 'doctrine_orm_model_autocomplete', array(), null, array(
+            ->add('category', 'doctrine_orm_model_autocomplete', [], null, [
                 // in related CategoryAdmin there must be datagrid filter on `title` field to make the autocompletion work
                 'property'=>'title',
-            ))
-        ;
+            ]);
     }
 
 doctrine_orm_date_range
 -----------------------
+
 The ``doctrine_orm_date_range`` filter renders two fields to filter all records between two dates.
-If only one date is set it will filter for all records until or since the given date.
+If only one date is set it will filter for all records until or since the given date::
 
-.. code-block:: php
-
-    // ArticleAdmin
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper->add('created', 'doctrine_orm_date_range');
@@ -106,43 +96,39 @@ If only one date is set it will filter for all records until or since the given 
 Timestamps
 ----------
 
-``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range`` support filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option:
+``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range``
+support filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
-            $datagrid
-                ->add('timestamp', 'doctrine_orm_datetime_range', array('input_type' => 'timestamp'));
+            $datagridMapper
+                ->add('timestamp', 'doctrine_orm_datetime_range', ['input_type' => 'timestamp']);
         }
     }
 
 Class
 -----
 
-``doctrine_orm_class`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option:
+``doctrine_orm_class`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
-            $datagrid->add('type', 'doctrine_orm_class', array('sub_classes' => $this->getSubClasses()));
+            $datagridMapper
+                ->add('type', 'doctrine_orm_class', ['sub_classes' => $this->getSubClasses()]);
         }
     }
 
@@ -160,49 +146,35 @@ If you need to filter your base entities by the value of a sub entity property, 
 
 .. code-block:: php
 
-    <?php
-    namespace Acme\AcmeBundle\Admin;
+    namespace App\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
-    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\AdminBundle\Show\ShowMapper;
 
-    class UserAdmin extends Admin
+    final class UserAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagrid)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
-            $datagrid
+            $datagridMapper
                 ->add('id')
                 ->add('firstName')
                 ->add('lastName')
                 ->add('address.street')
                 ->add('address.ZIPCode')
-                ->add('address.town')
-            ;
+                ->add('address.town');
         }
     }
-
 
 Label
 ^^^^^
 
-You can customize the label which appears on the main widget by using a ``label`` option:
+You can customize the label which appears on the main widget by using a ``label`` option::
 
-.. code-block:: php
-
-    <?php
-
-    protected function configureDatagridFilters(DatagridMapper $datagrid)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagrid
-            // ..
-            ->add('tags', null, array('label' => 'les tags'), null, array('expanded' => true, 'multiple' => true))
-            // ..
-        ;
+        $datagridMapper
+            ->add('tags', null, ['label' => 'les tags'], null, ['expanded' => true, 'multiple' => true]);
     }
-
 
 Callback
 ^^^^^^^^
@@ -213,46 +185,40 @@ To create a custom callback filter, two methods need to be implemented:
 * one to define how to use the field's value.
 
 The latter shall return whether the filter actually is applied to the queryBuilder or not.
-In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` implement this functionality:
+In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` implement this functionality::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
-    use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\AdminBundle\Show\ShowMapper;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, array(), null, array('expanded' => true, 'multiple' => true))
+                ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true])
                 ->add('author')
-                ->add('with_open_comments', 'doctrine_orm_callback', array(
-    //                'callback'   => array($this, 'getWithOpenCommentFilter'),
+                ->add('with_open_comments', 'doctrine_orm_callback', [
+    //                'callback'   => [$this, 'getWithOpenCommentFilter'],
                     'callback' => function($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
                             return;
                         }
 
-                        $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
-                        $queryBuilder->andWhere('c.status = :status');
-                        $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
+                        $queryBuilder
+                            ->leftJoin(sprintf('%s.comments', $alias), 'c')
+                            ->andWhere('c.status = :status')
+                            ->setParameter('status', Comment::STATUS_MODERATE);
 
                         return true;
                     },
                     'field_type' => 'checkbox'
-                ))
-            ;
+                ]);
         }
 
         public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
@@ -261,9 +227,10 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 return;
             }
 
-            $queryBuilder->leftJoin(sprintf('%s.comments', $alias), 'c');
-            $queryBuilder->andWhere('c.status = :status');
-            $queryBuilder->setParameter('status', Comment::STATUS_MODERATE);
+            $queryBuilder
+                ->leftJoin(sprintf('%s.comments', $alias), 'c')
+                ->andWhere('c.status = :status')
+                ->setParameter('status', Comment::STATUS_MODERATE);
 
             return true;
         }
