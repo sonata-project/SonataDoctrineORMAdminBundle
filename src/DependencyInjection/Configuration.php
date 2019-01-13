@@ -33,8 +33,14 @@ class Configuration implements ConfigurationInterface
      */
     public function getConfigTreeBuilder()
     {
-        $treeBuilder = new TreeBuilder();
-        $rootNode = $treeBuilder->root('sonata_doctrine_orm_admin', 'array');
+        $treeBuilder = new TreeBuilder('sonata_doctrine_orm_admin');
+
+        // Keep compatibility with symfony/config < 4.2
+        if (!method_exists($treeBuilder, 'getRootNode')) {
+            $rootNode = $treeBuilder->root('sonata_doctrine_orm_admin');
+        } else {
+            $rootNode = $treeBuilder->getRootNode();
+        }
 
         $rootNode
             ->children()
