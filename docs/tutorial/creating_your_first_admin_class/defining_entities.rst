@@ -35,7 +35,7 @@ Author
         /**
          * @ORM\Column(type = "string")
          */
-        protected $name;
+        private $name;
 
         public function __construct($name)
         {
@@ -71,7 +71,7 @@ Post
          * @ORM\Column(type="integer")
          * @ORM\GeneratedValue(strategy="AUTO")
          */
-        protected $id;
+        private $id;
 
         /**
          * @ORM\Column(type="string", length=255)
@@ -79,49 +79,49 @@ Post
          * @Assert\NotBlank()
          * @Assert\Length(min="10", max=255)
          */
-        protected $title;
+        private $title;
 
         /**
          * @ORM\Column(type="text")
          */
-        protected $abstract;
+        private $abstract;
 
         /**
          * @ORM\Column(type="text")
          *
          * @Assert\NotBlank()
          */
-        protected $content;
+        private $content;
 
         /**
          * @ORM\Column(type="boolean")
          */
-        protected $enabled;
+        private $enabled;
 
         /**
          * @ORM\Column(type="datetime")
          */
-        protected $created_at;
+        private $created_at;
 
         /**
          * @ORM\Column(type="datetime_immutable")
          */
-        protected $updated_at;
+        private $updated_at;
 
         /**
          * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
          */
-        protected $comments;
+        private $comments;
 
         /**
          * @ORM\ManyToMany(targetEntity="Tag")
          */
-        protected $tags;
+        private $tags;
 
         /**
          * @ORM\Embedded(class="Author")
          */
-        protected $author;
+        private $author;
 
         public function __construct()
         {
@@ -165,23 +165,23 @@ Tag
          * @ORM\Column(type="integer")
          * @ORM\GeneratedValue(strategy="AUTO")
          */
-        protected $id;
+        private $id;
 
         /**
          * @ORM\Column(type="string")
          * @Assert\NotBlank()
          */
-        protected $name;
+        private $name;
 
         /**
          * @ORM\Column(type="boolean")
          */
-        protected $enabled;
+        private $enabled;
 
         /**
          * @ORM\ManyToMany(targetEntity="Post")
          */
-        protected $posts;
+        private $posts;
 
         public function __construct()
         {
@@ -217,14 +217,14 @@ Comment
          * @ORM\Column(type="integer")
          * @ORM\GeneratedValue(strategy="AUTO")
          */
-        protected $id;
+        private $id;
 
         /**
          * @ORM\Column(type="string")
          *
          * @Assert\NotBlank()
          */
-        protected $name;
+        private $name;
 
 
         /**
@@ -232,23 +232,23 @@ Comment
          *
          * @Assert\NotBlank()
          */
-        protected $email;
+        private $email;
 
         /**
          * @ORM\Column(type="string")
          */
-        protected $url;
+        private $url;
 
         /**
          * @ORM\Column(type="text")
          * @Assert\NotBlank()
          */
-        protected $message;
+        private $message;
 
         /**
          * @ORM\ManyToOne(targetEntity="Post")
          */
-        protected $post;
+        private $post;
 
         public function __toString()
         {
@@ -256,6 +256,35 @@ Comment
         }
     }
 
+.. note::
+
+    For advanced usage, ``$id`` might be implemented as an object. The bundle will automatically resolve its string
+    representation from the ID object using ``$entity->getId()->__toString()`` (if implemented) when needed
+    (e.g., for generating url / rendering).
+
+    For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented:
+
+    .. code-block:: php
+
+        <?php
+
+        class Comment
+        {
+            /**
+             * @var \Ramsey\Uuid\UuidInterface
+             * @Id
+             * @Column(type="uuid_binary_ordered_time", unique=true)
+             * @GeneratedValue(strategy="CUSTOM")
+             * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
+             */
+            private $id;
+
+            // ...
+        }
+
+    As ``$comment->getId()`` returns an object of ``\Ramsey\Uuid\UuidInterface`` and the bundle recognizes
+    that it has offered a ``__toString`` method, ``$comment->getId()->__toString()`` is called to resolve
+    the ID string value as part of the entity url generation.
 
 Generate getters and setters
 ----------------------------
@@ -275,3 +304,5 @@ Create the database related to the entities and the mapping by running the follo
 .. code-block:: bash
 
     php app/console doctrine:schema:update --force
+
+.. _`InnoDB-optimised binary UUIDs`: https://github.com/ramsey/uuid-doctrine#innodb-optimised-binary-uuids

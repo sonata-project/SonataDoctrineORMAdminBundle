@@ -339,6 +339,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
+            if (method_exists($value, '__toString')) {
+                $identifiers[] = (string) $value;
+
+                continue;
+            }
+
             $fieldType = $metadata->getTypeOfField($name);
             $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
             if ($type) {

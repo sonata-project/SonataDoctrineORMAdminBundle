@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.7.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.3...3.7.0) - 2018-12-29
+### Added
+- Offer support of id string resolution for entity id object where
+`__toString()` will be used if provided. (This also fixes the issue where the
+id fails to display when the binary / byte datatype is used as primary key,
+e.g., UUIDBinaryType (aka: InnoDB Optimised Binary UUIDs))
+- Added possibility to make `StringFilter` case-insensitive
+
+### Fixed
+- Fix using the new collection type namespace
+- Fix deprecation for symfony/config 4.2+
+- Fix `Twig_Error_Runtime` "Key "associationAdmin" for array with keys
+translationDomain, associationadmin, options" does not exist."
+
 ## [3.6.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.2...3.6.3) - 2018-10-25
 ### Fixed
 - `sonata.admin.manipulator.acl.object.orm` is now public
