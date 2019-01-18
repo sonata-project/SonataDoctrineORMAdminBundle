@@ -23,7 +23,6 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
-use Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -34,6 +33,7 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
 
