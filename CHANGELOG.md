@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.7.0...3.8.0) - 2019-01-20
+
+### Added
+- Compatibility with `sonata-project/exporter` 2
+
+### Removed
+- support for php 5 and php 7.0
+
 ## [3.7.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.6.3...3.7.0) - 2018-12-29
 ### Added
 - Offer support of id string resolution for entity id object where
