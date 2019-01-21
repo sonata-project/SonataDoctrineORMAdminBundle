@@ -96,23 +96,23 @@ class ModelManagerTest extends TestCase
 
         $parameters = $manager->getSortParameters($field1, $datagrid1);
 
-        $this->assertEquals('DESC', $parameters['filter']['_sort_order']);
-        $this->assertEquals('field1', $parameters['filter']['_sort_by']);
+        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
+        $this->assertSame('field1', $parameters['filter']['_sort_by']);
 
         $parameters = $manager->getSortParameters($field2, $datagrid1);
 
-        $this->assertEquals('ASC', $parameters['filter']['_sort_order']);
-        $this->assertEquals('field2', $parameters['filter']['_sort_by']);
+        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
+        $this->assertSame('field2', $parameters['filter']['_sort_by']);
 
         $parameters = $manager->getSortParameters($field3, $datagrid1);
 
-        $this->assertEquals('ASC', $parameters['filter']['_sort_order']);
-        $this->assertEquals('field3sortBy', $parameters['filter']['_sort_by']);
+        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
+        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
 
         $parameters = $manager->getSortParameters($field3, $datagrid2);
 
-        $this->assertEquals('DESC', $parameters['filter']['_sort_order']);
-        $this->assertEquals('field3sortBy', $parameters['filter']['_sort_by']);
+        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
+        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
     }
 
     public function getVersionDataProvider()
@@ -240,26 +240,26 @@ class ModelManagerTest extends TestCase
         /** @var ClassMetadata $metadata */
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'plainField');
-        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'integer');
+        $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'integer');
 
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.plainField');
-        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'string');
+        $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'string');
 
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'embeddedEntity.plainField');
-        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+        $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.embeddedEntity.plainField');
-        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+        $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
         list($metadata, $lastPropertyName) = $modelManager
             ->getParentMetadataForProperty(
                 $containerEntityClass,
                 'associatedEntity.embeddedEntity.subEmbeddedEntity.plainField'
             );
-        $this->assertEquals($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
+        $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
     }
 
     public function getMetadataForEmbeddedEntity()
@@ -403,7 +403,7 @@ class ModelManagerTest extends TestCase
         $manager = new ModelManager($registry);
         $result = $manager->getIdentifierValues($entity);
 
-        $this->assertEquals('to-string-id', $result[0]);
+        $this->assertSame('to-string-id', $result[0]);
     }
 
     public function testNonIntegerIdentifierType()
@@ -447,7 +447,7 @@ class ModelManagerTest extends TestCase
         $manager = new ModelManager($registry);
         $result = $manager->getIdentifierValues($entity);
 
-        $this->assertEquals($entity->getId()->toString(), $result[0]);
+        $this->assertSame($entity->getId()->toString(), $result[0]);
     }
 
     public function testAssociationIdentifierType()

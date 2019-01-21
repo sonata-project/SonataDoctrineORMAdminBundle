@@ -48,7 +48,7 @@ class ListBuilder implements ListBuilderInterface
 
     public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
-        if (null == $type) {
+        if (null === $type) {
             $guessType = $this->guesser->guessType(
                 $admin->getClass(),
                 $fieldDescription->getName(),
@@ -149,7 +149,7 @@ class ListBuilder implements ListBuilderInterface
             ClassMetadata::ONE_TO_ONE,
             ClassMetadata::ONE_TO_MANY,
             ClassMetadata::MANY_TO_MANY,
-        ])) {
+        ], true)) {
             $admin->attachAdminClass($fieldDescription);
         }
     }

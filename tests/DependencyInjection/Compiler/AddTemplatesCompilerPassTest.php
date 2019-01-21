@@ -28,7 +28,7 @@ class AddTemplatesCompilerPassTest extends TestCase
             ->expects($this->any())
             ->method('getParameter')
             ->will($this->returnCallback(function ($value) {
-                if ('sonata.admin.configuration.admin_services' == $value) {
+                if ('sonata.admin.configuration.admin_services' === $value) {
                     return [
                         'my.admin' => [
                             'templates' => [
@@ -39,7 +39,7 @@ class AddTemplatesCompilerPassTest extends TestCase
                     ];
                 }
 
-                if ('sonata_doctrine_orm_admin.templates' == $value) {
+                if ('sonata_doctrine_orm_admin.templates' === $value) {
                     return [
                         'form' => ['default_form.twig.html'],
                         'filter' => ['default_filter.twig.html'],
@@ -72,6 +72,6 @@ class AddTemplatesCompilerPassTest extends TestCase
             ['setFormTheme', [['default_form.twig.html', 'myform.twig.html']]],
         ];
 
-        $this->assertEquals($expected, $definition->getMethodCalls());
+        $this->assertSame($expected, $definition->getMethodCalls());
     }
 }
