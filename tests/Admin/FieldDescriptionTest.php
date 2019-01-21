@@ -67,6 +67,8 @@ class FieldDescriptionTest extends TestCase
 
         $expected = [
             'misc' => 'foobar',
+            'placeholder' => 'short_object_description_placeholder',
+            'link_parameters' => [],
             'array' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
@@ -78,8 +80,6 @@ class FieldDescriptionTest extends TestCase
             ],
             'integer' => 1,
             'final' => 'test',
-            'placeholder' => 'short_object_description_placeholder',
-            'link_parameters' => [],
         ];
 
         $this->assertSame($expected, $field->getOptions());
