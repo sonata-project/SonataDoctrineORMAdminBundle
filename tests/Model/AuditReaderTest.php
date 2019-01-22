@@ -67,6 +67,9 @@ class AuditReaderTest extends TestCase
         $this->auditReader->findRevisions($className, $id);
     }
 
+    /**
+     * @doesNotPerformAssertions
+     */
     public function testDiff()
     {
         $this->simpleThingsAuditReader
