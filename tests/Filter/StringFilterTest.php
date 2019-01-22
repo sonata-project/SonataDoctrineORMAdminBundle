@@ -43,14 +43,14 @@ class StringFilterTest extends TestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => null]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -78,7 +78,7 @@ class StringFilterTest extends TestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_EQUAL]);
-        $this->assertSame(['alias.field = :field_name_0'], $builder->query);
+        $this->assertSame(['alias.field = :field_name_0'], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -108,11 +108,8 @@ class StringFilterTest extends TestCase
         $filter->apply($builder, ['type' => ChoiceType::TYPE_EQUAL, 'value' => 'asd']);
 
         $this->assertSame([
-            'o.association_mapping',
-            's_association_mapping.sub_association_mapping',
-            's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
             's_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
-        ], $builder->query);
+        ], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -126,7 +123,7 @@ class StringFilterTest extends TestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -140,7 +137,7 @@ class StringFilterTest extends TestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
         $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
