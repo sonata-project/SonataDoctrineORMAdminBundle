@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.0...3.8.1) - 2019-01-23
+### Fixed
+TypeError with explode in ModelManager
+
 ## [3.8.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.7.0...3.8.0) - 2019-01-20
 
 ### Added
