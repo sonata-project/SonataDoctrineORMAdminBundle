@@ -28,7 +28,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
         $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
-            if (!isset($attributes[0]['manager_type']) || 'orm' != $attributes[0]['manager_type']) {
+            if (!isset($attributes[0]['manager_type']) || 'orm' !== $attributes[0]['manager_type']) {
                 continue;
             }
 

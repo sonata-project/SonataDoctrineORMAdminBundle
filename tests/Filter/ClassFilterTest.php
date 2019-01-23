@@ -31,7 +31,7 @@ class ClassFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'asds');
         $filter->filter($builder, 'alias', 'field', ['value' => '']);
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
@@ -44,7 +44,7 @@ class ClassFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
@@ -65,7 +65,7 @@ class ClassFilterTest extends TestCase
             'alias INSTANCE OF type',
         ];
 
-        $this->assertEquals($expected, $builder->query);
+        $this->assertSame($expected, $builder->query);
         $this->assertTrue($filter->isActive());
     }
 }
