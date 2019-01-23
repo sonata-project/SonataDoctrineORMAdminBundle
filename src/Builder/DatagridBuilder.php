@@ -84,7 +84,7 @@ class DatagridBuilder implements DatagridBuilderInterface
                     )
                 );
 
-                if ('string' == $fieldMapping['type']) {
+                if ('string' === $fieldMapping['type']) {
                     $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
                 }
 
@@ -124,14 +124,14 @@ class DatagridBuilder implements DatagridBuilderInterface
             ClassMetadata::MANY_TO_MANY,
             ClassMetadata::MANY_TO_ONE,
             ClassMetadata::ONE_TO_ONE,
-        ])) {
+        ], true)) {
             $admin->attachAdminClass($fieldDescription);
         }
     }
 
     public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
     {
-        if (null == $type) {
+        if (null === $type) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
 
             $type = $guessType->getType();
