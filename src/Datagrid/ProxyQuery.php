@@ -155,7 +155,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         foreach ($identifierFields as $identifierField) {
             $order = $rootAlias.'.'.$identifierField;
-            if (!\in_array($order, $existingOrders)) {
+            if (!\in_array($order, $existingOrders, true)) {
                 $queryBuilder->addOrderBy(
                     $order,
                     $this->getSortOrder() // reusing the sort order is the most natural way to go
@@ -186,7 +186,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function setSortOrder($sortOrder)
     {
-        if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'])) {
+        if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'], true)) {
             throw new \InvalidArgumentException(sprintf(
                 '"%s" is not a valid sort order, valid values are "%s"',
                 $sortOrder,
@@ -271,7 +271,7 @@ class ProxyQuery implements ProxyQueryInterface
             }
 
             $newAlias .= '_'.$associationMapping['fieldName'];
-            if (!\in_array($newAlias, $this->entityJoinAliases)) {
+            if (!\in_array($newAlias, $this->entityJoinAliases, true)) {
                 $this->entityJoinAliases[] = $newAlias;
                 $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
             }
