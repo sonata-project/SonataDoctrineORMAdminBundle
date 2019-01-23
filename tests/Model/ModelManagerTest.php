@@ -186,6 +186,9 @@ class ModelManagerTest extends TestCase
             ->method('getMetadata')
             ->will($this->returnValue($metadata));
 
+        $em->expects($isVersioned ? $this->once() : $this->never())
+            ->method('lock');
+
         if ($expectsException) {
             $em->expects($this->once())
                 ->method('lock')
