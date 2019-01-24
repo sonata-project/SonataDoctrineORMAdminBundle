@@ -42,7 +42,7 @@ class PagerTest extends TestCase
         $pager = new Pager();
         $pager->setCountColumn($em->getClassMetadata(UserBrowser::class)->getIdentifierFieldNames());
         $pager->setQuery($pq);
-        $this->assertEquals(0, $pager->computeNbResult());
+        $this->assertSame(0, $pager->computeNbResult());
     }
 
     public function dataGetComputeNbResult()
