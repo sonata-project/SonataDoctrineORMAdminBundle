@@ -30,7 +30,7 @@ class NumberFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
@@ -43,7 +43,7 @@ class NumberFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
@@ -70,7 +70,7 @@ class NumberFilterTest extends TestCase
             'alias.field = :field_name_5',
         ];
 
-        $this->assertEquals($expected, $builder->query);
+        $this->assertSame($expected, $builder->query);
         $this->assertTrue($filter->isActive());
     }
 }

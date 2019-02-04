@@ -243,7 +243,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return;
         }
 
-        $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, $id));
+        $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
 
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
@@ -439,7 +439,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             foreach ($queryProxy->getQuery()->iterate() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
-                if (0 == (++$i % 20)) {
+                if (0 === (++$i % 20)) {
                     $entityManager->flush();
                     $entityManager->clear();
                 }
@@ -499,8 +499,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $values = $datagrid->getValues();
 
-        if ($fieldDescription->getName() == $values['_sort_by']->getName() || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable')) {
-            if ('ASC' == $values['_sort_order']) {
+        if ($fieldDescription->getName() === $values['_sort_by']->getName() || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable')) {
+            if ('ASC' === $values['_sort_order']) {
                 $values['_sort_order'] = 'DESC';
             } else {
                 $values['_sort_order'] = 'ASC';

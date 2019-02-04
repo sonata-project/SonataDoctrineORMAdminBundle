@@ -34,7 +34,7 @@ class DateTimeFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', '');
         $filter->filter($builder, 'alias', 'field', ['value' => '']);
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 

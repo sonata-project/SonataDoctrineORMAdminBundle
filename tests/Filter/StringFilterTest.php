@@ -30,7 +30,7 @@ class StringFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
 
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
@@ -40,18 +40,18 @@ class StringFilterTest extends TestCase
         $filter->initialize('field_name', ['format' => '%s']);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertEquals(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => null]);
-        $this->assertEquals(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -61,11 +61,11 @@ class StringFilterTest extends TestCase
         $filter->initialize('field_name', ['format' => '%s']);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_NOT_CONTAINS]);
-        $this->assertEquals(['alias.field NOT LIKE :field_name_0', 'alias.field IS NULL'], $builder->query[0]->getParts());
-        $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['alias.field NOT LIKE :field_name_0', 'alias.field IS NULL'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -75,11 +75,11 @@ class StringFilterTest extends TestCase
         $filter->initialize('field_name', ['format' => '%s']);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_EQUAL]);
-        $this->assertEquals(['alias.field = :field_name_0'], $builder->query);
-        $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['alias.field = :field_name_0'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -103,17 +103,26 @@ class StringFilterTest extends TestCase
         ]);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->apply($builder, ['type' => ChoiceType::TYPE_EQUAL, 'value' => 'asd']);
 
-        $this->assertEquals([
+        $this->assertSame(
             'o.association_mapping',
+            $builder->query[0]
+        );
+        $this->assertSame(
             's_association_mapping.sub_association_mapping',
+            $builder->query[1]
+        );
+        $this->assertSame(
             's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
+            $builder->query[2]
+        );
+        $this->assertSame([
             's_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
-        ], $builder->query);
-        $this->assertEquals(['field_name_0' => 'asd'], $builder->parameters);
+        ], $builder->query[3]->getParts());
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -123,11 +132,11 @@ class StringFilterTest extends TestCase
         $filter->initialize('field_name', ['case_sensitive' => false]);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertEquals(['LOWER(alias.field) LIKE :field_name_0'], $builder->query);
-        $this->assertEquals(['field_name_0' => '%foobar%'], $builder->parameters);
+        $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -137,11 +146,11 @@ class StringFilterTest extends TestCase
         $filter->initialize('field_name', ['case_sensitive' => true]);
 
         $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertEquals([], $builder->query);
+        $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertEquals(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertEquals(['field_name_0' => '%FooBar%'], $builder->parameters);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
+        $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 }

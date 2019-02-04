@@ -29,26 +29,26 @@ class BooleanFilter extends Filter
         if (\is_array($data['value'])) {
             $values = [];
             foreach ($data['value'] as $v) {
-                if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
+                if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                     continue;
                 }
 
-                $values[] = (BooleanType::TYPE_YES == $v) ? 1 : 0;
+                $values[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
             }
 
-            if (0 == \count($values)) {
+            if (0 === \count($values)) {
                 return;
             }
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES])) {
+            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                 return;
             }
 
             $parameterName = $this->getNewParameterName($queryBuilder);
             $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES == $data['value']) ? 1 : 0);
+            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
         }
     }
 

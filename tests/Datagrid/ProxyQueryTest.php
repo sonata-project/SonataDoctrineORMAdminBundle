@@ -195,7 +195,7 @@ class ProxyQueryTest extends TestCase
 
         $result = $pq->execute();
 
-        $this->assertEquals(2, $result[0]['id']);
+        $this->assertSame(2, $result[0]['id']);
     }
 
     public function testSortOrderValidatesItsInput(): void

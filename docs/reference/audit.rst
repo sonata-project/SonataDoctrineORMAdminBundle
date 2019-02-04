@@ -32,25 +32,16 @@ The audit functionality is provided by an optional, separated bundle that you ne
 
 .. code-block:: bash
 
-    php composer.phar require simplethings/entity-audit-bundle
+    composer require simplethings/entity-audit-bundle
 
+Next, be sure to enable the bundle in your `bundles.php` file::
 
-Next, be sure to enable the bundle in your `AppKernel.php` file:
+    // config/bundles.php
 
-.. code-block:: php
-
-    <?php
-
-    // app/AppKernel.php
-
-    public function registerBundles()
-    {
-        return array(
-            // ...
-            new SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle(),
-            // ...
-        );
-    }
+    return [
+        // ...
+        SimpleThings\EntityAudit\SimpleThingsEntityAuditBundle:class => ['all' => true],
+    ];
 
 Configuration
 -------------
@@ -60,23 +51,22 @@ will be audited. You can change this behavior by setting the ``force`` option to
 
 .. code-block:: yaml
 
+    # config/packages/sonata_doctrine_orm_admin.yaml
+
     sonata_doctrine_orm_admin:
         audit:
             force: false
 
 It is also possible to configure an entity audit with the attribute `audit` in `services.xml`.
-For instance :
 
 .. code-block:: xml
 
     <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
-        <tag name="sonata.admin" manager_type="orm" audit="false" group="tutorial_blog" label="post"/>
-
         <argument/>
         <argument>Tutorial\BlogBundle\Entity\Post</argument>
         <argument>TutorialBlogBundle:PostAdmin</argument>
+        <tag name="sonata.admin" manager_type="orm" audit="false" group="tutorial_blog" label="Post"/>
     </service>
-
 
 Usage
 -----
@@ -97,6 +87,7 @@ Entity compare
 ^^^^^^^^^^^^^^
 
 .. versionadded:: 2.3
+
     The history compare action was added in SonataAdminBundle 2.3.
 
 For making a comparison of two revisions, the ``show`` definition will be used for rendering both revisions. All rows where the output of the revisions doesn't match, the row is marked.

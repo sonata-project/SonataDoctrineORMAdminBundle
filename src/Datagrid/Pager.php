@@ -39,12 +39,13 @@ class Pager extends BasePager
         }
 
         $countQuery->select(sprintf(
-            'count(%s %s) as cnt',
+            'count(%s %s.%s) as cnt',
             $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            $this->getColumnsForQuery(current($countQuery->getRootAliases()))
+            current($countQuery->getRootAliases()),
+            current($this->getCountColumn())
         ));
 
-        return $countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult();
+        return (int) ($countQuery->resetDQLPart('orderBy')->getQuery()->getSingleScalarResult());
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
@@ -70,7 +71,7 @@ class Pager extends BasePager
             $this->getQuery()->setParameters($this->getParameters());
         }
 
-        if (0 == $this->getPage() || 0 == $this->getMaxPerPage() || 0 == $this->getNbResults()) {
+        if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->getNbResults()) {
             $this->setLastPage(0);
         } else {
             $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
@@ -80,18 +81,5 @@ class Pager extends BasePager
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
-    }
-
-    private function getColumnsForQuery(string $rootAlias): string
-    {
-        if (1 === \count($countColumns = $this->getCountColumn())) {
-            return $rootAlias.'.'.current($countColumns);
-        }
-
-        $columns = implode(",'-',", array_map(function ($column) use ($rootAlias) {
-            return "$rootAlias.$column";
-        }, $countColumns));
-
-        return "concat($columns)";
     }
 }

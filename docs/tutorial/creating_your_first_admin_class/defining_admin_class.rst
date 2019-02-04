@@ -12,17 +12,13 @@ PostAdmin
 
 By convention, `Admin` files are located in an `Admin` namespace.
 
-First, you need to create an `Admin/PostAdmin.php` file:
-
-.. code-block:: php
-
-    <?php
+First, you need to create an `Admin/PostAdmin.php` file::
 
     // src/Tutorial/BlogBundle/Admin/PostAdmin.php
 
     namespace Tutorial\BlogBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -32,13 +28,8 @@ First, you need to create an `Admin/PostAdmin.php` file:
 
     use Tutorial\BlogBundle\Entity\Comment;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
-        /**
-         * @param \Sonata\AdminBundle\Show\ShowMapper $showMapper
-         *
-         * @return void
-         */
         protected function configureShowFields(ShowMapper $showMapper)
         {
             $showMapper
@@ -47,41 +38,29 @@ First, you need to create an `Admin/PostAdmin.php` file:
                 ->add('author.name')
                 ->add('abstract')
                 ->add('content')
-                ->add('tags')
-            ;
+                ->add('tags');
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
-         *
-         * @return void
-         */
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
                 ->with('General')
-                    ->add('enabled', null, array('required' => false))
+                    ->add('enabled', null, ['required' => false])
                     ->add('title')
                     ->add('abstract')
                     ->add('content')
                 ->end()
                 ->with('Tags')
-                    ->add('tags', 'sonata_type_model', array('expanded' => true, 'multiple' => true))
+                    ->add('tags', 'sonata_type_model', ['expanded' => true, 'multiple' => true])
                 ->end()
                 ->with('Comments')
-                    ->add('comments', 'sonata_type_model', array('multiple' => true))
+                    ->add('comments', 'sonata_type_model', ['multiple' => true])
                 ->end()
-                ->with('System Information', array('collapsed' => true))
+                ->with('System Information', ['collapsed' => true])
                     ->add('created_at')
-                ->end()
-            ;
+                ->end();
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
-         *
-         * @return void
-         */
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
@@ -91,28 +70,21 @@ First, you need to create an `Admin/PostAdmin.php` file:
                 ->add('abstract')
                 ->add('content')
                 ->add('tags')
-                ->add('_action', 'actions', array(
-                    'actions' => array(
-                        'show' => array(),
-                        'edit' => array(),
-                        'delete' => array(),
-                    )
-                ))
-            ;
+                ->add('_action', 'actions', [
+                    'actions' => [
+                        'show' => [],
+                        'edit' => [],
+                        'delete' => [],
+                    ]
+                ]);
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
-         *
-         * @return void
-         */
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, array('field_options' => array('expanded' => true, 'multiple' => true)))
-            ;
+                ->add('tags', null, ['field_options' => ['expanded' => true, 'multiple' => true]]);
         }
     }
 
@@ -120,26 +92,27 @@ Second, register the `PostAdmin` class inside the DIC in your config file:
 
 .. configuration-block::
 
-.. code-block:: yaml
+    .. code-block:: xml
 
-    # app/config/config.yml
+        <!-- config/services.xml -->
 
-    services:
-       tutorial.blog.admin.post:
-          class: Tutorial\BlogBundle\Admin\PostAdmin
-          tags:
-            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: post }
-          arguments: [null, Tutorial\BlogBundle\Entity\Post, TutorialBlogBundle:PostAdmin]
+        <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
+            <argument/>
+            <argument>Tutorial\BlogBundle\Entity\Post</argument>
+            <argument>TutorialBlogBundle:PostAdmin</argument>
+            <tag name="sonata.admin" manager_type="orm" group="tutorial_blog" label="Post"/>
+        </service>
 
-.. code-block:: xml
+    .. code-block:: yaml
 
-    <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
-        <tag name="sonata.admin" manager_type="orm" group="tutorial_blog" label="post"/>
+        # config/services.yaml
 
-        <argument/>
-        <argument>Tutorial\BlogBundle\Entity\Post</argument>
-        <argument>TutorialBlogBundle:PostAdmin</argument>
-    </service>
+        services:
+           tutorial.blog.admin.post:
+              class: Tutorial\BlogBundle\Admin\PostAdmin
+              arguments: [~, Tutorial\BlogBundle\Entity\Post, TutorialBlogBundle:PostAdmin]
+              tags:
+                  - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: 'Post' }
 
 These is the minimal configuration required to display the entity inside the dashboard and interact with the CRUD interface.
 Following this however, you will need to create an `Admin Controller`.
@@ -154,11 +127,11 @@ Tweak the TagAdmin class
 
 .. code-block:: php
 
-    <?php
     // src/Tutorial/BlogBundle/Admin/TagAdmin.php
+
     namespace Tutorial\BlogBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\CoreBundle\Validator\ErrorElement;
@@ -166,56 +139,35 @@ Tweak the TagAdmin class
 
     use Tutorial\BlogBundle\Entity\Tag;
 
-    class TagAdmin extends Admin
+    final class TagAdmin extends AbstractAdmin
     {
-        /**
-         * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
-         * @return void
-         */
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
                 ->add('name')
-                ->add('enabled', null, array('required' => false))
-            ;
+                ->add('enabled', null, ['required' => false]);
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
-         * @return void
-         */
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
                 ->add('name')
-                ->add('posts')
-            ;
+                ->add('posts');
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
-         * @return void
-         */
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
                 ->addIdentifier('name')
-                ->add('enabled')
-            ;
+                ->add('enabled');
         }
 
-        /**
-         * @param \Sonata\CoreBundle\Validator\ErrorElement $errorElement
-         * @param mixed $object
-         * @return void
-         */
         public function validate(ErrorElement $errorElement, $object)
         {
             $errorElement
                 ->with('name')
-                    ->assertMaxLength(array('limit' => 32))
-                ->end()
-            ;
+                    ->assertMaxLength(['limit' => 32])
+                ->end();
         }
     }
 
@@ -223,72 +175,56 @@ And register the `TagAdmin` class inside the DIC in your config file:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/services.yaml
 
     services:
-       #...
-       tutorial.blog.admin.tag:
-          class: Tutorial\BlogBundle\Admin\TagAdmin
-          tags:
-            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: tag }
-          arguments: [null, Tutorial\BlogBundle\Entity\Tag, TutorialBlogBundle:TagAdmin]
-
+        tutorial.blog.admin.tag:
+            class: Tutorial\BlogBundle\Admin\TagAdmin
+            arguments: [~, Tutorial\BlogBundle\Entity\Tag, TutorialBlogBundle:TagAdmin]
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: 'Tag' }
 
 Tweak the CommentAdmin class
 ----------------------------
 
 .. code-block:: php
 
-    <?php
     // src/Tutorial/BlogBundle/Admin/CommentAdmin.php
+
     namespace Tutorial\BlogBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
-    class CommentAdmin extends Admin
+    final class CommentAdmin extends AbstractAdmin
     {
         protected $parentAssociationMapping = 'post';
 
-        /**
-         * @param \Sonata\AdminBundle\Form\FormMapper $formMapper
-         * @return void
-         */
         protected function configureFormFields(FormMapper $formMapper)
         {
-            if(!$this->isChild()) {
-                $formMapper->add('post', 'sonata_type_model', array(), array('edit' => 'list'));
+            if (!$this->isChild()) {
+                $formMapper->add('post', 'sonata_type_model', [], ['edit' => 'list']);
             }
 
             $formMapper
                 ->add('name')
                 ->add('email')
-                ->add('url', null, array('required' => false))
-                ->add('message')
-            ;
+                ->add('url', null, ['required' => false])
+                ->add('message');
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\DatagridMapper $datagridMapper
-         * @return void
-         */
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
                 ->add('name')
                 ->add('email')
-                ->add('message')
-            ;
+                ->add('message');
         }
 
-        /**
-         * @param \Sonata\AdminBundle\Datagrid\ListMapper $listMapper
-         * @return void
-         */
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
@@ -299,22 +235,19 @@ Tweak the CommentAdmin class
                 ->add('message');
         }
 
-        /**
-         * @return array
-         */
         public function getBatchActions()
         {
             $actions = parent::getBatchActions();
 
-            $actions['enabled'] = array(
+            $actions['enabled'] = [
                 'label' => $this->trans('batch_enable_comments'),
                 'ask_confirmation' => true,
-            );
+            ];
 
-            $actions['disabled'] = array(
+            $actions['disabled'] = [
                 'label' => $this->trans('batch_disable_comments'),
                 'ask_confirmation' => false
-            );
+            ];
 
             return $actions;
         }
@@ -324,12 +257,11 @@ And register the `TagAdmin` class inside the DIC in your config file:
 
 .. code-block:: yaml
 
-    # app/config/config.yml
+    # config/services.yaml
 
     services:
-       #...
-       tutorial.blog.admin.comment:
-          class: Tutorial\BlogBundle\Admin\CommentAdmin
-          tags:
-            - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: comment }
-          arguments: [null, Tutorial\BlogBundle\Entity\Comment, TutorialBlogBundle:CommentAdmin]
+        tutorial.blog.admin.comment:
+            class: Tutorial\BlogBundle\Admin\CommentAdmin
+            arguments: [, Tutorial\BlogBundle\Entity\Comment, TutorialBlogBundle:CommentAdmin]
+            tags:
+                - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: 'Comment' }

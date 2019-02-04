@@ -52,7 +52,7 @@ abstract class Filter extends BaseFilter
      */
     protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter): void
     {
-        if (self::CONDITION_OR == $this->getCondition()) {
+        if (self::CONDITION_OR === $this->getCondition()) {
             $queryBuilder->orWhere($parameter);
         } else {
             $queryBuilder->andWhere($parameter);

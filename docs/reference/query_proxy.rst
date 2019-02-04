@@ -4,7 +4,6 @@
 Doctrine ORM Proxy Query
 ========================
 
-
 The ``ProxyQuery`` object is used to add missing features from the original `Doctrine Query` builder:
 
 * ``execute`` method - no need to call the ``getQuery()`` method,
@@ -19,10 +18,7 @@ The ``ProxyQuery`` object is used to add missing features from the original `Doc
   causes performance issues and you are sure there will be no duplicates.
   To do so, simply call ``setDistinct(false)``.
 
-
 .. code-block:: php
-
-    <?php
 
     use Sonata\AdminBundle\Datagrid\ORM\ProxyQuery;
 

@@ -14,17 +14,15 @@ Example
 
 .. code-block:: php
 
-    <?php
-
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
         protected function configureListFields(ListMapper $listMapper)
         {
@@ -36,12 +34,12 @@ Example
                 ->add('commentsEnabled')
 
                 // add custom action links
-                ->add('_action', 'actions', array(
-                    'actions' => array(
-                        'show' => array(),
-                        'edit' => array(),
-                    )
-                ))
+                ->add('_action', 'actions', [
+                    'actions' => [
+                        'show' => [],
+                        'edit' => [],
+                    ]
+                ])
             ;
         }
     }
@@ -73,7 +71,6 @@ The most important option for each field is the ``type``. The available `types` 
 
     .. code-block:: php
 
-        <?php
         use Ramsey\Uuid\Uuid;
 
         class Example
@@ -101,29 +98,27 @@ You can set actions for the list items by adding an '_action' field in ``configu
 
 .. code-block:: php
 
-    <?php
-    $listMapper->add('_action', 'actions', array(
-        'actions' => array(
-            'show' => array(),
-            'edit' => array(),
-        )
-    ))
+    $listMapper
+        ->add('_action', 'actions', []
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+            ]
+        ]);
 
 `Edit` and `Delete` actions are enabled in the default configuration. You can add your own!
 Default template file is: ``@SonataAdmin/CRUD/list__action_[ACTION_NAME].html.twig``
 
-You can specify your own by setting up the 'template' option like so:
+You can specify your own by setting up the 'template' option like so::
 
-.. code-block:: php
-
-    <?php
-    $listMapper->add('_action', 'actions', array(
-        'actions' => array(
-            'show' => array(),
-            'edit' => array(),
-            'delete' => array('template' => '@My/MyController/my_partial.html.twig'),
-        )
-    ))
+    $listMapper
+        ->add('_action', 'actions', [
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'delete' => ['template' => '@My/MyController/my_partial.html.twig'],
+            ]
+        ]);
 
 Advance Usage
 -------------
@@ -134,20 +129,20 @@ Displaying sub entity properties
 If you need to display only one field from a sub entity or embedded object in a dedicated column, you can simply use the dot-separated notation:
 
 .. note::
+
     This only makes sense when the prefix path is made of entities, not collections.
 
 .. code-block:: php
 
-    <?php
-    namespace Acme\AcmeBundle\Admin;
+    namespace App\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
 
-    class UserAdmin extends Admin
+    final class UserAdmin extends AbstractAdmin
     {
         protected function configureListFields(ListMapper $listMapper)
         {
@@ -162,31 +157,27 @@ If you need to display only one field from a sub entity or embedded object in a 
         }
     }
 
-
 Custom template
 ^^^^^^^^^^^^^^^
 
-If you need a specific layout for a row cell, you can define a custom template:
+If you need a specific layout for a row cell, you can define a custom template::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\MediaBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
 
-    class MediaAdmin extends Admin
+   final class MediaAdmin extends AbstractAdmin
     {
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
                 ->addIdentifier('id')
-                ->add('image', 'string', array('template' => '@SonataMedia/MediaAdmin/list_image.html.twig'))
-                ->add('custom', 'string', array('template' => '@SonataMedia/MediaAdmin/list_custom.html.twig'))
+                ->add('image', 'string', ['template' => '@SonataMedia/MediaAdmin/list_image.html.twig'])
+                ->add('custom', 'string', ['template' => '@SonataMedia/MediaAdmin/list_custom.html.twig'])
             ;
         }
     }
@@ -199,8 +190,8 @@ The related template:
 
     {% block field %}
         <div>
-            <strong>{{ object.name }}</strong> <br />
-            {{ object.providername}} : {{ object.width }}x{{ object.height }} <br />
+            <strong>{{ object.name }}</strong> <br/>
+            {{ object.providername}} : {{ object.width }}x{{ object.height }} <br/>
         </div>
     {% endblock %}
 
@@ -208,31 +199,25 @@ Custom route
 ^^^^^^^^^^^^
 
 Default route for a link is `edit` (`many_to_one`, `one_to_one`, etc.).
-Using this, the route can be customized as follows:
+Using this, the route can be customized as follows::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\MediaBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Show\ShowMapper;
 
-
-    class MediaAdmin extends Admin
+    final class MediaAdmin extends AbstractAdmin
     {
         protected function configureListFields(ListMapper $listMapper)
         {
             $listMapper
-                ->addIdentifier('field', null, array(
-                    'route' => array(
+                ->addIdentifier('field', null, [
+                    'route' => [
                         'name' => 'show'
-                    )
-                ))
-                ;
+                    ]
+                ]);
         }
    }
-

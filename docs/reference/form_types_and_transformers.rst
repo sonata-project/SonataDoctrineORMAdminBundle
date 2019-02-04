@@ -18,48 +18,36 @@ Form types
 * ``sonata_type_model``: this type works like the native ``EntityType`` but this internal is abstracted to work with any implemented layer.
 * ``sonata_type_immutable_array``: this type allows to edit a fixed array, like a settings array.
 
-Let's say, the object has settings properties:
+Let's say, the object has settings properties::
 
-.. code-block:: php
-
-    <?php
     class Page
     {
-        public $settings = array(
-            'content'   => 'default content',
-            'public'    => true,
-            'type'      => 1
-        );
+        public $settings = [
+            'content' => 'default content',
+            'public' => true,
+            'type' => 1
+        ];
     }
 
-Now you can edit the settings array with:
+Now you can edit the settings array with::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\PageBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
-    use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\AdminBundle\Show\ShowMapper;
-    use Sonata\CoreBundle\Validator\ErrorElement;
 
-    class PageAdmin extends Admin
+    final class PageAdmin extends AbstractAdmin
     {
-
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
                 ->add('enabled')
-                ->add('settings', 'sonata_type_immutable_array', array(
-                    'keys' => array(
-                        array('content', 'textarea', array()),
-                        array('public', 'checkbox', array()),
-                        array('type', 'choice', array('choices' => array(1 => 'type 1', 2 => 'type 2')))
-                    )
-            );
+                ->add('settings', 'sonata_type_immutable_array', [
+                    'keys' => [
+                        ['content', 'textarea', []],
+                        ['public', 'checkbox', []],
+                        ['type', 'choice', ['choices' => [1 => 'type 1', 2 => 'type 2']]]
+                ]);
         }
     ));
 
@@ -69,46 +57,42 @@ Then, the output will be:
            :alt: Immutable Array Type
            :width: 460
 
-Other options:
+Other options::
 
-.. code-block:: php
-
-    <?php
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Admin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
-    use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\AdminBundle\Datagrid\ListMapper;
-    use Sonata\AdminBundle\Show\ShowMapper;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
-    class PostAdmin extends Admin
+    final class PostAdmin extends AbstractAdmin
     {
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
                 ->with('General')
-                    ->add('enabled', null, array('required' => false))
-                    ->add('author', 'sonata_type_model', array(), array('edit' => 'list'))
+                    ->add('enabled', null, ['required' => false])
+                    ->add('author', 'sonata_type_model', [], ['edit' => 'list'])
                     ->add('title')
                     ->add('abstract')
                     ->add('content')
                 ->end()
                 ->with('Tags')
-                    ->add('tags', 'sonata_type_model', array('expanded' => true))
+                    ->add('tags', 'sonata_type_model', ['expanded' => true])
                 ->end()
-                ->with('Options', array('collapsed' => true))
+                ->with('Options', ['collapsed' => true])
                     ->add('commentsCloseAt')
-                    ->add('commentsEnabled', null, array('required' => false))
-                    ->add('commentsDefaultStatus', 'choice', array('choices' => Comment::getStatusList()))
+                    ->add('commentsEnabled', null, ['required' => false])
+                    ->add('commentsDefaultStatus', 'choice', [
+                        'choices' => Comment::getStatusList()
+                    ])
                 ->end()
             ;
         }
     }
 
-Datatransformer
+DataTransformer
 ---------------
 
 * ``ArrayToModelTransformer``: transform an array to an object,
