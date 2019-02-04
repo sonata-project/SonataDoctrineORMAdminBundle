@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.8.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.1...3.8.2) - 2019-02-04
+### Fixed
+- `Sonata\DoctrineORMAdminBundle\Datagrid\Pager::computeNbResult()` now returns an integer, not a string
+- Composite key pagination throwing exception
+
 ## [3.8.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.0...3.8.1) - 2019-01-23
 ### Fixed
 TypeError with explode in ModelManager
