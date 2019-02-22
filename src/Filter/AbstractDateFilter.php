@@ -38,13 +38,13 @@ abstract class AbstractDateFilter extends Filter
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         // check data sanity
-        if (!$data || !\is_array($data) || !array_key_exists('value', $data)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
         if ($this->range) {
             // additional data check for ranged items
-            if (!array_key_exists('start', $data['value']) || !array_key_exists('end', $data['value'])) {
+            if (!\array_key_exists('start', $data['value']) || !\array_key_exists('end', $data['value'])) {
                 return;
             }
 

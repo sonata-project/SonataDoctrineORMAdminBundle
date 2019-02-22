@@ -90,7 +90,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
                 if (!empty($embeddedClasses = $metadata->embeddedClasses)
                     && isset($fieldMapping['declaredField'])
-                    && array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
+                    && \array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
                 ) {
                     $fieldDescription->setOption(
                         'field_name',
