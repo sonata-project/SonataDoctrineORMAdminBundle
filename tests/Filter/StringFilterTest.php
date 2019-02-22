@@ -34,6 +34,18 @@ class StringFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
+    public function testNullValue()
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['format' => '%s']);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertSame([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => ChoiceType::TYPE_EQUAL]);
+        $this->assertFalse($filter->isActive());
+    }
+
     public function testContains()
     {
         $filter = new StringFilter();
