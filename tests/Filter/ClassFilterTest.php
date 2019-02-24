@@ -20,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
 
 class ClassFilterTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -35,7 +35,7 @@ class ClassFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterInvalidOperator()
+    public function testFilterInvalidOperator(): void
     {
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -48,7 +48,7 @@ class ClassFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);

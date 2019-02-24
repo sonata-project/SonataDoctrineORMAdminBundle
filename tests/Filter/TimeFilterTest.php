@@ -23,7 +23,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
  */
 class TimeFilterTest extends TestCase
 {
-    public function testEmpty()
+    public function testEmpty(): void
     {
         $filter = new TimeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -38,7 +38,7 @@ class TimeFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testGetType()
+    public function testGetType(): void
     {
         $this->assertSame(TimeType::class, (new TimeFilter())->getFieldType());
     }

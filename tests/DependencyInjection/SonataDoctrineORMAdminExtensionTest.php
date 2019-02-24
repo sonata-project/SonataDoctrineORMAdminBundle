@@ -22,12 +22,12 @@ class SonataDoctrineORMAdminExtensionTest extends TestCase
      */
     protected $configuration;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->configuration);
     }
 
-    public function testEntityManagerSetFactory()
+    public function testEntityManagerSetFactory(): void
     {
         $this->configuration = new ContainerBuilder();
         $this->configuration->setParameter('kernel.bundles', ['SimpleThingsEntityAuditBundle' => true]);

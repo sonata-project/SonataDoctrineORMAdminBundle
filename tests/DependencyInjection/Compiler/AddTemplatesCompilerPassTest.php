@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class AddTemplatesCompilerPassTest extends TestCase
 {
-    public function testDefaultBehavior()
+    public function testDefaultBehavior(): void
     {
         $container = $this->createMock(ContainerBuilder::class);
 

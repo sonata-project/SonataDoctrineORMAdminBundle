@@ -34,7 +34,7 @@ class ShowBuilderTest extends TestCase
     private $admin;
     private $modelManager;
 
-    public function setUp()
+    public function setUp(): void
     {
         $this->guesser = $this->prophesize(TypeGuesserInterface::class);
 
@@ -52,7 +52,7 @@ class ShowBuilderTest extends TestCase
         $this->admin->addShowFieldDescription(Argument::cetera())->willReturn();
     }
 
-    public function testGetBaseList()
+    public function testGetBaseList(): void
     {
         $this->assertInstanceOf(FieldDescriptionCollection::class, $this->showBuilder->getBaseList());
     }
@@ -60,7 +60,7 @@ class ShowBuilderTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAddFieldNoType()
+    public function testAddFieldNoType(): void
     {
         $typeGuess = $this->prophesize(TypeGuess::class);
 
@@ -85,7 +85,7 @@ class ShowBuilderTest extends TestCase
     /**
      * @doesNotPerformAssertions
      */
-    public function testAddFieldWithType()
+    public function testAddFieldWithType(): void
     {
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
@@ -103,7 +103,7 @@ class ShowBuilderTest extends TestCase
     /**
      * @dataProvider fixFieldDescriptionData
      */
-    public function testFixFieldDescription($mappingType, $template)
+    public function testFixFieldDescription($mappingType, $template): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
@@ -148,7 +148,7 @@ class ShowBuilderTest extends TestCase
         ];
     }
 
-    public function testFixFieldDescriptionException()
+    public function testFixFieldDescriptionException(): void
     {
         $this->expectException(\RuntimeException::class);
         $this->showBuilder->fixFieldDescription($this->admin->reveal(), new FieldDescription());

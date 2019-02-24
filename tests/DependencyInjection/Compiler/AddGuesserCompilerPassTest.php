@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Reference;
 
 class AddGuesserCompilerPassTest extends TestCase
 {
-    public function testProcess()
+    public function testProcess(): void
     {
         $containerBuilder = $this->prophesize(ContainerBuilder::class);
         $definition = $this->prophesize(Definition::class);

@@ -20,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 
 class BooleanFilterTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -39,7 +39,7 @@ class BooleanFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterNo()
+    public function testFilterNo(): void
     {
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -53,7 +53,7 @@ class BooleanFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterYes()
+    public function testFilterYes(): void
     {
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -67,7 +67,7 @@ class BooleanFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterArray()
+    public function testFilterArray(): void
     {
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
