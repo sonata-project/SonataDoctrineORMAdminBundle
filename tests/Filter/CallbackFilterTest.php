@@ -19,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
 class CallbackFilterTest extends TestCase
 {
-    public function testFilterClosure()
+    public function testFilterClosure(): void
     {
         $builder = new ProxyQuery(new QueryBuilder());
 
@@ -40,7 +40,7 @@ class CallbackFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterMethod()
+    public function testFilterMethod(): void
     {
         $builder = new ProxyQuery(new QueryBuilder());
 
@@ -64,7 +64,7 @@ class CallbackFilterTest extends TestCase
         return true;
     }
 
-    public function testFilterException()
+    public function testFilterException(): void
     {
         $this->expectException(\RuntimeException::class);
 
@@ -76,7 +76,7 @@ class CallbackFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'myValue');
     }
 
-    public function testApplyMethod()
+    public function testApplyMethod(): void
     {
         $builder = new ProxyQuery(new QueryBuilder());
 

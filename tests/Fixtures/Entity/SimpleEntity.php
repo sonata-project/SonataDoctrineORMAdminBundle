@@ -21,7 +21,7 @@ class SimpleEntity
         return $this->schmeckles;
     }
 
-    public function setSchmeckles($value)
+    public function setSchmeckles($value): void
     {
         $this->schmeckles = $value;
     }
@@ -31,7 +31,7 @@ class SimpleEntity
         return $this->multiWordProperty;
     }
 
-    public function setMultiWordProperty($value)
+    public function setMultiWordProperty($value): void
     {
         $this->multiWordProperty = $value;
     }

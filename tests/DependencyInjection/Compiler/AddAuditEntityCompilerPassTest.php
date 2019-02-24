@@ -39,7 +39,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
     /**
      * @dataProvider processDataProvider
      */
-    public function testProcess($force, array $services)
+    public function testProcess($force, array $services): void
     {
         $container = $this->createMock(ContainerBuilder::class);
 

@@ -52,14 +52,14 @@ use Symfony\Bridge\Doctrine\RegistryInterface;
 
 class ModelManagerTest extends TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', UuidType::class);
         }
     }
 
-    public function testSortParameters()
+    public function testSortParameters(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -126,7 +126,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider getVersionDataProvider
      */
-    public function testGetVersion($isVersioned)
+    public function testGetVersion($isVersioned): void
     {
         $object = new VersionedEntity();
 
@@ -162,7 +162,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider lockDataProvider
      */
-    public function testLock($isVersioned, $expectsException)
+    public function testLock($isVersioned, $expectsException): void
     {
         $object = new VersionedEntity();
 
@@ -200,7 +200,7 @@ class ModelManagerTest extends TestCase
         $modelManager->lock($object, 123);
     }
 
-    public function testGetParentMetadataForProperty()
+    public function testGetParentMetadataForProperty(): void
     {
         if (version_compare(Version::VERSION, '2.5') < 0) {
             $this->markTestSkipped('Test for embeddables needs to run on Doctrine >= 2.5');
@@ -367,7 +367,7 @@ class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function testGetIdentifierValuesForIdInObjectTypeWithToStringSupport()
+    public function testGetIdentifierValuesForIdInObjectTypeWithToStringSupport(): void
     {
         $entityId = new ClassWithToStringSupport('to-string-id');
 
@@ -409,7 +409,7 @@ class ModelManagerTest extends TestCase
         $this->assertSame('to-string-id', $result[0]);
     }
 
-    public function testNonIntegerIdentifierType()
+    public function testNonIntegerIdentifierType(): void
     {
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
         $entity = new UuidEntity($uuid);
@@ -453,7 +453,7 @@ class ModelManagerTest extends TestCase
         $this->assertSame($entity->getId()->toString(), $result[0]);
     }
 
-    public function testAssociationIdentifierType()
+    public function testAssociationIdentifierType(): void
     {
         $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
 
@@ -518,7 +518,7 @@ class ModelManagerTest extends TestCase
      * @param string|null $sortOrder
      * @param bool        $isAddOrderBy
      */
-    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy)
+    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy): void
     {
         $datagrid = $this->getMockForAbstractClass(DatagridInterface::class);
         $configuration = $this->getMockBuilder(Configuration::class)->getMock();
@@ -577,7 +577,7 @@ class ModelManagerTest extends TestCase
         }
     }
 
-    public function testModelReverseTransform()
+    public function testModelReverseTransform(): void
     {
         $class = SimpleEntity::class;
 
@@ -612,7 +612,7 @@ class ModelManagerTest extends TestCase
         $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
-    public function testCollections()
+    public function testCollections(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
         $model = new ModelManager($registry);
@@ -636,7 +636,7 @@ class ModelManagerTest extends TestCase
         $this->assertTrue($collection->isEmpty());
     }
 
-    public function testModelTransform()
+    public function testModelTransform(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
         $model = new ModelManager($registry);
@@ -646,7 +646,7 @@ class ModelManagerTest extends TestCase
         $this->assertSame('doWeNeedThisMethod', $result);
     }
 
-    public function testGetPaginationParameters()
+    public function testGetPaginationParameters(): void
     {
         $datagrid = $this->createMock(DatagridInterface::class);
         $filter = $this->createMock(FilterInterface::class);
@@ -668,7 +668,7 @@ class ModelManagerTest extends TestCase
         $this->assertSame($name, $result['filter']['_sort_by']);
     }
 
-    public function testGetModelInstanceException()
+    public function testGetModelInstanceException(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -679,7 +679,7 @@ class ModelManagerTest extends TestCase
         $model->getModelInstance(AbstractEntity::class);
     }
 
-    public function testGetEntityManagerException()
+    public function testGetEntityManagerException(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -690,7 +690,7 @@ class ModelManagerTest extends TestCase
         $model->getEntityManager(VersionedEntity::class);
     }
 
-    public function testGetNewFieldDescriptionInstanceException()
+    public function testGetNewFieldDescriptionInstanceException(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -704,7 +704,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testCreate($exception)
+    public function testCreate($exception): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -743,7 +743,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testUpdate($exception)
+    public function testUpdate($exception): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -770,7 +770,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testRemove($exception)
+    public function testRemove($exception): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -794,7 +794,7 @@ class ModelManagerTest extends TestCase
         $model->delete(new VersionedEntity());
     }
 
-    public function testFindBadId()
+    public function testFindBadId(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -803,7 +803,7 @@ class ModelManagerTest extends TestCase
         $this->assertNull($model->find('notImportant', null));
     }
 
-    public function testGetUrlsafeIdentifierException()
+    public function testGetUrlsafeIdentifierException(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 
@@ -814,7 +814,7 @@ class ModelManagerTest extends TestCase
         $model->getNormalizedIdentifier('test');
     }
 
-    public function testGetUrlsafeIdentifierNull()
+    public function testGetUrlsafeIdentifierNull(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
 

@@ -20,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 
 class NumberFilterTest extends TestCase
 {
-    public function testFilterEmpty()
+    public function testFilterEmpty(): void
     {
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -34,7 +34,7 @@ class NumberFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterInvalidOperator()
+    public function testFilterInvalidOperator(): void
     {
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -47,7 +47,7 @@ class NumberFilterTest extends TestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilter()
+    public function testFilter(): void
     {
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);

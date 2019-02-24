@@ -50,7 +50,7 @@ final class DatagridBuilderTest extends TestCase
     private $admin;
     private $modelManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->formFactory = $this->prophesize(FormFactoryInterface::class);
         $this->filterFactory = $this->prophesize(FilterFactoryInterface::class);
@@ -74,7 +74,7 @@ final class DatagridBuilderTest extends TestCase
     /**
      * @dataProvider getBaseDatagridData
      */
-    public function testGetBaseDatagrid($pagerType, $pager)
+    public function testGetBaseDatagrid($pagerType, $pager): void
     {
         $proxyQuery = $this->prophesize(ProxyQueryInterface::class);
         $fieldDescription = $this->prophesize(FieldDescriptionCollection::class);
@@ -109,7 +109,7 @@ final class DatagridBuilderTest extends TestCase
         ];
     }
 
-    public function testGetBaseDatagridBadPagerType()
+    public function testGetBaseDatagridBadPagerType(): void
     {
         $this->admin->getPagerType()->willReturn('fake');
 
@@ -118,7 +118,7 @@ final class DatagridBuilderTest extends TestCase
         $this->datagridBuilder->getBaseDatagrid($this->admin->reveal());
     }
 
-    public function testFixFieldDescription()
+    public function testFixFieldDescription(): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
@@ -145,7 +145,7 @@ final class DatagridBuilderTest extends TestCase
         $this->datagridBuilder->fixFieldDescription($this->admin->reveal(), $fieldDescription);
     }
 
-    public function testAddFilterNoType()
+    public function testAddFilterNoType(): void
     {
         $datagrid = $this->prophesize(DatagridInterface::class);
         $guessType = $this->prophesize(TypeGuess::class);
