@@ -25,7 +25,7 @@ use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 class PagerTest extends TestCase
 {
-    public function testComputeNbResultFoCompositeId()
+    public function testComputeNbResultFoCompositeId(): void
     {
         $em = DoctrineTestHelper::createTestEntityManager();
         $classes = [

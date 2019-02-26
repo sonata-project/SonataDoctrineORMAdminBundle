@@ -138,7 +138,7 @@ class StringFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testCaseSensitiveFalse()
+    public function testCaseSensitiveFalse(): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['case_sensitive' => false]);
@@ -152,7 +152,7 @@ class StringFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testCaseSensitiveTrue()
+    public function testCaseSensitiveTrue(): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['case_sensitive' => true]);
