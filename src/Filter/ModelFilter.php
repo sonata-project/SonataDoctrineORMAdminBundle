@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
-use Sonata\CoreBundle\Form\Type\EqualType;
+use Sonata\Form\Type\EqualType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter

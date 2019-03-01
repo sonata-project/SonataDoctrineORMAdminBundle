@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\CoreBundle\Form\Type\BooleanType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\Form\Type\BooleanType;
 
 class BooleanFilterTest extends TestCase
 {

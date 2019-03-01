@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\CoreBundle\Form\Type\EqualType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
+use Sonata\Form\Type\EqualType;
 
 class ClassFilterTest extends TestCase
 {
