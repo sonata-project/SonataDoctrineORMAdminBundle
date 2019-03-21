@@ -62,7 +62,7 @@ Example
             $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, [] null, ['expanded' => true, 'multiple' => true]);
+                ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true]);
         }
     }
 
