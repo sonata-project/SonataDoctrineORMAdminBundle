@@ -492,6 +492,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
             throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
         }
 
+        $constructor = $r->getConstructor();
+
+        if (null !== $constructor && (!$constructor->isPublic() || $constructor->getNumberOfRequiredParameters() > 0)) {
+            return $r->newInstanceWithoutConstructor();
+        }
+
         return new $class();
     }
 
