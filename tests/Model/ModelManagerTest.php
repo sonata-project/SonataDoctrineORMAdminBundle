@@ -43,6 +43,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\SubEmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProtectedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
@@ -634,6 +635,15 @@ class ModelManagerTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $model->getModelInstance(AbstractEntity::class);
+    }
+
+    public function testGetModelInstanceForProtectedEntity(): void
+    {
+        $registry = $this->createMock(RegistryInterface::class);
+
+        $model = new ModelManager($registry);
+
+        $this->assertInstanceOf(ProtectedEntity::class, $model->getModelInstance(ProtectedEntity::class));
     }
 
     public function testGetEntityManagerException(): void
