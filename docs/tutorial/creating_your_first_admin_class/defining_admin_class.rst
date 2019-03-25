@@ -92,17 +92,6 @@ Second, register the `PostAdmin` class inside the DIC in your config file:
 
 .. configuration-block::
 
-    .. code-block:: xml
-
-        <!-- config/services.xml -->
-
-        <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
-            <argument/>
-            <argument>Tutorial\BlogBundle\Entity\Post</argument>
-            <argument>TutorialBlogBundle:PostAdmin</argument>
-            <tag name="sonata.admin" manager_type="orm" group="tutorial_blog" label="Post"/>
-        </service>
-
     .. code-block:: yaml
 
         # config/services.yaml
@@ -113,6 +102,17 @@ Second, register the `PostAdmin` class inside the DIC in your config file:
               arguments: [~, Tutorial\BlogBundle\Entity\Post, TutorialBlogBundle:PostAdmin]
               tags:
                   - { name: sonata.admin, manager_type: orm, group: tutorial_blog, label: 'Post' }
+
+    .. code-block:: xml
+
+        <!-- config/services.xml -->
+
+        <service id="tutorial.blog.admin.post" class="Tutorial\BlogBundle\Admin\PostAdmin">
+            <argument/>
+            <argument>Tutorial\BlogBundle\Entity\Post</argument>
+            <argument>TutorialBlogBundle:PostAdmin</argument>
+            <tag name="sonata.admin" manager_type="orm" group="tutorial_blog" label="Post"/>
+        </service>
 
 These is the minimal configuration required to display the entity inside the dashboard and interact with the CRUD interface.
 Following this however, you will need to create an `Admin Controller`.

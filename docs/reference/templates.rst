@@ -32,7 +32,8 @@ You can also configure the templates used by the `Form Framework` while renderin
             form: [ '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig' ]
             filter: [ "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig' ]
 
-You can also customize field types by adding types in the ``config.yml`` file. The default values are:
+You can also customize field types by adding types in your configuration file.
+The default values are:
 
 .. code-block:: yaml
 
