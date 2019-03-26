@@ -67,9 +67,8 @@ The most important option for each field is the ``type``. The available `types` 
 
 .. note::
 
-    Entities with a class as identifier value (ex. `uuid <https://github.com/ramsey/uuid>`_) will resolve to the correct supported type.
-
-    .. code-block:: php
+    Entities with a class as identifier value (ex. `uuid <https://github.com/ramsey/uuid>`_)
+    will resolve to the correct supported type::
 
         use Ramsey\Uuid\Uuid;
 

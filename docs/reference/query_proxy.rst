@@ -16,18 +16,16 @@ The ``ProxyQuery`` object is used to add missing features from the original `Doc
   to avoid duplicates in some cases. Sonata cannot detect whether or not
   you need ``DISTINCT``, but lets you remove that keyword in case it
   causes performance issues and you are sure there will be no duplicates.
-  To do so, simply call ``setDistinct(false)``.
+  To do so, simply call ``setDistinct(false)``::
 
-.. code-block:: php
+      use Sonata\AdminBundle\Datagrid\ORM\ProxyQuery;
 
-    use Sonata\AdminBundle\Datagrid\ORM\ProxyQuery;
+      $queryBuilder = $this->em->createQueryBuilder();
+      $queryBuilder->from('Post', 'p');
 
-    $queryBuilder = $this->em->createQueryBuilder();
-    $queryBuilder->from('Post', 'p');
+      $proxyQuery = new ProxyQuery($queryBuilder);
+      $proxyQuery->leftJoin('p.tags', 't');
+      $proxyQuery->setSortBy('name');
+      $proxyQuery->setMaxResults(10);
 
-    $proxyQuery = new ProxyQuery($queryBuilder);
-    $proxyQuery->leftJoin('p.tags', 't');
-    $proxyQuery->setSortBy('name');
-    $proxyQuery->setMaxResults(10);
-
-    $results = $proxyQuery->execute();
+      $results = $proxyQuery->execute();

@@ -258,9 +258,7 @@ Comment
     representation from the ID object using ``$entity->getId()->__toString()`` (if implemented) when needed
     (e.g., for generating url / rendering).
 
-    For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented:
-
-    .. code-block:: php
+    For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented::
 
         class Comment
         {
