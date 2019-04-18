@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.9.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.3...3.9.0) - 2019-04-17
+### Added
+- Added support for protected (no public constructor) entity creation
+
 ## [3.8.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.2...3.8.3) - 2019-02-28
 ### Fixed
 - Deprecations about core bundle forms
