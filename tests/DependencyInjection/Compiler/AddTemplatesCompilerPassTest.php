@@ -27,7 +27,7 @@ class AddTemplatesCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('getParameter')
-            ->will($this->returnCallback(function ($value) {
+            ->will($this->returnCallback(static function ($value) {
                 if ('sonata.admin.configuration.admin_services' === $value) {
                     return [
                         'my.admin' => [
