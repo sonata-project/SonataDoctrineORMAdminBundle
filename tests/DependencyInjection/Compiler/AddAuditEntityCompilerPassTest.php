@@ -46,7 +46,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('hasDefinition')
-            ->will($this->returnCallback(function ($id) {
+            ->will($this->returnCallback(static function ($id) {
                 if ('simplethings_entityaudit.config' === $id) {
                     return true;
                 }
@@ -56,7 +56,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('getParameter')
-            ->will($this->returnCallback(function ($id) use ($force) {
+            ->will($this->returnCallback(static function ($id) use ($force) {
                 if ('sonata_doctrine_orm_admin.audit.force' === $id) {
                     return $force;
                 }
@@ -70,7 +70,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('findTaggedServiceIds')
-            ->will($this->returnCallback(function ($id) use ($services) {
+            ->will($this->returnCallback(static function ($id) use ($services) {
                 if ('sonata.admin' === $id) {
                     $tags = [];
 
@@ -92,7 +92,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('getDefinition')
-            ->will($this->returnCallback(function ($id) {
+            ->will($this->returnCallback(static function ($id) {
                 return new Definition(null, [null, $id]);
             }))
         ;
