@@ -160,7 +160,7 @@ class FormContractor implements FormContractorInterface
             $options['delete'] = false;
 
             $options['data_class'] = $fieldDescription->getAssociationAdmin()->getClass();
-            $options['empty_data'] = function () use ($fieldDescription) {
+            $options['empty_data'] = static function () use ($fieldDescription) {
                 return $fieldDescription->getAssociationAdmin()->getNewInstance();
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
@@ -180,7 +180,7 @@ class FormContractor implements FormContractorInterface
             $options['type_options'] = [
                 'sonata_field_description' => $fieldDescription,
                 'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
-                'empty_data' => function () use ($fieldDescription) {
+                'empty_data' => static function () use ($fieldDescription) {
                     return $fieldDescription->getAssociationAdmin()->getNewInstance();
                 },
             ];
@@ -210,7 +210,7 @@ class FormContractor implements FormContractorInterface
      */
     private function checkFormClass($type, $classes)
     {
-        return array_filter($classes, function ($subclass) use ($type) {
+        return array_filter($classes, static function ($subclass) use ($type) {
             return is_a($type, $subclass, true);
         });
     }

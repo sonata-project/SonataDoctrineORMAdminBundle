@@ -25,7 +25,7 @@ class CallbackFilterTest extends TestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => function ($builder, $alias, $field, $value) {
+            'callback' => static function ($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value);
 
@@ -82,7 +82,7 @@ class CallbackFilterTest extends TestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
-            'callback' => function ($builder, $alias, $field, $value) {
+            'callback' => static function ($builder, $alias, $field, $value) {
                 $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $builder->setParameter('value', $value['value']);
 
