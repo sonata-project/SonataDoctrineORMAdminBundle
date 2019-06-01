@@ -27,7 +27,7 @@ class AddTemplatesCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('getParameter')
-            ->will($this->returnCallback(static function ($value) {
+            ->willReturnCallback(static function ($value) {
                 if ('sonata.admin.configuration.admin_services' === $value) {
                     return [
                         'my.admin' => [
@@ -45,13 +45,13 @@ class AddTemplatesCompilerPassTest extends TestCase
                         'filter' => ['default_filter.twig.html'],
                     ];
                 }
-            }))
+            })
         ;
 
         $container
             ->expects($this->any())
             ->method('findTaggedServiceIds')
-            ->will($this->returnValue(['my.admin' => [['manager_type' => 'orm']]]))
+            ->willReturn(['my.admin' => [['manager_type' => 'orm']]])
         ;
 
         $definition = new Definition(null);
@@ -59,7 +59,7 @@ class AddTemplatesCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('getDefinition')
-            ->will($this->returnValue($definition))
+            ->willReturn($definition)
         ;
 
         $definition->addMethodCall('setFilterTheme', [['custom_call.twig.html']]);
