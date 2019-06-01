@@ -82,18 +82,18 @@ class ModelManagerTest extends TestCase
         $datagrid1
             ->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue([
+            ->willReturn([
                 '_sort_by' => $field1,
                 '_sort_order' => 'ASC',
-            ]));
+            ]);
 
         $datagrid2
             ->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue([
+            ->willReturn([
                 '_sort_by' => $field3,
                 '_sort_order' => 'ASC',
-            ]));
+            ]);
 
         $parameters = $manager->getSortParameters($field1, $datagrid1);
 
@@ -140,7 +140,7 @@ class ModelManagerTest extends TestCase
 
         $modelManager->expects($this->any())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         if ($isVersioned) {
             $object->version = 123;
@@ -179,13 +179,13 @@ class ModelManagerTest extends TestCase
 
         $modelManager->expects($this->any())
             ->method('getEntityManager')
-            ->will($this->returnValue($em));
+            ->willReturn($em);
 
         $metadata = $this->getMetadata(\get_class($object), $isVersioned);
 
         $modelManager->expects($this->any())
             ->method('getMetadata')
-            ->will($this->returnValue($metadata));
+            ->willReturn($metadata);
 
         $em->expects($isVersioned ? $this->once() : $this->never())
             ->method('lock');
@@ -224,21 +224,21 @@ class ModelManagerTest extends TestCase
 
         $modelManager->expects($this->any())
             ->method('getEntityManager')
-            ->will($this->returnValue($em));
+            ->willReturn($em);
 
         $containerEntityMetadata = $this->getMetadataForContainerEntity();
         $associatedEntityMetadata = $this->getMetadataForAssociatedEntity();
         $embeddedEntityMetadata = $this->getMetadataForEmbeddedEntity();
 
         $modelManager->expects($this->any())->method('getMetadata')
-            ->will(
-                $this->returnValueMap(
+            ->willReturnMap(
+
                     [
                         [$containerEntityClass, $containerEntityMetadata],
                         [$embeddedEntityClass, $embeddedEntityMetadata],
                         [$associatedEntityClass, $associatedEntityMetadata],
                     ]
-                )
+
             );
 
         /** @var ClassMetadata $metadata */

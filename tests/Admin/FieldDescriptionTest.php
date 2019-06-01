@@ -199,7 +199,7 @@ class FieldDescriptionTest extends TestCase
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('myMethod')
-            ->will($this->returnValue('myMethodValue'));
+            ->willReturn('myMethodValue');
 
         $field = new FieldDescription();
         $field->setFieldName('any string, but not null');
@@ -217,7 +217,7 @@ class FieldDescriptionTest extends TestCase
             ->getMock();
         $mockedObject->expects($this->never())
             ->method('myMethod')
-            ->will($this->returnValue('myMethodValue'));
+            ->willReturn('myMethodValue');
 
         $field = new FieldDescription();
         $field->setFieldName('any string, but not null');
@@ -345,14 +345,14 @@ class FieldDescriptionTest extends TestCase
             ->getMock();
         $mockedEmbeddedObject->expects($this->once())
                     ->method('myMethod')
-                    ->will($this->returnValue('myMethodValue'));
+                    ->willReturn('myMethodValue');
 
         $mockedObject = $this->getMockBuilder('stdClass')
             ->setMethods(['getMyEmbeddedObject'])
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
-            ->will($this->returnValue($mockedEmbeddedObject));
+            ->willReturn($mockedEmbeddedObject);
 
         $field = new FieldDescription();
         $field->setFieldMapping([
@@ -371,19 +371,19 @@ class FieldDescriptionTest extends TestCase
             ->getMock();
         $mockedChildEmbeddedObject->expects($this->once())
             ->method('myMethod')
-            ->will($this->returnValue('myMethodValue'));
+            ->willReturn('myMethodValue');
         $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
             ->setMethods(['getChild'])
             ->getMock();
         $mockedEmbeddedObject->expects($this->once())
             ->method('getChild')
-            ->will($this->returnValue($mockedChildEmbeddedObject));
+            ->willReturn($mockedChildEmbeddedObject);
         $mockedObject = $this->getMockBuilder('stdClass')
             ->setMethods(['getMyEmbeddedObject'])
             ->getMock();
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
-            ->will($this->returnValue($mockedEmbeddedObject));
+            ->willReturn($mockedEmbeddedObject);
         $field = new FieldDescription();
         $field->setFieldMapping([
             'declaredField' => 'myEmbeddedObject.child', 'type' => 'string', 'fieldName' => 'myMethod',
