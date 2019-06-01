@@ -144,14 +144,14 @@ class ProxyQueryTest extends TestCase
             ->with($this->equalTo($expectedId), $this->equalTo([$value]));
         $qb->expects($this->any())
             ->method('getDQLPart')
-            ->will($this->returnCallBack(static function ($part) use ($class, $alias) {
+            ->willReturnCallback(static function ($part) use ($class, $alias) {
                 $parts = [
                     'from' => [new From($class, $alias)],
                     'orderBy' => [new OrderBy('whatever', 'DESC')],
                 ];
 
                 return $parts[$part];
-            }));
+            });
         $qb->expects($this->once())
             ->method('addOrderBy')
             ->with("$alias.$id", null);
