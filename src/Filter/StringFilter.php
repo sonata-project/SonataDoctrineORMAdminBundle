@@ -41,19 +41,21 @@ class StringFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        $or = $queryBuilder->expr()->orX();
+        if (self::CONDITION_AND === $this->getCondition()) {
+            $clause = $queryBuilder->expr()->andX();
+        } else {
+            $clause = $queryBuilder->expr()->orX();
+        }
 
         if ($this->getOption('case_sensitive')) {
-            $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+            $clause->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
         } else {
-            $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+            $clause->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         }
 
         if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
-            $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+            $clause->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
-
-        $this->applyWhere($queryBuilder, $or);
 
         if (ChoiceType::TYPE_EQUAL === $data['type']) {
             $queryBuilder->setParameter($parameterName, $data['value']);
@@ -65,6 +67,10 @@ class StringFilter extends Filter
                 )
             );
         }
+
+        $this->applyWhere($queryBuilder, $clause);
+
+        return $clause;
     }
 
     public function getDefaultOptions()

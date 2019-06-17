@@ -30,8 +30,10 @@ abstract class Filter extends BaseFilter
         if (\is_array($value) && \array_key_exists('value', $value)) {
             list($alias, $field) = $this->association($queryBuilder, $value);
 
-            $this->filter($queryBuilder, $alias, $field, $value);
+            return $this->filter($queryBuilder, $alias, $field, $value);
         }
+
+        return null;
     }
 
     public function isActive()
@@ -52,12 +54,6 @@ abstract class Filter extends BaseFilter
      */
     protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
     {
-        if (self::CONDITION_OR === $this->getCondition()) {
-            $queryBuilder->orWhere($parameter);
-        } else {
-            $queryBuilder->andWhere($parameter);
-        }
-
         // filter is active since it's added to the queryBuilder
         $this->active = true;
     }
