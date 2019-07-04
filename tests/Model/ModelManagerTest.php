@@ -37,6 +37,7 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
@@ -47,7 +48,6 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProtectedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
-use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\ClassWithToStringSupport;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
@@ -57,6 +57,9 @@ class ModelManagerTest extends TestCase
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', UuidType::class);
+        }
+        if (!Type::hasType('uuid_binary')) {
+            Type::addType('uuid_binary', UuidBinaryType::class);
         }
     }
 
@@ -368,16 +371,19 @@ class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function testGetIdentifierValuesForIdInObjectTypeWithToStringSupport(): void
+    public function testGetIdentifierValuesForIdInObjectTypeBinaryToStringSupport(): void
     {
-        $entityId = new ClassWithToStringSupport('to-string-id');
+        $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
 
-        $entity = new \stdClass();
+        $entity = new UuidEntity($uuid);
 
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
             ->method('getIdentifierValues')
-            ->willReturn([$entityId]);
+            ->willReturn([$entity->getId()]);
+        $meta->expects($this->any())
+            ->method('getTypeOfField')
+            ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
 
         $mf = $this->createMock(ClassMetadataFactory::class);
         $mf->expects($this->any())
@@ -385,6 +391,9 @@ class ModelManagerTest extends TestCase
             ->willReturn($meta);
 
         $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform->expects($this->any())
+                ->method('getDoctrineTypeMapping')
+                ->willReturn('binary');
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
@@ -407,7 +416,7 @@ class ModelManagerTest extends TestCase
         $manager = new ModelManager($registry);
         $result = $manager->getIdentifierValues($entity);
 
-        $this->assertSame('to-string-id', $result[0]);
+        $this->assertSame($entity->getId()->toString(), $result[0]);
     }
 
     public function testNonIntegerIdentifierType(): void

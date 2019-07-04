@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Model;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -339,16 +340,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
-            if (method_exists($value, '__toString')) {
-                $identifiers[] = (string) $value;
-
-                continue;
-            }
-
             $fieldType = $metadata->getTypeOfField($name);
             $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
             if ($type) {
-                $identifiers[] = $type->convertToDatabaseValue($value, $platform);
+                $identifiers[] = $this->getValueFromType($value, $type, $fieldType, $platform);
 
                 continue;
             }
@@ -632,5 +627,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
     protected function camelize($property)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+    }
+
+    /**
+     * @param mixed $value
+     */
+    private function getValueFromType($value, Type $type, string $fieldType, AbstractPlatform $platform): string
+    {
+        if ('binary' === $platform->getDoctrineTypeMapping($fieldType)) {
+            return (string) $type->convertToPHPValue($value, $platform);
+        }
+
+        return $type->convertToDatabaseValue($value, $platform);
     }
 }
