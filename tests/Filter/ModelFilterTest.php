@@ -23,8 +23,6 @@ use Sonata\Form\Type\EqualType;
 class ModelFilterTest extends TestCase
 {
     /**
-     * @param array $options
-     *
      * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
      */
     public function getFieldDescription(array $options)
