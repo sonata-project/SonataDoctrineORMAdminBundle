@@ -456,8 +456,6 @@ class ModelManagerTest extends TestCase
 
     /**
      * [sortBy, sortOrder, isAddOrderBy].
-     *
-     * @return array
      */
     public function getSortableInDataSourceIteratorDataProvider(): array
     {
