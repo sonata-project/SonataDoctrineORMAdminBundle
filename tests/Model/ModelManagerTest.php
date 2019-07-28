@@ -37,6 +37,7 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
@@ -56,6 +57,9 @@ class ModelManagerTest extends TestCase
     {
         if (!Type::hasType('uuid')) {
             Type::addType('uuid', UuidType::class);
+        }
+        if (!Type::hasType('uuid_binary')) {
+            Type::addType('uuid_binary', UuidBinaryType::class);
         }
     }
 

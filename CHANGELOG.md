@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.10.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.9.0...3.10.0) - 2019-07-20
+### Added
+- Don't hide edit button `sonata_type_model_list_widget` if there is no value
+
+### Fixed
+- Use a more reliable method for represent composite identifiers in a string
+
 ## [3.9.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.8.3...3.9.0) - 2019-04-17
 ### Added
 - Added support for protected (no public constructor) entity creation
