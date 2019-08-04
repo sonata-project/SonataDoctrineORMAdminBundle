@@ -21,6 +21,11 @@ use Symfony\Component\Form\FormTypeInterface;
 
 class ClassFilter extends Filter
 {
+    public const CHOICES = [
+        EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
+        EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
+    ];
+
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
@@ -83,11 +88,6 @@ class ClassFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = [
-            EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
-            EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
-        ];
-
-        return $choices[$type] ?? false;
+        return self::CHOICES[$type] ?? false;
     }
 }
