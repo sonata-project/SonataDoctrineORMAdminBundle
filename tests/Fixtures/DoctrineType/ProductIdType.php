@@ -49,10 +49,8 @@ final class ProductIdType extends Type
 
     /**
      * @param mixed $value
-     *
-     * @return int|null
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
     {
         $value = $this->convertToPHPValue($value, $platform);
 
