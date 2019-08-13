@@ -37,6 +37,7 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ProductIdType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
@@ -44,6 +45,8 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\SubEmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProtectedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
@@ -55,11 +58,14 @@ class ModelManagerTest extends TestCase
 {
     public static function setUpBeforeClass(): void
     {
-        if (!Type::hasType('uuid')) {
-            Type::addType('uuid', UuidType::class);
+        if (!Type::hasType(UuidType::NAME)) {
+            Type::addType(UuidType::NAME, UuidType::class);
         }
-        if (!Type::hasType('uuid_binary')) {
-            Type::addType('uuid_binary', UuidBinaryType::class);
+        if (!Type::hasType(UuidBinaryType::NAME)) {
+            Type::addType(UuidBinaryType::NAME, UuidBinaryType::class);
+        }
+        if (!Type::hasType(ProductIdType::NAME)) {
+            Type::addType(ProductIdType::NAME, ProductIdType::class);
         }
     }
 
@@ -470,6 +476,54 @@ class ModelManagerTest extends TestCase
         $result = $manager->getIdentifierValues($entity);
 
         $this->assertSame($entity->getId()->toString(), $result[0]);
+    }
+
+    public function testIntegerIdentifierType(): void
+    {
+        $id = new ProductId(12345);
+        $entity = new Product($id, 'Some product');
+
+        $meta = $this->createMock(ClassMetadata::class);
+        $meta->expects($this->any())
+            ->method('getIdentifierValues')
+            ->willReturn([$entity->getId()]);
+        $meta->expects($this->any())
+            ->method('getTypeOfField')
+            ->willReturn(ProductIdType::NAME);
+
+        $mf = $this->createMock(ClassMetadataFactory::class);
+        $mf->expects($this->any())
+            ->method('getMetadataFor')
+            ->willReturn($meta);
+
+        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform->expects($this->any())
+            ->method('hasDoctrineTypeMappingFor')
+            ->with(ProductIdType::NAME)
+            ->willReturn(false);
+
+        $conn = $this->createMock(Connection::class);
+        $conn->expects($this->any())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
+
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
+        $em->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($conn);
+
+        $registry = $this->createMock(RegistryInterface::class);
+        $registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturn($em);
+
+        $manager = new ModelManager($registry);
+        $result = $manager->getIdentifierValues($entity);
+
+        $this->assertSame((string) $entity->getId()->getId(), $result[0]);
     }
 
     public function testAssociationIdentifierType(): void
