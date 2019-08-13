@@ -453,6 +453,8 @@ class ModelManagerTest extends TestCase
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidType::NAME)
             ->willReturn(false);
+        $platform->expects($this->never())
+            ->method('getDoctrineTypeMapping');
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
@@ -501,6 +503,8 @@ class ModelManagerTest extends TestCase
             ->method('hasDoctrineTypeMappingFor')
             ->with(ProductIdType::NAME)
             ->willReturn(false);
+        $platform->expects($this->never())
+            ->method('getDoctrineTypeMapping');
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
