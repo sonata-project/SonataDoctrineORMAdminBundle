@@ -14,10 +14,10 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\IntegerType;
+use Doctrine\DBAL\Types\Type;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 
-final class ProductIdType extends IntegerType
+final class ProductIdType extends Type
 {
     const NAME = 'ProductId';
 
