@@ -634,10 +634,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     private function getValueFromType($value, Type $type, string $fieldType, AbstractPlatform $platform): string
     {
-        if ('binary' === $platform->getDoctrineTypeMapping($fieldType)) {
+        if ($platform->hasDoctrineTypeMappingFor($fieldType) &&
+            'binary' === $platform->getDoctrineTypeMapping($fieldType)
+        ) {
             return (string) $type->convertToPHPValue($value, $platform);
         }
 
-        return $type->convertToDatabaseValue($value, $platform);
+        return (string) $type->convertToDatabaseValue($value, $platform);
     }
 }
