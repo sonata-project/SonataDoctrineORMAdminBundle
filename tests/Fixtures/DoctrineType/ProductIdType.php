@@ -42,7 +42,7 @@ final class ProductIdType extends Type
 
         try {
             return new ProductId((int) $value);
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw ConversionException::conversionFailed($value, $this->getName());
         }
     }
