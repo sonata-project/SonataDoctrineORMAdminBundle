@@ -21,34 +21,18 @@ final class ProductIdType extends Type
 {
     const NAME = 'ProductId';
 
-    /**
-     * @param array            $fieldDeclaration
-     * @param AbstractPlatform $platform
-     *
-     * @return string
-     */
     public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform): string
     {
         return $platform->getIntegerTypeDeclarationSQL($fieldDeclaration);
     }
 
-    /**
-     * @param AbstractPlatform $platform
-     *
-     * @return bool
-     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;
     }
 
     /**
-     * @throws ConversionException
-     *
-     * @param mixed            $value
-     * @param AbstractPlatform $platform
-     *
-     * @return ProductId|null
+     * @param mixed $value
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ProductId
     {
@@ -64,12 +48,9 @@ final class ProductIdType extends Type
     }
 
     /**
-     * @throws ConversionException
+     * @param mixed $value
      *
-     * @param mixed            $value
-     * @param AbstractPlatform $platform
-     *
-     * @return mixed
+     * @return int|null
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
@@ -78,9 +59,6 @@ final class ProductIdType extends Type
         return $value !== null ? $value->getId() : null;
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return self::NAME;
