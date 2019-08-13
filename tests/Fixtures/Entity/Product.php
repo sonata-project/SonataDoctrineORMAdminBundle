@@ -12,7 +12,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
-class Product
+final class Product
 {
     private $id;
 
