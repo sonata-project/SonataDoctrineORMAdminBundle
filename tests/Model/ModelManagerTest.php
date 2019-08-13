@@ -392,8 +392,13 @@ class ModelManagerTest extends TestCase
 
         $platform = $this->createMock(PostgreSqlPlatform::class);
         $platform->expects($this->any())
-                ->method('getDoctrineTypeMapping')
-                ->willReturn('binary');
+            ->method('hasDoctrineTypeMappingFor')
+            ->with(UuidBinaryType::NAME)
+            ->willReturn(true);
+        $platform->expects($this->any())
+            ->method('getDoctrineTypeMapping')
+            ->with(UuidBinaryType::NAME)
+            ->willReturn('binary');
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
@@ -438,6 +443,10 @@ class ModelManagerTest extends TestCase
             ->willReturn($meta);
 
         $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform->expects($this->any())
+            ->method('hasDoctrineTypeMappingFor')
+            ->with(UuidType::NAME)
+            ->willReturn(false);
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
@@ -481,6 +490,8 @@ class ModelManagerTest extends TestCase
             ->willReturn($meta);
 
         $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform->expects($this->never())
+            ->method('hasDoctrineTypeMappingFor');
 
         $conn = $this->createMock(Connection::class);
         $conn->expects($this->any())
