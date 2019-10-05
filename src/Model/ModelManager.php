@@ -640,6 +640,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return (string) $type->convertToPHPValue($value, $platform);
         }
 
+        if (method_exists($value, '__toString')) {
+            return (string) $value;
+        }
+
         return (string) $type->convertToDatabaseValue($value, $platform);
     }
 }

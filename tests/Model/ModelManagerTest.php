@@ -18,6 +18,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
@@ -39,6 +40,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ProductIdType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\Uuid;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
@@ -50,6 +52,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProtectedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidBinaryEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
@@ -68,6 +71,37 @@ class ModelManagerTest extends TestCase
         if (!Type::hasType(ProductIdType::NAME)) {
             Type::addType(ProductIdType::NAME, ProductIdType::class);
         }
+    }
+
+    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod()
+    {
+        $entity = new UuidBinaryEntity(new Uuid('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
+
+        $platform = $this->createMock(MySqlPlatform::class);
+
+        $connection = $this->createMock(Connection::class);
+        $connection->expects($this->any())->method('getDatabasePlatform')->willReturn($platform);
+
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->expects($this->any())->method('getIdentifierValues')->willReturn([$entity->getId()]);
+        $classMetadata->expects($this->any())->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
+
+        $classMetadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $classMetadataFactory->expects($this->any())->method('getMetadataFor')->willReturn($classMetadata);
+
+        $entityManager = $this->createMock(EntityManager::class);
+        $entityManager->expects($this->any())->method('getMetadataFactory')->willReturn($classMetadataFactory);
+        $entityManager->expects($this->any())->method('getConnection')->willReturn($connection);
+
+        $registry = $this->createMock(RegistryInterface::class);
+        $registry->expects($this->any())->method('getManagerForClass')->willReturn($entityManager);
+
+        $manager = new ModelManager($registry);
+
+        $this->assertEquals(
+            ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
+            $manager->getIdentifierValues($entity)
+        );
     }
 
     public function testInstantiateWithDeprecatedRegistryInterface(): void
