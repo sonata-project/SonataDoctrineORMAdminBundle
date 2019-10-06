@@ -98,7 +98,7 @@ class ModelManagerTest extends TestCase
 
         $manager = new ModelManager($registry);
 
-        $this->assertEquals(
+        $this->assertSame(
             ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
             $manager->getIdentifierValues($entity)
         );
