@@ -409,17 +409,16 @@ class ModelManager implements ModelManagerInterface, LockInterface
             }
 
             $fieldType = $metadata->getTypeOfField($name);
-            $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
-            if ($type) {
+            if ($this->hasFieldCustomType($fieldType)) {
+                $type = $this->getFieldCustomType($fieldType);
                 $identifiers[] = $this->getValueFromType($value, $type, $fieldType, $platform);
-
                 continue;
             }
 
             $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value));
 
-            foreach ($identifierMetadata->getIdentifierValues($value) as $value) {
-                $identifiers[] = $value;
+            foreach ($identifierMetadata->getIdentifierValues($value) as $identifierValue) {
+                $identifiers[] = $identifierValue;
             }
         }
 
@@ -500,17 +499,16 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
+        $classMetadata = $this->getMetadata($class);
 
-        $prefix = uniqid();
+        $prefix = $this->generateIdentifierPrefix();
         $sqls = [];
         foreach ($idx as $pos => $id) {
             $ids = explode(self::ID_SEPARATOR, (string) $id);
 
             $ands = [];
-            foreach ($fieldNames as $posName => $name) {
-                $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', current($qb->getRootAliases()), $name, $parameterName);
-                $qb->setParameter($parameterName, $ids[$posName]);
+            foreach ($fieldNames as $posName => $field) {
+                $ands[] = $this->buildInnerIdentifier($prefix, $field, $ids[$posName], $pos, $qb, $classMetadata);
             }
 
             $sqls[] = implode(' AND ', $ands);
@@ -766,6 +764,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
     }
 
+    /**
+     * Generating unique prefix for query.
+     */
+    protected function generateIdentifierPrefix(): string
+    {
+        return uniqid('', true);
+    }
+
     private function getFieldName(ClassMetadata $metadata, string $name): string
     {
         if (\array_key_exists($name, $metadata->fieldMappings)) {
@@ -813,5 +819,29 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         return (string) $type->convertToDatabaseValue($value, $platform);
+    }
+
+    private function getFieldCustomType(string $fieldType): Type
+    {
+        return Type::getType($fieldType);
+    }
+
+    private function buildInnerIdentifier(string $prefix, string $field, $value, int $pos, QueryBuilder $qb, ClassMetadata $classMetadata): string
+    {
+        $parameterName = sprintf('field_%s_%s_%d', $prefix, $field, $pos);
+
+        $fieldMapping = $classMetadata->getFieldMapping($field);
+        if ($this->hasFieldCustomType($fieldMapping['type'])) {
+            $type = $this->getFieldCustomType($fieldMapping['type'])->getName();
+        }
+
+        $qb->setParameter($parameterName, $value, $type ?? null);
+
+        return sprintf('%s.%s = :%s', current($qb->getRootAliases()), $field, $parameterName);
+    }
+
+    private function hasFieldCustomType(?string $fieldType): bool
+    {
+        return $fieldType && Type::hasType($fieldType);
     }
 }

@@ -982,22 +982,21 @@ final class ModelManagerTest extends TestCase
      */
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
     {
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIdentifierFieldNames'])
-            ->getMock();
+        $managerRegistry = $this->createStub(ManagerRegistry::class);
+        $classMetadataFactory = $this->createStub(ClassMetadataFactory::class);
+        $classMetadata = $this->createStub(ClassMetadata::class);
 
-        $modelManager
-            ->expects($this->once())
-            ->method('getIdentifierFieldNames')
-            ->willReturn($identifierFieldNames);
+        $modelManager = new ModelManager(
+            $managerRegistry,
+            PropertyAccess::createPropertyAccessor()
+        );
 
-        $em = $this->getMockBuilder(EntityManager::class)
+        $entityManager = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
-            ->setConstructorArgs([$em])
+            ->setConstructorArgs([$entityManager])
             ->setMethodsExcept(['getParameters', 'setParameter'])
             ->getMock();
 
@@ -1013,8 +1012,34 @@ final class ModelManagerTest extends TestCase
 
         $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
             ->setConstructorArgs([$queryBuilder])
-            ->setMethods(['getSortBy'])
+            ->setMethods(['getSortBy', 'getQueryBuilder'])
             ->getMock();
+
+        $proxyQuery
+            ->expects($this->once())
+            ->method('getQueryBuilder')
+            ->willReturn($queryBuilder);
+
+        $managerRegistry->method('getManagerForClass')
+            ->with(Product::class)
+            ->willReturn($entityManager);
+
+        $entityManager->method('getMetadataFactory')
+            ->willReturn($classMetadataFactory);
+
+        $classMetadataFactory->method('getMetadataFor')
+            ->with(Product::class)
+            ->willReturn($classMetadata);
+
+        $classMetadata
+            ->method('getIdentifierFieldNames')
+            ->willReturn($identifierFieldNames);
+
+        $classMetadata
+            ->method('getFieldMapping')
+            ->willReturn([
+                'type' => 'string',
+            ]);
 
         $modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
 
@@ -1067,6 +1092,57 @@ final class ModelManagerTest extends TestCase
         $this->expectExceptionMessage('Array passed as argument 3 to "Sonata\DoctrineORMAdminBundle\Model\ModelManager::addIdentifiersToQuery()" must not be empty.');
 
         $this->modelManager->addIdentifiersToQuery(\stdClass::class, $datagrid, []);
+    }
+
+    public function testAddIdentifiersToQueryWithCustomIdMapping(): void
+    {
+        $managerRegistry = $this->createStub(ManagerRegistry::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
+        $classMetadataFactory = $this->createStub(ClassMetadataFactory::class);
+        $proxyQuery = $this->createStub(ProxyQuery::class);
+        $queryBuilder = new QueryBuilder($entityManager);
+        $classMetadata = $this->createStub(ClassMetadata::class);
+
+        Type::addType('binary_uuid', UuidBinaryType::class);
+
+        $managerRegistry->method('getManagerForClass')
+            ->with(\stdClass::class)
+            ->willReturn($entityManager);
+
+        $entityManager->method('getMetadataFactory')
+            ->willReturn($classMetadataFactory);
+
+        $classMetadataFactory->method('getMetadataFor')
+            ->with(\stdClass::class)
+            ->willReturn($classMetadata);
+
+        $classMetadata->method('getIdentifierFieldNames')
+            ->willReturn(['uuid']);
+
+        $proxyQuery->method('getQueryBuilder')
+            ->willReturn($queryBuilder);
+
+        $classMetadata->method('getFieldMapping')
+            ->with('uuid')
+            ->willReturn([
+                'type' => 'binary_uuid',
+            ]);
+
+        $queryBuilder->from('foobar', 'a');
+
+        $modelManager = new class($managerRegistry, PropertyAccess::createPropertyAccessor()) extends ModelManager {
+            protected function generateIdentifierPrefix(): string
+            {
+                return '1234';
+            }
+        };
+
+        $modelManager->addIdentifiersToQuery(\stdClass::class, $proxyQuery, ['uuid']);
+
+        $this->assertSame(
+            'SELECT FROM foobar a WHERE ( a.uuid = :field_1234_uuid_0 )',
+            $queryBuilder->getDQL()
+        );
     }
 
     private function getMetadata(string $class, bool $isVersioned = false): ClassMetadata
