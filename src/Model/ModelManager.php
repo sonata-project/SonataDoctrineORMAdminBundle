@@ -155,17 +155,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager->persist($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to create object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to create object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -176,17 +168,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager->persist($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to update object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to update object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -197,17 +181,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager->remove($object);
             $entityManager->flush();
         } catch (\PDOException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
+            throw new ModelManagerException(sprintf('Failed to delete object: %s', ClassUtils::getClass($object)), $e->getCode(), $e);
         }
     }
 
@@ -562,11 +538,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
             if ($reflClass->hasMethod($setter)) {
                 if (!$reflClass->getMethod($setter)->isPublic()) {
-                    throw new PropertyAccessDeniedException(sprintf(
-                        'Method "%s()" is not public in class "%s"',
-                        $setter,
-                        $reflClass->getName()
-                    ));
+                    throw new PropertyAccessDeniedException(sprintf('Method "%s()" is not public in class "%s"', $setter, $reflClass->getName()));
                 }
 
                 $instance->$setter($value);
@@ -575,12 +547,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 $instance->$property = $value;
             } elseif ($reflClass->hasProperty($property)) {
                 if (!$reflClass->getProperty($property)->isPublic()) {
-                    throw new PropertyAccessDeniedException(sprintf(
-                        'Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?',
-                            $property,
-                            $reflClass->getName(),
-                            ucfirst($property)
-                    ));
+                    throw new PropertyAccessDeniedException(sprintf('Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?', $property, $reflClass->getName(), ucfirst($property)));
                 }
 
                 $instance->$property = $value;

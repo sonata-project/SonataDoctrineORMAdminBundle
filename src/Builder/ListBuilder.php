@@ -101,11 +101,7 @@ class ListBuilder implements ListBuilderInterface
         }
 
         if (!$fieldDescription->getType()) {
-            throw new \RuntimeException(sprintf(
-                'Please define a type for field `%s` in `%s`',
-                $fieldDescription->getName(),
-                \get_class($admin)
-            ));
+            throw new \RuntimeException(sprintf('Please define a type for field `%s` in `%s`', $fieldDescription->getName(), \get_class($admin)));
         }
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
