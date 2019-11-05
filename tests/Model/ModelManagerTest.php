@@ -228,12 +228,6 @@ class ModelManagerTest extends TestCase
 
     public function testGetParentMetadataForProperty(): void
     {
-        if (version_compare(Version::VERSION, '2.5') < 0) {
-            $this->markTestSkipped('Test for embeddables needs to run on Doctrine >= 2.5');
-
-            return;
-        }
-
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;
         $embeddedEntityClass = EmbeddedEntity::class;

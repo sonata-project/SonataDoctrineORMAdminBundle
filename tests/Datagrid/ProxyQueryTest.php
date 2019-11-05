@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
@@ -115,11 +116,10 @@ class ProxyQueryTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        // NEXT MAJOR: Replace this when dropping PHP < 5.6
-        // $q = $this->createMock('PDOStatement');
-        $q = $this->getMockBuilder('stdClass')
-            ->setMethods(['execute', 'setHint'])
-            ->getMock();
+        $q = $this->getMockBuilder(AbstractQuery::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setHint', 'execute'])
+            ->getMockForAbstractClass();
         $q->expects($this->once())
            ->method('setHint')
            ->willReturn($q);
