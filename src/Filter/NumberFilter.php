@@ -18,6 +18,14 @@ use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 
 class NumberFilter extends Filter
 {
+    public const CHOICES = [
+        NumberType::TYPE_EQUAL => '=',
+        NumberType::TYPE_GREATER_EQUAL => '>=',
+        NumberType::TYPE_GREATER_THAN => '>',
+        NumberType::TYPE_LESS_EQUAL => '<=',
+        NumberType::TYPE_LESS_THAN => '<',
+    ];
+
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || !is_numeric($data['value'])) {
@@ -59,14 +67,6 @@ class NumberFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = [
-            NumberType::TYPE_EQUAL => '=',
-            NumberType::TYPE_GREATER_EQUAL => '>=',
-            NumberType::TYPE_GREATER_THAN => '>',
-            NumberType::TYPE_LESS_EQUAL => '<=',
-            NumberType::TYPE_LESS_THAN => '<',
-        ];
-
-        return $choices[$type] ?? false;
+        return self::CHOICES[$type] ?? false;
     }
 }

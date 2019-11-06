@@ -21,6 +21,16 @@ use Sonata\AdminBundle\Form\Type\Filter\DateType;
 
 abstract class AbstractDateFilter extends Filter
 {
+    public const CHOICES = [
+        DateType::TYPE_EQUAL => '=',
+        DateType::TYPE_GREATER_EQUAL => '>=',
+        DateType::TYPE_GREATER_THAN => '>',
+        DateType::TYPE_LESS_EQUAL => '<=',
+        DateType::TYPE_LESS_THAN => '<',
+        DateType::TYPE_NULL => 'NULL',
+        DateType::TYPE_NOT_NULL => 'NOT NULL',
+    ];
+
     /**
      * Flag indicating that filter will have range.
      *
@@ -178,16 +188,6 @@ abstract class AbstractDateFilter extends Filter
     {
         $type = (int) $type;
 
-        $choices = [
-            DateType::TYPE_EQUAL => '=',
-            DateType::TYPE_GREATER_EQUAL => '>=',
-            DateType::TYPE_GREATER_THAN => '>',
-            DateType::TYPE_LESS_EQUAL => '<=',
-            DateType::TYPE_LESS_THAN => '<',
-            DateType::TYPE_NULL => 'NULL',
-            DateType::TYPE_NOT_NULL => 'NOT NULL',
-        ];
-
-        return $choices[$type] ?? '=';
+        return self::CHOICES[$type] ?? '=';
     }
 }

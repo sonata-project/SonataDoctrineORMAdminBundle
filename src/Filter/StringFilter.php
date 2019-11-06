@@ -18,6 +18,12 @@ use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 
 class StringFilter extends Filter
 {
+    public const CHOICES = [
+        ChoiceType::TYPE_CONTAINS => 'LIKE',
+        ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+        ChoiceType::TYPE_EQUAL => '=',
+    ];
+
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
     {
         if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || null === $data['value']) {
@@ -91,12 +97,6 @@ class StringFilter extends Filter
      */
     private function getOperator($type)
     {
-        $choices = [
-            ChoiceType::TYPE_CONTAINS => 'LIKE',
-            ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-            ChoiceType::TYPE_EQUAL => '=',
-        ];
-
-        return $choices[$type] ?? false;
+        return self::CHOICES[$type] ?? false;
     }
 }
