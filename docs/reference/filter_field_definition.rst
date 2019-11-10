@@ -69,9 +69,9 @@ Example
 doctrine_orm_model_autocomplete
 -------------------------------
 
-This filter type uses ``sonata_type_model_autocomplete`` form type. It renders an input with select2 autocomplete feature.
+This filter type uses ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` form type. It renders an input with select2 autocomplete feature.
 Can be used as replacement of ``doctrine_orm_model`` to handle too many related items that cannot be loaded into memory.
-This form type requires ``property`` option. See documentation of ``sonata_type_model_autocomplete`` for all available options for this form type::
+This form type requires ``property`` option. See documentation of ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for all available options for this form type::
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {

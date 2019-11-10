@@ -79,29 +79,19 @@ final class FormContractorTest extends TestCase
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
         $admin->method('getNewInstance')->willReturn($model);
 
-        // NEXT_MAJOR: Use only FQCNs when dropping support for Symfony 2.8
         $modelTypes = [
-            'sonata_type_model',
-            'sonata_type_model_list',
-            'sonata_type_model_hidden',
-            'sonata_type_model_autocomplete',
             ModelType::class,
             ModelListType::class,
             ModelHiddenType::class,
             ModelAutocompleteType::class,
         ];
         $adminTypes = [
-            'sonata_type_admin',
             AdminType::class,
         ];
         $collectionTypes = [
-            'sonata_type_collection',
             DeprecatedCollectionType::class,
+            CollectionType::class,
         ];
-
-        if (class_exists(CollectionType::class)) {
-            $collectionTypes[] = CollectionType::class;
-        }
 
         // model types
         foreach ($modelTypes as $formType) {
@@ -146,7 +136,7 @@ final class FormContractorTest extends TestCase
 
         $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->method('getMappingType')->willReturn('simple');
-        $fieldDescription->method('getType')->willReturn('sonata_type_model_list');
+        $fieldDescription->method('getType')->willReturn(ModelListType::class);
         $fieldDescription->method('getOption')->with($this->logicalOr(
             $this->equalTo('edit'),
             $this->equalTo('admin_code')
