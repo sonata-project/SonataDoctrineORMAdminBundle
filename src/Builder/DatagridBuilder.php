@@ -156,8 +156,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->mergeOption('field_options', ['required' => false]);
 
-        // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-        if ('doctrine_orm_model_autocomplete' === $type || ModelAutocompleteFilter::class === $type) {
+        if (ModelAutocompleteFilter::class === $type) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetEntity(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),

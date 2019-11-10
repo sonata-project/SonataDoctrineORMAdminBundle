@@ -171,6 +171,6 @@ file that was distributed with this source code.
     {% elseif sonata_admin.field_description.mappingtype == constant('Doctrine\\ORM\\Mapping\\ClassMetadataInfo::MANY_TO_MANY') %}
         {{ block('sonata_admin_orm_many_to_many_widget') }}
     {% else %}
-        INVALID MODE : {{ id }} - type : sonata_type_collection - mapping : {{ sonata_admin.field_description.mappingtype }}
+        INVALID MODE : {{ id }} - type : CollectionType - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
 {% endblock %}

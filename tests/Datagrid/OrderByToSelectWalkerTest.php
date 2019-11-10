@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Version;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\Menu;

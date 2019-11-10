@@ -17,7 +17,6 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\Form\Type\EqualType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
-use Symfony\Component\Form\FormTypeInterface;
 
 class ClassFilter extends Filter
 {
@@ -66,10 +65,6 @@ class ClassFilter extends Filter
             'required' => false,
             'choices' => $this->getOption('sub_classes'),
         ];
-
-        if (method_exists(FormTypeInterface::class, 'setDefaultOptions')) {
-            $choiceOptions['choices_as_values'] = true;
-        }
 
         return $this->getOption('choices', $choiceOptions);
     }

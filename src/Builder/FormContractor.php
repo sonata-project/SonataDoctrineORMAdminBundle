@@ -99,13 +99,7 @@ class FormContractor implements FormContractorInterface
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
-        // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-        if (\in_array($type, [
-            'sonata_type_model',
-            'sonata_type_model_list',
-            'sonata_type_model_hidden',
-            'sonata_type_model_autocomplete',
-        ], true) || $this->checkFormClass($type, [
+        if ($this->checkFormClass($type, [
             ModelType::class,
             ModelTypeList::class,
             ModelListType::class,
@@ -113,17 +107,17 @@ class FormContractor implements FormContractorInterface
             ModelAutocompleteType::class,
         ])) {
             if ('list' === $fieldDescription->getOption('edit')) {
-                throw new \LogicException(
-                    'The `sonata_type_model` type does not accept an `edit` option anymore,'
-                    .' please review the UPGRADE-2.1.md file from the SonataAdminBundle'
-                );
+                throw new \LogicException(sprintf(
+                    'The `%s` type does not accept an `edit` option anymore,'
+                    .' please review the UPGRADE-2.1.md file from the SonataAdminBundle',
+                    ModelType::class
+                ));
             }
 
             $options['class'] = $fieldDescription->getTargetEntity();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
-            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-            if ('sonata_type_model_autocomplete' === $type || $this->checkFormClass($type, [ModelAutocompleteType::class])) {
+            if ($this->checkFormClass($type, [ModelAutocompleteType::class])) {
                 if (!$fieldDescription->getAssociationAdmin()) {
                     throw new \RuntimeException(sprintf(
                         'The current field `%s` is not linked to an admin.'
@@ -133,8 +127,7 @@ class FormContractor implements FormContractorInterface
                     ));
                 }
             }
-            // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-        } elseif ('sonata_type_admin' === $type || $this->checkFormClass($type, [AdminType::class])) {
+        } elseif ($this->checkFormClass($type, [AdminType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -149,9 +142,11 @@ class FormContractor implements FormContractorInterface
                 ClassMetadata::MANY_TO_ONE,
             ], true)) {
                 throw new \RuntimeException(sprintf(
-                    'You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One.'
-                    .' Maybe you want `sonata_type_collection` instead?',
-                    $fieldDescription->getName()
+                    'You are trying to add `%s` field `%s` which is not One-To-One or  Many-To-One.'
+                    .' Maybe you want `%s` instead?',
+                    AdminType::class,
+                    $fieldDescription->getName(),
+                    CollectionType::class
                 ));
             }
 
@@ -164,8 +159,7 @@ class FormContractor implements FormContractorInterface
                 return $fieldDescription->getAssociationAdmin()->getNewInstance();
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-        } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, [CollectionType::class, DeprecatedCollectionType::class])) {
+        } elseif ($this->checkFormClass($type, [CollectionType::class, DeprecatedCollectionType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'

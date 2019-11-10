@@ -22,6 +22,7 @@ First, you need to create an `Admin/PostAdmin.php` file::
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
+    use Sonata\AdminBundle\Form\Type\ModelType;
     use Sonata\AdminBundle\Show\ShowMapper;
 
     use Knp\Menu\ItemInterface as MenuItemInterface;
@@ -51,10 +52,10 @@ First, you need to create an `Admin/PostAdmin.php` file::
                     ->add('content')
                 ->end()
                 ->with('Tags')
-                    ->add('tags', 'sonata_type_model', ['expanded' => true, 'multiple' => true])
+                    ->add('tags', ModelType::class, ['expanded' => true, 'multiple' => true])
                 ->end()
                 ->with('Comments')
-                    ->add('comments', 'sonata_type_model', ['multiple' => true])
+                    ->add('comments', ModelType::class, ['multiple' => true])
                 ->end()
                 ->with('System Information', ['collapsed' => true])
                     ->add('created_at')
@@ -195,6 +196,7 @@ Tweak the CommentAdmin class
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Form\Type\ModelType;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Datagrid\ListMapper;
 
@@ -207,7 +209,7 @@ Tweak the CommentAdmin class
         protected function configureFormFields(FormMapper $formMapper)
         {
             if (!$this->isChild()) {
-                $formMapper->add('post', 'sonata_type_model', [], ['edit' => 'list']);
+                $formMapper->add('post', ModelType::class, [], ['edit' => 'list']);
             }
 
             $formMapper
