@@ -49,7 +49,7 @@ class AuditBlockService extends AbstractBlockService
         foreach ($this->auditReader->findRevisionHistory($blockContext->getSetting('limit'), 0) as $revision) {
             $revisions[] = [
                 'revision' => $revision,
-                'entities' => $this->auditReader->findEntitesChangedAtRevision($revision->getRev()),
+                'entities' => $this->auditReader->findEntitiesChangedAtRevision($revision->getRev()),
             ];
         }
 
