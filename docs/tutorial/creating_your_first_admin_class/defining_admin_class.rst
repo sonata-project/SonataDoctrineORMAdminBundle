@@ -135,8 +135,8 @@ Tweak the TagAdmin class
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
-    use Sonata\CoreBundle\Validator\ErrorElement;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\Form\Validator\ErrorElement;
 
     use Tutorial\BlogBundle\Entity\Tag;
 
