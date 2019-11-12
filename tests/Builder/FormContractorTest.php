@@ -80,15 +80,21 @@ final class FormContractorTest extends TestCase
         $admin->method('getNewInstance')->willReturn($model);
 
         $modelTypes = [
+            'sonata_type_model',
+            'sonata_type_model_list',
+            'sonata_type_model_hidden',
+            'sonata_type_model_autocomplete',
             ModelType::class,
             ModelListType::class,
             ModelHiddenType::class,
             ModelAutocompleteType::class,
         ];
         $adminTypes = [
+            'sonata_type_admin',
             AdminType::class,
         ];
         $collectionTypes = [
+            'sonata_type_collection',
             DeprecatedCollectionType::class,
             CollectionType::class,
         ];

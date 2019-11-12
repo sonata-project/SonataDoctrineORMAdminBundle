@@ -99,4 +99,4 @@ DataTransformer
 
 * ``ArrayToModelTransformer``: transform an array to an object,
 * ``ModelsToArrayTransformer``: transform a collection of array into a collection of object,
-* ``ModelToIdTransformater``: transform an ``id`` into an object.
+* ``ModelToIdTransformer``: transform an ``id`` into an object.

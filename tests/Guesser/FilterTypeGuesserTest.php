@@ -16,6 +16,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -86,7 +93,7 @@ class FilterTypeGuesserTest extends TestCase
 
         $options = $result->getOptions();
 
-        $this->assertSame('doctrine_orm_model', $result->getType());
+        $this->assertSame(ModelFilter::class, $result->getType());
         $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
         $this->assertSame($parentAssociation, $options['parent_association_mappings']);
         $this->assertSame(ClassMetadata::MANY_TO_ONE, $options['mapping_type']);
@@ -134,100 +141,100 @@ class FilterTypeGuesserTest extends TestCase
         return [
             'boolean' => [
                 'boolean',
-                'doctrine_orm_boolean',
+                BooleanFilter::class,
                 Guess::HIGH_CONFIDENCE,
                 BooleanType::class,
             ],
             'datetime' => [
                 'datetime',
-                $datetimeType = 'doctrine_orm_datetime',
+                DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime_immutable' => [
                 'datetime_immutable',
-                $datetimeType,
+                DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'vardatetime' => [
                 'vardatetime',
-                $datetimeType,
+                DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz' => [
                 'datetimetz',
-                $datetimeType,
+                DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz_immutable' => [
                 'datetimetz_immutable',
-                $datetimeType,
+                DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date' => [
                 'date',
-                $dateType = 'doctrine_orm_date',
+                DateFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date_immutable' => [
                 'date_immutable',
-                $dateType,
+                DateFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'decimal' => [
                 'decimal',
-                $numberType = 'doctrine_orm_number',
+                NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
             'float' => [
                 'float',
-                $numberType,
+                NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
             'integer' => [
                 'integer',
-                $numberType,
+                NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
             'bigint' => [
                 'bigint',
-                $numberType,
+                NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
             'smallint' => [
                 'smallint',
-                $numberType,
+                NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
             'string' => [
                 'string',
-                $stringType = 'doctrine_orm_string',
+                StringFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 TextType::class,
             ],
             'text' => [
                 'text',
-                $stringType,
+                StringFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 TextType::class,
             ],
             'time' => [
                 'time',
-                $timeType = 'doctrine_orm_time',
+                TimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'time_immutable' => [
                 'time_immutable',
-                $timeType,
+                TimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'somefake' => [
                 'somefake',
-                $stringType,
+                StringFilter::class,
                 Guess::LOW_CONFIDENCE,
             ],
         ];
