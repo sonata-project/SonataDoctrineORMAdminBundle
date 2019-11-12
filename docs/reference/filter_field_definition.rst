@@ -32,18 +32,18 @@ Available filter types
 
 For now, only `Doctrine ORM` filters are available:
 
-* `doctrine_orm_boolean`: depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field,
-* `doctrine_orm_callback`: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
-* `doctrine_orm_choice`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
-* `doctrine_orm_number`: depends on the ``sonata_type_filter_number`` Form Type,
-* `doctrine_orm_model_autocomplete`: uses ``sonata_type_model_autocomplete`` form type, can be used as replacement of ``doctrine_orm_model`` to handle too many items that cannot be loaded into memory.
-* `doctrine_orm_string`: depends on the ``sonata_type_filter_choice``,
-* `doctrine_orm_number`: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
-* `doctrine_orm_date`: depends on the ``sonata_type_filter_date`` Form Type, renders a date field,
-* `doctrine_orm_date_range`: depends on the ``sonata_type_filter_date_range`` Form Type, renders a 2 date fields,
-* `doctrine_orm_datetime`: depends on the ``sonata_type_filter_datetime`` Form Type, renders a datetime field,
-* `doctrine_orm_datetime_range`: depends on the ``sonata_type_filter_datetime_range`` Form Type, renders a 2 datetime fields,
-* `doctrine_orm_class`: depends on the ``sonata_type_filter_default`` Form type, renders a choice list field.
+* ``Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter``: depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter``: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter``: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``sonata_type_filter_number`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter``: uses ``sonata_type_model_autocomplete`` form type, can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many items that cannot be loaded into memory.
+* ``Sonata\DoctrineORMAdminBundle\Filter\StringFilter``: depends on the ``sonata_type_filter_choice``,
+* ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateFilter``: depends on the ``sonata_type_filter_date`` Form Type, renders a date field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter``: depends on the ``sonata_type_filter_date_range`` Form Type, renders a 2 date fields,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter``: depends on the ``sonata_type_filter_datetime`` Form Type, renders a datetime field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter``: depends on the ``sonata_type_filter_datetime_range`` Form Type, renders a 2 datetime fields,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter``: depends on the ``sonata_type_filter_default`` Form type, renders a choice list field.
 
 Example
 -------
@@ -70,13 +70,13 @@ doctrine_orm_model_autocomplete
 -------------------------------
 
 This filter type uses ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` form type. It renders an input with select2 autocomplete feature.
-Can be used as replacement of ``doctrine_orm_model`` to handle too many related items that cannot be loaded into memory.
+Can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many related items that cannot be loaded into memory.
 This form type requires ``property`` option. See documentation of ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for all available options for this form type::
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
         $datagridMapper
-            ->add('category', 'doctrine_orm_model_autocomplete', [], null, [
+            ->add('category', ModelAutocompleteFilter::class, [], null, [
                 // in related CategoryAdmin there must be datagrid filter on `title` field to make the autocompletion work
                 'property'=>'title',
             ]);
@@ -85,50 +85,52 @@ This form type requires ``property`` option. See documentation of ``Sonata\Admin
 doctrine_orm_date_range
 -----------------------
 
-The ``doctrine_orm_date_range`` filter renders two fields to filter all records between two dates.
+The ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter`` filter renders two fields to filter all records between two dates.
 If only one date is set it will filter for all records until or since the given date::
 
     protected function configureDatagridFilters(DatagridMapper $datagridMapper)
     {
-        $datagridMapper->add('created', 'doctrine_orm_date_range');
+        $datagridMapper->add('created', DateRangeFilter::class);
     }
 
 Timestamps
 ----------
 
-``doctrine_orm_date``, ``doctrine_orm_date_range``, ``doctrine_orm_datetime`` and ``doctrine_orm_datetime_range``
+``Sonata\DoctrineORMAdminBundle\Filter\DateFilter``, ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter``, ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter`` and ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter``
 support filtering of timestamp fields by specifying ``'input_type' => 'timestamp'`` option::
 
     namespace Sonata\NewsBundle\Admin;
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 
     final class PostAdmin extends AbstractAdmin
     {
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
-                ->add('timestamp', 'doctrine_orm_datetime_range', ['input_type' => 'timestamp']);
+                ->add('timestamp', DateTimeRangeFilter::class, ['input_type' => 'timestamp']);
         }
     }
 
 Class
 -----
 
-``doctrine_orm_class`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option::
+``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option::
 
     namespace Sonata\NewsBundle\Admin;
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
 
     final class PostAdmin extends AbstractAdmin
     {
         protected function configureDatagridFilters(DatagridMapper $datagridMapper)
         {
             $datagridMapper
-                ->add('type', 'doctrine_orm_class', ['sub_classes' => $this->getSubClasses()]);
+                ->add('type', ClassFilter::class, ['sub_classes' => $this->getSubClasses()]);
         }
     }
 
@@ -191,6 +193,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
@@ -203,7 +206,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ->add('enabled')
                 ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true])
                 ->add('author')
-                ->add('with_open_comments', 'doctrine_orm_callback', [
+                ->add('with_open_comments', CallbackFilter::class, [
     //                'callback'   => [$this, 'getWithOpenCommentFilter'],
                     'callback' => function($queryBuilder, $alias, $field, $value) {
                         if (!$value['value']) {
