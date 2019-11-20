@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
@@ -21,6 +22,7 @@ use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\OptimisticLockException;
@@ -69,9 +71,23 @@ class ModelManagerTest extends TestCase
         }
     }
 
-    public function testSortParameters(): void
+    public function testInstantiateWithDeprecatedRegistryInterface(): void
     {
         $registry = $this->createMock(RegistryInterface::class);
+        $manager = new ModelManager($registry);
+        $em = $this->createMock(EntityManagerInterface::class);
+
+        $registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with('x')
+            ->willReturn($em)
+        ;
+        $this->assertSame($em, $manager->getEntityManager('x'));
+    }
+
+    public function testSortParameters(): void
+    {
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $manager = new ModelManager($registry);
 
@@ -419,7 +435,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -469,7 +485,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -519,7 +535,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -564,7 +580,7 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
@@ -662,7 +678,7 @@ class ModelManagerTest extends TestCase
 
         $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $modelManager = $this->createMock(ObjectManager::class);
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
@@ -693,7 +709,7 @@ class ModelManagerTest extends TestCase
 
     public function testCollections(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $model = new ModelManager($registry);
 
         $collection = $model->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
@@ -717,7 +733,7 @@ class ModelManagerTest extends TestCase
 
     public function testModelTransform(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $model = new ModelManager($registry);
 
         $result = $model->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
@@ -729,7 +745,7 @@ class ModelManagerTest extends TestCase
     {
         $datagrid = $this->createMock(DatagridInterface::class);
         $filter = $this->createMock(FilterInterface::class);
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $datagrid->expects($this->once())
             ->method('getValues')
@@ -749,7 +765,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetModelInstanceException(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -760,7 +776,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetModelInstanceForProtectedEntity(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -769,7 +785,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetEntityManagerException(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -780,7 +796,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetNewFieldDescriptionInstanceException(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -794,7 +810,7 @@ class ModelManagerTest extends TestCase
      */
     public function testCreate($exception): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -833,7 +849,7 @@ class ModelManagerTest extends TestCase
      */
     public function testUpdate($exception): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -860,7 +876,7 @@ class ModelManagerTest extends TestCase
      */
     public function testRemove($exception): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -884,7 +900,7 @@ class ModelManagerTest extends TestCase
 
     public function testFindBadId(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -893,7 +909,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetUrlsafeIdentifierException(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
@@ -904,7 +920,7 @@ class ModelManagerTest extends TestCase
 
     public function testGetUrlsafeIdentifierNull(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
 
         $model = new ModelManager($registry);
 
