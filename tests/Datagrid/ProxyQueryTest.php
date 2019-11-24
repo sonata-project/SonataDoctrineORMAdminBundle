@@ -27,10 +27,10 @@ use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\DoubleNameEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
-use Symfony\Bridge\Doctrine\Tests\Fixtures\DoubleNameEntity;
 
 class ProxyQueryTest extends TestCase
 {
