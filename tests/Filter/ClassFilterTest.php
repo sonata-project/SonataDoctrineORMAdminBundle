@@ -20,6 +20,16 @@ use Sonata\Form\Type\EqualType;
 
 class ClassFilterTest extends TestCase
 {
+    public function testRenderSettings(): void
+    {
+        $filter = new ClassFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+        $options = $filter->getRenderSettings()[1];
+
+        $this->assertSame(EqualType::class, $options['operator_type']);
+        $this->assertSame([], $options['operator_options']);
+    }
+
     public function testFilterEmpty(): void
     {
         $filter = new ClassFilter();

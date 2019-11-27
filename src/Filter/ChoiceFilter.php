@@ -63,13 +63,17 @@ class ChoiceFilter extends Filter
 
     public function getDefaultOptions()
     {
-        return [];
+        return [
+            'operator_type' => EqualType::class,
+            'operator_options' => [],
+        ];
     }
 
     public function getRenderSettings()
     {
         return [DefaultType::class, [
-            'operator_type' => EqualType::class,
+            'operator_type' => $this->getOption('operator_type'),
+            'operator_options' => $this->getOption('operator_options'),
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
