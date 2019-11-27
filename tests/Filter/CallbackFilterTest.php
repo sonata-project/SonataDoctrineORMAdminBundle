@@ -16,9 +16,20 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CallbackFilterTest extends TestCase
 {
+    public function testRenderSettings(): void
+    {
+        $filter = new CallbackFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+        $options = $filter->getRenderSettings()[1];
+
+        $this->assertSame(HiddenType::class, $options['operator_type']);
+        $this->assertSame([], $options['operator_options']);
+    }
+
     public function testFilterClosure(): void
     {
         $builder = new ProxyQuery(new QueryBuilder());

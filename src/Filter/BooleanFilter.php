@@ -56,6 +56,8 @@ class BooleanFilter extends Filter
     {
         return [
             'field_type' => BooleanType::class,
+            'operator_type' => HiddenType::class,
+            'operator_options' => [],
         ];
     }
 
@@ -64,8 +66,8 @@ class BooleanFilter extends Filter
         return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
-            'operator_type' => HiddenType::class,
-            'operator_options' => [],
+            'operator_type' => $this->getOption('operator_type'),
+            'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
         ]];
     }
