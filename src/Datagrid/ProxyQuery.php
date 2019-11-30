@@ -211,7 +211,7 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * @return mixed
+     * @return QueryBuilder
      */
     public function getQueryBuilder()
     {

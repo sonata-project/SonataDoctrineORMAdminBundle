@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.12.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.11.0...3.12.0) - 2019-11-23
+### Added
+- Added support for Doctrine-Bundle 2.0
+
+### Fixed
+- Do not return exception if `Pager->computeNbResult` has no result
+
 ## [3.11.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.10.0...3.11.0) - 2019-11-03
 ### Fixed
 - Fix a break BC error

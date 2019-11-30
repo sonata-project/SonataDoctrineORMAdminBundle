@@ -17,9 +17,20 @@ use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+use Sonata\Form\Type\EqualType;
 
 class ChoiceFilterTest extends TestCase
 {
+    public function testRenderSettings(): void
+    {
+        $filter = new ChoiceFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+        $options = $filter->getRenderSettings()[1];
+
+        $this->assertSame(EqualType::class, $options['operator_type']);
+        $this->assertSame([], $options['operator_options']);
+    }
+
     public function testFilterEmpty(): void
     {
         $filter = new ChoiceFilter();

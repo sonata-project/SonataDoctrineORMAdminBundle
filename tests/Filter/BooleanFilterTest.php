@@ -17,9 +17,20 @@ use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\Form\Type\BooleanType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class BooleanFilterTest extends TestCase
 {
+    public function testRenderSettings(): void
+    {
+        $filter = new BooleanFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+        $options = $filter->getRenderSettings()[1];
+
+        $this->assertSame(HiddenType::class, $options['operator_type']);
+        $this->assertSame([], $options['operator_options']);
+    }
+
     public function testFilterEmpty(): void
     {
         $filter = new BooleanFilter();
