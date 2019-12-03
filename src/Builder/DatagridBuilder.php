@@ -180,7 +180,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
 
-        $defaultOptions = [];
+        $defaultOptions = ['validation_groups' => false];
         if ($this->csrfTokenEnabled) {
             $defaultOptions['csrf_protection'] = false;
         }
