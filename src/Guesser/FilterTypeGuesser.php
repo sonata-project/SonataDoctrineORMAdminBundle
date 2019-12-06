@@ -15,6 +15,13 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\Form\Type\BooleanType;
 use Sonata\Form\Type\EqualType;
@@ -60,7 +67,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                     $options['field_name'] = $mapping['fieldName'];
                     $options['mapping_type'] = $mapping['type'];
 
-                    return new TypeGuess('doctrine_orm_model', $options, Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess(ModelFilter::class, $options, Guess::HIGH_CONFIDENCE);
             }
         }
 
@@ -74,16 +81,16 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             case 'boolean':
                 $options['field_type'] = BooleanType::class;
 
-                return new TypeGuess('doctrine_orm_boolean', $options, Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(BooleanFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':
             case 'datetime_immutable':
             case 'vardatetime':
             case 'datetimetz':
             case 'datetimetz_immutable':
-                return new TypeGuess('doctrine_orm_datetime', $options, Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(DateTimeFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'date':
             case 'date_immutable':
-                return new TypeGuess('doctrine_orm_date', $options, Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(DateFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
             case 'integer':
@@ -91,17 +98,17 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             case 'smallint':
                 $options['field_type'] = NumberType::class;
 
-                return new TypeGuess('doctrine_orm_number', $options, Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(NumberFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
             case 'text':
                 $options['field_type'] = TextType::class;
 
-                return new TypeGuess('doctrine_orm_string', $options, Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(StringFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':
             case 'time_immutable':
-                return new TypeGuess('doctrine_orm_time', $options, Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(TimeFilter::class, $options, Guess::HIGH_CONFIDENCE);
             default:
-                return new TypeGuess('doctrine_orm_string', $options, Guess::LOW_CONFIDENCE);
+                return new TypeGuess(StringFilter::class, $options, Guess::LOW_CONFIDENCE);
         }
     }
 }

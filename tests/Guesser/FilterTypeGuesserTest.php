@@ -16,6 +16,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -86,7 +93,7 @@ class FilterTypeGuesserTest extends TestCase
 
         $options = $result->getOptions();
 
-        $this->assertSame('doctrine_orm_model', $result->getType());
+        $this->assertSame(ModelFilter::class, $result->getType());
         $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
         $this->assertSame($parentAssociation, $options['parent_association_mappings']);
         $this->assertSame(ClassMetadata::MANY_TO_ONE, $options['mapping_type']);
@@ -134,13 +141,13 @@ class FilterTypeGuesserTest extends TestCase
         return [
             'boolean' => [
                 'boolean',
-                'doctrine_orm_boolean',
+                BooleanFilter::class,
                 Guess::HIGH_CONFIDENCE,
                 BooleanType::class,
             ],
             'datetime' => [
                 'datetime',
-                $datetimeType = 'doctrine_orm_datetime',
+                $datetimeType = DateTimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime_immutable' => [
@@ -165,7 +172,7 @@ class FilterTypeGuesserTest extends TestCase
             ],
             'date' => [
                 'date',
-                $dateType = 'doctrine_orm_date',
+                $dateType = DateFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date_immutable' => [
@@ -175,7 +182,7 @@ class FilterTypeGuesserTest extends TestCase
             ],
             'decimal' => [
                 'decimal',
-                $numberType = 'doctrine_orm_number',
+                $numberType = NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 NumberType::class,
             ],
@@ -205,7 +212,7 @@ class FilterTypeGuesserTest extends TestCase
             ],
             'string' => [
                 'string',
-                $stringType = 'doctrine_orm_string',
+                $stringType = StringFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
                 TextType::class,
             ],
@@ -217,7 +224,7 @@ class FilterTypeGuesserTest extends TestCase
             ],
             'time' => [
                 'time',
-                $timeType = 'doctrine_orm_time',
+                $timeType = TimeFilter::class,
                 Guess::HIGH_CONFIDENCE,
             ],
             'time_immutable' => [
