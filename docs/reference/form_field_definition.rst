@@ -14,14 +14,15 @@ Example
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
-    use Sonata\CoreBundle\Validator\ErrorElement;
+    use Sonata\AdminBundle\Form\Type\ModelListType;
+    use Sonata\Form\Validator\ErrorElement;
 
     final class PostAdmin extends AbstractAdmin
     {
         protected function configureFormFields(FormMapper $formMapper)
         {
             $formMapper
-                ->add('author', 'sonata_type_model_list', [])
+                ->add('author', ModelListType::class, [])
                 ->add('enabled')
                 ->add('title')
                 ->add('abstract', null, ['required' => false])
@@ -80,6 +81,7 @@ you can use the corresponding option in the form field definition::
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Form\Type\ModelListType;
 
     final class PostAdmin extends AbstractAdmin
     {
@@ -88,7 +90,7 @@ you can use the corresponding option in the form field definition::
             $formMapper
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
-                    ->add('author', 'sonata_type_model_list', [], [
+                    ->add('author', ModelListType::class, [], [
                         'placeholder' => 'No author selected',
                     ]);
         }
@@ -139,8 +141,8 @@ If you have many ``Post`` linked to one ``User``, then the ``Post`` form should 
 
 The AdminBundle provides 2 options:
 
-* ``sonata_type_model``: the ``User`` list is set in a select widget with an `Add` button to create a new ``User``,
-* ``sonata_type_model_list``: the ``User`` list is set in a model where you can search, select and delete a ``User``.
+* ``Sonata\AdminBundle\Form\Type\ModelType``: the ``User`` list is set in a select widget with an `Add` button to create a new ``User``,
+* ``Sonata\AdminBundle\Form\Type\ModelListType``: the ``User`` list is set in a model where you can search, select and delete a ``User``.
 
 .. code-block:: php
 
@@ -148,6 +150,8 @@ The AdminBundle provides 2 options:
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Form\Type\ModelListType;
+    use Sonata\AdminBundle\Form\Type\ModelType;
 
     final class PostAdmin extends AbstractAdmin
     {
@@ -156,7 +160,7 @@ The AdminBundle provides 2 options:
             $formMapper
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
-                    ->add('author', 'sonata_type_model_list', [
+                    ->add('author', ModelListType::class, [
                         'btn_add'       => 'Add author',       //Specify a custom label
                         'btn_list'      => 'button.list',      //which will be translated
                         'btn_delete'    => false,              //or hide the button.
@@ -170,7 +174,7 @@ The AdminBundle provides 2 options:
                     ->add('content')
                 ->end()
                 ->with('Tags')
-                    ->add('tags', 'sonata_type_model', ['expanded' => true])
+                    ->add('tags', ModelType::class, ['expanded' => true])
                 ->end()
                 ->with('Options', ['collapsed' => true])
                     ->add('commentsCloseAt')
@@ -221,11 +225,11 @@ You can easily add a new ``Media`` row by defining one of these options:
                 ]);
         }
     }
-    
-.. note:: 
+
+.. note::
 
     You have to define the ``setMedias`` method into your ``Gallery`` class and manually attach each ``media`` to the current ``gallery`` and define cascading persistence for the relationship from media to gallery.
-    
+
 By default, position row will be rendered. If you want to hide it, you will need to alter child  admin class and add hidden position field.
 Use code like::
 
@@ -243,6 +247,6 @@ To render child help messages you must use 'sonata_help' instead of 'help'::
     {
         $formMapper
             ->add('image', 'file', [
-                'sonata_help' => 'help message rendered in parent sonata_type_collection'
+                'sonata_help' => 'help message rendered in parent CollectionType'
             ]);
     }

@@ -10,13 +10,13 @@ The `AdminBundle` is shipped with custom form types and data transfomers in orde
 Form types
 ----------
 
-* ``sonata_type_admin``: this type is linked to an `Admin` class and the field construction is delegated to an Admin class,
-* ``sonata_type_collection``: this type works like the native ``CollectionType`` but contains two extra features:
+* ``Sonata\AdminBundle\Form\Type\AdminType``: this type is linked to an `Admin` class and the field construction is delegated to an Admin class,
+* ``Sonata\Form\Type\CollectionType``: this type works like the native ``CollectionType`` but contains two extra features:
 
     * the data layer is abstracted to work with any implemented layer,
     * a delete option is added so a collection entry can be deleted.
-* ``sonata_type_model``: this type works like the native ``EntityType`` but this internal is abstracted to work with any implemented layer.
-* ``sonata_type_immutable_array``: this type allows to edit a fixed array, like a settings array.
+* ``Sonata\AdminBundle\Form\Type\ModelType``: this type works like the native ``EntityType`` but this internal is abstracted to work with any implemented layer.
+* ``Sonata\Form\Type\ImmutableArrayType``: this type allows to edit a fixed array, like a settings array.
 
 Let's say, the object has settings properties::
 
@@ -35,6 +35,7 @@ Now you can edit the settings array with::
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\Form\Type\ImmutableArrayType;
 
     final class PageAdmin extends AbstractAdmin
     {
@@ -42,7 +43,7 @@ Now you can edit the settings array with::
         {
             $formMapper
                 ->add('enabled')
-                ->add('settings', 'sonata_type_immutable_array', [
+                ->add('settings', ImmutableArrayType::class, [
                     'keys' => [
                         ['content', 'textarea', []],
                         ['public', 'checkbox', []],
@@ -63,6 +64,7 @@ Other options::
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
+    use Sonata\AdminBundle\Form\Type\ModelType;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
 
@@ -73,13 +75,13 @@ Other options::
             $formMapper
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
-                    ->add('author', 'sonata_type_model', [], ['edit' => 'list'])
+                    ->add('author', ModelType::class, [], ['edit' => 'list'])
                     ->add('title')
                     ->add('abstract')
                     ->add('content')
                 ->end()
                 ->with('Tags')
-                    ->add('tags', 'sonata_type_model', ['expanded' => true])
+                    ->add('tags', ModelType::class, ['expanded' => true])
                 ->end()
                 ->with('Options', ['collapsed' => true])
                     ->add('commentsCloseAt')
@@ -97,4 +99,4 @@ DataTransformer
 
 * ``ArrayToModelTransformer``: transform an array to an object,
 * ``ModelsToArrayTransformer``: transform a collection of array into a collection of object,
-* ``ModelToIdTransformater``: transform an ``id`` into an object.
+* ``ModelToIdTransformer``: transform an ``id`` into an object.

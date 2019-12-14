@@ -113,10 +113,11 @@ class FormContractor implements FormContractorInterface
             ModelAutocompleteType::class,
         ])) {
             if ('list' === $fieldDescription->getOption('edit')) {
-                throw new \LogicException(
-                    'The `sonata_type_model` type does not accept an `edit` option anymore,'
-                    .' please review the UPGRADE-2.1.md file from the SonataAdminBundle'
-                );
+                throw new \LogicException(sprintf(
+                    'The `%s` type does not accept an `edit` option anymore,'
+                    .' please review the UPGRADE-2.1.md file from the SonataAdminBundle',
+                    ModelType::class
+                ));
             }
 
             $options['class'] = $fieldDescription->getTargetEntity();
@@ -149,9 +150,11 @@ class FormContractor implements FormContractorInterface
                 ClassMetadata::MANY_TO_ONE,
             ], true)) {
                 throw new \RuntimeException(sprintf(
-                    'You are trying to add `sonata_type_admin` field `%s` which is not One-To-One or  Many-To-One.'
-                    .' Maybe you want `sonata_type_collection` instead?',
-                    $fieldDescription->getName()
+                    'You are trying to add `%s` field `%s` which is not One-To-One or  Many-To-One.'
+                    .' Maybe you want `%s` instead?',
+                    AdminType::class,
+                    $fieldDescription->getName(),
+                    CollectionType::class
                 ));
             }
 

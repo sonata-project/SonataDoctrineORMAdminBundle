@@ -55,7 +55,7 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
             ->willReturn([$revision = new Revision('test', '123', 'test')])
             ->shouldBeCalledTimes(1);
 
-        $this->simpleThingsAuditReader->findEntitesChangedAtRevision(Argument::cetera())
+        $this->simpleThingsAuditReader->findEntitiesChangedAtRevision(Argument::cetera())
             ->willReturn([])
             ->shouldBeCalledTimes(1);
 

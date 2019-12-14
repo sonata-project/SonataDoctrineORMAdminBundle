@@ -28,7 +28,6 @@ use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Version;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -228,12 +227,6 @@ class ModelManagerTest extends TestCase
 
     public function testGetParentMetadataForProperty(): void
     {
-        if (version_compare(Version::VERSION, '2.5') < 0) {
-            $this->markTestSkipped('Test for embeddables needs to run on Doctrine >= 2.5');
-
-            return;
-        }
-
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;
         $embeddedEntityClass = EmbeddedEntity::class;
