@@ -2,7 +2,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
-class Uuid
+final class ValueObjectWithMagicToStringImpl
 {
     private $uuid;
 
@@ -18,6 +18,6 @@ class Uuid
 
     public function __toString()
     {
-        return $this->uuid;
+        return (string) $this->uuid;
     }
 }

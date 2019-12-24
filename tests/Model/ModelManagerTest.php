@@ -26,6 +26,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -40,9 +41,10 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ProductIdType;
-use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\Uuid;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithMagicToStringImpl;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithToStringImpl;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
@@ -73,28 +75,39 @@ class ModelManagerTest extends TestCase
         }
     }
 
-    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod()
+    public function valueObjectDataProvider()
     {
-        $entity = new UuidBinaryEntity(new Uuid('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
+        return [
+            'value object with toString implementation' => [ValueObjectWithToStringImpl::class],
+            'value object with magic toString implementation' => [ValueObjectWithMagicToStringImpl::class],
+        ];
+    }
+
+    /**
+     * @dataProvider valueObjectDataProvider
+     */
+    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod($vbClassName)
+    {
+        $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
 
         $platform = $this->createMock(MySqlPlatform::class);
 
         $connection = $this->createMock(Connection::class);
-        $connection->expects($this->any())->method('getDatabasePlatform')->willReturn($platform);
+        $connection->method('getDatabasePlatform')->willReturn($platform);
 
-        $classMetadata = $this->createMock(ClassMetadata::class);
-        $classMetadata->expects($this->any())->method('getIdentifierValues')->willReturn([$entity->getId()]);
-        $classMetadata->expects($this->any())->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
+        $classMetadata = $this->createMock(ClassMetadataInfo::class);
+        $classMetadata->method('getIdentifierValues')->willReturn([$entity->getId()]);
+        $classMetadata->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
 
         $classMetadataFactory = $this->createMock(ClassMetadataFactory::class);
-        $classMetadataFactory->expects($this->any())->method('getMetadataFor')->willReturn($classMetadata);
+        $classMetadataFactory->method('getMetadataFor')->willReturn($classMetadata);
 
         $entityManager = $this->createMock(EntityManager::class);
-        $entityManager->expects($this->any())->method('getMetadataFactory')->willReturn($classMetadataFactory);
-        $entityManager->expects($this->any())->method('getConnection')->willReturn($connection);
+        $entityManager->method('getMetadataFactory')->willReturn($classMetadataFactory);
+        $entityManager->method('getConnection')->willReturn($connection);
 
         $registry = $this->createMock(RegistryInterface::class);
-        $registry->expects($this->any())->method('getManagerForClass')->willReturn($entityManager);
+        $registry->method('getManagerForClass')->willReturn($entityManager);
 
         $manager = new ModelManager($registry);
 
