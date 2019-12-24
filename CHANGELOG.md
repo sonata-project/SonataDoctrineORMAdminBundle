@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.13.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.12.0...3.13.0) - 2019-12-23
+### Fixed
+- Fix ProxyQuery::getQueryBuilder() return type.
+
+### Changed
+`operator_type` and `operator_options` are overridable for the provided Filters
+
+### Removed
+- Support for Symfony < 3.4
+- Support for Symfony >= 4, < 4.2
+
 ## [3.12.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.11.0...3.12.0) - 2019-11-23
 ### Added
 - Added support for Doctrine-Bundle 2.0
