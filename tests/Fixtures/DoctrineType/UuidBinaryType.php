@@ -45,6 +45,6 @@ final class UuidBinaryType extends StringType
      */
     public function convertToDatabaseValue($value, AbstractPlatform $platform)
     {
-        return $value->toString();
+        return hex2bin(str_replace('-', '', (string) $value));
     }
 }
