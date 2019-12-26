@@ -11,7 +11,7 @@
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
-class UuidEntity
+final class UuidEntity
 {
     private $uuid;
 

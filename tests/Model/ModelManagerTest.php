@@ -18,6 +18,7 @@ use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\Common\Persistence\ObjectManager;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\Configuration;
@@ -25,6 +26,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -41,6 +43,8 @@ use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ProductIdType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidBinaryType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithMagicToStringImpl;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithToStringImpl;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AbstractEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
@@ -50,6 +54,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProtectedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidBinaryEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
@@ -68,6 +73,48 @@ class ModelManagerTest extends TestCase
         if (!Type::hasType(ProductIdType::NAME)) {
             Type::addType(ProductIdType::NAME, ProductIdType::class);
         }
+    }
+
+    public function valueObjectDataProvider()
+    {
+        return [
+            'value object with toString implementation' => [ValueObjectWithToStringImpl::class],
+            'value object with magic toString implementation' => [ValueObjectWithMagicToStringImpl::class],
+        ];
+    }
+
+    /**
+     * @dataProvider valueObjectDataProvider
+     */
+    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod($vbClassName)
+    {
+        $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
+
+        $platform = $this->createMock(MySqlPlatform::class);
+
+        $connection = $this->createMock(Connection::class);
+        $connection->method('getDatabasePlatform')->willReturn($platform);
+
+        $classMetadata = $this->createMock(ClassMetadataInfo::class);
+        $classMetadata->method('getIdentifierValues')->willReturn([$entity->getId()]);
+        $classMetadata->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
+
+        $classMetadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $classMetadataFactory->method('getMetadataFor')->willReturn($classMetadata);
+
+        $entityManager = $this->createMock(EntityManager::class);
+        $entityManager->method('getMetadataFactory')->willReturn($classMetadataFactory);
+        $entityManager->method('getConnection')->willReturn($connection);
+
+        $registry = $this->createMock(RegistryInterface::class);
+        $registry->method('getManagerForClass')->willReturn($entityManager);
+
+        $manager = new ModelManager($registry);
+
+        $this->assertSame(
+            ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
+            $manager->getIdentifierValues($entity)
+        );
     }
 
     public function testInstantiateWithDeprecatedRegistryInterface(): void
