@@ -75,7 +75,7 @@ class ModelManagerTest extends TestCase
         }
     }
 
-    public function valueObjectDataProvider()
+    public function valueObjectDataProvider(): array
     {
         return [
             'value object with toString implementation' => [ValueObjectWithToStringImpl::class],
@@ -86,7 +86,7 @@ class ModelManagerTest extends TestCase
     /**
      * @dataProvider valueObjectDataProvider
      */
-    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod($vbClassName)
+    public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod(string $vbClassName): void
     {
         $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
 
