@@ -30,16 +30,16 @@
         "sonata-project/admin-bundle": "^3.29",
         "sonata-project/core-bundle": "^3.14",
         "sonata-project/exporter": "^1.11.0 || ^2.0",
-        "symfony/config": "^3.4 || ^4.2",
-        "symfony/console": "^3.4 || ^4.2",
-        "symfony/dependency-injection": "^3.4 || ^4.2",
-        "symfony/doctrine-bridge": "^3.4 || ^4.2",
-        "symfony/form": "^3.4 || ^4.2",
-        "symfony/framework-bundle": "^3.4 || ^4.2",
-        "symfony/http-foundation": "^3.4 || ^4.2",
-        "symfony/http-kernel": "^3.4 || ^4.2",
-        "symfony/options-resolver": "^3.4 || ^4.2",
-        "symfony/security-acl": "^2.8 || ^3.0"
+        "symfony/config": "^4.4",
+        "symfony/console": "^4.4",
+        "symfony/dependency-injection": "^4.4",
+        "symfony/doctrine-bridge": "^4.4",
+        "symfony/form": "^4.4",
+        "symfony/framework-bundle": "^4.4",
+        "symfony/http-foundation": "^4.4",
+        "symfony/http-kernel": "^4.4",
+        "symfony/options-resolver": "^4.4",
+        "symfony/security-acl": "^3.0"
     },
     "conflict": {
         "simplethings/entity-audit-bundle": ">=2.0",
@@ -50,8 +50,8 @@
     },
     "require-dev": {
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
-        "sonata-project/block-bundle": "^3.11",
-        "symfony/phpunit-bridge": "^4.3"
+        "sonata-project/block-bundle": "^3.17",
+        "symfony/phpunit-bridge": "^5.0"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
