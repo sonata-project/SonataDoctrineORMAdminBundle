@@ -101,13 +101,7 @@ This placeholder is translated using the ``SonataAdminBundle`` catalog.
 Advanced usage: File management
 -------------------------------
 
-If you want to use custom types from the Form framework you must use the ``addType`` method.
-
-.. note::
-
-    The ``add`` method uses the information provided by the model definition.
-
-.. code-block:: php
+If you want to use custom types from the Form framework you must use the ``addType`` method::
 
     namespace Sonata\MediaBundle\Admin;
 
@@ -131,6 +125,10 @@ If you want to use custom types from the Form framework you must use the ``addTy
 
 .. note::
 
+    The ``add`` method uses the information provided by the model definition.
+
+.. note::
+
     By setting ``type=false`` in the file definition, the Form framework will provide an instance of
     ``UploadedFile`` for the ``Media::setBinaryContent`` method. Otherwise, the full path will be provided.
 
@@ -144,7 +142,7 @@ The AdminBundle provides 2 options:
 * ``Sonata\AdminBundle\Form\Type\ModelType``: the ``User`` list is set in a select widget with an `Add` button to create a new ``User``,
 * ``Sonata\AdminBundle\Form\Type\ModelListType``: the ``User`` list is set in a model where you can search, select and delete a ``User``.
 
-.. code-block:: php
+The following example shows both types in action::
 
     namespace Sonata\NewsBundle\Admin;
 
@@ -197,7 +195,7 @@ You can easily add a new ``Media`` row by defining one of these options:
 * ``sortable``: if the model has a position field, you can enable a drag and drop sortable effect by setting ``sortable=field_name``.
 * ``limit``: ``<an integer>`` if defined, limits the number of elements that can be added, after which the "Add new" button will not be displayed
 
-.. code-block:: php
+The following example shows the ``CollectionType`` in action::
 
     namespace Sonata\MediaBundle\Admin;
 
