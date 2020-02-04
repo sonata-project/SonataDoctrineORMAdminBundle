@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.14.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.13.0...3.14.0) - 2020-02-04
+### Fixed
+- crash in `computeNbResult` where `groupBy` was used
+- deprecations from `doctrine/persistence`
+- Avoid to call not accessible `toString()` methods.
+
+### Changed
+- Disabled validation group in `Builder/DatagridBuilder::getBaseDatagrid()`
+
+### Changed
+- Added check and call of `toString` and `__toString` when calling
+  `getValueFromType` on value-object such as Uuid
+
 ## [3.13.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.12.0...3.13.0) - 2019-12-23
 ### Fixed
 - Fix ProxyQuery::getQueryBuilder() return type.
