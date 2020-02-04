@@ -45,7 +45,10 @@ class Pager extends BasePager
             current($this->getCountColumn())
         ));
 
-        return (int) ($countQuery->resetDQLPart('orderBy')->getQuery()->getOneOrNullResult(Query::HYDRATE_SINGLE_SCALAR));
+        return array_sum(array_column(
+            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
+            'cnt'
+        ));
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
