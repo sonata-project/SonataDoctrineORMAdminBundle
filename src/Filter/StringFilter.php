@@ -29,10 +29,7 @@ class StringFilter extends Filter
      */
     private $caseSensitive;
 
-    /**
-     * @param bool $caseSensitive
-     */
-    public function __construct($caseSensitive)
+    public function __construct(bool $caseSensitive = true)
     {
         $this->caseSensitive = $caseSensitive;
     }

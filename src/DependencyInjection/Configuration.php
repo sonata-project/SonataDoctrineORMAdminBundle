@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -41,13 +42,6 @@ class Configuration implements ConfigurationInterface
         } else {
             $rootNode = $treeBuilder->getRootNode();
         }
-
-        $caseSensitiveInfo = <<<'CASESENSITIVE'
-Whether the StringFilter should behave case sensitive or not.
-Using case-insensitivity might lead to performance issues.
-See https://use-the-index-luke.com/sql/where-clause/functions/case-insensitive-search
-for more information.
-CASESENSITIVE;
 
         $rootNode
             ->children()
@@ -83,23 +77,40 @@ CASESENSITIVE;
                         ->end()
                     ->end()
                 ->end()
-                ->arrayNode('filters')
+            ->end()
+            ->append($this->getFiltersNode())
+        ;
+
+        return $treeBuilder;
+    }
+
+    private function getFiltersNode(): ArrayNodeDefinition
+    {
+        $treeBuilder = new TreeBuilder();
+        $node = $treeBuilder->root('filters');
+
+        $caseSensitiveInfo = <<<'CASESENSITIVE'
+Whether the StringFilter should behave case sensitive or not.
+Using case-insensitivity might lead to performance issues.
+See https://use-the-index-luke.com/sql/where-clause/functions/case-insensitive-search
+for more information.
+CASESENSITIVE;
+
+        $node
+            ->addDefaultsIfNotSet()
+            ->children()
+                ->arrayNode('string')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->arrayNode('string')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->booleanNode('case_sensitive')
-                                    ->defaultTrue()
-                                    ->info($caseSensitiveInfo)
-                                ->end()
-                            ->end()
+                        ->booleanNode('case_sensitive')
+                            ->defaultTrue()
+                            ->info($caseSensitiveInfo)
                         ->end()
                     ->end()
                 ->end()
             ->end()
         ;
 
-        return $treeBuilder;
+        return $node;
     }
 }
