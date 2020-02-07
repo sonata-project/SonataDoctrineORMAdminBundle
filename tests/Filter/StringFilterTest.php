@@ -142,11 +142,11 @@ class StringFilterTest extends TestCase
     {
         $caseSensitive = false;
 
-        // Setting case_sensitive via constructor
+        // Setting default case sensitive via constructor
         $filter1 = new StringFilter($caseSensitive);
         $filter1->initialize('field_name');
 
-        // Setting case_sensitive via options
+        // Setting case sensitive via options
         $filter2 = new StringFilter();
         $filter2->initialize('field_name', ['case_sensitive' => $caseSensitive]);
 
@@ -165,11 +165,11 @@ class StringFilterTest extends TestCase
     {
         $caseSensitive = true;
 
-        // Setting case_sensitive via constructor
+        // Setting default case sensitive via constructor
         $filter1 = new StringFilter($caseSensitive);
         $filter1->initialize('field_name');
 
-        // Setting case_sensitive via options
+        // Setting case sensitive via options
         $filter2 = new StringFilter();
         $filter2->initialize('field_name', ['case_sensitive' => $caseSensitive]);
 

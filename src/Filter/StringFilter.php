@@ -27,11 +27,11 @@ class StringFilter extends Filter
     /**
      * @var bool
      */
-    private $caseSensitive;
+    private $defaultCaseSensitive;
 
-    public function __construct(bool $caseSensitive = true)
+    public function __construct(bool $defaultCaseSensitive = true)
     {
-        $this->caseSensitive = $caseSensitive;
+        $this->defaultCaseSensitive = $defaultCaseSensitive;
     }
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -87,7 +87,7 @@ class StringFilter extends Filter
     {
         return [
             'format' => '%%%s%%',
-            'case_sensitive' => $this->caseSensitive,
+            'case_sensitive' => $this->defaultCaseSensitive,
         ];
     }
 
