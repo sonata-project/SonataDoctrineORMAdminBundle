@@ -44,6 +44,7 @@ For now, only `Doctrine ORM` filters are available:
 * ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateTimeType`` Form Type, renders a datetime field,
 * ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType`` Form Type, renders a 2 datetime fields,
 * ``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DefaultType`` Form type, renders a choice list field.
+* ``Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DefaultType`` Form type, renders a choice list field.
 
 Example
 -------
@@ -159,6 +160,26 @@ ClassFilter
         {
             $datagridMapper
                 ->add('type', ClassFilter::class, ['sub_classes' => $this->getSubClasses()]);
+        }
+    }
+
+Empty
+-----
+
+``Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter`` supports filtering for empty (null) entity fields::
+
+    namespace Sonata\NewsBundle\Admin;
+
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Filter\EmptyFilter;
+
+    final class PostAdmin extends AbstractAdmin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        {
+            $datagridMapper
+                ->add('deleted', EmptyFilter::class, ['field_name' => 'deletedAt']);
         }
     }
 

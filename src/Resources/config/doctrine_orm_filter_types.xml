@@ -40,5 +40,8 @@
         <service id="sonata.admin.orm.filter.type.class" class="Sonata\DoctrineORMAdminBundle\Filter\ClassFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_class"/>
         </service>
+        <service id="Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_empty"/>
+        </service>
     </services>
 </container>
