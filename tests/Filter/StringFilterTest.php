@@ -140,29 +140,47 @@ class StringFilterTest extends TestCase
 
     public function testCaseSensitiveFalse(): void
     {
-        $filter = new StringFilter();
-        $filter->initialize('field_name', ['case_sensitive' => false]);
+        $caseSensitive = false;
 
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
+        // Setting case_sensitive via constructor
+        $filter1 = new StringFilter($caseSensitive);
+        $filter1->initialize('field_name');
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query[0]->getParts());
-        $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        // Setting case_sensitive via options
+        $filter2 = new StringFilter();
+        $filter2->initialize('field_name', ['case_sensitive' => $caseSensitive]);
+
+        foreach ([$filter1, $filter2] as $filter) {
+            $builder = new ProxyQuery(new QueryBuilder());
+            $this->assertSame([], $builder->query);
+
+            $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+            $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query[0]->getParts());
+            $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        }
     }
 
     public function testCaseSensitiveTrue(): void
     {
-        $filter = new StringFilter();
-        $filter->initialize('field_name', ['case_sensitive' => true]);
+        $caseSensitive = true;
 
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
+        // Setting case_sensitive via constructor
+        $filter1 = new StringFilter($caseSensitive);
+        $filter1->initialize('field_name');
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
-        $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        // Setting case_sensitive via options
+        $filter2 = new StringFilter();
+        $filter2->initialize('field_name', ['case_sensitive' => $caseSensitive]);
+
+        foreach ([$filter1, $filter2] as $filter) {
+            $builder = new ProxyQuery(new QueryBuilder());
+            $this->assertSame([], $builder->query);
+
+            $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query[0]->getParts());
+            $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        }
     }
 }
