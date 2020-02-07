@@ -17,6 +17,7 @@
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_model_autocomplete"/>
         </service>
         <service id="sonata.admin.orm.filter.type.string" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
+            <argument>%sonata_doctrine_orm_admin.filters.string.case_sensitive%</argument>
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_string"/>
         </service>
         <service id="sonata.admin.orm.filter.type.number" class="Sonata\DoctrineORMAdminBundle\Filter\NumberFilter">

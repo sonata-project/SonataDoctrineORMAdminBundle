@@ -42,6 +42,13 @@ class Configuration implements ConfigurationInterface
             $rootNode = $treeBuilder->getRootNode();
         }
 
+        $caseSensitiveInfo = <<<'CASESENSITIVE'
+Whether the StringFilter should behave case sensitive or not.
+Using case-insensitivity might lead to performance issues.
+See https://use-the-index-luke.com/sql/where-clause/functions/case-insensitive-search
+for more information.
+CASESENSITIVE;
+
         $rootNode
             ->children()
                 ->scalarNode('entity_manager')->defaultNull()->end()
@@ -71,6 +78,20 @@ class Configuration implements ConfigurationInterface
                                 ->arrayNode('show')
                                     ->useAttributeAsKey('name')
                                     ->prototype('scalar')->end()
+                                ->end()
+                            ->end()
+                        ->end()
+                    ->end()
+                ->end()
+                ->arrayNode('filters')
+                    ->addDefaultsIfNotSet()
+                    ->children()
+                        ->arrayNode('string')
+                            ->addDefaultsIfNotSet()
+                            ->children()
+                                ->booleanNode('case_sensitive')
+                                    ->defaultTrue()
+                                    ->info($caseSensitiveInfo)
                                 ->end()
                             ->end()
                         ->end()

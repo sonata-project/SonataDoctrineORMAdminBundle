@@ -57,5 +57,10 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
 
         $container->getDefinition('sonata.admin.builder.orm_show')
             ->replaceArgument(1, $config['templates']['types']['show']);
+
+        $container->setParameter(
+            'sonata_doctrine_orm_admin.filters.string.case_sensitive',
+            $config['filters']['string']['case_sensitive']
+        );
     }
 }

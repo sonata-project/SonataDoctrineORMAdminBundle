@@ -62,3 +62,7 @@ Full configuration options
                     percent:    "@SonataAdmin/CRUD/base_percent.html.twig"
                     choice:     "@SonataAdmin/CRUD/show_choice.html.twig"
                     url:        "@SonataAdmin/CRUD/show_url.html.twig"
+
+        filters:
+            string:
+                case_sensitive: true

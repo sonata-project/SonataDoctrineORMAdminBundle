@@ -24,6 +24,19 @@ class StringFilter extends Filter
         ChoiceType::TYPE_EQUAL => '=',
     ];
 
+    /**
+     * @var bool
+     */
+    private $caseSensitive;
+
+    /**
+     * @param bool $caseSensitive
+     */
+    public function __construct($caseSensitive)
+    {
+        $this->caseSensitive = $caseSensitive;
+    }
+
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || null === $data['value']) {
@@ -77,7 +90,7 @@ class StringFilter extends Filter
     {
         return [
             'format' => '%%%s%%',
-            'case_sensitive' => true,
+            'case_sensitive' => $this->caseSensitive,
         ];
     }
 
