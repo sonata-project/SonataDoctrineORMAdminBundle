@@ -28,7 +28,7 @@ class TypeGuesserTest extends TestCase
     private $modelManager;
     private $guesser;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->modelManager = $this->prophesize(ModelManager::class);
         $this->guesser = new TypeGuesser();

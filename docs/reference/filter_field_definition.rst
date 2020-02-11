@@ -140,13 +140,7 @@ Advanced usage
 Filtering by sub entity properties
 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-If you need to filter your base entities by the value of a sub entity property, you can simply use the dot-separated notation:
-
-.. note::
-
-    This only makes sense when the prefix path is made of entities, not collections.
-
-.. code-block:: php
+If you need to filter your base entities by the value of a sub entity property, you can simply use the dot-separated notation::
 
     namespace App\Admin;
 
@@ -166,6 +160,10 @@ If you need to filter your base entities by the value of a sub entity property, 
                 ->add('address.town');
         }
     }
+
+.. note::
+
+    This only makes sense when the prefix path is made of entities, not collections.
 
 Label
 ^^^^^

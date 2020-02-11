@@ -33,21 +33,19 @@ env:
     - SYMFONY_DEPRECATIONS_HELPER=max[self]=0
     - TARGET=test
     - UPSTREAM_URL=https://github.com/sonata-project/SonataDoctrineORMAdminBundle.git
-    - PHPUNIT_VERSION=7
+    - PHPUNIT_VERSION=8
 
 matrix:
   fast_finish: true
   include:
     - php: '7.3'
-      env: TARGET=docs
-    - php: '7.3'
       env: TARGET=lint
     - php: '7.2'
       env: COMPOSER_FLAGS="--prefer-lowest"
     - php: '7.3'
-      env: SYMFONY=3.4.*
+      env: SYMFONY=4.4.*
     - php: '7.3'
-      env: SYMFONY='dev-master as 3.4.x-dev'
+      env: SYMFONY='dev-master as 4.4.x-dev'
     - php: '7.3'
       env: SONATA_ADMIN=3.*
     - php: '7.3'
@@ -58,7 +56,7 @@ matrix:
     - php: 7.4snapshot
     - php: nightly
     - env: SYMFONY_DEPRECATIONS_HELPER=0
-    - env: SYMFONY='dev-master as 3.4.x-dev'
+    - env: SYMFONY='dev-master as 4.4.x-dev'
     - env: SONATA_ADMIN='dev-master as 3.x-dev'
 
 before_install:

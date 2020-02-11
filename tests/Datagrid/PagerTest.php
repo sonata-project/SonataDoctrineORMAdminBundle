@@ -62,11 +62,12 @@ class PagerTest extends TestCase
     {
         $query = $this->getMockBuilder(AbstractQuery::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getOneOrNullResult'])
+            ->setMethods(['getResult'])
             ->getMockForAbstractClass();
 
         $query->expects($this->once())
-            ->method('getOneOrNullResult');
+            ->method('getResult')
+            ->willReturn([['cnt' => 1], ['cnt' => 2]]);
 
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->disableOriginalConstructor()

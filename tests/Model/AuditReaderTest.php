@@ -25,7 +25,7 @@ class AuditReaderTest extends TestCase
     private $simpleThingsAuditReader;
     private $auditReader;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
         $this->auditReader = new AuditReader($this->simpleThingsAuditReader->reveal());

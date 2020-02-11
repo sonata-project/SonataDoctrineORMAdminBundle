@@ -13,7 +13,7 @@ Make sure the `Orphan Removal` option is set to ``true``:
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="UTF-8"?>
     <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
         <entity name="Application\Sonata\MediaBundle\Entity\Gallery" table="media__gallery" >
 
@@ -43,7 +43,7 @@ Make sure the ``order-by`` option is correctly set:
 
 .. code-block:: xml
 
-    <?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="UTF-8"?>
     <doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xsi="http://www.w3.org/2001/XMLSchema-instance" schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
         <entity name="Application\Sonata\MediaBundle\Entity\Gallery" table="media__gallery" >
 

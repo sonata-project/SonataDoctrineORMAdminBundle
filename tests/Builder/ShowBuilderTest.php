@@ -34,7 +34,7 @@ class ShowBuilderTest extends TestCase
     private $admin;
     private $modelManager;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->guesser = $this->prophesize(TypeGuesserInterface::class);
 
