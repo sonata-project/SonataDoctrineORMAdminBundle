@@ -64,7 +64,8 @@ class StringFilter extends Filter
         if (ChoiceType::TYPE_EQUAL === $data['type']) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
-            $queryBuilder->setParameter($parameterName,
+            $queryBuilder->setParameter(
+                $parameterName,
                 sprintf(
                     $this->getOption('format'),
                     $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])

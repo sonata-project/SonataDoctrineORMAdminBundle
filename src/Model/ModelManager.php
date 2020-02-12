@@ -577,9 +577,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 if (!$reflClass->getProperty($property)->isPublic()) {
                     throw new PropertyAccessDeniedException(sprintf(
                         'Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?',
-                            $property,
-                            $reflClass->getName(),
-                            ucfirst($property)
+                        $property,
+                        $reflClass->getName(),
+                        ucfirst($property)
                     ));
                 }
 

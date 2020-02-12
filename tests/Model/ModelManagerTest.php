@@ -297,13 +297,11 @@ class ModelManagerTest extends TestCase
 
         $modelManager->expects($this->any())->method('getMetadata')
             ->willReturnMap(
-
-                    [
+                [
                         [$containerEntityClass, $containerEntityMetadata],
                         [$embeddedEntityClass, $embeddedEntityMetadata],
                         [$associatedEntityClass, $associatedEntityMetadata],
                     ]
-
             );
 
         /** @var ClassMetadata $metadata */
