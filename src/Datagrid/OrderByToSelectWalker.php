@@ -77,7 +77,9 @@ final class OrderByToSelectWalker extends TreeWalkerAdapter
         foreach ($selects as $idVar => $fields) {
             foreach ($fields as $field => $expression) {
                 $AST->selectClause->selectExpressions[] = new SelectExpression(
-                    $this->createSelectExpressionItem($expression), null, true
+                    $this->createSelectExpressionItem($expression),
+                    null,
+                    true
                 );
             }
         }
