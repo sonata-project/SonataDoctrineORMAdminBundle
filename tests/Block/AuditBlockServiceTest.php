@@ -65,7 +65,7 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
         $this->blockService->execute($blockContext->reveal());
 
         $this->assertSame('template', $this->templating->view);
-        $this->assertInternalType('array', $this->templating->parameters['settings']);
+        $this->assertIsArray($this->templating->parameters['settings']);
         $this->assertSame($revision, $this->templating->parameters['revisions'][0]['revision']);
         $this->assertSame($block, $this->templating->parameters['block']);
     }
