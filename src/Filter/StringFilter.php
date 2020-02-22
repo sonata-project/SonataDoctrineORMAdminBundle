@@ -15,13 +15,14 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 
 class StringFilter extends Filter
 {
     public const CHOICES = [
-        ChoiceType::TYPE_CONTAINS => 'LIKE',
-        ChoiceType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-        ChoiceType::TYPE_EQUAL => '=',
+        ContainsOperatorType::TYPE_CONTAINS => 'LIKE',
+        ContainsOperatorType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+        ContainsOperatorType::TYPE_EQUAL => '=',
     ];
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -36,7 +37,7 @@ class StringFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ? ChoiceType::TYPE_CONTAINS : $data['type'];
+        $data['type'] = !isset($data['type']) ? ContainsOperatorType::TYPE_CONTAINS : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
@@ -55,13 +56,13 @@ class StringFilter extends Filter
             $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         }
 
-        if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
+        if (ContainsOperatorType::TYPE_NOT_CONTAINS === $data['type']) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($queryBuilder, $or);
 
-        if (ChoiceType::TYPE_EQUAL === $data['type']) {
+        if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
             $queryBuilder->setParameter($parameterName, $data['value']);
         } else {
             $queryBuilder->setParameter(

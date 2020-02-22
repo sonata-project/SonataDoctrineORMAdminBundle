@@ -17,7 +17,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
-use Sonata\Form\Type\EqualType;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 class ModelFilter extends Filter
@@ -46,7 +46,7 @@ class ModelFilter extends Filter
             'field_name' => false,
             'field_type' => EntityType::class,
             'field_options' => [],
-            'operator_type' => EqualType::class,
+            'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
     }
@@ -79,7 +79,7 @@ class ModelFilter extends Filter
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL === $data['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));

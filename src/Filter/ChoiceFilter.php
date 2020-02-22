@@ -14,9 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
-use Sonata\Form\Type\EqualType;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 
 class ChoiceFilter extends Filter
 {
@@ -36,7 +35,7 @@ class ChoiceFilter extends Filter
     public function getDefaultOptions()
     {
         return [
-            'operator_type' => EqualType::class,
+            'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
     }
@@ -70,7 +69,7 @@ class ChoiceFilter extends Filter
         // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
         $completeField = sprintf('%s.%s', $alias, $field);
         $parameterName = $this->getNewParameterName($queryBuilder);
-        if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
+        if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $andConditions = [$queryBuilder->expr()->isNotNull($completeField)];
             if (0 !== \count($data['value'])) {
                 $andConditions[] = $queryBuilder->expr()->notIn($completeField, ':'.$parameterName);
@@ -95,7 +94,7 @@ class ChoiceFilter extends Filter
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
+        if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             if (null === $data['value']) {
                 $this->applyWhere($queryBuilder, $queryBuilder->expr()->isNotNull(sprintf('%s.%s', $alias, $field)));
             } else {

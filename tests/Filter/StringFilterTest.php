@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 
@@ -42,7 +42,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => ChoiceType::TYPE_EQUAL]);
+        $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => ContainsOperatorType::TYPE_EQUAL]);
         $this->assertFalse($filter->isActive());
     }
 
@@ -54,7 +54,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_CONTAINS]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
 
@@ -75,7 +75,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_NOT_CONTAINS]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_NOT_CONTAINS]);
         $this->assertSame(['alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -89,7 +89,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ChoiceType::TYPE_EQUAL]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_EQUAL]);
         $this->assertSame(['alias.field = :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -117,7 +117,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->apply($builder, ['type' => ChoiceType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($builder, ['type' => ContainsOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
         $this->assertSame(
             'o.association_mapping',
@@ -147,7 +147,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
         $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -161,7 +161,7 @@ class StringFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ChoiceType::TYPE_CONTAINS]);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
         $this->assertTrue($filter->isActive());

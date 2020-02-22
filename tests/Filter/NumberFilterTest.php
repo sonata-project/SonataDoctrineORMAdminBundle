@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Form\Type\Filter\NumberType;
+use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 
@@ -54,11 +54,11 @@ class NumberFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_GREATER_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_GREATER_THAN, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_LESS_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberType::TYPE_LESS_THAN, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_THAN, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_EQUAL, 'value' => 42]);
+        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_THAN, 'value' => 42]);
         $filter->filter($builder, 'alias', 'field', ['value' => 42]);
 
         $expected = [
