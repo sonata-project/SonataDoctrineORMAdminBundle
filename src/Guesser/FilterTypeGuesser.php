@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
@@ -24,7 +25,6 @@ use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\Form\Type\BooleanType;
-use Sonata\Form\Type\EqualType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -45,7 +45,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             'options' => [],
         ];
 
-        list($metadata, $propertyName, $parentAssociationMappings) = $ret;
+        [$metadata, $propertyName, $parentAssociationMappings] = $ret;
 
         $options['parent_association_mappings'] = $parentAssociationMappings;
 
@@ -57,7 +57,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 case ClassMetadata::ONE_TO_MANY:
                 case ClassMetadata::MANY_TO_ONE:
                 case ClassMetadata::MANY_TO_MANY:
-                    $options['operator_type'] = EqualType::class;
+                    $options['operator_type'] = EqualOperatorType::class;
                     $options['operator_options'] = [];
                     $options['field_type'] = EntityType::class;
                     $options['field_options'] = [

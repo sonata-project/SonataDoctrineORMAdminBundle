@@ -18,17 +18,19 @@ use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
+use Sonata\AdminBundle\Form\Type\Operator\DateOperatorType;
+use Sonata\AdminBundle\Form\Type\Operator\DateRangeOperatorType;
 
 abstract class AbstractDateFilter extends Filter
 {
     public const CHOICES = [
-        DateType::TYPE_EQUAL => '=',
-        DateType::TYPE_GREATER_EQUAL => '>=',
-        DateType::TYPE_GREATER_THAN => '>',
-        DateType::TYPE_LESS_EQUAL => '<=',
-        DateType::TYPE_LESS_THAN => '<',
-        DateType::TYPE_NULL => 'NULL',
-        DateType::TYPE_NOT_NULL => 'NOT NULL',
+        DateOperatorType::TYPE_EQUAL => '=',
+        DateOperatorType::TYPE_GREATER_EQUAL => '>=',
+        DateOperatorType::TYPE_GREATER_THAN => '>',
+        DateOperatorType::TYPE_LESS_EQUAL => '<=',
+        DateOperatorType::TYPE_LESS_THAN => '<',
+        DateOperatorType::TYPE_NULL => 'NULL',
+        DateOperatorType::TYPE_NOT_NULL => 'NOT NULL',
     ];
 
     /**
@@ -79,7 +81,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // default type for range filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateRangeType::TYPE_BETWEEN : $data['type'];
+            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $data['type'];
 
             $startDateParameterName = $this->getNewParameterName($queryBuilder);
             $endDateParameterName = $this->getNewParameterName($queryBuilder);
@@ -109,7 +111,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // default type for simple filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateType::TYPE_EQUAL : $data['type'];
+            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateOperatorType::TYPE_EQUAL : $data['type'];
 
             // just find an operator and apply query
             $operator = $this->getOperator($data['type']);
@@ -129,7 +131,7 @@ abstract class AbstractDateFilter extends Filter
             $parameterName = $this->getNewParameterName($queryBuilder);
 
             // date filter should filter records for the whole day
-            if (false === $this->time && DateType::TYPE_EQUAL === $data['type']) {
+            if (false === $this->time && DateRangeOperatorType::TYPE_EQUAL === $data['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
                 $queryBuilder->setParameter($parameterName, $data['value']);
 
@@ -178,7 +180,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * Resolves DataType:: constants to SQL operators.
+     * Resolves DateOperatorType:: constants to SQL operators.
      *
      * @param int $type
      *

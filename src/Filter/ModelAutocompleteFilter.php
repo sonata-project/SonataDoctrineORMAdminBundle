@@ -18,7 +18,7 @@ use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
-use Sonata\Form\Type\EqualType;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 
 class ModelAutocompleteFilter extends Filter
 {
@@ -45,7 +45,7 @@ class ModelAutocompleteFilter extends Filter
             'field_name' => false,
             'field_type' => ModelAutocompleteType::class,
             'field_options' => [],
-            'operator_type' => EqualType::class,
+            'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
     }
@@ -79,7 +79,7 @@ class ModelAutocompleteFilter extends Filter
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL === $data['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
@@ -103,7 +103,7 @@ class ModelAutocompleteFilter extends Filter
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualType::TYPE_IS_NOT_EQUAL === $data['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
         } else {
             $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));

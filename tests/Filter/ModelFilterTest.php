@@ -16,9 +16,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
-use Sonata\Form\Type\EqualType;
 
 class ModelFilterTest extends TestCase
 {
@@ -56,7 +56,7 @@ class ModelFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', [
-            'type' => EqualType::TYPE_IS_EQUAL,
+            'type' => EqualOperatorType::TYPE_EQUAL,
             'value' => ['1', '2'],
         ]);
 
@@ -74,7 +74,7 @@ class ModelFilterTest extends TestCase
         $builder = new ProxyQuery(new QueryBuilder());
 
         $filter->filter($builder, 'alias', 'field', [
-            'type' => EqualType::TYPE_IS_NOT_EQUAL,
+            'type' => EqualOperatorType::TYPE_NOT_EQUAL,
             'value' => ['1', '2'],
         ]);
 
@@ -94,7 +94,7 @@ class ModelFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 2]);
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]);
 
         $this->assertSame(['alias IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => [2]], $builder->parameters);
@@ -108,7 +108,7 @@ class ModelFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 2]);
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]);
 
         $this->assertSame(
             'alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
@@ -157,7 +157,7 @@ class ModelFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->apply($builder, ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd']);
+        $filter->apply($builder, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
         $this->assertSame([
             'o.association_mapping',
@@ -187,7 +187,7 @@ class ModelFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->apply($builder, ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 'asd']);
+        $filter->apply($builder, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
         $this->assertSame([
             'o.association_mapping',
