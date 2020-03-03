@@ -27,8 +27,14 @@ class ConfigurationTest extends TestCase
 
         $this->assertNull($config['entity_manager']);
         $this->assertTrue($config['audit']['force']);
-        $this->assertArraySubset(['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'], $config['templates']['form']);
-        $this->assertArraySubset(['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'], $config['templates']['filter']);
+        $this->assertContains(
+            '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig',
+            $config['templates']['form']
+        );
+        $this->assertContains(
+            '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig',
+            $config['templates']['filter']
+        );
         $this->assertArrayNotHasKey('types', $config['templates']);
     }
 
