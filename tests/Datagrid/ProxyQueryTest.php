@@ -229,4 +229,44 @@ class ProxyQueryTest extends TestCase
         $query->setSortOrder($validValue);
         $this->assertSame($validValue, $query->getSortOrder());
     }
+
+    public function testExecuteWithOrderBy(): void
+    {
+        $entity1 = new DoubleNameEntity(1, 'Foo', 'Bar');
+        $entity2 = new DoubleNameEntity(2, 'Bar', 'Bar');
+        $entity3 = new DoubleNameEntity(3, 'Bar', 'Foo');
+
+        $this->em->persist($entity1);
+        $this->em->persist($entity2);
+        $this->em->persist($entity3);
+        $this->em->flush();
+
+        $query = new ProxyQuery(
+            $this->em->createQueryBuilder()->select('o.id')->from(DoubleNameEntity::class, 'o')
+        );
+        $query->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
+
+        $this->assertSame(
+            [
+                ['id' => 1],
+                ['id' => 2],
+                ['id' => 3],
+            ],
+            $query->execute()
+        );
+
+        $query2 = new ProxyQuery(
+            $this->em->createQueryBuilder()->select('o.id')->from(DoubleNameEntity::class, 'o')->addOrderBy('o.name')
+        );
+        $query2->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
+
+        $this->assertSame(
+            [
+                ['id' => 2],
+                ['id' => 1],
+                ['id' => 3],
+            ],
+            $query2->execute()
+        );
+    }
 }
