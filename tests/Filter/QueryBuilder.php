@@ -32,11 +32,11 @@ class QueryBuilder
     }
 
     /**
-     * @param string $query
+     * @param string|Orx|Andx $query
      */
     public function andWhere($query): void
     {
-        $this->query[] = $query;
+        $this->query[] = (string) $query;
     }
 
     /**
@@ -48,20 +48,18 @@ class QueryBuilder
     }
 
     /**
-     * @param string $name
-     * @param string $value
+     * @param string       $alias
+     * @param string|array $parameter
      *
      * @return string
      */
-    public function in($name, $value)
+    public function in($alias, $parameter)
     {
-        $this->query[] = 'in_'.$name;
-
-        if (\is_array($value)) {
-            return sprintf('%s IN ("%s")', $name, implode(',', $value));
+        if (\is_array($parameter)) {
+            return sprintf('%s IN ("%s")', $alias, implode(',', $parameter));
         }
 
-        return sprintf('%s IN %s', 'in_'.$name, $value);
+        return sprintf('%s IN %s', $alias, $parameter);
     }
 
     public function getDQLPart($queryPart)
@@ -126,13 +124,17 @@ class QueryBuilder
     }
 
     /**
-     * @param string $alias
-     * @param string $parameter
+     * @param string       $alias
+     * @param string|array $parameter
      *
      * @return string
      */
     public function notIn($alias, $parameter)
     {
+        if (\is_array($parameter)) {
+            return sprintf('%s NOT IN ("%s")', $alias, implode(',', $parameter));
+        }
+
         return sprintf('%s NOT IN %s', $alias, $parameter);
     }
 

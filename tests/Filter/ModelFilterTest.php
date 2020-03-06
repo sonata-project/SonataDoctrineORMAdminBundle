@@ -61,7 +61,7 @@ class ModelFilterTest extends TestCase
         ]);
 
         // the alias is now computer by the entityJoin method
-        $this->assertSame(['in_alias', 'in_alias IN :field_name_0'], $builder->query);
+        $this->assertSame(['alias IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -79,10 +79,10 @@ class ModelFilterTest extends TestCase
         ]);
 
         // the alias is now computer by the entityJoin method
-        $this->assertSame([
-            'alias NOT IN :field_name_0',
-            'IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
-        ], $builder->query[0]->getParts());
+        $this->assertSame(
+            'alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
+            $builder->query[0]
+        );
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -96,7 +96,7 @@ class ModelFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 2]);
 
-        $this->assertSame(['in_alias', 'in_alias IN :field_name_0'], $builder->query);
+        $this->assertSame(['alias IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => [2]], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -110,10 +110,10 @@ class ModelFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 2]);
 
-        $this->assertSame([
-            'alias NOT IN :field_name_0',
-            'IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
-        ], $builder->query[0]->getParts());
+        $this->assertSame(
+            'alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
+            $builder->query[0]
+        );
 
         $this->assertSame(['field_name_0' => [2]], $builder->parameters);
         $this->assertTrue($filter->isActive());
@@ -161,8 +161,7 @@ class ModelFilterTest extends TestCase
 
         $this->assertSame([
             'o.association_mapping',
-            'in_s_association_mapping',
-            'in_s_association_mapping IN :field_name_0',
+            's_association_mapping IN :field_name_0',
         ], $builder->query);
         $this->assertTrue($filter->isActive());
     }
@@ -194,8 +193,7 @@ class ModelFilterTest extends TestCase
             'o.association_mapping',
             's_association_mapping.sub_association_mapping',
             's_association_mapping_sub_association_mapping.sub_sub_association_mapping',
-            'in_s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
-            'in_s_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
+            's_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
         ], $builder->query);
         $this->assertTrue($filter->isActive());
     }
