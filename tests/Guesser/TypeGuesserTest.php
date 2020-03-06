@@ -120,6 +120,11 @@ class TypeGuesserTest extends TestCase
                 $array,
                 Guess::HIGH_CONFIDENCE,
             ],
+            'simple_array' => [
+                'simple_array',
+                $array,
+                Guess::HIGH_CONFIDENCE,
+            ],
             'json_array' => [
                 'json_array',
                 $array,
