@@ -27,37 +27,9 @@ class ChoiceFilter extends Filter
         }
 
         if (\is_array($data['value'])) {
-            if (0 === \count($data['value'])) {
-                return;
-            }
-
-            if (\in_array('all', $data['value'], true)) {
-                return;
-            }
-
-            // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
-            $completeField = sprintf('%s.%s', $alias, $field);
-            $parameterName = $this->getNewParameterName($queryBuilder);
-            if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($completeField, ':'.$parameterName));
-            } else {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($completeField, ':'.$parameterName));
-            }
-            $queryBuilder->setParameter($parameterName, $data['value']);
+            $this->filterWithMultipleValues($queryBuilder, $alias, $field, $data);
         } else {
-            if ('' === $data['value'] || null === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
-                return;
-            }
-
-            $parameterName = $this->getNewParameterName($queryBuilder);
-
-            if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s <> :%s', $alias, $field, $parameterName));
-            } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            }
-
-            $queryBuilder->setParameter($parameterName, $data['value']);
+            $this->filterWithSingleValue($queryBuilder, $alias, $field, $data);
         }
     }
 
@@ -78,5 +50,65 @@ class ChoiceFilter extends Filter
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
         ]];
+    }
+
+    private function filterWithMultipleValues(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    {
+        if (0 === \count($data['value'])) {
+            return;
+        }
+
+        if (\in_array('all', $data['value'], true)) {
+            return;
+        }
+
+        $isNullSelected = \in_array(null, $data['value'], true);
+        $data['value'] = array_filter($data['value'], static function ($value): bool {
+            return null !== $value;
+        });
+
+        // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
+        $completeField = sprintf('%s.%s', $alias, $field);
+        $parameterName = $this->getNewParameterName($queryBuilder);
+        if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
+            $andConditions = [$queryBuilder->expr()->isNotNull($completeField)];
+            if (0 !== \count($data['value'])) {
+                $andConditions[] = $queryBuilder->expr()->notIn($completeField, ':'.$parameterName);
+                $queryBuilder->setParameter($parameterName, $data['value']);
+            }
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->andX()->addMultiple($andConditions));
+        } else {
+            $orConditions = [$queryBuilder->expr()->in($completeField, ':'.$parameterName)];
+            if ($isNullSelected) {
+                $orConditions[] = $queryBuilder->expr()->isNull($completeField);
+            }
+            $this->applyWhere($queryBuilder, $queryBuilder->expr()->orX()->addMultiple($orConditions));
+            $queryBuilder->setParameter($parameterName, $data['value']);
+        }
+    }
+
+    private function filterWithSingleValue(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    {
+        if ('' === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
+            return;
+        }
+
+        $parameterName = $this->getNewParameterName($queryBuilder);
+
+        if (ChoiceType::TYPE_NOT_CONTAINS === $data['type']) {
+            if (null === $data['value']) {
+                $this->applyWhere($queryBuilder, $queryBuilder->expr()->isNotNull(sprintf('%s.%s', $alias, $field)));
+            } else {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $parameterName));
+                $queryBuilder->setParameter($parameterName, $data['value']);
+            }
+        } else {
+            if (null === $data['value']) {
+                $this->applyWhere($queryBuilder, $queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+            } else {
+                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+                $queryBuilder->setParameter($parameterName, $data['value']);
+            }
+        }
     }
 }
