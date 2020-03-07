@@ -124,13 +124,18 @@ class ProxyQuery implements ProxyQueryInterface
 
         // todo : check how doctrine behave, potential SQL injection here ...
         if ($this->getSortBy()) {
+            $orderByDQLPart = $queryBuilder->getDQLPart('orderBy');
+            $queryBuilder->resetDQLPart('orderBy');
+
             $sortBy = $this->getSortBy();
             if (false === strpos($sortBy, '.')) { // add the current alias
                 $sortBy = $rootAlias.'.'.$sortBy;
             }
             $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
-        } else {
-            $queryBuilder->resetDQLPart('orderBy');
+
+            foreach ($orderByDQLPart as $orderBy) {
+                $queryBuilder->addOrderBy($orderBy);
+            }
         }
 
         /* By default, always add a sort on the identifier fields of the first
