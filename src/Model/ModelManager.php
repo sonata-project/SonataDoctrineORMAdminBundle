@@ -519,7 +519,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $values = $datagrid->getValues();
 
-        if (isset($values['_sort_by'])) {
+        if (isset($values['_sort_by']) && $values['_sort_by'] instanceof FieldDescriptionInterface) {
             $values['_sort_by'] = $values['_sort_by']->getName();
         }
         $values['_page'] = $page;
@@ -635,7 +635,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $values = $datagrid->getValues();
 
-        if (!isset($values['_sort_by'])) {
+        if (!isset($values['_sort_by']) || !$values['_sort_by'] instanceof FieldDescriptionInterface) {
             return false;
         }
 
