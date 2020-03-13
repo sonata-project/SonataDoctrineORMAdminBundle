@@ -87,7 +87,7 @@ class ChoiceFilter extends Filter
         }
     }
 
-    private function filterWithSingleValue(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    private function filterWithSingleValue(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data = []): void
     {
         if ('' === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
             return;
