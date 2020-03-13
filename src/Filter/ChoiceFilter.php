@@ -52,7 +52,7 @@ class ChoiceFilter extends Filter
         ]];
     }
 
-    private function filterWithMultipleValues(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    private function filterWithMultipleValues(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data = []): void
     {
         if (0 === \count($data['value'])) {
             return;
