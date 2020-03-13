@@ -120,10 +120,7 @@ class QueryBuilder
         return $queryPart.' IS NULL';
     }
 
-    /**
-     * @param string $queryPart
-     */
-    public function isNotNull($queryPart): string
+    public function isNotNull(string $queryPart): string
     {
         return $queryPart.' IS NOT NULL';
     }
