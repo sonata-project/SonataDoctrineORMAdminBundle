@@ -31,11 +31,11 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
-use Sonata\AdminBundle\Filter\FilterInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -727,14 +727,14 @@ class ModelManagerTest extends TestCase
     public function testGetPaginationParameters(): void
     {
         $datagrid = $this->createMock(DatagridInterface::class);
-        $filter = $this->createMock(FilterInterface::class);
+        $field = $this->createMock(FieldDescriptionInterface::class);
         $registry = $this->createMock(ManagerRegistry::class);
 
         $datagrid->expects($this->once())
             ->method('getValues')
-            ->willReturn(['_sort_by' => $filter]);
+            ->willReturn(['_sort_by' => $field]);
 
-        $filter->expects($this->once())
+        $field->expects($this->once())
             ->method('getName')
             ->willReturn($name = 'test');
 

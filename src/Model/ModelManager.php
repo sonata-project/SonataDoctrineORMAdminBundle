@@ -500,7 +500,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $values = $datagrid->getValues();
 
-        if ($fieldDescription->getName() === $values['_sort_by']->getName() || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable')) {
+        if ($this->isFieldAlreadySorted($fieldDescription, $datagrid)) {
             if ('ASC' === $values['_sort_order']) {
                 $values['_sort_order'] = 'DESC';
             } else {
@@ -519,7 +519,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         $values = $datagrid->getValues();
 
-        $values['_sort_by'] = $values['_sort_by']->getName();
+        if (isset($values['_sort_by']) && $values['_sort_by'] instanceof FieldDescriptionInterface) {
+            $values['_sort_by'] = $values['_sort_by']->getName();
+        }
         $values['_page'] = $page;
 
         return ['filter' => $values];
@@ -627,6 +629,18 @@ class ModelManager implements ModelManagerInterface, LockInterface
     protected function camelize($property)
     {
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+    }
+
+    private function isFieldAlreadySorted(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid): bool
+    {
+        $values = $datagrid->getValues();
+
+        if (!isset($values['_sort_by']) || !$values['_sort_by'] instanceof FieldDescriptionInterface) {
+            return false;
+        }
+
+        return $values['_sort_by']->getName() === $fieldDescription->getName()
+            || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable');
     }
 
     /**
