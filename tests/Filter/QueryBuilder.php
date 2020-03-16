@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Orx;
 
 class QueryBuilder
@@ -93,6 +94,11 @@ class QueryBuilder
         return new Orx(\func_get_args());
     }
 
+    public function andX($x = null): Andx
+    {
+        return new Andx(\func_get_args());
+    }
+
     /**
      * @param string $alias
      * @param string $parameter
@@ -112,6 +118,11 @@ class QueryBuilder
     public function isNull($queryPart)
     {
         return $queryPart.' IS NULL';
+    }
+
+    public function isNotNull(string $queryPart): string
+    {
+        return $queryPart.' IS NOT NULL';
     }
 
     /**
