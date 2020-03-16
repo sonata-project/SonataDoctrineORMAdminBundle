@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.15.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.14.0...3.15.0) - 2020-03-16
+### Added
+- Added support for guessing the show type of `simple_array` fields.
+- Allow null to be selected in ChoiceFilter
+- Allow `_sort_by` filter to not be initially defined.
+- `sonata.admin.manager` tag to `sonata.admin.manager.orm` service.
+
+### Fixed
+- The `_sort_by_ ` datagrid value is properly applied before any custom `orderBy`.
+- Crash when entity has many identifiers and one of the not last identifiers is an entity.
+
 ## [3.14.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.13.0...3.14.0) - 2020-02-04
 ### Fixed
 - crash in `computeNbResult` where `groupBy` was used
