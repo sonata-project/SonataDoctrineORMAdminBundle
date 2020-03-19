@@ -56,7 +56,7 @@ class QueryBuilder
     public function in($alias, $parameter)
     {
         if (\is_array($parameter)) {
-            return sprintf('%s IN ("%s")', $alias, implode(',', $parameter));
+            return sprintf('%s IN ("%s")', $alias, implode(', ', $parameter));
         }
 
         return sprintf('%s IN %s', $alias, $parameter);
