@@ -55,8 +55,7 @@ class ChoiceFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => ChoiceType::TYPE_CONTAINS, 'value' => ['1', '2']]);
 
-        $this->assertSame('in_alias.field', $builder->query[0]);
-        $this->assertSame('in_alias.field IN :field_name_0', (string) $builder->query[1]);
+        $this->assertSame(['alias.field IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
@@ -70,8 +69,7 @@ class ChoiceFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => ChoiceType::TYPE_CONTAINS, 'value' => ['1', null]]);
 
-        $this->assertSame('in_alias.field', $builder->query[0]);
-        $this->assertSame('in_alias.field IN :field_name_0 OR alias.field IS NULL', (string) $builder->query[1]);
+        $this->assertSame(['alias.field IN :field_name_0 OR alias.field IS NULL'], $builder->query);
         $this->assertSame(['field_name_0' => ['1']], $builder->parameters);
         $this->assertTrue($filter->isActive());
 
@@ -79,7 +77,7 @@ class ChoiceFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => ChoiceType::TYPE_NOT_CONTAINS, 'value' => ['1', null]]);
 
-        $this->assertSame('alias.field IS NOT NULL AND alias.field NOT IN :field_name_0', (string) $builder->query[0]);
+        $this->assertSame(['alias.field IS NOT NULL AND alias.field NOT IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => ['1']], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
