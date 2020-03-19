@@ -48,8 +48,8 @@ class QueryBuilder
     }
 
     /**
-     * @param string       $alias
-     * @param string|array $parameter
+     * @param string          $alias
+     * @param string|string[] $parameter
      *
      * @return string
      */
@@ -124,8 +124,8 @@ class QueryBuilder
     }
 
     /**
-     * @param string       $alias
-     * @param string|array $parameter
+     * @param string          $alias
+     * @param string|string[] $parameter
      *
      * @return string
      */
