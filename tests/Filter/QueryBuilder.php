@@ -132,7 +132,7 @@ class QueryBuilder
     public function notIn($alias, $parameter)
     {
         if (\is_array($parameter)) {
-            return sprintf('%s NOT IN ("%s")', $alias, implode(',', $parameter));
+            return sprintf('%s NOT IN ("%s")', $alias, implode(', ', $parameter));
         }
 
         return sprintf('%s NOT IN %s', $alias, $parameter);
