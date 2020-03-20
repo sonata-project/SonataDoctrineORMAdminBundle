@@ -87,7 +87,7 @@ class BooleanFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
-        $this->assertSame(['in_alias.field', 'alias.field IN ("0")'], $builder->query);
+        $this->assertSame(['alias.field IN ("0")'], $builder->query);
         $this->assertTrue($filter->isActive());
     }
 }

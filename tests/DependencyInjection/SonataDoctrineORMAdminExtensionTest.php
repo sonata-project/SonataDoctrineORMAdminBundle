@@ -12,6 +12,7 @@ declare(strict_types=1);
  */
 
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\DependencyInjection\SonataAdminExtension;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\SonataDoctrineORMAdminExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -31,6 +32,8 @@ class SonataDoctrineORMAdminExtensionTest extends TestCase
     {
         $this->configuration = new ContainerBuilder();
         $this->configuration->setParameter('kernel.bundles', ['SimpleThingsEntityAuditBundle' => true]);
+        $adminBundleExtension = new SonataAdminExtension();
+        $adminBundleExtension->prepend($this->configuration);
         $loader = new SonataDoctrineORMAdminExtension();
         $loader->load([], $this->configuration);
 
