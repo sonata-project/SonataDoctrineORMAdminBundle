@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
-use Sonata\Form\Type\EqualType;
 
 class ClassFilterTest extends TestCase
 {
@@ -26,7 +26,7 @@ class ClassFilterTest extends TestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(EqualType::class, $options['operator_type']);
+        $this->assertSame(EqualOperatorType::class, $options['operator_type']);
         $this->assertSame([], $options['operator_options']);
     }
 
@@ -65,8 +65,8 @@ class ClassFilterTest extends TestCase
 
         $builder = new ProxyQuery(new QueryBuilder());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_EQUAL, 'value' => 'type']);
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualType::TYPE_IS_NOT_EQUAL, 'value' => 'type']);
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']);
+        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']);
         $filter->filter($builder, 'alias', 'field', ['value' => 'type']);
 
         $expected = [

@@ -15,14 +15,14 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
-use Sonata\Form\Type\EqualType;
+use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 class ClassFilter extends Filter
 {
     public const CHOICES = [
-        EqualType::TYPE_IS_EQUAL => 'INSTANCE OF',
-        EqualType::TYPE_IS_NOT_EQUAL => 'NOT INSTANCE OF',
+        EqualOperatorType::TYPE_EQUAL => 'INSTANCE OF',
+        EqualOperatorType::TYPE_NOT_EQUAL => 'NOT INSTANCE OF',
     ];
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
@@ -35,7 +35,7 @@ class ClassFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ? EqualType::TYPE_IS_EQUAL : $data['type'];
+        $data['type'] = !isset($data['type']) ? EqualOperatorType::TYPE_EQUAL : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
@@ -49,7 +49,7 @@ class ClassFilter extends Filter
     public function getDefaultOptions()
     {
         return [
-            'operator_type' => EqualType::class,
+            'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
     }

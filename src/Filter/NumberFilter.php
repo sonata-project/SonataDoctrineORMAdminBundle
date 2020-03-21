@@ -15,15 +15,16 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
+use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 
 class NumberFilter extends Filter
 {
     public const CHOICES = [
-        NumberType::TYPE_EQUAL => '=',
-        NumberType::TYPE_GREATER_EQUAL => '>=',
-        NumberType::TYPE_GREATER_THAN => '>',
-        NumberType::TYPE_LESS_EQUAL => '<=',
-        NumberType::TYPE_LESS_THAN => '<',
+        NumberOperatorType::TYPE_EQUAL => '=',
+        NumberOperatorType::TYPE_GREATER_EQUAL => '>=',
+        NumberOperatorType::TYPE_GREATER_THAN => '>',
+        NumberOperatorType::TYPE_LESS_EQUAL => '<=',
+        NumberOperatorType::TYPE_LESS_THAN => '<',
     ];
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
