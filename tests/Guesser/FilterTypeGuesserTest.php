@@ -29,6 +29,7 @@ use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
@@ -196,19 +197,19 @@ class FilterTypeGuesserTest extends TestCase
                 'integer',
                 NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
+                IntegerType::class,
             ],
             'bigint' => [
                 'bigint',
                 NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
+                IntegerType::class,
             ],
             'smallint' => [
                 'smallint',
                 NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
+                IntegerType::class,
             ],
             'string' => [
                 'string',

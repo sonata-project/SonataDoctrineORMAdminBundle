@@ -26,6 +26,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
@@ -93,10 +94,13 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess(DateFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
+                $options['field_type'] = NumberType::class;
+
+                return new TypeGuess(NumberFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
-                $options['field_type'] = NumberType::class;
+                $options['field_type'] = IntegerType::class;
 
                 return new TypeGuess(NumberFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
