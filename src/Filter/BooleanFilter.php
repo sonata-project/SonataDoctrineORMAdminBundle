@@ -15,11 +15,21 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
-use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class BooleanFilter extends Filter
 {
+    /**
+     * NEXT_MAJOR: Remove this constant and use `Sonata\Form\Type\BooleanType::TYPE_YES`
+     * from "sonata-project/form-extensions" instead.
+     */
+    private const BOOLEAN_TYPE_YES = 1;
+    /**
+     * NEXT_MAJOR: Remove this constant and use `Sonata\Form\Type\BooleanType::TYPE_NO`
+     * from "sonata-project/form-extensions" instead.
+     */
+    private const BOOLEAN_TYPE_NO = 2;
+
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
     {
         if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
@@ -29,11 +39,11 @@ class BooleanFilter extends Filter
         if (\is_array($data['value'])) {
             $values = [];
             foreach ($data['value'] as $v) {
-                if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+                if (!\in_array($v, [self::BOOLEAN_TYPE_NO, self::BOOLEAN_TYPE_YES], true)) {
                     continue;
                 }
 
-                $values[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
+                $values[] = (self::BOOLEAN_TYPE_YES === $v) ? 1 : 0;
             }
 
             if (0 === \count($values)) {
@@ -42,13 +52,13 @@ class BooleanFilter extends Filter
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+            if (!\in_array($data['value'], [self::BOOLEAN_TYPE_NO, self::BOOLEAN_TYPE_YES], true)) {
                 return;
             }
 
             $parameterName = $this->getNewParameterName($queryBuilder);
             $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
+            $queryBuilder->setParameter($parameterName, (self::BOOLEAN_TYPE_YES === $data['value']) ? 1 : 0);
         }
     }
 

@@ -23,8 +23,6 @@ use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelTypeList;
-use Sonata\CoreBundle\Form\Type\CollectionType as DeprecatedCollectionType;
-use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -149,12 +147,13 @@ class FormContractor implements FormContractorInterface
                 ClassMetadata::ONE_TO_ONE,
                 ClassMetadata::MANY_TO_ONE,
             ], true)) {
+                // NEXT_MAJOR: Import the class from "sonata-project/form-extensions" and use `CollectionType::class` instead.
                 throw new \RuntimeException(sprintf(
                     'You are trying to add `%s` field `%s` which is not One-To-One or  Many-To-One.'
                     .' Maybe you want `%s` instead?',
                     AdminType::class,
                     $fieldDescription->getName(),
-                    CollectionType::class
+                    'Sonata\Form\Type\CollectionType'
                 ));
             }
 
@@ -167,8 +166,8 @@ class FormContractor implements FormContractorInterface
                 return $fieldDescription->getAssociationAdmin()->getNewInstance();
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        // NEXT_MAJOR: Check only against FQCNs when dropping support for Symfony 2.8
-        } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, [CollectionType::class, DeprecatedCollectionType::class])) {
+        // NEXT_MAJOR: Import the class from "sonata-project/form-extensions" and only check against `Sonata\Form\Type\CollectionType` when dropping support for Symfony 2.8
+        } elseif ('sonata_type_collection' === $type || $this->checkFormClass($type, ['Sonata\Form\Type\CollectionType', 'Sonata\CoreBundle\Form\Type\CollectionType'])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -192,10 +191,7 @@ class FormContractor implements FormContractorInterface
         return $options;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
+    private function hasAssociation(FieldDescriptionInterface $fieldDescription): bool
     {
         return \in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
@@ -205,15 +201,9 @@ class FormContractor implements FormContractorInterface
         ], true);
     }
 
-    /**
-     * @param string $type
-     * @param array  $classes
-     *
-     * @return array
-     */
-    private function checkFormClass($type, $classes)
+    private function checkFormClass(string $type, array $classes): array
     {
-        return array_filter($classes, static function ($subclass) use ($type) {
+        return array_filter($classes, static function (string $subclass) use ($type): bool {
             return is_a($type, $subclass, true);
         });
     }

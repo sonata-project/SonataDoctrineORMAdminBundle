@@ -23,7 +23,6 @@ use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\CoreBundle\Form\Type\CollectionType as DeprecatedCollectionType;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
@@ -93,9 +92,10 @@ final class FormContractorTest extends TestCase
             'sonata_type_admin',
             AdminType::class,
         ];
+        // NEXT_MAJOR: Import the class from "sonata-project/form-extensions" and use `CollectionType::class` instead.
         $collectionTypes = [
             'sonata_type_collection',
-            DeprecatedCollectionType::class,
+            'Sonata\CoreBundle\Form\Type\CollectionType',
             CollectionType::class,
         ];
 

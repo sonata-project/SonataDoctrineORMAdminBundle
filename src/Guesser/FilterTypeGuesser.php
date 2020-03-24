@@ -24,7 +24,6 @@ use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
-use Sonata\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
@@ -80,7 +79,8 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type'] = BooleanType::class;
+                // NEXT_MAJOR: Import the class from "sonata-project/form-extensions" and use `BooleanType::class` instead.
+                $options['field_type'] = 'Sonata\Form\Type\BooleanType';
 
                 return new TypeGuess(BooleanFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':
