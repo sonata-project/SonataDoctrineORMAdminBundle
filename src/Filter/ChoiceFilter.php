@@ -57,10 +57,6 @@ class ChoiceFilter extends Filter
             return;
         }
 
-        if (\in_array('all', $data['value'], true)) {
-            return;
-        }
-
         $isNullSelected = \in_array(null, $data['value'], true);
         $data['value'] = array_filter($data['value'], static function ($value): bool {
             return null !== $value;
@@ -88,7 +84,7 @@ class ChoiceFilter extends Filter
 
     private function filterWithSingleValue(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data = []): void
     {
-        if ('' === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
+        if ('' === $data['value'] || false === $data['value']) {
             return;
         }
 
