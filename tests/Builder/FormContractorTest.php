@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
@@ -36,7 +37,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 final class FormContractorTest extends TestCase
 {
     /**
-     * @var FormFactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactoryInterface|MockObject
      */
     private $formFactory;
 
@@ -80,21 +81,15 @@ final class FormContractorTest extends TestCase
         $admin->method('getNewInstance')->willReturn($model);
 
         $modelTypes = [
-            'sonata_type_model',
-            'sonata_type_model_list',
-            'sonata_type_model_hidden',
-            'sonata_type_model_autocomplete',
             ModelType::class,
             ModelListType::class,
             ModelHiddenType::class,
             ModelAutocompleteType::class,
         ];
         $adminTypes = [
-            'sonata_type_admin',
             AdminType::class,
         ];
         $collectionTypes = [
-            'sonata_type_collection',
             DeprecatedCollectionType::class,
             CollectionType::class,
         ];
