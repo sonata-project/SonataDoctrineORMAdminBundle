@@ -30,6 +30,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
@@ -281,7 +282,7 @@ class ModelManagerTest extends TestCase
 
         $em = $this->createMock(EntityManager::class);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|ModelManager $modelManager */
+        /** @var MockObject|ModelManager $modelManager */
         $modelManager = $this->getMockBuilder($modelManagerClass)
             ->disableOriginalConstructor()
             ->setMethods(['getMetadata', 'getEntityManager'])
