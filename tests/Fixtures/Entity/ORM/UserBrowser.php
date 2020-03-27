@@ -19,18 +19,20 @@ use Doctrine\ORM\Mapping as ORM;
 class UserBrowser
 {
     /**
-     * @ORM\ManyToOne(targetEntity="User")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     * @ORM\Id()
-     * @ORM\GeneratedValue("NONE")
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(type="integer")
+     *
+     * @var int
      */
-    private $user;
+    private $userId;
 
     /**
-     * @var string
-     *
      * @ORM\Id
-     * @ORM\Column(type="string", length=64)
+     * @ORM\GeneratedValue(strategy="NONE")
+     * @ORM\Column(type="integer")
+     *
+     * @var int
      */
     private $browserId;
 }
