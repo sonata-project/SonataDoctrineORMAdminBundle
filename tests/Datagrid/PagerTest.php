@@ -25,27 +25,37 @@ use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 class PagerTest extends TestCase
 {
-    public function testComputeNbResultFoCompositeId(): void
+    public function entityClassDataProvider(): array
+    {
+        return [
+            [User::class], // single identifier
+            [UserBrowser::class], // composite identifier
+        ];
+    }
+
+    /**
+     * @dataProvider entityClassDataProvider
+     */
+    public function testComputeNbResultForCompositeId(string $className): void
     {
         $em = DoctrineTestHelper::createTestEntityManager();
         $classes = [
-            $em->getClassMetadata(User::class),
-            $em->getClassMetadata(UserBrowser::class),
+            $em->getClassMetadata($className),
         ];
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema($classes);
 
         $qb = $em->createQueryBuilder()
-            ->select('ub')
-            ->from(UserBrowser::class, 'ub');
+            ->select('e')
+            ->from($className, 'e');
         $pq = new ProxyQuery($qb);
         $pager = new Pager();
-        $pager->setCountColumn($em->getClassMetadata(UserBrowser::class)->getIdentifierFieldNames());
+        $pager->setCountColumn($em->getClassMetadata($className)->getIdentifierFieldNames());
         $pager->setQuery($pq);
         $this->assertSame(0, $pager->computeNbResult());
     }
 
-    public function dataGetComputeNbResult()
+    public function dataGetComputeNbResult(): array
     {
         return [
             [true],
@@ -55,10 +65,8 @@ class PagerTest extends TestCase
 
     /**
      * @dataProvider dataGetComputeNbResult
-     *
-     * @param bool $distinct
      */
-    public function testComputeNbResult($distinct): void
+    public function testComputeNbResult(bool $distinct): void
     {
         $query = $this->getMockBuilder(AbstractQuery::class)
             ->disableOriginalConstructor()

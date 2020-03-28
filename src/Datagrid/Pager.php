@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * Doctrine pager class.
@@ -23,6 +24,11 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
  */
 class Pager extends BasePager
 {
+    /**
+     * Use separator in CONCAT() function for correct determinate similar records.
+     */
+    public const CONCAT_SEPARATOR = '|';
+
     /**
      * NEXT_MAJOR: remove this property.
      *
@@ -38,12 +44,11 @@ class Pager extends BasePager
             $countQuery->setParameters($this->getParameters());
         }
 
-        $countQuery->select(sprintf(
-            'count(%s %s.%s) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            current($countQuery->getRootAliases()),
-            current($this->getCountColumn())
-        ));
+        if (\count($this->getCountColumn()) > 1) {
+            $this->countCompositePrimaryKey($countQuery);
+        } else {
+            $this->countSinglePrimaryKey($countQuery);
+        }
 
         return array_sum(array_column(
             $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
@@ -84,5 +89,36 @@ class Pager extends BasePager
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
+    }
+
+    private function countCompositePrimaryKey(ProxyQueryInterface $countQuery): void
+    {
+        $rootAliases = current($countQuery->getRootAliases());
+        $countQuery->setParameter('concat_separator', self::CONCAT_SEPARATOR);
+        $columns = [];
+
+        foreach ($this->getCountColumn() as $column) {
+            if ($columns) {
+                $columns[] = ':concat_separator';
+            }
+
+            $columns[] = sprintf('%s.%s', $rootAliases, $column);
+        }
+
+        $countQuery->select(sprintf(
+            'count(%s concat(%s)) as cnt',
+            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
+            implode(', ', $columns)
+        ));
+    }
+
+    private function countSinglePrimaryKey(ProxyQueryInterface $countQuery): void
+    {
+        $countQuery->select(sprintf(
+            'count(%s %s.%s) as cnt',
+            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
+            current($countQuery->getRootAliases()),
+            current($this->getCountColumn())
+        ));
     }
 }
