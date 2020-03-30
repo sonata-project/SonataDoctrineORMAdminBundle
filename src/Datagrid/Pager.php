@@ -95,20 +95,13 @@ class Pager extends BasePager
     {
         $rootAliases = current($countQuery->getRootAliases());
         $countQuery->setParameter('concat_separator', self::CONCAT_SEPARATOR);
-        $columns = [];
 
-        foreach ($this->getCountColumn() as $column) {
-            if ($columns) {
-                $columns[] = ':concat_separator';
-            }
-
-            $columns[] = sprintf('%s.%s', $rootAliases, $column);
-        }
+        $columns = $rootAliases.'.'.implode(', :concat_separator, '.$rootAliases.'.', $this->getCountColumn());
 
         $countQuery->select(sprintf(
             'count(%s concat(%s)) as cnt',
             $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            implode(', ', $columns)
+            $columns
         ));
     }
 
