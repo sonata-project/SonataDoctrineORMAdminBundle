@@ -216,7 +216,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
         if (!$metadata->isVersioned) {
-            return;
+            return null;
         }
 
         return $metadata->reflFields[$metadata->versionField]->getValue($object);
@@ -241,7 +241,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function find($class, $id)
     {
         if (!isset($id)) {
-            return;
+            return null;
         }
 
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
@@ -370,20 +370,20 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if (!$entity) {
-            return;
+            return null;
         }
 
         if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
-            return;
+            return null;
         }
 
         $values = $this->getIdentifierValues($entity);
 
         if (0 === \count($values)) {
-            return;
+            return null;
         }
 
         return implode(self::ID_SEPARATOR, $values);
