@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.16.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.15.0...3.16.0) - 2020-04-02
+### Added
+- `@method` annotation for `ProxyQuery`
+
+### Fixed
+- Fixed returning `void` in `ModelManager::getNormalizedIdentifier()`, which is
+intended to return a value or `null`.
+- Removed deprecated usage of admin `FormType` constants
+- Concat value of complex primary key for correct calculate total pages in `Datagrid`
+
+### Removed
+- Drop support of php 7.1
+
 ## [3.15.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.14.0...3.15.0) - 2020-03-16
 ### Added
 - Added support for guessing the show type of `simple_array` fields.
