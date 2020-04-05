@@ -314,6 +314,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $query->execute();
     }
 
+    /**
+     * NEXT_MAJOR: Remove this function
+     *
+     * @deprecated
+     */
     public function getModelIdentifier($class)
     {
         return $this->getMetadata($class)->identifier;
