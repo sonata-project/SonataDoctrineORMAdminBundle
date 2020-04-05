@@ -315,7 +315,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * NEXT_MAJOR: Remove this function
+     * NEXT_MAJOR: Remove this function.
      *
      * @deprecated
      */
