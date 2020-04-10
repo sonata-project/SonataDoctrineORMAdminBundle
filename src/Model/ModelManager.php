@@ -370,12 +370,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getNormalizedIdentifier($entity)
     {
-        if (is_scalar($entity)) {
-            throw new \RuntimeException('Invalid argument, object or null required');
+        if (null === $entity) {
+            return null;
         }
 
-        if (!$entity) {
-            return null;
+        if (!\is_object($entity)) {
+            throw new \RuntimeException('Invalid argument, object or null required');
         }
 
         if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
