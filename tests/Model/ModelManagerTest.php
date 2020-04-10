@@ -946,7 +946,12 @@ class ModelManagerTest extends TestCase
         $this->assertNull($model->find('notImportant', null));
     }
 
-    public function testGetUrlsafeIdentifierException(): void
+    /**
+     * @dataProvider getWrongEntities
+     *
+     * @param mixed $entity
+     */
+    public function testNormalizedIdentifierException($entity): void
     {
         $registry = $this->createMock(ManagerRegistry::class);
 
@@ -954,7 +959,18 @@ class ModelManagerTest extends TestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $model->getNormalizedIdentifier('test');
+        $model->getNormalizedIdentifier($entity);
+    }
+
+    public function getWrongEntities(): iterable
+    {
+        yield [0];
+        yield [1];
+        yield [false];
+        yield [true];
+        yield [[]];
+        yield [''];
+        yield ['sonata-project'];
     }
 
     public function testGetUrlsafeIdentifierNull(): void
