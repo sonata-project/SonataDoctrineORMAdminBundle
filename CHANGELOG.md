@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.17.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.16.0...3.17.0) - 2020-04-11
+### Fixed
+- Fixed weak check at `ModelManager::getNormalizedIdentifier()`.
+
+### Deprecated
+- Deprecate `getModelIdentifier` from `ModelManager`
+
 ## [3.16.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.15.0...3.16.0) - 2020-04-02
 ### Added
 - `@method` annotation for `ProxyQuery`
