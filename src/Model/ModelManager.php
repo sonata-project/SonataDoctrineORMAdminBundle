@@ -400,7 +400,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
-    public function getUrlsafeIdentifier($entity)
+    public function getUrlSafeIdentifier($entity)
     {
         return $this->getNormalizedIdentifier($entity);
     }
