@@ -42,7 +42,7 @@ class AuditBlockService extends AbstractBlockService
         $this->auditReader = $auditReader;
     }
 
-    public function execute(BlockContextInterface $blockContext, Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
     {
         $revisions = [];
 
