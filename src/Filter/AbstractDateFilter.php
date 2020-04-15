@@ -131,7 +131,7 @@ abstract class AbstractDateFilter extends Filter
             $parameterName = $this->getNewParameterName($queryBuilder);
 
             // date filter should filter records for the whole day
-            if (false === $this->time && DateRangeOperatorType::TYPE_EQUAL === $data['type']) {
+            if (false === $this->time && DateOperatorType::TYPE_EQUAL === $data['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
                 $queryBuilder->setParameter($parameterName, $data['value']);
 
