@@ -78,7 +78,7 @@ Once the ``EntityAuditBundle`` is set, then 3 new actions are available:
 
 * `/admin/vendor/entity/{id}/history`: displays the history list
 * `/admin/vendor/entity/{id}/history/{revision}`: displays the object at a specific revision
-* `/admin/vendor/entity/{id}/history/{base_revision}/{compare_revision}`: displays a comparision of an object between two specified revisions
+* `/admin/vendor/entity/{id}/history/{base_revision}/{compare_revision}`: displays a comparison of an object between two specified revisions
 
 These actions are available in the ``view`` and ``edit`` action.
 Please note the current implementation uses the ``show`` definition to display the revision.
