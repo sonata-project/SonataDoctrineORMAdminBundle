@@ -47,7 +47,7 @@ class FieldDescriptionTest extends TestCase
 
         $this->assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
-        $field->mergeOption('non_existant', ['key1' => 'key_1', 'key2' => 'key_2']);
+        $field->mergeOption('non_existent', ['key1' => 'key_1', 'key2' => 'key_2']);
 
         $this->assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
@@ -74,7 +74,7 @@ class FieldDescriptionTest extends TestCase
                 'key2' => 'key_2',
                 'key3' => 'key_3',
             ],
-            'non_existant' => [
+            'non_existent' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
             ],

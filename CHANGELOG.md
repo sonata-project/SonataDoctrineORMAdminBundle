@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.17.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.17.0...3.17.1) - 2020-04-21
+### Fixed
+Typo in AbstractDateFilter, `DateRangeOperatorType::TYPE_EQUAL` should have been
+`DateOperatorType::TYPE_EQUAL`.
 ## [3.17.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.16.0...3.17.0) - 2020-04-11
 ### Fixed
 - Fixed weak check at `ModelManager::getNormalizedIdentifier()`.
