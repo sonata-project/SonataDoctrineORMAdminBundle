@@ -38,6 +38,7 @@ For now, only `Doctrine ORM` filters are available:
 * ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\NumberType`` Form Type,
 * ``Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter``: uses ``Sonata\AdminBundle\Form\Type\Filter\ModelAutocompleteType`` form type, can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many items that cannot be loaded into memory.
 * ``Sonata\DoctrineORMAdminBundle\Filter\StringFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\ChoiceType`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\StringListFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\ChoiceType`` Form Type,
 * ``Sonata\DoctrineORMAdminBundle\Filter\DateFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateType`` Form Type, renders a date field,
 * ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateRangeType`` Form Type, renders a 2 date fields,
 * ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateTimeType`` Form Type, renders a datetime field,
@@ -64,6 +65,34 @@ Example
                 ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true]);
         }
     }
+
+StringListFilter
+----------------
+
+This filter is made for filtering on values saved in databases as serialized arrays of strings with the
+``@ORM\Column(type="array")`` annotation. It is recommended to use another table and ``OneToMany`` relations
+if you want to make complex ``SQL`` queries or if your table is too big and you get performance issues but
+this filter can provide some basic queries::
+
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    {
+        $datagridMapper
+            ->add('labels', StringListFilter::class, [], ChoiceType::class, [
+                'choices' => [
+                    'patch' => 'patch',
+                    'minor' => 'minor',
+                    'major' => 'major',
+                    'approved' => 'approved',
+                    // ...
+                ],
+                'multiple' => true,
+            ]);
+    }
+
+.. note::
+
+    The filter can give bad results with associative arrays since it is not easy to distinguish between keys
+    and values for a serialized associative array.
 
 ModelAutocompleteFilter
 -----------------------
