@@ -22,12 +22,6 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "https://github.com/mathieupetrini/SonataAdminBundle.git"
-        }
-    ],
     "require": {
         "php": "^7.2",
         "doctrine/doctrine-bundle": "^1.8 || ^2.0",
@@ -50,6 +44,12 @@
         "symfony/options-resolver": "^4.4 || ^5.0",
         "symfony/security-acl": "^3.0"
     },
+    "repositories": [
+        {
+            "type": "git",
+            "url": "https://github.com/mathieupetrini/SonataAdminBundle.git"
+        }
+    ],
     "conflict": {
         "simplethings/entity-audit-bundle": ">=2.0",
         "sonata-project/block-bundle": "<3.11"
