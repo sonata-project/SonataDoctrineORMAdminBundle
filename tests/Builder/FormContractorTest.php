@@ -90,7 +90,6 @@ final class FormContractorTest extends TestCase
             AdminType::class,
         ];
         $collectionTypes = [
-            DeprecatedCollectionType::class,
             CollectionType::class,
         ];
 

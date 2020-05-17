@@ -67,8 +67,8 @@ final class DatagridBuilderTest extends TestCase
 
         $this->admin->getClass()->willReturn('FakeClass');
         $this->admin->getModelManager()->willReturn($this->modelManager->reveal());
-        $this->admin->attachAdminClass(Argument::cetera())->willReturn();
-        $this->admin->addFilterFieldDescription(Argument::cetera())->willReturn();
+        $this->admin->attachAdminClass(Argument::cetera());
+        $this->admin->addFilterFieldDescription(Argument::cetera());
     }
 
     /**

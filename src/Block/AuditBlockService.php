@@ -18,9 +18,10 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Block\Service\AbstractBlockService;
 use Sonata\BlockBundle\Model\BlockInterface;
-use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Templating\EngineInterface;
+use Twig\Environment;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -32,17 +33,14 @@ class AuditBlockService extends AbstractBlockService
      */
     protected $auditReader;
 
-    /**
-     * @param string $name
-     */
-    public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
+    public function __construct(Environment $templating, AuditReader $auditReader)
     {
-        parent::__construct($name, $templating);
+        parent::__construct($templating);
 
         $this->auditReader = $auditReader;
     }
 
-    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $revisions = [];
 

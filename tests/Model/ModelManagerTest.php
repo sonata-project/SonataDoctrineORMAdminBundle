@@ -107,7 +107,7 @@ class ModelManagerTest extends TestCase
         $entityManager->method('getMetadataFactory')->willReturn($classMetadataFactory);
         $entityManager->method('getConnection')->willReturn($connection);
 
-        $registry = $this->createMock(RegistryInterface::class);
+        $registry = $this->createMock(ManagerRegistry::class);
         $registry->method('getManagerForClass')->willReturn($entityManager);
 
         $manager = new ModelManager($registry);
@@ -116,20 +116,6 @@ class ModelManagerTest extends TestCase
             ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
             $manager->getIdentifierValues($entity)
         );
-    }
-
-    public function testInstantiateWithDeprecatedRegistryInterface(): void
-    {
-        $registry = $this->createMock(RegistryInterface::class);
-        $manager = new ModelManager($registry);
-        $em = $this->createMock(EntityManagerInterface::class);
-
-        $registry->expects($this->once())
-            ->method('getManagerForClass')
-            ->with('x')
-            ->willReturn($em)
-        ;
-        $this->assertSame($em, $manager->getEntityManager('x'));
     }
 
     public function testSortParameters(): void
@@ -646,7 +632,7 @@ class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
-        $registry = $this->getMockBuilder(RegistryInterface::class)->getMock();
+        $registry = $this->getMockBuilder(ManagerRegistry::class)->getMock();
         $manager = new ModelManager($registry);
         $manager->getDataSourceIterator($datagrid, []);
 
