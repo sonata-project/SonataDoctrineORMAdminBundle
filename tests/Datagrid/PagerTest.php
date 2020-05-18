@@ -100,4 +100,34 @@ class PagerTest extends TestCase
         $pager->setQuery($proxyQuery);
         $pager->computeNbResult();
     }
+
+    /**
+     * @dataProvider initDataProvider
+     */
+    public function testInit(int $computedNbResult, int $page, int $expectedFirstResult): void
+    {
+        $query = $this->createMock(ProxyQuery::class);
+        $pager = $this->createPartialMock(Pager::class, ['computeNbResult']);
+
+        $pager->method('computeNbResult')->willReturn($computedNbResult);
+
+        $pager->setMaxPerPage(10);
+        $pager->setPage($page);
+        $pager->setQuery($query);
+
+        $query->expects($this->once())->method('setFirstResult')->with($expectedFirstResult);
+        $query->expects($this->once())->method('setMaxResults')->with(10);
+
+        $pager->init();
+    }
+
+    public function initDataProvider(): iterable
+    {
+        return [
+            [50, 3, 20],
+            [50, 10, 40],
+            [15, 3, 10],
+            [15, 1, 0],
+        ];
+    }
 }

@@ -72,19 +72,20 @@ class Pager extends BasePager
 
         $this->setNbResults($this->computeNbResult());
 
-        $this->getQuery()->setFirstResult(null);
-        $this->getQuery()->setMaxResults(null);
-
         if (\count($this->getParameters()) > 0) {
             $this->getQuery()->setParameters($this->getParameters());
         }
 
         if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->getNbResults()) {
             $this->setLastPage(0);
+            $this->getQuery()->setFirstResult(null);
+            $this->getQuery()->setMaxResults(null);
         } else {
-            $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
-
             $this->setLastPage((int) ceil($this->getNbResults() / $this->getMaxPerPage()));
+
+            // Offset should be computed after we set the last page
+            // because the setLastPage method can modify the getPage return value
+            $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
 
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
