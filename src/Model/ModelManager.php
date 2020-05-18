@@ -540,6 +540,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
         ];
     }
 
+    public function getDefaultPerPageOptions(string $class): array
+    {
+        return [10, 25, 50, 100, 250];
+    }
+
     public function modelTransform($class, $instance)
     {
         return $instance;
