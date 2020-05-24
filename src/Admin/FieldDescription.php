@@ -35,11 +35,33 @@ class FieldDescription extends BaseFieldDescription
         $this->fieldName = $associationMapping['fieldName'];
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
+     */
     public function getTargetEntity()
+    {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+            .' Use %s::getTargetModel() instead.',
+            __METHOD__,
+            __CLASS__
+        ), E_USER_DEPRECATED);
+
+        return $this->getTargetModel();
+    }
+
+    /**
+     * @final since sonata-project/doctrine-orm-admin-bundle 3.x.
+     */
+    public function getTargetModel(): ?string
     {
         if ($this->associationMapping) {
             return $this->associationMapping['targetEntity'];
         }
+
+        return null;
     }
 
     public function setFieldMapping($fieldMapping)
