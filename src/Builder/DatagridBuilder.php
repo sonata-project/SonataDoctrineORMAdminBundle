@@ -158,7 +158,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         if (ModelAutocompleteFilter::class === $type) {
             $fieldDescription->mergeOption('field_options', [
-                'class' => $fieldDescription->getTargetEntity(),
+                'class' => $fieldDescription->getTargetModel(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
                 'admin_code' => $admin->getCode(),
                 'context' => 'filter',
