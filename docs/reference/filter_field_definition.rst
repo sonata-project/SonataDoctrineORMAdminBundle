@@ -32,18 +32,18 @@ Available filter types
 
 For now, only `Doctrine ORM` filters are available:
 
-* ``Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter``: depends on the ``sonata_type_filter_default`` Form Type, renders yes or no field,
-* ``Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter``: depends on the ``sonata_type_filter_default`` Form Type, types can be configured as needed,
-* ``Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter``: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
-* ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``sonata_type_filter_number`` Form Type,
-* ``Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter``: uses ``sonata_type_model_autocomplete`` form type, can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many items that cannot be loaded into memory.
-* ``Sonata\DoctrineORMAdminBundle\Filter\StringFilter``: depends on the ``sonata_type_filter_choice``,
-* ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``sonata_type_filter_choice`` Form Type, renders yes or no field,
-* ``Sonata\DoctrineORMAdminBundle\Filter\DateFilter``: depends on the ``sonata_type_filter_date`` Form Type, renders a date field,
-* ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter``: depends on the ``sonata_type_filter_date_range`` Form Type, renders a 2 date fields,
-* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter``: depends on the ``sonata_type_filter_datetime`` Form Type, renders a datetime field,
-* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter``: depends on the ``sonata_type_filter_datetime_range`` Form Type, renders a 2 datetime fields,
-* ``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter``: depends on the ``sonata_type_filter_default`` Form type, renders a choice list field.
+* ``Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DefaultType`` Form Type, renders yes or no field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DefaultType`` Form Type, types can be configured as needed,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\ChoiceType`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\NumberFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\NumberType`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter``: uses ``Sonata\AdminBundle\Form\Type\Filter\ModelAutocompleteType`` form type, can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many items that cannot be loaded into memory.
+* ``Sonata\DoctrineORMAdminBundle\Filter\StringFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\ChoiceType`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\StringListFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\ChoiceType`` Form Type,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateType`` Form Type, renders a date field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateRangeType`` Form Type, renders a 2 date fields,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateTimeType`` Form Type, renders a datetime field,
+* ``Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType`` Form Type, renders a 2 datetime fields,
+* ``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter``: depends on the ``Sonata\AdminBundle\Form\Type\Filter\DefaultType`` Form type, renders a choice list field.
 
 Example
 -------
@@ -66,8 +66,36 @@ Example
         }
     }
 
-doctrine_orm_model_autocomplete
--------------------------------
+StringListFilter
+----------------
+
+This filter is made for filtering on values saved in databases as serialized arrays of strings with the
+``@ORM\Column(type="array")`` annotation. It is recommended to use another table and ``OneToMany`` relations
+if you want to make complex ``SQL`` queries or if your table is too big and you get performance issues but
+this filter can provide some basic queries::
+
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    {
+        $datagridMapper
+            ->add('labels', StringListFilter::class, [], ChoiceType::class, [
+                'choices' => [
+                    'patch' => 'patch',
+                    'minor' => 'minor',
+                    'major' => 'major',
+                    'approved' => 'approved',
+                    // ...
+                ],
+                'multiple' => true,
+            ]);
+    }
+
+.. note::
+
+    The filter can give bad results with associative arrays since it is not easy to distinguish between keys
+    and values for a serialized associative array.
+
+ModelAutocompleteFilter
+-----------------------
 
 This filter type uses ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` form type. It renders an input with select2 autocomplete feature.
 Can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many related items that cannot be loaded into memory.
@@ -82,8 +110,8 @@ This form type requires ``property`` option. See documentation of ``Sonata\Admin
             ]);
     }
 
-doctrine_orm_date_range
------------------------
+DateRangeFilter
+---------------
 
 The ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter`` filter renders two fields to filter all records between two dates.
 If only one date is set it will filter for all records until or since the given date::
@@ -114,8 +142,8 @@ support filtering of timestamp fields by specifying ``'input_type' => 'timestamp
         }
     }
 
-Class
------
+ClassFilter
+-----------
 
 ``Sonata\DoctrineORMAdminBundle\Filter\ClassFilter`` supports filtering on hierarchical entities. You need to specify the ``sub_classes`` option::
 
