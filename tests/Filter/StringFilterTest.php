@@ -139,31 +139,33 @@ class StringFilterTest extends TestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testCaseSensitiveFalse(): void
+    /**
+     * @dataProvider caseSensitiveDataProvider
+     */
+    public function testCaseSensitive(bool $caseSensitive, int $operatorType, string $expectedQuery, string $expectedParameter): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['case_sensitive' => false]);
+        $filter->initialize('field_name', ['case_sensitive' => $caseSensitive]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
-        $this->assertSame(['LOWER(alias.field) LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%foobar%'], $builder->parameters);
+        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => $operatorType]);
+        $this->assertSame([$expectedQuery], $builder->query);
+        $this->assertSame(['field_name_0' => $expectedParameter], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
-    public function testCaseSensitiveTrue(): void
+    public function caseSensitiveDataProvider(): array
     {
-        $filter = new StringFilter();
-        $filter->initialize('field_name', ['case_sensitive' => true]);
+        return [
+            [false, ContainsOperatorType::TYPE_CONTAINS, 'LOWER(alias.field) LIKE :field_name_0', '%foobar%'],
+            [false, ContainsOperatorType::TYPE_NOT_CONTAINS, 'LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'],
+            [false, ContainsOperatorType::TYPE_EQUAL, 'LOWER(alias.field) = :field_name_0', 'foobar'],
+            [true, ContainsOperatorType::TYPE_CONTAINS, 'alias.field LIKE :field_name_0', '%FooBar%'],
+            [true, ContainsOperatorType::TYPE_NOT_CONTAINS, 'alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'],
+            [true, ContainsOperatorType::TYPE_EQUAL, 'alias.field = :field_name_0', 'FooBar'],
 
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
-
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%FooBar%'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        ];
     }
 }
