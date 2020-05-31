@@ -63,7 +63,10 @@ class StringFilter extends Filter
         $this->applyWhere($queryBuilder, $or);
 
         if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
-            $queryBuilder->setParameter($parameterName, $data['value']);
+            $queryBuilder->setParameter(
+                $parameterName,
+                $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+            );
         } else {
             $queryBuilder->setParameter(
                 $parameterName,
