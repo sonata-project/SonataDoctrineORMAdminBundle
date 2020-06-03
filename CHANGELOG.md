@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.18.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.17.1...3.18.0) - 2020-06-02
+### Added
+- Added direct dependency against "twig/twig".
+- Added `ModelManager::getDefaultPerPageOptions`
+- `ArrayFilter` which supports `@ORM\Column(type="array")`
+
+### Fixed
+- Fixed usage of deprecated Twig syntax `for..if`.
+- StringFilter now correctly takes the `case_sensitive` option into account
+  when the operator is `=`.
+
 ## [3.17.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.17.0...3.17.1) - 2020-04-21
 ### Fixed
 Typo in AbstractDateFilter, `DateRangeOperatorType::TYPE_EQUAL` should have been

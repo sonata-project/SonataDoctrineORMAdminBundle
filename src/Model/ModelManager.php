@@ -317,7 +317,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this function.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x. To be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.18. To be removed in 4.0.
      */
     public function getModelIdentifier($class)
     {
