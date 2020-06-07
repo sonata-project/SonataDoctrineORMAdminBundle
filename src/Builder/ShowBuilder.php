@@ -19,6 +19,7 @@ use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 
 class ShowBuilder implements ShowBuilderInterface
 {
@@ -89,35 +90,6 @@ class ShowBuilder implements ShowBuilderInterface
 
         if (!$fieldDescription->getTemplate()) {
             $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
-
-            if (!$fieldDescription->getTemplate()) {
-                switch ($fieldDescription->getMappingType()) {
-                    case ClassMetadata::MANY_TO_ONE:
-                        $fieldDescription->setTemplate(
-                            '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig'
-                        );
-
-                        break;
-                    case ClassMetadata::ONE_TO_ONE:
-                        $fieldDescription->setTemplate(
-                            '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig'
-                        );
-
-                        break;
-                    case ClassMetadata::ONE_TO_MANY:
-                        $fieldDescription->setTemplate(
-                            '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig'
-                        );
-
-                        break;
-                    case ClassMetadata::MANY_TO_MANY:
-                        $fieldDescription->setTemplate(
-                            '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig'
-                        );
-
-                        break;
-                }
-            }
         }
 
         switch ($fieldDescription->getMappingType()) {
@@ -134,12 +106,27 @@ class ShowBuilder implements ShowBuilderInterface
     /**
      * @param string $type
      *
-     * @return string
+     * @return string|null
      */
     private function getTemplate($type)
     {
         if (!isset($this->templates[$type])) {
-            return;
+            // NEXT_MAJOR: Remove the check for deprecated type and always return null.
+            if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
+                return $this->getTemplate(TypeGuesser::DEPRECATED_TYPES[$type]);
+            }
+
+            return null;
+        }
+
+        // NEXT_MAJOR: Remove the deprecation.
+        if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
+            @trigger_error(sprintf(
+                'Overriding %s show template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.'
+                .' You should override %s show template instead.',
+                $type,
+                TypeGuesser::DEPRECATED_TYPES[$type]
+            ), E_USER_DEPRECATED);
         }
 
         return $this->templates[$type];
