@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
+use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 
@@ -65,6 +66,32 @@ class StringFilterTest extends TestCase
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
         $this->assertTrue($filter->isActive());
+    }
+
+    public function testStartsWith(): void
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['format' => '%s']);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertSame([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_STARTS_WITH]);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['field_name_0' => 'asd%'], $builder->parameters);
+    }
+
+    public function testEndsWith(): void
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['format' => '%s']);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertSame([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_ENDS_WITH]);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['field_name_0' => '%asd'], $builder->parameters);
     }
 
     public function testNotContains(): void
