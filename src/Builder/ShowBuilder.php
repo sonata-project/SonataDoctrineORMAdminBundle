@@ -122,7 +122,7 @@ class ShowBuilder implements ShowBuilderInterface
         // NEXT_MAJOR: Remove the deprecation.
         if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
             @trigger_error(sprintf(
-                'Overriding %s show template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.'
+                'Overriding %s show template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.19.'
                 .' You should override %s show template instead.',
                 $type,
                 TypeGuesser::DEPRECATED_TYPES[$type]

@@ -209,7 +209,7 @@ class ListBuilder implements ListBuilderInterface
         // NEXT_MAJOR: Remove the deprecation.
         if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
             @trigger_error(sprintf(
-                'Overriding %s list template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.'
+                'Overriding %s list template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.19.'
                 .' You should override %s list template instead.',
                 $type,
                 TypeGuesser::DEPRECATED_TYPES[$type]

@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.19.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.18.0...3.19.0) - 2020-06-26
+### Changed
+- [[#1055](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1055)]
+  `decimal` and `float` type use the `float` template if no `number` template
+exists ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1055](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1055)]
+  `one_to_one`, `one_to_many`, `many_to_one` and `many_to_many` type are
+correctly using the template defined in your config instead of the Sonata one.
+([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Removed
+- [[#1048](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1048)]
+  Remove SonataCoreBundle dependencies
+([@wbloszyk](https://github.com/wbloszyk))
+
 ## [3.18.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.17.1...3.18.0) - 2020-06-02
 ### Added
 - Added direct dependency against "twig/twig".
