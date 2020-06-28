@@ -4,6 +4,10 @@ UPGRADE 3.x
 UPGRADE FROM 3.x to 3.x
 =======================
 
+### Sonata\DoctrineORMAdminBundle\Filter\StringFilter
+
+Deprecated `format` option with no replacement.
+
 ### Sonata\DoctrineORMAdminBundle\Admin\FieldDescription
 
 Deprecated `getTargetEntity()`, use `getTargetModel()` instead.

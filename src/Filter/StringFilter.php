@@ -79,6 +79,13 @@ class StringFilter extends Filter
                     break;
                 default:
                     $format = $this->getOption('format');
+
+                    if ('%%%s%%' !== $format) {
+                        @trigger_error(
+                            'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+                            E_USER_DEPRECATED
+                        );
+                    }
             }
 
             $queryBuilder->setParameter(
@@ -94,6 +101,7 @@ class StringFilter extends Filter
     public function getDefaultOptions()
     {
         return [
+            // NEXT_MAJOR: Remove the format option.
             'format' => '%%%s%%',
             'case_sensitive' => true,
         ];
