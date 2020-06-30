@@ -1,8 +1,8 @@
 UPGRADE 3.x
 ===========
 
-UPGRADE FROM 3.x to 3.x
-=======================
+UPGRADE FROM 3.19 to 3.20
+=========================
 
 ### Sonata\DoctrineORMAdminBundle\Admin\FieldDescription
 
