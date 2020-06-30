@@ -942,7 +942,7 @@ class ModelManagerTest extends TestCase
      *
      * @group legacy
      *
-     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::find() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.
+     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::find() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
      */
     public function testFindBadId(): void
     {
@@ -985,7 +985,7 @@ class ModelManagerTest extends TestCase
      *
      * @group legacy
      *
-     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::getNormalizedIdentifier() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.
+     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::getNormalizedIdentifier() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
      */
     public function testGetUrlsafeIdentifierNull(): void
     {

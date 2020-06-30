@@ -242,7 +242,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         if (null === $id) {
             @trigger_error(sprintf(
-                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.',
+                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
 
@@ -378,7 +378,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         // NEXT_MAJOR: Remove the following 2 checks and declare "object" as type for argument 1.
         if (null === $entity) {
             @trigger_error(sprintf(
-                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.',
+                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
 
@@ -401,7 +401,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             // ));
 
             @trigger_error(sprintf(
-                'Passing an object which is in state %u (new) or %u (removed) as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing an object which is in state %u (new) or %u (removed) as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20'
                 .'and will be not allowed in version 4.0.',
                 UnitOfWork::STATE_NEW,
                 UnitOfWork::STATE_REMOVED,
@@ -431,7 +431,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         // NEXT_MAJOR: Remove the following check and declare "object" as type for argument 1.
         if (!\is_object($entity)) {
             @trigger_error(sprintf(
-                'Passing other type than object for argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.',
+                'Passing other type than object for argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
 

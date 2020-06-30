@@ -38,12 +38,12 @@ class FieldDescription extends BaseFieldDescription
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
      */
     public function getTargetEntity()
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0.'
             .' Use %s::getTargetModel() instead.',
             __METHOD__,
             __CLASS__
@@ -53,7 +53,7 @@ class FieldDescription extends BaseFieldDescription
     }
 
     /**
-     * @final since sonata-project/doctrine-orm-admin-bundle 3.x.
+     * @final since sonata-project/doctrine-orm-admin-bundle 3.20.
      */
     public function getTargetModel(): ?string
     {

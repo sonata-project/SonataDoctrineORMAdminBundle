@@ -2,6 +2,22 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.20.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.19.0...3.20.0) - 2020-06-30
+### Added
+- [[#1057](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1057)]
+  Add `StringFilter` support for `START_WITH` and `END_WITH` operator
+([@napestershine](https://github.com/napestershine))
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)]
+  Added `FieldDescription::getTargetModel()`.
+([@phansys](https://github.com/phansys))
+
+### Deprecated
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)] Deprecated passing `null` as argument 2 for `ModelManager::find()`; ([@phansys](https://github.com/phansys))
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)] Deprecated passing `null` as argument 1 for `ModelManager::getNormalizedIdentifier()`; ([@phansys](https://github.com/phansys))
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)] Deprecated passing objects which are in state 2 (new) or 4 (removed) as argument 1 for `ModelManager::getNormalizedIdentifier()`; ([@phansys](https://github.com/phansys))
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)] Deprecated passing other type than `object` as argument 1 for `ModelManager::getUrlSafeIdentifier()`; ([@phansys](https://github.com/phansys))
+- [[#1049](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1049)] Deprecated `FieldDescription::getTargetEntity()` in favor of `FieldDescription::getTargetModel()`. ([@phansys](https://github.com/phansys))
+
 ## [3.19.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.18.0...3.19.0) - 2020-06-26
 ### Changed
 - [[#1055](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1055)]
