@@ -15,14 +15,16 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
-use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
+use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 
 class StringFilter extends Filter
 {
     public const CHOICES = [
-        ContainsOperatorType::TYPE_CONTAINS => 'LIKE',
-        ContainsOperatorType::TYPE_NOT_CONTAINS => 'NOT LIKE',
-        ContainsOperatorType::TYPE_EQUAL => '=',
+        StringOperatorType::TYPE_CONTAINS => 'LIKE',
+        StringOperatorType::TYPE_STARTS_WITH => 'LIKE',
+        StringOperatorType::TYPE_ENDS_WITH => 'LIKE',
+        StringOperatorType::TYPE_NOT_CONTAINS => 'NOT LIKE',
+        StringOperatorType::TYPE_EQUAL => '=',
     ];
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
@@ -37,7 +39,7 @@ class StringFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ? ContainsOperatorType::TYPE_CONTAINS : $data['type'];
+        $data['type'] = !isset($data['type']) ? StringOperatorType::TYPE_CONTAINS : $data['type'];
 
         $operator = $this->getOperator((int) $data['type']);
 
@@ -56,22 +58,33 @@ class StringFilter extends Filter
             $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         }
 
-        if (ContainsOperatorType::TYPE_NOT_CONTAINS === $data['type']) {
+        if (StringOperatorType::TYPE_NOT_CONTAINS === $data['type']) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($queryBuilder, $or);
 
-        if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
+        if (StringOperatorType::TYPE_EQUAL === $data['type']) {
             $queryBuilder->setParameter(
                 $parameterName,
                 $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
             );
         } else {
+            switch ($data['type']) {
+                case StringOperatorType::TYPE_STARTS_WITH:
+                    $format = '%s%%';
+                    break;
+                case StringOperatorType::TYPE_ENDS_WITH:
+                    $format = '%%%s';
+                    break;
+                default:
+                    $format = $this->getOption('format');
+            }
+
             $queryBuilder->setParameter(
                 $parameterName,
                 sprintf(
-                    $this->getOption('format'),
+                    $format,
                     $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
                 )
             );

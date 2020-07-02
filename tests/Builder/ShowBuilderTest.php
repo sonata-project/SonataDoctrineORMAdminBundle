@@ -19,6 +19,7 @@ use Prophecy\Argument;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -40,7 +41,13 @@ class ShowBuilderTest extends TestCase
 
         $this->showBuilder = new ShowBuilder(
             $this->guesser->reveal(),
-            ['fakeTemplate' => 'fake']
+            [
+                'fakeTemplate' => 'fake',
+                TemplateRegistry::TYPE_ONE_TO_ONE => '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
+                TemplateRegistry::TYPE_ONE_TO_MANY => '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
+                TemplateRegistry::TYPE_MANY_TO_ONE => '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
+                TemplateRegistry::TYPE_MANY_TO_MANY => '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
+            ]
         );
 
         $this->admin = $this->prophesize(AdminInterface::class);
@@ -102,14 +109,15 @@ class ShowBuilderTest extends TestCase
 
     /**
      * @dataProvider fixFieldDescriptionData
+     * @dataProvider fixFieldDescriptionDeprecatedData
      */
-    public function testFixFieldDescription($mappingType, $template): void
+    public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
         $classMetadata = $this->prophesize(ClassMetadata::class);
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
-        $fieldDescription->setType('someType');
+        $fieldDescription->setType($type);
         $fieldDescription->setMappingType($mappingType);
 
         $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
@@ -126,22 +134,55 @@ class ShowBuilderTest extends TestCase
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
 
-    public function fixFieldDescriptionData(): array
+    public function fixFieldDescriptionData(): iterable
     {
         return [
             'one-to-one' => [
+                TemplateRegistry::TYPE_ONE_TO_ONE,
                 ClassMetadata::ONE_TO_ONE,
                 '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
             ],
             'many-to-one' => [
+                TemplateRegistry::TYPE_MANY_TO_ONE,
                 ClassMetadata::MANY_TO_ONE,
                 '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
             ],
             'one-to-many' => [
+                TemplateRegistry::TYPE_ONE_TO_MANY,
                 ClassMetadata::ONE_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
             ],
             'many-to-many' => [
+                TemplateRegistry::TYPE_MANY_TO_MANY,
+                ClassMetadata::MANY_TO_MANY,
+                '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
+            ],
+        ];
+    }
+
+    /**
+     * NEXT_MAJOR: Remove this dataprovider.
+     */
+    public function fixFieldDescriptionDeprecatedData(): iterable
+    {
+        return [
+            'deprecated-one-to-one' => [
+                'orm_one_to_one',
+                ClassMetadata::ONE_TO_ONE,
+                '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
+            ],
+            'deprecated-many-to-one' => [
+                'orm_many_to_one',
+                ClassMetadata::MANY_TO_ONE,
+                '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
+            ],
+            'deprecated-one-to-many' => [
+                'orm_one_to_many',
+                ClassMetadata::ONE_TO_MANY,
+                '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
+            ],
+            'deprecated-many-to-many' => [
+                'orm_many_to_many',
                 ClassMetadata::MANY_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
             ],

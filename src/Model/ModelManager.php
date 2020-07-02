@@ -240,7 +240,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function find($class, $id)
     {
-        if (!isset($id)) {
+        if (null === $id) {
+            @trigger_error(sprintf(
+                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
+                __METHOD__
+            ), E_USER_DEPRECATED);
+
             return null;
         }
 
@@ -260,7 +265,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @param string $class
+     * @param string|object $class
      *
      * @return EntityManager
      */
@@ -370,7 +375,13 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getNormalizedIdentifier($entity)
     {
+        // NEXT_MAJOR: Remove the following 2 checks and declare "object" as type for argument 1.
         if (null === $entity) {
+            @trigger_error(sprintf(
+                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
+                __METHOD__
+            ), E_USER_DEPRECATED);
+
             return null;
         }
 
@@ -382,6 +393,21 @@ class ModelManager implements ModelManagerInterface, LockInterface
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
+            // NEXT_MAJOR: Uncomment the following exception, remove the deprecation and the return statement inside this conditional block.
+            // throw new \InvalidArgumentException(sprintf(
+            //    'Can not get the normalized identifier for %s since it is in state %u.',
+            //    ClassUtils::getClass($entity),
+            //    $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity)
+            // ));
+
+            @trigger_error(sprintf(
+                'Passing an object which is in state %u (new) or %u (removed) as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20'
+                .'and will be not allowed in version 4.0.',
+                UnitOfWork::STATE_NEW,
+                UnitOfWork::STATE_REMOVED,
+                __METHOD__
+            ), E_USER_DEPRECATED);
+
             return null;
         }
 
@@ -402,6 +428,16 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getUrlSafeIdentifier($entity)
     {
+        // NEXT_MAJOR: Remove the following check and declare "object" as type for argument 1.
+        if (!\is_object($entity)) {
+            @trigger_error(sprintf(
+                'Passing other type than object for argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
+                __METHOD__
+            ), E_USER_DEPRECATED);
+
+            return null;
+        }
+
         return $this->getNormalizedIdentifier($entity);
     }
 
@@ -447,9 +483,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
             $entityManager->flush();
             $entityManager->clear();
-        } catch (\PDOException $e) {
-            throw new ModelManagerException('', 0, $e);
-        } catch (DBALException $e) {
+        } catch (\PDOException | DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
     }

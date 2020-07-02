@@ -882,6 +882,13 @@ class ModelManagerTest extends TestCase
         $model->delete(new VersionedEntity());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @group legacy
+     *
+     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::find() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
+     */
     public function testFindBadId(): void
     {
         $registry = $this->createMock(ManagerRegistry::class);
@@ -918,6 +925,13 @@ class ModelManagerTest extends TestCase
         yield ['sonata-project'];
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @group legacy
+     *
+     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::getNormalizedIdentifier() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
+     */
     public function testGetUrlsafeIdentifierNull(): void
     {
         $registry = $this->createMock(ManagerRegistry::class);

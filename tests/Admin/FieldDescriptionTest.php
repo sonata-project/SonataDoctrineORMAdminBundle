@@ -303,11 +303,11 @@ class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription();
 
-        $this->assertNull($field->getTargetEntity());
+        $this->assertNull($field->getTargetModel());
 
         $field->setAssociationMapping($assocationMapping);
 
-        $this->assertSame('someValue', $field->getTargetEntity());
+        $this->assertSame('someValue', $field->getTargetModel());
     }
 
     public function testIsIdentifierFromFieldMapping(): void

@@ -24,7 +24,7 @@ use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\CoreBundle\Form\Type\CollectionType as DeprecatedCollectionType;
+use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\FormContractor;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\Form\Type\CollectionType;
@@ -74,9 +74,10 @@ final class FormContractorTest extends TestCase
         $admin->method('getModelManager')->willReturn($modelManager);
         $admin->method('getClass')->willReturn($modelClass);
 
-        $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
+        // NEXT_MAJOR: Mock `FieldDescriptionInterface` instead and replace `getTargetEntity()` with `getTargetModel().
+        $fieldDescription = $this->createMock(FieldDescription::class);
         $fieldDescription->method('getAdmin')->willReturn($admin);
-        $fieldDescription->method('getTargetEntity')->willReturn($modelClass);
+        $fieldDescription->method('getTargetModel')->willReturn($modelClass);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
         $admin->method('getNewInstance')->willReturn($model);
 
@@ -90,7 +91,6 @@ final class FormContractorTest extends TestCase
             AdminType::class,
         ];
         $collectionTypes = [
-            DeprecatedCollectionType::class,
             CollectionType::class,
         ];
 
