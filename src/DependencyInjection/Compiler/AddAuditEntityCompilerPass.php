@@ -55,12 +55,7 @@ class AddAuditEntityCompilerPass implements CompilerPassInterface
         $auditManager->addMethodCall('setReader', ['sonata.admin.audit.orm.reader', $auditedEntities]);
     }
 
-    /**
-     * @param string $name
-     *
-     * @return string
-     */
-    private function getModelName(ContainerBuilder $container, $name)
+    private function getModelName(ContainerBuilder $container, string $name): string
     {
         if ('%' === $name[0]) {
             return $container->getParameter(substr($name, 1, -1));

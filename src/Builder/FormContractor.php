@@ -98,7 +98,7 @@ class FormContractor implements FormContractorInterface
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
-        if ($this->checkFormClass($type, [
+        if ($this->isAnyInstanceOf($type, [
             ModelType::class,
             ModelTypeList::class,
             ModelListType::class,
@@ -116,7 +116,7 @@ class FormContractor implements FormContractorInterface
             $options['class'] = $fieldDescription->getTargetModel();
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
-            if ($this->checkFormClass($type, [ModelAutocompleteType::class])) {
+            if ($this->isAnyInstanceOf($type, [ModelAutocompleteType::class])) {
                 if (!$fieldDescription->getAssociationAdmin()) {
                     throw new \RuntimeException(sprintf(
                         'The current field `%s` is not linked to an admin.'
@@ -126,7 +126,7 @@ class FormContractor implements FormContractorInterface
                     ));
                 }
             }
-        } elseif ($this->checkFormClass($type, [AdminType::class])) {
+        } elseif ($this->isAnyInstanceOf($type, [AdminType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -159,7 +159,7 @@ class FormContractor implements FormContractorInterface
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
         // NEXT_MAJOR: remove 'Sonata\CoreBundle\Form\Type\CollectionType'
-        } elseif ($this->checkFormClass($type, [CollectionType::class, 'Sonata\CoreBundle\Form\Type\CollectionType'])) {
+        } elseif ($this->isAnyInstanceOf($type, [CollectionType::class, 'Sonata\CoreBundle\Form\Type\CollectionType'])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
@@ -183,10 +183,7 @@ class FormContractor implements FormContractorInterface
         return $options;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
+    private function hasAssociation(FieldDescriptionInterface $fieldDescription): bool
     {
         return \in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
@@ -197,15 +194,16 @@ class FormContractor implements FormContractorInterface
     }
 
     /**
-     * @param string $type
-     * @param array  $classes
-     *
-     * @return array
+     * @param string[] $classes
      */
-    private function checkFormClass($type, $classes)
+    private function isAnyInstanceOf(string $type, array $classes): bool
     {
-        return array_filter($classes, static function ($subclass) use ($type) {
-            return is_a($type, $subclass, true);
-        });
+        foreach ($classes as $class) {
+            if (is_a($type, $class, true)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

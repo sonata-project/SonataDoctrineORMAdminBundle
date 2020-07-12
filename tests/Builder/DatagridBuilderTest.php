@@ -67,8 +67,6 @@ final class DatagridBuilderTest extends TestCase
 
         $this->admin->getClass()->willReturn('FakeClass');
         $this->admin->getModelManager()->willReturn($this->modelManager->reveal());
-        $this->admin->attachAdminClass(Argument::cetera())->willReturn();
-        $this->admin->addFilterFieldDescription(Argument::cetera())->willReturn();
     }
 
     /**
@@ -126,6 +124,8 @@ final class DatagridBuilderTest extends TestCase
         $fieldDescription->setName('test');
         $fieldDescription->setMappingType(ClassMetadata::ONE_TO_MANY);
 
+        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
+
         $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
 
         $this->modelManager->getParentMetadataForProperty(Argument::cetera())
@@ -147,6 +147,8 @@ final class DatagridBuilderTest extends TestCase
 
     public function testAddFilterNoType(): void
     {
+        $this->admin->addFilterFieldDescription(Argument::cetera())->shouldBeCalled();
+
         $datagrid = $this->prophesize(DatagridInterface::class);
         $guessType = $this->prophesize(TypeGuess::class);
 
