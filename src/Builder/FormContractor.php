@@ -183,10 +183,7 @@ class FormContractor implements FormContractorInterface
         return $options;
     }
 
-    /**
-     * @return bool
-     */
-    private function hasAssociation(FieldDescriptionInterface $fieldDescription)
+    private function hasAssociation(FieldDescriptionInterface $fieldDescription): bool
     {
         return \in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
@@ -196,13 +193,7 @@ class FormContractor implements FormContractorInterface
         ], true);
     }
 
-    /**
-     * @param string $type
-     * @param array  $classes
-     *
-     * @return array
-     */
-    private function checkFormClass($type, $classes)
+    private function checkFormClass(string $type, array $classes): array
     {
         return array_filter($classes, static function ($subclass) use ($type) {
             return is_a($type, $subclass, true);

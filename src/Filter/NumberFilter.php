@@ -33,9 +33,9 @@ class NumberFilter extends Filter
             return;
         }
 
-        $type = $data['type'] ?? false;
+        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
 
-        $operator = $this->getOperator($type);
+        $operator = $this->getOperator((int) $type);
 
         if (!$operator) {
             $operator = '=';
@@ -62,11 +62,9 @@ class NumberFilter extends Filter
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
+     * @return string|false
      */
-    private function getOperator($type)
+    private function getOperator(int $type)
     {
         return self::CHOICES[$type] ?? false;
     }

@@ -81,11 +81,9 @@ class ClassFilter extends Filter
     }
 
     /**
-     * @param int $type
-     *
-     * @return mixed
+     * @return string|false
      */
-    private function getOperator($type)
+    private function getOperator(int $type)
     {
         return self::CHOICES[$type] ?? false;
     }

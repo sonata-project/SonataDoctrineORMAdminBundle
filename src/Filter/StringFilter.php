@@ -109,11 +109,9 @@ class StringFilter extends Filter
     }
 
     /**
-     * @param string $type
-     *
-     * @return bool
+     * @return string|false
      */
-    private function getOperator($type)
+    private function getOperator(int $type)
     {
         return self::CHOICES[$type] ?? false;
     }
