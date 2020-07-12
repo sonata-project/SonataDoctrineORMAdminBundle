@@ -34,12 +34,7 @@ class NumberFilter extends Filter
         }
 
         $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
-
         $operator = $this->getOperator((int) $type);
-
-        if (!$operator) {
-            $operator = '=';
-        }
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
@@ -61,11 +56,8 @@ class NumberFilter extends Filter
         ]];
     }
 
-    /**
-     * @return string|false
-     */
-    private function getOperator(int $type)
+    private function getOperator(int $type): string
     {
-        return self::CHOICES[$type] ?? false;
+        return self::CHOICES[$type] ?? self::CHOICES[NumberOperatorType::TYPE_EQUAL];
     }
 }
