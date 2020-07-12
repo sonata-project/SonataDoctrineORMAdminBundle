@@ -35,13 +35,8 @@ class ClassFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ? EqualOperatorType::TYPE_EQUAL : $data['type'];
-
-        $operator = $this->getOperator((int) $data['type']);
-
-        if (!$operator) {
-            $operator = 'INSTANCE OF';
-        }
+        $type = $data['type'] ?? EqualOperatorType::TYPE_EQUAL;
+        $operator = $this->getOperator((int) $type);
 
         $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $data['value']));
     }
@@ -80,13 +75,8 @@ class ClassFilter extends Filter
         ]];
     }
 
-    /**
-     * @param int $type
-     *
-     * @return mixed
-     */
-    private function getOperator($type)
+    private function getOperator(int $type): string
     {
-        return self::CHOICES[$type] ?? false;
+        return self::CHOICES[$type] ?? self::CHOICES[EqualOperatorType::TYPE_EQUAL];
     }
 }
