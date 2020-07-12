@@ -72,7 +72,9 @@ class AuditBlockService extends AbstractBlockService
                     __METHOD__,
                     EngineInterface::class,
                     Environment::class,
-                    \is_object($templatingOrDeprecatedName) ? \get_class($templatingOrDeprecatedName) : \gettype($templatingOrDeprecatedName)
+                    \is_object($templatingOrDeprecatedName)
+                        ? 'instance of '.\get_class($templatingOrDeprecatedName)
+                        : \gettype($templatingOrDeprecatedName)
                 ));
             }
 
@@ -81,7 +83,7 @@ class AuditBlockService extends AbstractBlockService
             $this->auditReader = $templatingOrAuditReader;
         } else {
             throw new \TypeError(sprintf(
-                'Argument 2 passed to %s() must be either an instance of %s or preferably %s, %s given.',
+                'Argument 2 passed to %s() must be either an instance of %s or preferably %s, instance of %s given.',
                 __METHOD__,
                 EngineInterface::class,
                 AuditReader::class,
