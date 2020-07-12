@@ -38,7 +38,7 @@ class StringFilterTest extends TestCase
     public function testNullValue(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
@@ -50,28 +50,28 @@ class StringFilterTest extends TestCase
     public function testContains(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => null]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
     public function testStartsWith(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
@@ -84,7 +84,7 @@ class StringFilterTest extends TestCase
     public function testEndsWith(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
@@ -97,21 +97,21 @@ class StringFilterTest extends TestCase
     public function testNotContains(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_NOT_CONTAINS]);
         $this->assertSame(['alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
         $this->assertTrue($filter->isActive());
     }
 
     public function testEquals(): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
+        $filter->initialize('field_name');
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
@@ -126,7 +126,6 @@ class StringFilterTest extends TestCase
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', [
-            'format' => '%s',
             'field_name' => 'field_name',
             'parent_association_mappings' => [
                 [
@@ -194,5 +193,25 @@ class StringFilterTest extends TestCase
             [true, ContainsOperatorType::TYPE_EQUAL, 'alias.field = :field_name_0', 'FooBar'],
 
         ];
+    }
+
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
+     * @expectedDeprecation The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     */
+    public function testFormatOption(): void
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['format' => '%s']);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertSame([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_CONTAINS]);
+        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
     }
 }
