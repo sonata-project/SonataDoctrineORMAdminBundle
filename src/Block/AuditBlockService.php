@@ -21,6 +21,7 @@ use Sonata\BlockBundle\Model\BlockInterface;
 use Symfony\Bundle\FrameworkBundle\Templating\EngineInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Twig\Environment;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -33,13 +34,62 @@ class AuditBlockService extends AbstractBlockService
     protected $auditReader;
 
     /**
-     * @param string $name
+     * NEXT_MAJOR: Allow only Environment|EngineInterface for argument 1 and AuditReader for argument 2.
+     *
+     * @param Environment|EngineInterface|string $templatingOrDeprecatedName
+     * @param EngineInterface|AuditReader        $templatingOrAuditReader
      */
-    public function __construct($name, EngineInterface $templating, AuditReader $auditReader)
+    public function __construct($templatingOrDeprecatedName, object $templatingOrAuditReader, ?AuditReader $auditReader = null)
     {
-        parent::__construct($name, $templating);
+        if ($templatingOrAuditReader instanceof EngineInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 2 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError in version 4.0. You must pass an instance of %s instead.',
+                EngineInterface::class,
+                __METHOD__,
+                AuditReader::class
+            ), E_USER_DEPRECATED);
 
-        $this->auditReader = $auditReader;
+            if (null === $auditReader) {
+                throw new \TypeError(sprintf(
+                    'Passing null as argument 3 to %s() is not allowed when %s is passed as argument 2.'
+                    .' You must pass an instance of %s instead.',
+                    __METHOD__,
+                    EngineInterface::class,
+                    AuditReader::class
+                ));
+            }
+
+            parent::__construct($templatingOrDeprecatedName, $templatingOrAuditReader);
+
+            $this->auditReader = $auditReader;
+        } elseif ($templatingOrAuditReader instanceof AuditReader) {
+            if (!$templatingOrDeprecatedName instanceof Environment
+                && !$templatingOrDeprecatedName instanceof EngineInterface
+            ) {
+                throw new \TypeError(sprintf(
+                    'Argument 1 passed to %s() must be either an instance of %s or preferably %s, %s given.',
+                    __METHOD__,
+                    EngineInterface::class,
+                    Environment::class,
+                    \is_object($templatingOrDeprecatedName)
+                        ? 'instance of '.\get_class($templatingOrDeprecatedName)
+                        : \gettype($templatingOrDeprecatedName)
+                ));
+            }
+
+            parent::__construct($templatingOrDeprecatedName);
+
+            $this->auditReader = $templatingOrAuditReader;
+        } else {
+            throw new \TypeError(sprintf(
+                'Argument 2 passed to %s() must be either an instance of %s or preferably %s, instance of %s given.',
+                __METHOD__,
+                EngineInterface::class,
+                AuditReader::class,
+                \get_class($templatingOrAuditReader)
+            ));
+        }
     }
 
     public function execute(BlockContextInterface $blockContext, ?Response $response = null)

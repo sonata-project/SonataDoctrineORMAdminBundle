@@ -13,31 +13,37 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Block;
 
-use Prophecy\Argument;
+use PHPUnit\Framework\MockObject\MockObject;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
 use SimpleThings\EntityAudit\Revision;
 use Sonata\BlockBundle\Block\BlockContext;
 use Sonata\BlockBundle\Model\Block;
-use Sonata\BlockBundle\Test\AbstractBlockServiceTestCase;
+use Sonata\BlockBundle\Test\BlockServiceTestCase;
 use Sonata\DoctrineORMAdminBundle\Block\AuditBlockService;
 
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class AuditBlockServiceTest extends AbstractBlockServiceTestCase
+class AuditBlockServiceTest extends BlockServiceTestCase
 {
+    /**
+     * @var SimpleThingsAuditReader&MockObject
+     */
     private $simpleThingsAuditReader;
+
+    /**
+     * @var AuditBlockService
+     */
     private $blockService;
 
     protected function setUp(): void
     {
         parent::setUp();
-        $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
+        $this->simpleThingsAuditReader = $this->createMock(SimpleThingsAuditReader::class);
 
         $this->blockService = new AuditBlockService(
-            'block.service',
-            $this->templating,
-            $this->simpleThingsAuditReader->reveal()
+            $this->twig,
+            $this->simpleThingsAuditReader
         );
     }
 
@@ -46,28 +52,38 @@ class AuditBlockServiceTest extends AbstractBlockServiceTestCase
      */
     public function testExecute(): void
     {
-        $blockContext = $this->prophesize(BlockContext::class);
+        $blockContext = $this->createMock(BlockContext::class);
 
-        $blockContext->getBlock()->willReturn($block = new Block())->shouldBeCalledTimes(1);
-        $blockContext->getSetting('limit')->willReturn($limit = 10)->shouldBeCalledTimes(1);
+        $blockContext->expects($this->once())->method('getBlock')->willReturn($block = new Block());
+        $blockContext->expects($this->once())->method('getSetting')->with('limit')->willReturn($limit = 10);
 
-        $this->simpleThingsAuditReader->findRevisionHistory($limit, 0)
-            ->willReturn([$revision = new Revision('test', '123', 'test')])
-            ->shouldBeCalledTimes(1);
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('findRevisionHistory')
+            ->with($limit, 0)
+            ->willReturn([$revision = new Revision('test', '123', 'test')]);
 
-        $this->simpleThingsAuditReader->findEntitiesChangedAtRevision(Argument::cetera())
-            ->willReturn([])
-            ->shouldBeCalledTimes(1);
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('findEntitiesChangedAtRevision')
+            ->willReturn([]);
 
-        $blockContext->getTemplate()->willReturn('template')->shouldBeCalledTimes(1);
-        $blockContext->getSettings()->willReturn([])->shouldBeCalledTimes(1);
+        $blockContext->expects($this->once())->method('getTemplate')->willReturn('template');
+        $blockContext->expects($this->once())->method('getSettings')->willReturn([]);
 
-        $this->blockService->execute($blockContext->reveal());
+        $this->twig
+            ->expects($this->once())
+            ->method('render')
+            ->with('template', [
+                'block' => $block,
+                'settings' => [],
+                'revisions' => [['revision' => $revision, 'entities' => []]],
+            ])
+            ->willReturn('content');
 
-        $this->assertSame('template', $this->templating->view);
-        $this->assertIsArray($this->templating->parameters['settings']);
-        $this->assertSame($revision, $this->templating->parameters['revisions'][0]['revision']);
-        $this->assertSame($block, $this->templating->parameters['block']);
+        $response = $this->blockService->execute($blockContext);
+
+        $this->assertSame('content', $response->getContent());
     }
 
     public function testDefaultSettings(): void
