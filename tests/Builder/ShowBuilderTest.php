@@ -62,9 +62,6 @@ class ShowBuilderTest extends TestCase
         $this->assertInstanceOf(FieldDescriptionCollection::class, $this->showBuilder->getBaseList());
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAddFieldNoType(): void
     {
         $typeGuess = $this->prophesize(TypeGuess::class);
@@ -90,9 +87,6 @@ class ShowBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testAddFieldWithType(): void
     {
         $fieldDescription = new FieldDescription();
