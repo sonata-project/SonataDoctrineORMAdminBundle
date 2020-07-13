@@ -39,7 +39,7 @@ class ModelAutocompleteFilter extends Filter
         }
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'field_name' => false,
@@ -50,7 +50,7 @@ class ModelAutocompleteFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
@@ -68,10 +68,8 @@ class ModelAutocompleteFilter extends Filter
      * @param ProxyQueryInterface|QueryBuilder $queryBuilder
      * @param string                           $alias
      * @param mixed                            $data
-     *
-     * @return mixed
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data): void
     {
         if (0 === \count($data['value'])) {
             return;
@@ -92,10 +90,8 @@ class ModelAutocompleteFilter extends Filter
      * @param ProxyQueryInterface|QueryBuilder $queryBuilder
      * @param string                           $alias
      * @param mixed                            $data
-     *
-     * @return mixed
      */
-    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data)
+    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data): void
     {
         if (empty($data['value'])) {
             return;
@@ -112,7 +108,7 @@ class ModelAutocompleteFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    protected function association(ProxyQueryInterface $queryBuilder, $data): array
     {
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();

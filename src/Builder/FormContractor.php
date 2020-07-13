@@ -25,6 +25,7 @@ use Sonata\AdminBundle\Form\Type\ModelType;
 use Sonata\AdminBundle\Form\Type\ModelTypeList;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
+use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
 class FormContractor implements FormContractorInterface
@@ -80,20 +81,17 @@ class FormContractor implements FormContractorInterface
         }
     }
 
-    /**
-     * @return FormFactoryInterface
-     */
-    public function getFormFactory()
+    public function getFormFactory(): FormFactoryInterface
     {
         return $this->formFactory;
     }
 
-    public function getFormBuilder($name, array $options = [])
+    public function getFormBuilder(string $name, array $options = []): FormBuilderInterface
     {
         return $this->getFormFactory()->createNamedBuilder($name, FormType::class, null, $options);
     }
 
-    public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
+    public function getDefaultOptions(?string $type, FieldDescriptionInterface $fieldDescription): array
     {
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;

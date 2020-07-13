@@ -41,7 +41,7 @@ class ClassFilter extends Filter
         $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $data['value']));
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'operator_type' => EqualOperatorType::class,
@@ -49,12 +49,12 @@ class ClassFilter extends Filter
         ];
     }
 
-    public function getFieldType()
+    public function getFieldType(): string
     {
         return $this->getOption('field_type', ChoiceType::class);
     }
 
-    public function getFieldOptions()
+    public function getFieldOptions(): array
     {
         $choiceOptions = [
             'required' => false,
@@ -64,7 +64,7 @@ class ClassFilter extends Filter
         return $this->getOption('choices', $choiceOptions);
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'operator_type' => $this->getOption('operator_type'),

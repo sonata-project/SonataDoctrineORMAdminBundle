@@ -42,12 +42,12 @@ class NumberFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [NumberType::class, [
             'field_type' => $this->getFieldType(),

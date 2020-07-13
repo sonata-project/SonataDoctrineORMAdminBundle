@@ -50,14 +50,11 @@ class DatagridBuilder implements DatagridBuilderInterface
      */
     protected $csrfTokenEnabled;
 
-    /**
-     * @param bool $csrfTokenEnabled
-     */
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterFactoryInterface $filterFactory,
         TypeGuesserInterface $guesser,
-        $csrfTokenEnabled = true
+        bool $csrfTokenEnabled = true
     ) {
         $this->formFactory = $formFactory;
         $this->filterFactory = $filterFactory;
@@ -129,7 +126,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         }
     }
 
-    public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function addFilter(DatagridInterface $datagrid, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null === $type) {
             $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
@@ -174,7 +171,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $datagrid->addFilter($filter);
     }
 
-    public function getBaseDatagrid(AdminInterface $admin, array $values = [])
+    public function getBaseDatagrid(AdminInterface $admin, array $values = []): DatagridInterface
     {
         $pager = $this->getPager($admin->getPagerType());
 
@@ -193,13 +190,9 @@ class DatagridBuilder implements DatagridBuilderInterface
     /**
      * Get pager by pagerType.
      *
-     * @param string $pagerType
-     *
      * @throws \RuntimeException If invalid pager type is set
-     *
-     * @return PagerInterface
      */
-    protected function getPager($pagerType)
+    protected function getPager(string $pagerType): PagerInterface
     {
         switch ($pagerType) {
             case Pager::TYPE_DEFAULT:

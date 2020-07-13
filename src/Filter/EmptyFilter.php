@@ -48,7 +48,7 @@ final class EmptyFilter extends Filter
         }
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'field_type' => BooleanType::class,
@@ -57,7 +57,7 @@ final class EmptyFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'field_type' => $this->getFieldType(),

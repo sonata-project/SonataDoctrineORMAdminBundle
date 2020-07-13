@@ -230,22 +230,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame($assocationMapping, $field->getAssociationMapping());
     }
 
-    public function testSetAssociationMappingAllowOnlyForArray(): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $field = new FieldDescription();
-        $field->setAssociationMapping('test');
-    }
-
-    public function testSetFieldMappingAllowOnlyForArray(): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $field = new FieldDescription();
-        $field->setFieldMapping('test');
-    }
-
     public function testSetFieldMappingSetType(): void
     {
         $fieldMapping = [

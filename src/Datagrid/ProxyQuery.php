@@ -142,12 +142,8 @@ class ProxyQuery implements ProxyQueryInterface
     /**
      * Optimize queries with a lot of rows.
      * It is not recommended to use "false" with left joins.
-     *
-     * @param bool $distinct
-     *
-     * @return self
      */
-    final public function setDistinct($distinct)
+    final public function setDistinct(bool $distinct): ProxyQueryInterface
     {
         if (!\is_bool($distinct)) {
             throw new \InvalidArgumentException('$distinct is not a boolean');
@@ -158,15 +154,12 @@ class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
-    /**
-     * @return bool
-     */
-    final public function isDistinct()
+    final public function isDistinct(): bool
     {
         return $this->distinct;
     }
 
-    public function execute(array $params = [], $hydrationMode = null)
+    public function execute(array $params = [], ?int $hydrationMode = null)
     {
         // always clone the original queryBuilder
         $queryBuilder = clone $this->queryBuilder;
@@ -227,7 +220,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $query->execute($params, $hydrationMode);
     }
 
-    public function setSortBy($parentAssociationMappings, $fieldMapping)
+    public function setSortBy(array $parentAssociationMappings, array $fieldMapping): ProxyQueryInterface
     {
         $alias = $this->entityJoin($parentAssociationMappings);
         $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
@@ -235,12 +228,12 @@ class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
-    public function getSortBy()
+    public function getSortBy(): ?string
     {
         return $this->sortBy;
     }
 
-    public function setSortOrder($sortOrder)
+    public function setSortOrder(string $sortOrder): ProxyQueryInterface
     {
         if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'], true)) {
             throw new \InvalidArgumentException(sprintf(
@@ -254,7 +247,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
-    public function getSortOrder()
+    public function getSortOrder(): ?string
     {
         return $this->sortOrder;
     }
@@ -266,44 +259,41 @@ class ProxyQuery implements ProxyQueryInterface
         return $query->getSingleScalarResult();
     }
 
-    /**
-     * @return QueryBuilder
-     */
-    public function getQueryBuilder()
+    public function getQueryBuilder(): QueryBuilder
     {
         return $this->queryBuilder;
     }
 
-    public function setFirstResult($firstResult)
+    public function setFirstResult(?int $firstResult): ProxyQueryInterface
     {
         $this->queryBuilder->setFirstResult($firstResult);
 
         return $this;
     }
 
-    public function getFirstResult()
+    public function getFirstResult(): ?int
     {
         return $this->queryBuilder->getFirstResult();
     }
 
-    public function setMaxResults($maxResults)
+    public function setMaxResults(?int $maxResults): ProxyQueryInterface
     {
         $this->queryBuilder->setMaxResults($maxResults);
 
         return $this;
     }
 
-    public function getMaxResults()
+    public function getMaxResults(): ?int
     {
         return $this->queryBuilder->getMaxResults();
     }
 
-    public function getUniqueParameterId()
+    public function getUniqueParameterId(): int
     {
         return $this->uniqueParameterId++;
     }
 
-    public function entityJoin(array $associationMappings)
+    public function entityJoin(array $associationMappings): string
     {
         $alias = current($this->queryBuilder->getRootAliases());
 
@@ -344,12 +334,10 @@ class ProxyQuery implements ProxyQueryInterface
      * @param string $name  the name of the hint
      * @param mixed  $value the value of the hint
      *
-     * @return ProxyQueryInterface
-     *
      * @see \Doctrine\ORM\Query::setHint
      * @see \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER
      */
-    final public function setHint($name, $value)
+    final public function setHint(string $name, $value): ProxyQueryInterface
     {
         $this->hints[$name] = $value;
 
@@ -359,10 +347,8 @@ class ProxyQuery implements ProxyQueryInterface
     /**
      * This method alters the query to return a clean set of object with a working
      * set of Object.
-     *
-     * @return QueryBuilder
      */
-    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder)
+    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
         $queryBuilderId = clone $queryBuilder;
         $rootAlias = current($queryBuilderId->getRootAliases());

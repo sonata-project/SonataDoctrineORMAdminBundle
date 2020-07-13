@@ -44,9 +44,10 @@ class AuditReaderTest extends TestCase
     {
         $this->simpleThingsAuditReader
             ->findRevisionHistory($limit = 20, $offset = 0)
-            ->shouldBeCalledTimes(1);
+            ->shouldBeCalledTimes(1)
+            ->willReturn([]);
 
-        $this->auditReader->findRevisionHistory(null, $limit, $offset);
+        $this->auditReader->findRevisionHistory('class', $limit, $offset);
     }
 
     public function testFindRevision(): void
@@ -55,14 +56,15 @@ class AuditReaderTest extends TestCase
             ->findRevision($revision = 2)
             ->shouldBeCalledTimes(1);
 
-        $this->auditReader->findRevision(null, $revision);
+        $this->auditReader->findRevision('class', $revision);
     }
 
     public function testFindRevisions(): void
     {
         $this->simpleThingsAuditReader
             ->findRevisions($className = 'fakeClass', $id = 2)
-            ->shouldBeCalledTimes(1);
+            ->shouldBeCalledTimes(1)
+            ->willReturn([]);
 
         $this->auditReader->findRevisions($className, $id);
     }
@@ -73,7 +75,8 @@ class AuditReaderTest extends TestCase
     public function testDiff(): void
     {
         $this->simpleThingsAuditReader
-            ->diff($className = 'fakeClass', $id = 1, $oldRevision = 1, $newRevision = 2);
+            ->diff($className = 'fakeClass', $id = 1, $oldRevision = 1, $newRevision = 2)
+            ->willReturn([]);
 
         $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
     }

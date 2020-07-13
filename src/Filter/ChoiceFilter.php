@@ -32,7 +32,7 @@ class ChoiceFilter extends Filter
         }
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'operator_type' => EqualOperatorType::class,
@@ -40,7 +40,7 @@ class ChoiceFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'operator_type' => $this->getOption('operator_type'),

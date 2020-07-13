@@ -41,7 +41,7 @@ class TypeGuesser extends AbstractTypeGuesser
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
-            return new TypeGuess('text', [], Guess::LOW_CONFIDENCE);
+            return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
 
         list($metadata, $propertyName, $parentAssociationMappings) = $ret;
@@ -87,22 +87,20 @@ class TypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess(TemplateRegistry::TYPE_DATE, [], Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
-                // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_FLOAT, [], Guess::LOW_CONFIDENCE)
-                return new TypeGuess('number', [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(TemplateRegistry::TYPE_FLOAT, [], Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
                 return new TypeGuess(TemplateRegistry::TYPE_INTEGER, [], Guess::MEDIUM_CONFIDENCE);
             case 'string':
-                return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::MEDIUM_CONFIDENCE);
             case 'text':
                 return new TypeGuess(TemplateRegistry::TYPE_TEXTAREA, [], Guess::MEDIUM_CONFIDENCE);
             case 'time':
             case 'time_immutable':
                 return new TypeGuess(TemplateRegistry::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
             default:
-                // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE)
-                return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::LOW_CONFIDENCE);
+                return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
     }
 }

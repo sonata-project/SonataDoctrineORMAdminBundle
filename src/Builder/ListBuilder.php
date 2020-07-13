@@ -42,12 +42,12 @@ class ListBuilder implements ListBuilderInterface
         $this->templates = $templates;
     }
 
-    public function getBaseList(array $options = [])
+    public function getBaseList(array $options = []): FieldDescriptionCollection
     {
         return new FieldDescriptionCollection();
     }
 
-    public function buildField($type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function buildField(?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null === $type) {
             $guessType = $this->guesser->guessType(
@@ -63,7 +63,7 @@ class ListBuilder implements ListBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
     }
 
-    public function addField(FieldDescriptionCollection $list, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         $this->buildField($type, $fieldDescription, $admin);
         $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
@@ -155,10 +155,7 @@ class ListBuilder implements ListBuilderInterface
         }
     }
 
-    /**
-     * @return FieldDescriptionInterface
-     */
-    public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription)
+    public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription): FieldDescriptionInterface
     {
         if (null === $fieldDescription->getTemplate()) {
             $fieldDescription->setTemplate('@SonataAdmin/CRUD/list__action.html.twig');

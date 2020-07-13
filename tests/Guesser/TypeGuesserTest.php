@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\Guess;
@@ -43,7 +44,7 @@ class TypeGuesserTest extends TestCase
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
 
-        $this->assertSame('text', $result->getType());
+        $this->assertSame(TemplateRegistry::TYPE_STRING, $result->getType());
         $this->assertSame(Guess::LOW_CONFIDENCE, $result->getConfidence());
     }
 
@@ -116,93 +117,93 @@ class TypeGuesserTest extends TestCase
     {
         return [
             'array' => [
-                $array = 'array',
-                $array,
+                'array',
+                TemplateRegistry::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'simple_array' => [
                 'simple_array',
-                $array,
+                TemplateRegistry::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'json_array' => [
                 'json_array',
-                $array,
+                TemplateRegistry::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'json' => [
                 'json',
-                $array,
+                TemplateRegistry::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'boolean' => [
-                $boolean = 'boolean',
-                $boolean,
+                'boolean',
+                TemplateRegistry::TYPE_BOOLEAN,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime' => [
-                $datetime = 'datetime',
-                $datetime,
+                'datetime',
+                TemplateRegistry::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime_immutable' => [
                 'datetime_immutable',
-                $datetime,
+                TemplateRegistry::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'vardatetime' => [
                 'vardatetime',
-                $datetime,
+                TemplateRegistry::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz' => [
                 'datetimetz',
-                $datetime,
+                TemplateRegistry::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz_immutable' => [
                 'datetimetz_immutable',
-                $datetime,
+                TemplateRegistry::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date' => [
-                $date = 'date',
-                $date,
+                'date',
+                TemplateRegistry::TYPE_DATE,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date_immutable' => [
                 'date_immutable',
-                $date,
+                TemplateRegistry::TYPE_DATE,
                 Guess::HIGH_CONFIDENCE,
             ],
             'decimal' => [
                 'decimal',
-                $number = 'number',
+                TemplateRegistry::TYPE_FLOAT,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'float' => [
                 'float',
-                $number,
+                TemplateRegistry::TYPE_FLOAT,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'integer' => [
-                $integer = 'integer',
-                $integer,
+                'integer',
+                TemplateRegistry::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'bigint' => [
                 'bigint',
-                $integer,
+                TemplateRegistry::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'smallint' => [
                 'smallint',
-                $integer,
+                TemplateRegistry::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'string' => [
                 'string',
-                $text = 'text',
+                TemplateRegistry::TYPE_STRING,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'text' => [
@@ -211,18 +212,18 @@ class TypeGuesserTest extends TestCase
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'time' => [
-                $time = 'time',
-                $time,
+                'time',
+                TemplateRegistry::TYPE_TIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'time_immutable' => [
                 'time_immutable',
-                $time,
+                TemplateRegistry::TYPE_TIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'somefake' => [
                 'somefake',
-                $text,
+                TemplateRegistry::TYPE_STRING,
                 Guess::LOW_CONFIDENCE,
             ],
         ];
