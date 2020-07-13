@@ -315,13 +315,13 @@ class FieldDescriptionTest extends TestCase
         $fieldMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-            'id' => 'someId',
+            'id' => true,
         ];
 
         $field = new FieldDescription();
         $field->setFieldMapping($fieldMapping);
 
-        $this->assertSame('someId', $field->isIdentifier());
+        $this->assertTrue($field->isIdentifier());
     }
 
     public function testGetFieldMapping(): void

@@ -31,7 +31,7 @@ abstract class AbstractTypeGuesser implements TypeGuesserInterface
             return $modelManager->getParentMetadataForProperty($baseClass, $propertyFullName);
         } catch (MappingException $e) {
             // no metadata not found.
-            return;
+            return null;
         }
     }
 }
