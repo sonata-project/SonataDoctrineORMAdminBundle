@@ -55,8 +55,6 @@ class ShowBuilderTest extends TestCase
 
         $this->admin->getClass()->willReturn('FakeClass');
         $this->admin->getModelManager()->willReturn($this->modelManager->reveal());
-        $this->admin->attachAdminClass(Argument::cetera())->willReturn();
-        $this->admin->addShowFieldDescription(Argument::cetera())->willReturn();
     }
 
     public function testGetBaseList(): void
@@ -74,6 +72,9 @@ class ShowBuilderTest extends TestCase
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
         $fieldDescription->setMappingType(ClassMetadata::MANY_TO_ONE);
+
+        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
+        $this->admin->addShowFieldDescription(Argument::cetera())->shouldBeCalled();
 
         $typeGuess->getType()->willReturn($typeGuessReturn = 'fakeType');
 
@@ -97,6 +98,8 @@ class ShowBuilderTest extends TestCase
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
 
+        $this->admin->addShowFieldDescription(Argument::cetera())->shouldBeCalled();
+
         $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
 
         $this->showBuilder->addField(
@@ -119,6 +122,8 @@ class ShowBuilderTest extends TestCase
         $fieldDescription->setName('FakeName');
         $fieldDescription->setType($type);
         $fieldDescription->setMappingType($mappingType);
+
+        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
 
         $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
 

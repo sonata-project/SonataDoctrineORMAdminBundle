@@ -39,13 +39,8 @@ class StringFilter extends Filter
             return;
         }
 
-        $data['type'] = !isset($data['type']) ? StringOperatorType::TYPE_CONTAINS : $data['type'];
-
-        $operator = $this->getOperator((int) $data['type']);
-
-        if (!$operator) {
-            $operator = 'LIKE';
-        }
+        $type = $data['type'] ?? StringOperatorType::TYPE_CONTAINS;
+        $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
@@ -58,19 +53,19 @@ class StringFilter extends Filter
             $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         }
 
-        if (StringOperatorType::TYPE_NOT_CONTAINS === $data['type']) {
+        if (StringOperatorType::TYPE_NOT_CONTAINS === $type) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($queryBuilder, $or);
 
-        if (StringOperatorType::TYPE_EQUAL === $data['type']) {
+        if (StringOperatorType::TYPE_EQUAL === $type) {
             $queryBuilder->setParameter(
                 $parameterName,
                 $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
             );
         } else {
-            switch ($data['type']) {
+            switch ($type) {
                 case StringOperatorType::TYPE_STARTS_WITH:
                     $format = '%s%%';
                     break;
@@ -79,6 +74,13 @@ class StringFilter extends Filter
                     break;
                 default:
                     $format = $this->getOption('format');
+
+                    if ('%%%s%%' !== $format) {
+                        @trigger_error(
+                            'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+                            E_USER_DEPRECATED
+                        );
+                    }
             }
 
             $queryBuilder->setParameter(
@@ -94,6 +96,7 @@ class StringFilter extends Filter
     public function getDefaultOptions()
     {
         return [
+            // NEXT_MAJOR: Remove the format option.
             'format' => '%%%s%%',
             'case_sensitive' => true,
         ];
@@ -108,13 +111,8 @@ class StringFilter extends Filter
         ]];
     }
 
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
+    private function getOperator(int $type): string
     {
-        return self::CHOICES[$type] ?? false;
+        return self::CHOICES[$type] ?? self::CHOICES[StringOperatorType::TYPE_CONTAINS];
     }
 }

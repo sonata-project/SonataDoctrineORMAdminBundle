@@ -44,13 +44,14 @@ class ListBuilderTest extends TestCase
         $this->admin = $this->prophesize(AdminInterface::class);
         $this->admin->getClass()->willReturn('Foo');
         $this->admin->getModelManager()->willReturn($this->modelManager);
-        $this->admin->addListFieldDescription(Argument::cetera())->willReturn();
 
         $this->listBuilder = new ListBuilder($this->typeGuesser->reveal());
     }
 
     public function testAddListActionField(): void
     {
+        $this->admin->addListFieldDescription(Argument::cetera())->shouldBeCalled();
+
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('foo');
         $list = $this->listBuilder->getBaseList();
@@ -66,6 +67,8 @@ class ListBuilderTest extends TestCase
 
     public function testCorrectFixedActionsFieldType(): void
     {
+        $this->admin->addListFieldDescription(Argument::cetera())->shouldBeCalled();
+
         $this->typeGuesser->guessType(Argument::cetera())
             ->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 

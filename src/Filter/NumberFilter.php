@@ -33,13 +33,8 @@ class NumberFilter extends Filter
             return;
         }
 
-        $type = $data['type'] ?? false;
-
-        $operator = $this->getOperator($type);
-
-        if (!$operator) {
-            $operator = '=';
-        }
+        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
+        $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
@@ -61,13 +56,8 @@ class NumberFilter extends Filter
         ]];
     }
 
-    /**
-     * @param string $type
-     *
-     * @return bool
-     */
-    private function getOperator($type)
+    private function getOperator(int $type): string
     {
-        return self::CHOICES[$type] ?? false;
+        return self::CHOICES[$type] ?? self::CHOICES[NumberOperatorType::TYPE_EQUAL];
     }
 }

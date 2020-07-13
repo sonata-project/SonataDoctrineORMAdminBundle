@@ -125,12 +125,8 @@ class ModelFilter extends Filter
     /**
      * Retrieve the parent alias for given alias.
      * Root alias for direct association or entity joined alias for association depth >= 2.
-     *
-     * @param string $alias
-     *
-     * @return string
      */
-    private function getParentAlias(ProxyQueryInterface $queryBuilder, $alias)
+    private function getParentAlias(ProxyQueryInterface $queryBuilder, string $alias): string
     {
         $parentAlias = $rootAlias = current($queryBuilder->getRootAliases());
         $joins = $queryBuilder->getDQLPart('join');

@@ -103,12 +103,7 @@ class ShowBuilder implements ShowBuilderInterface
         }
     }
 
-    /**
-     * @param string $type
-     *
-     * @return string|null
-     */
-    private function getTemplate($type)
+    private function getTemplate(string $type): ?string
     {
         if (!isset($this->templates[$type])) {
             // NEXT_MAJOR: Remove the check for deprecated type and always return null.

@@ -180,6 +180,8 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
+     * NEXT_MAJOR: Change the visibility for private.
+     *
      * Resolves DateOperatorType:: constants to SQL operators.
      *
      * @param int $type
@@ -190,6 +192,6 @@ abstract class AbstractDateFilter extends Filter
     {
         $type = (int) $type;
 
-        return self::CHOICES[$type] ?? '=';
+        return self::CHOICES[$type] ?? self::CHOICES[DateOperatorType::TYPE_EQUAL];
     }
 }
