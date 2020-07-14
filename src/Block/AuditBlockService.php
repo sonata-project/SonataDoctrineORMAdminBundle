@@ -43,7 +43,7 @@ class AuditBlockService extends AbstractBlockService
     {
         if ($templatingOrAuditReader instanceof EngineInterface) {
             @trigger_error(sprintf(
-                'Passing %s as argument 2 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing %s as argument 2 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21'
                 .' and will throw a \TypeError in version 4.0. You must pass an instance of %s instead.',
                 EngineInterface::class,
                 __METHOD__,

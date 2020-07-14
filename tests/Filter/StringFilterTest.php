@@ -200,7 +200,7 @@ class StringFilterTest extends TestCase
      *
      * @group legacy
      *
-     * @expectedDeprecation The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     * @expectedDeprecation The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.
      */
     public function testFormatOption(): void
     {
