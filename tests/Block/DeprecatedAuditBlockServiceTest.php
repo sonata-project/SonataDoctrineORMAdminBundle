@@ -46,7 +46,7 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
     }
 
     /**
-     * @expectedDeprecation Passing Symfony\Bundle\FrameworkBundle\Templating\EngineInterface as argument 2 to Sonata\DoctrineORMAdminBundle\Block\AuditBlockService::__construct() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will throw a \TypeError in version 4.0. You must pass an instance of SimpleThings\EntityAudit\AuditReader instead.
+     * @expectedDeprecation Passing Symfony\Bundle\FrameworkBundle\Templating\EngineInterface as argument 2 to Sonata\DoctrineORMAdminBundle\Block\AuditBlockService::__construct() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will throw a \TypeError in version 4.0. You must pass an instance of SimpleThings\EntityAudit\AuditReader instead.
      */
     public function testExecute(): void
     {
@@ -75,7 +75,7 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
     }
 
     /**
-     * @expectedDeprecation Passing Symfony\Bundle\FrameworkBundle\Templating\EngineInterface as argument 2 to Sonata\DoctrineORMAdminBundle\Block\AuditBlockService::__construct() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will throw a \TypeError in version 4.0. You must pass an instance of SimpleThings\EntityAudit\AuditReader instead.
+     * @expectedDeprecation Passing Symfony\Bundle\FrameworkBundle\Templating\EngineInterface as argument 2 to Sonata\DoctrineORMAdminBundle\Block\AuditBlockService::__construct() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will throw a \TypeError in version 4.0. You must pass an instance of SimpleThings\EntityAudit\AuditReader instead.
      */
     public function testDefaultSettings(): void
     {
