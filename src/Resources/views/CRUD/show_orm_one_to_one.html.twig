@@ -11,7 +11,7 @@ file that was distributed with this source code.
 
 {% extends '@SonataAdmin/CRUD/base_show_field.html.twig' %}
 
-{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig' %}
+{% deprecated 'The "show_orm_one_to_one.html.twig" template is deprecated, use "@SonataAdmin/CRUD/Association/show_one_to_one.html.twig" instead.' %}
 
 {% block field %}
     {% set route_name = field_description.options.route.name %}

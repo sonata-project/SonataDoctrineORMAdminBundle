@@ -40,7 +40,7 @@
         "symfony/http-kernel": "^4.4",
         "symfony/options-resolver": "^4.4",
         "symfony/security-acl": "^3.0",
-        "twig/twig": "^1.41 || ^2.10"
+        "twig/twig": "^2.10"
     },
     "conflict": {
         "simplethings/entity-audit-bundle": ">=2.0",

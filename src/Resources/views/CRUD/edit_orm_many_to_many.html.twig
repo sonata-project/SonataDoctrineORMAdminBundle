@@ -9,7 +9,7 @@ file that was distributed with this source code.
 
 #}
 
-{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/edit_many_to_many.html.twig' %}
+{% deprecated 'The "edit_orm_many_to_many.html.twig" template is deprecated, use "@SonataAdmin/CRUD/Association/edit_many_to_many.html.twig" instead.' %}
 
 {% if sonata_admin.field_description.hasassociationadmin %}
     <div id="field_container_{{ id }}" class="field-container">
