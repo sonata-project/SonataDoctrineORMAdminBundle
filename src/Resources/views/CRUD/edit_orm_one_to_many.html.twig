@@ -9,7 +9,7 @@ file that was distributed with this source code.
 
 #}
 
-{% sonata_template_deprecate '@SonataAdmin/CRUD/Association/edit_one_to_many.html.twig' %}
+{% deprecated 'The "edit_orm_one_to_many.html.twig" template is deprecated, use "@SonataAdmin/CRUD/Association/edit_one_to_many.html.twig" instead.' %}
 
 {% if not sonata_admin.field_description.hasassociationadmin %}
     {% for element in value %}
