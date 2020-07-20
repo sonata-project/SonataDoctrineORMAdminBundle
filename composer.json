@@ -53,7 +53,7 @@
     },
     "require-dev": {
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
-        "sonata-project/block-bundle": "^3.17",
+        "sonata-project/block-bundle": "^3.17 || ^4.0",
         "symfony/phpunit-bridge": "^5.0"
     },
     "suggest": {
