@@ -24,6 +24,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Twig\Environment;
 
 /**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class AuditBlockService extends AbstractBlockService
@@ -92,7 +94,7 @@ class AuditBlockService extends AbstractBlockService
         }
     }
 
-    public function execute(BlockContextInterface $blockContext, ?Response $response = null)
+    public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $revisions = [];
 
@@ -119,7 +121,7 @@ class AuditBlockService extends AbstractBlockService
         return 'Audit List';
     }
 
-    public function configureSettings(OptionsResolver $resolver)
+    public function configureSettings(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
             'limit' => 10,
