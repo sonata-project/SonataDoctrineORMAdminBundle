@@ -39,6 +39,7 @@
         "symfony/http-foundation": "^4.4",
         "symfony/http-kernel": "^4.4",
         "symfony/options-resolver": "^4.4",
+        "symfony/property-access": "^4.4",
         "symfony/security-acl": "^3.0",
         "twig/twig": "^2.10"
     },
