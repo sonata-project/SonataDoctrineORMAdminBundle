@@ -19,12 +19,12 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -616,15 +616,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $metadata = $this->getMetadata($class);
 
         foreach ($array as $name => $value) {
-            // property or association ?
-            if (\array_key_exists($name, $metadata->fieldMappings)) {
-                $property = $metadata->fieldMappings[$name]['fieldName'];
-            } elseif (\array_key_exists($name, $metadata->associationMappings)) {
-                $property = $metadata->associationMappings[$name]['fieldName'];
-            } else {
-                $property = $name;
-            }
-
+            $property = $this->getFieldName($metadata, $name);
             $this->propertyAccessor->setValue($instance, $property, $value);
         }
 
@@ -671,6 +663,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         ), E_USER_DEPRECATED);
 
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+    }
+
+    private function getFieldName(ClassMetadata $metadata, string $name): string
+    {
+        if (\array_key_exists($name, $metadata->fieldMappings)) {
+            return $metadata->fieldMappings[$name]['fieldName'];
+        }
+
+        if (\array_key_exists($name, $metadata->associationMappings)) {
+            return $metadata->associationMappings[$name]['fieldName'];
+        }
+
+        return $name;
     }
 
     private function isFieldAlreadySorted(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid): bool
