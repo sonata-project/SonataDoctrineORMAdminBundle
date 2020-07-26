@@ -7,6 +7,7 @@
         </service>
         <service id="sonata.admin.manager.orm" class="Sonata\DoctrineORMAdminBundle\Model\ModelManager" public="true">
             <argument type="service" id="doctrine"/>
+            <argument type="service" id="property_accessor"/>
             <tag name="sonata.admin.manager"/>
         </service>
         <!-- FormBuilder -->

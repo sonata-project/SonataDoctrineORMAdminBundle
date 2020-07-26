@@ -77,7 +77,7 @@ class StringFilter extends Filter
 
                     if ('%%%s%%' !== $format) {
                         @trigger_error(
-                            'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+                            'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.',
                             E_USER_DEPRECATED
                         );
                     }

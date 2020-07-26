@@ -59,10 +59,20 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidBinaryEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
-use Symfony\Bridge\Doctrine\RegistryInterface;
+use Symfony\Component\PropertyAccess\PropertyAccess;
 
 class ModelManagerTest extends TestCase
 {
+    /**
+     * @var ManagerRegistry|MockObject
+     */
+    private $registry;
+
+    /**
+     * @var ModelManager
+     */
+    private $modelManager;
+
     public static function setUpBeforeClass(): void
     {
         if (!Type::hasType(UuidType::NAME)) {
@@ -74,6 +84,12 @@ class ModelManagerTest extends TestCase
         if (!Type::hasType(ProductIdType::NAME)) {
             Type::addType(ProductIdType::NAME, ProductIdType::class);
         }
+    }
+
+    protected function setup(): void
+    {
+        $this->registry = $this->createMock(ManagerRegistry::class);
+        $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
     }
 
     public function valueObjectDataProvider(): array
@@ -107,37 +123,28 @@ class ModelManagerTest extends TestCase
         $entityManager->method('getMetadataFactory')->willReturn($classMetadataFactory);
         $entityManager->method('getConnection')->willReturn($connection);
 
-        $registry = $this->createMock(RegistryInterface::class);
-        $registry->method('getManagerForClass')->willReturn($entityManager);
-
-        $manager = new ModelManager($registry);
+        $this->registry->method('getManagerForClass')->willReturn($entityManager);
 
         $this->assertSame(
             ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
-            $manager->getIdentifierValues($entity)
+            $this->modelManager->getIdentifierValues($entity)
         );
     }
 
     public function testInstantiateWithDeprecatedRegistryInterface(): void
     {
-        $registry = $this->createMock(RegistryInterface::class);
-        $manager = new ModelManager($registry);
         $em = $this->createMock(EntityManagerInterface::class);
 
-        $registry->expects($this->once())
+        $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with('x')
             ->willReturn($em)
         ;
-        $this->assertSame($em, $manager->getEntityManager('x'));
+        $this->assertSame($em, $this->modelManager->getEntityManager('x'));
     }
 
     public function testSortParameters(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $manager = new ModelManager($registry);
-
         $datagrid1 = $this->createMock(Datagrid::class);
         $datagrid2 = $this->createMock(Datagrid::class);
 
@@ -167,22 +174,22 @@ class ModelManagerTest extends TestCase
                 '_sort_order' => 'ASC',
             ]);
 
-        $parameters = $manager->getSortParameters($field1, $datagrid1);
+        $parameters = $this->modelManager->getSortParameters($field1, $datagrid1);
 
         $this->assertSame('DESC', $parameters['filter']['_sort_order']);
         $this->assertSame('field1', $parameters['filter']['_sort_by']);
 
-        $parameters = $manager->getSortParameters($field2, $datagrid1);
+        $parameters = $this->modelManager->getSortParameters($field2, $datagrid1);
 
         $this->assertSame('ASC', $parameters['filter']['_sort_order']);
         $this->assertSame('field2', $parameters['filter']['_sort_by']);
 
-        $parameters = $manager->getSortParameters($field3, $datagrid1);
+        $parameters = $this->modelManager->getSortParameters($field3, $datagrid1);
 
         $this->assertSame('ASC', $parameters['filter']['_sort_order']);
         $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
 
-        $parameters = $manager->getSortParameters($field3, $datagrid2);
+        $parameters = $this->modelManager->getSortParameters($field3, $datagrid2);
 
         $this->assertSame('DESC', $parameters['filter']['_sort_order']);
         $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
@@ -432,6 +439,57 @@ class ModelManagerTest extends TestCase
         return $metadata;
     }
 
+    public function testGetIdentifierValuesForIdInObjectTypeBinaryToStringSupport(): void
+    {
+        $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
+
+        $entity = new UuidEntity($uuid);
+
+        $meta = $this->createMock(ClassMetadata::class);
+        $meta->expects($this->any())
+            ->method('getIdentifierValues')
+            ->willReturn([$entity->getId()]);
+        $meta->expects($this->any())
+            ->method('getTypeOfField')
+            ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
+
+        $mf = $this->createMock(ClassMetadataFactory::class);
+        $mf->expects($this->any())
+            ->method('getMetadataFor')
+            ->willReturn($meta);
+
+        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform->expects($this->any())
+            ->method('hasDoctrineTypeMappingFor')
+            ->with(UuidBinaryType::NAME)
+            ->willReturn(true);
+        $platform->expects($this->any())
+            ->method('getDoctrineTypeMapping')
+            ->with(UuidBinaryType::NAME)
+            ->willReturn('binary');
+
+        $conn = $this->createMock(Connection::class);
+        $conn->expects($this->any())
+            ->method('getDatabasePlatform')
+            ->willReturn($platform);
+
+        $em = $this->createMock(EntityManager::class);
+        $em->expects($this->any())
+            ->method('getMetadataFactory')
+            ->willReturn($mf);
+        $em->expects($this->any())
+            ->method('getConnection')
+            ->willReturn($conn);
+
+        $this->registry->expects($this->any())
+            ->method('getManagerForClass')
+            ->willReturn($em);
+
+        $result = $this->modelManager->getIdentifierValues($entity);
+
+        $this->assertSame($entity->getId()->toString(), $result[0]);
+    }
+
     public function testNonIntegerIdentifierType(): void
     {
         $uuid = new NonIntegerIdentifierTestClass('efbcfc4b-8c43-4d42-aa4c-d707e55151ac');
@@ -471,13 +529,11 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
+        $this->registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
-        $manager = new ModelManager($registry);
-        $result = $manager->getIdentifierValues($entity);
+        $result = $this->modelManager->getIdentifierValues($entity);
 
         $this->assertSame($entity->getId()->toString(), $result[0]);
     }
@@ -521,13 +577,11 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
+        $this->registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
-        $manager = new ModelManager($registry);
-        $result = $manager->getIdentifierValues($entity);
+        $result = $this->modelManager->getIdentifierValues($entity);
 
         $this->assertSame((string) $entity->getId()->getId(), $result[0]);
     }
@@ -566,13 +620,11 @@ class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($conn);
 
-        $registry = $this->createMock(ManagerRegistry::class);
-        $registry->expects($this->any())
+        $this->registry->expects($this->any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
-        $manager = new ModelManager($registry);
-        $result = $manager->getIdentifierValues($entity);
+        $result = $this->modelManager->getIdentifierValues($entity);
 
         $this->assertSame(42, $result[0]);
     }
@@ -646,9 +698,7 @@ class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
-        $registry = $this->getMockBuilder(RegistryInterface::class)->getMock();
-        $manager = new ModelManager($registry);
-        $manager->getDataSourceIterator($datagrid, []);
+        $this->modelManager->getDataSourceIterator($datagrid, []);
 
         if ($isAddOrderBy) {
             $this->assertArrayHasKey($key = 'doctrine.customTreeWalkers', $hints = $query->getHints());
@@ -661,26 +711,25 @@ class ModelManagerTest extends TestCase
         $class = SimpleEntity::class;
 
         $metadataFactory = $this->createMock(ClassMetadataFactory::class);
-        $modelManager = $this->createMock(ObjectManager::class);
+        $objectManager = $this->createMock(ObjectManager::class);
         $registry = $this->createMock(ManagerRegistry::class);
 
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
 
-        $modelManager->expects($this->once())
+        $objectManager->expects($this->once())
             ->method('getMetadataFactory')
             ->willReturn($metadataFactory);
         $metadataFactory->expects($this->once())
             ->method('getMetadataFor')
             ->with($class)
             ->willReturn($classMetadata);
-        $registry->expects($this->once())
+        $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with($class)
-            ->willReturn($modelManager);
+            ->willReturn($objectManager);
 
-        $manager = new ModelManager($registry);
-        $this->assertInstanceOf($class, $object = $manager->modelReverseTransform(
+        $this->assertInstanceOf($class, $object = $this->modelManager->modelReverseTransform(
             $class,
             [
                 'schmeckles' => 42,
@@ -693,34 +742,28 @@ class ModelManagerTest extends TestCase
 
     public function testCollections(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-        $model = new ModelManager($registry);
-
-        $collection = $model->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
+        $collection = $this->modelManager->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
         $this->assertInstanceOf(ArrayCollection::class, $collection);
 
         $item1 = 'item1';
         $item2 = 'item2';
-        $model->collectionAddElement($collection, $item1);
-        $model->collectionAddElement($collection, $item2);
+        $this->modelManager->collectionAddElement($collection, $item1);
+        $this->modelManager->collectionAddElement($collection, $item2);
 
-        $this->assertTrue($model->collectionHasElement($collection, $item1));
+        $this->assertTrue($this->modelManager->collectionHasElement($collection, $item1));
 
-        $model->collectionRemoveElement($collection, $item1);
+        $this->modelManager->collectionRemoveElement($collection, $item1);
 
-        $this->assertFalse($model->collectionHasElement($collection, $item1));
+        $this->assertFalse($this->modelManager->collectionHasElement($collection, $item1));
 
-        $model->collectionClear($collection);
+        $this->modelManager->collectionClear($collection);
 
         $this->assertTrue($collection->isEmpty());
     }
 
     public function testModelTransform(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-        $model = new ModelManager($registry);
-
-        $result = $model->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
+        $result = $this->modelManager->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
 
         $this->assertSame('doWeNeedThisMethod', $result);
     }
@@ -729,7 +772,6 @@ class ModelManagerTest extends TestCase
     {
         $datagrid = $this->createMock(DatagridInterface::class);
         $field = $this->createMock(FieldDescriptionInterface::class);
-        $registry = $this->createMock(ManagerRegistry::class);
 
         $datagrid->expects($this->once())
             ->method('getValues')
@@ -739,9 +781,7 @@ class ModelManagerTest extends TestCase
             ->method('getName')
             ->willReturn($name = 'test');
 
-        $model = new ModelManager($registry);
-
-        $result = $model->getPaginationParameters($datagrid, $page = 5);
+        $result = $this->modelManager->getPaginationParameters($datagrid, $page = 5);
 
         $this->assertSame($page, $result['filter']['_page']);
         $this->assertSame($name, $result['filter']['_sort_by']);
@@ -749,44 +789,28 @@ class ModelManagerTest extends TestCase
 
     public function testGetModelInstanceException(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
         $this->expectException(\RuntimeException::class);
 
-        $model->getModelInstance(AbstractEntity::class);
+        $this->modelManager->getModelInstance(AbstractEntity::class);
     }
 
     public function testGetModelInstanceForProtectedEntity(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
-        $this->assertInstanceOf(ProtectedEntity::class, $model->getModelInstance(ProtectedEntity::class));
+        $this->assertInstanceOf(ProtectedEntity::class, $this->modelManager->getModelInstance(ProtectedEntity::class));
     }
 
     public function testGetEntityManagerException(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
         $this->expectException(\RuntimeException::class);
 
-        $model->getEntityManager(VersionedEntity::class);
+        $this->modelManager->getEntityManager(VersionedEntity::class);
     }
 
     public function testGetNewFieldDescriptionInstanceException(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
         $this->expectException(\RuntimeException::class);
 
-        $model->getNewFieldDescriptionInstance(VersionedEntity::class, [], []);
+        $this->modelManager->getNewFieldDescriptionInstance(VersionedEntity::class, [], []);
     }
 
     /**
@@ -794,11 +818,9 @@ class ModelManagerTest extends TestCase
      */
     public function testCreate($exception): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
         $entityManger = $this->createMock(EntityManager::class);
 
-        $registry->expects($this->once())
+        $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
@@ -809,11 +831,9 @@ class ModelManagerTest extends TestCase
             ->method('flush')
             ->willThrowException($exception);
 
-        $model = new ModelManager($registry);
-
         $this->expectException(ModelManagerException::class);
 
-        $model->create(new VersionedEntity());
+        $this->modelManager->create(new VersionedEntity());
     }
 
     public function createUpdateRemoveData(): array
@@ -833,11 +853,9 @@ class ModelManagerTest extends TestCase
      */
     public function testUpdate($exception): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
         $entityManger = $this->createMock(EntityManager::class);
 
-        $registry->expects($this->once())
+        $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
@@ -848,11 +866,9 @@ class ModelManagerTest extends TestCase
             ->method('flush')
             ->willThrowException($exception);
 
-        $model = new ModelManager($registry);
-
         $this->expectException(ModelManagerException::class);
 
-        $model->update(new VersionedEntity());
+        $this->modelManager->update(new VersionedEntity());
     }
 
     /**
@@ -860,11 +876,9 @@ class ModelManagerTest extends TestCase
      */
     public function testRemove($exception): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
         $entityManger = $this->createMock(EntityManager::class);
 
-        $registry->expects($this->once())
+        $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
@@ -875,11 +889,9 @@ class ModelManagerTest extends TestCase
             ->method('flush')
             ->willThrowException($exception);
 
-        $model = new ModelManager($registry);
-
         $this->expectException(ModelManagerException::class);
 
-        $model->delete(new VersionedEntity());
+        $this->modelManager->delete(new VersionedEntity());
     }
 
     /**
@@ -891,11 +903,7 @@ class ModelManagerTest extends TestCase
      */
     public function testFindBadId(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
-        $this->assertNull($model->find('notImportant', null));
+        $this->assertNull($this->modelManager->find('notImportant', null));
     }
 
     /**
@@ -905,13 +913,9 @@ class ModelManagerTest extends TestCase
      */
     public function testNormalizedIdentifierException($entity): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
         $this->expectException(\RuntimeException::class);
 
-        $model->getNormalizedIdentifier($entity);
+        $this->modelManager->getNormalizedIdentifier($entity);
     }
 
     public function getWrongEntities(): iterable
@@ -934,11 +938,7 @@ class ModelManagerTest extends TestCase
      */
     public function testGetUrlsafeIdentifierNull(): void
     {
-        $registry = $this->createMock(ManagerRegistry::class);
-
-        $model = new ModelManager($registry);
-
-        $this->assertNull($model->getNormalizedIdentifier(null));
+        $this->assertNull($this->modelManager->getNormalizedIdentifier(null));
     }
 
     private function getMetadata($class, $isVersioned)

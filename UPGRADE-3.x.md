@@ -1,12 +1,22 @@
 UPGRADE 3.x
 ===========
 
-UPGRADE FROM 3.19 to 3.20
+UPGRADE FROM 3.x to 3.x
+=========================
+
+### Sonata\DoctrineORMAdminBundle\Model\ModelManager
+
+Deprecated `camelize()` method with no replacement.
+
+UPGRADE FROM 3.20 to 3.21
 =========================
 
 ### Sonata\DoctrineORMAdminBundle\Filter\StringFilter
 
 Deprecated `format` option with no replacement.
+
+UPGRADE FROM 3.19 to 3.20
+=========================
 
 ### Sonata\DoctrineORMAdminBundle\Admin\FieldDescription
 

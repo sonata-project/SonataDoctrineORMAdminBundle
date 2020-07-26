@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.21.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.20.0...3.21.0) - 2020-07-14
+### Added
+- [[#979](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/979)]  Add new filter for empty fields ([@core23](https://github.com/core23))
+
+### Deprecated
+- [[#1061](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1061)] `format` option of the `StringFilter`. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1067](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1067)] Passing a string as argument 1 when instantiating Sonata\DoctrineORMAdminBundle\Block\AuditBlockService ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.20.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.19.0...3.20.0) - 2020-06-30
 ### Added
 - [[#1057](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1057)]

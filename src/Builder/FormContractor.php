@@ -196,8 +196,12 @@ class FormContractor implements FormContractorInterface
     /**
      * @param string[] $classes
      */
-    private function isAnyInstanceOf(string $type, array $classes): bool
+    private function isAnyInstanceOf(?string $type, array $classes): bool
     {
+        if (null === $type) {
+            return false;
+        }
+
         foreach ($classes as $class) {
             if (is_a($type, $class, true)) {
                 return true;
