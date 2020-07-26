@@ -19,12 +19,12 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -36,24 +36,48 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
-use Symfony\Component\Form\Exception\PropertyAccessDeniedException;
+use Symfony\Component\PropertyAccess\PropertyAccess;
+use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
+
     /**
      * @var ManagerRegistry
      */
     protected $registry;
 
     /**
+     * @var PropertyAccessorInterface
+     */
+    protected $propertyAccessor;
+
+    /**
      * @var EntityManager[]
      */
     protected $cache = [];
 
-    public function __construct(ManagerRegistry $registry)
+    /**
+     * NEXT_MAJOR: Make $propertyAccessor mandatory.
+     */
+    public function __construct(ManagerRegistry $registry, ?PropertyAccessorInterface $propertyAccessor = null)
     {
         $this->registry = $registry;
+
+        // NEXT_MAJOR: Remove this block.
+        if (null === $propertyAccessor) {
+            @trigger_error(sprintf(
+                'Constructing "%s" without passing an instance of "%s" as second argument is deprecated since'
+                .' sonata-project/doctrine-orm-admin-bundle 3.x and will be mandatory in 4.0',
+                __CLASS__,
+                PropertyAccessorInterface::class
+            ), E_USER_DEPRECATED);
+
+            $propertyAccessor = PropertyAccess::createPropertyAccessor();
+        }
+
+        $this->propertyAccessor = $propertyAccessor;
     }
 
     /**
@@ -591,48 +615,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $instance = $this->getModelInstance($class);
         $metadata = $this->getMetadata($class);
 
-        $reflClass = $metadata->reflClass;
         foreach ($array as $name => $value) {
-            $reflection_property = false;
-            // property or association ?
-            if (\array_key_exists($name, $metadata->fieldMappings)) {
-                $property = $metadata->fieldMappings[$name]['fieldName'];
-                $reflection_property = $metadata->reflFields[$name];
-            } elseif (\array_key_exists($name, $metadata->associationMappings)) {
-                $property = $metadata->associationMappings[$name]['fieldName'];
-            } else {
-                $property = $name;
-            }
-
-            $setter = 'set'.$this->camelize($name);
-
-            if ($reflClass->hasMethod($setter)) {
-                if (!$reflClass->getMethod($setter)->isPublic()) {
-                    throw new PropertyAccessDeniedException(sprintf(
-                        'Method "%s()" is not public in class "%s"',
-                        $setter,
-                        $reflClass->getName()
-                    ));
-                }
-
-                $instance->$setter($value);
-            } elseif ($reflClass->hasMethod('__set')) {
-                // needed to support magic method __set
-                $instance->$property = $value;
-            } elseif ($reflClass->hasProperty($property)) {
-                if (!$reflClass->getProperty($property)->isPublic()) {
-                    throw new PropertyAccessDeniedException(sprintf(
-                        'Property "%s" is not public in class "%s". Maybe you should create the method "set%s()"?',
-                        $property,
-                        $reflClass->getName(),
-                        ucfirst($property)
-                    ));
-                }
-
-                $instance->$property = $value;
-            } elseif ($reflection_property) {
-                $reflection_property->setValue($instance, $value);
-            }
+            $property = $this->getFieldName($metadata, $name);
+            $this->propertyAccessor->setValue($instance, $property, $value);
         }
 
         return $instance;
@@ -664,7 +649,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * method taken from Symfony\Component\PropertyAccess\PropertyAccessor.
+     * NEXT_MAJOR: Remove this method.
      *
      * @param string $property
      *
@@ -672,7 +657,25 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     protected function camelize($property)
     {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+            __METHOD__
+        ), E_USER_DEPRECATED);
+
         return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+    }
+
+    private function getFieldName(ClassMetadata $metadata, string $name): string
+    {
+        if (\array_key_exists($name, $metadata->fieldMappings)) {
+            return $metadata->fieldMappings[$name]['fieldName'];
+        }
+
+        if (\array_key_exists($name, $metadata->associationMappings)) {
+            return $metadata->associationMappings[$name]['fieldName'];
+        }
+
+        return $name;
     }
 
     private function isFieldAlreadySorted(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid): bool
