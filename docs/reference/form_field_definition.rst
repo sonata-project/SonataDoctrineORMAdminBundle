@@ -24,14 +24,10 @@ Example
             $formMapper
                 ->add('author', ModelListType::class, [])
                 ->add('enabled')
-                ->add('title')
+                // you can define help messages using Symfony help option
+                ->add('title', null, ['help' => 'help_post_title'])
                 ->add('abstract', null, ['required' => false])
-                ->add('content')
-
-                // you can define help messages like this
-                ->setHelps([
-                   'title' => $this->trans('help_post_title')
-                ]);
+                ->add('content');
         }
 
         public function validate(ErrorElement $errorElement, $object)
