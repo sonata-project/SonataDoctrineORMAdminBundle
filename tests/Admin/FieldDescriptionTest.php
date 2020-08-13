@@ -146,14 +146,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame($adminMock, $field->getParent());
     }
 
-    public function testGetHelp(): void
-    {
-        $field = new FieldDescription();
-        $field->setHelp('help message');
-
-        $this->assertSame($field->getHelp(), 'help message');
-    }
-
     public function testGetAdmin(): void
     {
         $adminMock = $this->createMock(AdminInterface::class);
