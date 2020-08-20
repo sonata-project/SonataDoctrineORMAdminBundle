@@ -38,8 +38,8 @@
         "symfony/framework-bundle": "^4.4",
         "symfony/http-foundation": "^4.4",
         "symfony/http-kernel": "^4.4",
-        "symfony/options-resolver": "^4.4",
-        "symfony/property-access": "^4.4",
+        "symfony/options-resolver": "^4.4 || ^5.1",
+        "symfony/property-access": "^4.4 || ^5.1",
         "symfony/security-acl": "^3.0",
         "twig/twig": "^2.10"
     },
@@ -54,7 +54,7 @@
     "require-dev": {
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
-        "symfony/phpunit-bridge": "^5.0"
+        "symfony/phpunit-bridge": "^5.1.1"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
