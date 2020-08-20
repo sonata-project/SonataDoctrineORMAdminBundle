@@ -4,6 +4,13 @@ UPGRADE 3.x
 UPGRADE FROM 3.x to 3.x
 =========================
 
+### Compatibility with SonataBlockBundle 4.0
+
+We added compatibility with SonataBlockBundle 4.0, make sure you are explicitly declaring your dependency
+with `sonata-project/block-bundle` in your composer.json in order to avoid unwanted upgrades.
+
+There is a minimal BC Break on `AuditBlockService`. If you are extending this class (keep in mind that it will become final on 4.0) you should add return type hints to `execute()` and `configureSettings()`.
+
 ### Sonata\DoctrineORMAdminBundle\Model\ModelManager
 
 Deprecated `camelize()` method with no replacement.
