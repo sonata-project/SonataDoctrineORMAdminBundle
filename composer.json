@@ -41,7 +41,7 @@
         "symfony/options-resolver": "^4.4",
         "symfony/property-access": "^4.4",
         "symfony/security-acl": "^3.0",
-        "twig/twig": "^2.10"
+        "twig/twig": "^2.10 || ^3.0"
     },
     "conflict": {
         "simplethings/entity-audit-bundle": ">=2.0",
