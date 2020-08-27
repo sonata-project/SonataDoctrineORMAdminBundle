@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Block;
 use PHPUnit\Framework\MockObject\MockObject;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
 use SimpleThings\EntityAudit\Revision;
-use Sonata\BlockBundle\Block\BlockContext;
+use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Model\Block;
 use Sonata\BlockBundle\Test\BlockServiceTestCase;
 use Sonata\DoctrineORMAdminBundle\Block\AuditBlockService;
@@ -52,7 +52,7 @@ class AuditBlockServiceTest extends BlockServiceTestCase
      */
     public function testExecute(): void
     {
-        $blockContext = $this->createMock(BlockContext::class);
+        $blockContext = $this->createMock(BlockContextInterface::class);
 
         $blockContext->expects($this->once())->method('getBlock')->willReturn($block = new Block());
         $blockContext->expects($this->once())->method('getSetting')->with('limit')->willReturn($limit = 10);

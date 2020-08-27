@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Block;
 use Prophecy\Argument;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
 use SimpleThings\EntityAudit\Revision;
-use Sonata\BlockBundle\Block\BlockContext;
+use Sonata\BlockBundle\Block\BlockContextInterface;
 use Sonata\BlockBundle\Model\Block;
 use Sonata\BlockBundle\Test\BlockServiceTestCase;
 use Sonata\DoctrineORMAdminBundle\Block\AuditBlockService;
@@ -35,6 +35,13 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
 
     protected function setUp(): void
     {
+        if (!property_exists($this, 'templating')) {
+            $this->markTestSkipped(sprintf(
+                '%s requires sonata-project/block-bundle < 3.18.4.',
+                __CLASS__
+            ));
+        }
+
         parent::setUp();
         $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
 
@@ -50,7 +57,7 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
      */
     public function testExecute(): void
     {
-        $blockContext = $this->prophesize(BlockContext::class);
+        $blockContext = $this->prophesize(BlockContextInterface::class);
 
         $blockContext->getBlock()->willReturn($block = new Block())->shouldBeCalledTimes(1);
         $blockContext->getSetting('limit')->willReturn($limit = 10)->shouldBeCalledTimes(1);
