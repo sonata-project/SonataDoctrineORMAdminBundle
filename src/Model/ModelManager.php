@@ -69,7 +69,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         if (null === $propertyAccessor) {
             @trigger_error(sprintf(
                 'Constructing "%s" without passing an instance of "%s" as second argument is deprecated since'
-                .' sonata-project/doctrine-orm-admin-bundle 3.x and will be mandatory in 4.0',
+                .' sonata-project/doctrine-orm-admin-bundle 3.22 and will be mandatory in 4.0.',
                 __CLASS__,
                 PropertyAccessorInterface::class
             ), E_USER_DEPRECATED);
@@ -315,12 +315,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.22 and will be removed in version 4.0
      */
     public function getParentFieldDescription($parentAssociationMapping, $class)
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.22 and will be removed in 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 
@@ -668,7 +668,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     protected function camelize($property)
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.22 and will be removed in version 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 

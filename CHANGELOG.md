@@ -2,6 +2,23 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.22.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.21.0...3.22.0) - 2020-08-29
+### Added
+- [[#1091](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1091)] Added support for symfony/options-resolver:^5.1 ([@phansys](https://github.com/phansys))
+- [[#1091](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1091)] Added support for symfony/property-access:^5.1 ([@phansys](https://github.com/phansys))
+- [[#1100](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1100)] Add support for Twig 3 ([@willemverspyck](https://github.com/willemverspyck))
+- [[#1023](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1023)] Add support for SonataBlockBundle 4.0 ([@wbloszyk](https://github.com/wbloszyk))
+
+### Changed
+- [[#1077](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1077)] Use `deprecated` tag instead of `sonata_template_deprecate` to not throw unwanted deprecation notices ([@franmomu](https://github.com/franmomu))
+
+### Deprecated
+- [[#1082](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1082)] Deprecate ModelManager::getParentFieldDescription with no replacement ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1078](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1078)] Deprecate `ModelManager::camelize` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Removed
+- [[#1077](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1077)] Support for Twig 1.x ([@franmomu](https://github.com/franmomu))
+
 ## [3.21.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.20.0...3.21.0) - 2020-07-14
 ### Added
 - [[#979](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/979)]  Add new filter for empty fields ([@core23](https://github.com/core23))
