@@ -31,7 +31,7 @@ class TimeFilter extends AbstractDateFilter
      */
     protected $time = true;
 
-    public function getFieldType()
+    public function getFieldType(): string
     {
         return $this->getOption('field_type', TimeType::class);
     }

@@ -36,7 +36,7 @@ class Pager extends BasePager
      */
     protected $queryBuilder = null;
 
-    public function computeNbResult()
+    public function computeNbResult(): int
     {
         $countQuery = clone $this->getQuery();
 
@@ -56,12 +56,12 @@ class Pager extends BasePager
         ));
     }
 
-    public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
+    public function getResults($hydrationMode = Query::HYDRATE_OBJECT): array
     {
         return $this->getQuery()->execute([], $hydrationMode);
     }
 
-    public function getQuery()
+    public function getQuery(): ProxyQueryInterface
     {
         return $this->query;
     }

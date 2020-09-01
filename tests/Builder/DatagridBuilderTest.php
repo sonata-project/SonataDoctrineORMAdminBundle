@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Prophecy\Argument;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
+use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
@@ -62,7 +62,7 @@ final class DatagridBuilderTest extends TestCase
             $this->typeGuesser->reveal()
         );
 
-        $this->admin = $this->prophesize(AbstractAdmin::class);
+        $this->admin = $this->prophesize(AdminInterface::class);
         $this->modelManager = $this->prophesize(ModelManager::class);
 
         $this->admin->getClass()->willReturn('FakeClass');
@@ -75,12 +75,12 @@ final class DatagridBuilderTest extends TestCase
     public function testGetBaseDatagrid($pagerType, $pager): void
     {
         $proxyQuery = $this->prophesize(ProxyQueryInterface::class);
-        $fieldDescription = $this->prophesize(FieldDescriptionCollection::class);
+        $fieldDescription = new FieldDescriptionCollection();
         $formBuilder = $this->prophesize(FormBuilderInterface::class);
 
         $this->admin->getPagerType()->willReturn($pagerType);
         $this->admin->createQuery()->willReturn($proxyQuery->reveal());
-        $this->admin->getList()->willReturn($fieldDescription->reveal());
+        $this->admin->getList()->willReturn($fieldDescription);
 
         $this->modelManager->getIdentifierFieldNames(Argument::any())->willReturn(['id']);
 

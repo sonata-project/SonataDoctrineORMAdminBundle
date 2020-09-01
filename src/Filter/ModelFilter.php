@@ -39,7 +39,7 @@ class ModelFilter extends Filter
         $this->handleMultiple($queryBuilder, $alias, $data);
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'mapping_type' => false,
@@ -51,7 +51,7 @@ class ModelFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
@@ -68,10 +68,8 @@ class ModelFilter extends Filter
      *
      * @param string $alias
      * @param mixed  $data
-     *
-     * @return mixed
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data): void
     {
         if (0 === \count($data['value'])) {
             return;
@@ -102,7 +100,7 @@ class ModelFilter extends Filter
         $queryBuilder->setParameter($parameterName, $data['value']);
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    protected function association(ProxyQueryInterface $queryBuilder, $data): array
     {
         $types = [
             ClassMetadata::ONE_TO_ONE,

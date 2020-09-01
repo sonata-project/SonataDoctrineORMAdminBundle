@@ -22,12 +22,8 @@ class FieldDescription extends BaseFieldDescription
         $this->parentAssociationMappings = [];
     }
 
-    public function setAssociationMapping($associationMapping): void
+    public function setAssociationMapping(array $associationMapping): void
     {
-        if (!\is_array($associationMapping)) {
-            throw new \RuntimeException('The association mapping must be an array');
-        }
-
         $this->associationMapping = $associationMapping;
 
         $this->type = $this->type ?: $associationMapping['type'];
@@ -40,7 +36,7 @@ class FieldDescription extends BaseFieldDescription
      *
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
      */
-    public function getTargetEntity()
+    public function getTargetEntity(): ?string
     {
         @trigger_error(sprintf(
             'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0.'
@@ -64,12 +60,8 @@ class FieldDescription extends BaseFieldDescription
         return null;
     }
 
-    public function setFieldMapping($fieldMapping): void
+    public function setFieldMapping(array $fieldMapping): void
     {
-        if (!\is_array($fieldMapping)) {
-            throw new \RuntimeException('The field mapping must be an array');
-        }
-
         $this->fieldMapping = $fieldMapping;
 
         $this->type = $this->type ?: $fieldMapping['type'];
@@ -88,7 +80,7 @@ class FieldDescription extends BaseFieldDescription
         $this->parentAssociationMappings = $parentAssociationMappings;
     }
 
-    public function isIdentifier()
+    public function isIdentifier(): bool
     {
         return isset($this->fieldMapping['id']) ? $this->fieldMapping['id'] : false;
     }

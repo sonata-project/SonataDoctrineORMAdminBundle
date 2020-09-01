@@ -13,12 +13,13 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
+use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -36,6 +37,7 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
+use Sonata\Exporter\Source\SourceIteratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
@@ -54,7 +56,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     protected $propertyAccessor;
 
     /**
-     * @var EntityManager[]
+     * @var EntityManagerInterface[]
      */
     protected $cache = [];
 
@@ -69,7 +71,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         if (null === $propertyAccessor) {
             @trigger_error(sprintf(
                 'Constructing "%s" without passing an instance of "%s" as second argument is deprecated since'
-                .' sonata-project/doctrine-orm-admin-bundle 3.x and will be mandatory in 4.0',
+                .' sonata-project/doctrine-orm-admin-bundle 3.22 and will be mandatory in 4.0.',
                 __CLASS__,
                 PropertyAccessorInterface::class
             ), E_USER_DEPRECATED);
@@ -80,12 +82,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $this->propertyAccessor = $propertyAccessor;
     }
 
-    /**
-     * @param string $class
-     *
-     * @return ClassMetadata
-     */
-    public function getMetadata($class)
+    public function getMetadata(string $class): ClassMetadata
     {
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
@@ -104,7 +101,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      *                array $parentAssociationMappings
      *                )
      */
-    public function getParentMetadataForProperty($baseClass, $propertyFullName)
+    public function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
         $nameElements = explode('.', $propertyFullName);
         $lastPropertyName = array_pop($nameElements);
@@ -140,7 +137,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
-    public function getNewFieldDescriptionInstance($class, $name, array $options = [])
+    public function getNewFieldDescriptionInstance(string $class, string $name, array $options = []): FieldDescriptionInterface
     {
         if (!\is_string($name)) {
             throw new \RuntimeException('The name argument must be a string');
@@ -154,7 +151,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $options['route']['parameters'] = [];
         }
 
-        list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
+        [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName($name);
@@ -172,7 +169,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $fieldDescription;
     }
 
-    public function create($object): void
+    public function create(object $object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -193,7 +190,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function update($object): void
+    public function update(object $object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -214,7 +211,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function delete($object): void
+    public function delete(object $object): void
     {
         try {
             $entityManager = $this->getEntityManager($object);
@@ -235,7 +232,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function getLockVersion($object)
+    public function getLockVersion(object $object)
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
@@ -246,7 +243,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $metadata->reflFields[$metadata->versionField]->getValue($object);
     }
 
-    public function lock($object, $expectedVersion): void
+    public function lock(object $object, ?int $expectedVersion): void
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
@@ -262,7 +259,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function find($class, $id)
+    public function find(string $class, $id): ?object
     {
         if (null === $id) {
             @trigger_error(sprintf(
@@ -278,22 +275,20 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
-    public function findBy($class, array $criteria = [])
+    public function findBy(string $class, array $criteria = []): array
     {
         return $this->getEntityManager($class)->getRepository($class)->findBy($criteria);
     }
 
-    public function findOneBy($class, array $criteria = [])
+    public function findOneBy(string $class, array $criteria = []): ?object
     {
         return $this->getEntityManager($class)->getRepository($class)->findOneBy($criteria);
     }
 
     /**
      * @param string|object $class
-     *
-     * @return EntityManager
      */
-    public function getEntityManager($class)
+    public function getEntityManager($class): EntityManagerInterface
     {
         if (\is_object($class)) {
             $class = \get_class($class);
@@ -312,39 +307,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->cache[$class];
     }
 
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0
-     */
-    public function getParentFieldDescription($parentAssociationMapping, $class)
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0',
-            __METHOD__
-        ), E_USER_DEPRECATED);
-
-        $fieldName = $parentAssociationMapping['fieldName'];
-
-        $metadata = $this->getMetadata($class);
-
-        $associatingMapping = $metadata->associationMappings[$parentAssociationMapping];
-
-        $fieldDescription = $this->getNewFieldDescriptionInstance($class, $fieldName);
-        $fieldDescription->setName($parentAssociationMapping);
-        $fieldDescription->setAssociationMapping($associatingMapping);
-
-        return $fieldDescription;
-    }
-
-    public function createQuery($class, $alias = 'o')
+    public function createQuery(string $class, $alias = 'o'): ProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
 
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
 
-    public function executeQuery($query)
+    public function executeQuery(object $query)
     {
         if ($query instanceof QueryBuilder) {
             return $query->getQuery()->execute();
@@ -353,17 +323,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $query->execute();
     }
 
-    /**
-     * NEXT_MAJOR: Remove this function.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.18. To be removed in 4.0.
-     */
-    public function getModelIdentifier($class)
-    {
-        return $this->getMetadata($class)->identifier;
-    }
-
-    public function getIdentifierValues($entity)
+    public function getIdentifierValues(object $entity): array
     {
         // Fix code has an impact on performance, so disable it ...
         //$entityManager = $this->getEntityManager($entity);
@@ -402,54 +362,25 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $identifiers;
     }
 
-    public function getIdentifierFieldNames($class)
+    public function getIdentifierFieldNames(string $class): array
     {
         return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
-    public function getNormalizedIdentifier($entity)
+    public function getNormalizedIdentifier(object $entity): string
     {
-        // NEXT_MAJOR: Remove the following 2 checks and declare "object" as type for argument 1.
-        if (null === $entity) {
-            @trigger_error(sprintf(
-                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
-                __METHOD__
-            ), E_USER_DEPRECATED);
-
-            return null;
-        }
-
-        if (!\is_object($entity)) {
-            throw new \RuntimeException('Invalid argument, object or null required');
-        }
-
         if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
-            // NEXT_MAJOR: Uncomment the following exception, remove the deprecation and the return statement inside this conditional block.
-            // throw new \InvalidArgumentException(sprintf(
-            //    'Can not get the normalized identifier for %s since it is in state %u.',
-            //    ClassUtils::getClass($entity),
-            //    $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity)
-            // ));
-
-            @trigger_error(sprintf(
-                'Passing an object which is in state %u (new) or %u (removed) as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20'
-                .'and will be not allowed in version 4.0.',
-                UnitOfWork::STATE_NEW,
-                UnitOfWork::STATE_REMOVED,
-                __METHOD__
-            ), E_USER_DEPRECATED);
-
-            return null;
+            throw new \InvalidArgumentException(sprintf(
+                'Can not get the normalized identifier for %s since it is in state %u.',
+                ClassUtils::getClass($entity),
+                $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity)
+            ));
         }
 
         $values = $this->getIdentifierValues($entity);
-
-        if (0 === \count($values)) {
-            return null;
-        }
 
         return implode(self::ID_SEPARATOR, $values);
     }
@@ -460,22 +391,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
-    public function getUrlSafeIdentifier($entity)
+    public function getUrlSafeIdentifier(object $entity): string
     {
-        // NEXT_MAJOR: Remove the following check and declare "object" as type for argument 1.
-        if (!\is_object($entity)) {
-            @trigger_error(sprintf(
-                'Passing other type than object for argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
-                __METHOD__
-            ), E_USER_DEPRECATED);
-
-            return null;
-        }
-
         return $this->getNormalizedIdentifier($entity);
     }
 
-    public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx): void
+    public function addIdentifiersToQuery(string $class, ProxyQueryInterface $queryProxy, array $idx): void
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $queryProxy->getQueryBuilder();
@@ -498,7 +419,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    public function batchDelete($class, ProxyQueryInterface $queryProxy): void
+    public function batchDelete(string $class, ProxyQueryInterface $queryProxy): void
     {
         $queryProxy->select('DISTINCT '.current($queryProxy->getRootAliases()));
 
@@ -522,8 +443,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
-    public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
-    {
+    public function getDataSourceIterator(
+        DatagridInterface $datagrid,
+        array $fields,
+        ?int $firstResult = null,
+        ?int $maxResult = null
+    ): SourceIteratorInterface {
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
@@ -546,14 +471,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new DoctrineORMQuerySourceIterator($query, $fields);
     }
 
-    public function getExportFields($class)
+    public function getExportFields(string $class): array
     {
         $metadata = $this->getEntityManager($class)->getClassMetadata($class);
 
         return $metadata->getFieldNames();
     }
 
-    public function getModelInstance($class)
+    public function getModelInstance(string $class): object
     {
         $r = new \ReflectionClass($class);
         if ($r->isAbstract()) {
@@ -600,7 +525,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return ['filter' => $values];
     }
 
-    public function getDefaultSortValues($class)
+    public function getDefaultSortValues(string $class): array
     {
         return [
             '_page' => 1,
@@ -613,12 +538,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return [10, 25, 50, 100, 250];
     }
 
-    public function modelTransform($class, $instance)
+    public function modelTransform(string $class, object $instance): object
     {
         return $instance;
     }
 
-    public function modelReverseTransform($class, array $array = [])
+    public function modelReverseTransform(string $class, array $array = []): object
     {
         $instance = $this->getModelInstance($class);
         $metadata = $this->getMetadata($class);
@@ -631,46 +556,29 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $instance;
     }
 
-    public function getModelCollectionInstance($class)
+    public function getModelCollectionInstance(string $class): Collection
     {
         return new \Doctrine\Common\Collections\ArrayCollection();
     }
 
-    public function collectionClear(&$collection)
+    public function collectionClear(Collection $collection): void
     {
-        return $collection->clear();
+        $collection->clear();
     }
 
-    public function collectionHasElement(&$collection, &$element)
+    public function collectionHasElement(Collection $collection, object $element): bool
     {
         return $collection->contains($element);
     }
 
-    public function collectionAddElement(&$collection, &$element)
+    public function collectionAddElement(Collection $collection, object $element): void
     {
-        return $collection->add($element);
+        $collection->add($element);
     }
 
-    public function collectionRemoveElement(&$collection, &$element)
+    public function collectionRemoveElement(Collection $collection, object $element): void
     {
-        return $collection->removeElement($element);
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @param string $property
-     *
-     * @return mixed
-     */
-    protected function camelize($property)
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
-            __METHOD__
-        ), E_USER_DEPRECATED);
-
-        return str_replace(' ', '', ucwords(str_replace('_', ' ', $property)));
+        $collection->removeElement($element);
     }
 
     private function getFieldName(ClassMetadata $metadata, string $name): string

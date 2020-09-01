@@ -29,11 +29,9 @@ use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -145,8 +143,8 @@ class ModelManagerTest extends TestCase
 
     public function testSortParameters(): void
     {
-        $datagrid1 = $this->createMock(Datagrid::class);
-        $datagrid2 = $this->createMock(Datagrid::class);
+        $datagrid1 = $this->createMock(DatagridInterface::class);
+        $datagrid2 = $this->createMock(DatagridInterface::class);
 
         $field1 = new FieldDescription();
         $field1->setName('field1');
@@ -711,8 +709,7 @@ class ModelManagerTest extends TestCase
         $class = SimpleEntity::class;
 
         $metadataFactory = $this->createMock(ClassMetadataFactory::class);
-        $objectManager = $this->createMock(ObjectManager::class);
-        $registry = $this->createMock(ManagerRegistry::class);
+        $objectManager = $this->createMock(EntityManagerInterface::class);
 
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
@@ -745,8 +742,8 @@ class ModelManagerTest extends TestCase
         $collection = $this->modelManager->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
         $this->assertInstanceOf(ArrayCollection::class, $collection);
 
-        $item1 = 'item1';
-        $item2 = 'item2';
+        $item1 = new \stdClass();
+        $item2 = new \stdClass();
         $this->modelManager->collectionAddElement($collection, $item1);
         $this->modelManager->collectionAddElement($collection, $item2);
 
@@ -763,9 +760,10 @@ class ModelManagerTest extends TestCase
 
     public function testModelTransform(): void
     {
-        $result = $this->modelManager->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
+        $object = new \stdClass();
+        $result = $this->modelManager->modelTransform('thisIsNotUsed', $object);
 
-        $this->assertSame('doWeNeedThisMethod', $result);
+        $this->assertSame($object, $result);
     }
 
     public function testGetPaginationParameters(): void
@@ -804,13 +802,6 @@ class ModelManagerTest extends TestCase
         $this->expectException(\RuntimeException::class);
 
         $this->modelManager->getEntityManager(VersionedEntity::class);
-    }
-
-    public function testGetNewFieldDescriptionInstanceException(): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $this->modelManager->getNewFieldDescriptionInstance(VersionedEntity::class, [], []);
     }
 
     /**
@@ -904,41 +895,6 @@ class ModelManagerTest extends TestCase
     public function testFindBadId(): void
     {
         $this->assertNull($this->modelManager->find('notImportant', null));
-    }
-
-    /**
-     * @dataProvider getWrongEntities
-     *
-     * @param mixed $entity
-     */
-    public function testNormalizedIdentifierException($entity): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $this->modelManager->getNormalizedIdentifier($entity);
-    }
-
-    public function getWrongEntities(): iterable
-    {
-        yield [0];
-        yield [1];
-        yield [false];
-        yield [true];
-        yield [[]];
-        yield [''];
-        yield ['sonata-project'];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @group legacy
-     *
-     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::getNormalizedIdentifier() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
-     */
-    public function testGetUrlsafeIdentifierNull(): void
-    {
-        $this->assertNull($this->modelManager->getNormalizedIdentifier(null));
     }
 
     private function getMetadata($class, $isVersioned)

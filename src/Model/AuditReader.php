@@ -28,27 +28,27 @@ class AuditReader implements AuditReaderInterface
         $this->auditReader = $auditReader;
     }
 
-    public function find($className, $id, $revision)
+    public function find(string $className, $id, $revision): ?object
     {
         return $this->auditReader->find($className, $id, $revision);
     }
 
-    public function findRevisionHistory($className, $limit = 20, $offset = 0)
+    public function findRevisionHistory(string $className, ?int $limit = 20, ?int $offset = 0): array
     {
         return $this->auditReader->findRevisionHistory($limit, $offset);
     }
 
-    public function findRevision($classname, $revision)
+    public function findRevision(string $classname, $revision): ?object
     {
         return $this->auditReader->findRevision($revision);
     }
 
-    public function findRevisions($className, $id)
+    public function findRevisions(string $className, $id): array
     {
         return $this->auditReader->findRevisions($className, $id);
     }
 
-    public function diff($className, $id, $oldRevision, $newRevision)
+    public function diff(string $className, $id, $oldRevision, $newRevision): array
     {
         return $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
     }

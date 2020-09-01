@@ -137,10 +137,4 @@ class ListBuilderTest extends TestCase
             ],
         ];
     }
-
-    public function testFixFieldDescriptionException(): void
-    {
-        $this->expectException(\RuntimeException::class);
-        $this->listBuilder->fixFieldDescription($this->admin->reveal(), new FieldDescription());
-    }
 }

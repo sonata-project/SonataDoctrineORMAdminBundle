@@ -48,8 +48,8 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'Sonata Doctrine Orm Admin Bundle'
-copyright = u'2010-2019, Thomas Rabaix'
+project = u'SonataDoctrineOrmAdminBundle'
+copyright = u'2010-2020, Thomas Rabaix'
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the

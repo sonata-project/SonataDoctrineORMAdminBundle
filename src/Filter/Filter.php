@@ -34,12 +34,12 @@ abstract class Filter extends BaseFilter
         }
     }
 
-    public function isActive()
+    public function isActive(): bool
     {
         return $this->active;
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    protected function association(ProxyQueryInterface $queryBuilder, $value): array
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 
@@ -62,10 +62,7 @@ abstract class Filter extends BaseFilter
         $this->active = true;
     }
 
-    /**
-     * @return string
-     */
-    protected function getNewParameterName(ProxyQueryInterface $queryBuilder)
+    protected function getNewParameterName(ProxyQueryInterface $queryBuilder): string
     {
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.

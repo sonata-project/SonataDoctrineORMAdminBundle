@@ -153,14 +153,14 @@ abstract class AbstractDateFilter extends Filter
         }
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'input_type' => 'datetime',
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         $name = DateType::class;
 

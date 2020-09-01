@@ -29,7 +29,7 @@ class CallbackFilter extends Filter
         $this->active = \call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $data);
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'callback' => null,
@@ -39,7 +39,7 @@ class CallbackFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'field_type' => $this->getFieldType(),
@@ -50,7 +50,7 @@ class CallbackFilter extends Filter
         ]];
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    protected function association(ProxyQueryInterface $queryBuilder, $data): array
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 

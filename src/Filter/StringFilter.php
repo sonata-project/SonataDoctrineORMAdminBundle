@@ -93,7 +93,7 @@ class StringFilter extends Filter
         }
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             // NEXT_MAJOR: Remove the format option.
@@ -102,7 +102,7 @@ class StringFilter extends Filter
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [ChoiceType::class, [
             'field_type' => $this->getFieldType(),
