@@ -1,7 +1,7 @@
 UPGRADE 3.x
 ===========
 
-UPGRADE FROM 3.x to 3.x
+UPGRADE FROM 3.21 to 3.22
 =========================
 
 ### Compatibility with SonataBlockBundle 4.0
