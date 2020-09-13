@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.23.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.22.0...3.23.0) - 2020-09-13
+### Deprecated
+- [[#1109](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1109)] Deprecate ModelManager collections methods. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1109](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1109)] Deprecate ModelManager::getPaginationParameters(). ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1109](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1109)] Deprecate ModelManager::getSortParameters(). ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.22.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.21.0...3.22.0) - 2020-08-29
 ### Added
 - [[#1091](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1091)] Added support for symfony/options-resolver:^5.1 ([@phansys](https://github.com/phansys))

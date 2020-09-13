@@ -182,7 +182,7 @@ class ModelManagerTest extends TestCase
                 '_sort_order' => 'ASC',
             ]);
 
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getSortParameters() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getSortParameters() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.23 and will be removed in version 4.0.');
         $parameters = $this->modelManager->getSortParameters($field1, $datagrid1);
 
         $this->assertSame('DESC', $parameters['filter']['_sort_order']);
@@ -758,7 +758,7 @@ class ModelManagerTest extends TestCase
      */
     public function testCollections(): void
     {
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getModelCollectionInstance() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getModelCollectionInstance() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.23 and will be removed in version 4.0.');
         $collection = $this->modelManager->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
         $this->assertInstanceOf(ArrayCollection::class, $collection);
 
@@ -803,7 +803,7 @@ class ModelManagerTest extends TestCase
             ->method('getName')
             ->willReturn($name = 'test');
 
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getPaginationParameters() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getPaginationParameters() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.23 and will be removed in version 4.0.');
         $result = $this->modelManager->getPaginationParameters($datagrid, $page = 5);
 
         $this->assertSame($page, $result['filter']['_page']);
