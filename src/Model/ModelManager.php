@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
@@ -494,37 +493,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new $class();
     }
 
-    public function getSortParameters(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid)
-    {
-        $values = $datagrid->getValues();
-
-        if ($this->isFieldAlreadySorted($fieldDescription, $datagrid)) {
-            if ('ASC' === $values['_sort_order']) {
-                $values['_sort_order'] = 'DESC';
-            } else {
-                $values['_sort_order'] = 'ASC';
-            }
-        } else {
-            $values['_sort_order'] = 'ASC';
-        }
-
-        $values['_sort_by'] = \is_string($fieldDescription->getOption('sortable')) ? $fieldDescription->getOption('sortable') : $fieldDescription->getName();
-
-        return ['filter' => $values];
-    }
-
-    public function getPaginationParameters(DatagridInterface $datagrid, $page)
-    {
-        $values = $datagrid->getValues();
-
-        if (isset($values['_sort_by']) && $values['_sort_by'] instanceof FieldDescriptionInterface) {
-            $values['_sort_by'] = $values['_sort_by']->getName();
-        }
-        $values['_page'] = $page;
-
-        return ['filter' => $values];
-    }
-
     public function getDefaultSortValues(string $class): array
     {
         return [
@@ -554,31 +522,6 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         return $instance;
-    }
-
-    public function getModelCollectionInstance(string $class): Collection
-    {
-        return new \Doctrine\Common\Collections\ArrayCollection();
-    }
-
-    public function collectionClear(Collection $collection): void
-    {
-        $collection->clear();
-    }
-
-    public function collectionHasElement(Collection $collection, object $element): bool
-    {
-        return $collection->contains($element);
-    }
-
-    public function collectionAddElement(Collection $collection, object $element): void
-    {
-        $collection->add($element);
-    }
-
-    public function collectionRemoveElement(Collection $collection, object $element): void
-    {
-        $collection->removeElement($element);
     }
 
     private function getFieldName(ClassMetadata $metadata, string $name): string

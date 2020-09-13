@@ -1,6 +1,19 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.22 to 3.23
+=========================
+
+### Sonata\DoctrineORMAdminBundle\Model\ModelManager
+
+- Deprecated `ModelManager::getModelCollectionInstance()`.
+- Deprecated `ModelManager::collectionClear()`.
+- Deprecated `ModelManager::collectionHasElement()`.
+- Deprecated `ModelManager::collectionAddElement()`.
+- Deprecated `ModelManager::collectionRemoveElement()`.
+- Deprecated `ModelManager::getPaginationParameters()`.
+- Deprecated `ModelManager::getSortParameters()`.
+
 UPGRADE FROM 3.21 to 3.22
 =========================
 

@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
@@ -31,11 +30,9 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -139,58 +136,6 @@ class ModelManagerTest extends TestCase
             ->willReturn($em)
         ;
         $this->assertSame($em, $this->modelManager->getEntityManager('x'));
-    }
-
-    public function testSortParameters(): void
-    {
-        $datagrid1 = $this->createMock(DatagridInterface::class);
-        $datagrid2 = $this->createMock(DatagridInterface::class);
-
-        $field1 = new FieldDescription();
-        $field1->setName('field1');
-
-        $field2 = new FieldDescription();
-        $field2->setName('field2');
-
-        $field3 = new FieldDescription();
-        $field3->setName('field3');
-        $field3->setOption('sortable', 'field3sortBy');
-
-        $datagrid1
-            ->expects($this->any())
-            ->method('getValues')
-            ->willReturn([
-                '_sort_by' => $field1,
-                '_sort_order' => 'ASC',
-            ]);
-
-        $datagrid2
-            ->expects($this->any())
-            ->method('getValues')
-            ->willReturn([
-                '_sort_by' => $field3,
-                '_sort_order' => 'ASC',
-            ]);
-
-        $parameters = $this->modelManager->getSortParameters($field1, $datagrid1);
-
-        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field1', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field2, $datagrid1);
-
-        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field2', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field3, $datagrid1);
-
-        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field3, $datagrid2);
-
-        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
     }
 
     public function getVersionDataProvider(): array
@@ -737,52 +682,12 @@ class ModelManagerTest extends TestCase
         $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
-    public function testCollections(): void
-    {
-        $collection = $this->modelManager->getModelCollectionInstance('whyDoWeEvenHaveThisParameter');
-        $this->assertInstanceOf(ArrayCollection::class, $collection);
-
-        $item1 = new \stdClass();
-        $item2 = new \stdClass();
-        $this->modelManager->collectionAddElement($collection, $item1);
-        $this->modelManager->collectionAddElement($collection, $item2);
-
-        $this->assertTrue($this->modelManager->collectionHasElement($collection, $item1));
-
-        $this->modelManager->collectionRemoveElement($collection, $item1);
-
-        $this->assertFalse($this->modelManager->collectionHasElement($collection, $item1));
-
-        $this->modelManager->collectionClear($collection);
-
-        $this->assertTrue($collection->isEmpty());
-    }
-
     public function testModelTransform(): void
     {
         $object = new \stdClass();
         $result = $this->modelManager->modelTransform('thisIsNotUsed', $object);
 
         $this->assertSame($object, $result);
-    }
-
-    public function testGetPaginationParameters(): void
-    {
-        $datagrid = $this->createMock(DatagridInterface::class);
-        $field = $this->createMock(FieldDescriptionInterface::class);
-
-        $datagrid->expects($this->once())
-            ->method('getValues')
-            ->willReturn(['_sort_by' => $field]);
-
-        $field->expects($this->once())
-            ->method('getName')
-            ->willReturn($name = 'test');
-
-        $result = $this->modelManager->getPaginationParameters($datagrid, $page = 5);
-
-        $this->assertSame($page, $result['filter']['_page']);
-        $this->assertSame($name, $result['filter']['_sort_by']);
     }
 
     public function testGetModelInstanceException(): void
