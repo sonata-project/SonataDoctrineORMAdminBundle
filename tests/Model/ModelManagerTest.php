@@ -147,6 +147,21 @@ class ModelManagerTest extends TestCase
     }
 
     /**
+     * @dataProvider supportsQueryDataProvider
+     */
+    public function testSupportsQuery(bool $expected, object $object): void
+    {
+        $this->assertSame($expected, $this->modelManager->supportsQuery($object));
+    }
+
+    public function supportsQueryDataProvider(): iterable
+    {
+        yield [true, $this->createMock(ProxyQuery::class)];
+        yield [true, $this->createMock(QueryBuilder::class)];
+        yield [false, new \stdClass()];
+    }
+
+    /**
      * NEXT_MAJOR: Remove this test.
      *
      * @group legacy
