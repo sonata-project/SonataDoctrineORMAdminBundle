@@ -3,11 +3,13 @@
     "type": "symfony-bundle",
     "description": "Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle",
     "keywords": [
-        "Admin Generator",
         "admin",
+        "admin-generator",
+        "bundle",
+        "doctrine",
+        "orm",
         "sonata",
-        "bootstrap",
-        "generator"
+        "symfony"
     ],
     "homepage": "https://sonata-project.org/bundles/admin",
     "license": "MIT",
