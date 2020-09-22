@@ -29,110 +29,186 @@ class StringFilterTest extends TestCase
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
+        $filter->filter($builder, 'alias', 'field', []);
 
         $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
     }
 
-    public function testNullValue(): void
+    public function getValues(): iterable
     {
-        $filter = new StringFilter();
-        $filter->initialize('field_name');
-
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
-
-        $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => StringOperatorType::TYPE_EQUAL]);
-        $this->assertFalse($filter->isActive());
+        return [
+            'filter by normal value' => ['asd', false],
+            'not filter by empty string' => ['', false],
+            'filter by empty string' => ['', true],
+            'not filter by null' => [null, false],
+            'filter by null' => [null, true],
+            'not filter by 0' => [0, false],
+            'filter by 0' => [0, true],
+            'not filter by \'0\'' => ['0', false],
+            'filter by \'0\'' => ['0', true],
+        ];
     }
 
-    public function testContains(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testDefaultType($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => null]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
-
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => null]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        if ('' !== (string) $value) {
+            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
-    public function testStartsWith(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testContains($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_STARTS_WITH]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd%'], $builder->parameters);
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]);
+
+        if ('' !== (string) $value) {
+            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
-    public function testEndsWith(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testStartsWith($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_ENDS_WITH]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%asd'], $builder->parameters);
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]);
+
+        if ('' !== (string) $value) {
+            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['field_name_0' => sprintf('%s%%', $value)], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
-    public function testNotContains(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testEndsWith($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
-        $this->assertSame(['alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
-        $this->assertSame(['field_name_0' => '%asd%'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]);
+
+        if ('' !== (string) $value) {
+            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['field_name_0' => sprintf('%%%s', $value)], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
-    public function testEquals(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testNotContains($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_EQUAL]);
-        $this->assertSame(['alias.field = :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
+
+        if ('' !== (string) $value) {
+            $this->assertSame(['alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
+            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
-    public function testNotEquals(): void
+    /**
+     * @dataProvider getValues
+     */
+    public function testEquals($value, bool $allowEmpty): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name');
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
         $builder = new ProxyQuery(new QueryBuilder());
         $this->assertSame([], $builder->query);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
-        $this->assertSame(['alias.field <> :field_name_0 OR alias.field IS NULL'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
-        $this->assertTrue($filter->isActive());
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]);
+
+        if ('' !== (string) $value || $allowEmpty) {
+            $this->assertSame(['alias.field = :field_name_0'], $builder->query);
+            $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
+    }
+
+    /**
+     * @dataProvider getValues
+     */
+    public function testNotEquals($value, bool $allowEmpty): void
+    {
+        $filter = new StringFilter();
+        $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+        $this->assertSame([], $builder->query);
+
+        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
+
+        if ('' !== (string) $value || $allowEmpty) {
+            $this->assertSame(['alias.field <> :field_name_0 OR alias.field IS NULL'], $builder->query);
+            $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->parameters);
+            $this->assertTrue($filter->isActive());
+        } else {
+            $this->assertSame([], $builder->query);
+            $this->assertFalse($filter->isActive());
+        }
     }
 
     public function testEqualsWithValidParentAssociationMappings(): void
