@@ -313,11 +313,29 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
 
+    public function supportsQuery(object $query): bool
+    {
+        return $query instanceof ProxyQuery || $query instanceof QueryBuilder;
+    }
+
     public function executeQuery(object $query)
     {
         if ($query instanceof QueryBuilder) {
             return $query->getQuery()->execute();
         }
+
+        if ($query instanceof ProxyQuery) {
+            return $query->execute();
+        }
+
+        // NEXT_MAJOR: Throw an InvalidArgumentException instead.
+        @trigger_error(sprintf(
+            'Not passing an instance of %s or %s as param 1 of %s() is deprecated since'
+            .' sonata-project/doctrine-orm-admin-bundle 3.x and will throw an exception in 4.0.',
+            QueryBuilder::class,
+            ProxyQuery::class,
+            __METHOD__
+        ), E_USER_DEPRECATED);
 
         return $query->execute();
     }
