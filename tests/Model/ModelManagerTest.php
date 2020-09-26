@@ -153,64 +153,6 @@ class ModelManagerTest extends TestCase
         yield [false, new \stdClass()];
     }
 
-    /**
-     * NEXT_MAJOR: Remove this test.
-     *
-     * @group legacy
-     */
-    public function testSortParameters(): void
-    {
-        $datagrid1 = $this->createMock(Datagrid::class);
-        $datagrid2 = $this->createMock(Datagrid::class);
-
-        $field1 = new FieldDescription();
-        $field1->setName('field1');
-
-        $field2 = new FieldDescription();
-        $field2->setName('field2');
-
-        $field3 = new FieldDescription();
-        $field3->setName('field3');
-        $field3->setOption('sortable', 'field3sortBy');
-
-        $datagrid1
-            ->expects($this->any())
-            ->method('getValues')
-            ->willReturn([
-                '_sort_by' => $field1,
-                '_sort_order' => 'ASC',
-            ]);
-
-        $datagrid2
-            ->expects($this->any())
-            ->method('getValues')
-            ->willReturn([
-                '_sort_by' => $field3,
-                '_sort_order' => 'ASC',
-            ]);
-
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getSortParameters() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.23 and will be removed in version 4.0.');
-        $parameters = $this->modelManager->getSortParameters($field1, $datagrid1);
-
-        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field1', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field2, $datagrid1);
-
-        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field2', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field3, $datagrid1);
-
-        $this->assertSame('ASC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
-
-        $parameters = $this->modelManager->getSortParameters($field3, $datagrid2);
-
-        $this->assertSame('DESC', $parameters['filter']['_sort_order']);
-        $this->assertSame('field3sortBy', $parameters['filter']['_sort_by']);
-    }
-
     public function getVersionDataProvider(): array
     {
         return [
