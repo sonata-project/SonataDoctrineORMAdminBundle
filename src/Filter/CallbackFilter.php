@@ -18,6 +18,9 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class CallbackFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -50,7 +53,12 @@ class CallbackFilter extends Filter
         ]];
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    /**
+     * @param mixed[] $value
+     *
+     * @return array
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 

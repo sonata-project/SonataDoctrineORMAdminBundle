@@ -19,6 +19,9 @@ use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class TypeGuesser extends AbstractTypeGuesser
 {
     /**

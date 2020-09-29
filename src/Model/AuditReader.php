@@ -16,6 +16,9 @@ namespace Sonata\DoctrineORMAdminBundle\Model;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
 use Sonata\AdminBundle\Model\AuditReaderInterface;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class AuditReader implements AuditReaderInterface
 {
     /**

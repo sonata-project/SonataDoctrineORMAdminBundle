@@ -39,6 +39,11 @@ abstract class Filter extends BaseFilter
         return $this->active;
     }
 
+    /**
+     * @param mixed[] $value
+     *
+     * @return string[]
+     */
     protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());

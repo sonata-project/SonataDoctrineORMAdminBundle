@@ -18,6 +18,9 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class BooleanFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)

@@ -21,6 +21,8 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
  * Doctrine pager class.
  *
  * @author Jonathan H. Wage <jonwage@gmail.com>
+ *
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
  */
 class Pager extends BasePager
 {
@@ -36,6 +38,9 @@ class Pager extends BasePager
      */
     protected $queryBuilder = null;
 
+    /**
+     * @return int
+     */
     public function computeNbResult()
     {
         $countQuery = clone $this->getQuery();

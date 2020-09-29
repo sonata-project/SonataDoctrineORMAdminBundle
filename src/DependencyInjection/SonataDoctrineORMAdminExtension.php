@@ -20,6 +20,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
 
 /**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  * @author Michael Williams <michael.williams@funsational.com>
  */

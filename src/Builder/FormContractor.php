@@ -27,6 +27,9 @@ use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class FormContractor implements FormContractorInterface
 {
     /**
@@ -195,6 +198,8 @@ class FormContractor implements FormContractorInterface
 
     /**
      * @param string[] $classes
+     *
+     * @phpstan-param class-string[] $classes
      */
     private function isAnyInstanceOf(?string $type, array $classes): bool
     {

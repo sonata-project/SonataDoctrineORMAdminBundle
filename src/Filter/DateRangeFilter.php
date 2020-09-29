@@ -15,6 +15,9 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\Form\Type\DateRangeType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class DateRangeFilter extends AbstractDateFilter
 {
     /**

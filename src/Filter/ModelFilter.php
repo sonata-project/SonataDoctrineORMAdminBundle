@@ -20,6 +20,9 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class ModelFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
@@ -66,20 +69,20 @@ class ModelFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param string $alias
-     * @param mixed  $data
+     * @param string  $alias
+     * @param mixed[] $value
      *
-     * @return mixed
+     * @return void
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data)
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $value)
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($value['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
@@ -99,10 +102,17 @@ class ModelFilter extends Filter
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $data['value']);
+        $queryBuilder->setParameter($parameterName, $value['value']);
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data)
+    /**
+     * @param mixed[] $value
+     *
+     * @return array
+     *
+     * @phpstan-return array{string, bool}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value)
     {
         $types = [
             ClassMetadata::ONE_TO_ONE,
