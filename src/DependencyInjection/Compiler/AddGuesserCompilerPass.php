@@ -18,6 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Reference;
 
 /**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class AddGuesserCompilerPass implements CompilerPassInterface

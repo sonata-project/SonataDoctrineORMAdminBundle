@@ -39,6 +39,9 @@ use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
@@ -84,6 +87,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $class
      *
      * @return ClassMetadata
+     *
+     * @phpstan-param class-string $class
      */
     public function getMetadata($class)
     {
@@ -98,11 +103,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
      *                                 property string)
      *
-     * @return array(
-     *                \Doctrine\ORM\Mapping\ClassMetadata $parentMetadata,
-     *                string $lastPropertyName,
-     *                array $parentAssociationMappings
-     *                )
+     * @return array
+     *
+     * @phpstan-param class-string $baseClass
+     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
@@ -134,6 +138,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $class
      *
      * @return bool
+     *
+     * @phpstan-param class-string $class
      */
     public function hasMetadata($class)
     {
@@ -292,6 +298,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string|object $class
      *
      * @return EntityManager
+     *
+     * @phpstan-param class-string $class
      */
     public function getEntityManager($class)
     {

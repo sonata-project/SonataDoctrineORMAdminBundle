@@ -17,6 +17,9 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class ChoiceFilter extends Filter
 {
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)

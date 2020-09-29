@@ -15,6 +15,9 @@ namespace Sonata\DoctrineORMAdminBundle\Admin;
 
 use Sonata\AdminBundle\Admin\BaseFieldDescription;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ */
 class FieldDescription extends BaseFieldDescription
 {
     public function __construct()
@@ -52,9 +55,6 @@ class FieldDescription extends BaseFieldDescription
         return $this->getTargetModel();
     }
 
-    /**
-     * @final since sonata-project/doctrine-orm-admin-bundle 3.20.
-     */
     public function getTargetModel(): ?string
     {
         if ($this->associationMapping) {
