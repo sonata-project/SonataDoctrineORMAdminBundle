@@ -289,6 +289,21 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * @return object[] all objects matching the given identifiers
+     *
+     * @phpstan-template T of object
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return T[]
+     */
+    public function findMultiple(string $class, array $ids): array
+    {
+        $proxyQuery = $this->createQuery($class);
+        $this->addIdentifiersToQuery($class, $proxyQuery, $ids);
+
+        return $this->executeQuery($proxyQuery);
+    }
+
+    /**
      * @param string|object $class
      *
      * @return EntityManager
