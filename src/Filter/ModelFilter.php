@@ -25,21 +25,21 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
  */
 class ModelFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || empty($data['value'])) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || empty($value['value'])) {
             return;
         }
 
-        if ($data['value'] instanceof Collection) {
-            $data['value'] = $data['value']->toArray();
+        if ($value['value'] instanceof Collection) {
+            $value['value'] = $value['value']->toArray();
         }
 
-        if (!\is_array($data['value'])) {
-            $data['value'] = [$data['value']];
+        if (!\is_array($value['value'])) {
+            $value['value'] = [$value['value']];
         }
 
-        $this->handleMultiple($queryBuilder, $alias, $data);
+        $this->handleMultiple($queryBuilder, $alias, $value);
     }
 
     public function getDefaultOptions()

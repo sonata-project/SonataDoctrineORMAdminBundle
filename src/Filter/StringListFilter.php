@@ -19,28 +19,28 @@ use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 
 final class StringListFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if (!\is_array($data['value'])) {
-            $data['value'] = [$data['value']];
+        if (!\is_array($value['value'])) {
+            $value['value'] = [$value['value']];
         }
 
-        $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $data['type'] ? 'NOT LIKE' : 'LIKE';
+        $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $value['type'] ? 'NOT LIKE' : 'LIKE';
 
         $andConditions = $queryBuilder->expr()->andX();
-        foreach ($data['value'] as $value) {
+        foreach ($value['value'] as $item) {
             $parameterName = $this->getNewParameterName($queryBuilder);
             $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
-            $queryBuilder->setParameter($parameterName, '%'.serialize($value).'%');
+            $queryBuilder->setParameter($parameterName, '%'.serialize($item).'%');
         }
 
-        if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
-            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data['value'])));
+        if (ContainsOperatorType::TYPE_EQUAL === $value['type']) {
+            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($value['value'])));
         }
 
         $this->applyWhere($queryBuilder, $andConditions);

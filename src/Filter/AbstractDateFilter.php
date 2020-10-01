@@ -47,78 +47,78 @@ abstract class AbstractDateFilter extends Filter
      */
     protected $time = false;
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
         // check data sanity
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
         }
 
         if ($this->range) {
             // additional data check for ranged items
-            if (!\array_key_exists('start', $data['value']) || !\array_key_exists('end', $data['value'])) {
+            if (!\array_key_exists('start', $value['value']) || !\array_key_exists('end', $value['value'])) {
                 return;
             }
 
-            if (!$data['value']['start'] && !$data['value']['end']) {
+            if (!$value['value']['start'] && !$value['value']['end']) {
                 return;
             }
 
             // date filter should filter records for the whole days
             if (false === $this->time) {
-                if ($data['value']['start'] instanceof \DateTime) {
-                    $data['value']['start']->setTime(0, 0, 0);
+                if ($value['value']['start'] instanceof \DateTime) {
+                    $value['value']['start']->setTime(0, 0, 0);
                 }
-                if ($data['value']['end'] instanceof \DateTime) {
-                    $data['value']['end']->setTime(23, 59, 59);
+                if ($value['value']['end'] instanceof \DateTime) {
+                    $value['value']['end']->setTime(23, 59, 59);
                 }
             }
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $data['value']['start'] = $data['value']['start'] instanceof \DateTime ? $data['value']['start']->getTimestamp() : 0;
-                $data['value']['end'] = $data['value']['end'] instanceof \DateTime ? $data['value']['end']->getTimestamp() : 0;
+                $value['value']['start'] = $value['value']['start'] instanceof \DateTime ? $value['value']['start']->getTimestamp() : 0;
+                $value['value']['end'] = $value['value']['end'] instanceof \DateTime ? $value['value']['end']->getTimestamp() : 0;
             }
 
             // default type for range filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $data['type'];
+            $value['type'] = !isset($value['type']) || !is_numeric($value['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $value['type'];
 
             $startDateParameterName = $this->getNewParameterName($queryBuilder);
             $endDateParameterName = $this->getNewParameterName($queryBuilder);
 
-            if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $data['type']) {
+            if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $value['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
-                if ($data['value']['start']) {
+                if ($value['value']['start']) {
                     $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
                 }
 
-                if ($data['value']['end']) {
+                if ($value['value']['end']) {
                     $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
                 }
             }
 
-            if ($data['value']['start']) {
-                $queryBuilder->setParameter($startDateParameterName, $data['value']['start']);
+            if ($value['value']['start']) {
+                $queryBuilder->setParameter($startDateParameterName, $value['value']['start']);
             }
 
-            if ($data['value']['end']) {
-                $queryBuilder->setParameter($endDateParameterName, $data['value']['end']);
+            if ($value['value']['end']) {
+                $queryBuilder->setParameter($endDateParameterName, $value['value']['end']);
             }
         } else {
-            if (!$data['value']) {
+            if (!$value['value']) {
                 return;
             }
 
             // default type for simple filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateOperatorType::TYPE_EQUAL : $data['type'];
+            $value['type'] = !isset($value['type']) || !is_numeric($value['type']) ? DateOperatorType::TYPE_EQUAL : $value['type'];
 
             // just find an operator and apply query
-            $operator = $this->getOperator($data['type']);
+            $operator = $this->getOperator($value['type']);
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $data['value'] = $data['value'] instanceof \DateTime ? $data['value']->getTimestamp() : 0;
+                $value['value'] = $value['value'] instanceof \DateTime ? $value['value']->getTimestamp() : 0;
             }
 
             // null / not null only check for col
@@ -131,16 +131,16 @@ abstract class AbstractDateFilter extends Filter
             $parameterName = $this->getNewParameterName($queryBuilder);
 
             // date filter should filter records for the whole day
-            if (false === $this->time && DateOperatorType::TYPE_EQUAL === $data['type']) {
+            if (false === $this->time && DateOperatorType::TYPE_EQUAL === $value['type']) {
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
+                $queryBuilder->setParameter($parameterName, $value['value']);
 
                 $endDateParameterName = $this->getNewParameterName($queryBuilder);
                 $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
                 if ('timestamp' === $this->getOption('input_type')) {
-                    $endValue = strtotime('+1 day', $data['value']);
+                    $endValue = strtotime('+1 day', $value['value']);
                 } else {
-                    $endValue = clone $data['value'];
+                    $endValue = clone $value['value'];
                     $endValue->add(new \DateInterval('P1D'));
                 }
                 $queryBuilder->setParameter($endDateParameterName, $endValue);
@@ -149,7 +149,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-            $queryBuilder->setParameter($parameterName, $data['value']);
+            $queryBuilder->setParameter($parameterName, $value['value']);
         }
     }
 

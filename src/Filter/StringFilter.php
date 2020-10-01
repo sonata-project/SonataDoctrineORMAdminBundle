@@ -30,19 +30,19 @@ class StringFilter extends Filter
         StringOperatorType::TYPE_EQUAL => '=',
     ];
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || null === $data['value']) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || null === $value['value']) {
             return;
         }
 
-        $data['value'] = trim($data['value']);
+        $value['value'] = trim($value['value']);
 
-        if (0 === \strlen($data['value'])) {
+        if (0 === \strlen($value['value'])) {
             return;
         }
 
-        $type = $data['type'] ?? StringOperatorType::TYPE_CONTAINS;
+        $type = $value['type'] ?? StringOperatorType::TYPE_CONTAINS;
         $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
@@ -65,7 +65,7 @@ class StringFilter extends Filter
         if (StringOperatorType::TYPE_EQUAL === $type) {
             $queryBuilder->setParameter(
                 $parameterName,
-                $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+                $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
             );
         } else {
             switch ($type) {
@@ -90,7 +90,7 @@ class StringFilter extends Filter
                 $parameterName,
                 sprintf(
                     $format,
-                    $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+                    $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
                 )
             );
         }

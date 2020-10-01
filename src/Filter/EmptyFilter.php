@@ -23,22 +23,22 @@ final class EmptyFilter extends Filter
     /**
      * @param string       $alias
      * @param string       $field
-     * @param mixed[]|null $data
+     * @param mixed[]|null $value
      */
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (null === $data || !\is_array($data) || !\array_key_exists('value', $data)) {
+        if (null === $value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if (BooleanType::TYPE_YES === (int) $data['value']) {
+        if (BooleanType::TYPE_YES === (int) $value['value']) {
             $this->applyWhere(
                 $queryBuilder,
                 $queryBuilder
                 ->expr()
                 ->isNull(sprintf('%s.%s', $alias, $field))
             );
-        } elseif (BooleanType::TYPE_NO === (int) $data['value']) {
+        } elseif (BooleanType::TYPE_NO === (int) $value['value']) {
             $this->applyWhere(
                 $queryBuilder,
                 $queryBuilder
