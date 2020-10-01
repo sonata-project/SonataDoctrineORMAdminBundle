@@ -50,7 +50,6 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
 
             foreach ($qb->getQuery()->iterate() as $row) {
                 $objectIds[] = ObjectIdentity::fromDomainObject($row[0]);
-                $objectIdIterator = new \ArrayIterator($objectIds);
 
                 // detach from Doctrine, so that it can be Garbage-Collected immediately
                 $em->detach($row[0]);
@@ -58,7 +57,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 ++$count;
 
                 if (0 === ($count % $batchSize)) {
-                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
+                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
                     $countAdded += $batchAdded;
                     $countUpdated += $batchUpdated;
                     $objectIds = [];
@@ -70,7 +69,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             }
 
             if (\count($objectIds) > 0) {
-                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, $objectIdIterator, $securityIdentity);
+                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
