@@ -501,10 +501,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
-    public function addIdentifiersToQuery($class, ProxyQueryInterface $queryProxy, array $idx)
+    public function addIdentifiersToQuery($class, ProxyQueryInterface $query, array $idx)
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
-        $qb = $queryProxy->getQueryBuilder();
+        $qb = $query->getQueryBuilder();
 
         $prefix = uniqid();
         $sqls = [];

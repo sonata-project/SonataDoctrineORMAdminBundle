@@ -22,16 +22,16 @@ use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
  */
 class ChoiceFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if (\is_array($data['value'])) {
-            $this->filterWithMultipleValues($queryBuilder, $alias, $field, $data);
+        if (\is_array($value['value'])) {
+            $this->filterWithMultipleValues($queryBuilder, $alias, $field, $value);
         } else {
-            $this->filterWithSingleValue($queryBuilder, $alias, $field, $data);
+            $this->filterWithSingleValue($queryBuilder, $alias, $field, $value);
         }
     }
 

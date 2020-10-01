@@ -28,20 +28,20 @@ class ClassFilter extends Filter
         EqualOperatorType::TYPE_NOT_EQUAL => 'NOT INSTANCE OF',
     ];
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data)
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if (0 === \strlen($data['value'])) {
+        if (0 === \strlen($value['value'])) {
             return;
         }
 
-        $type = $data['type'] ?? EqualOperatorType::TYPE_EQUAL;
+        $type = $value['type'] ?? EqualOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
-        $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $data['value']));
+        $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $value['value']));
     }
 
     public function getDefaultOptions()
