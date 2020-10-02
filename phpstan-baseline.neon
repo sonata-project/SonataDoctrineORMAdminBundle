@@ -3,5 +3,5 @@ parameters:
 		-
 			message: "#^Class Symfony\\\\Component\\\\Templating\\\\EngineInterface not found\\.$#"
 			count: 3
-			path: ../src/Block/AuditBlockService.php
+			path: src/Block/AuditBlockService.php
 
