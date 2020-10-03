@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;

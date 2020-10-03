@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Datagrid\Datagrid;

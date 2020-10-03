@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;

@@ -90,7 +90,7 @@ class FilterTypeGuesserTest extends TestCase
             'fieldName' => $fieldName,
         ]);
 
-        $this->modelManager->method('getParentMetadataForProperty')->with($class,$property)
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
             ->willReturn([$classMetadata, $property, $parentAssociation]);
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager);
@@ -123,7 +123,7 @@ class FilterTypeGuesserTest extends TestCase
         $classMetadata->fieldMappings = [$property => ['fieldName' => $type]];
         $classMetadata->method('getTypeOfField')->with($property)->willReturn($type);
 
-        $this->modelManager->method('getParentMetadataForProperty')->with($class,$property)
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
             ->willReturn([$classMetadata, $property, 'notUsed']);
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager);
