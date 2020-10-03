@@ -37,10 +37,10 @@ class ShowBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->guesser = $this->prophesize(TypeGuesserInterface::class);
+        $this->guesser = $this->createStub(TypeGuesserInterface::class);
 
         $this->showBuilder = new ShowBuilder(
-            $this->guesser->reveal(),
+            $this->guesser,
             [
                 'fakeTemplate' => 'fake',
                 TemplateRegistry::TYPE_ONE_TO_ONE => '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
@@ -50,11 +50,11 @@ class ShowBuilderTest extends TestCase
             ]
         );
 
-        $this->admin = $this->prophesize(AdminInterface::class);
-        $this->modelManager = $this->prophesize(ModelManager::class);
+        $this->admin = $this->createMock(AdminInterface::class);
+        $this->modelManager = $this->createStub(ModelManager::class);
 
-        $this->admin->getClass()->willReturn('FakeClass');
-        $this->admin->getModelManager()->willReturn($this->modelManager->reveal());
+        $this->admin->method('getClass')->willReturn('FakeClass');
+        $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
 
     public function testGetBaseList(): void
@@ -64,26 +64,25 @@ class ShowBuilderTest extends TestCase
 
     public function testAddFieldNoType(): void
     {
-        $typeGuess = $this->prophesize(TypeGuess::class);
+        $typeGuess = $this->createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
         $fieldDescription->setMappingType(ClassMetadata::MANY_TO_ONE);
 
-        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
-        $this->admin->addShowFieldDescription(Argument::cetera())->shouldBeCalled();
+        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects($this->once())->method('addShowFieldDescription');
 
-        $typeGuess->getType()->willReturn($typeGuessReturn = 'fakeType');
+        $typeGuess->method('getType')->willReturn('fakeType');
 
-        $this->guesser->guessType(Argument::any(), Argument::any(), $this->modelManager)->willReturn($typeGuess);
-
-        $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
+        $this->guesser->method('guessType')->with($this->anything(), $this->anything(), $this->modelManager)->willReturn($typeGuess);
+        $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
             null,
             $fieldDescription,
-            $this->admin->reveal()
+            $this->admin
         );
     }
 
@@ -92,15 +91,14 @@ class ShowBuilderTest extends TestCase
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
 
-        $this->admin->addShowFieldDescription(Argument::cetera())->shouldBeCalled();
-
-        $this->modelManager->hasMetadata(Argument::any())->willReturn(false);
+        $this->admin->expects($this->once())->method('addShowFieldDescription');
+        $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
             'someType',
             $fieldDescription,
-            $this->admin->reveal()
+            $this->admin
         );
     }
 
@@ -110,25 +108,20 @@ class ShowBuilderTest extends TestCase
      */
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $classMetadata = $this->createStub(ClassMetadata::class);
+        $classMetadata->fieldMappings = [2 => []];
+        $classMetadata->associationMappings = [2 => ['fieldName' => 'fakeField']];
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('FakeName');
         $fieldDescription->setType($type);
         $fieldDescription->setMappingType($mappingType);
 
-        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
+        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->modelManager->method('hasMetadata')->willReturn(true);
+        $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 
-        $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
-
-        $this->modelManager->getParentMetadataForProperty(Argument::cetera())
-            ->willReturn([$classMetadata, 2, $parentAssociationMapping = []]);
-
-        $classMetadata->fieldMappings = [2 => []];
-
-        $classMetadata->associationMappings = [2 => ['fieldName' => 'fakeField']];
-
-        $this->showBuilder->fixFieldDescription($this->admin->reveal(), $fieldDescription);
+        $this->showBuilder->fixFieldDescription($this->admin, $fieldDescription);
 
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
@@ -191,6 +184,7 @@ class ShowBuilderTest extends TestCase
     public function testFixFieldDescriptionException(): void
     {
         $this->expectException(\RuntimeException::class);
-        $this->showBuilder->fixFieldDescription($this->admin->reveal(), new FieldDescription());
+
+        $this->showBuilder->fixFieldDescription($this->admin, new FieldDescription());
     }
 }

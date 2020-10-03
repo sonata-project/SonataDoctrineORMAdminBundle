@@ -52,21 +52,21 @@ final class DatagridBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->formFactory = $this->prophesize(FormFactoryInterface::class);
-        $this->filterFactory = $this->prophesize(FilterFactoryInterface::class);
-        $this->typeGuesser = $this->prophesize(TypeGuesserInterface::class);
+        $this->formFactory = $this->createStub(FormFactoryInterface::class);
+        $this->filterFactory = $this->createStub(FilterFactoryInterface::class);
+        $this->typeGuesser = $this->createStub(TypeGuesserInterface::class);
 
         $this->datagridBuilder = new DatagridBuilder(
-            $this->formFactory->reveal(),
-            $this->filterFactory->reveal(),
-            $this->typeGuesser->reveal()
+            $this->formFactory,
+            $this->filterFactory,
+            $this->typeGuesser
         );
 
-        $this->admin = $this->prophesize(AbstractAdmin::class);
-        $this->modelManager = $this->prophesize(ModelManager::class);
+        $this->admin = $this->createMock(AbstractAdmin::class);
+        $this->modelManager = $this->createMock(ModelManager::class);
 
-        $this->admin->getClass()->willReturn('FakeClass');
-        $this->admin->getModelManager()->willReturn($this->modelManager->reveal());
+        $this->admin->method('getClass')->willReturn('FakeClass');
+        $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
 
     /**
@@ -74,22 +74,19 @@ final class DatagridBuilderTest extends TestCase
      */
     public function testGetBaseDatagrid($pagerType, $pager): void
     {
-        $proxyQuery = $this->prophesize(ProxyQueryInterface::class);
-        $fieldDescription = $this->prophesize(FieldDescriptionCollection::class);
-        $formBuilder = $this->prophesize(FormBuilderInterface::class);
+        $proxyQuery = $this->createStub(ProxyQueryInterface::class);
+        $fieldDescription = $this->createStub(FieldDescriptionCollection::class);
+        $formBuilder = $this->createStub(FormBuilderInterface::class);
 
-        $this->admin->getPagerType()->willReturn($pagerType);
-        $this->admin->createQuery()->willReturn($proxyQuery->reveal());
-        $this->admin->getList()->willReturn($fieldDescription->reveal());
+        $this->admin->method('getPagerType')->willReturn($pagerType);
+        $this->admin->method('createQuery')->willReturn($proxyQuery);
+        $this->admin->method('getList')->willReturn($fieldDescription);
+        $this->modelManager->method('getIdentifierFieldNames')->willReturn(['id']);
+        $this->formFactory->method('createNamedBuilder')->willReturn($formBuilder);
 
-        $this->modelManager->getIdentifierFieldNames(Argument::any())->willReturn(['id']);
+        $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin);
 
-        $this->formFactory->createNamedBuilder(Argument::cetera())->willReturn($formBuilder->reveal());
-
-        $this->assertInstanceOf(
-            Datagrid::class,
-            $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin->reveal())
-        );
+        $this->assertInstanceOf(Datagrid::class, $datagrid);
         $this->assertInstanceOf($pager, $datagrid->getPager());
     }
 
@@ -109,29 +106,16 @@ final class DatagridBuilderTest extends TestCase
 
     public function testGetBaseDatagridBadPagerType(): void
     {
-        $this->admin->getPagerType()->willReturn('fake');
+        $this->admin->method('getPagerType')->willReturn('fake');
 
         $this->expectException(\RuntimeException::class);
 
-        $this->datagridBuilder->getBaseDatagrid($this->admin->reveal());
+        $this->datagridBuilder->getBaseDatagrid($this->admin);
     }
 
     public function testFixFieldDescription(): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
-
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('test');
-        $fieldDescription->setMappingType(ClassMetadata::ONE_TO_MANY);
-
-        $this->admin->attachAdminClass(Argument::cetera())->shouldBeCalled();
-
-        $this->modelManager->hasMetadata(Argument::any())->willReturn(true);
-
-        $this->modelManager->getParentMetadataForProperty(Argument::cetera())
-            ->willReturn([$classMetadata, 'someField', $parentAssociationMapping = []])
-            ->shouldBeCalledTimes(1);
-
+        $classMetadata = $this->createStub(ClassMetadata::class);
         $classMetadata->fieldMappings = [
             'someField' => [
                 'type' => 'string',
@@ -142,39 +126,37 @@ final class DatagridBuilderTest extends TestCase
         $classMetadata->associationMappings = ['someField' => ['fieldName' => 'fakeField']];
         $classMetadata->embeddedClasses = ['someFieldDeclared' => ['fieldName' => 'fakeField']];
 
-        $this->datagridBuilder->fixFieldDescription($this->admin->reveal(), $fieldDescription);
+        $fieldDescription = new FieldDescription();
+        $fieldDescription->setName('test');
+        $fieldDescription->setMappingType(ClassMetadata::ONE_TO_MANY);
+
+        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->modelManager->method('hasMetadata')->willReturn(true);
+        $this->modelManager->expects($this->once())->method('getParentMetadataForProperty')
+            ->willReturn([$classMetadata, 'someField', []]);
+
+        $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
     }
 
     public function testAddFilterNoType(): void
     {
-        $this->admin->addFilterFieldDescription(Argument::cetera())->shouldBeCalled();
-
-        $datagrid = $this->prophesize(DatagridInterface::class);
-        $guessType = $this->prophesize(TypeGuess::class);
+        $datagrid = $this->createStub(DatagridInterface::class);
+        $guessType = $this->createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName('test');
 
-        $this->typeGuesser->guessType(Argument::cetera())->willReturn($guessType->reveal());
-        $guessType->getOptions()->willReturn(['name' => 'value']);
+        $this->admin->expects($this->once())->method('addFilterFieldDescription');
+        $this->admin->method('getCode')->willReturn('someFakeCode');
+        $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
+        $this->typeGuesser->method('guessType')->willReturn($guessType);
+        $this->modelManager->expects($this->once())->method('hasMetadata')->willReturn(false);
+        $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());
 
-        $guessType->getType()->willReturn($typeGuessReturn = ModelAutocompleteFilter::class);
+        $guessType->method('getOptions')->willReturn(['name' => 'value']);
+        $guessType->method('getType')->willReturn(ModelAutocompleteFilter::class);
+        $datagrid->method('addFilter')->with($this->isInstanceOf(ModelAutocompleteFilter::class));
 
-        $this->modelManager->hasMetadata(Argument::cetera())->willReturn(false)->shouldBeCalledTimes(1);
-
-        $this->admin->getCode()->willReturn('someFakeCode');
-
-        $this->filterFactory->create(Argument::cetera())->willReturn(new ModelAutocompleteFilter());
-
-        $this->admin->getLabelTranslatorStrategy()->willReturn(new FormLabelTranslatorStrategy());
-
-        $datagrid->addFilter(Argument::type(ModelAutocompleteFilter::class));
-
-        $this->datagridBuilder->addFilter(
-            $datagrid->reveal(),
-            null,
-            $fieldDescription,
-            $this->admin->reveal()
-        );
+        $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription, $this->admin);
     }
 }
