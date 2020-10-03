@@ -56,7 +56,8 @@
     "require-dev": {
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
-        "symfony/phpunit-bridge": "^5.1.1"
+        "symfony/phpunit-bridge": "^5.1.1",
+        "symfony/templating": "^4.4 || ^5.1"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
