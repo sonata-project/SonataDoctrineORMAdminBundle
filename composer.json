@@ -56,6 +56,7 @@
     "require-dev": {
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
+        "symfony/templating": "^4.4 || ^5.1",
         "symfony/phpunit-bridge": "^5.1.1"
     },
     "suggest": {
