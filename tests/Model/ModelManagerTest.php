@@ -1030,6 +1030,7 @@ final class ModelManagerTest extends TestCase
 
     public function addIdentifiersToQueryProvider(): iterable
     {
+        yield [['1', '2'], ['id'], [1, 2]];
         yield [['112', '2020'], ['id'], ['112', '2020']];
         yield [['1', '42', '2', '256'], ['id', 'foreignId'], ['1~42', '2~256']];
         yield [['a', '4', 'b', '52'], ['id', 'foreignId'], ['a~4', 'b~52']];

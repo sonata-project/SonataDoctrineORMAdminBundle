@@ -502,7 +502,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @phpstan-param non-empty-array<string> $idx
+     * @phpstan-param non-empty-array<string|int> $idx
      *
      * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
      */
@@ -521,7 +521,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $prefix = uniqid();
         $sqls = [];
         foreach ($idx as $pos => $id) {
-            $ids = explode(self::ID_SEPARATOR, $id);
+            $ids = explode(self::ID_SEPARATOR, (string) $id);
 
             $ands = [];
             foreach ($fieldNames as $posName => $name) {
