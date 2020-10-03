@@ -27,53 +27,59 @@ class AuditReaderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->simpleThingsAuditReader = $this->prophesize(SimpleThingsAuditReader::class);
-        $this->auditReader = new AuditReader($this->simpleThingsAuditReader->reveal());
+        $this->simpleThingsAuditReader = $this->createMock(SimpleThingsAuditReader::class);
+        $this->auditReader = new AuditReader($this->simpleThingsAuditReader);
     }
 
     public function testFind(): void
     {
-        $this->simpleThingsAuditReader
-            ->find($className = 'fakeClass', $id = 1, $revision = 2)
-            ->shouldBeCalledTimes(1);
+        $className = 'fakeClass';
+        $id = 1;
+        $revision = 2;
+
+        $this->simpleThingsAuditReader->expects($this->once())->method('find')->with($className, $id, $revision);
 
         $this->auditReader->find($className, $id, $revision);
     }
 
     public function testFindRevisionHistory(): void
     {
-        $this->simpleThingsAuditReader
-            ->findRevisionHistory($limit = 20, $offset = 0)
-            ->shouldBeCalledTimes(1);
+        $limit = 20;
+        $offset = 0;
+
+        $this->simpleThingsAuditReader->expects($this->once())->method('findRevisionHistory')->with($limit, $offset);
 
         $this->auditReader->findRevisionHistory(null, $limit, $offset);
     }
 
     public function testFindRevision(): void
     {
-        $this->simpleThingsAuditReader
-            ->findRevision($revision = 2)
-            ->shouldBeCalledTimes(1);
+        $revision = 2;
+
+        $this->simpleThingsAuditReader->expects($this->once())->method('findRevision')->with($revision);
 
         $this->auditReader->findRevision(null, $revision);
     }
 
     public function testFindRevisions(): void
     {
-        $this->simpleThingsAuditReader
-            ->findRevisions($className = 'fakeClass', $id = 2)
-            ->shouldBeCalledTimes(1);
+        $className = 'fakeClass';
+        $id = 2;
+
+        $this->simpleThingsAuditReader->expects($this->once())->method('findRevisions')->with($className, $id);
 
         $this->auditReader->findRevisions($className, $id);
     }
 
-    /**
-     * @doesNotPerformAssertions
-     */
     public function testDiff(): void
     {
-        $this->simpleThingsAuditReader
-            ->diff($className = 'fakeClass', $id = 1, $oldRevision = 1, $newRevision = 2);
+        $className = 'fakeClass';
+        $id = 1;
+        $oldRevision = 1;
+        $newRevision = 2;
+
+        $this->simpleThingsAuditReader->expects($this->once())->method('diff')
+            ->with($className, $id, $oldRevision, $newRevision);
 
         $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
     }

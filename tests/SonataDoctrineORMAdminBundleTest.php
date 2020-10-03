@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Prophecy\Argument;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
@@ -28,21 +27,15 @@ class SonataDoctrineORMAdminBundleTest extends TestCase
 {
     public function testBuild(): void
     {
-        $containerBuilder = $this->prophesize(ContainerBuilder::class);
+        $containerBuilder = $this->createMock(ContainerBuilder::class);
 
-        $containerBuilder
-            ->addCompilerPass(Argument::type(AddGuesserCompilerPass::class))
-            ->shouldBeCalledTimes(1);
-
-        $containerBuilder
-            ->addCompilerPass(Argument::type(AddTemplatesCompilerPass::class))
-            ->shouldBeCalledTimes(1);
-
-        $containerBuilder
-            ->addCompilerPass(Argument::type(AddAuditEntityCompilerPass::class))
-            ->shouldBeCalledTimes(1);
+        $containerBuilder->expects($this->exactly(3))->method('addCompilerPass')->withConsecutive(
+            [$this->isInstanceOf(AddGuesserCompilerPass::class)],
+            [$this->isInstanceOf(AddTemplatesCompilerPass::class)],
+            [$this->isInstanceOf(AddAuditEntityCompilerPass::class)]
+        );
 
         $bundle = new SonataDoctrineORMAdminBundle();
-        $bundle->build($containerBuilder->reveal());
+        $bundle->build($containerBuilder);
     }
 }
