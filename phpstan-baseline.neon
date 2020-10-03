@@ -1,7 +1,7 @@
 parameters:
 	ignoreErrors:
 		-
-			message: "#^Class Symfony\\\\Component\\\\Templating\\\\EngineInterface not found\\.$#"
-			count: 3
+			message: "#^Method Sonata\\\\BlockBundle\\\\Block\\\\Service\\\\AbstractBlockService\\:\\:__construct\\(\\) invoked with 2 parameters, 1 required\\.$#"
+			count: 1
 			path: src/Block/AuditBlockService.php
 
