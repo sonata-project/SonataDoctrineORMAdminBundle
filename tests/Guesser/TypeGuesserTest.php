@@ -30,18 +30,19 @@ class TypeGuesserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->modelManager = $this->prophesize(ModelManager::class);
+        $this->modelManager = $this->createStub(ModelManager::class);
         $this->guesser = new TypeGuesser();
     }
 
     public function testGuessTypeNoMetadata(): void
     {
-        $this->modelManager->getParentMetadataForProperty(
-            $class = 'FakeClass',
-            $property = 'fakeProperty'
-        )->willThrow(MappingException::class);
+        $class = 'FakeClass';
+        $property = 'fakeProperty';
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
+            ->willThrowException(new MappingException());
+
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $this->assertSame('text', $result->getType());
         $this->assertSame(Guess::LOW_CONFIDENCE, $result->getConfidence());
@@ -52,18 +53,18 @@ class TypeGuesserTest extends TestCase
      */
     public function testGuessTypeWithAssociation($mappingType, $type): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $property = 'fakeProperty';
+        $class = 'FakeClass';
 
-        $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(true);
-        $classMetadata->getAssociationMapping($property)
-            ->willReturn(['type' => $mappingType]);
+        $classMetadata = $this->createStub(ClassMetadata::class);
 
-        $this->modelManager->getParentMetadataForProperty(
-            $class = 'FakeClass',
-            $property
-        )->willReturn([$classMetadata, $property, 'notUsed']);
+        $classMetadata->method('hasAssociation')->with($property)->willReturn(true);
+        $classMetadata->method('getAssociationMapping')->with($property)->willReturn(['type' => $mappingType]);
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
+            ->willReturn([$classMetadata, $property, 'notUsed']);
+
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $this->assertSame($type, $result->getType());
         $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
@@ -96,17 +97,18 @@ class TypeGuesserTest extends TestCase
      */
     public function testGuessTypeNoAssociation($type, $resultType, $confidence): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $property = 'fakeProperty';
+        $class = 'FakeClass';
 
-        $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(false);
-        $classMetadata->getTypeOfField($property)->willReturn($type);
+        $classMetadata = $this->createStub(ClassMetadata::class);
 
-        $this->modelManager->getParentMetadataForProperty(
-            $class = 'FakeClass',
-            $property
-        )->willReturn([$classMetadata, $property, 'notUsed']);
+        $classMetadata->method('hasAssociation')->with($property)->willReturn(false);
+        $classMetadata->method('getTypeOfField')->with($property)->willReturn($type);
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
+            ->willReturn([$classMetadata, $property, 'notUsed']);
+
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $this->assertSame($resultType, $result->getType());
         $this->assertSame($confidence, $result->getConfidence());
