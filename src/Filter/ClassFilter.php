@@ -19,7 +19,7 @@ use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class ClassFilter extends Filter
 {

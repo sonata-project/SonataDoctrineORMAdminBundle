@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.24.0](sonata-project/SonataDoctrineORMAdminBundle/compare/3.23.0...3.24.0) - 2020-10-08
+### Added
+- [[#1142](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1142)] `FormContractor::getDefaultOptions()` pass `by_reference` from `CollectionType` to `AdminType` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1127](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1127)] Add more phpdoc ([@core23](https://github.com/core23))
+- [[#1113](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1113)] `ModelManager::supportsQuery()` method ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1117](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1117)] Allow `doctrine/persistence` 2 ([@franmomu](https://github.com/franmomu))
+
+### Deprecated
+- [[#1113](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1113)] Calling `executeQuery()` on something else than an instance of `Doctrine\ORM\QueryBuilder` or `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1128](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1128)] Fix null error in `ObjectAclManipulator` ([@core23](https://github.com/core23))
+
 ## [3.23.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.22.0...3.23.0) - 2020-09-13
 ### Deprecated
 - [[#1109](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1109)] Deprecate ModelManager collections methods. ([@VincentLanglet](https://github.com/VincentLanglet))

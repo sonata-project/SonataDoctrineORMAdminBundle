@@ -17,7 +17,7 @@ use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  *
  * This class contains the configuration information for the bundle.
  *

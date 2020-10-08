@@ -19,7 +19,7 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class CallbackFilter extends Filter
 {

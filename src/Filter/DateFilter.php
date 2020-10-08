@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class DateFilter extends AbstractDateFilter
 {

@@ -22,7 +22,7 @@ use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class ShowBuilder implements ShowBuilderInterface
 {
