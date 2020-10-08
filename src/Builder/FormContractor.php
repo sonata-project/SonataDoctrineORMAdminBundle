@@ -98,6 +98,9 @@ class FormContractor implements FormContractorInterface
 
     public function getDefaultOptions($type, FieldDescriptionInterface $fieldDescription)
     {
+        // NEXT_MAJOR: Remove this line and update the function signature.
+        $formOptions = \func_get_args()[2] ?? [];
+
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
@@ -174,13 +177,7 @@ class FormContractor implements FormContractorInterface
 
             $options['type'] = AdminType::class;
             $options['modifiable'] = true;
-            $options['type_options'] = [
-                'sonata_field_description' => $fieldDescription,
-                'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
-                'empty_data' => static function () use ($fieldDescription) {
-                    return $fieldDescription->getAssociationAdmin()->getNewInstance();
-                },
-            ];
+            $options['type_options'] = $this->getDefaultAdminTypeOptions($fieldDescription, $formOptions);
         }
 
         return $options;
@@ -214,5 +211,22 @@ class FormContractor implements FormContractorInterface
         }
 
         return false;
+    }
+
+    private function getDefaultAdminTypeOptions(FieldDescriptionInterface $fieldDescription, array $formOptions): array
+    {
+        $typeOptions = [
+            'sonata_field_description' => $fieldDescription,
+            'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
+            'empty_data' => static function () use ($fieldDescription) {
+                return $fieldDescription->getAssociationAdmin()->getNewInstance();
+            },
+        ];
+
+        if (isset($formOptions['by_reference'])) {
+            $typeOptions['by_reference'] = $formOptions['by_reference'];
+        }
+
+        return $typeOptions;
     }
 }
