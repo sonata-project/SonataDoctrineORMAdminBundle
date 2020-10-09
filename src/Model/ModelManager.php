@@ -40,7 +40,7 @@ use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class ModelManager implements ModelManagerInterface, LockInterface
 {
@@ -370,7 +370,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         // NEXT_MAJOR: Throw an InvalidArgumentException instead.
         @trigger_error(sprintf(
             'Not passing an instance of %s or %s as param 1 of %s() is deprecated since'
-            .' sonata-project/doctrine-orm-admin-bundle 3.x and will throw an exception in 4.0.',
+            .' sonata-project/doctrine-orm-admin-bundle 3.24 and will throw an exception in 4.0.',
             QueryBuilder::class,
             ProxyQuery::class,
             __METHOD__

@@ -22,7 +22,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
  *
  * @author Jonathan H. Wage <jonwage@gmail.com>
  *
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class Pager extends BasePager
 {

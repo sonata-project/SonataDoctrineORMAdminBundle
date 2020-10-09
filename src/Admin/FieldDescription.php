@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Admin;
 use Sonata\AdminBundle\Admin\BaseFieldDescription;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class FieldDescription extends BaseFieldDescription
 {
