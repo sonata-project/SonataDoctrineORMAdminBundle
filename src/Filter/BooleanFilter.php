@@ -18,17 +18,20 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class BooleanFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if (\is_array($data['value'])) {
+        if (\is_array($value['value'])) {
             $values = [];
-            foreach ($data['value'] as $v) {
+            foreach ($value['value'] as $v) {
                 if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                     continue;
                 }
@@ -42,13 +45,13 @@ class BooleanFilter extends Filter
 
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+            if (!\in_array($value['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                 return;
             }
 
             $parameterName = $this->getNewParameterName($queryBuilder);
             $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
+            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES === $value['value']) ? 1 : 0);
         }
     }
 

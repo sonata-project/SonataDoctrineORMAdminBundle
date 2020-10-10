@@ -43,8 +43,8 @@ class FilterTypeGuesserTest extends TestCase
     protected function setUp(): void
     {
         $this->guesser = new FilterTypeGuesser();
-        $this->modelManager = $this->prophesize(ModelManager::class);
-        $this->metadata = $this->prophesize(ClassMetadata::class);
+        $this->modelManager = $this->createStub(ModelManager::class);
+        $this->metadata = $this->createStub(ClassMetadata::class);
     }
 
     public function testThrowsOnMissingField(): void
@@ -53,44 +53,47 @@ class FilterTypeGuesserTest extends TestCase
 
         $class = 'My\Model';
         $property = 'whatever';
-        $this->modelManager->getParentMetadataForProperty($class, $property)->willReturn([
-            $this->metadata->reveal(),
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)->willReturn([
+            $this->metadata,
             $property,
             'parent mappings, no idea what it looks like',
         ]);
-        $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->guesser->guessType($class, $property, $this->modelManager);
     }
 
     public function testGuessTypeNoMetadata(): void
     {
-        $this->modelManager->getParentMetadataForProperty(
+        $this->modelManager->method('getParentMetadataForProperty')->with(
             $class = 'FakeClass',
             $property = 'fakeProperty'
-        )->willThrow(MappingException::class);
+        )->willThrowException(new MappingException());
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $this->assertFalse($result);
     }
 
     public function testGuessTypeWithAssociation(): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $property = 'fakeProperty';
+        $targetEntity = 'FakeEntity';
+        $fieldName = 'fakeName';
+        $class = 'FakeClass';
+        $parentAssociation = 'parentAssociation';
 
-        $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(true);
-        $classMetadata->getAssociationMapping($property)
-            ->willReturn([
-                'type' => ClassMetadata::MANY_TO_ONE,
-                'targetEntity' => $targetEntity = 'FakeEntity',
-                'fieldName' => $fieldName = 'fakeName',
-            ]);
+        $classMetadata = $this->createStub(ClassMetadata::class);
 
-        $this->modelManager->getParentMetadataForProperty(
-            $class = 'FakeClass',
-            $property
-        )->willReturn([$classMetadata, $property, $parentAssociation = 'parentAssociation']);
+        $classMetadata->method('hasAssociation')->with($property)->willReturn(true);
+        $classMetadata->method('getAssociationMapping')->with($property)->willReturn([
+            'type' => ClassMetadata::MANY_TO_ONE,
+            'targetEntity' => $targetEntity,
+            'fieldName' => $fieldName,
+        ]);
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
+            ->willReturn([$classMetadata, $property, $parentAssociation]);
+
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $options = $result->getOptions();
 
@@ -110,19 +113,20 @@ class FilterTypeGuesserTest extends TestCase
      */
     public function testGuessTypeNoAssociation($type, $resultType, $confidence, $fieldType = null): void
     {
-        $classMetadata = $this->prophesize(ClassMetadata::class);
+        $property = 'fakeProperty';
+        $class = 'FakeClass';
 
-        $classMetadata->hasAssociation($property = 'fakeProperty')->willReturn(false);
+        $classMetadata = $this->createStub(ClassMetadata::class);
+
+        $classMetadata->method('hasAssociation')->with($property)->willReturn(false);
 
         $classMetadata->fieldMappings = [$property => ['fieldName' => $type]];
-        $classMetadata->getTypeOfField($property)->willReturn($type);
+        $classMetadata->method('getTypeOfField')->with($property)->willReturn($type);
 
-        $this->modelManager->getParentMetadataForProperty(
-            $class = 'FakeClass',
-            $property
-        )->willReturn([$classMetadata, $property, 'notUsed']);
+        $this->modelManager->method('getParentMetadataForProperty')->with($class, $property)
+            ->willReturn([$classMetadata, $property, 'notUsed']);
 
-        $result = $this->guesser->guessType($class, $property, $this->modelManager->reveal());
+        $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
         $options = $result->getOptions();
 

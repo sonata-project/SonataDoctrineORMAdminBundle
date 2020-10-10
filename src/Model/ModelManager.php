@@ -40,6 +40,9 @@ use Sonata\Exporter\Source\SourceIteratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
@@ -81,6 +84,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $this->propertyAccessor = $propertyAccessor;
     }
 
+    /**
+     * @phpstan-param class-string $class
+     */
     public function getMetadata(string $class): ClassMetadata
     {
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
@@ -94,11 +100,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
      *                                 property string)
      *
-     * @return array(
-     *                \Doctrine\ORM\Mapping\ClassMetadata $parentMetadata,
-     *                string $lastPropertyName,
-     *                array $parentAssociationMappings
-     *                )
+     * @phpstan-param class-string $baseClass
+     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}
      */
     public function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
@@ -130,6 +133,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $class
      *
      * @return bool
+     *
+     * @phpstan-param class-string $class
      */
     public function hasMetadata($class)
     {
@@ -286,6 +291,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     /**
      * @param string|object $class
+     *
+     * @phpstan-param class-string|object $class
      */
     public function getEntityManager($class): EntityManagerInterface
     {
@@ -331,7 +338,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         // NEXT_MAJOR: Throw an InvalidArgumentException instead.
         @trigger_error(sprintf(
             'Not passing an instance of %s or %s as param 1 of %s() is deprecated since'
-            .' sonata-project/doctrine-orm-admin-bundle 3.x and will throw an exception in 4.0.',
+            .' sonata-project/doctrine-orm-admin-bundle 3.24 and will throw an exception in 4.0.',
             QueryBuilder::class,
             ProxyQuery::class,
             __METHOD__
@@ -413,10 +420,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
-    public function addIdentifiersToQuery(string $class, ProxyQueryInterface $queryProxy, array $idx): void
+    public function addIdentifiersToQuery(string $class, ProxyQueryInterface $query, array $idx): void
     {
         $fieldNames = $this->getIdentifierFieldNames($class);
-        $qb = $queryProxy->getQueryBuilder();
+        $qb = $query->getQueryBuilder();
 
         $prefix = uniqid();
         $sqls = [];

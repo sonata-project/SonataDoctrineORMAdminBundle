@@ -24,13 +24,13 @@ abstract class Filter extends BaseFilter
      */
     protected $active = false;
 
-    public function apply($queryBuilder, $value): void
+    public function apply($query, $value): void
     {
         $this->value = $value;
         if (\is_array($value) && \array_key_exists('value', $value)) {
-            list($alias, $field) = $this->association($queryBuilder, $value);
+            [$alias, $field] = $this->association($query, $value);
 
-            $this->filter($queryBuilder, $alias, $field, $value);
+            $this->filter($query, $alias, $field, $value);
         }
     }
 
@@ -39,7 +39,12 @@ abstract class Filter extends BaseFilter
         return $this->active;
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $value): array
+    /**
+     * @param mixed[] $value
+     *
+     * @return string[]
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, array $value): array
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 

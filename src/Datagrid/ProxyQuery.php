@@ -81,12 +81,12 @@ class ProxyQuery implements ProxyQueryInterface
     protected $queryBuilder;
 
     /**
-     * @var string
+     * @var string|null
      */
     protected $sortBy;
 
     /**
-     * @var mixed
+     * @var string|null
      */
     protected $sortOrder;
 

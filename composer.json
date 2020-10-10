@@ -1,7 +1,7 @@
 {
     "name": "sonata-project/doctrine-orm-admin-bundle",
     "type": "symfony-bundle",
-    "description": "Symfony Sonata / Integrate Doctrine ORM into the SonataAdminBundle",
+    "description": "Integrate Doctrine ORM into the SonataAdminBundle",
     "keywords": [
         "admin",
         "admin-generator",
@@ -54,9 +54,12 @@
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "require-dev": {
+        "psalm/plugin-symfony": "^1.4",
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^4.2",
-        "symfony/phpunit-bridge": "^5.1.1"
+        "symfony/phpunit-bridge": "^5.1.1",
+        "symfony/templating": "^4.4 || ^5.1",
+        "vimeo/psalm": "^3.13.1"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."

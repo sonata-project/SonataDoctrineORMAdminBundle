@@ -271,23 +271,23 @@ class ModelManagerTest extends TestCase
             );
 
         /** @var ClassMetadata $metadata */
-        list($metadata, $lastPropertyName) = $modelManager
+        [$metadata, $lastPropertyName] = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'integer');
 
-        list($metadata, $lastPropertyName) = $modelManager
+        [$metadata, $lastPropertyName] = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'string');
 
-        list($metadata, $lastPropertyName) = $modelManager
+        [$metadata, $lastPropertyName] = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'embeddedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
-        list($metadata, $lastPropertyName) = $modelManager
+        [$metadata, $lastPropertyName] = $modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.embeddedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
-        list($metadata, $lastPropertyName) = $modelManager
+        [$metadata, $lastPropertyName] = $modelManager
             ->getParentMetadataForProperty(
                 $containerEntityClass,
                 'associatedEntity.embeddedEntity.subEmbeddedEntity.plainField'

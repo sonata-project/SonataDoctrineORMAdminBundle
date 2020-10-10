@@ -18,6 +18,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 class AddTemplatesCompilerPass implements CompilerPassInterface

@@ -20,23 +20,26 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class ModelFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || empty($data['value'])) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || empty($value['value'])) {
             return;
         }
 
-        if ($data['value'] instanceof Collection) {
-            $data['value'] = $data['value']->toArray();
+        if ($value['value'] instanceof Collection) {
+            $value['value'] = $value['value']->toArray();
         }
 
-        if (!\is_array($data['value'])) {
-            $data['value'] = [$data['value']];
+        if (!\is_array($value['value'])) {
+            $value['value'] = [$value['value']];
         }
 
-        $this->handleMultiple($queryBuilder, $alias, $data);
+        $this->handleMultiple($queryBuilder, $alias, $value);
     }
 
     public function getDefaultOptions(): array
@@ -66,18 +69,18 @@ class ModelFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param string $alias
-     * @param mixed  $data
+     * @param string  $alias
+     * @param mixed[] $value
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data): void
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $value): void
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($value['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
             $or = $queryBuilder->expr()->orX();
 
             $or->add($queryBuilder->expr()->notIn($alias, ':'.$parameterName));
@@ -97,10 +100,15 @@ class ModelFilter extends Filter
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $data['value']);
+        $queryBuilder->setParameter($parameterName, $value['value']);
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data): array
+    /**
+     * @param mixed[] $value
+     *
+     * @phpstan-return array{string, bool}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, array $value): array
     {
         $types = [
             ClassMetadata::ONE_TO_ONE,

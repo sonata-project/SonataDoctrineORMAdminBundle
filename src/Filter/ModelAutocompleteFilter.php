@@ -20,22 +20,25 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class ModelAutocompleteFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
         }
 
-        if ($data['value'] instanceof Collection) {
-            $data['value'] = $data['value']->toArray();
+        if ($value['value'] instanceof Collection) {
+            $value['value'] = $value['value']->toArray();
         }
 
-        if (\is_array($data['value'])) {
-            $this->handleMultiple($queryBuilder, $alias, $data);
+        if (\is_array($value['value'])) {
+            $this->handleMultiple($queryBuilder, $alias, $value);
         } else {
-            $this->handleModel($queryBuilder, $alias, $data);
+            $this->handleModel($queryBuilder, $alias, $value);
         }
     }
 
@@ -67,48 +70,53 @@ class ModelAutocompleteFilter extends Filter
      *
      * @param ProxyQueryInterface|QueryBuilder $queryBuilder
      * @param string                           $alias
-     * @param mixed                            $data
+     * @param mixed[]                          $value
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $data): void
+    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $value): void
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($value['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
         } else {
             $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $data['value']);
+        $queryBuilder->setParameter($parameterName, $value['value']);
     }
 
     /**
      * @param ProxyQueryInterface|QueryBuilder $queryBuilder
      * @param string                           $alias
-     * @param mixed                            $data
+     * @param mixed[]                          $value
      */
-    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $data): void
+    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $value): void
     {
-        if (empty($data['value'])) {
+        if (empty($value['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($queryBuilder);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
             $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
         } else {
             $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $data['value']);
+        $queryBuilder->setParameter($parameterName, $value['value']);
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data): array
+    /**
+     * @param mixed[] $value
+     *
+     * @phpstan-return array{string, bool}
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, $value): array
     {
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();

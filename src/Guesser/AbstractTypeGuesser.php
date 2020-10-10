@@ -24,6 +24,10 @@ abstract class AbstractTypeGuesser implements TypeGuesserInterface
      * @param string $propertyFullName
      *
      * @return array|null
+     *
+     * @phpstan-param class-string $baseClass
+     *
+     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}|null
      */
     protected function getParentMetadataForProperty($baseClass, $propertyFullName, ModelManagerInterface $modelManager)
     {

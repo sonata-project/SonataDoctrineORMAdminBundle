@@ -23,18 +23,22 @@ class AddGuesserCompilerPassTest extends TestCase
 {
     public function testProcess(): void
     {
-        $containerBuilder = $this->prophesize(ContainerBuilder::class);
-        $definition = $this->prophesize(Definition::class);
-        $definition->replaceArgument(0, [new Reference('some.id')])->shouldBeCalledTimes(3);
+        $containerBuilder = $this->createStub(ContainerBuilder::class);
+        $definition = $this->createMock(Definition::class);
+        $definition->expects($this->exactly(3))->method('replaceArgument')->with(0, [new Reference('some.id')]);
 
-        $containerBuilder->getDefinition('sonata.admin.guesser.orm_list_chain')->willReturn($definition->reveal());
-        $containerBuilder->getDefinition('sonata.admin.guesser.orm_datagrid_chain')->willReturn($definition->reveal());
-        $containerBuilder->getDefinition('sonata.admin.guesser.orm_show_chain')->willReturn($definition->reveal());
+        $containerBuilder->method('getDefinition')->withConsecutive(
+            ['sonata.admin.guesser.orm_list_chain'],
+            ['sonata.admin.guesser.orm_datagrid_chain'],
+            ['sonata.admin.guesser.orm_show_chain']
+        )->willReturn($definition);
 
-        $containerBuilder->findTaggedServiceIds('sonata.admin.guesser.orm_list')->willReturn(['some.id' => 'attr']);
-        $containerBuilder->findTaggedServiceIds('sonata.admin.guesser.orm_datagrid')->willReturn(['some.id' => 'attr']);
-        $containerBuilder->findTaggedServiceIds('sonata.admin.guesser.orm_show')->willReturn(['some.id' => 'attr']);
+        $containerBuilder->method('findTaggedServiceIds')->withConsecutive(
+            ['sonata.admin.guesser.orm_list'],
+            ['sonata.admin.guesser.orm_datagrid'],
+            ['sonata.admin.guesser.orm_show']
+        )->willReturn(['some.id' => 'attr']);
 
-        (new AddGuesserCompilerPass())->process($containerBuilder->reveal());
+        (new AddGuesserCompilerPass())->process($containerBuilder);
     }
 }

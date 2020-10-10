@@ -18,15 +18,18 @@ use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class CallbackFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
         if (!\is_callable($this->getOption('callback'))) {
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
-        $this->active = \call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $data);
+        $this->active = \call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $value);
     }
 
     public function getDefaultOptions(): array
@@ -50,7 +53,10 @@ class CallbackFilter extends Filter
         ]];
     }
 
-    protected function association(ProxyQueryInterface $queryBuilder, $data): array
+    /**
+     * @param mixed[] $value
+     */
+    protected function association(ProxyQueryInterface $queryBuilder, array $value): array
     {
         $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
 

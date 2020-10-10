@@ -22,12 +22,14 @@ use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelHiddenType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Sonata\AdminBundle\Form\Type\ModelType;
-use Sonata\AdminBundle\Form\Type\ModelTypeList;
 use Sonata\Form\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class FormContractor implements FormContractorInterface
 {
     /**
@@ -93,12 +95,14 @@ class FormContractor implements FormContractorInterface
 
     public function getDefaultOptions(?string $type, FieldDescriptionInterface $fieldDescription): array
     {
+        // NEXT_MAJOR: Remove this line and update the function signature.
+        $formOptions = \func_get_args()[2] ?? [];
+
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
         if ($this->isAnyInstanceOf($type, [
             ModelType::class,
-            ModelTypeList::class,
             ModelListType::class,
             ModelHiddenType::class,
             ModelAutocompleteType::class,
@@ -169,13 +173,7 @@ class FormContractor implements FormContractorInterface
 
             $options['type'] = AdminType::class;
             $options['modifiable'] = true;
-            $options['type_options'] = [
-                'sonata_field_description' => $fieldDescription,
-                'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
-                'empty_data' => static function () use ($fieldDescription) {
-                    return $fieldDescription->getAssociationAdmin()->getNewInstance();
-                },
-            ];
+            $options['type_options'] = $this->getDefaultAdminTypeOptions($fieldDescription, $formOptions);
         }
 
         return $options;
@@ -193,6 +191,8 @@ class FormContractor implements FormContractorInterface
 
     /**
      * @param string[] $classes
+     *
+     * @phpstan-param class-string[] $classes
      */
     private function isAnyInstanceOf(?string $type, array $classes): bool
     {
@@ -207,5 +207,22 @@ class FormContractor implements FormContractorInterface
         }
 
         return false;
+    }
+
+    private function getDefaultAdminTypeOptions(FieldDescriptionInterface $fieldDescription, array $formOptions): array
+    {
+        $typeOptions = [
+            'sonata_field_description' => $fieldDescription,
+            'data_class' => $fieldDescription->getAssociationAdmin()->getClass(),
+            'empty_data' => static function () use ($fieldDescription) {
+                return $fieldDescription->getAssociationAdmin()->getNewInstance();
+            },
+        ];
+
+        if (isset($formOptions['by_reference'])) {
+            $typeOptions['by_reference'] = $formOptions['by_reference'];
+        }
+
+        return $typeOptions;
     }
 }

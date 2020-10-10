@@ -19,6 +19,9 @@ use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class TypeGuesser extends AbstractTypeGuesser
 {
     /**
@@ -44,7 +47,7 @@ class TypeGuesser extends AbstractTypeGuesser
             return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
 
-        list($metadata, $propertyName, $parentAssociationMappings) = $ret;
+        [$metadata, $propertyName, $parentAssociationMappings] = $ret;
 
         if ($metadata->hasAssociation($propertyName)) {
             $mapping = $metadata->getAssociationMapping($propertyName);

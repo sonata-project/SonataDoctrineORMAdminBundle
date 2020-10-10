@@ -17,6 +17,9 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 
+/**
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ */
 class NumberFilter extends Filter
 {
     public const CHOICES = [
@@ -27,19 +30,19 @@ class NumberFilter extends Filter
         NumberOperatorType::TYPE_LESS_THAN => '<',
     ];
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
     {
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || !is_numeric($data['value'])) {
+        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || !is_numeric($value['value'])) {
             return;
         }
 
-        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
+        $type = $value['type'] ?? NumberOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($queryBuilder);
         $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        $queryBuilder->setParameter($parameterName, $data['value']);
+        $queryBuilder->setParameter($parameterName, $value['value']);
     }
 
     public function getDefaultOptions(): array
