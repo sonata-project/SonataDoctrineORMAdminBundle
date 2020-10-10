@@ -60,7 +60,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
                 ++$count;
 
                 if (0 === ($count % $batchSize)) {
-                    list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
+                    [$batchAdded, $batchUpdated] = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
                     $countAdded += $batchAdded;
                     $countUpdated += $batchUpdated;
                     $objectIds = [];
@@ -72,7 +72,7 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
             }
 
             if (\count($objectIds) > 0) {
-                list($batchAdded, $batchUpdated) = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
+                [$batchAdded, $batchUpdated] = $this->configureAcls($output, $admin, new \ArrayIterator($objectIds), $securityIdentity);
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }

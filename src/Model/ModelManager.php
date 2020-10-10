@@ -160,7 +160,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $options['route']['parameters'] = [];
         }
 
-        list($metadata, $propertyName, $parentAssociationMappings) = $this->getParentMetadataForProperty($class, $name);
+        [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
         $fieldDescription = new FieldDescription();
         $fieldDescription->setName($name);

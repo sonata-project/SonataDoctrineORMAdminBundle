@@ -28,7 +28,7 @@ abstract class Filter extends BaseFilter
     {
         $this->value = $value;
         if (\is_array($value) && \array_key_exists('value', $value)) {
-            list($alias, $field) = $this->association($query, $value);
+            [$alias, $field] = $this->association($query, $value);
 
             $this->filter($query, $alias, $field, $value);
         }
