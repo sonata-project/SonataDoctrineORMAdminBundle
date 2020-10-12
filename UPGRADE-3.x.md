@@ -1,6 +1,40 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.x to 3.x
+=======================
+
+### Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter
+
+Deprecate the usage of a callback which does not return a boolean value.
+
+Previously, this was valid:
+```php
+function callback(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $value)
+{
+    if (!$value['value']) {
+        return;
+    }
+
+    // ...
+
+    return true;
+}
+```
+To remove the deprecation, please update the code this way:
+```php
+function callback(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $value): bool
+{
+    if (!$value['value']) {
+        return false;
+    }
+
+    // ...
+
+    return true;
+}
+```
+
 UPGRADE FROM 3.22 to 3.23
 =========================
 
