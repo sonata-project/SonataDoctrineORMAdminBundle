@@ -255,9 +255,9 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ->add('author')
                 ->add('with_open_comments', CallbackFilter::class, [
     //                'callback'   => [$this, 'getWithOpenCommentFilter'],
-                    'callback' => function($queryBuilder, $alias, $field, $value) {
+                    'callback' => static function(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $value): bool {
                         if (!$value['value']) {
-                            return;
+                            return false;
                         }
 
                         $queryBuilder
@@ -274,7 +274,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
         public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
         {
             if (!$value['value']) {
-                return;
+                return false;
             }
 
             $queryBuilder
