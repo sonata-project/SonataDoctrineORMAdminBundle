@@ -16,10 +16,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CallbackFilterTest extends TestCase
 {
+    use ExpectDeprecationTrait;
+
     public function testRenderSettings(): void
     {
         $filter = new CallbackFilter();
@@ -107,5 +110,34 @@ class CallbackFilterTest extends TestCase
         $this->assertSame(['CUSTOM QUERY o.field_name_test'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->parameters);
         $this->assertTrue($filter->isActive());
+    }
+
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @group legacy
+     */
+    public function testWrongCallbackReturnType(): void
+    {
+        $builder = new ProxyQuery(new QueryBuilder());
+
+        $filter = new CallbackFilter();
+        $filter->initialize('field_name', [
+            'callback' => static function ($builder, $alias, $field, $value) {
+                $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $builder->setParameter('value', $value);
+
+                return 1;
+            },
+        ]);
+
+        $this->expectDeprecation(
+            'Using another return type than boolean for the callback option is deprecated'
+            .' since sonata-project/doctrine-orm-admin-bundle 3.x and will throw an exception in version 4.0.'
+        );
+        $filter->filter($builder, 'alias', 'field', 'myValue');
+
+        $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertSame(['value' => 'myValue'], $builder->parameters);
     }
 }
