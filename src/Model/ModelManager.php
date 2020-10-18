@@ -143,12 +143,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getNewFieldDescriptionInstance(string $class, string $name, array $options = []): FieldDescriptionInterface
     {
-        if (!\is_string($name)) {
-            throw new \RuntimeException('The name argument must be a string');
-        }
-
         if (!isset($options['route']['name'])) {
-            $options['route']['name'] = 'edit';
+            $options['route']['name'] = 'show';
         }
 
         if (!isset($options['route']['parameters'])) {
