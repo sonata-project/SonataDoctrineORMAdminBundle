@@ -724,6 +724,54 @@ class ModelManagerTest extends TestCase
         $this->modelManager->getEntityManager(VersionedEntity::class);
     }
 
+    public function testGetNewFieldDescriptionInstance(): void
+    {
+        $modelManager = $this->getMockBuilder(ModelManager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getParentMetadataForProperty'])
+            ->getMock();
+
+        $modelManager->method('getParentMetadataForProperty')->willReturn([
+            $classMetadata = new ClassMetadata(\stdClass::class),
+            'property',
+            [],
+        ]);
+
+        $fieldDescription = $modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', []);
+        $options = $fieldDescription->getOptions();
+
+        $this->assertSame([
+            'route' => ['name' => 'show', 'parameters' => []],
+            'placeholder' => 'short_object_description_placeholder',
+            'link_parameters' => [],
+        ], $options);
+    }
+
+    public function testGetNewFieldDescriptionInstanceWithOptions(): void
+    {
+        $modelManager = $this->getMockBuilder(ModelManager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getParentMetadataForProperty'])
+            ->getMock();
+
+        $modelManager->method('getParentMetadataForProperty')->willReturn([
+            $classMetadata = new ClassMetadata(\stdClass::class),
+            'property',
+            [],
+        ]);
+
+        $fieldDescription = $modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', [
+            'route' => ['name' => 'edit', 'parameters' => ['foo' => 'bar']],
+        ]);
+        $options = $fieldDescription->getOptions();
+
+        $this->assertSame([
+            'route' => ['name' => 'edit', 'parameters' => ['foo' => 'bar']],
+            'placeholder' => 'short_object_description_placeholder',
+            'link_parameters' => [],
+        ], $options);
+    }
+
     /**
      * @dataProvider createUpdateRemoveData
      */
