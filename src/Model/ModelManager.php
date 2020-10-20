@@ -501,8 +501,20 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
+    /**
+     * @phpstan-param non-empty-array<string> $idx
+     *
+     * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
+     */
     public function addIdentifiersToQuery($class, ProxyQueryInterface $query, array $idx)
     {
+        if ([] === $idx) {
+            throw new \InvalidArgumentException(sprintf(
+                'Array passed as argument 3 to "%s()" must not be empty.',
+                __METHOD__
+            ));
+        }
+
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
 
