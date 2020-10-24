@@ -162,9 +162,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName($name);
-        $fieldDescription->setOptions($options);
+        $fieldDescription = new FieldDescription($name, $options);
         $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
         if (isset($metadata->associationMappings[$propertyName])) {

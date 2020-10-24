@@ -50,8 +50,7 @@ class ListBuilderTest extends TestCase
     {
         $this->admin->expects($this->once())->method('addListFieldDescription');
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('foo');
+        $fieldDescription = new FieldDescription('foo');
 
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, 'actions', $fieldDescription, $this->admin);
@@ -68,8 +67,7 @@ class ListBuilderTest extends TestCase
         $this->admin->expects($this->once())->method('addListFieldDescription');
         $this->typeGuesser->method('guessType')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('_action');
+        $fieldDescription = new FieldDescription('_action');
         $fieldDescription->setOption('actions', ['test' => []]);
 
         $list = $this->listBuilder->getBaseList();
@@ -100,8 +98,7 @@ class ListBuilderTest extends TestCase
         $this->admin->expects($this->once())->method('attachAdminClass');
         $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('test');
+        $fieldDescription = new FieldDescription('test');
         $fieldDescription->setOption('sortable', true);
         $fieldDescription->setType('fakeType');
         $fieldDescription->setMappingType($type);
@@ -137,6 +134,6 @@ class ListBuilderTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $this->listBuilder->fixFieldDescription($this->admin, new FieldDescription());
+        $this->listBuilder->fixFieldDescription($this->admin, new FieldDescription('name'));
     }
 }
