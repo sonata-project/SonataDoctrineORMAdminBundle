@@ -41,7 +41,7 @@ class TypeGuesser extends AbstractTypeGuesser
         'number' => TemplateRegistry::TYPE_FLOAT,
     ];
 
-    public function guessType($class, $property, ModelManagerInterface $modelManager)
+    public function guessType(string $class, string $property, ModelManagerInterface $modelManager): ?TypeGuess
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
             return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);

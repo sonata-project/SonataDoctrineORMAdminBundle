@@ -88,16 +88,13 @@ class FormContractor implements FormContractorInterface
         return $this->formFactory;
     }
 
-    public function getFormBuilder(string $name, array $options = []): FormBuilderInterface
+    public function getFormBuilder(string $name, array $formOptions = []): FormBuilderInterface
     {
-        return $this->getFormFactory()->createNamedBuilder($name, FormType::class, null, $options);
+        return $this->getFormFactory()->createNamedBuilder($name, FormType::class, null, $formOptions);
     }
 
-    public function getDefaultOptions(?string $type, FieldDescriptionInterface $fieldDescription): array
+    public function getDefaultOptions(?string $type, FieldDescriptionInterface $fieldDescription, array $formOptions = []): array
     {
-        // NEXT_MAJOR: Remove this line and update the function signature.
-        $formOptions = \func_get_args()[2] ?? [];
-
         $options = [];
         $options['sonata_field_description'] = $fieldDescription;
 
