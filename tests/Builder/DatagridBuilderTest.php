@@ -125,8 +125,7 @@ final class DatagridBuilderTest extends TestCase
         $classMetadata->associationMappings = ['someField' => ['fieldName' => 'fakeField']];
         $classMetadata->embeddedClasses = ['someFieldDeclared' => ['fieldName' => 'fakeField']];
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('test');
+        $fieldDescription = new FieldDescription('test');
         $fieldDescription->setMappingType(ClassMetadata::ONE_TO_MANY);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
@@ -142,8 +141,7 @@ final class DatagridBuilderTest extends TestCase
         $datagrid = $this->createStub(DatagridInterface::class);
         $guessType = $this->createStub(TypeGuess::class);
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName('test');
+        $fieldDescription = new FieldDescription('test');
 
         $this->admin->expects($this->once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');
