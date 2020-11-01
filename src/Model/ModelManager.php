@@ -153,9 +153,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
-        $fieldDescription = new FieldDescription();
-        $fieldDescription->setName($name);
-        $fieldDescription->setOptions($options);
+        $fieldDescription = new FieldDescription($name, $options);
         $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
         if (isset($metadata->associationMappings[$propertyName])) {
@@ -416,15 +414,27 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getNormalizedIdentifier($entity);
     }
 
+    /**
+     * @phpstan-param non-empty-array<string|int> $idx
+     *
+     * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
+     */
     public function addIdentifiersToQuery(string $class, ProxyQueryInterface $query, array $idx): void
     {
+        if ([] === $idx) {
+            throw new \InvalidArgumentException(sprintf(
+                'Array passed as argument 3 to "%s()" must not be empty.',
+                __METHOD__
+            ));
+        }
+
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
 
         $prefix = uniqid();
         $sqls = [];
         foreach ($idx as $pos => $id) {
-            $ids = explode(self::ID_SEPARATOR, $id);
+            $ids = explode(self::ID_SEPARATOR, (string) $id);
 
             $ands = [];
             foreach ($fieldNames as $posName => $name) {

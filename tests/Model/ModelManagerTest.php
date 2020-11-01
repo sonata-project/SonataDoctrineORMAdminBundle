@@ -31,6 +31,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
@@ -56,7 +57,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
-class ModelManagerTest extends TestCase
+final class ModelManagerTest extends TestCase
 {
     /**
      * @var ManagerRegistry|MockObject
@@ -865,7 +866,99 @@ class ModelManagerTest extends TestCase
         $this->assertNull($this->modelManager->find('notImportant', null));
     }
 
-    private function getMetadata($class, $isVersioned)
+    /**
+     * @dataProvider addIdentifiersToQueryProvider
+     */
+    public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
+    {
+        $modelManager = $this->getMockBuilder(ModelManager::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getIdentifierFieldNames'])
+            ->getMock();
+
+        $modelManager
+            ->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->willReturn($identifierFieldNames);
+
+        $em = $this->getMockBuilder(EntityManager::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
+            ->setConstructorArgs([$em])
+            ->setMethodsExcept(['getParameters', 'setParameter'])
+            ->getMock();
+
+        $queryBuilder
+            ->expects($this->exactly(\count($expectedParameters)))
+            ->method('getRootAliases')
+            ->willReturn(['p']);
+
+        $queryBuilder
+            ->expects($this->once())
+            ->method('andWhere')
+            ->with($this->stringContains(sprintf('( p.%s = :field_', $identifierFieldNames[0])));
+
+        $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
+            ->setConstructorArgs([$queryBuilder])
+            ->setMethods(['getSortBy'])
+            ->getMock();
+
+        $modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
+
+        $this->assertCount(\count($expectedParameters), $proxyQuery->getParameters());
+
+        foreach ($proxyQuery->getParameters() as $offset => $parameter) {
+            $this->assertSame($expectedParameters[$offset], $parameter->getValue());
+        }
+    }
+
+    public function addIdentifiersToQueryProvider(): iterable
+    {
+        yield [['1', '2'], ['id'], [1, 2]];
+        yield [['112', '2020'], ['id'], ['112', '2020']];
+        yield [['1', '42', '2', '256'], ['id', 'foreignId'], ['1~42', '2~256']];
+        yield [['a', '4', 'b', '52'], ['id', 'foreignId'], ['a~4', 'b~52']];
+        yield [['048b78d8-eced-47bb-8dff-31d7d32352a0', '1986'], ['mixed'], ['048b78d8-eced-47bb-8dff-31d7d32352a0', '1986']];
+        yield [
+            [
+                '048b78d8-eced-47bb-8dff-31d7d32352a0',
+                '3d6e98f5-8e43-4a81-b39b-3303c0aa5841',
+            ], [
+                'guid',
+            ], [
+                '048b78d8-eced-47bb-8dff-31d7d32352a0',
+                '3d6e98f5-8e43-4a81-b39b-3303c0aa5841',
+            ],
+        ];
+        yield [
+            [
+                '048b78d8-eced-47bb-8dff-31d7d32352a0',
+                '3d6e98f5-8e43-4a81-b39b-3303c0aa5841',
+                'dfc1c309-8628-4e1a-8ce3-d3727dedaac6',
+                'f31b0cb3-a7a5-4297-ba3d-d810b286b002',
+            ], [
+                'guid',
+                'foreingGuid',
+            ], [
+                '048b78d8-eced-47bb-8dff-31d7d32352a0~3d6e98f5-8e43-4a81-b39b-3303c0aa5841',
+                'dfc1c309-8628-4e1a-8ce3-d3727dedaac6~f31b0cb3-a7a5-4297-ba3d-d810b286b002',
+            ],
+        ];
+    }
+
+    public function testAddIdentifiersToQueryWithEmptyIdentifiers(): void
+    {
+        $datagrid = $this->createStub(ProxyQueryInterface::class);
+
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Array passed as argument 3 to "Sonata\DoctrineORMAdminBundle\Model\ModelManager::addIdentifiersToQuery()" must not be empty.');
+
+        $this->modelManager->addIdentifiersToQuery(\stdClass::class, $datagrid, []);
+    }
+
+    private function getMetadata(string $class, bool $isVersioned = false): ClassMetadata
     {
         $metadata = new ClassMetadata($class);
 

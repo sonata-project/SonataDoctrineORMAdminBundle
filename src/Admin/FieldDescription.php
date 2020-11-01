@@ -20,17 +20,13 @@ use Sonata\AdminBundle\Admin\BaseFieldDescription;
  */
 class FieldDescription extends BaseFieldDescription
 {
-    public function __construct()
-    {
-        $this->parentAssociationMappings = [];
-    }
-
     public function setAssociationMapping(array $associationMapping): void
     {
         $this->associationMapping = $associationMapping;
 
         $this->type = $this->type ?: $associationMapping['type'];
         $this->mappingType = $this->mappingType ?: $associationMapping['type'];
+        // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $associationMapping['fieldName'];
     }
 
@@ -66,6 +62,7 @@ class FieldDescription extends BaseFieldDescription
 
         $this->type = $this->type ?: $fieldMapping['type'];
         $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
+        // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
@@ -82,7 +79,7 @@ class FieldDescription extends BaseFieldDescription
 
     public function isIdentifier(): bool
     {
-        return isset($this->fieldMapping['id']) ? $this->fieldMapping['id'] : false;
+        return $this->fieldMapping['id'] ?? false;
     }
 
     public function getValue($object)
