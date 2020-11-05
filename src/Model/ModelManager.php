@@ -37,7 +37,6 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\Exporter\Source\SourceIteratorInterface;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 /**
@@ -62,25 +61,9 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     protected $cache = [];
 
-    /**
-     * NEXT_MAJOR: Make $propertyAccessor mandatory.
-     */
-    public function __construct(ManagerRegistry $registry, ?PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor)
     {
         $this->registry = $registry;
-
-        // NEXT_MAJOR: Remove this block.
-        if (null === $propertyAccessor) {
-            @trigger_error(sprintf(
-                'Constructing "%s" without passing an instance of "%s" as second argument is deprecated since'
-                .' sonata-project/doctrine-orm-admin-bundle 3.22 and will be mandatory in 4.0.',
-                __CLASS__,
-                PropertyAccessorInterface::class
-            ), E_USER_DEPRECATED);
-
-            $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        }
-
         $this->propertyAccessor = $propertyAccessor;
     }
 
@@ -259,13 +242,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function find(string $class, $id): ?object
     {
-        if (null === $id) {
-            @trigger_error(sprintf(
-                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
-                __METHOD__
-            ), E_USER_DEPRECATED);
-
-            return null;
+        if (!\is_int($id) || !\is_string($id)) {
+            throw new \TypeError(sprintf(
+                'Argument 2 passed to %s() must be an int or a string, %s given.',
+                __METHOD__,
+                \is_object($id) ? 'instance of "'.\get_class($id).'"' : '"'.\gettype($id).'"'
+            ));
         }
 
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
@@ -329,16 +311,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return $query->execute();
         }
 
-        // NEXT_MAJOR: Throw an InvalidArgumentException instead.
-        @trigger_error(sprintf(
-            'Not passing an instance of %s or %s as param 1 of %s() is deprecated since'
-            .' sonata-project/doctrine-orm-admin-bundle 3.24 and will throw an exception in 4.0.',
+        throw new \InvalidArgumentException(sprintf(
+            'The query MUST be an instance of %s or %s.',
             QueryBuilder::class,
             ProxyQuery::class,
-            __METHOD__
-        ), E_USER_DEPRECATED);
-
-        return $query->execute();
+        ));
     }
 
     public function getIdentifierValues(object $entity): array

@@ -288,24 +288,4 @@ class StringFilterTest extends TestCase
             [true, StringOperatorType::TYPE_ENDS_WITH, 'alias.field LIKE :field_name_0', '%FooBar'],
         ];
     }
-
-    /**
-     * NEXT_MAJOR: Remove this test.
-     *
-     * @group legacy
-     *
-     * @expectedDeprecation The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.
-     */
-    public function testFormatOption(): void
-    {
-        $filter = new StringFilter();
-        $filter->initialize('field_name', ['format' => '%s']);
-
-        $builder = new ProxyQuery(new QueryBuilder());
-        $this->assertSame([], $builder->query);
-
-        $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 'asd'], $builder->parameters);
-    }
 }

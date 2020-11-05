@@ -87,24 +87,16 @@ class FieldDescriptionTest extends TestCase
     public function testAssociationMapping(): void
     {
         $field = new FieldDescription('name');
-        $field->setAssociationMapping([
-            'type' => 'integer',
-            'fieldName' => 'position',
-        ]);
+        $field->setAssociationMapping(['type' => 'integer']);
 
         $this->assertSame('integer', $field->getType());
         $this->assertSame('integer', $field->getMappingType());
-        $this->assertSame('position', $field->getFieldName());
 
         // cannot overwrite defined definition
-        $field->setAssociationMapping([
-            'type' => 'overwrite?',
-            'fieldName' => 'overwritten',
-        ]);
+        $field->setAssociationMapping(['type' => 'overwrite?']);
 
         $this->assertSame('integer', $field->getType());
         $this->assertSame('integer', $field->getMappingType());
-        $this->assertSame('overwritten', $field->getFieldName());
 
         $field->setMappingType('string');
         $this->assertSame('string', $field->getMappingType());

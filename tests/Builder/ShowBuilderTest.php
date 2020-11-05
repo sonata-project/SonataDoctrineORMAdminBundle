@@ -101,7 +101,6 @@ class ShowBuilderTest extends TestCase
 
     /**
      * @dataProvider fixFieldDescriptionData
-     * @dataProvider fixFieldDescriptionDeprecatedData
      */
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
@@ -142,35 +141,6 @@ class ShowBuilderTest extends TestCase
             ],
             'many-to-many' => [
                 TemplateRegistry::TYPE_MANY_TO_MANY,
-                ClassMetadata::MANY_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
-            ],
-        ];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this dataprovider.
-     */
-    public function fixFieldDescriptionDeprecatedData(): iterable
-    {
-        return [
-            'deprecated-one-to-one' => [
-                'orm_one_to_one',
-                ClassMetadata::ONE_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
-            ],
-            'deprecated-many-to-one' => [
-                'orm_many_to_one',
-                ClassMetadata::MANY_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
-            ],
-            'deprecated-one-to-many' => [
-                'orm_one_to_many',
-                ClassMetadata::ONE_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
-            ],
-            'deprecated-many-to-many' => [
-                'orm_many_to_many',
                 ClassMetadata::MANY_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
             ],

@@ -93,16 +93,7 @@ class StringFilter extends Filter
                 $format = '%%%s';
                 break;
             default:
-                // NEXT_MAJOR: Remove this line, uncomment the following and remove the deprecation
-                $format = $this->getOption('format');
-                // $format = '%%%s%%';
-
-                if ('%%%s%%' !== $format) {
-                    @trigger_error(
-                        'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.',
-                        E_USER_DEPRECATED
-                    );
-                }
+                $format = '%%%s%%';
         }
 
         $queryBuilder->setParameter(
@@ -117,8 +108,6 @@ class StringFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
-            // NEXT_MAJOR: Remove the format option.
-            'format' => '%%%s%%',
             'case_sensitive' => true,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,

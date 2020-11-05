@@ -31,13 +31,6 @@ class Pager extends BasePager
      */
     public const CONCAT_SEPARATOR = '|';
 
-    /**
-     * NEXT_MAJOR: remove this property.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 2.4 and will be removed in 4.0
-     */
-    protected $queryBuilder = null;
-
     public function computeNbResult(): int
     {
         $countQuery = clone $this->getQuery();

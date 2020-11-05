@@ -26,25 +26,6 @@ class FieldDescription extends BaseFieldDescription
 
         $this->type = $this->type ?: $associationMapping['type'];
         $this->mappingType = $this->mappingType ?: $associationMapping['type'];
-        // NEXT_MAJOR: Remove the next line.
-        $this->fieldName = $associationMapping['fieldName'];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
-     */
-    public function getTargetEntity(): ?string
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0.'
-            .' Use %s::getTargetModel() instead.',
-            __METHOD__,
-            __CLASS__
-        ), E_USER_DEPRECATED);
-
-        return $this->getTargetModel();
     }
 
     public function getTargetModel(): ?string
@@ -62,8 +43,6 @@ class FieldDescription extends BaseFieldDescription
 
         $this->type = $this->type ?: $fieldMapping['type'];
         $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
-        // NEXT_MAJOR: Remove the next line.
-        $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
     public function setParentAssociationMappings(array $parentAssociationMappings): void

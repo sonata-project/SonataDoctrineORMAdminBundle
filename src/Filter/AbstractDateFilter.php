@@ -182,15 +182,13 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * NEXT_MAJOR: Change the visibility for private.
-     *
      * Resolves DateOperatorType:: constants to SQL operators.
      *
      * @param int $type
      *
      * @return string
      */
-    protected function getOperator($type)
+    private function getOperator($type)
     {
         $type = (int) $type;
 

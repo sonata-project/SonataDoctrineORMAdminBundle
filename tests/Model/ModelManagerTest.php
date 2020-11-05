@@ -855,18 +855,6 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @group legacy
-     *
-     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::find() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
-     */
-    public function testFindBadId(): void
-    {
-        $this->assertNull($this->modelManager->find('notImportant', null));
-    }
-
-    /**
      * @dataProvider addIdentifiersToQueryProvider
      */
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
