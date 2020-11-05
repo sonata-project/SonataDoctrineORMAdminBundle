@@ -47,9 +47,6 @@ class AuditBlockServiceTest extends BlockServiceTestCase
         );
     }
 
-    /**
-     * @group legacy
-     */
     public function testExecute(): void
     {
         $blockContext = $this->createMock(BlockContextInterface::class);
