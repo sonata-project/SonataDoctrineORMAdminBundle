@@ -59,7 +59,7 @@
         "psalm/plugin-symfony": "^1.4",
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^4.2",
-        "symfony/phpunit-bridge": "^5.1.1",
+        "symfony/phpunit-bridge": "^5.1.4",
         "symfony/templating": "^4.4 || ^5.1",
         "vimeo/psalm": "^3.13.1"
     },

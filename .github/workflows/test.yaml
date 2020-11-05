@@ -74,11 +74,6 @@ jobs:
               if: matrix.php-version == '8.0'
               run: composer config platform.php 7.4.99
 
-            - name: Sets PHPUnit 8.5 for PHP 7.2
-              if: matrix.php-version == '7.2'
-              run: |
-                  echo 'SYMFONY_PHPUNIT_VERSION=8.5' >> $GITHUB_ENV
-
             - name: Install variant
               if: matrix.variant != 'normal'
               run: composer require ${{ matrix.variant }} --no-update
