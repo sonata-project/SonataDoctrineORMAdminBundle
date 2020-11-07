@@ -188,4 +188,27 @@ final class DateRangeFilterTest extends TestCase
             new \DateTimeZone('Africa/Cairo'),
         ];
     }
+
+    public function testFilterEndDateImmutable(): void
+    {
+        $filter = new DateRangeFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+
+        $builder = new ProxyQuery(new QueryBuilder());
+
+        $endDateTime = new \DateTimeImmutable('2016-08-31');
+
+        $filter->filter($builder, 'alias', 'field', [
+            'type' => null,
+            'value' => [
+                'start' => '',
+                'end' => $endDateTime,
+            ],
+        ]);
+
+        $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
+        $this->assertCount(1, $builder->parameters);
+        $this->assertSame($endDateTime->modify('+23 hours 59 minutes 59 seconds')->getTimestamp(), $builder->parameters['field_name_1']->getTimestamp());
+        $this->assertTrue($filter->isActive());
+    }
 }
