@@ -170,6 +170,7 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
 
+        // NEXT_MAJOR: Remove this code since it was introduced in SonataAdmin (https://github.com/sonata-project/SonataAdminBundle/pull/6571)
         if (false !== $filter->getLabel() && !$filter->getLabel()) {
             $filter->setLabel($admin->getLabelTranslatorStrategy()->getLabel($fieldDescription->getName(), 'filter', 'label'));
         }
