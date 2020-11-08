@@ -385,20 +385,20 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
-    public function getNormalizedIdentifier(object $entity): string
+    public function getNormalizedIdentifier(object $entity): ?string
     {
         if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
-            throw new \InvalidArgumentException(sprintf(
-                'Can not get the normalized identifier for %s since it is in state %u.',
-                ClassUtils::getClass($entity),
-                $this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity)
-            ));
+            return null;
         }
 
         $values = $this->getIdentifierValues($entity);
+
+        if (0 === \count($values)) {
+            return null;
+        }
 
         return implode(self::ID_SEPARATOR, $values);
     }
@@ -409,7 +409,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
-    public function getUrlSafeIdentifier(object $entity): string
+    public function getUrlSafeIdentifier(object $entity): ?string
     {
         return $this->getNormalizedIdentifier($entity);
     }
