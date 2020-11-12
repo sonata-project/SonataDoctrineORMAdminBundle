@@ -13,19 +13,18 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
 
-class StringListFilterTest extends TestCase
+class StringListFilterTest extends FilterTestCase
 {
     public function testItStaysDisabledWhenFilteringWithAnEmptyValue(): void
     {
         $filter = new StringListFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
@@ -39,12 +38,12 @@ class StringListFilterTest extends TestCase
         $filter = new StringListFilter();
         $filter->initialize('field_name');
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => null]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%N;%'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%N;%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -56,12 +55,12 @@ class StringListFilterTest extends TestCase
         $filter = new StringListFilter();
         $filter->initialize('field_name');
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => $type]);
         $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -76,12 +75,12 @@ class StringListFilterTest extends TestCase
         $filter = new StringListFilter();
         $filter->initialize('field_name');
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_NOT_CONTAINS]);
         $this->assertSame(['alias.field NOT LIKE :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -90,12 +89,12 @@ class StringListFilterTest extends TestCase
         $filter = new StringListFilter();
         $filter->initialize('field_name');
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_EQUAL]);
         $this->assertSame(['alias.field LIKE :field_name_0 AND alias.field LIKE \'a:1:%\''], $builder->query);
-        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->parameters);
+        $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -111,12 +110,12 @@ class StringListFilterTest extends TestCase
         $filter = new StringListFilter();
         $filter->initialize('field_name');
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => $type]);
         $this->assertSame($query, $builder->query);
-        $this->assertSame($parameters, $builder->parameters);
+        $this->assertSame($parameters, $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
