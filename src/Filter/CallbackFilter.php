@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -23,13 +24,24 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class CallbackFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (!\is_callable($this->getOption('callback'))) {
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
-        $isActive = \call_user_func($this->getOption('callback'), $queryBuilder, $alias, $field, $value);
+        $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $value);
         if (!\is_bool($isActive)) {
             @trigger_error(
                 'Using another return type than boolean for the callback option is deprecated'
@@ -73,9 +85,20 @@ class CallbackFilter extends Filter
      *
      * @return array
      */
-    protected function association(ProxyQueryInterface $queryBuilder, $value)
+    protected function association(BaseProxyQueryInterface $query, $value)
     {
-        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        $alias = $query->entityJoin($this->getParentAssociationMappings());
 
         return [$this->getOption('alias', $alias), $this->getFieldName()];
     }

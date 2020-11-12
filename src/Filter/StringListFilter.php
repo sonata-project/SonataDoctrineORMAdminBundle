@@ -13,14 +13,26 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 final class StringListFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value): void
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
             return;
         }
@@ -31,19 +43,19 @@ final class StringListFilter extends Filter
 
         $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $value['type'] ? 'NOT LIKE' : 'LIKE';
 
-        $andConditions = $queryBuilder->expr()->andX();
+        $andConditions = $query->getQueryBuilder()->expr()->andX();
         foreach ($value['value'] as $item) {
-            $parameterName = $this->getNewParameterName($queryBuilder);
+            $parameterName = $this->getNewParameterName($query);
             $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
-            $queryBuilder->setParameter($parameterName, '%'.serialize($item).'%');
+            $query->getQueryBuilder()->setParameter($parameterName, '%'.serialize($item).'%');
         }
 
         if (ContainsOperatorType::TYPE_EQUAL === $value['type']) {
             $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($value['value'])));
         }
 
-        $this->applyWhere($queryBuilder, $andConditions);
+        $this->applyWhere($query, $andConditions);
     }
 
     public function getDefaultOptions(): array

@@ -13,9 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Doctrine\ORM\QueryBuilder;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class Filter extends BaseFilter
 {
@@ -23,6 +23,17 @@ abstract class Filter extends BaseFilter
      * @var bool
      */
     protected $active = false;
+
+    /**
+     * NEXT_MAJOR change $query type for Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface.
+     *
+     * Apply the filter to the QueryBuilder instance.
+     *
+     * @param string  $alias
+     * @param string  $field
+     * @param mixed[] $value
+     */
+    abstract public function filter(BaseProxyQueryInterface $query, $alias, $field, $value);
 
     public function apply($query, $value)
     {
@@ -44,23 +55,44 @@ abstract class Filter extends BaseFilter
      *
      * @return string[]
      */
-    protected function association(ProxyQueryInterface $queryBuilder, array $value)
+    protected function association(BaseProxyQueryInterface $query, array $value)
     {
-        $alias = $queryBuilder->entityJoin($this->getParentAssociationMappings());
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        $alias = $query->entityJoin($this->getParentAssociationMappings());
 
         return [$alias, $this->getFieldName()];
     }
 
     /**
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     * @param mixed                            $parameter
+     * @param mixed $parameter
      */
-    protected function applyWhere(ProxyQueryInterface $queryBuilder, $parameter)
+    protected function applyWhere(BaseProxyQueryInterface $query, $parameter)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (self::CONDITION_OR === $this->getCondition()) {
-            $queryBuilder->orWhere($parameter);
+            $query->getQueryBuilder()->orWhere($parameter);
         } else {
-            $queryBuilder->andWhere($parameter);
+            $query->getQueryBuilder()->andWhere($parameter);
         }
 
         // filter is active since it's added to the queryBuilder
@@ -70,10 +102,21 @@ abstract class Filter extends BaseFilter
     /**
      * @return string
      */
-    protected function getNewParameterName(ProxyQueryInterface $queryBuilder)
+    protected function getNewParameterName(BaseProxyQueryInterface $query)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.
-        return str_replace('.', '_', $this->getName()).'_'.$queryBuilder->getUniqueParameterId();
+        return str_replace('.', '_', $this->getName()).'_'.$query->getUniqueParameterId();
     }
 }

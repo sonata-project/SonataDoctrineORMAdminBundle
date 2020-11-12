@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Operator\DateOperatorType;
 use Sonata\AdminBundle\Form\Type\Operator\DateRangeOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class AbstractDateFilter extends Filter
 {
@@ -47,8 +48,19 @@ abstract class AbstractDateFilter extends Filter
      */
     protected $time = false;
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         // check data sanity
         if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
@@ -85,27 +97,27 @@ abstract class AbstractDateFilter extends Filter
             // default type for range filter
             $value['type'] = !isset($value['type']) || !is_numeric($value['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $value['type'];
 
-            $startDateParameterName = $this->getNewParameterName($queryBuilder);
-            $endDateParameterName = $this->getNewParameterName($queryBuilder);
+            $startDateParameterName = $this->getNewParameterName($query);
+            $endDateParameterName = $this->getNewParameterName($query);
 
             if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $value['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
+                $this->applyWhere($query, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
                 if ($value['value']['start']) {
-                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
+                    $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
                 }
 
                 if ($value['value']['end']) {
-                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
+                    $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
                 }
             }
 
             if ($value['value']['start']) {
-                $queryBuilder->setParameter($startDateParameterName, $value['value']['start']);
+                $query->getQueryBuilder()->setParameter($startDateParameterName, $value['value']['start']);
             }
 
             if ($value['value']['end']) {
-                $queryBuilder->setParameter($endDateParameterName, $value['value']['end']);
+                $query->getQueryBuilder()->setParameter($endDateParameterName, $value['value']['end']);
             }
         } else {
             if (!$value['value']) {
@@ -125,33 +137,33 @@ abstract class AbstractDateFilter extends Filter
 
             // null / not null only check for col
             if (\in_array($operator, ['NULL', 'NOT NULL'], true)) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
+                $this->applyWhere($query, sprintf('%s.%s IS %s ', $alias, $field, $operator));
 
                 return;
             }
 
-            $parameterName = $this->getNewParameterName($queryBuilder);
+            $parameterName = $this->getNewParameterName($query);
 
             // date filter should filter records for the whole day
             if (false === $this->time && DateOperatorType::TYPE_EQUAL === $value['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
-                $queryBuilder->setParameter($parameterName, $value['value']);
+                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
+                $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
 
-                $endDateParameterName = $this->getNewParameterName($queryBuilder);
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
+                $endDateParameterName = $this->getNewParameterName($query);
+                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
                 if ('timestamp' === $this->getOption('input_type')) {
                     $endValue = strtotime('+1 day', $value['value']);
                 } else {
                     $endValue = clone $value['value'];
                     $endValue->add(new \DateInterval('P1D'));
                 }
-                $queryBuilder->setParameter($endDateParameterName, $endValue);
+                $query->getQueryBuilder()->setParameter($endDateParameterName, $endValue);
 
                 return;
             }
 
-            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-            $queryBuilder->setParameter($parameterName, $value['value']);
+            $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+            $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
         }
     }
 
