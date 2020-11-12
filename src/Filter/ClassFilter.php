@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
 /**
@@ -28,8 +29,19 @@ class ClassFilter extends Filter
         EqualOperatorType::TYPE_NOT_EQUAL => 'NOT INSTANCE OF',
     ];
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
             return;
         }
@@ -41,7 +53,7 @@ class ClassFilter extends Filter
         $type = $value['type'] ?? EqualOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
-        $this->applyWhere($queryBuilder, sprintf('%s %s %s', $alias, $operator, $value['value']));
+        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $value['value']));
     }
 
     public function getDefaultOptions()

@@ -13,25 +13,37 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class ChoiceFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
             return;
         }
 
         if (\is_array($value['value'])) {
-            $this->filterWithMultipleValues($queryBuilder, $alias, $field, $value);
+            $this->filterWithMultipleValues($query, $alias, $field, $value);
         } else {
-            $this->filterWithSingleValue($queryBuilder, $alias, $field, $value);
+            $this->filterWithSingleValue($query, $alias, $field, $value);
         }
     }
 
@@ -54,8 +66,19 @@ class ChoiceFilter extends Filter
         ]];
     }
 
-    private function filterWithMultipleValues(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data = []): void
+    private function filterWithMultipleValues(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if (0 === \count($data['value'])) {
             return;
         }
@@ -71,45 +94,56 @@ class ChoiceFilter extends Filter
 
         // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
         $completeField = sprintf('%s.%s', $alias, $field);
-        $parameterName = $this->getNewParameterName($queryBuilder);
+        $parameterName = $this->getNewParameterName($query);
         if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
-            $andConditions = [$queryBuilder->expr()->isNotNull($completeField)];
+            $andConditions = [$query->getQueryBuilder()->expr()->isNotNull($completeField)];
             if (0 !== \count($data['value'])) {
-                $andConditions[] = $queryBuilder->expr()->notIn($completeField, ':'.$parameterName);
-                $queryBuilder->setParameter($parameterName, $data['value']);
+                $andConditions[] = $query->getQueryBuilder()->expr()->notIn($completeField, ':'.$parameterName);
+                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
             }
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->andX()->addMultiple($andConditions));
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->andX()->addMultiple($andConditions));
         } else {
-            $orConditions = [$queryBuilder->expr()->in($completeField, ':'.$parameterName)];
+            $orConditions = [$query->getQueryBuilder()->expr()->in($completeField, ':'.$parameterName)];
             if ($isNullSelected) {
-                $orConditions[] = $queryBuilder->expr()->isNull($completeField);
+                $orConditions[] = $query->getQueryBuilder()->expr()->isNull($completeField);
             }
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->orX()->addMultiple($orConditions));
-            $queryBuilder->setParameter($parameterName, $data['value']);
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->orX()->addMultiple($orConditions));
+            $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
         }
     }
 
-    private function filterWithSingleValue(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data = []): void
+    private function filterWithSingleValue(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if ('' === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
             return;
         }
 
-        $parameterName = $this->getNewParameterName($queryBuilder);
+        $parameterName = $this->getNewParameterName($query);
 
         if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             if (null === $data['value']) {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->isNotNull(sprintf('%s.%s', $alias, $field)));
+                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNotNull(sprintf('%s.%s', $alias, $field)));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s != :%s', $alias, $field, $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
+                $this->applyWhere($query, sprintf('%s.%s != :%s', $alias, $field, $parameterName));
+                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
             }
         } else {
             if (null === $data['value']) {
-                $this->applyWhere($queryBuilder, $queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
             } else {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-                $queryBuilder->setParameter($parameterName, $data['value']);
+                $this->applyWhere($query, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
             }
         }
     }
