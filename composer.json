@@ -54,6 +54,7 @@
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "require-dev": {
+        "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.52",
         "phpstan/phpstan-symfony": "^0.12.10",
         "psalm/plugin-symfony": "^2.0",
