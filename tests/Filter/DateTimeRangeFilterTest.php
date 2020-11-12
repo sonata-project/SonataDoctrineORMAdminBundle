@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\Form\Type\DateTimeRangeType;
@@ -21,14 +20,14 @@ use Sonata\Form\Type\DateTimeRangeType;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class DateTimeRangeFilterTest extends TestCase
+class DateTimeRangeFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {
         $filter = new DateTimeRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
