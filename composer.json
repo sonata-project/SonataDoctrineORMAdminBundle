@@ -56,12 +56,12 @@
     "require-dev": {
         "phpstan/phpstan": "^0.12.52",
         "phpstan/phpstan-symfony": "^0.12.10",
-        "psalm/plugin-symfony": "^1.4",
+        "psalm/plugin-symfony": "^2.0",
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
-        "symfony/phpunit-bridge": "^5.1.1",
+        "symfony/phpunit-bridge": "^5.1.8",
         "symfony/templating": "^4.4 || ^5.1",
-        "vimeo/psalm": "^3.13.1"
+        "vimeo/psalm": "^4.1.1"
     },
     "suggest": {
         "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
