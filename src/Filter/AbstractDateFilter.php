@@ -65,19 +65,21 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // date filter should filter records for the whole days
-            if (false === $this->time) {
-                if ($value['value']['start'] instanceof \DateTime) {
-                    $value['value']['start']->setTime(0, 0, 0);
-                }
-                if ($value['value']['end'] instanceof \DateTime) {
-                    $value['value']['end']->setTime(23, 59, 59);
-                }
+            if (false === $this->time && ($value['value']['end'] instanceof \DateTime || $value['value']['end'] instanceof \DateTimeImmutable)) {
+                // since the received `\DateTime` object  uses the model timezone to represent
+                // the value submitted by the view (which can use a different timezone) and this
+                // value is intended to contain a time in the begining of a date (IE, if the model
+                // object is configured to use UTC timezone, the view object "2020-11-07 00:00:00.0-03:00"
+                // is transformed to "2020-11-07 03:00:00.0+00:00" in the model object), we increment
+                // the time part by adding "23:59:59" in order to cover the whole end date and get proper
+                // results from queries like "o.created_at <= :date_end".
+                $value['value']['end'] = $value['value']['end']->modify('+23 hours 59 minutes 59 seconds');
             }
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $value['value']['start'] = $value['value']['start'] instanceof \DateTime ? $value['value']['start']->getTimestamp() : 0;
-                $value['value']['end'] = $value['value']['end'] instanceof \DateTime ? $value['value']['end']->getTimestamp() : 0;
+                $value['value']['start'] = $value['value']['start'] instanceof \DateTimeInterface ? $value['value']['start']->getTimestamp() : 0;
+                $value['value']['end'] = $value['value']['end'] instanceof \DateTimeInterface ? $value['value']['end']->getTimestamp() : 0;
             }
 
             // default type for range filter
@@ -118,7 +120,7 @@ abstract class AbstractDateFilter extends Filter
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $value['value'] = $value['value'] instanceof \DateTime ? $value['value']->getTimestamp() : 0;
+                $value['value'] = $value['value'] instanceof \DateTimeInterface ? $value['value']->getTimestamp() : 0;
             }
 
             // null / not null only check for col
