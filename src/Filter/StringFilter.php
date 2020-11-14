@@ -28,6 +28,7 @@ class StringFilter extends Filter
         StringOperatorType::TYPE_ENDS_WITH => 'LIKE',
         StringOperatorType::TYPE_NOT_CONTAINS => 'NOT LIKE',
         StringOperatorType::TYPE_EQUAL => '=',
+        StringOperatorType::TYPE_NOT_EQUAL => '<>',
     ];
 
     public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value)
@@ -56,44 +57,43 @@ class StringFilter extends Filter
             $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         }
 
-        if (StringOperatorType::TYPE_NOT_CONTAINS === $type) {
+        if (StringOperatorType::TYPE_NOT_CONTAINS === $type || StringOperatorType::TYPE_NOT_EQUAL === $type) {
             $or->add($queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($queryBuilder, $or);
 
-        if (StringOperatorType::TYPE_EQUAL === $type) {
-            $queryBuilder->setParameter(
-                $parameterName,
-                $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
-            );
-        } else {
-            switch ($type) {
-                case StringOperatorType::TYPE_STARTS_WITH:
-                    $format = '%s%%';
-                    break;
-                case StringOperatorType::TYPE_ENDS_WITH:
-                    $format = '%%%s';
-                    break;
-                default:
-                    $format = $this->getOption('format');
+        switch ($type) {
+            case StringOperatorType::TYPE_EQUAL:
+            case StringOperatorType::TYPE_NOT_EQUAL:
+                $format = '%s';
+                break;
+            case StringOperatorType::TYPE_STARTS_WITH:
+                $format = '%s%%';
+                break;
+            case StringOperatorType::TYPE_ENDS_WITH:
+                $format = '%%%s';
+                break;
+            default:
+                // NEXT_MAJOR: Remove this line, uncomment the following and remove the deprecation
+                $format = $this->getOption('format');
+                // $format = '%%%s%%';
 
-                    if ('%%%s%%' !== $format) {
-                        @trigger_error(
-                            'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.',
-                            E_USER_DEPRECATED
-                        );
-                    }
-            }
-
-            $queryBuilder->setParameter(
-                $parameterName,
-                sprintf(
-                    $format,
-                    $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
-                )
-            );
+                if ('%%%s%%' !== $format) {
+                    @trigger_error(
+                        'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.',
+                        E_USER_DEPRECATED
+                    );
+                }
         }
+
+        $queryBuilder->setParameter(
+            $parameterName,
+            sprintf(
+                $format,
+                $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
+            )
+        );
     }
 
     public function getDefaultOptions()
