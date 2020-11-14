@@ -224,7 +224,7 @@ class FormContractor implements FormContractorInterface
         ];
 
         if (isset($formOptions['by_reference'])) {
-            $typeOptions['by_reference'] = $formOptions['by_reference'];
+            $typeOptions['collection_by_reference'] = $formOptions['by_reference'];
         }
 
         return $typeOptions;

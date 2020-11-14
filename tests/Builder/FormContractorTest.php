@@ -125,7 +125,7 @@ final class FormContractorTest extends TestCase
             $this->assertSame($fieldDescription, $options['type_options']['sonata_field_description']);
             $this->assertSame($modelClass, $options['type_options']['data_class']);
             $this->assertSame($model, $options['type_options']['empty_data']());
-            $this->assertFalse($options['type_options']['by_reference']);
+            $this->assertFalse($options['type_options']['collection_by_reference']);
         }
     }
 
