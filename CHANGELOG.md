@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.25.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.24.0...3.25.0) - 2020-11-15
+### Added
+- [[#1202](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1202)] Added "Not equal" filter for `StringFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1190](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1190)] Support for `\DateTimeImmutable` at `AbstractDateFilter::filter()` ([@phansys](https://github.com/phansys))
+- [[#1166](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1166)] Check to guarantee that argument 3 passed to `ModelManager::addIdentifiersToQuery()` is not an empty array ([@phansys](https://github.com/phansys))
+
+### Deprecated
+- [[#1170](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1170)] Instantiate a FieldDescription without passing the name as first argument ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1159](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1159)] Using a callback filter with a callback option which does not return a boolean ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1197](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1197)] `FormContractor::getDefaultOptions()` passes `collection_by_reference` option instead of `by_reference` to `AdminType` in order to respect the new API ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1189](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1189)] Setting wrong date and time references at `AbstractDateFilter::filter()` ([@phansys](https://github.com/phansys))
+- [[#1136](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1136)] `TypeError` thrown by `explode()` when receiving non string values as argument 2 from argument 3 at `ModelManager::addIdentifiersToQuery()` ([@phansys](https://github.com/phansys))
+
 ## [3.24.0](sonata-project/SonataDoctrineORMAdminBundle/compare/3.23.0...3.24.0) - 2020-10-08
 ### Added
 - [[#1142](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1142)] `FormContractor::getDefaultOptions()` pass `by_reference` from `CollectionType` to `AdminType` ([@VincentLanglet](https://github.com/VincentLanglet))
