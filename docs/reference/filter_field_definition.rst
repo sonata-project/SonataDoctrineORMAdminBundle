@@ -67,6 +67,15 @@ Example
         }
     }
 
+StringFilter
+------------
+
+The string filter has additional options:
+
+* ``case_sensitive`` - set to ``false`` to make the search case insensitive. By default ``true`` is used;
+* ``trim`` - use one of ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_*`` constants to control the clearing of blank spaces around in the value. By default ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_BOTH`` is used;
+* ``allow_empty`` - set to ``true`` to enable search by empty value. By default ``false`` is used.
+
 StringListFilter
 ----------------
 
