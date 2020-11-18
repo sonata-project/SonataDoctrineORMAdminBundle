@@ -508,7 +508,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
             $ands = [];
             foreach ($fieldNames as $posName => $field) {
-                $ands[] = $this->buildInnerIdentifier($prefix, $field, $ids[$posName], $pos, $qb, $classMetadata);
+                $parameterName = sprintf('field_%s_%s_%d', $prefix, $field, $pos);
+                $ands[] = $this->buildInnerIdentifier($field, $ids[$posName], $parameterName, $qb, $classMetadata);
             }
 
             $sqls[] = implode(' AND ', $ands);
@@ -826,10 +827,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return Type::getType($fieldType);
     }
 
-    private function buildInnerIdentifier(string $prefix, string $field, $value, int $pos, QueryBuilder $qb, ClassMetadata $classMetadata): string
+    private function buildInnerIdentifier(string $field, $value, string $parameterName, QueryBuilder $qb, ClassMetadata $classMetadata): string
     {
-        $parameterName = sprintf('field_%s_%s_%d', $prefix, $field, $pos);
-
         $fieldMapping = $classMetadata->getFieldMapping($field);
         if ($this->hasFieldCustomType($fieldMapping['type'])) {
             $type = $this->getFieldCustomType($fieldMapping['type'])->getName();
