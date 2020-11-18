@@ -192,6 +192,8 @@ Empty
         }
     }
 
+The ``inverse`` option can be used to filter values that are not empty.
+
 Advanced usage
 --------------
 

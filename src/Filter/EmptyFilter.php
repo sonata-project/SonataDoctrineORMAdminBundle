@@ -31,19 +31,18 @@ final class EmptyFilter extends Filter
             return;
         }
 
-        if (BooleanType::TYPE_YES === (int) $value['value']) {
+        $isYes = BooleanType::TYPE_YES === (int) $value['value'];
+        $isNo = BooleanType::TYPE_NO === (int) $value['value'];
+
+        if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
             $this->applyWhere(
                 $queryBuilder,
-                $queryBuilder
-                ->expr()
-                ->isNull(sprintf('%s.%s', $alias, $field))
+                $queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field))
             );
-        } elseif (BooleanType::TYPE_NO === (int) $value['value']) {
+        } elseif (!$this->getOption('inverse') && $isNo || $this->getOption('inverse') && $isYes) {
             $this->applyWhere(
                 $queryBuilder,
-                $queryBuilder
-                ->expr()
-                ->isNotNull(sprintf('%s.%s', $alias, $field))
+                $queryBuilder->expr()->isNotNull(sprintf('%s.%s', $alias, $field))
             );
         }
     }
@@ -54,6 +53,7 @@ final class EmptyFilter extends Filter
             'field_type' => BooleanType::class,
             'operator_type' => HiddenType::class,
             'operator_options' => [],
+            'inverse' => false,
         ];
     }
 

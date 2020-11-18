@@ -38,11 +38,12 @@ final class EmptyFilterTest extends TestCase
     /**
      * @dataProvider valueDataProvider
      */
-    public function testValue(int $value, string $expectedQuery): void
+    public function testValue(bool $inverse, int $value, string $expectedQuery): void
     {
         $filter = new EmptyFilter();
         $filter->initialize('field_name', [
             'field_options' => ['class' => 'FooBar'],
+            'inverse' => $inverse,
         ]);
 
         $builder = new ProxyQuery(new QueryBuilder());
@@ -68,8 +69,10 @@ final class EmptyFilterTest extends TestCase
     public function valueDataProvider(): array
     {
         return [
-            [BooleanType::TYPE_YES, 'alias.field IS NULL'],
-            [BooleanType::TYPE_NO, 'alias.field IS NOT NULL'],
+            [false, BooleanType::TYPE_YES, 'alias.field IS NULL'],
+            [false, BooleanType::TYPE_NO, 'alias.field IS NOT NULL'],
+            [true, BooleanType::TYPE_YES, 'alias.field IS NOT NULL'],
+            [true, BooleanType::TYPE_NO, 'alias.field IS NULL'],
         ];
     }
 }
