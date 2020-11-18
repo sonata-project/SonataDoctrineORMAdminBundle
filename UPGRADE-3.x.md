@@ -1,8 +1,25 @@
 UPGRADE 3.x
 ===========
 
-UPGRADE FROM 3.x to 3.x
-=======================
+UPGRADE FROM 3.24 to 3.25
+=========================
+
+### Sonata\DoctrineORMAdminBundle\Model\ModelManager
+
+Previously passing an object which is in state new or removed as argument 1 for `getNormalizedIdentifier()` was deprecated and would throw an exception in 4.0. Since throwing an exception is not allowed (and returning `null` is still allowed), the deprecation is removed.
+
+### Added full support for `\DateTimeImmutable` in filters extending `Sonata\DoctrineORMAdminBundle\Filter\AbstractDateFilter`
+
+- `Sonata\DoctrineORMAdminBundle\Filter\DateFilter`
+- `Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter`
+- `Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter`
+- `Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter`
+- `Sonata\DoctrineORMAdminBundle\Filter\TimeFilter`
+
+Previous to this change, only the instances of `\DateTime` were manipulated in these
+filters to set the time under determined circumstances. If you are using them with instances
+of `\DateTimeImmutable`, be aware of this change in order to confirm if you must update
+your implementation.
 
 ### Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter
 

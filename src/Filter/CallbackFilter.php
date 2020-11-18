@@ -33,7 +33,7 @@ class CallbackFilter extends Filter
         if (!\is_bool($isActive)) {
             @trigger_error(
                 'Using another return type than boolean for the callback option is deprecated'
-                .' since sonata-project/doctrine-orm-admin-bundle 3.x and will throw an exception in version 4.0.',
+                .' since sonata-project/doctrine-orm-admin-bundle 3.25 and will throw an exception in version 4.0.',
                 E_USER_DEPRECATED
             );
 
