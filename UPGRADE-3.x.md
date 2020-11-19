@@ -5,6 +5,10 @@ UPGRADE 3.x
 
 The EmptyFilter is deprecated, use NullFilter instead.
 
+### Sonata\DoctrineORMAdminBundle\Model\ModelManager
+
+Deprecate `modelTransform()`, `getDefaultPerPageOptions()`, `getDefaultSortValues()` and `getDataSourceIterator()` with no replacement.
+
 ### Sonata\DoctrineORMAdminBundle\Filter\Filter
 
 Deprecate passing an instance of `Sonata\AdminBundle\Datagrid\ProxyQueryInterface`

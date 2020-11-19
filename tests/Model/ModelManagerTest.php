@@ -653,6 +653,8 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this dataprovider.
+     *
      * [sortBy, sortOrder, isAddOrderBy].
      *
      * @return array
@@ -668,6 +670,10 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider getSortableInDataSourceIteratorDataProvider
      *
      * @param string|null $sortBy
@@ -723,6 +729,7 @@ final class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.');
         $this->modelManager->getDataSourceIterator($datagrid, []);
 
         if ($isAddOrderBy) {
@@ -792,8 +799,15 @@ final class ModelManagerTest extends TestCase
         $this->assertTrue($collection->isEmpty());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testModelTransform(): void
     {
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+
         $result = $this->modelManager->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
 
         $this->assertSame('doWeNeedThisMethod', $result);

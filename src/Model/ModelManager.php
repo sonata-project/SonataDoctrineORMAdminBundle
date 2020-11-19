@@ -576,8 +576,20 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-admin/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.
+     *
+     * @return DoctrineORMQuerySourceIterator
+     */
     public function getDataSourceIterator(DatagridInterface $datagrid, array $fields, $firstResult = null, $maxResult = null)
     {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            __METHOD__
+        ), E_USER_DEPRECATED);
+
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
 
@@ -674,8 +686,18 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return ['filter' => $values];
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     */
     public function getDefaultSortValues($class)
     {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            __METHOD__
+        ), E_USER_DEPRECATED);
+
         return [
             '_sort_order' => 'ASC',
             '_sort_by' => implode(',', $this->getModelIdentifier($class)),
@@ -684,13 +706,33 @@ class ModelManager implements ModelManagerInterface, LockInterface
         ];
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     */
     public function getDefaultPerPageOptions(string $class): array
     {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            __METHOD__
+        ), E_USER_DEPRECATED);
+
         return [10, 25, 50, 100, 250];
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     */
     public function modelTransform($class, $instance)
     {
+        @trigger_error(sprintf(
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+            __METHOD__
+        ), E_USER_DEPRECATED);
+
         return $instance;
     }
 
