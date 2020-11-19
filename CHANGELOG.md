@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.26.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.25.0...3.26.0) - 2020-11-19
+### Added
+- [[#1207](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1207)] Added an option `inverse` for the `EmptyFilter` filter ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1120](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1120)] Allow empty string for filtering ([@peter-gribanov](https://github.com/peter-gribanov))
+
 ## [3.25.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.24.0...3.25.0) - 2020-11-15
 ### Added
 - [[#1202](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1202)] Added "Not equal" filter for `StringFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
