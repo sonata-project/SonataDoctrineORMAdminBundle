@@ -18,7 +18,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * This class try to unify the query usage with Doctrine.
