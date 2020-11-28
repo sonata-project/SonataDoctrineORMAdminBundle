@@ -13,21 +13,20 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 
 /**
  * @author Patrick Landolt <patrick.landolt@artack.ch>
  */
-final class DateRangeFilterTest extends TestCase
+final class DateRangeFilterTest extends FilterTestCase
 {
     public function testFilterEmpty(): void
     {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', '');
@@ -55,7 +54,7 @@ final class DateRangeFilterTest extends TestCase
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $startDateTime = new \DateTime('2016-08-01');
         $endDateTime = new \DateTime('2016-08-31');
@@ -72,7 +71,7 @@ final class DateRangeFilterTest extends TestCase
         $this->assertSame([
             'field_name_0' => $startDateTime,
             'field_name_1' => $endDateTime,
-        ], $builder->parameters);
+        ], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -81,7 +80,7 @@ final class DateRangeFilterTest extends TestCase
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $startDateTime = new \DateTime('2016-08-01');
 
@@ -94,7 +93,7 @@ final class DateRangeFilterTest extends TestCase
         ]);
 
         $this->assertSame(['alias.field >= :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => $startDateTime], $builder->parameters);
+        $this->assertSame(['field_name_0' => $startDateTime], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -103,7 +102,7 @@ final class DateRangeFilterTest extends TestCase
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $endDateTime = new \DateTime('2016-08-31');
 
@@ -116,7 +115,7 @@ final class DateRangeFilterTest extends TestCase
         ]);
 
         $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
-        $this->assertSame(['field_name_1' => $endDateTime], $builder->parameters);
+        $this->assertSame(['field_name_1' => $endDateTime], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -131,7 +130,7 @@ final class DateRangeFilterTest extends TestCase
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $modelEndDateTime = clone $viewEndDateTime;
         $modelEndDateTime->setTimezone($modelTimeZone);
@@ -149,7 +148,7 @@ final class DateRangeFilterTest extends TestCase
 
         $this->assertTrue($filter->isActive());
         $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
-        $this->assertSame(['field_name_1' => $modelEndDateTime], $builder->parameters);
+        $this->assertSame(['field_name_1' => $modelEndDateTime], $builder->queryParameters);
         $this->assertSame($expectedEndDateTime->getTimestamp(), $modelEndDateTime->getTimestamp());
     }
 
@@ -194,7 +193,7 @@ final class DateRangeFilterTest extends TestCase
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $endDateTime = new \DateTimeImmutable('2016-08-31');
 
@@ -207,8 +206,11 @@ final class DateRangeFilterTest extends TestCase
         ]);
 
         $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
-        $this->assertCount(1, $builder->parameters);
-        $this->assertSame($endDateTime->modify('+23 hours 59 minutes 59 seconds')->getTimestamp(), $builder->parameters['field_name_1']->getTimestamp());
+        $this->assertCount(1, $builder->queryParameters);
+        $this->assertSame(
+            $endDateTime->modify('+23 hours 59 minutes 59 seconds')->getTimestamp(),
+            $builder->queryParameters['field_name_1']->getTimestamp()
+        );
         $this->assertTrue($filter->isActive());
     }
 }

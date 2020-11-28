@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
 
-class ClassFilterTest extends TestCase
+class ClassFilterTest extends FilterTestCase
 {
     public function testRenderSettings(): void
     {
@@ -35,7 +34,7 @@ class ClassFilterTest extends TestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', null);
         $filter->filter($builder, 'alias', 'field', 'asds');
@@ -50,7 +49,7 @@ class ClassFilterTest extends TestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
 
@@ -63,7 +62,7 @@ class ClassFilterTest extends TestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']);
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']);

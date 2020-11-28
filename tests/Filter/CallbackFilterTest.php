@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class CallbackFilterTest extends TestCase
+class CallbackFilterTest extends FilterTestCase
 {
     use ExpectDeprecationTrait;
 
@@ -35,7 +34,7 @@ class CallbackFilterTest extends TestCase
 
     public function testFilterClosure(): void
     {
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
@@ -50,13 +49,13 @@ class CallbackFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'myValue');
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->parameters);
+        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
     public function testFilterMethod(): void
     {
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
@@ -66,7 +65,7 @@ class CallbackFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'myValue');
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->parameters);
+        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -82,7 +81,7 @@ class CallbackFilterTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', []);
@@ -92,7 +91,7 @@ class CallbackFilterTest extends TestCase
 
     public function testApplyMethod(): void
     {
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
@@ -108,7 +107,7 @@ class CallbackFilterTest extends TestCase
         $filter->apply($builder, ['value' => 'myValue']);
 
         $this->assertSame(['CUSTOM QUERY o.field_name_test'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->parameters);
+        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
@@ -119,7 +118,7 @@ class CallbackFilterTest extends TestCase
      */
     public function testWrongCallbackReturnType(): void
     {
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
@@ -138,6 +137,6 @@ class CallbackFilterTest extends TestCase
         $filter->filter($builder, 'alias', 'field', 'myValue');
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->parameters);
+        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
     }
 }

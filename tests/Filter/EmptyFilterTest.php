@@ -13,12 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
-use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter;
 use Sonata\Form\Type\BooleanType;
 
-final class EmptyFilterTest extends TestCase
+final class EmptyFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {
@@ -27,7 +26,7 @@ final class EmptyFilterTest extends TestCase
             'field_options' => ['class' => 'FooBar'],
         ]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($builder, 'alias', 'field', null);
 
@@ -46,7 +45,7 @@ final class EmptyFilterTest extends TestCase
             'inverse' => $inverse,
         ]);
 
-        $builder = new ProxyQuery(new QueryBuilder());
+        $builder = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => $value]);

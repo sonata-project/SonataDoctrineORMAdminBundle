@@ -13,12 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Tools\SchemaTool;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\DoctrineORMAdminBundle\Tests\Filter\QueryBuilder;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\User;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\UserBrowser;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
@@ -53,51 +51,5 @@ class PagerTest extends TestCase
         $pager->setCountColumn($em->getClassMetadata($className)->getIdentifierFieldNames());
         $pager->setQuery($pq);
         $this->assertSame(0, $pager->computeNbResult());
-    }
-
-    public function dataGetComputeNbResult(): array
-    {
-        return [
-            [true],
-            [false],
-        ];
-    }
-
-    /**
-     * @dataProvider dataGetComputeNbResult
-     */
-    public function testComputeNbResult(bool $distinct): void
-    {
-        $query = $this->getMockBuilder(AbstractQuery::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getResult'])
-            ->getMockForAbstractClass();
-
-        $query->expects($this->once())
-            ->method('getResult')
-            ->willReturn([['cnt' => 1], ['cnt' => 2]]);
-
-        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getQuery', 'select', 'resetDQLPart'])
-            ->getMock();
-
-        $queryBuilder->expects($this->once())
-            ->method('getQuery')
-            ->willReturn($query);
-
-        $queryBuilder->expects($this->once())
-            ->method('select');
-
-        $proxyQuery = new ProxyQuery($queryBuilder);
-        $proxyQuery->setDistinct($distinct);
-
-        $queryBuilder->expects($this->once())
-            ->method('resetDQLPart')
-            ->willReturn($proxyQuery);
-
-        $pager = new Pager();
-        $pager->setQuery($proxyQuery);
-        $pager->computeNbResult();
     }
 }
