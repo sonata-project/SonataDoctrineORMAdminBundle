@@ -49,5 +49,6 @@
         <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
             <argument/>
         </service>
+        <service id="sonata.admin.data_source.orm" class="Sonata\DoctrineORMAdminBundle\Exporter\DataSource"/>
     </services>
 </container>
