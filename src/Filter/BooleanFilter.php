@@ -42,20 +42,20 @@ class BooleanFilter extends Filter
         }
 
         if (\is_array($data['value'])) {
-            $datas = [];
+            $values = [];
             foreach ($data['value'] as $v) {
                 if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                     continue;
                 }
 
-                $datas[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
+                $values[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
             }
 
-            if (0 === \count($datas)) {
+            if (0 === \count($values)) {
                 return;
             }
 
-            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $datas));
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
             if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                 return;

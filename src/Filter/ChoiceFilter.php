@@ -66,23 +66,16 @@ class ChoiceFilter extends Filter
         ]];
     }
 
+    /**
+     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
+     */
     private function filterWithMultipleValues(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         if (0 === \count($data['value'])) {
             return;
         }
 
+        // NEXT_MAJOR: Remove this case.
         if (\in_array('all', $data['value'], true)) {
             return;
         }
@@ -112,19 +105,12 @@ class ChoiceFilter extends Filter
         }
     }
 
+    /**
+     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
+     */
     private function filterWithSingleValue(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
+        // NEXT_MAJOR: Remove 'all' case.
         if ('' === $data['value'] || false === $data['value'] || 'all' === $data['value']) {
             return;
         }
