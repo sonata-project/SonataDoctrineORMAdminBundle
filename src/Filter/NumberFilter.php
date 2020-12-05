@@ -31,7 +31,7 @@ class NumberFilter extends Filter
         NumberOperatorType::TYPE_LESS_THAN => '<',
     ];
 
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -44,17 +44,17 @@ class NumberFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || !is_numeric($value['value'])) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return;
         }
 
-        $type = $value['type'] ?? NumberOperatorType::TYPE_EQUAL;
+        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
         $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     public function getDefaultOptions()

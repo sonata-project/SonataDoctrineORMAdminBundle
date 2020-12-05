@@ -24,9 +24,9 @@ final class EmptyFilter extends Filter
     /**
      * @param string       $alias
      * @param string       $field
-     * @param mixed[]|null $value
+     * @param mixed[]|null $data
      */
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -39,12 +39,12 @@ final class EmptyFilter extends Filter
             ));
         }
 
-        if (null === $value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        if (null === $data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        $isYes = BooleanType::TYPE_YES === (int) $value['value'];
-        $isNo = BooleanType::TYPE_NO === (int) $value['value'];
+        $isYes = BooleanType::TYPE_YES === (int) $data['value'];
+        $isNo = BooleanType::TYPE_NO === (int) $data['value'];
 
         if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
             $this->applyWhere(

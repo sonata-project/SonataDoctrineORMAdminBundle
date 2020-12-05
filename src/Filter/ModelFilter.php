@@ -26,7 +26,7 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
  */
 class ModelFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -39,19 +39,19 @@ class ModelFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || empty($value['value'])) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || empty($data['value'])) {
             return;
         }
 
-        if ($value['value'] instanceof Collection) {
-            $value['value'] = $value['value']->toArray();
+        if ($data['value'] instanceof Collection) {
+            $data['value'] = $data['value']->toArray();
         }
 
-        if (!\is_array($value['value'])) {
-            $value['value'] = [$value['value']];
+        if (!\is_array($data['value'])) {
+            $data['value'] = [$data['value']];
         }
 
-        $this->handleMultiple($query, $alias, $value);
+        $this->handleMultiple($query, $alias, $data);
     }
 
     public function getDefaultOptions()
@@ -82,11 +82,11 @@ class ModelFilter extends Filter
      *  so the field value is not used here.
      *
      * @param string  $alias
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return void
      */
-    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $value)
+    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -99,13 +99,13 @@ class ModelFilter extends Filter
             ));
         }
 
-        if (0 === \count($value['value'])) {
+        if (0 === \count($data['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $or = $query->getQueryBuilder()->expr()->orX();
 
             $or->add($query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
@@ -125,17 +125,17 @@ class ModelFilter extends Filter
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return array
      *
      * @phpstan-return array{string, bool}
      */
-    protected function association(BaseProxyQueryInterface $query, $value)
+    protected function association(BaseProxyQueryInterface $query, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
