@@ -18,6 +18,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -219,7 +220,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $query->execute($params, $hydrationMode);
     }
 
-    public function setSortBy(array $parentAssociationMappings, array $fieldMapping): ProxyQueryInterface
+    public function setSortBy(array $parentAssociationMappings, array $fieldMapping): BaseProxyQueryInterface
     {
         $alias = $this->entityJoin($parentAssociationMappings);
         $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
@@ -232,7 +233,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $this->sortBy;
     }
 
-    public function setSortOrder(string $sortOrder): ProxyQueryInterface
+    public function setSortOrder(string $sortOrder): BaseProxyQueryInterface
     {
         if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'], true)) {
             throw new \InvalidArgumentException(sprintf(
@@ -263,7 +264,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $this->queryBuilder;
     }
 
-    public function setFirstResult(?int $firstResult): ProxyQueryInterface
+    public function setFirstResult(?int $firstResult): BaseProxyQueryInterface
     {
         $this->queryBuilder->setFirstResult($firstResult);
 
@@ -275,7 +276,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $this->queryBuilder->getFirstResult();
     }
 
-    public function setMaxResults(?int $maxResults): ProxyQueryInterface
+    public function setMaxResults(?int $maxResults): BaseProxyQueryInterface
     {
         $this->queryBuilder->setMaxResults($maxResults);
 
