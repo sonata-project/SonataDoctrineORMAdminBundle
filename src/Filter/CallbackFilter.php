@@ -24,7 +24,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
  */
 class CallbackFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -41,7 +41,7 @@ class CallbackFilter extends Filter
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
-        $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $value);
+        $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $data);
         if (!\is_bool($isActive)) {
             @trigger_error(
                 'Using another return type than boolean for the callback option is deprecated'
@@ -81,11 +81,11 @@ class CallbackFilter extends Filter
     }
 
     /**
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return array
      */
-    protected function association(BaseProxyQueryInterface $query, $value)
+    protected function association(BaseProxyQueryInterface $query, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {

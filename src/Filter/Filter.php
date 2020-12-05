@@ -31,17 +31,17 @@ abstract class Filter extends BaseFilter
      *
      * @param string  $alias
      * @param string  $field
-     * @param mixed[] $value
+     * @param mixed[] $data
      */
-    abstract public function filter(BaseProxyQueryInterface $query, $alias, $field, $value);
+    abstract public function filter(BaseProxyQueryInterface $query, $alias, $field, $data);
 
-    public function apply($query, $value)
+    public function apply($query, $filterData)
     {
-        $this->value = $value;
-        if (\is_array($value) && \array_key_exists('value', $value)) {
-            [$alias, $field] = $this->association($query, $value);
+        $this->value = $filterData;
+        if (\is_array($filterData) && \array_key_exists('value', $filterData)) {
+            [$alias, $field] = $this->association($query, $filterData);
 
-            $this->filter($query, $alias, $field, $value);
+            $this->filter($query, $alias, $field, $filterData);
         }
     }
 
@@ -51,11 +51,11 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return string[]
      */
-    protected function association(BaseProxyQueryInterface $query, array $value)
+    protected function association(BaseProxyQueryInterface $query, array $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {

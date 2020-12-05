@@ -29,7 +29,7 @@ class ClassFilter extends Filter
         EqualOperatorType::TYPE_NOT_EQUAL => 'NOT INSTANCE OF',
     ];
 
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -42,18 +42,18 @@ class ClassFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if (0 === \strlen($value['value'])) {
+        if (0 === \strlen($data['value'])) {
             return;
         }
 
-        $type = $value['type'] ?? EqualOperatorType::TYPE_EQUAL;
+        $type = $data['type'] ?? EqualOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
-        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $value['value']));
+        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $data['value']));
     }
 
     public function getDefaultOptions()

@@ -519,15 +519,15 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    public function batchDelete($class, ProxyQueryInterface $queryProxy)
+    public function batchDelete($class, ProxyQueryInterface $query)
     {
-        $queryProxy->select('DISTINCT '.current($queryProxy->getRootAliases()));
+        $query->select('DISTINCT '.current($query->getRootAliases()));
 
         try {
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($queryProxy->getQuery()->iterate() as $pos => $object) {
+            foreach ($query->getQuery()->iterate() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
                 if (0 === (++$i % 20)) {

@@ -20,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 final class StringListFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -33,26 +33,26 @@ final class StringListFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if (!\is_array($value['value'])) {
-            $value['value'] = [$value['value']];
+        if (!\is_array($data['value'])) {
+            $data['value'] = [$data['value']];
         }
 
-        $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $value['type'] ? 'NOT LIKE' : 'LIKE';
+        $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $data['type'] ? 'NOT LIKE' : 'LIKE';
 
         $andConditions = $query->getQueryBuilder()->expr()->andX();
-        foreach ($value['value'] as $item) {
+        foreach ($data['value'] as $item) {
             $parameterName = $this->getNewParameterName($query);
             $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
             $query->getQueryBuilder()->setParameter($parameterName, '%'.serialize($item).'%');
         }
 
-        if (ContainsOperatorType::TYPE_EQUAL === $value['type']) {
-            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($value['value'])));
+        if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
+            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data['value'])));
         }
 
         $this->applyWhere($query, $andConditions);

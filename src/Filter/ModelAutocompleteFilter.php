@@ -25,7 +25,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
  */
 class ModelAutocompleteFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -38,18 +38,18 @@ class ModelAutocompleteFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if ($value['value'] instanceof Collection) {
-            $value['value'] = $value['value']->toArray();
+        if ($data['value'] instanceof Collection) {
+            $data['value'] = $data['value']->toArray();
         }
 
-        if (\is_array($value['value'])) {
-            $this->handleMultiple($query, $alias, $value);
+        if (\is_array($data['value'])) {
+            $this->handleMultiple($query, $alias, $data);
         } else {
-            $this->handleModel($query, $alias, $value);
+            $this->handleModel($query, $alias, $data);
         }
     }
 
@@ -80,11 +80,11 @@ class ModelAutocompleteFilter extends Filter
      *  so the field value is not used here.
      *
      * @param string  $alias
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return void
      */
-    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $value)
+    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -97,28 +97,28 @@ class ModelAutocompleteFilter extends Filter
             ));
         }
 
-        if (0 === \count($value['value'])) {
+        if (0 === \count($data['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
         } else {
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     /**
      * @param string  $alias
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return void
      */
-    protected function handleModel(BaseProxyQueryInterface $query, $alias, $value)
+    protected function handleModel(BaseProxyQueryInterface $query, $alias, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -131,29 +131,29 @@ class ModelAutocompleteFilter extends Filter
             ));
         }
 
-        if (empty($value['value'])) {
+        if (empty($data['value'])) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             $this->applyWhere($query, sprintf('%s != :%s', $alias, $parameterName));
         } else {
             $this->applyWhere($query, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @return array
      *
      * @phpstan-return array{string, bool}
      */
-    protected function association(BaseProxyQueryInterface $query, $value)
+    protected function association(BaseProxyQueryInterface $query, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {

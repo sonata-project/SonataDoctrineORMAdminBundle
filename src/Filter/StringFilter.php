@@ -47,7 +47,7 @@ class StringFilter extends Filter
         StringOperatorType::TYPE_NOT_CONTAINS,
     ];
 
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -60,15 +60,15 @@ class StringFilter extends Filter
             ));
         }
 
-        if (!\is_array($value) || !\array_key_exists('value', $value)) {
+        if (!\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        $value['value'] = $this->trim((string) ($value['value'] ?? ''));
-        $type = $value['type'] ?? StringOperatorType::TYPE_CONTAINS;
+        $data['value'] = $this->trim((string) ($data['value'] ?? ''));
+        $type = $data['type'] ?? StringOperatorType::TYPE_CONTAINS;
 
         // ignore empty value if it doesn't make sense
-        if ('' === $value['value'] &&
+        if ('' === $data['value'] &&
             (!$this->getOption('allow_empty') || \in_array($type, self::MEANINGLESS_TYPES, true))
         ) {
             return;
@@ -121,7 +121,7 @@ class StringFilter extends Filter
             $parameterName,
             sprintf(
                 $format,
-                $this->getOption('case_sensitive') ? $value['value'] : mb_strtolower($value['value'])
+                $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
             )
         );
     }

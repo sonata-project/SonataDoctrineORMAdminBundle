@@ -23,7 +23,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
  */
 class ChoiceFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $value)
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
@@ -36,14 +36,14 @@ class ChoiceFilter extends Filter
             ));
         }
 
-        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if (\is_array($value['value'])) {
-            $this->filterWithMultipleValues($query, $alias, $field, $value);
+        if (\is_array($data['value'])) {
+            $this->filterWithMultipleValues($query, $alias, $field, $data);
         } else {
-            $this->filterWithSingleValue($query, $alias, $field, $value);
+            $this->filterWithSingleValue($query, $alias, $field, $data);
         }
     }
 
@@ -88,8 +88,8 @@ class ChoiceFilter extends Filter
         }
 
         $isNullSelected = \in_array(null, $data['value'], true);
-        $data['value'] = array_filter($data['value'], static function ($value): bool {
-            return null !== $value;
+        $data['value'] = array_filter($data['value'], static function ($data): bool {
+            return null !== $data;
         });
 
         // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
