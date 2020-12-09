@@ -58,7 +58,7 @@ class ListBuilder implements ListBuilderInterface
                 $fieldDescription->getName(),
                 $admin->getModelManager()
             );
-            $fieldDescription->setType($guessType->getType() ? $guessType->getType() : '_action');
+            $fieldDescription->setType($guessType->getType() ?: '_action');
         } else {
             $fieldDescription->setType($type);
         }
