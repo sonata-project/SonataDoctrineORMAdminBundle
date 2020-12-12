@@ -1,6 +1,12 @@
 UPGRADE 3.x
 ===========
 
+### Sonata\DoctrineORMAdminBundle\Filter\Filter
+
+Deprecate passing an instance of `Sonata\AdminBundle\Datagrid\ProxyQueryInterface`
+which is not an instance of `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery` as
+argument 1 to the `Sonata\DoctrineORMAdminBundle\Filter\Filter::filter()` method.
+
 UPGRADE FROM 3.25 to 3.26
 =========================
 

@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -23,26 +24,37 @@ final class EmptyFilter extends Filter
     /**
      * @param string       $alias
      * @param string       $field
-     * @param mixed[]|null $value
+     * @param mixed[]|null $data
      */
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
-        if (null === $value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (null === $data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        $isYes = BooleanType::TYPE_YES === (int) $value['value'];
-        $isNo = BooleanType::TYPE_NO === (int) $value['value'];
+        $isYes = BooleanType::TYPE_YES === (int) $data['value'];
+        $isNo = BooleanType::TYPE_NO === (int) $data['value'];
 
         if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
             $this->applyWhere(
-                $queryBuilder,
-                $queryBuilder->expr()->isNull(sprintf('%s.%s', $alias, $field))
+                $query,
+                $query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field))
             );
         } elseif (!$this->getOption('inverse') && $isNo || $this->getOption('inverse') && $isYes) {
             $this->applyWhere(
-                $queryBuilder,
-                $queryBuilder->expr()->isNotNull(sprintf('%s.%s', $alias, $field))
+                $query,
+                $query->getQueryBuilder()->expr()->isNotNull(sprintf('%s.%s', $alias, $field))
             );
         }
     }

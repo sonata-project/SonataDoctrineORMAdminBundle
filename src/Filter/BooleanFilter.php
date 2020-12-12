@@ -13,8 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -23,15 +24,26 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
  */
 class BooleanFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
-        if (!$value || !\is_array($value) || !\array_key_exists('type', $value) || !\array_key_exists('value', $value)) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if (\is_array($value['value'])) {
+        if (\is_array($data['value'])) {
             $values = [];
-            foreach ($value['value'] as $v) {
+            foreach ($data['value'] as $v) {
                 if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                     continue;
                 }
@@ -43,15 +55,15 @@ class BooleanFilter extends Filter
                 return;
             }
 
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in(sprintf('%s.%s', $alias, $field), $values));
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!\in_array($value['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                 return;
             }
 
-            $parameterName = $this->getNewParameterName($queryBuilder);
-            $this->applyWhere($queryBuilder, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $queryBuilder->setParameter($parameterName, (BooleanType::TYPE_YES === $value['value']) ? 1 : 0);
+            $parameterName = $this->getNewParameterName($query);
+            $this->applyWhere($query, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+            $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
         }
     }
 

@@ -13,9 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
@@ -30,19 +31,30 @@ class NumberFilter extends Filter
         NumberOperatorType::TYPE_LESS_THAN => '<',
     ];
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value) || !is_numeric($value['value'])) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || !is_numeric($data['value'])) {
             return;
         }
 
-        $type = $value['type'] ?? NumberOperatorType::TYPE_EQUAL;
+        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
-        $parameterName = $this->getNewParameterName($queryBuilder);
-        $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        $queryBuilder->setParameter($parameterName, $value['value']);
+        $parameterName = $this->getNewParameterName($query);
+        $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     public function getDefaultOptions(): array

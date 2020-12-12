@@ -13,13 +13,14 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Operator\DateOperatorType;
 use Sonata\AdminBundle\Form\Type\Operator\DateRangeOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class AbstractDateFilter extends Filter
 {
@@ -47,25 +48,36 @@ abstract class AbstractDateFilter extends Filter
      */
     protected $time = false;
 
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         // check data sanity
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
         if ($this->range) {
             // additional data check for ranged items
-            if (!\array_key_exists('start', $value['value']) || !\array_key_exists('end', $value['value'])) {
+            if (!\array_key_exists('start', $data['value']) || !\array_key_exists('end', $data['value'])) {
                 return;
             }
 
-            if (!$value['value']['start'] && !$value['value']['end']) {
+            if (!$data['value']['start'] && !$data['value']['end']) {
                 return;
             }
 
             // date filter should filter records for the whole days
-            if (false === $this->time && ($value['value']['end'] instanceof \DateTime || $value['value']['end'] instanceof \DateTimeImmutable)) {
+            if (false === $this->time && ($data['value']['end'] instanceof \DateTime || $data['value']['end'] instanceof \DateTimeImmutable)) {
                 // since the received `\DateTime` object  uses the model timezone to represent
                 // the value submitted by the view (which can use a different timezone) and this
                 // value is intended to contain a time in the begining of a date (IE, if the model
@@ -73,85 +85,85 @@ abstract class AbstractDateFilter extends Filter
                 // is transformed to "2020-11-07 03:00:00.0+00:00" in the model object), we increment
                 // the time part by adding "23:59:59" in order to cover the whole end date and get proper
                 // results from queries like "o.created_at <= :date_end".
-                $value['value']['end'] = $value['value']['end']->modify('+23 hours 59 minutes 59 seconds');
+                $data['value']['end'] = $data['value']['end']->modify('+23 hours 59 minutes 59 seconds');
             }
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $value['value']['start'] = $value['value']['start'] instanceof \DateTimeInterface ? $value['value']['start']->getTimestamp() : 0;
-                $value['value']['end'] = $value['value']['end'] instanceof \DateTimeInterface ? $value['value']['end']->getTimestamp() : 0;
+                $data['value']['start'] = $data['value']['start'] instanceof \DateTimeInterface ? $data['value']['start']->getTimestamp() : 0;
+                $data['value']['end'] = $data['value']['end'] instanceof \DateTimeInterface ? $data['value']['end']->getTimestamp() : 0;
             }
 
             // default type for range filter
-            $value['type'] = !isset($value['type']) || !is_numeric($value['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $value['type'];
+            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateRangeOperatorType::TYPE_BETWEEN : $data['type'];
 
-            $startDateParameterName = $this->getNewParameterName($queryBuilder);
-            $endDateParameterName = $this->getNewParameterName($queryBuilder);
+            $startDateParameterName = $this->getNewParameterName($query);
+            $endDateParameterName = $this->getNewParameterName($query);
 
-            if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $value['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
+            if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $data['type']) {
+                $this->applyWhere($query, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } else {
-                if ($value['value']['start']) {
-                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
+                if ($data['value']['start']) {
+                    $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
                 }
 
-                if ($value['value']['end']) {
-                    $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
+                if ($data['value']['end']) {
+                    $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
                 }
             }
 
-            if ($value['value']['start']) {
-                $queryBuilder->setParameter($startDateParameterName, $value['value']['start']);
+            if ($data['value']['start']) {
+                $query->getQueryBuilder()->setParameter($startDateParameterName, $data['value']['start']);
             }
 
-            if ($value['value']['end']) {
-                $queryBuilder->setParameter($endDateParameterName, $value['value']['end']);
+            if ($data['value']['end']) {
+                $query->getQueryBuilder()->setParameter($endDateParameterName, $data['value']['end']);
             }
         } else {
-            if (!$value['value']) {
+            if (!$data['value']) {
                 return;
             }
 
             // default type for simple filter
-            $value['type'] = !isset($value['type']) || !is_numeric($value['type']) ? DateOperatorType::TYPE_EQUAL : $value['type'];
+            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateOperatorType::TYPE_EQUAL : $data['type'];
 
             // just find an operator and apply query
-            $operator = $this->getOperator($value['type']);
+            $operator = $this->getOperator($data['type']);
 
             // transform types
             if ('timestamp' === $this->getOption('input_type')) {
-                $value['value'] = $value['value'] instanceof \DateTimeInterface ? $value['value']->getTimestamp() : 0;
+                $data['value'] = $data['value'] instanceof \DateTimeInterface ? $data['value']->getTimestamp() : 0;
             }
 
             // null / not null only check for col
             if (\in_array($operator, ['NULL', 'NOT NULL'], true)) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s IS %s ', $alias, $field, $operator));
+                $this->applyWhere($query, sprintf('%s.%s IS %s ', $alias, $field, $operator));
 
                 return;
             }
 
-            $parameterName = $this->getNewParameterName($queryBuilder);
+            $parameterName = $this->getNewParameterName($query);
 
             // date filter should filter records for the whole day
-            if (false === $this->time && DateOperatorType::TYPE_EQUAL === $value['type']) {
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
-                $queryBuilder->setParameter($parameterName, $value['value']);
+            if (false === $this->time && DateOperatorType::TYPE_EQUAL === $data['type']) {
+                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $parameterName));
+                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
 
-                $endDateParameterName = $this->getNewParameterName($queryBuilder);
-                $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
+                $endDateParameterName = $this->getNewParameterName($query);
+                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
                 if ('timestamp' === $this->getOption('input_type')) {
-                    $endValue = strtotime('+1 day', $value['value']);
+                    $endValue = strtotime('+1 day', $data['value']);
                 } else {
-                    $endValue = clone $value['value'];
+                    $endValue = clone $data['value'];
                     $endValue->add(new \DateInterval('P1D'));
                 }
-                $queryBuilder->setParameter($endDateParameterName, $endValue);
+                $query->getQueryBuilder()->setParameter($endDateParameterName, $endValue);
 
                 return;
             }
 
-            $this->applyWhere($queryBuilder, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-            $queryBuilder->setParameter($parameterName, $value['value']);
+            $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+            $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
         }
     }
 

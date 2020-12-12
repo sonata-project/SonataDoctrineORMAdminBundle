@@ -14,31 +14,42 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\QueryBuilder;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
 class ModelAutocompleteFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $queryBuilder, $alias, $field, $value): void
+    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
     {
-        if (!$value || !\is_array($value) || !\array_key_exists('value', $value)) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
             return;
         }
 
-        if ($value['value'] instanceof Collection) {
-            $value['value'] = $value['value']->toArray();
+        if ($data['value'] instanceof Collection) {
+            $data['value'] = $data['value']->toArray();
         }
 
-        if (\is_array($value['value'])) {
-            $this->handleMultiple($queryBuilder, $alias, $value);
+        if (\is_array($data['value'])) {
+            $this->handleMultiple($query, $alias, $data);
         } else {
-            $this->handleModel($queryBuilder, $alias, $value);
+            $this->handleModel($query, $alias, $data);
         }
     }
 
@@ -68,59 +79,90 @@ class ModelAutocompleteFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     * @param string                           $alias
-     * @param mixed[]                          $value
+     * @param string  $alias
+     * @param mixed[] $data
      */
-    protected function handleMultiple(ProxyQueryInterface $queryBuilder, $alias, $value): void
+    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $data): void
     {
-        if (0 === \count($value['value'])) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (0 === \count($data['value'])) {
             return;
         }
 
-        $parameterName = $this->getNewParameterName($queryBuilder);
+        $parameterName = $this->getNewParameterName($query);
 
-        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->notIn($alias, ':'.$parameterName));
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
         } else {
-            $this->applyWhere($queryBuilder, $queryBuilder->expr()->in($alias, ':'.$parameterName));
+            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param ProxyQueryInterface|QueryBuilder $queryBuilder
-     * @param string                           $alias
-     * @param mixed[]                          $value
+     * @param string  $alias
+     * @param mixed[] $data
      */
-    protected function handleModel(ProxyQueryInterface $queryBuilder, $alias, $value): void
+    protected function handleModel(BaseProxyQueryInterface $query, $alias, $data): void
     {
-        if (empty($value['value'])) {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
+        if (empty($data['value'])) {
             return;
         }
 
-        $parameterName = $this->getNewParameterName($queryBuilder);
+        $parameterName = $this->getNewParameterName($query);
 
-        if (isset($value['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $value['type']) {
-            $this->applyWhere($queryBuilder, sprintf('%s != :%s', $alias, $parameterName));
+        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+            $this->applyWhere($query, sprintf('%s != :%s', $alias, $parameterName));
         } else {
-            $this->applyWhere($queryBuilder, sprintf('%s = :%s', $alias, $parameterName));
+            $this->applyWhere($query, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $queryBuilder->setParameter($parameterName, $value['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     /**
-     * @param mixed[] $value
+     * @param mixed[] $data
      *
      * @phpstan-return array{string, bool}
      */
-    protected function association(ProxyQueryInterface $queryBuilder, $value): array
+    protected function association(BaseProxyQueryInterface $query, $data): array
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();
-        $alias = $queryBuilder->entityJoin($associationMappings);
+        $alias = $query->entityJoin($associationMappings);
 
         return [$alias, false];
     }
