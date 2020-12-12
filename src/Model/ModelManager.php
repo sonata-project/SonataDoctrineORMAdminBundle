@@ -84,6 +84,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * NEXT_MAJOR: Change visibility to private.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be private in version 4.0
+     *
      * @param string $class
      *
      * @return ClassMetadata
@@ -92,6 +96,15 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getMetadata($class)
     {
+        // NEXT_MAJOR: Remove this block.
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                .' will be private in version 4.0.',
+                __METHOD__
+            ), E_USER_DEPRECATED);
+        }
+
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
 
@@ -116,7 +129,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $parentAssociationMappings = [];
 
         foreach ($nameElements as $nameElement) {
-            $metadata = $this->getMetadata($class);
+            // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+            $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
 
             if (isset($metadata->associationMappings[$nameElement])) {
                 $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
@@ -131,10 +145,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $properties = \array_slice($nameElements, \count($parentAssociationMappings));
         $properties[] = $lastPropertyName;
 
-        return [$this->getMetadata($class), implode('.', $properties), $parentAssociationMappings];
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+        return [
+            $this->getMetadata($class, 'sonata_deprecation_mute'),
+            implode('.', $properties),
+            $parentAssociationMappings,
+        ];
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0
+     *
      * @param string $class
      *
      * @return bool
@@ -143,6 +166,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function hasMetadata($class)
     {
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                .' will be removed in version 4.0.',
+                __METHOD__
+            ), E_USER_DEPRECATED);
+        }
+
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
@@ -162,18 +193,13 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
-        $fieldDescription = new FieldDescription($name, $options);
-        $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
-
-        if (isset($metadata->associationMappings[$propertyName])) {
-            $fieldDescription->setAssociationMapping($metadata->associationMappings[$propertyName]);
-        }
-
-        if (isset($metadata->fieldMappings[$propertyName])) {
-            $fieldDescription->setFieldMapping($metadata->fieldMappings[$propertyName]);
-        }
-
-        return $fieldDescription;
+        return new FieldDescription(
+            $name,
+            $options,
+            $metadata->fieldMappings[$propertyName] ?? [],
+            $metadata->associationMappings[$propertyName] ?? [],
+            $parentAssociationMappings
+        );
     }
 
     public function create($object)
@@ -241,7 +267,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getLockVersion($object)
     {
-        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
 
         if (!$metadata->isVersioned) {
             return null;
@@ -252,7 +279,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function lock($object, $expectedVersion)
     {
-        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
 
         if (!$metadata->isVersioned) {
             return;
@@ -332,7 +360,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
         $fieldName = $parentAssociationMapping['fieldName'];
 
-        $metadata = $this->getMetadata($class);
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+        $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
 
         $associatingMapping = $metadata->associationMappings[$parentAssociationMapping];
 
@@ -384,7 +413,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getModelIdentifier($class)
     {
-        return $this->getMetadata($class)->identifier;
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+        return $this->getMetadata($class, 'sonata_deprecation_mute')->identifier;
     }
 
     public function getIdentifierValues($entity)
@@ -396,7 +426,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
         //}
 
         $class = ClassUtils::getClass($entity);
-        $metadata = $this->getMetadata($class);
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+        $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
@@ -416,7 +447,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
-            $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value));
+            // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+            $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value), 'sonata_deprecation_mute');
 
             foreach ($identifierMetadata->getIdentifierValues($value) as $value) {
                 $identifiers[] = $value;
@@ -428,7 +460,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getIdentifierFieldNames($class)
     {
-        return $this->getMetadata($class)->getIdentifierFieldNames();
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+        return $this->getMetadata($class, 'sonata_deprecation_mute')->getIdentifierFieldNames();
     }
 
     public function getNormalizedIdentifier($entity)
@@ -664,7 +697,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function modelReverseTransform($class, array $array = [])
     {
         $instance = $this->getModelInstance($class);
-        $metadata = $this->getMetadata($class);
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+        $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
 
         foreach ($array as $name => $value) {
             $property = $this->getFieldName($metadata, $name);

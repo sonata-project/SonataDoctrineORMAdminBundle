@@ -65,8 +65,7 @@ class ShowBuilderTest extends TestCase
     {
         $typeGuess = $this->createStub(TypeGuess::class);
 
-        $fieldDescription = new FieldDescription('FakeName');
-        $fieldDescription->setMappingType(ClassMetadata::MANY_TO_ONE);
+        $fieldDescription = new FieldDescription('FakeName', [], ['type' => ClassMetadata::MANY_TO_ONE]);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
         $this->admin->expects($this->once())->method('addShowFieldDescription');
@@ -105,15 +104,16 @@ class ShowBuilderTest extends TestCase
      */
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
+        // NEXT_MAJOR: Remove the next 3 lines.
         $classMetadata = $this->createStub(ClassMetadata::class);
         $classMetadata->fieldMappings = [2 => []];
         $classMetadata->associationMappings = [2 => ['fieldName' => 'fakeField']];
 
-        $fieldDescription = new FieldDescription('FakeName');
+        $fieldDescription = new FieldDescription('FakeName', [], ['type' => $mappingType]);
         $fieldDescription->setType($type);
-        $fieldDescription->setMappingType($mappingType);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
+        // NEXT_MAJOR: Remove the next 2 lines.
         $this->modelManager->method('hasMetadata')->willReturn(true);
         $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 

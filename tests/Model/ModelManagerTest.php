@@ -328,10 +328,11 @@ final class ModelManagerTest extends TestCase
         $modelManager->expects($this->any())->method('getMetadata')
             ->willReturnMap(
                 [
-                        [$containerEntityClass, $containerEntityMetadata],
-                        [$embeddedEntityClass, $embeddedEntityMetadata],
-                        [$associatedEntityClass, $associatedEntityMetadata],
-                    ]
+                    // NEXT_MAJOR: Remove the 'sonata_deprecation_mute'
+                    [$containerEntityClass, 'sonata_deprecation_mute', $containerEntityMetadata],
+                    [$embeddedEntityClass, 'sonata_deprecation_mute', $embeddedEntityMetadata],
+                    [$associatedEntityClass, 'sonata_deprecation_mute', $associatedEntityMetadata],
+                ]
             );
 
         /** @var ClassMetadata $metadata */

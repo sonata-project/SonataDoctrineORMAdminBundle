@@ -86,8 +86,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testAssociationMapping(): void
     {
-        $field = new FieldDescription('name');
-        $field->setAssociationMapping([
+        $field = new FieldDescription('name', [], [], [
             'type' => 'integer',
             'fieldName' => 'position',
         ]);
@@ -96,6 +95,7 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame('integer', $field->getMappingType());
         $this->assertSame('position', $field->getFieldName());
 
+        // NEXT_MAJOR: Remove all the rest of the test.
         // cannot overwrite defined definition
         $field->setAssociationMapping([
             'type' => 'overwrite?',
@@ -216,17 +216,18 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetAssociationMapping(): void
     {
-        $assocationMapping = [
+        $associationMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
         ];
 
-        $field = new FieldDescription('name');
-        $field->setAssociationMapping($assocationMapping);
-
-        $this->assertSame($assocationMapping, $field->getAssociationMapping());
+        $field = new FieldDescription('name', [], [], $associationMapping);
+        $this->assertSame($associationMapping, $field->getAssociationMapping());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     */
     public function testSetAssociationMappingAllowOnlyForArray(): void
     {
         $this->expectException(\RuntimeException::class);
@@ -235,6 +236,9 @@ class FieldDescriptionTest extends TestCase
         $field->setAssociationMapping('test');
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     */
     public function testSetFieldMappingAllowOnlyForArray(): void
     {
         $this->expectException(\RuntimeException::class);
@@ -250,8 +254,7 @@ class FieldDescriptionTest extends TestCase
             'fieldName' => 'position',
         ];
 
-        $field = new FieldDescription('position');
-        $field->setFieldMapping($fieldMapping);
+        $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertSame('integer', $field->getType());
     }
@@ -263,25 +266,20 @@ class FieldDescriptionTest extends TestCase
             'fieldName' => 'position',
         ];
 
-        $field = new FieldDescription('position');
-        $field->setFieldMapping($fieldMapping);
+        $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertSame('integer', $field->getMappingType());
     }
 
     public function testGetTargetEntity(): void
     {
-        $assocationMapping = [
+        $associationMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
             'targetEntity' => 'someValue',
         ];
 
-        $field = new FieldDescription('position');
-
-        $this->assertNull($field->getTargetModel());
-
-        $field->setAssociationMapping($assocationMapping);
+        $field = new FieldDescription('position', [], [], $associationMapping);
 
         $this->assertSame('someValue', $field->getTargetModel());
     }
@@ -294,8 +292,7 @@ class FieldDescriptionTest extends TestCase
             'id' => true,
         ];
 
-        $field = new FieldDescription('position');
-        $field->setFieldMapping($fieldMapping);
+        $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertTrue($field->isIdentifier());
     }
@@ -308,8 +305,7 @@ class FieldDescriptionTest extends TestCase
             'id' => 'someId',
         ];
 
-        $field = new FieldDescription('position');
-        $field->setFieldMapping($fieldMapping);
+        $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertSame($fieldMapping, $field->getFieldMapping());
     }
@@ -330,9 +326,10 @@ class FieldDescriptionTest extends TestCase
             ->method('getMyEmbeddedObject')
             ->willReturn($mockedEmbeddedObject);
 
-        $field = new FieldDescription('myMethod');
-        $field->setFieldMapping([
-            'declaredField' => 'myEmbeddedObject', 'type' => 'string', 'fieldName' => 'myEmbeddedObject.myMethod',
+        $field = new FieldDescription('myMethod', [], [
+            'declaredField' => 'myEmbeddedObject',
+            'type' => 'string',
+            'fieldName' => 'myEmbeddedObject.myMethod',
         ]);
         $field->setOption('code', 'myMethod');
 
@@ -359,11 +356,14 @@ class FieldDescriptionTest extends TestCase
         $mockedObject->expects($this->once())
             ->method('getMyEmbeddedObject')
             ->willReturn($mockedEmbeddedObject);
-        $field = new FieldDescription('myMethod');
-        $field->setFieldMapping([
-            'declaredField' => 'myEmbeddedObject.child', 'type' => 'string', 'fieldName' => 'myMethod',
+
+        $field = new FieldDescription('myMethod', [], [
+            'declaredField' => 'myEmbeddedObject.child',
+            'type' => 'string',
+            'fieldName' => 'myMethod',
         ]);
         $field->setOption('code', 'myMethod');
+
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 }
