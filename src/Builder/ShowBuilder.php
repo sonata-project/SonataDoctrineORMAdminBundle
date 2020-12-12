@@ -69,7 +69,8 @@ class ShowBuilder implements ShowBuilderInterface
     {
         $fieldDescription->setAdmin($admin);
 
-        if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
+        // NEXT_MAJOR: Remove this block.
+        if ($admin->getModelManager()->hasMetadata($admin->getClass(), 'sonata_deprecation_mute')) {
             [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
             $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
