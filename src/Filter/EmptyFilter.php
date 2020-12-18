@@ -13,16 +13,19 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-// NEXT_MAJOR: remove this file
-@trigger_error(sprintf(
-    'The %1$s\EmptyFilter class is deprecated since version 3.x and will be removed in 4.0.'
-    .' Use %1$s\NullFilter instead.',
-    __NAMESPACE__
-), E_USER_DEPRECATED);
-
 /**
  * @psalm-suppress InvalidExtendClass
  */
 final class EmptyFilter extends NullFilter
 {
+    public function __construct()
+    {
+        // NEXT_MAJOR: remove this file
+        @trigger_error(sprintf(
+            'The %s class is deprecated since version 3.x and will be removed in 4.0.'
+            .' Use %s instead.',
+            __CLASS__,
+            NullFilter::class
+        ), E_USER_DEPRECATED);
+    }
 }
