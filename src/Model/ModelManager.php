@@ -106,7 +106,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @return array
      *
      * @phpstan-param class-string $baseClass
-     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}
+     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata|null, string, array}
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
@@ -116,22 +116,28 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $parentAssociationMappings = [];
 
         foreach ($nameElements as $nameElement) {
-            $metadata = $this->getMetadata($class);
+            if (null === $class) {
+                $parentAssociationMappings[] = ['fieldName' => $nameElement];
+            }
 
+            $metadata = $this->getMetadata($class);
             if (isset($metadata->associationMappings[$nameElement])) {
                 $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
                 $class = $metadata->getAssociationTargetClass($nameElement);
-
-                continue;
+            } else {
+                $parentAssociationMappings[] = ['fieldName' => $nameElement];
+                $class = null;
             }
-
-            break;
         }
 
         $properties = \array_slice($nameElements, \count($parentAssociationMappings));
         $properties[] = $lastPropertyName;
 
-        return [$this->getMetadata($class), implode('.', $properties), $parentAssociationMappings];
+        return [
+            null !== $class ? $this->getMetadata($class) : null,
+            implode('.', $properties),
+            $parentAssociationMappings,
+        ];
     }
 
     /**

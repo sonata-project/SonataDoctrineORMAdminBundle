@@ -44,10 +44,13 @@ class TypeGuesser extends AbstractTypeGuesser
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
-            return new TypeGuess('text', [], Guess::LOW_CONFIDENCE);
+            return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::LOW_CONFIDENCE);
         }
 
         [$metadata, $propertyName, $parentAssociationMappings] = $ret;
+        if (null === $metadata) {
+            return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::LOW_CONFIDENCE);
+        }
 
         if ($metadata->hasAssociation($propertyName)) {
             $mapping = $metadata->getAssociationMapping($propertyName);

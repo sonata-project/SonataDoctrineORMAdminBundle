@@ -44,13 +44,16 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             return false;
         }
 
+        [$metadata, $propertyName, $parentAssociationMappings] = $ret;
+        if (null === $metadata) {
+            return null;
+        }
+
         $options = [
             'field_type' => null,
             'field_options' => [],
             'options' => [],
         ];
-
-        [$metadata, $propertyName, $parentAssociationMappings] = $ret;
 
         $options['parent_association_mappings'] = $parentAssociationMappings;
 

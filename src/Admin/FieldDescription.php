@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Admin;
 
 use Sonata\AdminBundle\Admin\BaseFieldDescription;
+use Sonata\AdminBundle\Exception\NoValueException;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
@@ -28,8 +29,11 @@ class FieldDescription extends BaseFieldDescription
 
         $this->associationMapping = $associationMapping;
 
-        $this->type = $this->type ?: $associationMapping['type'];
-        $this->mappingType = $this->mappingType ?: $associationMapping['type'];
+        if (isset($fieldMapping['type'])) {
+            $this->type = $this->type ?: $associationMapping['type'];
+            $this->mappingType = $this->mappingType ?: $associationMapping['type'];
+        }
+
         // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $associationMapping['fieldName'];
     }
@@ -53,11 +57,7 @@ class FieldDescription extends BaseFieldDescription
 
     public function getTargetModel(): ?string
     {
-        if ($this->associationMapping) {
-            return $this->associationMapping['targetEntity'];
-        }
-
-        return null;
+        return $this->associationMapping['targetEntity'] ?? null;
     }
 
     public function setFieldMapping($fieldMapping)
@@ -68,8 +68,11 @@ class FieldDescription extends BaseFieldDescription
 
         $this->fieldMapping = $fieldMapping;
 
-        $this->type = $this->type ?: $fieldMapping['type'];
-        $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
+        if (isset($fieldMapping['type'])) {
+            $this->type = $this->type ?: $fieldMapping['type'];
+            $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
+        }
+
         // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
@@ -93,7 +96,7 @@ class FieldDescription extends BaseFieldDescription
     public function getValue($object)
     {
         foreach ($this->parentAssociationMappings as $parentAssociationMapping) {
-            $object = $this->getFieldValue($object, $parentAssociationMapping['fieldName']);
+            $object = $this->getChildValue($object, $parentAssociationMapping['fieldName']);
         }
 
         $fieldMapping = $this->getFieldMapping();
@@ -102,10 +105,37 @@ class FieldDescription extends BaseFieldDescription
         if (isset($fieldMapping['declaredField'])) {
             $parentFields = explode('.', $fieldMapping['declaredField']);
             foreach ($parentFields as $parentField) {
-                $object = $this->getFieldValue($object, $parentField);
+                $object = $this->getChildValue($object, $parentField);
             }
         }
 
         return $this->getFieldValue($object, $this->fieldName);
+    }
+
+    /**
+     * @param object|null $object
+     * @param string      $fieldName
+     *
+     * @throws NoValueException
+     */
+    private function getChildValue(?object $object, string $fieldName): ?object
+    {
+        if (null === $object) {
+            return null;
+        }
+
+        $child = $this->getFieldValue($object, $fieldName);
+        if (null !== $child && !is_object($child)) {
+            throw new NoValueException(sprintf(
+                'Unexpected value when accessing to the property "%s" on the class "%s" for the field "%s".'
+                .' Expected object|null, got %s.',
+                $fieldName,
+                get_class($object),
+                $this->getName(),
+                gettype($child)
+            ));
+        }
+
+        return $child;
     }
 }

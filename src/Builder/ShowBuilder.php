@@ -73,14 +73,16 @@ class ShowBuilder implements ShowBuilderInterface
             [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
             $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
 
-            // set the default field mapping
-            if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
-            }
+            if (null !== $metadata) {
+                // set the default field mapping
+                if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                    $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
+                }
 
-            // set the default association mapping
-            if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
+                // set the default association mapping
+                if (isset($metadata->associationMappings[$lastPropertyName])) {
+                    $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
+                }
             }
         }
 

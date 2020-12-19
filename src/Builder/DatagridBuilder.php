@@ -77,40 +77,42 @@ class DatagridBuilder implements DatagridBuilderInterface
             [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()
                 ->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
 
-            // set the default field mapping
-            if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setOption(
-                    'field_mapping',
-                    $fieldDescription->getOption(
+            if (null !== $metadata) {
+                // set the default field mapping
+                if (isset($metadata->fieldMappings[$lastPropertyName])) {
+                    $fieldDescription->setOption(
                         'field_mapping',
-                        $fieldMapping = $metadata->fieldMappings[$lastPropertyName]
-                    )
-                );
+                        $fieldDescription->getOption(
+                            'field_mapping',
+                            $fieldMapping = $metadata->fieldMappings[$lastPropertyName]
+                        )
+                    );
 
-                if ('string' === $fieldMapping['type']) {
-                    $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
+                    if ('string' === $fieldMapping['type']) {
+                        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
+                    }
+
+                    if (!empty($embeddedClasses = $metadata->embeddedClasses)
+                        && isset($fieldMapping['declaredField'])
+                        && \array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
+                    ) {
+                        $fieldDescription->setOption(
+                            'field_name',
+                            $fieldMapping['fieldName']
+                        );
+                    }
                 }
 
-                if (!empty($embeddedClasses = $metadata->embeddedClasses)
-                    && isset($fieldMapping['declaredField'])
-                    && \array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
-                ) {
+                // set the default association mapping
+                if (isset($metadata->associationMappings[$lastPropertyName])) {
                     $fieldDescription->setOption(
-                        'field_name',
-                        $fieldMapping['fieldName']
+                        'association_mapping',
+                        $fieldDescription->getOption(
+                            'association_mapping',
+                            $metadata->associationMappings[$lastPropertyName]
+                        )
                     );
                 }
-            }
-
-            // set the default association mapping
-            if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setOption(
-                    'association_mapping',
-                    $fieldDescription->getOption(
-                        'association_mapping',
-                        $metadata->associationMappings[$lastPropertyName]
-                    )
-                );
             }
 
             $fieldDescription->setOption(
