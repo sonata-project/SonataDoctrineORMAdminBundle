@@ -198,7 +198,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $options,
             $metadata->fieldMappings[$propertyName] ?? [],
             $metadata->associationMappings[$propertyName] ?? [],
-            $parentAssociationMappings
+            $parentAssociationMappings,
+            $propertyName
         );
     }
 
