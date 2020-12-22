@@ -84,6 +84,11 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame($expected, $field->getOptions());
     }
 
+    /**
+     * NEXT_MAJOR: Remove half of the test.
+     *
+     * @group legacy
+     */
     public function testAssociationMapping(): void
     {
         $field = new FieldDescription('name', [], [], [
@@ -185,15 +190,10 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetValue(): void
     {
-        $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['myMethod'])
-            ->getMock();
-        $mockedObject->expects($this->once())
-            ->method('myMethod')
-            ->willReturn('myMethodValue');
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
+        $mockedObject->expects($this->once())->method('myMethod')->willReturn('myMethodValue');
 
-        $field = new FieldDescription('name');
-        $field->setOption('code', 'myMethod');
+        $field = new FieldDescription('name', ['code' => 'myMethod']);
 
         $this->assertSame($field->getValue($mockedObject), 'myMethodValue');
     }
@@ -202,12 +202,8 @@ class FieldDescriptionTest extends TestCase
     {
         $this->expectException(NoValueException::class);
 
-        $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['myMethod'])
-            ->getMock();
-        $mockedObject->expects($this->never())
-            ->method('myMethod')
-            ->willReturn('myMethodValue');
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
+        $mockedObject->expects($this->never())->method('myMethod')->willReturn('myMethodValue');
 
         $field = new FieldDescription('name');
 
@@ -312,57 +308,29 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetValueForEmbeddedObject(): void
     {
-        $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['myMethod'])
-            ->getMock();
-        $mockedEmbeddedObject->expects($this->once())
-                    ->method('myMethod')
-                    ->willReturn('myMethodValue');
+        $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
+        $mockedEmbeddedObject->expects($this->once())->method('getMyMethod')->willReturn('myMethodValue');
 
-        $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['getMyEmbeddedObject'])
-            ->getMock();
-        $mockedObject->expects($this->once())
-            ->method('getMyEmbeddedObject')
-            ->willReturn($mockedEmbeddedObject);
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
+        $mockedObject->expects($this->once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
 
-        $field = new FieldDescription('myMethod', [], [
-            'declaredField' => 'myEmbeddedObject',
-            'type' => 'string',
-            'fieldName' => 'myEmbeddedObject.myMethod',
-        ]);
-        $field->setOption('code', 'myMethod');
+        $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.myMethod');
 
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     public function testGetValueForMultiLevelEmbeddedObject(): void
     {
-        $mockedChildEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['myMethod'])
-            ->getMock();
-        $mockedChildEmbeddedObject->expects($this->once())
-            ->method('myMethod')
-            ->willReturn('myMethodValue');
-        $mockedEmbeddedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['getChild'])
-            ->getMock();
-        $mockedEmbeddedObject->expects($this->once())
-            ->method('getChild')
-            ->willReturn($mockedChildEmbeddedObject);
-        $mockedObject = $this->getMockBuilder('stdClass')
-            ->setMethods(['getMyEmbeddedObject'])
-            ->getMock();
-        $mockedObject->expects($this->once())
-            ->method('getMyEmbeddedObject')
-            ->willReturn($mockedEmbeddedObject);
+        $mockedChildEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
+        $mockedChildEmbeddedObject->expects($this->once())->method('getMyMethod')->willReturn('myMethodValue');
 
-        $field = new FieldDescription('myMethod', [], [
-            'declaredField' => 'myEmbeddedObject.child',
-            'type' => 'string',
-            'fieldName' => 'myMethod',
-        ]);
-        $field->setOption('code', 'myMethod');
+        $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getChild'])->getMock();
+        $mockedEmbeddedObject->expects($this->once())->method('getChild')->willReturn($mockedChildEmbeddedObject);
+
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
+        $mockedObject->expects($this->once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
+
+        $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.child.myMethod');
 
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }

@@ -105,16 +105,6 @@ class FieldDescription extends BaseFieldDescription
             $object = $this->getFieldValue($object, $parentAssociationMapping['fieldName']);
         }
 
-        $fieldMapping = $this->getFieldMapping();
-        // Support embedded object for mapping
-        // Ref: https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html
-        if (isset($fieldMapping['declaredField'])) {
-            $parentFields = explode('.', $fieldMapping['declaredField']);
-            foreach ($parentFields as $parentField) {
-                $object = $this->getFieldValue($object, $parentField);
-            }
-        }
-
-        return $this->getFieldValue($object, $this->fieldName);
+        return $this->getFieldValue($object, $this->getFieldName());
     }
 }
