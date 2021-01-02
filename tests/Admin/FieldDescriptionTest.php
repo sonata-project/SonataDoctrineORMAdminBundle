@@ -154,28 +154,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertTrue($field->hasAssociationAdmin());
     }
 
-    public function testGetValue(): void
-    {
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
-        $mockedObject->expects($this->once())->method('myMethod')->willReturn('myMethodValue');
-
-        $field = new FieldDescription('name', ['code' => 'myMethod']);
-
-        $this->assertSame($field->getValue($mockedObject), 'myMethodValue');
-    }
-
-    public function testGetValueWhenCannotRetrieve(): void
-    {
-        $this->expectException(NoValueException::class);
-
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
-        $mockedObject->expects($this->never())->method('myMethod')->willReturn('myMethodValue');
-
-        $field = new FieldDescription('name');
-
-        $this->assertSame($field->getValue($mockedObject), 'myMethodValue');
-    }
-
     public function testGetAssociationMapping(): void
     {
         $associationMapping = [
@@ -233,7 +211,7 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame('integer', $field->getMappingType());
     }
 
-    public function testGetTargetEntity(): void
+    public function testGetTargetModel(): void
     {
         $associationMapping = [
             'type' => 'integer',
@@ -270,6 +248,41 @@ class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertSame($fieldMapping, $field->getFieldMapping());
+    }
+
+    public function testGetValue(): void
+    {
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
+        $mockedObject->expects($this->once())->method('myMethod')->willReturn('myMethodValue');
+
+        $field = new FieldDescription('name', ['code' => 'myMethod']);
+
+        $this->assertSame('myMethodValue', $field->getValue($mockedObject));
+    }
+
+    public function testGetValueWithParentAssociationMappings(): void
+    {
+        $mockedSubObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFieldName'])->getMock();
+        $mockedSubObject->expects($this->once())->method('getFieldName')->willReturn('value');
+
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getSubObject'])->getMock();
+        $mockedObject->expects($this->once())->method('getSubObject')->willReturn($mockedSubObject);
+
+        $field = new FieldDescription('name', [], [], [], [['fieldName' => 'subObject']], 'fieldName');
+
+        $this->assertSame('value', $field->getValue($mockedObject));
+    }
+
+    public function testGetValueWhenCannotRetrieve(): void
+    {
+        $this->expectException(NoValueException::class);
+
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
+        $mockedObject->expects($this->never())->method('myMethod')->willReturn('myMethodValue');
+
+        $field = new FieldDescription('name');
+
+        $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     public function testGetValueForEmbeddedObject(): void
