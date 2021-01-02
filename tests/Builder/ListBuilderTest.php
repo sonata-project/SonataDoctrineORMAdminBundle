@@ -90,18 +90,19 @@ class ListBuilderTest extends TestCase
      */
     public function testFixFieldDescription($type, $template): void
     {
+        // NEXT_MAJOR: Remove the next 3 lines.
         $classMetadata = $this->createStub(ClassMetadata::class);
         $classMetadata->fieldMappings = [2 => [1 => 'test', 'type' => 'string']];
         $classMetadata->associationMappings = [2 => ['fieldName' => 'fake']];
 
-        $this->modelManager->method('hasMetadata')->willReturn(true);
         $this->admin->expects($this->once())->method('attachAdminClass');
+        // NEXT_MAJOR: Remove the next 2 lines.
+        $this->modelManager->method('hasMetadata')->willReturn(true);
         $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 
-        $fieldDescription = new FieldDescription('test');
+        $fieldDescription = new FieldDescription('test', [], ['type' => $type]);
         $fieldDescription->setOption('sortable', true);
         $fieldDescription->setType('fakeType');
-        $fieldDescription->setMappingType($type);
 
         $this->listBuilder->fixFieldDescription($this->admin, $fieldDescription);
 

@@ -55,10 +55,13 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidBinaryEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
+use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 
 final class ModelManagerTest extends TestCase
 {
+    use ExpectDeprecationTrait;
+
     /**
      * @var ManagerRegistry|MockObject
      */
@@ -265,10 +268,11 @@ final class ModelManagerTest extends TestCase
         $modelManager->expects($this->any())->method('getMetadata')
             ->willReturnMap(
                 [
-                        [$containerEntityClass, $containerEntityMetadata],
-                        [$embeddedEntityClass, $embeddedEntityMetadata],
-                        [$associatedEntityClass, $associatedEntityMetadata],
-                    ]
+                    // NEXT_MAJOR: Remove the 'sonata_deprecation_mute'
+                    [$containerEntityClass, 'sonata_deprecation_mute', $containerEntityMetadata],
+                    [$embeddedEntityClass, 'sonata_deprecation_mute', $embeddedEntityMetadata],
+                    [$associatedEntityClass, 'sonata_deprecation_mute', $associatedEntityMetadata],
+                ]
             );
 
         /** @var ClassMetadata $metadata */
@@ -589,6 +593,8 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this dataprovider.
+     *
      * [sortBy, sortOrder, isAddOrderBy].
      */
     public function getSortableInDataSourceIteratorDataProvider(): array
@@ -602,6 +608,10 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider getSortableInDataSourceIteratorDataProvider
      *
      * @param string|null $sortBy
@@ -657,6 +667,7 @@ final class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.');
         $this->modelManager->getDataSourceIterator($datagrid, []);
 
         if ($isAddOrderBy) {
@@ -698,8 +709,15 @@ final class ModelManagerTest extends TestCase
         $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testModelTransform(): void
     {
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+
         $object = new \stdClass();
         $result = $this->modelManager->modelTransform('thisIsNotUsed', $object);
 

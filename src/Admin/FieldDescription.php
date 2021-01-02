@@ -20,6 +20,9 @@ use Sonata\AdminBundle\Admin\BaseFieldDescription;
  */
 class FieldDescription extends BaseFieldDescription
 {
+    /**
+     * NEXT_MAJOR: Change visibility to protected.
+     */
     public function setAssociationMapping(array $associationMapping): void
     {
         $this->associationMapping = $associationMapping;
@@ -56,6 +59,9 @@ class FieldDescription extends BaseFieldDescription
         return null;
     }
 
+    /**
+     * NEXT_MAJOR: Change visibility to protected.
+     */
     public function setFieldMapping(array $fieldMapping): void
     {
         $this->fieldMapping = $fieldMapping;
@@ -66,6 +72,9 @@ class FieldDescription extends BaseFieldDescription
         $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
+    /**
+     * NEXT_MAJOR: Change visibility to protected.
+     */
     public function setParentAssociationMappings(array $parentAssociationMappings): void
     {
         foreach ($parentAssociationMappings as $parentAssociationMapping) {

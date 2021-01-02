@@ -70,7 +70,8 @@ class DatagridBuilder implements DatagridBuilderInterface
         // set default values
         $fieldDescription->setAdmin($admin);
 
-        if ($admin->getModelManager()->hasMetadata($admin->getClass())) {
+        // NEXT_MAJOR: Remove this block.
+        if ($admin->getModelManager()->hasMetadata($admin->getClass(), 'sonata_deprecation_mute')) {
             [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()
                 ->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
 
@@ -115,6 +116,23 @@ class DatagridBuilder implements DatagridBuilderInterface
                 $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings)
             );
         }
+
+        // NEXT_MAJOR: Uncomment this code.
+        //if ([] !== $fieldDescription->getFieldMapping()) {
+        //    $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
+        //
+        //    if ('string' === $fieldDescription->getFieldMapping()['type']) {
+        //        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
+        //    }
+        //}
+        //
+        //if ([] !== $fieldDescription->getAssociationMapping()) {
+        //    $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $fieldDescription->getAssociationMapping()));
+        //}
+        //
+        //if ([] !== $fieldDescription->getParentAssociationMappings()) {
+        //    $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $fieldDescription->getParentAssociationMappings()));
+        //}
 
         $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));

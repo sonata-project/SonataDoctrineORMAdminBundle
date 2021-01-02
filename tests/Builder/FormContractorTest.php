@@ -131,11 +131,12 @@ final class FormContractorTest extends TestCase
 
     public function testAdminClassAttachForNotMappedField(): void
     {
-        // Given
+        // NEXT_MAJOR: Remove the next 2 lines.
         $modelManager = $this->createMock(ModelManager::class);
         $modelManager->method('hasMetadata')->willReturn(false);
 
         $admin = $this->createMock(AdminInterface::class);
+        // NEXT_MAJOR: Remove the next line.
         $admin->method('getModelManager')->willReturn($modelManager);
 
         $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
@@ -146,14 +147,11 @@ final class FormContractorTest extends TestCase
             $this->equalTo('admin_code')
         ))->willReturn('sonata.admin.code');
 
-        // Then
         $admin
             ->expects($this->once())
             ->method('attachAdminClass')
-            ->with($fieldDescription)
-        ;
+            ->with($fieldDescription);
 
-        // When
         $this->formContractor->fixFieldDescription($admin, $fieldDescription);
     }
 }

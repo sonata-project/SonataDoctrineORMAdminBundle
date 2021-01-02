@@ -14,19 +14,14 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\NullFilter;
 use Sonata\Form\Type\BooleanType;
 
-/**
- * NEXT_MAJOR: Remove this test.
- *
- * @group legacy
- */
-final class EmptyFilterTest extends FilterTestCase
+final class NullFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {
-        $filter = new EmptyFilter();
+        $filter = new NullFilter();
         $filter->initialize('field_name', [
             'field_options' => ['class' => 'FooBar'],
         ]);
@@ -44,7 +39,7 @@ final class EmptyFilterTest extends FilterTestCase
      */
     public function testValue(bool $inverse, int $value, string $expectedQuery): void
     {
-        $filter = new EmptyFilter();
+        $filter = new NullFilter();
         $filter->initialize('field_name', [
             'field_options' => ['class' => 'FooBar'],
             'inverse' => $inverse,
@@ -61,7 +56,7 @@ final class EmptyFilterTest extends FilterTestCase
 
     public function testRenderSettings(): void
     {
-        $filter = new EmptyFilter();
+        $filter = new NullFilter();
         $filter->initialize('field_name', [
             'field_options' => ['class' => 'FooBar'],
         ]);
