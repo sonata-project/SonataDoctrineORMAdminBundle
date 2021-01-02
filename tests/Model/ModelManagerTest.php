@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -262,6 +261,10 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove the group legacy and change the dataprovider from [false, false] to [false, true]
+     *
+     * @group legacy
+     *
      * @dataProvider lockDataProvider
      */
     public function testLock($isVersioned, $expectsException): void
@@ -840,7 +843,7 @@ final class ModelManagerTest extends TestCase
 
     public function testGetModelInstanceException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ModelManagerException::class);
 
         $this->modelManager->getModelInstance(AbstractEntity::class);
     }
@@ -852,7 +855,7 @@ final class ModelManagerTest extends TestCase
 
     public function testGetEntityManagerException(): void
     {
-        $this->expectException(\RuntimeException::class);
+        $this->expectException(ModelManagerException::class);
 
         $this->modelManager->getEntityManager(VersionedEntity::class);
     }
@@ -864,10 +867,7 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->getNewFieldDescriptionInstance(VersionedEntity::class, [], []);
     }
 
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
-    public function testCreate($exception): void
+    public function testCreate(): void
     {
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -880,29 +880,14 @@ final class ModelManagerTest extends TestCase
 
         $entityManger->expects($this->once())
             ->method('flush')
-            ->willThrowException($exception);
+            ->willThrowException(new \Exception());
 
         $this->expectException(ModelManagerException::class);
 
         $this->modelManager->create(new VersionedEntity());
     }
 
-    public function createUpdateRemoveData()
-    {
-        return [
-            'PDOException' => [
-                new \PDOException(),
-            ],
-            'DBALException' => [
-                new DBALException(),
-            ],
-        ];
-    }
-
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
-    public function testUpdate($exception): void
+    public function testUpdate(): void
     {
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -915,17 +900,14 @@ final class ModelManagerTest extends TestCase
 
         $entityManger->expects($this->once())
             ->method('flush')
-            ->willThrowException($exception);
+            ->willThrowException(new \Exception());
 
         $this->expectException(ModelManagerException::class);
 
         $this->modelManager->update(new VersionedEntity());
     }
 
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
-    public function testRemove($exception): void
+    public function testRemove(): void
     {
         $entityManger = $this->createMock(EntityManager::class);
 
@@ -938,7 +920,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManger->expects($this->once())
             ->method('flush')
-            ->willThrowException($exception);
+            ->willThrowException(new \Exception());
 
         $this->expectException(ModelManagerException::class);
 

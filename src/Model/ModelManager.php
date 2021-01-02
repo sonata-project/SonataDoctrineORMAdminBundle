@@ -14,12 +14,10 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
@@ -90,6 +88,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      *
      * @param string $class
      *
+     * @throws ModelManagerException if the entity manager or the metadata is not found
+     *
      * @return ClassMetadata
      *
      * @phpstan-param class-string $class
@@ -105,7 +105,15 @@ class ModelManager implements ModelManagerInterface, LockInterface
             ), E_USER_DEPRECATED);
         }
 
-        return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
+        try {
+            return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
+        } catch (\Exception $exception) {
+            throw new ModelManagerException(
+                sprintf('Cannot find the metadata of the class %s', $class),
+                $exception->getCode(),
+                $exception
+            );
+        }
     }
 
     /**
@@ -115,6 +123,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @param string $baseClass        The base class of the model holding the fully qualified property
      * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
      *                                 property string)
+     *
+     * @throws ModelManagerException if the entity manager or the metadata is not found
      *
      * @return array
      *
@@ -159,6 +169,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0
      *
      * @param string $class
+     *
+     * @throws ModelManagerException if the entity manager is not found
      *
      * @return bool
      *
@@ -208,17 +220,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
+                $exception->getCode(),
+                $exception
             );
         }
     }
@@ -229,17 +235,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
+                $exception->getCode(),
+                $exception
             );
         }
     }
@@ -250,25 +250,23 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->remove($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
+                $exception->getCode(),
+                $exception
             );
         }
     }
 
     public function getLockVersion($object)
     {
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
+        try {
+            // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+            $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
+        } catch (\Exception $exception) {
+            return null;
+        }
 
         if (!$metadata->isVersioned) {
             return null;
@@ -279,18 +277,28 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function lock($object, $expectedVersion)
     {
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
-
-        if (!$metadata->isVersioned) {
-            return;
-        }
-
         try {
-            $entityManager = $this->getEntityManager($object);
-            $entityManager->lock($object, LockMode::OPTIMISTIC, $expectedVersion);
-        } catch (OptimisticLockException $e) {
-            throw new LockException($e->getMessage(), $e->getCode(), $e);
+            // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
+            $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
+
+            // NEXT_MAJOR: Remove this check.
+            if (!$metadata->isVersioned) {
+                @trigger_error(
+                    'Trying to lock a non versioned object is deprecated since sonata-project/doctrine-orm-admin-bundle'
+                    .' 3.x and will throw a LockException in version 4.0.',
+                    E_USER_DEPRECATED
+                );
+
+                return;
+            }
+
+            $this->getEntityManager($object)->lock($object, LockMode::OPTIMISTIC, $expectedVersion);
+        } catch (\Exception $exception) {
+            throw new LockException(
+                sprintf('Failed to lock object: %s', ClassUtils::getClass($object)),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
@@ -323,9 +331,11 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @param string|object $class
      *
+     * @throws ModelManagerException if no entity manager is defined for the class provided
+     *
      * @return EntityManager
      *
-     * @phpstan-param class-string $class
+     * @phpstan-param class-string|object $class
      */
     public function getEntityManager($class)
     {
@@ -337,7 +347,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $em = $this->registry->getManagerForClass($class);
 
             if (!$em) {
-                throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
+                throw new ModelManagerException(sprintf('No entity manager defined for class %s', $class));
             }
 
             $this->cache[$class] = $em;
@@ -428,7 +438,13 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $class = ClassUtils::getClass($entity);
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`
         $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
-        $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
+        $connection = $this->getEntityManager($class)->getConnection();
+
+        try {
+            $platform = $connection->getDatabasePlatform();
+        } catch (\Exception $exception) {
+            $platform = null;
+        }
 
         $identifiers = [];
 
@@ -439,19 +455,22 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
-            $fieldType = $metadata->getTypeOfField($name);
-            $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
-            if ($type) {
-                $identifiers[] = $this->getValueFromType($value, $type, $fieldType, $platform);
+            if (null !== $platform) {
+                $fieldType = $metadata->getTypeOfField($name);
+                $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
 
-                continue;
+                if (null !== $type) {
+                    $identifiers[] = $this->getValueFromType($value, $type, $fieldType, $platform);
+
+                    continue;
+                }
             }
 
             // NEXT_MAJOR: Remove `sonata_deprecation_mute`
             $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value), 'sonata_deprecation_mute');
 
-            foreach ($identifierMetadata->getIdentifierValues($value) as $value) {
-                $identifiers[] = $value;
+            foreach ($identifierMetadata->getIdentifierValues($value) as $identifierValue) {
+                $identifiers[] = $identifierValue;
             }
         }
 
@@ -520,6 +539,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @phpstan-param non-empty-array<string|int> $idx
      *
+     * @throws ModelManagerException
      * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
      */
     public function addIdentifiersToQuery($class, ProxyQueryInterface $query, array $idx)
@@ -571,8 +591,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
             $entityManager->flush();
             $entityManager->clear();
-        } catch (\PDOException | DBALException $e) {
-            throw new ModelManagerException('', 0, $e);
+        } catch (\Exception $exception) {
+            throw new ModelManagerException('Failed to batch delete', $exception->getCode(), $exception);
         }
     }
 
@@ -621,15 +641,23 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getModelInstance($class)
     {
-        $r = new \ReflectionClass($class);
-        if ($r->isAbstract()) {
-            throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
+        $reflection = new \ReflectionClass($class);
+        if ($reflection->isAbstract()) {
+            throw new ModelManagerException(sprintf('Cannot initialize abstract class: %s', $class));
         }
 
-        $constructor = $r->getConstructor();
+        $constructor = $reflection->getConstructor();
 
         if (null !== $constructor && (!$constructor->isPublic() || $constructor->getNumberOfRequiredParameters() > 0)) {
-            return $r->newInstanceWithoutConstructor();
+            try {
+                return $reflection->newInstanceWithoutConstructor();
+            } catch (\ReflectionException $exception) {
+                throw new ModelManagerException(
+                    sprintf('Cannot initialize class: %s', $class),
+                    $exception->getCode(),
+                    $exception
+                );
+            }
         }
 
         return new $class();
