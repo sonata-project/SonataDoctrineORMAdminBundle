@@ -84,11 +84,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame($expected, $field->getOptions());
     }
 
-    /**
-     * NEXT_MAJOR: Remove half of the test.
-     *
-     * @group legacy
-     */
     public function testAssociationMapping(): void
     {
         $field = new FieldDescription('name', [], [], [
@@ -110,35 +105,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame('integer', $field->getType());
         $this->assertSame('integer', $field->getMappingType());
         $this->assertSame('overwritten', $field->getFieldName());
-
-        $field->setMappingType('string');
-        $this->assertSame('string', $field->getMappingType());
-        $this->assertSame('integer', $field->getType());
-    }
-
-    public function testSetName(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $this->assertSame($field->getName(), 'New field description name');
-    }
-
-    public function testSetNameSetFieldNameToo(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $this->assertSame($field->getFieldName(), 'New field description name');
-    }
-
-    public function testSetNameDoesNotSetFieldNameWhenSetBefore(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $field->setFieldName('field name');
-        $this->assertSame($field->getFieldName(), 'field name');
-
-        $field->setName('New field description name');
-        $this->assertSame($field->getFieldName(), 'field name');
     }
 
     public function testGetParent(): void
