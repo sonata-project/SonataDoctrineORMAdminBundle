@@ -39,6 +39,11 @@ class Pager extends BasePager
     protected $queryBuilder = null;
 
     /**
+     * @var string[]
+     */
+    protected $countColumn = ['id'];
+
+    /**
      * @var int
      */
     private $resultsCount = 0;
@@ -89,13 +94,6 @@ class Pager extends BasePager
         return $deprecatedCount;
     }
 
-    public function setResultsCount(int $count): void
-    {
-        $this->resultsCount = $count;
-        // NEXT_MAJOR: Remove this line.
-        $this->setNbResults($count, 'sonata_deprecation_mute');
-    }
-
     /**
      * NEXT_MAJOR: remove this method.
      *
@@ -117,15 +115,17 @@ class Pager extends BasePager
 
     public function init()
     {
-        $this->resetIterator();
+        // NEXT_MAJOR: Remove this line.
+        $this->resetIterator('sonata_deprecation_mute');
 
         $this->setResultsCount($this->computeNbResult('sonata_deprecation_mute'));
 
         $this->getQuery()->setFirstResult(null);
         $this->getQuery()->setMaxResults(null);
 
-        if (\count($this->getParameters()) > 0) {
-            $this->getQuery()->setParameters($this->getParameters());
+        // NEXT_MAJOR: Remove this code.
+        if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
+            $this->getQuery()->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
         if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->countResults()) {
@@ -138,6 +138,22 @@ class Pager extends BasePager
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCountColumn()
+    {
+        return $this->countColumn;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function setCountColumn(array $countColumn)
+    {
+        return $this->countColumn = $countColumn;
     }
 
     /**
@@ -188,8 +204,9 @@ class Pager extends BasePager
     {
         $countQuery = clone $this->getQuery();
 
-        if (\count($this->getParameters()) > 0) {
-            $countQuery->setParameters($this->getParameters());
+        // NEXT_MAJOR: Remove this code.
+        if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
+            $countQuery->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
         if (\count($this->getCountColumn()) > 1) {
@@ -202,5 +219,12 @@ class Pager extends BasePager
             $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
             'cnt'
         ));
+    }
+
+    private function setResultsCount(int $count): void
+    {
+        $this->resultsCount = $count;
+        // NEXT_MAJOR: Remove this line.
+        $this->setNbResults($count, 'sonata_deprecation_mute');
     }
 }
