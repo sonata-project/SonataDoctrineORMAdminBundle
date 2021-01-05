@@ -113,7 +113,7 @@ file that was distributed with this source code.
             </span>
 
             <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.hasAccess('delete') and btn_delete %}
+                {% if btn_delete %}
                     <a  href=""
                         onclick="return remove_selected_element_{{ id }}(this);"
                         class="btn btn-danger btn-sm sonata-ba-action"
@@ -174,3 +174,4 @@ file that was distributed with this source code.
         INVALID MODE : {{ id }} - type : CollectionType - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
 {% endblock %}
+
