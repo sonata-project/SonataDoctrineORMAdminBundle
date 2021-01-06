@@ -272,7 +272,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                             return false;
                         }
 
-                        $queryBuilder
+                        $query
                             ->leftJoin(sprintf('%s.comments', $alias), 'c')
                             ->andWhere('c.status = :status')
                             ->setParameter('status', Comment::STATUS_MODERATE);
