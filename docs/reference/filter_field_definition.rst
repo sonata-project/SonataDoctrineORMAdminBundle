@@ -251,6 +251,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
     use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 
     use Application\Sonata\NewsBundle\Entity\Comment;
@@ -266,12 +267,12 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ->add('author')
                 ->add('with_open_comments', CallbackFilter::class, [
     //                'callback'   => [$this, 'getWithOpenCommentFilter'],
-                    'callback' => static function(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $value): bool {
-                        if (!$value['value']) {
+                    'callback' => static function(ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
+                        if (!$data['value']) {
                             return false;
                         }
 
-                        $queryBuilder
+                        $query
                             ->leftJoin(sprintf('%s.comments', $alias), 'c')
                             ->andWhere('c.status = :status')
                             ->setParameter('status', Comment::STATUS_MODERATE);
@@ -282,13 +283,13 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ]);
         }
 
-        public function getWithOpenCommentFilter($queryBuilder, $alias, $field, $value)
+        public function getWithOpenCommentFilter(ProxyQueryInterface $query, string $alias, string $field, array $data): bool
         {
-            if (!$value['value']) {
+            if (!$data['value']) {
                 return false;
             }
 
-            $queryBuilder
+            $query
                 ->leftJoin(sprintf('%s.comments', $alias), 'c')
                 ->andWhere('c.status = :status')
                 ->setParameter('status', Comment::STATUS_MODERATE);
