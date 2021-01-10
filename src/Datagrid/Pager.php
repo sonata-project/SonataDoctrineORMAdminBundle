@@ -16,7 +16,6 @@ namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * Doctrine pager class.
