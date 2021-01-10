@@ -203,7 +203,7 @@ class Pager extends BasePager
         }
 
         if (!$this->getQuery() instanceof ProxyQueryInterface) {
-            throw new \InvalidArgumentException(
+            throw new \TypeError(
                 sprintf('The datagrid query MUST implement %s.', ProxyQueryInterface::class)
             );
         }
