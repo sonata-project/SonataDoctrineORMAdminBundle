@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
@@ -28,6 +29,10 @@ class Pager extends BasePager
 {
     /**
      * Use separator in CONCAT() function for correct determinate similar records.
+     *
+     * NEXT_MAJOR: remove this property.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0
      */
     public const CONCAT_SEPARATOR = '|';
 
@@ -51,17 +56,20 @@ class Pager extends BasePager
     /**
      * NEXT_MAJOR: remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
      * @return int
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
      */
     public function computeNbResult()
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[0] ?? null)) {
-            @trigger_error(sprintf(
-                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
-                __METHOD__,
-            ), E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
+                    __METHOD__,
+                ),
+                E_USER_DEPRECATED
+            );
         }
 
         return $this->computeResultsCount();
@@ -86,10 +94,13 @@ class Pager extends BasePager
             return $this->resultsCount;
         }
 
-        @trigger_error(sprintf(
-            'Relying on the protected property "%s::$nbResults" and its getter/setter is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will fail 4.0. Use "countResults()" and "setResultsCount()" instead.',
-            self::class,
-        ), E_USER_DEPRECATED);
+        @trigger_error(
+            sprintf(
+                'Relying on the protected property "%s::$nbResults" and its getter/setter is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will fail 4.0. Use "countResults()" and "setResultsCount()" instead.',
+                self::class,
+            ),
+            E_USER_DEPRECATED
+        );
 
         return $deprecatedCount;
     }
@@ -97,17 +108,20 @@ class Pager extends BasePager
     /**
      * NEXT_MAJOR: remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
      * @return int
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
      */
     public function getNbResults()
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[0] ?? null)) {
-            @trigger_error(sprintf(
-                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "countResults()" instead.',
-                __METHOD__,
-            ), E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "countResults()" instead.',
+                    __METHOD__,
+                ),
+                E_USER_DEPRECATED
+            );
         }
 
         return $this->nbResults;
@@ -159,45 +173,24 @@ class Pager extends BasePager
     /**
      * NEXT_MAJOR: remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
      * @param int $nb
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
      */
     protected function setNbResults($nb)
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
-            @trigger_error(sprintf(
-                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "setResultsCount()" instead.',
-                __METHOD__,
-            ), E_USER_DEPRECATED);
+            @trigger_error(
+                sprintf(
+                    'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "setResultsCount()" instead.',
+                    __METHOD__,
+                ),
+                E_USER_DEPRECATED
+            );
         }
 
         $this->nbResults = $nb;
         $this->resultsCount = (int) $nb;
-    }
-
-    private function countCompositePrimaryKey(ProxyQueryInterface $countQuery): void
-    {
-        $rootAliases = current($countQuery->getRootAliases());
-        $countQuery->setParameter('concat_separator', self::CONCAT_SEPARATOR);
-
-        $columns = $rootAliases.'.'.implode(', :concat_separator, '.$rootAliases.'.', $this->getCountColumn());
-
-        $countQuery->select(sprintf(
-            'count(%s concat(%s)) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            $columns
-        ));
-    }
-
-    private function countSinglePrimaryKey(ProxyQueryInterface $countQuery): void
-    {
-        $countQuery->select(sprintf(
-            'count(%s %s.%s) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            current($countQuery->getRootAliases()),
-            current($this->getCountColumn())
-        ));
     }
 
     private function computeResultsCount(): int
@@ -209,16 +202,15 @@ class Pager extends BasePager
             $countQuery->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        if (\count($this->getCountColumn()) > 1) {
-            $this->countCompositePrimaryKey($countQuery);
-        } else {
-            $this->countSinglePrimaryKey($countQuery);
+        if (!$this->getQuery() instanceof ProxyQueryInterface) {
+            throw new \InvalidArgumentException(
+                sprintf('The datagrid query MUST implement %s.', ProxyQueryInterface::class)
+            );
         }
 
-        return array_sum(array_column(
-            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
-            'cnt'
-        ));
+        $paginator = new Paginator($this->getQuery()->getQueryBuilder());
+
+        return \count($paginator);
     }
 
     private function setResultsCount(int $count): void
