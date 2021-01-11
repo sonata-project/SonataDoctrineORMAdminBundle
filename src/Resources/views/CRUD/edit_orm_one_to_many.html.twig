@@ -47,8 +47,7 @@ file that was distributed with this source code.
 
             {% if display_create_button %}
                 <span id="field_actions_{{ id }}" >
-                    <a
-                        href="{{ sonata_admin.field_description.associationadmin.generateUrl(
+                    <a href="{{ sonata_admin.field_description.associationadmin.generateUrl(
                             'create',
                             sonata_admin.field_description.getOption('link_parameters', {})
                         ) }}"
@@ -77,8 +76,7 @@ file that was distributed with this source code.
         {% else %}
             <span id="field_actions_{{ id }}" >
                 {% if display_create_button %}
-                    <a
-                        href="{{ sonata_admin.field_description.associationadmin.generateUrl(
+                    <a href="{{ sonata_admin.field_description.associationadmin.generateUrl(
                             'create',
                             sonata_admin.field_description.getOption('link_parameters', {})
                         ) }}"
