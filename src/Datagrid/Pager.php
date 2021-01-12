@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * Doctrine pager class.
@@ -27,93 +27,54 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 class Pager extends BasePager
 {
     /**
-     * Use separator in CONCAT() function for correct determinate similar records.
+     * @var int
      */
-    public const CONCAT_SEPARATOR = '|';
-
-    /**
-     * NEXT_MAJOR: remove this property.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 2.4 and will be removed in 4.0
-     */
-    protected $queryBuilder = null;
-
-    public function computeNbResult(): int
-    {
-        $countQuery = clone $this->getQuery();
-
-        if (\count($this->getParameters()) > 0) {
-            $countQuery->setParameters($this->getParameters());
-        }
-
-        if (\count($this->getCountColumn()) > 1) {
-            $this->countCompositePrimaryKey($countQuery);
-        } else {
-            $this->countSinglePrimaryKey($countQuery);
-        }
-
-        return array_sum(array_column(
-            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
-            'cnt'
-        ));
-    }
+    private $resultsCount = 0;
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT): array
     {
         return $this->getQuery()->execute([], $hydrationMode);
     }
 
-    public function getQuery(): ProxyQueryInterface
+    public function countResults(): int
     {
-        return $this->query;
+        return $this->resultsCount;
     }
 
     public function init(): void
     {
-        $this->resetIterator();
-
-        $this->setNbResults($this->computeNbResult());
+        $this->setResultsCount($this->computeResultsCount());
 
         $this->getQuery()->setFirstResult(null);
         $this->getQuery()->setMaxResults(null);
 
-        if (\count($this->getParameters()) > 0) {
-            $this->getQuery()->setParameters($this->getParameters());
-        }
-
-        if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->getNbResults()) {
+        if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->countResults()) {
             $this->setLastPage(0);
         } else {
             $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
 
-            $this->setLastPage((int) ceil($this->getNbResults() / $this->getMaxPerPage()));
+            $this->setLastPage((int) ceil($this->countResults() / $this->getMaxPerPage()));
 
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
     }
 
-    private function countCompositePrimaryKey(ProxyQueryInterface $countQuery): void
+    private function computeResultsCount(): int
     {
-        $rootAliases = current($countQuery->getRootAliases());
-        $countQuery->setParameter('concat_separator', self::CONCAT_SEPARATOR);
+        if (null === $this->getQuery()) {
+            throw new \TypeError('Missing mandatory datagrid query.');
+        }
 
-        $columns = $rootAliases.'.'.implode(', :concat_separator, '.$rootAliases.'.', $this->getCountColumn());
+        $countQuery = clone $this->getQuery();
 
-        $countQuery->select(sprintf(
-            'count(%s concat(%s)) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            $columns
-        ));
+        $paginator = new Paginator($countQuery->getQueryBuilder());
+
+        return \count($paginator);
     }
 
-    private function countSinglePrimaryKey(ProxyQueryInterface $countQuery): void
+    private function setResultsCount(int $count): void
     {
-        $countQuery->select(sprintf(
-            'count(%s %s.%s) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            current($countQuery->getRootAliases()),
-            current($this->getCountColumn())
-        ));
+        $this->resultsCount = $count;
     }
 }
