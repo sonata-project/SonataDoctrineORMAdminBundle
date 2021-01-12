@@ -89,6 +89,7 @@ class DatagridBuilder implements DatagridBuilderInterface
                     $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
                 }
 
+                // NEXT_MAJOR: Remove this, the fieldName should be correctly set at the creation.
                 if (!empty($embeddedClasses = $metadata->embeddedClasses)
                     && isset($fieldMapping['declaredField'])
                     && \array_key_exists($fieldMapping['declaredField'], $embeddedClasses)

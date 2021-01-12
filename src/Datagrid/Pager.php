@@ -38,24 +38,23 @@ class Pager extends BasePager
      */
     protected $queryBuilder = null;
 
+    /**
+     * NEXT_MAJOR: remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
+     *
+     * @return int
+     */
     public function computeNbResult(): int
     {
-        $countQuery = clone $this->getQuery();
-
-        if (\count($this->getParameters()) > 0) {
-            $countQuery->setParameters($this->getParameters());
+        if ('sonata_deprecation_mute' !== (\func_get_args()[0] ?? null)) {
+            @trigger_error(sprintf(
+                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
+                __METHOD__,
+            ), E_USER_DEPRECATED);
         }
 
-        if (\count($this->getCountColumn()) > 1) {
-            $this->countCompositePrimaryKey($countQuery);
-        } else {
-            $this->countSinglePrimaryKey($countQuery);
-        }
-
-        return array_sum(array_column(
-            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
-            'cnt'
-        ));
+        return $this->computeResultsCount();
     }
 
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT): array
@@ -68,29 +67,103 @@ class Pager extends BasePager
         return $this->query;
     }
 
+    public function countResults(): int
+    {
+        // NEXT_MAJOR: just return "$this->resultsCount" directly.
+        $deprecatedCount = $this->getNbResults('sonata_deprecation_mute');
+
+        if ($deprecatedCount === $this->resultsCount) {
+            return $this->resultsCount;
+        }
+
+        @trigger_error(sprintf(
+            'Relying on the protected property "%s::$nbResults" and its getter/setter is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will fail 4.0. Use "countResults()" and "setResultsCount()" instead.',
+            self::class,
+        ), E_USER_DEPRECATED);
+
+        return $deprecatedCount;
+    }
+
+    /**
+     * NEXT_MAJOR: remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
+     *
+     * @return int
+     */
+    public function getNbResults()
+    {
+        if ('sonata_deprecation_mute' !== (\func_get_args()[0] ?? null)) {
+            @trigger_error(sprintf(
+                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "countResults()" instead.',
+                __METHOD__,
+            ), E_USER_DEPRECATED);
+        }
+
+        return $this->nbResults;
+    }
+
     public function init(): void
     {
-        $this->resetIterator();
+        // NEXT_MAJOR: Remove this line.
+        $this->resetIterator('sonata_deprecation_mute');
 
-        $this->setNbResults($this->computeNbResult());
+        $this->setResultsCount($this->computeNbResult('sonata_deprecation_mute'));
 
         $this->getQuery()->setFirstResult(null);
         $this->getQuery()->setMaxResults(null);
 
-        if (\count($this->getParameters()) > 0) {
-            $this->getQuery()->setParameters($this->getParameters());
+        // NEXT_MAJOR: Remove this code.
+        if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
+            $this->getQuery()->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->getNbResults()) {
+        if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->countResults()) {
             $this->setLastPage(0);
         } else {
             $offset = ($this->getPage() - 1) * $this->getMaxPerPage();
 
-            $this->setLastPage((int) ceil($this->getNbResults() / $this->getMaxPerPage()));
+            $this->setLastPage((int) ceil($this->countResults() / $this->getMaxPerPage()));
 
             $this->getQuery()->setFirstResult($offset);
             $this->getQuery()->setMaxResults($this->getMaxPerPage());
         }
+    }
+
+    /**
+     * @return string[]
+     */
+    public function getCountColumn()
+    {
+        return $this->countColumn;
+    }
+
+    /**
+     * @return string[]
+     */
+    public function setCountColumn(array $countColumn)
+    {
+        return $this->countColumn = $countColumn;
+    }
+
+    /**
+     * NEXT_MAJOR: remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
+     *
+     * @param int $nb
+     */
+    protected function setNbResults($nb)
+    {
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "setResultsCount()" instead.',
+                __METHOD__,
+            ), E_USER_DEPRECATED);
+        }
+
+        $this->nbResults = $nb;
+        $this->resultsCount = (int) $nb;
     }
 
     private function countCompositePrimaryKey(ProxyQueryInterface $countQuery): void
@@ -115,5 +188,33 @@ class Pager extends BasePager
             current($countQuery->getRootAliases()),
             current($this->getCountColumn())
         ));
+    }
+
+    private function computeResultsCount(): int
+    {
+        $countQuery = clone $this->getQuery();
+
+        // NEXT_MAJOR: Remove this code.
+        if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
+            $countQuery->setParameters($this->getParameters('sonata_deprecation_mute'));
+        }
+
+        if (\count($this->getCountColumn()) > 1) {
+            $this->countCompositePrimaryKey($countQuery);
+        } else {
+            $this->countSinglePrimaryKey($countQuery);
+        }
+
+        return array_sum(array_column(
+            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
+            'cnt'
+        ));
+    }
+
+    private function setResultsCount(int $count): void
+    {
+        $this->resultsCount = $count;
+        // NEXT_MAJOR: Remove this line.
+        $this->setNbResults($count, 'sonata_deprecation_mute');
     }
 }
