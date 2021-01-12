@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * Doctrine pager class.
@@ -23,6 +22,8 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
  * @author Jonathan H. Wage <jonwage@gmail.com>
  *
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
+ *
+ * @phpstan-extends BasePager<ProxyQueryInterface>
  */
 class Pager extends BasePager
 {
@@ -67,8 +68,23 @@ class Pager extends BasePager
         return $this->computeResultsCount();
     }
 
+    public function getCurrentPageResults(): iterable
+    {
+        return $this->getQuery()->execute();
+    }
+
+    /**
+     * NEXT_MAJOR: remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
+     */
     public function getResults($hydrationMode = Query::HYDRATE_OBJECT)
     {
+        @trigger_error(sprintf(
+            'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "getCurrentPageResults()" instead.',
+            __METHOD__,
+        ), E_USER_DEPRECATED);
+
         return $this->getQuery()->execute([], $hydrationMode);
     }
 
