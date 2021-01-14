@@ -36,7 +36,7 @@ final class CRUDTest extends BasePantherTestCase
     {
         $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/list');
 
-        self::assertSelectorTextContains('.sonata-ba-list-field-text[objectid="category_novel"] .sonata-link-identifier', 'Novel');
+        self::assertSelectorTextContains('.sonata-ba-list-field-string[objectid="category_novel"] .sonata-link-identifier', 'Novel');
     }
 
     public function testShow(): void

@@ -39,11 +39,14 @@ class Pager extends BasePager
     protected $queryBuilder = null;
 
     /**
+     * @var int
+     */
+    private $resultsCount = 0;
+
+    /**
      * NEXT_MAJOR: remove this method.
      *
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
-     * @return int
      */
     public function computeNbResult(): int
     {
@@ -88,10 +91,8 @@ class Pager extends BasePager
      * NEXT_MAJOR: remove this method.
      *
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
-     * @return int
      */
-    public function getNbResults()
+    public function getNbResults(): int
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[0] ?? null)) {
             @trigger_error(sprintf(
@@ -133,27 +134,22 @@ class Pager extends BasePager
     /**
      * @return string[]
      */
-    public function getCountColumn()
+    public function getCountColumn(): array
     {
         return $this->countColumn;
     }
 
-    /**
-     * @return string[]
-     */
-    public function setCountColumn(array $countColumn)
+    public function setCountColumn(array $countColumn): void
     {
-        return $this->countColumn = $countColumn;
+        $this->countColumn = $countColumn;
     }
 
     /**
      * NEXT_MAJOR: remove this method.
      *
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27
-     *
-     * @param int $nb
      */
-    protected function setNbResults($nb)
+    protected function setNbResults(int $nb): void
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
             @trigger_error(sprintf(
