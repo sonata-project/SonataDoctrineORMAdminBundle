@@ -18,8 +18,7 @@ file that was distributed with this source code.
                 <ul class="nav nav-tabs">
                     {% for name, form_group in associationAdmin.formgroups %}
                         <li class="{% if loop.first %}active{% endif %}">
-                            <a
-                                href="#{{ associationAdmin.uniqid }}_{{ loop.parent.loop.index }}_{{ loop.index }}"
+                            <a href="#{{ associationAdmin.uniqid }}_{{ loop.parent.loop.index }}_{{ loop.index }}"
                                 data-toggle="tab"
                             >
                                 <i class="icon-exclamation-sign has-errors hide"></i>
