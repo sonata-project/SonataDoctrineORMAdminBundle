@@ -71,7 +71,7 @@ file that was distributed with this source code.
         </span>
         <span id="field_actions_{{ id }}" class="field-actions">
             <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.isGranted('LIST') and btn_list %}
+                {% if sonata_admin.field_description.associationadmin.hasroute('list') and sonata_admin.field_description.associationadmin.hasAccess('list') and btn_list %}
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('list') }}"
                         onclick="return start_field_dialog_form_list_{{ id }}(this);"
                         class="btn btn-info btn-sm sonata-ba-action"
@@ -83,7 +83,7 @@ file that was distributed with this source code.
                 {% endif %}
 
                 {% if sonata_admin.field_description.associationadmin.hasroute('create')
-                    and sonata_admin.field_description.associationadmin.isGranted('CREATE')
+                    and sonata_admin.field_description.associationadmin.hasAccess('create')
                     and btn_add
                 %}
                     <a  href="{{ sonata_admin.field_description.associationadmin.generateUrl('create') }}"
@@ -96,7 +96,7 @@ file that was distributed with this source code.
                     </a>
                 {% endif %}
                 {% if sonata_admin.field_description.associationadmin.hasroute('edit')
-                    and sonata_admin.field_description.associationadmin.isGranted('EDIT')
+                    and sonata_admin.field_description.associationadmin.hasAccess('edit')
                     and btn_edit
                 %}
                     <a  href="{{ sonata_admin.value == null ? '' : sonata_admin.field_description.associationadmin.generateUrl('edit', {
@@ -113,7 +113,7 @@ file that was distributed with this source code.
             </span>
 
             <span class="btn-group">
-                {% if sonata_admin.field_description.associationadmin.hasRoute('delete') and sonata_admin.field_description.associationadmin.isGranted('DELETE') and btn_delete %}
+                {% if btn_delete %}
                     <a  href=""
                         onclick="return remove_selected_element_{{ id }}(this);"
                         class="btn btn-danger btn-sm sonata-ba-action"
@@ -174,3 +174,4 @@ file that was distributed with this source code.
         INVALID MODE : {{ id }} - type : CollectionType - mapping : {{ sonata_admin.field_description.mappingtype }}
     {% endif %}
 {% endblock %}
+

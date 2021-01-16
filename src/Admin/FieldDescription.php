@@ -27,7 +27,7 @@ class FieldDescription extends BaseFieldDescription
     {
         $this->associationMapping = $associationMapping;
 
-        $this->type = $this->type ?: $associationMapping['type'];
+        $this->type = $this->type ?: (string) $associationMapping['type'];
         $this->mappingType = $this->mappingType ?: $associationMapping['type'];
         // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $associationMapping['fieldName'];
@@ -66,7 +66,7 @@ class FieldDescription extends BaseFieldDescription
     {
         $this->fieldMapping = $fieldMapping;
 
-        $this->type = $this->type ?: $fieldMapping['type'];
+        $this->type = $this->type ?: (string) $fieldMapping['type'];
         $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
         // NEXT_MAJOR: Remove the next line.
         $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
@@ -97,16 +97,6 @@ class FieldDescription extends BaseFieldDescription
             $object = $this->getFieldValue($object, $parentAssociationMapping['fieldName']);
         }
 
-        $fieldMapping = $this->getFieldMapping();
-        // Support embedded object for mapping
-        // Ref: https://www.doctrine-project.org/projects/doctrine-orm/en/latest/tutorials/embeddables.html
-        if (isset($fieldMapping['declaredField'])) {
-            $parentFields = explode('.', $fieldMapping['declaredField']);
-            foreach ($parentFields as $parentField) {
-                $object = $this->getFieldValue($object, $parentField);
-            }
-        }
-
-        return $this->getFieldValue($object, $this->fieldName);
+        return $this->getFieldValue($object, $this->getFieldName());
     }
 }

@@ -54,14 +54,17 @@
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.52",
         "phpstan/phpstan-symfony": "^0.12.10",
         "psalm/plugin-symfony": "^2.0",
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^4.2",
+        "symfony/panther": "^0.8.0",
         "symfony/phpunit-bridge": "^5.1.8",
         "symfony/templating": "^4.4 || ^5.1",
+        "symfony/yaml": "^4.4 || ^5.1",
         "vimeo/psalm": "^4.1.1"
     },
     "suggest": {
