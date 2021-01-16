@@ -15,27 +15,21 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
-use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Address;
-use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
-use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 
-final class AppFixtures extends Fixture
+final class CategoryFixtures extends Fixture
 {
+    public const CATEGORY = 'category_novel';
+
     public function load(ObjectManager $manager): void
     {
         $dystopianCategory = new Category('category_dystopian', 'Dystopian');
         $novelCategory = new Category('category_novel', 'Novel');
 
-        $author = new Author('Miguel de Cervantes');
-        $author->setAddress(new Address('Somewhere in La Mancha, in a place whose name I do not care to remember'));
-        $book = new Book('book_id', 'Don Quixote', $author);
-        $book->addCategory($novelCategory);
-
-        $manager->persist($author);
         $manager->persist($novelCategory);
         $manager->persist($dystopianCategory);
-        $manager->persist($book);
         $manager->flush();
+
+        $this->addReference(self::CATEGORY, $novelCategory);
     }
 }
