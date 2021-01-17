@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Car;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
@@ -62,5 +64,16 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 null,
             ])
 
+        ->set(CarAdmin::class)
+            ->public()
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'label' => 'Car',
+            ])
+            ->args([
+                '',
+                Car::class,
+                null,
+            ])
     ;
 };
