@@ -2,6 +2,38 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.27.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.26.0...3.27.0) - 2021-01-17
+### Added
+- [[#1262](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1262)] Added Pager::getCurrentPageResults() ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1257](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1257)] Implemented `Sonata\AdminBundle\Datagrid\PagerInterface::countResults()` ([@dmaicher](https://github.com/dmaicher))
+- [[#1234](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1234)] Added `Sonata\DoctrineORMAdminBundle\Filter\NullFilter` ([@pbories](https://github.com/pbories))
+- [[#1218](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1218)] Added `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1212](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1212)] Added `DataSourceInterface` implementation ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Changed
+- [[#1259](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1259)] Code formatting in views and change from `<a>` with empty href to button ([@axzx](https://github.com/axzx))
+- [[#1255](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1255)] Changing access checking in views (isGranted to hasAccess) ([@axzx](https://github.com/axzx))
+- [[#1241](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1241)] When using embedded fields or fake field 'foo.bar' (with custom getters in the entity), `FieldDescription::fieldName` is changed from `bar` to the correct value `foo.bar` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1262](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1262)] Deprecated Pager::getResults() ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1257](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1257)] `Sonata\DoctrineORMAdminBundle\Datagrid\Pager::computeNbResult()` ([@dmaicher](https://github.com/dmaicher))
+- [[#1257](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1257)] `Sonata\DoctrineORMAdminBundle\Datagrid\Pager::getNbResults()` ([@dmaicher](https://github.com/dmaicher))
+- [[#1257](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1257)] `Sonata\DoctrineORMAdminBundle\Datagrid\Pager::setNbResults()` ([@dmaicher](https://github.com/dmaicher))
+- [[#1234](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1234)] Deprecated `Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter` ([@pbories](https://github.com/pbories))
+- [[#1232](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1232)] Deprecated `ModelManager::getMetadata()` method ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1232](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1232)] Deprecated `ModelManager::hasMetadata()` method ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1211](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1211)] Deprecate `Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform()` with no replacement ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1211](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1211)] Deprecate `Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDefaultPerPageOptions()` with no replacement ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1211](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1211)] Deprecate `Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDefaultSortValues()` with no replacement ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1211](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1211)] Deprecate `Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator()` with no replacement ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1199](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1199)] Deprecate passing an instance of `ProxyQueryInterface` which is not an instance of `Sonata\DoctrineORMAdminBundle\Datagrid::ProxyQuery` as argument 1 to the `Sonata\DoctrineORMAdminBundle\Filter\Filter::filter()` method ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1248](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1248)] Unavoidable deprecation in Pager ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1254](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1254)] Fix for checking if delete button is to be displayed ([@axzx](https://github.com/axzx))
+- [[#1241](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1241)] Support for embedded and custom getters by the FieldDescription ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.26.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.25.0...3.26.0) - 2020-11-19
 ### Added
 - [[#1207](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1207)] Added an option `inverse` for the `EmptyFilter` filter ([@VincentLanglet](https://github.com/VincentLanglet))

@@ -729,7 +729,7 @@ final class ModelManagerTest extends TestCase
             ->method('getQuery')
             ->willReturn($proxyQuery);
 
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.');
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.');
         $this->modelManager->getDataSourceIterator($datagrid, []);
 
         if ($isAddOrderBy) {
@@ -806,7 +806,7 @@ final class ModelManagerTest extends TestCase
      */
     public function testModelTransform(): void
     {
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.');
+        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.');
 
         $result = $this->modelManager->modelTransform('thisIsNotUsed', 'doWeNeedThisMethod');
 
