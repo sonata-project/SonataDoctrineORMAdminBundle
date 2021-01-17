@@ -23,4 +23,11 @@ final class CompositePrimaryKeysTest extends BasePantherTestCase
 
         self::assertSelectorTextContains('.box-footer', '1 / 1  -  3 results');
     }
+
+    public function testListRelationsCompositePrimaryKeys(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/item/list');
+
+        self::assertSelectorTextContains('.box-footer', '1 / 1  -  3 results');
+    }
 }
