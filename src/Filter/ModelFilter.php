@@ -31,7 +31,7 @@ class ModelFilter extends Filter
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
                 .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
@@ -91,7 +91,7 @@ class ModelFilter extends Filter
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
                 .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
@@ -140,7 +140,7 @@ class ModelFilter extends Filter
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
                 .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
@@ -175,7 +175,7 @@ class ModelFilter extends Filter
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
                 .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
