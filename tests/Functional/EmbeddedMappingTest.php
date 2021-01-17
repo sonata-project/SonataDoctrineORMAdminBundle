@@ -31,7 +31,7 @@ final class EmbeddedMappingTest extends BasePantherTestCase
         self::assertSelectorTextContains('.sonata-link-identifier', 'Miguel de Cervantes');
     }
 
-    public function testCreateDocumentWithEmbedded(): void
+    public function testCreateEntityWithEmbedded(): void
     {
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/create');
 

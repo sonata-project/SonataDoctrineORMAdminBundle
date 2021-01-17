@@ -87,7 +87,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Change visibility to private.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be private in version 4.0
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be private in version 4.0
      *
      * @phpstan-param class-string $class
      */
@@ -96,7 +96,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         // NEXT_MAJOR: Remove this block.
         if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
             @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
                 .' will be private in version 4.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
@@ -151,7 +151,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0
      *
      * @param string $class
      *
@@ -163,7 +163,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
             @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
                 .' will be removed in version 4.0.',
                 __METHOD__
             ), E_USER_DEPRECATED);
@@ -508,7 +508,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-admin/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.
+     * @deprecated since sonata-admin/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.
      *
      * @return DoctrineORMQuerySourceIterator
      */
@@ -519,7 +519,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         ?int $maxResult = null
     ): SourceIteratorInterface {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 
@@ -571,12 +571,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
      */
     public function getDefaultSortValues(string $class): array
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 
@@ -589,12 +589,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
      */
     public function getDefaultPerPageOptions(string $class): array
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0.',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 
@@ -604,12 +604,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
      */
     public function modelTransform(string $class, object $instance): object
     {
         @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.',
             __METHOD__
         ), E_USER_DEPRECATED);
 

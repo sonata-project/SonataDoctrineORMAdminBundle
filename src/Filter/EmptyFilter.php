@@ -22,7 +22,7 @@ final class EmptyFilter extends NullFilter
     {
         // NEXT_MAJOR: remove this file
         @trigger_error(sprintf(
-            'The %s class is deprecated since version 3.x and will be removed in 4.0.'
+            'The %s class is deprecated since version 3.27 and will be removed in 4.0.'
             .' Use %s instead.',
             __CLASS__,
             NullFilter::class

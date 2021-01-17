@@ -19,7 +19,7 @@ use Symfony\Component\Panther\DomCrawler\Crawler;
 
 final class ManyToOneMappingTest extends BasePantherTestCase
 {
-    public function testCreateDocumentWithReferences(): void
+    public function testCreateEntityWithReferences(): void
     {
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/book/create');
 

@@ -107,31 +107,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame('overwritten', $field->getFieldName());
     }
 
-    public function testSetName(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $this->assertSame($field->getName(), 'New field description name');
-    }
-
-    public function testSetNameSetFieldNameToo(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $this->assertSame($field->getFieldName(), 'New field description name');
-    }
-
-    public function testSetNameDoesNotSetFieldNameWhenSetBefore(): void
-    {
-        $field = new FieldDescription('New field description name');
-
-        $field->setFieldName('field name');
-        $this->assertSame($field->getFieldName(), 'field name');
-
-        $field->setName('New field description name');
-        $this->assertSame($field->getFieldName(), 'field name');
-    }
-
     public function testGetParent(): void
     {
         $adminMock = $this->createMock(AdminInterface::class);

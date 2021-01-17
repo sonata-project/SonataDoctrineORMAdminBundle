@@ -76,10 +76,10 @@ final class CRUDTest extends BasePantherTestCase
 
     public function testDelete(): void
     {
-        $documentManager = static::bootKernel()->getContainer()->get('doctrine')->getManager();
+        $entityManager = static::bootKernel()->getContainer()->get('doctrine')->getManager();
 
-        $documentManager->persist(new Category('category_to_remove', 'name'));
-        $documentManager->flush();
+        $entityManager->persist(new Category('category_to_remove', 'name'));
+        $entityManager->flush();
 
         $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/category_to_remove/delete');
 

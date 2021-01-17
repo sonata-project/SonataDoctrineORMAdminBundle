@@ -1,6 +1,9 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.26 to 3.27
+=========================
+
 ### Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter
 
 The EmptyFilter is deprecated, use NullFilter instead.

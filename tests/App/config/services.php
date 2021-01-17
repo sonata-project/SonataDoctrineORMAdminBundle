@@ -11,11 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-use Doctrine\Bundle\FixturesBundle\DependencyInjection\CompilerPass\FixturesCompilerPass;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
-use Sonata\DoctrineORMAdminBundle\Tests\App\DataFixtures\AppFixtures;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
@@ -23,6 +21,10 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
+        ->defaults()
+        ->autowire()
+        ->autoconfigure()
+        ->load('Sonata\\DoctrineORMAdminBundle\\Tests\\App\\DataFixtures\\', dirname(__DIR__).'/DataFixtures')
 
         ->set(CategoryAdmin::class)
             ->public()
@@ -60,7 +62,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 null,
             ])
 
-        ->set(AppFixtures::class)
-            ->tag(FixturesCompilerPass::FIXTURE_TAG)
     ;
 };
