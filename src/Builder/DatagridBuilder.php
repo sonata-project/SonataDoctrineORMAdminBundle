@@ -201,8 +201,6 @@ class DatagridBuilder implements DatagridBuilderInterface
     {
         $pager = $this->getPager($admin->getPagerType());
 
-        $pager->setCountColumn($admin->getModelManager()->getIdentifierFieldNames($admin->getClass()));
-
         $defaultOptions = ['validation_groups' => false];
         if ($this->csrfTokenEnabled) {
             $defaultOptions['csrf_protection'] = false;

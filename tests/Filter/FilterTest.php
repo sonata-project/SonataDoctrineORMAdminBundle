@@ -69,15 +69,6 @@ class FilterTest extends TestCase
         $this->assertSame(['class' => 'FooBar'], $filter->getFieldOptions());
     }
 
-    public function testValues(): void
-    {
-        $filter = new FilterTest_Filter();
-        $this->assertEmpty($filter->getValue());
-
-        $filter->setValue(42);
-        $this->assertSame(42, $filter->getValue());
-    }
-
     public function testExceptionOnEmptyFieldName(): void
     {
         $this->expectException(\RuntimeException::class);
