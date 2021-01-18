@@ -21,13 +21,13 @@ final class CarFixtures extends Fixture
 {
     public function load(ObjectManager $manager): void
     {
-        $peugeot2000 = new Car('Peugeot', 2000);
-        $peugeot2010 = new Car('Peugeot', 2010);
-        $ferrari2000 = new Car('Ferrari', 2000);
+        $foo2000 = new Car('Foo', 2000);
+        $foo2010 = new Car('Foo', 2010);
+        $bar2000 = new Car('Bar', 2000);
 
-        $manager->persist($peugeot2000);
-        $manager->persist($peugeot2010);
-        $manager->persist($ferrari2000);
+        $manager->persist($foo2000);
+        $manager->persist($foo2010);
+        $manager->persist($bar2000);
         $manager->flush();
     }
 }
