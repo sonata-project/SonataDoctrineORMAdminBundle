@@ -24,11 +24,8 @@ use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
-use Sonata\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -44,11 +41,7 @@ class FilterTypeGuesser extends AbstractTypeGuesser
             return false;
         }
 
-        $options = [
-            'field_type' => null,
-            'field_options' => [],
-            'options' => [],
-        ];
+        $options = [];
 
         [$metadata, $propertyName, $parentAssociationMappings] = $ret;
 
@@ -84,8 +77,6 @@ class FilterTypeGuesser extends AbstractTypeGuesser
 
         switch ($metadata->getTypeOfField($propertyName)) {
             case 'boolean':
-                $options['field_type'] = BooleanType::class;
-
                 return new TypeGuess(BooleanFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'datetime':
             case 'datetime_immutable':
@@ -98,8 +89,6 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess(DateFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
-                $options['field_type'] = NumberType::class;
-
                 return new TypeGuess(NumberFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
@@ -109,8 +98,6 @@ class FilterTypeGuesser extends AbstractTypeGuesser
                 return new TypeGuess(NumberFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'string':
             case 'text':
-                $options['field_type'] = TextType::class;
-
                 return new TypeGuess(StringFilter::class, $options, Guess::MEDIUM_CONFIDENCE);
             case 'time':
             case 'time_immutable':
