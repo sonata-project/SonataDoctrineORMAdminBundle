@@ -49,7 +49,7 @@ class FieldDescription extends BaseFieldDescription
             .' Use %s::getTargetModel() instead.',
             __METHOD__,
             __CLASS__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return $this->getTargetModel();
     }
