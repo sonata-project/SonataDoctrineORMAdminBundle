@@ -76,7 +76,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 .' sonata-project/doctrine-orm-admin-bundle 3.22 and will be mandatory in 4.0.',
                 __CLASS__,
                 PropertyAccessorInterface::class
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
 
             $propertyAccessor = PropertyAccess::createPropertyAccessor();
         }
@@ -99,7 +99,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
                 .' will be private in version 4.0.',
                 __METHOD__
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
@@ -166,7 +166,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
                 'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
                 .' will be removed in version 4.0.',
                 __METHOD__
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
@@ -292,7 +292,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             @trigger_error(sprintf(
                 'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
 
             return null;
         }
@@ -365,7 +365,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             QueryBuilder::class,
             ProxyQuery::class,
             __METHOD__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return $query->execute();
     }
@@ -521,7 +521,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         @trigger_error(sprintf(
             'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         $datagrid->buildPager();
         $query = $datagrid->getQuery();
@@ -578,7 +578,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         @trigger_error(sprintf(
             'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return [
             '_page' => 1,
@@ -596,7 +596,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         @trigger_error(sprintf(
             'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
             __METHOD__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return [10, 25, 50, 100, 250];
     }
@@ -611,7 +611,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         @trigger_error(sprintf(
             'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.',
             __METHOD__
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return $instance;
     }
