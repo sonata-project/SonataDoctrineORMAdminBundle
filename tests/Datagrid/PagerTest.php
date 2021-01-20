@@ -34,24 +34,21 @@ class PagerTest extends TestCase
     /**
      * @dataProvider entityClassDataProvider
      */
-    public function testComputeResultsCountForCompositeId(string $className): void
+    public function testCountResults(string $className): void
     {
         $em = DoctrineTestHelper::createTestEntityManager();
-        $classes = [
-            $em->getClassMetadata($className),
-        ];
         $schemaTool = new SchemaTool($em);
-        $schemaTool->createSchema($classes);
+        $schemaTool->createSchema([
+            $em->getClassMetadata($className),
+        ]);
 
-        $qb = $em->createQueryBuilder()
-            ->select('e')
-            ->from($className, 'e')
-        ;
+        $qb = $em->createQueryBuilder()->select('e')->from($className, 'e');
         $pq = new ProxyQuery($qb);
+
         $pager = new Pager();
-        $pager->setCountColumn($em->getClassMetadata($className)->getIdentifierFieldNames());
         $pager->setQuery($pq);
         $pager->init();
+
         $this->assertSame(0, $pager->countResults());
     }
 }

@@ -125,7 +125,7 @@ class ShowBuilder implements ShowBuilderInterface
                 .' You should override %s show template instead.',
                 $type,
                 TypeGuesser::DEPRECATED_TYPES[$type]
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->templates[$type];
