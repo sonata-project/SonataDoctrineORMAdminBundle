@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
@@ -28,6 +29,10 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 class Pager extends BasePager
 {
     /**
+     * NEXT_MAJOR: remove this property.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0
+     *
      * Use separator in CONCAT() function for correct determinate similar records.
      */
     public const CONCAT_SEPARATOR = '|';
@@ -38,11 +43,6 @@ class Pager extends BasePager
      * @deprecated since sonata-project/doctrine-orm-admin-bundle 2.4 and will be removed in 4.0
      */
     protected $queryBuilder = null;
-
-    /**
-     * @var string[]
-     */
-    protected $countColumn = ['id'];
 
     /**
      * @var int
@@ -60,7 +60,7 @@ class Pager extends BasePager
             @trigger_error(sprintf(
                 'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
                 __METHOD__,
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->computeResultsCount();
@@ -76,7 +76,7 @@ class Pager extends BasePager
         @trigger_error(sprintf(
             'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "getCurrentPageResults()" instead.',
             __METHOD__,
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return $this->getQuery()->execute([], $hydrationMode);
     }
@@ -98,7 +98,7 @@ class Pager extends BasePager
         @trigger_error(sprintf(
             'Relying on the protected property "%s::$nbResults" and its getter/setter is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will fail 4.0. Use "countResults()" and "setResultsCount()" instead.',
             self::class,
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
 
         return $deprecatedCount;
     }
@@ -114,7 +114,7 @@ class Pager extends BasePager
             @trigger_error(sprintf(
                 'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "countResults()" instead.',
                 __METHOD__,
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->nbResults;
@@ -125,7 +125,9 @@ class Pager extends BasePager
         // NEXT_MAJOR: Remove this line.
         $this->resetIterator('sonata_deprecation_mute');
 
+        // NEXT_MAJOR: Remove this line and uncomment the following one.
         $this->setResultsCount($this->computeNbResult('sonata_deprecation_mute'));
+//        $this->setResultsCount($this->computeResultsCount());
 
         $this->getQuery()->setFirstResult(null);
         $this->getQuery()->setMaxResults(null);
@@ -171,56 +173,34 @@ class Pager extends BasePager
             @trigger_error(sprintf(
                 'The %s() method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0. Use "setResultsCount()" instead.',
                 __METHOD__,
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         $this->nbResults = $nb;
         $this->resultsCount = (int) $nb;
     }
 
-    private function countCompositePrimaryKey(ProxyQueryInterface $countQuery): void
-    {
-        $rootAliases = current($countQuery->getRootAliases());
-        $countQuery->setParameter('concat_separator', self::CONCAT_SEPARATOR);
-
-        $columns = $rootAliases.'.'.implode(', :concat_separator, '.$rootAliases.'.', $this->getCountColumn());
-
-        $countQuery->select(sprintf(
-            'count(%s concat(%s)) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            $columns
-        ));
-    }
-
-    private function countSinglePrimaryKey(ProxyQueryInterface $countQuery): void
-    {
-        $countQuery->select(sprintf(
-            'count(%s %s.%s) as cnt',
-            $countQuery instanceof ProxyQuery && !$countQuery->isDistinct() ? null : 'DISTINCT',
-            current($countQuery->getRootAliases()),
-            current($this->getCountColumn())
-        ));
-    }
-
     private function computeResultsCount(): int
     {
-        $countQuery = clone $this->getQuery();
+        // NEXT_MAJOR: remove the clone.
+        $query = clone $this->getQuery();
+
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf(
+                'The pager query MUST implement %s, %s provided.',
+                ProxyQueryInterface::class,
+                \is_object($query) ? sprintf('instance of %s', \get_class($query)) : \gettype($query)
+            ));
+        }
 
         // NEXT_MAJOR: Remove this code.
         if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
-            $countQuery->setParameters($this->getParameters('sonata_deprecation_mute'));
+            $query->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        if (\count($this->getCountColumn()) > 1) {
-            $this->countCompositePrimaryKey($countQuery);
-        } else {
-            $this->countSinglePrimaryKey($countQuery);
-        }
+        $paginator = new Paginator($query->getQueryBuilder());
 
-        return array_sum(array_column(
-            $countQuery->resetDQLPart('orderBy')->getQuery()->getResult(Query::HYDRATE_SCALAR),
-            'cnt'
-        ));
+        return \count($paginator);
     }
 
     private function setResultsCount(int $count): void

@@ -27,11 +27,8 @@ use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\MissingPropertyMetadataException;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
-use Sonata\Form\Type\BooleanType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
-use Symfony\Component\Form\Extension\Core\Type\NumberType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Guess\Guess;
 
 class FilterTypeGuesserTest extends TestCase
@@ -133,11 +130,11 @@ class FilterTypeGuesserTest extends TestCase
         $this->assertSame($resultType, $result->getType());
         $this->assertSame($type, $options['field_name']);
         $this->assertSame($confidence, $result->getConfidence());
-        $this->assertSame([], $options['options']);
-        $this->assertSame([], $options['field_options']);
 
         if ($fieldType) {
             $this->assertSame($fieldType, $options['field_type']);
+        } else {
+            $this->assertArrayNotHasKey('field_type', $options);
         }
     }
 
@@ -148,7 +145,6 @@ class FilterTypeGuesserTest extends TestCase
                 'boolean',
                 BooleanFilter::class,
                 Guess::HIGH_CONFIDENCE,
-                BooleanType::class,
             ],
             'datetime' => [
                 'datetime',
@@ -189,13 +185,11 @@ class FilterTypeGuesserTest extends TestCase
                 'decimal',
                 NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'float' => [
                 'float',
                 NumberFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                NumberType::class,
             ],
             'integer' => [
                 'integer',
@@ -219,13 +213,11 @@ class FilterTypeGuesserTest extends TestCase
                 'string',
                 StringFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                TextType::class,
             ],
             'text' => [
                 'text',
                 StringFilter::class,
                 Guess::MEDIUM_CONFIDENCE,
-                TextType::class,
             ],
             'time' => [
                 'time',
