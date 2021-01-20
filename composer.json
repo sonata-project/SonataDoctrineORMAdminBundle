@@ -61,7 +61,7 @@
         "psalm/plugin-symfony": "^2.0",
         "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
-        "symfony/panther": "^0.8.0",
+        "symfony/panther": "^0.9.0",
         "symfony/phpunit-bridge": "^5.1.8",
         "symfony/templating": "^4.4 || ^5.1",
         "symfony/yaml": "^4.4 || ^5.1",
