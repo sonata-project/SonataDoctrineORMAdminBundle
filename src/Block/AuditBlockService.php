@@ -50,7 +50,7 @@ class AuditBlockService extends AbstractBlockService
                 EngineInterface::class,
                 __METHOD__,
                 AuditReader::class
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
 
             if (null === $auditReader) {
                 throw new \TypeError(sprintf(
