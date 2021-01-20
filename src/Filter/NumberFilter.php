@@ -17,6 +17,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+use Symfony\Component\Form\Extension\Core\Type\NumberType as FormNumberType;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
@@ -59,7 +60,9 @@ class NumberFilter extends Filter
 
     public function getDefaultOptions(): array
     {
-        return [];
+        return [
+            'field_type' => FormNumberType::class,
+        ];
     }
 
     public function getRenderSettings(): array

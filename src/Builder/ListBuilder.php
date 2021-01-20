@@ -220,7 +220,7 @@ class ListBuilder implements ListBuilderInterface
                 .' You should override %s list template instead.',
                 $type,
                 TypeGuesser::DEPRECATED_TYPES[$type]
-            ), E_USER_DEPRECATED);
+            ), \E_USER_DEPRECATED);
         }
 
         return $this->templates[$type];

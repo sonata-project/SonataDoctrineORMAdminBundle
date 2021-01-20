@@ -26,6 +26,6 @@ final class EmptyFilter extends NullFilter
             .' Use %s instead.',
             __CLASS__,
             NullFilter::class
-        ), E_USER_DEPRECATED);
+        ), \E_USER_DEPRECATED);
     }
 }
