@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\Guess;
@@ -45,7 +45,7 @@ class TypeGuesserTest extends TestCase
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
-        $this->assertSame(TemplateRegistry::TYPE_STRING, $result->getType());
+        $this->assertSame(FieldDescriptionInterface::TYPE_STRING, $result->getType());
         $this->assertSame(Guess::LOW_CONFIDENCE, $result->getConfidence());
     }
 
@@ -120,112 +120,112 @@ class TypeGuesserTest extends TestCase
         return [
             'array' => [
                 'array',
-                TemplateRegistry::TYPE_ARRAY,
+                FieldDescriptionInterface::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'simple_array' => [
                 'simple_array',
-                TemplateRegistry::TYPE_ARRAY,
+                FieldDescriptionInterface::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'json_array' => [
                 'json_array',
-                TemplateRegistry::TYPE_ARRAY,
+                FieldDescriptionInterface::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'json' => [
                 'json',
-                TemplateRegistry::TYPE_ARRAY,
+                FieldDescriptionInterface::TYPE_ARRAY,
                 Guess::HIGH_CONFIDENCE,
             ],
             'boolean' => [
                 'boolean',
-                TemplateRegistry::TYPE_BOOLEAN,
+                FieldDescriptionInterface::TYPE_BOOLEAN,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime' => [
                 'datetime',
-                TemplateRegistry::TYPE_DATETIME,
+                FieldDescriptionInterface::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetime_immutable' => [
                 'datetime_immutable',
-                TemplateRegistry::TYPE_DATETIME,
+                FieldDescriptionInterface::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'vardatetime' => [
                 'vardatetime',
-                TemplateRegistry::TYPE_DATETIME,
+                FieldDescriptionInterface::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz' => [
                 'datetimetz',
-                TemplateRegistry::TYPE_DATETIME,
+                FieldDescriptionInterface::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'datetimetz_immutable' => [
                 'datetimetz_immutable',
-                TemplateRegistry::TYPE_DATETIME,
+                FieldDescriptionInterface::TYPE_DATETIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date' => [
                 'date',
-                TemplateRegistry::TYPE_DATE,
+                FieldDescriptionInterface::TYPE_DATE,
                 Guess::HIGH_CONFIDENCE,
             ],
             'date_immutable' => [
                 'date_immutable',
-                TemplateRegistry::TYPE_DATE,
+                FieldDescriptionInterface::TYPE_DATE,
                 Guess::HIGH_CONFIDENCE,
             ],
             'decimal' => [
                 'decimal',
-                TemplateRegistry::TYPE_FLOAT,
+                FieldDescriptionInterface::TYPE_FLOAT,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'float' => [
                 'float',
-                TemplateRegistry::TYPE_FLOAT,
+                FieldDescriptionInterface::TYPE_FLOAT,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'integer' => [
                 'integer',
-                TemplateRegistry::TYPE_INTEGER,
+                FieldDescriptionInterface::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'bigint' => [
                 'bigint',
-                TemplateRegistry::TYPE_INTEGER,
+                FieldDescriptionInterface::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'smallint' => [
                 'smallint',
-                TemplateRegistry::TYPE_INTEGER,
+                FieldDescriptionInterface::TYPE_INTEGER,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'string' => [
                 'string',
-                TemplateRegistry::TYPE_STRING,
+                FieldDescriptionInterface::TYPE_STRING,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'text' => [
                 'text',
-                'textarea',
+                FieldDescriptionInterface::TYPE_TEXTAREA,
                 Guess::MEDIUM_CONFIDENCE,
             ],
             'time' => [
                 'time',
-                TemplateRegistry::TYPE_TIME,
+                FieldDescriptionInterface::TYPE_TIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'time_immutable' => [
                 'time_immutable',
-                TemplateRegistry::TYPE_TIME,
+                FieldDescriptionInterface::TYPE_TIME,
                 Guess::HIGH_CONFIDENCE,
             ],
             'somefake' => [
                 'somefake',
-                TemplateRegistry::TYPE_STRING,
+                FieldDescriptionInterface::TYPE_STRING,
                 Guess::LOW_CONFIDENCE,
             ],
         ];

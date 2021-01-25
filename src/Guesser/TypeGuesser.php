@@ -14,8 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -34,17 +34,17 @@ class TypeGuesser extends AbstractTypeGuesser
      * @internal
      */
     public const DEPRECATED_TYPES = [
-        'orm_one_to_many' => TemplateRegistry::TYPE_ONE_TO_MANY,
-        'orm_many_to_many' => TemplateRegistry::TYPE_MANY_TO_MANY,
-        'orm_many_to_one' => TemplateRegistry::TYPE_MANY_TO_ONE,
-        'orm_one_to_one' => TemplateRegistry::TYPE_ONE_TO_ONE,
-        'number' => TemplateRegistry::TYPE_FLOAT,
+        'orm_one_to_many' => FieldDescriptionInterface::TYPE_ONE_TO_MANY,
+        'orm_many_to_many' => FieldDescriptionInterface::TYPE_MANY_TO_MANY,
+        'orm_many_to_one' => FieldDescriptionInterface::TYPE_MANY_TO_ONE,
+        'orm_one_to_one' => FieldDescriptionInterface::TYPE_ONE_TO_ONE,
+        'number' => FieldDescriptionInterface::TYPE_FLOAT,
     ];
 
     public function guessType(string $class, string $property, ModelManagerInterface $modelManager): ?TypeGuess
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
-            return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
+            return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
 
         [$metadata, $propertyName, $parentAssociationMappings] = $ret;
@@ -54,19 +54,19 @@ class TypeGuesser extends AbstractTypeGuesser
 
             switch ($mapping['type']) {
                 case ClassMetadata::ONE_TO_MANY:
-                    // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE)
+                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE)
                     return new TypeGuess('orm_one_to_many', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::MANY_TO_MANY:
-                    // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE)
+                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE)
                     return new TypeGuess('orm_many_to_many', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::MANY_TO_ONE:
-                    // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE)
+                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE)
                     return new TypeGuess('orm_many_to_one', [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::ONE_TO_ONE:
-                    // NEXT_MAJOR: return new TypeGuess(TemplateRegistry::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE)
+                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE)
                     return new TypeGuess('orm_one_to_one', [], Guess::HIGH_CONFIDENCE);
             }
         }
@@ -76,34 +76,34 @@ class TypeGuesser extends AbstractTypeGuesser
             case 'simple_array':
             case 'json':
             case 'json_array':
-                return new TypeGuess(TemplateRegistry::TYPE_ARRAY, [], Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_ARRAY, [], Guess::HIGH_CONFIDENCE);
             case 'boolean':
-                return new TypeGuess(TemplateRegistry::TYPE_BOOLEAN, [], Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_BOOLEAN, [], Guess::HIGH_CONFIDENCE);
             case 'datetime':
             case 'datetime_immutable':
             case 'vardatetime':
             case 'datetimetz':
             case 'datetimetz_immutable':
-                return new TypeGuess(TemplateRegistry::TYPE_DATETIME, [], Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_DATETIME, [], Guess::HIGH_CONFIDENCE);
             case 'date':
             case 'date_immutable':
-                return new TypeGuess(TemplateRegistry::TYPE_DATE, [], Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_DATE, [], Guess::HIGH_CONFIDENCE);
             case 'decimal':
             case 'float':
-                return new TypeGuess(TemplateRegistry::TYPE_FLOAT, [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_FLOAT, [], Guess::MEDIUM_CONFIDENCE);
             case 'integer':
             case 'bigint':
             case 'smallint':
-                return new TypeGuess(TemplateRegistry::TYPE_INTEGER, [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_INTEGER, [], Guess::MEDIUM_CONFIDENCE);
             case 'string':
-                return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::MEDIUM_CONFIDENCE);
             case 'text':
-                return new TypeGuess(TemplateRegistry::TYPE_TEXTAREA, [], Guess::MEDIUM_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_TEXTAREA, [], Guess::MEDIUM_CONFIDENCE);
             case 'time':
             case 'time_immutable':
-                return new TypeGuess(TemplateRegistry::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
             default:
-                return new TypeGuess(TemplateRegistry::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
+                return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
     }
 }
