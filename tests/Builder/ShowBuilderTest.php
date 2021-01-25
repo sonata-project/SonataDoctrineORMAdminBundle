@@ -17,8 +17,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -42,10 +42,10 @@ class ShowBuilderTest extends TestCase
             $this->guesser,
             [
                 'fakeTemplate' => 'fake',
-                TemplateRegistry::TYPE_ONE_TO_ONE => '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
-                TemplateRegistry::TYPE_ONE_TO_MANY => '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
-                TemplateRegistry::TYPE_MANY_TO_ONE => '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
-                TemplateRegistry::TYPE_MANY_TO_MANY => '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
+                FieldDescriptionInterface::TYPE_ONE_TO_ONE => '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
+                FieldDescriptionInterface::TYPE_ONE_TO_MANY => '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
+                FieldDescriptionInterface::TYPE_MANY_TO_ONE => '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
+                FieldDescriptionInterface::TYPE_MANY_TO_MANY => '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
             ]
         );
 
@@ -126,22 +126,22 @@ class ShowBuilderTest extends TestCase
     {
         return [
             'one-to-one' => [
-                TemplateRegistry::TYPE_ONE_TO_ONE,
+                FieldDescriptionInterface::TYPE_ONE_TO_ONE,
                 ClassMetadata::ONE_TO_ONE,
                 '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
             ],
             'many-to-one' => [
-                TemplateRegistry::TYPE_MANY_TO_ONE,
+                FieldDescriptionInterface::TYPE_MANY_TO_ONE,
                 ClassMetadata::MANY_TO_ONE,
                 '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
             ],
             'one-to-many' => [
-                TemplateRegistry::TYPE_ONE_TO_MANY,
+                FieldDescriptionInterface::TYPE_ONE_TO_MANY,
                 ClassMetadata::ONE_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
             ],
             'many-to-many' => [
-                TemplateRegistry::TYPE_MANY_TO_MANY,
+                FieldDescriptionInterface::TYPE_MANY_TO_MANY,
                 ClassMetadata::MANY_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
             ],
