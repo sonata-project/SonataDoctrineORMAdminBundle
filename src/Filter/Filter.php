@@ -37,7 +37,6 @@ abstract class Filter extends BaseFilter
 
     public function apply($query, $filterData): void
     {
-        $this->value = $filterData;
         if (\is_array($filterData) && \array_key_exists('value', $filterData)) {
             [$alias, $field] = $this->association($query, $filterData);
 
