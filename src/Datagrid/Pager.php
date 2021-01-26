@@ -31,7 +31,7 @@ class Pager extends BasePager
     /**
      * NEXT_MAJOR: remove this property.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in 4.0
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.28 and will be removed in 4.0
      *
      * Use separator in CONCAT() function for correct determinate similar records.
      */
