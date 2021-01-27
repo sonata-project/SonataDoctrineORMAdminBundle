@@ -69,9 +69,9 @@ class ClassFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => 'type']);
 
         $expected = [
-            'alias INSTANCE OF type',
-            'alias NOT INSTANCE OF type',
-            'alias INSTANCE OF type',
+            'WHERE alias INSTANCE OF type',
+            'WHERE alias NOT INSTANCE OF type',
+            'WHERE alias INSTANCE OF type',
         ];
 
         $this->assertSame($expected, $builder->query);

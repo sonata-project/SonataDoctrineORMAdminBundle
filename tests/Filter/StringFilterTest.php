@@ -63,7 +63,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => null]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
             $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -86,7 +86,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
             $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -109,7 +109,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
             $this->assertSame(['field_name_0' => sprintf('%s%%', $value)], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -132,7 +132,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
             $this->assertSame(['field_name_0' => sprintf('%%%s', $value)], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -155,7 +155,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
+            $this->assertSame(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
             $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -178,7 +178,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]);
 
         if ('' !== (string) $value || $allowEmpty) {
-            $this->assertSame(['alias.field = :field_name_0'], $builder->query);
+            $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
             $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -201,7 +201,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
 
         if ('' !== (string) $value || $allowEmpty) {
-            $this->assertSame(['alias.field <> :field_name_0 OR alias.field IS NULL'], $builder->query);
+            $this->assertSame(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $builder->query);
             $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->queryParameters);
             $this->assertTrue($filter->isActive());
         } else {
@@ -246,7 +246,7 @@ class StringFilterTest extends FilterTestCase
             $builder->query[2]
         );
         $this->assertSame(
-            's_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
+            'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
             $builder->query[3]
         );
         $this->assertSame(['field_name_0' => 'asd'], $builder->queryParameters);
@@ -273,18 +273,18 @@ class StringFilterTest extends FilterTestCase
     public function caseSensitiveDataProvider(): array
     {
         return [
-            [false, StringOperatorType::TYPE_CONTAINS, 'LOWER(alias.field) LIKE :field_name_0', '%foobar%'],
-            [false, StringOperatorType::TYPE_NOT_CONTAINS, 'LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'],
-            [false, StringOperatorType::TYPE_EQUAL, 'LOWER(alias.field) = :field_name_0', 'foobar'],
-            [false, StringOperatorType::TYPE_NOT_EQUAL, 'LOWER(alias.field) <> :field_name_0 OR alias.field IS NULL', 'foobar'],
-            [false, StringOperatorType::TYPE_STARTS_WITH, 'LOWER(alias.field) LIKE :field_name_0', 'foobar%'],
-            [false, StringOperatorType::TYPE_ENDS_WITH, 'LOWER(alias.field) LIKE :field_name_0', '%foobar'],
-            [true, StringOperatorType::TYPE_CONTAINS, 'alias.field LIKE :field_name_0', '%FooBar%'],
-            [true, StringOperatorType::TYPE_NOT_CONTAINS, 'alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'],
-            [true, StringOperatorType::TYPE_EQUAL, 'alias.field = :field_name_0', 'FooBar'],
-            [true, StringOperatorType::TYPE_NOT_EQUAL, 'alias.field <> :field_name_0 OR alias.field IS NULL', 'FooBar'],
-            [true, StringOperatorType::TYPE_STARTS_WITH, 'alias.field LIKE :field_name_0', 'FooBar%'],
-            [true, StringOperatorType::TYPE_ENDS_WITH, 'alias.field LIKE :field_name_0', '%FooBar'],
+            [false, StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'],
+            [false, StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'],
+            [false, StringOperatorType::TYPE_EQUAL, 'WHERE LOWER(alias.field) = :field_name_0', 'foobar'],
+            [false, StringOperatorType::TYPE_NOT_EQUAL, 'WHERE LOWER(alias.field) <> :field_name_0 OR alias.field IS NULL', 'foobar'],
+            [false, StringOperatorType::TYPE_STARTS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', 'foobar%'],
+            [false, StringOperatorType::TYPE_ENDS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar'],
+            [true, StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'],
+            [true, StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'],
+            [true, StringOperatorType::TYPE_EQUAL, 'WHERE alias.field = :field_name_0', 'FooBar'],
+            [true, StringOperatorType::TYPE_NOT_EQUAL, 'WHERE alias.field <> :field_name_0 OR alias.field IS NULL', 'FooBar'],
+            [true, StringOperatorType::TYPE_STARTS_WITH, 'WHERE alias.field LIKE :field_name_0', 'FooBar%'],
+            [true, StringOperatorType::TYPE_ENDS_WITH, 'WHERE alias.field LIKE :field_name_0', '%FooBar'],
         ];
     }
 
@@ -304,7 +304,7 @@ class StringFilterTest extends FilterTestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => StringOperatorType::TYPE_CONTAINS]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 'asd'], $builder->queryParameters);
     }
 }

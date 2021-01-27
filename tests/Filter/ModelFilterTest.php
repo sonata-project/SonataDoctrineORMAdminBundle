@@ -60,7 +60,7 @@ class ModelFilterTest extends FilterTestCase
         ]);
 
         // the alias is now computer by the entityJoin method
-        $this->assertSame(['alias IN :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -79,7 +79,7 @@ class ModelFilterTest extends FilterTestCase
 
         // the alias is now computer by the entityJoin method
         $this->assertSame(
-            'alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
+            'WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
             $builder->query[0]
         );
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->queryParameters);
@@ -95,7 +95,7 @@ class ModelFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]);
 
-        $this->assertSame(['alias IN :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias IN :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => [2]], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -110,7 +110,7 @@ class ModelFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]);
 
         $this->assertSame(
-            'alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
+            'WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
             $builder->query[0]
         );
 
@@ -160,7 +160,7 @@ class ModelFilterTest extends FilterTestCase
 
         $this->assertSame([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
-            's_association_mapping IN :field_name_0',
+            'WHERE s_association_mapping IN :field_name_0',
         ], $builder->query);
         $this->assertTrue($filter->isActive());
     }
@@ -192,7 +192,7 @@ class ModelFilterTest extends FilterTestCase
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'LEFT JOIN s_association_mapping.sub_association_mapping AS s_association_mapping_sub_association_mapping',
             'LEFT JOIN s_association_mapping_sub_association_mapping.sub_sub_association_mapping AS s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
-            's_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
+            'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
         ], $builder->query);
         $this->assertTrue($filter->isActive());
     }
