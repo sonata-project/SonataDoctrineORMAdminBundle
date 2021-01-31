@@ -176,6 +176,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         $this->fixFieldDescription($admin, $fieldDescription);
         $admin->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
 
+        // NEXT_MAJOR: Remove this line (see https://github.com/sonata-project/SonataAdminBundle/pull/6828)
         $fieldDescription->mergeOption('field_options', ['required' => false]);
 
         if (ModelAutocompleteFilter::class === $type) {
