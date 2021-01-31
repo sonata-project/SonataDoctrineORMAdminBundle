@@ -124,7 +124,6 @@ class ListBuilder implements ListBuilderInterface
             ));
         }
 
-        $fieldDescription->setOption('code', $fieldDescription->getOption('code', $fieldDescription->getName()));
         $fieldDescription->setOption('label', $fieldDescription->getOption('label', $fieldDescription->getName()));
 
         if (!$fieldDescription->getTemplate()) {
@@ -182,10 +181,6 @@ class ListBuilder implements ListBuilderInterface
 
         if (null === $fieldDescription->getOption('name')) {
             $fieldDescription->setOption('name', 'Action');
-        }
-
-        if (null === $fieldDescription->getOption('code')) {
-            $fieldDescription->setOption('code', 'Action');
         }
 
         if (null !== $fieldDescription->getOption('actions')) {
