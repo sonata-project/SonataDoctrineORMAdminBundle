@@ -133,13 +133,6 @@ abstract class AbstractDateFilter extends Filter
                 $data['value'] = $data['value'] instanceof \DateTimeInterface ? $data['value']->getTimestamp() : 0;
             }
 
-            // null / not null only check for col
-            if (\in_array($operator, ['NULL', 'NOT NULL'], true)) {
-                $this->applyWhere($query, sprintf('%s.%s IS %s ', $alias, $field, $operator));
-
-                return;
-            }
-
             $parameterName = $this->getNewParameterName($query);
 
             // date filter should filter records for the whole day
