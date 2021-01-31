@@ -30,8 +30,6 @@ abstract class AbstractDateFilter extends Filter
         DateOperatorType::TYPE_GREATER_THAN => '>',
         DateOperatorType::TYPE_LESS_EQUAL => '<=',
         DateOperatorType::TYPE_LESS_THAN => '<',
-        DateOperatorType::TYPE_NULL => 'NULL',
-        DateOperatorType::TYPE_NOT_NULL => 'NOT NULL',
     ];
 
     /**
