@@ -125,7 +125,7 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // default type for simple filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateOperatorType::TYPE_EQUAL : $data['type'];
+            $data['type'] = $data['type'] ?? DateOperatorType::TYPE_EQUAL;
 
             // just find an operator and apply query
             $operator = $this->getOperator($data['type']);
@@ -206,6 +206,15 @@ abstract class AbstractDateFilter extends Filter
     {
         $type = (int) $type;
 
+        if (!isset(self::CHOICES[$type])) {
+            // NEXT_MAJOR: Throw an \OutOfRangeException instead.
+            @trigger_error(
+                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw an \OutOfRangeException error in version 4.0.',
+            );
+        }
+
+        // NEXT_MAJOR: Remove the default value
         return self::CHOICES[$type] ?? self::CHOICES[DateOperatorType::TYPE_EQUAL];
     }
 }
