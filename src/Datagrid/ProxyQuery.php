@@ -22,6 +22,8 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * This class try to unify the query usage with Doctrine.
  *
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ *
  * @method Query\Expr    expr()
  * @method QueryBuilder  setCacheable($cacheable)
  * @method bool          isCacheable()
