@@ -15,7 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -26,20 +25,9 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
  */
 class ModelFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data) || empty($data['value'])) {
+        if (!\array_key_exists('value', $data) || empty($data['value'])) {
             return;
         }
 
@@ -81,22 +69,10 @@ class ModelFilter extends Filter
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
      *
-     * @param string  $alias
      * @param mixed[] $data
      */
-    protected function handleMultiple(BaseProxyQueryInterface $query, $alias, $data): void
+    protected function handleMultiple(ProxyQueryInterface $query, string $alias, array $data): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         if (0 === \count($data['value'])) {
             return;
         }
@@ -126,24 +102,8 @@ class ModelFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
-    /**
-     * @param mixed[] $data
-     *
-     * @phpstan-return array{string, bool}
-     */
-    protected function association(BaseProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, array $data): array
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         $types = [
             ClassMetadata::ONE_TO_ONE,
             ClassMetadata::ONE_TO_MANY,
@@ -159,26 +119,15 @@ class ModelFilter extends Filter
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $query->entityJoin($associationMappings);
 
-        return [$alias, false];
+        return [$alias, ''];
     }
 
     /**
      * Retrieve the parent alias for given alias.
      * Root alias for direct association or entity joined alias for association depth >= 2.
      */
-    private function getParentAlias(BaseProxyQueryInterface $query, string $alias): string
+    private function getParentAlias(ProxyQueryInterface $query, string $alias): string
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         $parentAlias = $rootAlias = current($query->getQueryBuilder()->getRootAliases());
         $joins = $query->getQueryBuilder()->getDQLPart('join');
         if (isset($joins[$rootAlias])) {

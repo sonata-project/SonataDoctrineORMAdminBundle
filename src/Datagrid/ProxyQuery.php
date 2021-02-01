@@ -114,22 +114,19 @@ class ProxyQuery implements ProxyQueryInterface
      */
     private $hints = [];
 
-    /**
-     * @param QueryBuilder $queryBuilder
-     */
-    public function __construct($queryBuilder)
+    public function __construct(QueryBuilder $queryBuilder)
     {
         $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
         $this->entityJoinAliases = [];
     }
 
-    public function __call($name, $args)
+    public function __call(string $name, array $args)
     {
         return $this->queryBuilder->$name(...$args);
     }
 
-    public function __get($name)
+    public function __get(string $name)
     {
         return $this->queryBuilder->$name;
     }

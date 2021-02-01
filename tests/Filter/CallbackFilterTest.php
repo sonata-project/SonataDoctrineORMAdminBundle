@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -38,15 +39,15 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => static function ($builder, $alias, $field, $value) {
-                $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $builder->setParameter('value', $value);
+            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
+                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $query->getQueryBuilder()->setParameter('value', $data['value']);
 
                 return true;
             },
         ]);
 
-        $filter->filter($builder, 'alias', 'field', 'myValue');
+        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
@@ -62,17 +63,17 @@ class CallbackFilterTest extends FilterTestCase
             'callback' => [$this, 'customCallback'],
         ]);
 
-        $filter->filter($builder, 'alias', 'field', 'myValue');
+        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
 
-    public function customCallback($builder, $alias, $field, $value)
+    public function customCallback(ProxyQueryInterface $query, string $alias, string $field, array $data): bool
     {
-        $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-        $builder->setParameter('value', $value);
+        $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+        $query->getQueryBuilder()->setParameter('value', $data['value']);
 
         return true;
     }
@@ -86,7 +87,7 @@ class CallbackFilterTest extends FilterTestCase
         $filter = new CallbackFilter();
         $filter->initialize('field_name', []);
 
-        $filter->filter($builder, 'alias', 'field', 'myValue');
+        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
     }
 
     public function testApplyMethod(): void
@@ -95,9 +96,9 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
-            'callback' => static function ($builder, $alias, $field, $value) {
-                $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $builder->setParameter('value', $value['value']);
+            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
+                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $query->getQueryBuilder()->setParameter('value', $data['value']);
 
                 return true;
             },
@@ -122,9 +123,9 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => static function ($builder, $alias, $field, $value) {
-                $builder->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $builder->setParameter('value', $value);
+            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data) {
+                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $query->getQueryBuilder()->setParameter('value', $data['value']);
 
                 return 1;
             },
@@ -134,7 +135,7 @@ class CallbackFilterTest extends FilterTestCase
             'Using another return type than boolean for the callback option is deprecated'
             .' since sonata-project/doctrine-orm-admin-bundle 3.25 and will throw an exception in version 4.0.'
         );
-        $filter->filter($builder, 'alias', 'field', 'myValue');
+        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
         $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);

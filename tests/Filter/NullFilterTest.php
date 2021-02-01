@@ -28,7 +28,7 @@ final class NullFilterTest extends FilterTestCase
 
         $builder = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
+        $filter->filter($builder, 'alias', 'field', []);
 
         $this->assertSame([], $builder->query);
         $this->assertFalse($filter->isActive());
