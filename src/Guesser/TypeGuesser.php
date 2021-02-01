@@ -24,50 +24,29 @@ use Symfony\Component\Form\Guess\TypeGuess;
  */
 class TypeGuesser extends AbstractTypeGuesser
 {
-    /**
-     * This is a mapping between the old deprecated value we provided in the TypeGuesser
-     * and the value we should use to get the correct SonataAdminBundle template. Making the change
-     * directly in the TypeGuesser would be a BC-break if a user overrides the templates config.
-     *
-     * NEXT_MAJOR: remove this constant.
-     *
-     * @internal
-     */
-    public const DEPRECATED_TYPES = [
-        'orm_one_to_many' => FieldDescriptionInterface::TYPE_ONE_TO_MANY,
-        'orm_many_to_many' => FieldDescriptionInterface::TYPE_MANY_TO_MANY,
-        'orm_many_to_one' => FieldDescriptionInterface::TYPE_MANY_TO_ONE,
-        'orm_one_to_one' => FieldDescriptionInterface::TYPE_ONE_TO_ONE,
-        'number' => FieldDescriptionInterface::TYPE_FLOAT,
-    ];
-
     public function guessType(string $class, string $property, ModelManagerInterface $modelManager): ?TypeGuess
     {
         if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
             return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }
 
-        [$metadata, $propertyName, $parentAssociationMappings] = $ret;
+        [$metadata, $propertyName] = $ret;
 
         if ($metadata->hasAssociation($propertyName)) {
             $mapping = $metadata->getAssociationMapping($propertyName);
 
             switch ($mapping['type']) {
                 case ClassMetadata::ONE_TO_MANY:
-                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE)
-                    return new TypeGuess('orm_one_to_many', [], Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::MANY_TO_MANY:
-                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE)
-                    return new TypeGuess('orm_many_to_many', [], Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::MANY_TO_ONE:
-                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE)
-                    return new TypeGuess('orm_many_to_one', [], Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE);
 
                 case ClassMetadata::ONE_TO_ONE:
-                    // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE)
-                    return new TypeGuess('orm_one_to_one', [], Guess::HIGH_CONFIDENCE);
+                    return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE);
             }
         }
 

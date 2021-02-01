@@ -76,19 +76,19 @@ class TypeGuesserTest extends TestCase
         return [
             'many-to-one' => [
                 ClassMetadata::MANY_TO_ONE,
-                'orm_many_to_one',
+                FieldDescriptionInterface::TYPE_MANY_TO_ONE,
             ],
             'one-to-many' => [
                 ClassMetadata::ONE_TO_MANY,
-                'orm_one_to_many',
+                FieldDescriptionInterface::TYPE_ONE_TO_MANY,
             ],
             'one-to-one' => [
                 ClassMetadata::ONE_TO_ONE,
-                'orm_one_to_one',
+                FieldDescriptionInterface::TYPE_ONE_TO_ONE,
             ],
             'many-to-many' => [
                 ClassMetadata::MANY_TO_MANY,
-                'orm_many_to_many',
+                FieldDescriptionInterface::TYPE_MANY_TO_MANY,
             ],
         ];
     }

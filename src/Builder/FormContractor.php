@@ -27,24 +27,12 @@ use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class FormContractor implements FormContractorInterface
+final class FormContractor implements FormContractorInterface
 {
     /**
-     * NEXT_MAJOR: remove this property.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.0.4, to be removed in 4.0
-     *
      * @var FormFactoryInterface
      */
-    protected $fieldFactory;
-
-    /**
-     * @var FormFactoryInterface
-     */
-    protected $formFactory;
+    private $formFactory;
 
     public function __construct(FormFactoryInterface $formFactory)
     {
@@ -53,21 +41,6 @@ class FormContractor implements FormContractorInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
-        // NEXT_MAJOR: Remove this block.
-        if ($admin->getModelManager()->hasMetadata($admin->getClass(), 'sonata_deprecation_mute')) {
-            $metadata = $admin->getModelManager()->getMetadata($admin->getClass(), 'sonata_deprecation_mute');
-
-            // set the default field mapping
-            if (isset($metadata->fieldMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$fieldDescription->getName()]);
-            }
-
-            // set the default association mapping
-            if (isset($metadata->associationMappings[$fieldDescription->getName()])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$fieldDescription->getName()]);
-            }
-        }
-
         if (!$fieldDescription->getType()) {
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
@@ -158,8 +131,7 @@ class FormContractor implements FormContractorInterface
                 return $fieldDescription->getAssociationAdmin()->getNewInstance();
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
-        // NEXT_MAJOR: remove 'Sonata\CoreBundle\Form\Type\CollectionType'
-        } elseif ($this->isAnyInstanceOf($type, [CollectionType::class, 'Sonata\CoreBundle\Form\Type\CollectionType'])) {
+        } elseif ($this->isAnyInstanceOf($type, [CollectionType::class])) {
             if (!$fieldDescription->getAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
