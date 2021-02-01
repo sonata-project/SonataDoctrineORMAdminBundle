@@ -19,7 +19,6 @@ use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
@@ -69,22 +68,6 @@ class ShowBuilder implements ShowBuilderInterface
     {
         $fieldDescription->setAdmin($admin);
 
-        // NEXT_MAJOR: Remove this block.
-        if ($admin->getModelManager()->hasMetadata($admin->getClass(), 'sonata_deprecation_mute')) {
-            [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
-            $fieldDescription->setParentAssociationMappings($parentAssociationMappings);
-
-            // set the default field mapping
-            if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setFieldMapping($metadata->fieldMappings[$lastPropertyName]);
-            }
-
-            // set the default association mapping
-            if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setAssociationMapping($metadata->associationMappings[$lastPropertyName]);
-            }
-        }
-
         if (!$fieldDescription->getType()) {
             throw new \RuntimeException(sprintf('Please define a type for field `%s` in `%s`', $fieldDescription->getName(), \get_class($admin)));
         }
@@ -109,22 +92,7 @@ class ShowBuilder implements ShowBuilderInterface
     private function getTemplate(string $type): ?string
     {
         if (!isset($this->templates[$type])) {
-            // NEXT_MAJOR: Remove the check for deprecated type and always return null.
-            if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
-                return $this->getTemplate(TypeGuesser::DEPRECATED_TYPES[$type]);
-            }
-
             return null;
-        }
-
-        // NEXT_MAJOR: Remove the deprecation.
-        if (isset(TypeGuesser::DEPRECATED_TYPES[$type])) {
-            @trigger_error(sprintf(
-                'Overriding %s show template is deprecated since sonata-project/doctrine-orm-admin-bundle 3.19.'
-                .' You should override %s show template instead.',
-                $type,
-                TypeGuesser::DEPRECATED_TYPES[$type]
-            ), \E_USER_DEPRECATED);
         }
 
         return $this->templates[$type];

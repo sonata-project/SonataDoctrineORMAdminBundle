@@ -73,7 +73,6 @@ class ShowBuilderTest extends TestCase
         $typeGuess->method('getType')->willReturn('fakeType');
 
         $this->guesser->method('guessType')->with($this->anything(), $this->anything(), $this->modelManager)->willReturn($typeGuess);
-        $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
@@ -88,7 +87,6 @@ class ShowBuilderTest extends TestCase
         $fieldDescription = new FieldDescription('FakeName');
 
         $this->admin->expects($this->once())->method('addShowFieldDescription');
-        $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
@@ -100,22 +98,13 @@ class ShowBuilderTest extends TestCase
 
     /**
      * @dataProvider fixFieldDescriptionData
-     * @dataProvider fixFieldDescriptionDeprecatedData
      */
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
-        // NEXT_MAJOR: Remove the next 3 lines.
-        $classMetadata = $this->createStub(ClassMetadata::class);
-        $classMetadata->fieldMappings = [2 => []];
-        $classMetadata->associationMappings = [2 => ['fieldName' => 'fakeField']];
-
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => $mappingType]);
         $fieldDescription->setType($type);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
-        // NEXT_MAJOR: Remove the next 2 lines.
-        $this->modelManager->method('hasMetadata')->willReturn(true);
-        $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 
         $this->showBuilder->fixFieldDescription($this->admin, $fieldDescription);
 
@@ -142,35 +131,6 @@ class ShowBuilderTest extends TestCase
             ],
             'many-to-many' => [
                 FieldDescriptionInterface::TYPE_MANY_TO_MANY,
-                ClassMetadata::MANY_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
-            ],
-        ];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this dataprovider.
-     */
-    public function fixFieldDescriptionDeprecatedData(): iterable
-    {
-        return [
-            'deprecated-one-to-one' => [
-                'orm_one_to_one',
-                ClassMetadata::ONE_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
-            ],
-            'deprecated-many-to-one' => [
-                'orm_many_to_one',
-                ClassMetadata::MANY_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
-            ],
-            'deprecated-one-to-many' => [
-                'orm_one_to_many',
-                ClassMetadata::ONE_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
-            ],
-            'deprecated-many-to-many' => [
-                'orm_many_to_many',
                 ClassMetadata::MANY_TO_MANY,
                 '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
             ],
