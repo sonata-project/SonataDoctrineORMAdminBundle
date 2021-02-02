@@ -42,6 +42,18 @@ class FilterTestCase extends TestCase
             }
         );
 
+        $queryBuilder->method('andHaving')->willReturnCallback(
+            static function ($query) use ($queryBuilder): void {
+                $queryBuilder->query[] = (string) $query;
+            }
+        );
+
+        $queryBuilder->method('addGroupBy')->willReturnCallback(
+            static function (string $groupBy) use ($queryBuilder): void {
+                $queryBuilder->query[] = sprintf('GROUP BY %s', $groupBy);
+            }
+        );
+
         $queryBuilder->method('expr')->willReturnCallback(
             static function () use ($testCase): Expr {
                 return $testCase->createExprStub();

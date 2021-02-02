@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.28.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.27.0...3.28.0) - 2021-01-26
+### Added
+- [[#1280](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1280)] Added `CountFilter`. ([@rgrassian](https://github.com/rgrassian))
+
+### Changed
+- [[#1268](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1268)] Use Doctrine ORM Paginator to count in Pager. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1268](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1268)] `Pager::CONCAT_SEPARATOR` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1265](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1265)] Do not provide a default `null` `field_type` option for Filter ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1268](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1268)] Support of composite key for computeNbResult ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.27.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.26.0...3.27.0) - 2021-01-17
 ### Added
 - [[#1262](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1262)] Added Pager::getCurrentPageResults() ([@VincentLanglet](https://github.com/VincentLanglet))

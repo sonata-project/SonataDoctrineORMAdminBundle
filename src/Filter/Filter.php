@@ -98,6 +98,21 @@ abstract class Filter extends BaseFilter
         $this->active = true;
     }
 
+    /**
+     * @param mixed $parameter
+     */
+    protected function applyHaving(ProxyQueryInterface $query, $parameter): void
+    {
+        if (self::CONDITION_OR === $this->getCondition()) {
+            $query->getQueryBuilder()->orHaving($parameter);
+        } else {
+            $query->getQueryBuilder()->andHaving($parameter);
+        }
+
+        // filter is active since it's added to the queryBuilder
+        $this->active = true;
+    }
+
     protected function getNewParameterName(BaseProxyQueryInterface $query): string
     {
         /* NEXT_MAJOR: Remove this deprecation and update the typehint */
