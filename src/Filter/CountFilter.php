@@ -57,14 +57,14 @@ final class CountFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
-    public function getDefaultOptions()
+    public function getDefaultOptions(): array
     {
         return [
             'field_type' => FormNumberType::class,
         ];
     }
 
-    public function getRenderSettings()
+    public function getRenderSettings(): array
     {
         return [NumberType::class, [
             'field_type' => $this->getFieldType(),
