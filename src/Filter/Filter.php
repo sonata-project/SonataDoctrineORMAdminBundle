@@ -25,19 +25,17 @@ abstract class Filter extends BaseFilter
     protected $active = false;
 
     /**
-     * NEXT_MAJOR change $query type for Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface.
-     *
      * Apply the filter to the QueryBuilder instance.
-     *
-     * @param string  $alias
-     * @param string  $field
-     * @param mixed[] $data
      */
-    abstract public function filter(BaseProxyQueryInterface $query, $alias, $field, $data);
+    abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void;
 
-    public function apply($query, $filterData): void
+    public function apply(BaseProxyQueryInterface $query, array $filterData): void
     {
-        if (\is_array($filterData) && \array_key_exists('value', $filterData)) {
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+        }
+
+        if (\array_key_exists('value', $filterData)) {
             [$alias, $field] = $this->association($query, $filterData);
 
             $this->filter($query, $alias, $field, $filterData);
@@ -49,24 +47,8 @@ abstract class Filter extends BaseFilter
         return $this->active;
     }
 
-    /**
-     * @param mixed[] $data
-     *
-     * @return string[]
-     */
-    protected function association(BaseProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, array $data): array
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         $alias = $query->entityJoin($this->getParentAssociationMappings());
 
         return [$alias, $this->getFieldName()];
@@ -75,19 +57,8 @@ abstract class Filter extends BaseFilter
     /**
      * @param mixed $parameter
      */
-    protected function applyWhere(BaseProxyQueryInterface $query, $parameter): void
+    protected function applyWhere(ProxyQueryInterface $query, $parameter): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         if (self::CONDITION_OR === $this->getCondition()) {
             $query->getQueryBuilder()->orWhere($parameter);
         } else {
@@ -113,19 +84,8 @@ abstract class Filter extends BaseFilter
         $this->active = true;
     }
 
-    protected function getNewParameterName(BaseProxyQueryInterface $query): string
+    protected function getNewParameterName(ProxyQueryInterface $query): string
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.
         return str_replace('.', '_', $this->getName()).'_'.$query->getUniqueParameterId();

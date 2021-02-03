@@ -55,10 +55,9 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function mergeMethodCall(Definition $definition, $name, $value): void
+    public function mergeMethodCall(Definition $definition, string $name, $value): void
     {
         $methodCalls = $definition->getMethodCalls();
 

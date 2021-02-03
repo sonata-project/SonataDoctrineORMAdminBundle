@@ -36,8 +36,6 @@ class ClassFilterTest extends FilterTestCase
 
         $builder = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', 'asds');
         $filter->filter($builder, 'alias', 'field', ['value' => '']);
 
         $this->assertSame([], $builder->query);

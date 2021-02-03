@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -23,20 +22,9 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
  */
 class ChoiceFilter extends Filter
 {
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
-        if (!$data || !\is_array($data) || !\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
             return;
         }
 
@@ -66,10 +54,7 @@ class ChoiceFilter extends Filter
         ]];
     }
 
-    /**
-     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
-     */
-    private function filterWithMultipleValues(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
         if (0 === \count($data['value'])) {
             return;
@@ -100,10 +85,7 @@ class ChoiceFilter extends Filter
         }
     }
 
-    /**
-     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
-     */
-    private function filterWithSingleValue(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data = []): void
     {
         if ('' === $data['value'] || false === $data['value']) {
             return;

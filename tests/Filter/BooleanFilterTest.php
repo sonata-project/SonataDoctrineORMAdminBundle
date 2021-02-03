@@ -37,11 +37,6 @@ class BooleanFilterTest extends FilterTestCase
 
         $builder = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', '');
-        $filter->filter($builder, 'alias', 'field', 'test');
-        $filter->filter($builder, 'alias', 'field', false);
-
         $filter->filter($builder, 'alias', 'field', []);
         $filter->filter($builder, 'alias', 'field', [null, 'test']);
 

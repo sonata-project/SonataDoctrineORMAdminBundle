@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
 use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
@@ -46,21 +45,10 @@ abstract class AbstractDateFilter extends Filter
      */
     protected $time = false;
 
-    public function filter(BaseProxyQueryInterface $query, $alias, $field, $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
-        if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ));
-        }
-
         // check data sanity
-        if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
+        if (!\array_key_exists('value', $data)) {
             return;
         }
 
