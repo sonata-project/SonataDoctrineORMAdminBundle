@@ -20,16 +20,11 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 abstract class AbstractTypeGuesser implements TypeGuesserInterface
 {
     /**
-     * @param string $baseClass
-     * @param string $propertyFullName
-     *
-     * @return array|null
-     *
      * @phpstan-param class-string $baseClass
      *
      * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}|null
      */
-    protected function getParentMetadataForProperty($baseClass, $propertyFullName, ModelManagerInterface $modelManager)
+    protected function getParentMetadataForProperty(string $baseClass, string $propertyFullName, ModelManagerInterface $modelManager): ?array
     {
         try {
             return $modelManager->getParentMetadataForProperty($baseClass, $propertyFullName);

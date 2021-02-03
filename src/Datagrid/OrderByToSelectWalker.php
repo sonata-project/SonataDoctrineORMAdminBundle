@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query\AST\Functions\IdentityFunction;
+use Doctrine\ORM\Query\AST\Node;
 use Doctrine\ORM\Query\AST\OrderByClause;
 use Doctrine\ORM\Query\AST\PathExpression;
 use Doctrine\ORM\Query\AST\SelectExpression;
@@ -90,7 +91,7 @@ final class OrderByToSelectWalker extends TreeWalkerAdapter
      *
      * @return IdentityFunction|PathExpression
      */
-    private function createSelectExpressionItem(PathExpression $pathExpression)
+    private function createSelectExpressionItem(PathExpression $pathExpression): Node
     {
         if (PathExpression::TYPE_SINGLE_VALUED_ASSOCIATION === $pathExpression->type) {
             $identity = new IdentityFunction('identity');

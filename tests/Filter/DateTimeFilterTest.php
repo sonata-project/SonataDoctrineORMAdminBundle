@@ -29,8 +29,6 @@ class DateTimeFilterTest extends FilterTestCase
 
         $builder = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', '');
         $filter->filter($builder, 'alias', 'field', ['value' => '']);
 
         $this->assertSame([], $builder->query);
