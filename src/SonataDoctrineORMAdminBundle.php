@@ -19,10 +19,7 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompi
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Bundle\Bundle;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class SonataDoctrineORMAdminBundle extends Bundle
+final class SonataDoctrineORMAdminBundle extends Bundle
 {
     public function build(ContainerBuilder $container): void
     {

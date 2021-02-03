@@ -20,10 +20,7 @@ use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ListBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class ListBuilder implements ListBuilderInterface
+final class ListBuilder implements ListBuilderInterface
 {
     /**
      * @var TypeGuesserInterface

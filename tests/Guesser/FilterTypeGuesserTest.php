@@ -17,6 +17,7 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
@@ -40,7 +41,11 @@ class FilterTypeGuesserTest extends TestCase
     protected function setUp(): void
     {
         $this->guesser = new FilterTypeGuesser();
-        $this->modelManager = $this->createStub(ModelManager::class);
+        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)
+            ->setMethodsExcept([])
+            ->addMethods(['getParentMetadataForProperty'])
+            ->getMock()
+        ;
         $this->metadata = $this->createStub(ClassMetadata::class);
     }
 

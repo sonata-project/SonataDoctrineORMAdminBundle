@@ -18,10 +18,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class CallbackFilter extends Filter
+final class CallbackFilter extends Filter
 {
     public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {

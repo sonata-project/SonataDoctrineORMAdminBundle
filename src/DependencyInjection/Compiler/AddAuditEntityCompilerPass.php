@@ -17,11 +17,9 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
-class AddAuditEntityCompilerPass implements CompilerPassInterface
+final class AddAuditEntityCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {

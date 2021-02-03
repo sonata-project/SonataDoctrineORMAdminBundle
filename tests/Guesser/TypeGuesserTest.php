@@ -17,8 +17,8 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\Guess;
 
 /**
@@ -31,7 +31,11 @@ class TypeGuesserTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->modelManager = $this->createStub(ModelManager::class);
+        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)
+            ->setMethodsExcept([])
+            ->addMethods(['getParentMetadataForProperty'])
+            ->getMock()
+        ;
         $this->guesser = new TypeGuesser();
     }
 

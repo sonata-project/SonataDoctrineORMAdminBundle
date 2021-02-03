@@ -28,10 +28,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class DatagridBuilder implements DatagridBuilderInterface
+final class DatagridBuilder implements DatagridBuilderInterface
 {
     /**
      * @var FilterFactoryInterface

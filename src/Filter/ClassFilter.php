@@ -18,10 +18,7 @@ use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class ClassFilter extends Filter
+final class ClassFilter extends Filter
 {
     public const CHOICES = [
         EqualOperatorType::TYPE_EQUAL => 'INSTANCE OF',

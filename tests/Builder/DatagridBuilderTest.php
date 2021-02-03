@@ -24,11 +24,11 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\AdminBundle\Translator\FormLabelTranslatorStrategy;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Guess\TypeGuess;
@@ -62,8 +62,12 @@ final class DatagridBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->createMock(ModelManager::class);
-
+        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)
+            ->setMethodsExcept([])
+            // NEXT_MAJOR: remove the "hasMetadata" and "getParentMetadataForProperty" methods and just mock the interface normally
+            ->addMethods(['hasMetadata', 'getParentMetadataForProperty'])
+            ->getMock()
+        ;
         $this->admin->method('getClass')->willReturn('FakeClass');
         $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }

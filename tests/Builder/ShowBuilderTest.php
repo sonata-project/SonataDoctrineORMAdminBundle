@@ -19,9 +19,9 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\TypeGuess;
 
 /**
@@ -50,7 +50,7 @@ class ShowBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->createStub(ModelManager::class);
+        $this->modelManager = $this->createStub(ModelManagerInterface::class);
 
         $this->admin->method('getClass')->willReturn('FakeClass');
         $this->admin->method('getModelManager')->willReturn($this->modelManager);
