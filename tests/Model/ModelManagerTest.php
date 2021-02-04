@@ -172,7 +172,7 @@ final class ModelManagerTest extends TestCase
     {
         $object = new VersionedEntity();
 
-        $this->setGetMetadataExpectation(get_class($object), $this->getMetadata(\get_class($object), $isVersioned));
+        $this->setGetMetadataExpectation(\get_class($object), $this->getMetadata(\get_class($object), $isVersioned));
 
         if ($isVersioned) {
             $object->version = 123;
@@ -201,7 +201,7 @@ final class ModelManagerTest extends TestCase
 
         $metadata = $this->getMetadata(\get_class($object), $isVersioned);
 
-        $em = $this->setGetMetadataExpectation(get_class($object), $metadata);
+        $em = $this->setGetMetadataExpectation(\get_class($object), $metadata);
 
         $em->expects($isVersioned ? $this->once() : $this->never())
             ->method('lock');

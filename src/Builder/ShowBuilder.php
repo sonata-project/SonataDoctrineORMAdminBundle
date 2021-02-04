@@ -20,7 +20,7 @@ use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 
-class ShowBuilder implements ShowBuilderInterface
+final class ShowBuilder implements ShowBuilderInterface
 {
     /**
      * @var TypeGuesserInterface
