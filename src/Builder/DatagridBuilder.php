@@ -161,7 +161,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
      *
      * @throws \RuntimeException If invalid pager type is set
      */
-    protected function getPager(string $pagerType): PagerInterface
+    private function getPager(string $pagerType): PagerInterface
     {
         switch ($pagerType) {
             case Pager::TYPE_DEFAULT:
