@@ -89,6 +89,17 @@ class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
         $fieldDescription->setOption('field_name', $fieldDescription->getOption('field_name', $fieldDescription->getFieldName()));
 
+        $fieldDescription->mergeOption('field_options', ['required' => false]);
+
+        if (ModelAutocompleteFilter::class === $fieldDescription->getType()) {
+            $fieldDescription->mergeOption('field_options', [
+                'class' => $fieldDescription->getTargetModel(),
+                'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
+                'admin_code' => $admin->getCode(),
+                'context' => 'filter',
+            ]);
+        }
+
         if (\in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
             ClassMetadata::MANY_TO_MANY,
@@ -123,17 +134,6 @@ class DatagridBuilder implements DatagridBuilderInterface
 
         $this->fixFieldDescription($admin, $fieldDescription);
         $admin->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
-
-        $fieldDescription->mergeOption('field_options', ['required' => false]);
-
-        if (ModelAutocompleteFilter::class === $type) {
-            $fieldDescription->mergeOption('field_options', [
-                'class' => $fieldDescription->getTargetModel(),
-                'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
-                'admin_code' => $admin->getCode(),
-                'context' => 'filter',
-            ]);
-        }
 
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
 
