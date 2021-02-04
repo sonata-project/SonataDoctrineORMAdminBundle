@@ -114,25 +114,9 @@ final class DatagridBuilderTest extends TestCase
 
     public function testFixFieldDescription(): void
     {
-        // NEXT_MAJOR: Remove the next 4 lines.
-        $classMetadata = $this->createStub(ClassMetadata::class);
-        $classMetadata->fieldMappings = [
-            'someField' => [
-                'type' => 'string',
-                'declaredField' => 'someFieldDeclared',
-                'fieldName' => 'fakeField',
-            ],
-        ];
-        $classMetadata->associationMappings = ['someField' => ['fieldName' => 'fakeField']];
-        $classMetadata->embeddedClasses = ['someFieldDeclared' => ['fieldName' => 'fakeField']];
-
         $fieldDescription = new FieldDescription('test', [], ['type' => ClassMetadata::ONE_TO_MANY]);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
-        // NEXT_MAJOR: Remove the next 2 lines.
-        $this->modelManager->method('hasMetadata')->willReturn(true);
-        $this->modelManager->expects($this->once())->method('getParentMetadataForProperty')
-            ->willReturn([$classMetadata, 'someField', []]);
 
         $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
     }
@@ -148,8 +132,6 @@ final class DatagridBuilderTest extends TestCase
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
         $this->typeGuesser->method('guessType')->willReturn($guessType);
-        // NEXT_MAJOR: Remove the next line.
-        $this->modelManager->expects($this->once())->method('hasMetadata')->willReturn(false);
         $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());
 
         $guessType->method('getOptions')->willReturn(['name' => 'value']);

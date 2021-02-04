@@ -70,72 +70,24 @@ class DatagridBuilder implements DatagridBuilderInterface
         // set default values
         $fieldDescription->setAdmin($admin);
 
-        // NEXT_MAJOR: Remove this block.
-        if ($admin->getModelManager()->hasMetadata($admin->getClass(), 'sonata_deprecation_mute')) {
-            [$metadata, $lastPropertyName, $parentAssociationMappings] = $admin->getModelManager()
-                ->getParentMetadataForProperty($admin->getClass(), $fieldDescription->getName());
+        if ([] !== $fieldDescription->getFieldMapping()) {
+            $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
 
-            // set the default field mapping
-            if (isset($metadata->fieldMappings[$lastPropertyName])) {
-                $fieldDescription->setOption(
-                    'field_mapping',
-                    $fieldDescription->getOption(
-                        'field_mapping',
-                        $fieldMapping = $metadata->fieldMappings[$lastPropertyName]
-                    )
-                );
-
-                if ('string' === $fieldMapping['type']) {
-                    $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-                }
-
-                // NEXT_MAJOR: Remove this, the fieldName should be correctly set at the creation.
-                if (!empty($embeddedClasses = $metadata->embeddedClasses)
-                    && isset($fieldMapping['declaredField'])
-                    && \array_key_exists($fieldMapping['declaredField'], $embeddedClasses)
-                ) {
-                    $fieldDescription->setOption(
-                        'field_name',
-                        $fieldMapping['fieldName']
-                    );
-                }
+            if ('string' === $fieldDescription->getFieldMapping()['type']) {
+                $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
             }
-
-            // set the default association mapping
-            if (isset($metadata->associationMappings[$lastPropertyName])) {
-                $fieldDescription->setOption(
-                    'association_mapping',
-                    $fieldDescription->getOption(
-                        'association_mapping',
-                        $metadata->associationMappings[$lastPropertyName]
-                    )
-                );
-            }
-
-            $fieldDescription->setOption(
-                'parent_association_mappings',
-                $fieldDescription->getOption('parent_association_mappings', $parentAssociationMappings)
-            );
         }
 
-        // NEXT_MAJOR: Uncomment this code.
-        //if ([] !== $fieldDescription->getFieldMapping()) {
-        //    $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
-        //
-        //    if ('string' === $fieldDescription->getFieldMapping()['type']) {
-        //        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-        //    }
-        //}
-        //
-        //if ([] !== $fieldDescription->getAssociationMapping()) {
-        //    $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $fieldDescription->getAssociationMapping()));
-        //}
-        //
-        //if ([] !== $fieldDescription->getParentAssociationMappings()) {
-        //    $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $fieldDescription->getParentAssociationMappings()));
-        //}
+        if ([] !== $fieldDescription->getAssociationMapping()) {
+            $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $fieldDescription->getAssociationMapping()));
+        }
+
+        if ([] !== $fieldDescription->getParentAssociationMappings()) {
+            $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $fieldDescription->getParentAssociationMappings()));
+        }
 
         $fieldDescription->setOption('name', $fieldDescription->getOption('name', $fieldDescription->getName()));
+        $fieldDescription->setOption('field_name', $fieldDescription->getOption('field_name', $fieldDescription->getFieldName()));
 
         if (\in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
