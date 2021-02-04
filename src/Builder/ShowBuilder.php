@@ -25,12 +25,12 @@ final class ShowBuilder implements ShowBuilderInterface
     /**
      * @var TypeGuesserInterface
      */
-    protected $guesser;
+    private $guesser;
 
     /**
      * @var string[]
      */
-    protected $templates;
+    private $templates;
 
     /**
      * @param string[] $templates

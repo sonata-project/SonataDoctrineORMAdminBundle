@@ -33,22 +33,22 @@ final class DatagridBuilder implements DatagridBuilderInterface
     /**
      * @var FilterFactoryInterface
      */
-    protected $filterFactory;
+    private $filterFactory;
 
     /**
      * @var FormFactoryInterface
      */
-    protected $formFactory;
+    private $formFactory;
 
     /**
      * @var TypeGuesserInterface
      */
-    protected $guesser;
+    private $guesser;
 
     /**
      * @var bool
      */
-    protected $csrfTokenEnabled;
+    private $csrfTokenEnabled;
 
     public function __construct(
         FormFactoryInterface $formFactory,
