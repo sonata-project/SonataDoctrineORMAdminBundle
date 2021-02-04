@@ -29,8 +29,6 @@ class FieldDescription extends BaseFieldDescription
 
         $this->type = $this->type ?: (string) $associationMapping['type'];
         $this->mappingType = $this->mappingType ?: $associationMapping['type'];
-        // NEXT_MAJOR: Remove the next line.
-        $this->fieldName = $associationMapping['fieldName'];
     }
 
     /**
@@ -68,8 +66,6 @@ class FieldDescription extends BaseFieldDescription
 
         $this->type = $this->type ?: (string) $fieldMapping['type'];
         $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
-        // NEXT_MAJOR: Remove the next line.
-        $this->fieldName = $this->fieldName ?: $fieldMapping['fieldName'];
     }
 
     /**
