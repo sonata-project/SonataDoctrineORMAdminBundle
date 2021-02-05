@@ -38,13 +38,13 @@ class FilterTestCase extends TestCase
 
         $queryBuilder->method('andWhere')->willReturnCallback(
             static function ($query) use ($queryBuilder): void {
-                $queryBuilder->query[] = (string) $query;
+                $queryBuilder->query[] = sprintf('WHERE %s', $query);
             }
         );
 
         $queryBuilder->method('andHaving')->willReturnCallback(
             static function ($query) use ($queryBuilder): void {
-                $queryBuilder->query[] = (string) $query;
+                $queryBuilder->query[] = sprintf('HAVING %s', $query);
             }
         );
 

@@ -53,7 +53,7 @@ final class CountFilter extends Filter
         $parameterName = $this->getNewParameterName($query);
         $rootAlias = current($query->getQueryBuilder()->getRootAliases());
         $query->getQueryBuilder()->addGroupBy($rootAlias);
-        $this->applyWhere($query, sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+        $this->applyHaving($query, sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
