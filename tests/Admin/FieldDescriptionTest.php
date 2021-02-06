@@ -84,29 +84,6 @@ class FieldDescriptionTest extends TestCase
         $this->assertSame($expected, $field->getOptions());
     }
 
-    public function testAssociationMapping(): void
-    {
-        $field = new FieldDescription('name', [], [], [
-            'type' => 'integer',
-            'fieldName' => 'position',
-        ]);
-
-        $this->assertSame('integer', $field->getType());
-        $this->assertSame('integer', $field->getMappingType());
-        $this->assertSame('position', $field->getFieldName());
-
-        // NEXT_MAJOR: Remove all the rest of the test.
-        // cannot overwrite defined definition
-        $field->setAssociationMapping([
-            'type' => 'overwrite?',
-            'fieldName' => 'overwritten',
-        ]);
-
-        $this->assertSame('integer', $field->getType());
-        $this->assertSame('integer', $field->getMappingType());
-        $this->assertSame('overwritten', $field->getFieldName());
-    }
-
     public function testGetParent(): void
     {
         $adminMock = $this->createMock(AdminInterface::class);
@@ -154,39 +131,43 @@ class FieldDescriptionTest extends TestCase
         $this->assertTrue($field->hasAssociationAdmin());
     }
 
-    public function testGetAssociationMapping(): void
+    public function testSetFieldMapping(): void
     {
-        $associationMapping = [
-            'type' => 'integer',
-            'fieldName' => 'position',
-        ];
-
-        $field = new FieldDescription('name', [], [], $associationMapping);
-        $this->assertSame($associationMapping, $field->getAssociationMapping());
-    }
-
-    public function testSetFieldMappingSetType(): void
-    {
-        $fieldMapping = [
-            'type' => 'integer',
-            'fieldName' => 'position',
-        ];
+        $fieldMapping = ['type' => 'integer'];
 
         $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertSame('integer', $field->getType());
+        $this->assertSame('integer', $field->getMappingType());
+        $this->assertSame($fieldMapping, $field->getFieldMapping());
     }
 
-    public function testSetFieldMappingSetMappingType(): void
+    public function testSetAssociationMapping(): void
     {
-        $fieldMapping = [
-            'type' => 'integer',
-            'fieldName' => 'position',
-        ];
+        $associationMapping = ['type' => 'integer'];
 
-        $field = new FieldDescription('position', [], $fieldMapping);
+        $field = new FieldDescription('name', [], [], $associationMapping);
 
+        $this->assertSame('integer', $field->getType());
         $this->assertSame('integer', $field->getMappingType());
+        $this->assertSame($associationMapping, $field->getAssociationMapping());
+    }
+
+    public function testSetParentAssociationMappings(): void
+    {
+        $parentAssociationMappings = [['fieldName' => 'subObject']];
+
+        $field = new FieldDescription('name', [], [], [], $parentAssociationMappings);
+
+        $this->assertSame($parentAssociationMappings, $field->getParentAssociationMappings());
+    }
+
+    public function testSetInvalidParentAssociationMappings(): void
+    {
+        $parentAssociationMappings = ['subObject'];
+
+        $this->expectException(\InvalidArgumentException::class);
+        new FieldDescription('name', [], [], [], $parentAssociationMappings);
     }
 
     public function testGetTargetModel(): void
@@ -213,19 +194,6 @@ class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('position', [], $fieldMapping);
 
         $this->assertTrue($field->isIdentifier());
-    }
-
-    public function testGetFieldMapping(): void
-    {
-        $fieldMapping = [
-            'type' => 'integer',
-            'fieldName' => 'position',
-            'id' => 'someId',
-        ];
-
-        $field = new FieldDescription('position', [], $fieldMapping);
-
-        $this->assertSame($fieldMapping, $field->getFieldMapping());
     }
 
     public function testGetValue(): void
