@@ -20,34 +20,6 @@ use Sonata\AdminBundle\Admin\BaseFieldDescription;
  */
 class FieldDescription extends BaseFieldDescription
 {
-    /**
-     * NEXT_MAJOR: Change visibility to protected.
-     */
-    public function setAssociationMapping(array $associationMapping): void
-    {
-        $this->associationMapping = $associationMapping;
-
-        $this->type = $this->type ?: (string) $associationMapping['type'];
-        $this->mappingType = $this->mappingType ?: $associationMapping['type'];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0. Use FieldDescription::getTargetModel() instead.
-     */
-    public function getTargetEntity(): ?string
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be removed in version 4.0.'
-            .' Use %s::getTargetModel() instead.',
-            __METHOD__,
-            __CLASS__
-        ), \E_USER_DEPRECATED);
-
-        return $this->getTargetModel();
-    }
-
     public function getTargetModel(): ?string
     {
         if ($this->associationMapping) {
@@ -55,31 +27,6 @@ class FieldDescription extends BaseFieldDescription
         }
 
         return null;
-    }
-
-    /**
-     * NEXT_MAJOR: Change visibility to protected.
-     */
-    public function setFieldMapping(array $fieldMapping): void
-    {
-        $this->fieldMapping = $fieldMapping;
-
-        $this->type = $this->type ?: (string) $fieldMapping['type'];
-        $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
-    }
-
-    /**
-     * NEXT_MAJOR: Change visibility to protected.
-     */
-    public function setParentAssociationMappings(array $parentAssociationMappings): void
-    {
-        foreach ($parentAssociationMappings as $parentAssociationMapping) {
-            if (!\is_array($parentAssociationMapping)) {
-                throw new \RuntimeException('An association mapping must be an array');
-            }
-        }
-
-        $this->parentAssociationMappings = $parentAssociationMappings;
     }
 
     public function isIdentifier(): bool
@@ -94,5 +41,32 @@ class FieldDescription extends BaseFieldDescription
         }
 
         return $this->getFieldValue($object, $this->getFieldName());
+    }
+
+    protected function setFieldMapping(array $fieldMapping): void
+    {
+        $this->fieldMapping = $fieldMapping;
+
+        $this->type = $this->type ?: (string) $fieldMapping['type'];
+        $this->mappingType = $this->mappingType ?: $fieldMapping['type'];
+    }
+
+    protected function setAssociationMapping(array $associationMapping): void
+    {
+        $this->associationMapping = $associationMapping;
+
+        $this->type = $this->type ?: (string) $associationMapping['type'];
+        $this->mappingType = $this->mappingType ?: $associationMapping['type'];
+    }
+
+    protected function setParentAssociationMappings(array $parentAssociationMappings): void
+    {
+        foreach ($parentAssociationMappings as $parentAssociationMapping) {
+            if (!\is_array($parentAssociationMapping)) {
+                throw new \InvalidArgumentException('An association mapping must be an array');
+            }
+        }
+
+        $this->parentAssociationMappings = $parentAssociationMappings;
     }
 }
