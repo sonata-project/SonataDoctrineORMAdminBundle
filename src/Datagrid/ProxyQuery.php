@@ -22,7 +22,7 @@ use Doctrine\ORM\QueryBuilder;
 /**
  * This class try to unify the query usage with Doctrine.
  *
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.29
  *
  * @method Query\Expr    expr()
  * @method QueryBuilder  setCacheable($cacheable)

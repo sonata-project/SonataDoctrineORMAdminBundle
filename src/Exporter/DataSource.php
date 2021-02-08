@@ -21,7 +21,7 @@ use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 
 /**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
+ * @final since sonata-project/doctrine-orm-admin-bundle 3.29
  */
 class DataSource implements DataSourceInterface
 {
