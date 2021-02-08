@@ -61,7 +61,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', '2']]);
 
-        $this->assertSame(['alias.field NOT IN :field_name_0 OR alias.field IS NULL'], $builder->query);
+        $this->assertSame(['WHERE alias.field NOT IN :field_name_0 OR alias.field IS NULL'], $builder->query);
         $this->assertSame(['field_name_0' => ['1', '2']], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -105,7 +105,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => '1']);
 
-        $this->assertSame(['alias.field != :field_name_0 OR alias.field IS NULL'], $builder->query);
+        $this->assertSame(['WHERE alias.field != :field_name_0 OR alias.field IS NULL'], $builder->query);
         $this->assertSame(['field_name_0' => '1'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
