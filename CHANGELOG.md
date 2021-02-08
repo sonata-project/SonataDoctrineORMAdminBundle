@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.29.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.28.0...3.29.0) - 2021-02-08
+### Deprecated
+- [[#1292](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1292)] Extending `ProxyQuery` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1292](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1292)] Extending `DataSource` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1287](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1287)] Fixed `CountFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.28.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.27.0...3.28.0) - 2021-01-26
 ### Added
 - [[#1280](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1280)] Added `CountFilter`. ([@rgrassian](https://github.com/rgrassian))
