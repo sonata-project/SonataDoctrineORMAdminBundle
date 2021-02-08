@@ -161,6 +161,11 @@ class StringFilter extends Filter
                 'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
                 .' and will throw an \OutOfRangeException error in version 4.0.',
             );
+//            throw new \OutOfRangeException(sprintf(
+//                'The type "%s" is not supported, allowed one are "%s".',
+//                $type,
+//                implode('", "', array_keys(self::CHOICES))
+//            ));
         }
 
         // NEXT_MAJOR: Remove the default value
