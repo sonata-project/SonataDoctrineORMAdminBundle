@@ -62,7 +62,7 @@ final class DatagridBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)->getMock();
+        $this->modelManager = $this->createMock(ModelManagerInterface::class);
         $this->admin->method('getClass')->willReturn('FakeClass');
         $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
