@@ -172,23 +172,14 @@ final class ModelManagerTest extends TestCase
     {
         $object = new VersionedEntity();
 
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata'])
-            ->getMock();
-
-        $metadata = $this->getMetadata(\get_class($object), $isVersioned);
-
-        $modelManager->expects($this->any())
-            ->method('getMetadata')
-            ->willReturn($metadata);
+        $this->setGetMetadataExpectation(\get_class($object), $this->getMetadata(\get_class($object), $isVersioned));
 
         if ($isVersioned) {
             $object->version = 123;
 
-            $this->assertNotNull($modelManager->getLockVersion($object));
+            $this->assertNotNull($this->modelManager->getLockVersion($object));
         } else {
-            $this->assertNull($modelManager->getLockVersion($object));
+            $this->assertNull($this->modelManager->getLockVersion($object));
         }
     }
 
@@ -208,25 +199,9 @@ final class ModelManagerTest extends TestCase
     {
         $object = new VersionedEntity();
 
-        $em = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['lock'])
-            ->getMock();
-
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata', 'getEntityManager'])
-            ->getMock();
-
-        $modelManager->expects($this->any())
-            ->method('getEntityManager')
-            ->willReturn($em);
-
         $metadata = $this->getMetadata(\get_class($object), $isVersioned);
 
-        $modelManager->expects($this->any())
-            ->method('getMetadata')
-            ->willReturn($metadata);
+        $em = $this->setGetMetadataExpectation(\get_class($object), $metadata);
 
         $em->expects($isVersioned ? $this->once() : $this->never())
             ->method('lock');
@@ -239,7 +214,7 @@ final class ModelManagerTest extends TestCase
             $this->expectException(LockException::class);
         }
 
-        $modelManager->lock($object, 123);
+        $this->modelManager->lock($object, 123);
     }
 
     public function testGetParentMetadataForProperty(): void
@@ -247,52 +222,51 @@ final class ModelManagerTest extends TestCase
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;
         $embeddedEntityClass = EmbeddedEntity::class;
-        $modelManagerClass = ModelManager::class;
 
-        $em = $this->createMock(EntityManager::class);
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->registry->expects($this->atLeastOnce())
+            ->method('getManagerForClass')
+            ->willReturn($em)
+        ;
 
-        /** @var MockObject|ModelManager $modelManager */
-        $modelManager = $this->getMockBuilder($modelManagerClass)
-            ->disableOriginalConstructor()
-            ->setMethods(['getMetadata', 'getEntityManager'])
-            ->getMock();
-
-        $modelManager->expects($this->any())
-            ->method('getEntityManager')
-            ->willReturn($em);
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $em->expects($this->atLeastOnce())
+            ->method('getMetadataFactory')
+            ->willReturn($metadataFactory)
+        ;
 
         $containerEntityMetadata = $this->getMetadataForContainerEntity();
         $associatedEntityMetadata = $this->getMetadataForAssociatedEntity();
         $embeddedEntityMetadata = $this->getMetadataForEmbeddedEntity();
 
-        $modelManager->expects($this->any())->method('getMetadata')
+        $metadataFactory->expects($this->atLeastOnce())
+            ->method('getMetadataFor')
             ->willReturnMap(
                 [
-                    // NEXT_MAJOR: Remove the 'sonata_deprecation_mute'
-                    [$containerEntityClass, 'sonata_deprecation_mute', $containerEntityMetadata],
-                    [$embeddedEntityClass, 'sonata_deprecation_mute', $embeddedEntityMetadata],
-                    [$associatedEntityClass, 'sonata_deprecation_mute', $associatedEntityMetadata],
+                    [$containerEntityClass, $containerEntityMetadata],
+                    [$embeddedEntityClass, $embeddedEntityMetadata],
+                    [$associatedEntityClass, $associatedEntityMetadata],
                 ]
             );
 
         /** @var ClassMetadata $metadata */
-        [$metadata, $lastPropertyName] = $modelManager
+        [$metadata, $lastPropertyName] = $this->modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'integer');
 
-        [$metadata, $lastPropertyName] = $modelManager
+        [$metadata, $lastPropertyName] = $this->modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'string');
 
-        [$metadata, $lastPropertyName] = $modelManager
+        [$metadata, $lastPropertyName] = $this->modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'embeddedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
-        [$metadata, $lastPropertyName] = $modelManager
+        [$metadata, $lastPropertyName] = $this->modelManager
             ->getParentMetadataForProperty($containerEntityClass, 'associatedEntity.embeddedEntity.plainField');
         $this->assertSame($metadata->fieldMappings[$lastPropertyName]['type'], 'boolean');
 
-        [$metadata, $lastPropertyName] = $modelManager
+        [$metadata, $lastPropertyName] = $this->modelManager
             ->getParentMetadataForProperty(
                 $containerEntityClass,
                 'associatedEntity.embeddedEntity.subEmbeddedEntity.plainField'
@@ -745,18 +719,9 @@ final class ModelManagerTest extends TestCase
 
     public function testGetNewFieldDescriptionInstance(): void
     {
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParentMetadataForProperty'])
-            ->getMock();
+        $this->setGetMetadataExpectation(\stdClass::class, new ClassMetadata(\stdClass::class));
 
-        $modelManager->method('getParentMetadataForProperty')->willReturn([
-            $classMetadata = new ClassMetadata(\stdClass::class),
-            'property',
-            [],
-        ]);
-
-        $fieldDescription = $modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', []);
+        $fieldDescription = $this->modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', []);
         $options = $fieldDescription->getOptions();
 
         $this->assertSame([
@@ -768,18 +733,9 @@ final class ModelManagerTest extends TestCase
 
     public function testGetNewFieldDescriptionInstanceWithOptions(): void
     {
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->onlyMethods(['getParentMetadataForProperty'])
-            ->getMock();
+        $this->setGetMetadataExpectation(\stdClass::class, new ClassMetadata(\stdClass::class));
 
-        $modelManager->method('getParentMetadataForProperty')->willReturn([
-            $classMetadata = new ClassMetadata(\stdClass::class),
-            'property',
-            [],
-        ]);
-
-        $fieldDescription = $modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', [
+        $fieldDescription = $this->modelManager->getNewFieldDescriptionInstance(\stdClass::class, 'name', [
             'route' => ['name' => 'edit', 'parameters' => ['foo' => 'bar']],
         ]);
         $options = $fieldDescription->getOptions();
@@ -889,16 +845,6 @@ final class ModelManagerTest extends TestCase
      */
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
     {
-        $modelManager = $this->getMockBuilder(ModelManager::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['getIdentifierFieldNames'])
-            ->getMock();
-
-        $modelManager
-            ->expects($this->once())
-            ->method('getIdentifierFieldNames')
-            ->willReturn($identifierFieldNames);
-
         $em = $this->getMockBuilder(EntityManager::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -923,7 +869,14 @@ final class ModelManagerTest extends TestCase
             ->setMethods(['getSortBy'])
             ->getMock();
 
-        $modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
+        $metadata = $this->createMock(ClassMetadata::class);
+        $metadata->expects($this->once())
+            ->method('getIdentifierFieldNames')
+            ->willReturn($identifierFieldNames)
+        ;
+        $this->setGetMetadataExpectation(Product::class, $metadata);
+
+        $this->modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
 
         $this->assertCount(\count($expectedParameters), $proxyQuery->getParameters());
 
@@ -989,5 +942,32 @@ final class ModelManagerTest extends TestCase
         }
 
         return $metadata;
+    }
+
+    /**
+     * @return EntityManagerInterface&MockObject
+     */
+    private function setGetMetadataExpectation(string $class, ClassMetadata $classMetadata): EntityManagerInterface
+    {
+        $em = $this->createMock(EntityManagerInterface::class);
+        $this->registry->expects($this->atLeastOnce())
+            ->method('getManagerForClass')
+            ->with($class)
+            ->willReturn($em)
+        ;
+
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $em->expects($this->atLeastOnce())
+            ->method('getMetadataFactory')
+            ->willReturn($metadataFactory)
+        ;
+
+        $metadataFactory->expects($this->atLeastOnce())
+            ->method('getMetadataFor')
+            ->with($class)
+            ->willReturn($classMetadata)
+        ;
+
+        return $em;
     }
 }

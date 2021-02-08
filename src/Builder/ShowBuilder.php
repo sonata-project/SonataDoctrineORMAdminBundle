@@ -20,20 +20,17 @@ use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class ShowBuilder implements ShowBuilderInterface
+final class ShowBuilder implements ShowBuilderInterface
 {
     /**
      * @var TypeGuesserInterface
      */
-    protected $guesser;
+    private $guesser;
 
     /**
      * @var string[]
      */
-    protected $templates;
+    private $templates;
 
     /**
      * @param string[] $templates

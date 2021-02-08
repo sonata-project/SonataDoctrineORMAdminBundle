@@ -17,9 +17,9 @@ use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ListBuilder;
-use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -37,7 +37,7 @@ class ListBuilderTest extends TestCase
     protected function setUp(): void
     {
         $this->typeGuesser = $this->createStub(TypeGuesserInterface::class);
-        $this->modelManager = $this->createStub(ModelManager::class);
+        $this->modelManager = $this->createStub(ModelManagerInterface::class);
         $this->admin = $this->createMock(AdminInterface::class);
 
         $this->admin->method('getClass')->willReturn('Foo');

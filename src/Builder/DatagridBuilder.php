@@ -28,30 +28,27 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class DatagridBuilder implements DatagridBuilderInterface
+final class DatagridBuilder implements DatagridBuilderInterface
 {
     /**
      * @var FilterFactoryInterface
      */
-    protected $filterFactory;
+    private $filterFactory;
 
     /**
      * @var FormFactoryInterface
      */
-    protected $formFactory;
+    private $formFactory;
 
     /**
      * @var TypeGuesserInterface
      */
-    protected $guesser;
+    private $guesser;
 
     /**
      * @var bool
      */
-    protected $csrfTokenEnabled;
+    private $csrfTokenEnabled;
 
     public function __construct(
         FormFactoryInterface $formFactory,
@@ -164,7 +161,7 @@ class DatagridBuilder implements DatagridBuilderInterface
      *
      * @throws \RuntimeException If invalid pager type is set
      */
-    protected function getPager(string $pagerType): PagerInterface
+    private function getPager(string $pagerType): PagerInterface
     {
         switch ($pagerType) {
             case Pager::TYPE_DEFAULT:

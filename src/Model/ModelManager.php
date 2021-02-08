@@ -43,24 +43,24 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
-class ModelManager implements ModelManagerInterface, LockInterface
+final class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
 
     /**
      * @var ManagerRegistry
      */
-    protected $registry;
+    private $registry;
 
     /**
      * @var PropertyAccessorInterface
      */
-    protected $propertyAccessor;
+    private $propertyAccessor;
 
     /**
      * @var EntityManagerInterface[]
      */
-    protected $cache = [];
+    private $cache = [];
 
     /**
      * NEXT_MAJOR: Make $propertyAccessor mandatory.

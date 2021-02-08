@@ -21,10 +21,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class ObjectAclManipulator extends BaseObjectAclManipulator
+final class ObjectAclManipulator extends BaseObjectAclManipulator
 {
     public function batchConfigureAcls(OutputInterface $output, AdminInterface $admin, ?UserSecurityIdentity $securityIdentity = null): void
     {
