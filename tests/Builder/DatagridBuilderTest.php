@@ -62,12 +62,7 @@ final class DatagridBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)
-            ->setMethodsExcept([])
-            // NEXT_MAJOR: remove the "hasMetadata" and "getParentMetadataForProperty" methods and just mock the interface normally
-            ->addMethods(['hasMetadata', 'getParentMetadataForProperty'])
-            ->getMock()
-        ;
+        $this->modelManager = $this->getMockBuilder(ModelManagerInterface::class)->getMock();
         $this->admin->method('getClass')->willReturn('FakeClass');
         $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
