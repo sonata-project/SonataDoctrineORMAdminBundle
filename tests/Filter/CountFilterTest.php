@@ -64,12 +64,12 @@ class CountFilterTest extends FilterTestCase
     public function filterDataProvider(): array
     {
         return [
-            ['COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL],
-            ['COUNT(alias.field) >= :field_name_0', NumberOperatorType::TYPE_GREATER_EQUAL],
-            ['COUNT(alias.field) > :field_name_0', NumberOperatorType::TYPE_GREATER_THAN],
-            ['COUNT(alias.field) <= :field_name_0', NumberOperatorType::TYPE_LESS_EQUAL],
-            ['COUNT(alias.field) < :field_name_0', NumberOperatorType::TYPE_LESS_THAN],
-            ['COUNT(alias.field) = :field_name_0', null],
+            ['HAVING COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL],
+            ['HAVING COUNT(alias.field) >= :field_name_0', NumberOperatorType::TYPE_GREATER_EQUAL],
+            ['HAVING COUNT(alias.field) > :field_name_0', NumberOperatorType::TYPE_GREATER_THAN],
+            ['HAVING COUNT(alias.field) <= :field_name_0', NumberOperatorType::TYPE_LESS_EQUAL],
+            ['HAVING COUNT(alias.field) < :field_name_0', NumberOperatorType::TYPE_LESS_THAN],
+            ['HAVING COUNT(alias.field) = :field_name_0', null],
         ];
     }
 }

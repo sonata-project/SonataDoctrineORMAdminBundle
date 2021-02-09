@@ -60,12 +60,12 @@ class NumberFilterTest extends FilterTestCase
         $filter->filter($builder, 'alias', 'field', ['value' => 42]);
 
         $expected = [
-            'alias.field = :field_name_0',
-            'alias.field >= :field_name_1',
-            'alias.field > :field_name_2',
-            'alias.field <= :field_name_3',
-            'alias.field < :field_name_4',
-            'alias.field = :field_name_5',
+            'WHERE alias.field = :field_name_0',
+            'WHERE alias.field >= :field_name_1',
+            'WHERE alias.field > :field_name_2',
+            'WHERE alias.field <= :field_name_3',
+            'WHERE alias.field < :field_name_4',
+            'WHERE alias.field = :field_name_5',
         ];
 
         $this->assertSame($expected, $builder->query);

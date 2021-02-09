@@ -41,7 +41,7 @@ class StringListFilterTest extends FilterTestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => null, 'type' => null]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => '%N;%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -58,7 +58,7 @@ class StringListFilterTest extends FilterTestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => $type]);
-        $this->assertSame(['alias.field LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -78,7 +78,7 @@ class StringListFilterTest extends FilterTestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_NOT_CONTAINS]);
-        $this->assertSame(['alias.field NOT LIKE :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field NOT LIKE :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -92,7 +92,7 @@ class StringListFilterTest extends FilterTestCase
         $this->assertSame([], $builder->query);
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_EQUAL]);
-        $this->assertSame(['alias.field LIKE :field_name_0 AND alias.field LIKE \'a:1:%\''], $builder->query);
+        $this->assertSame(['WHERE alias.field LIKE :field_name_0 AND alias.field LIKE \'a:1:%\''], $builder->query);
         $this->assertSame(['field_name_0' => '%s:3:"asd";%'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -123,7 +123,7 @@ class StringListFilterTest extends FilterTestCase
         yield 'equal choice' => [
             ['asd', 'qwe'],
             ContainsOperatorType::TYPE_EQUAL,
-            ["alias.field LIKE :field_name_0 AND alias.field LIKE :field_name_1 AND alias.field LIKE 'a:2:%'"],
+            ["WHERE alias.field LIKE :field_name_0 AND alias.field LIKE :field_name_1 AND alias.field LIKE 'a:2:%'"],
             [
                 'field_name_0' => '%s:3:"asd";%',
                 'field_name_1' => '%s:3:"qwe";%',
@@ -133,7 +133,7 @@ class StringListFilterTest extends FilterTestCase
         yield 'contains choice' => [
             ['asd', 'qwe'],
             ContainsOperatorType::TYPE_CONTAINS,
-            ['alias.field LIKE :field_name_0 AND alias.field LIKE :field_name_1'],
+            ['WHERE alias.field LIKE :field_name_0 AND alias.field LIKE :field_name_1'],
             [
                 'field_name_0' => '%s:3:"asd";%',
                 'field_name_1' => '%s:3:"qwe";%',
@@ -143,7 +143,7 @@ class StringListFilterTest extends FilterTestCase
         yield 'not contains choice' => [
             ['asd', 'qwe'],
             ContainsOperatorType::TYPE_NOT_CONTAINS,
-            ['alias.field NOT LIKE :field_name_0 AND alias.field NOT LIKE :field_name_1'],
+            ['WHERE alias.field NOT LIKE :field_name_0 AND alias.field NOT LIKE :field_name_1'],
             [
                 'field_name_0' => '%s:3:"asd";%',
                 'field_name_1' => '%s:3:"qwe";%',

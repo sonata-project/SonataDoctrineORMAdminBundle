@@ -68,10 +68,10 @@ final class NullFilterTest extends FilterTestCase
     public function valueDataProvider(): array
     {
         return [
-            [false, BooleanType::TYPE_YES, 'alias.field IS NULL'],
-            [false, BooleanType::TYPE_NO, 'alias.field IS NOT NULL'],
-            [true, BooleanType::TYPE_YES, 'alias.field IS NOT NULL'],
-            [true, BooleanType::TYPE_NO, 'alias.field IS NULL'],
+            [false, BooleanType::TYPE_YES, 'WHERE alias.field IS NULL'],
+            [false, BooleanType::TYPE_NO, 'WHERE alias.field IS NOT NULL'],
+            [true, BooleanType::TYPE_YES, 'WHERE alias.field IS NOT NULL'],
+            [true, BooleanType::TYPE_NO, 'WHERE alias.field IS NULL'],
         ];
     }
 }

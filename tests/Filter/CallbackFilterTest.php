@@ -49,7 +49,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
-        $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -65,7 +65,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
-        $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -107,7 +107,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter->apply($builder, ['value' => 'myValue']);
 
-        $this->assertSame(['CUSTOM QUERY o.field_name_test'], $builder->query);
+        $this->assertSame(['WHERE CUSTOM QUERY o.field_name_test'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -137,7 +137,7 @@ class CallbackFilterTest extends FilterTestCase
         );
         $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
 
-        $this->assertSame(['CUSTOM QUERY alias.field'], $builder->query);
+        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
     }
 }

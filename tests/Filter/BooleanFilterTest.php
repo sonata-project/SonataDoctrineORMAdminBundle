@@ -53,7 +53,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_NO]);
 
-        $this->assertSame(['alias.field = :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 0], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -67,7 +67,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_YES]);
 
-        $this->assertSame(['alias.field = :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => 1], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -81,7 +81,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
-        $this->assertSame(['alias.field IN ("0")'], $builder->query);
+        $this->assertSame(['WHERE alias.field IN ("0")'], $builder->query);
         $this->assertTrue($filter->isActive());
     }
 }

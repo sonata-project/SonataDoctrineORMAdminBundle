@@ -62,7 +62,7 @@ final class DateRangeFilterTest extends FilterTestCase
             ],
         ]);
 
-        $this->assertSame(['alias.field >= :field_name_0', 'alias.field <= :field_name_1'], $builder->query);
+        $this->assertSame(['WHERE alias.field >= :field_name_0', 'WHERE alias.field <= :field_name_1'], $builder->query);
         $this->assertSame([
             'field_name_0' => $startDateTime,
             'field_name_1' => $endDateTime,
@@ -87,7 +87,7 @@ final class DateRangeFilterTest extends FilterTestCase
             ],
         ]);
 
-        $this->assertSame(['alias.field >= :field_name_0'], $builder->query);
+        $this->assertSame(['WHERE alias.field >= :field_name_0'], $builder->query);
         $this->assertSame(['field_name_0' => $startDateTime], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -109,7 +109,7 @@ final class DateRangeFilterTest extends FilterTestCase
             ],
         ]);
 
-        $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
+        $this->assertSame(['WHERE alias.field <= :field_name_1'], $builder->query);
         $this->assertSame(['field_name_1' => $endDateTime], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
@@ -142,7 +142,7 @@ final class DateRangeFilterTest extends FilterTestCase
         ]);
 
         $this->assertTrue($filter->isActive());
-        $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
+        $this->assertSame(['WHERE alias.field <= :field_name_1'], $builder->query);
         $this->assertSame(['field_name_1' => $modelEndDateTime], $builder->queryParameters);
         $this->assertSame($expectedEndDateTime->getTimestamp(), $modelEndDateTime->getTimestamp());
     }
@@ -200,7 +200,7 @@ final class DateRangeFilterTest extends FilterTestCase
             ],
         ]);
 
-        $this->assertSame(['alias.field <= :field_name_1'], $builder->query);
+        $this->assertSame(['WHERE alias.field <= :field_name_1'], $builder->query);
         $this->assertCount(1, $builder->queryParameters);
         $this->assertSame(
             $endDateTime->modify('+23 hours 59 minutes 59 seconds')->getTimestamp(),
