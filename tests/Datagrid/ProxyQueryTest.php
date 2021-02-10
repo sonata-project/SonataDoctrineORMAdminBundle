@@ -162,11 +162,7 @@ class ProxyQueryTest extends TestCase
             ->method('getRootAliases')
             ->willReturn([$alias]);
 
-        $pq = $this->getMockBuilder(ProxyQuery::class)
-            ->setConstructorArgs([$qb])
-            ->setMethods(['a'])
-            ->getMock();
-
+        $pq = new ProxyQuery($qb);
         $pq->setDistinct($distinct);
 
         /* Work */

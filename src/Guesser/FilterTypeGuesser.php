@@ -29,10 +29,7 @@ use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class FilterTypeGuesser extends AbstractTypeGuesser
+final class FilterTypeGuesser extends AbstractTypeGuesser
 {
     public function guessType(string $class, string $property, ModelManagerInterface $modelManager): ?TypeGuess
     {

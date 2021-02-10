@@ -20,10 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Sonata\Exporter\Source\SourceIteratorInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.29
- */
-class DataSource implements DataSourceInterface
+final class DataSource implements DataSourceInterface
 {
     public function createIterator(ProxyQueryInterface $query, array $fields): SourceIteratorInterface
     {

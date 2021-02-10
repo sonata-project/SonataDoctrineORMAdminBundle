@@ -18,23 +18,19 @@ use Doctrine\DBAL\DBALException;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
-use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
-use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ProductIdType;
@@ -152,7 +148,7 @@ final class ModelManagerTest extends TestCase
 
     public function supportsQueryDataProvider(): iterable
     {
-        yield [true, $this->createMock(ProxyQuery::class)];
+        yield [true, new ProxyQuery($this->createMock(QueryBuilder::class))];
         yield [true, $this->createMock(QueryBuilder::class)];
         yield [false, new \stdClass()];
     }
@@ -566,90 +562,6 @@ final class ModelManagerTest extends TestCase
         $this->assertSame(42, $result[0]);
     }
 
-    /**
-     * NEXT_MAJOR: Remove this dataprovider.
-     *
-     * [sortBy, sortOrder, isAddOrderBy].
-     */
-    public function getSortableInDataSourceIteratorDataProvider(): array
-    {
-        return [
-            [null, null, false],
-            ['', 'ASC', false],
-            ['field', 'ASC', true],
-            ['field', null, true],
-        ];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this test.
-     *
-     * @group legacy
-     *
-     * @dataProvider getSortableInDataSourceIteratorDataProvider
-     *
-     * @param string|null $sortBy
-     * @param string|null $sortOrder
-     * @param bool        $isAddOrderBy
-     */
-    public function testSortableInDataSourceIterator($sortBy, $sortOrder, $isAddOrderBy): void
-    {
-        $datagrid = $this->getMockForAbstractClass(DatagridInterface::class);
-        $configuration = $this->getMockBuilder(Configuration::class)->getMock();
-        $configuration->expects($this->any())
-            ->method('getDefaultQueryHints')
-            ->willReturn([]);
-
-        $em = $this->getMockBuilder(EntityManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $em->expects($this->any())
-            ->method('getConfiguration')
-            ->willReturn($configuration);
-
-        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
-            ->setConstructorArgs([$em])
-            ->getMock();
-        $query = new Query($em);
-
-        $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
-            ->setConstructorArgs([$queryBuilder])
-            ->setMethods(['getSortBy', 'getSortOrder', 'getRootAliases'])
-            ->getMock();
-
-        $proxyQuery->expects($this->any())
-            ->method('getSortOrder')
-            ->willReturn($sortOrder);
-
-        $proxyQuery->expects($this->any())
-            ->method('getSortBy')
-            ->willReturn($sortBy);
-
-        $queryBuilder->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())
-            ->method('addOrderBy');
-
-        $proxyQuery->expects($this->any())
-            ->method('getRootAliases')
-            ->willReturn(['a']);
-
-        $queryBuilder->expects($this->any())
-            ->method('getQuery')
-            ->willReturn($query);
-
-        $datagrid->expects($this->any())
-            ->method('getQuery')
-            ->willReturn($proxyQuery);
-
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::getDataSourceIterator() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.');
-        $this->modelManager->getDataSourceIterator($datagrid, []);
-
-        if ($isAddOrderBy) {
-            $this->assertArrayHasKey($key = 'doctrine.customTreeWalkers', $hints = $query->getHints());
-            $this->assertContains(OrderByToSelectWalker::class, $hints[$key]);
-        }
-    }
-
     public function testModelReverseTransform(): void
     {
         $class = SimpleEntity::class;
@@ -864,10 +776,7 @@ final class ModelManagerTest extends TestCase
             ->method('andWhere')
             ->with($this->stringContains(sprintf('( p.%s = :field_', $identifierFieldNames[0])));
 
-        $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
-            ->setConstructorArgs([$queryBuilder])
-            ->setMethods(['getSortBy'])
-            ->getMock();
+        $proxyQuery = new ProxyQuery($queryBuilder);
 
         $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->once())

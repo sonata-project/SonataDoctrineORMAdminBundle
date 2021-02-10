@@ -20,7 +20,6 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
@@ -33,16 +32,10 @@ use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
-use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
-use Sonata\Exporter\Source\SourceIteratorInterface;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
 final class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
@@ -503,46 +496,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         } catch (\PDOException | DBALException $e) {
             throw new ModelManagerException('', 0, $e);
         }
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-admin/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.
-     *
-     * @return DoctrineORMQuerySourceIterator
-     */
-    public function getDataSourceIterator(
-        DatagridInterface $datagrid,
-        array $fields,
-        ?int $firstResult = null,
-        ?int $maxResult = null
-    ): SourceIteratorInterface {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        $datagrid->buildPager();
-        $query = $datagrid->getQuery();
-
-        $query->select('DISTINCT '.current($query->getRootAliases()));
-        $query->setFirstResult($firstResult);
-        $query->setMaxResults($maxResult);
-
-        if ($query instanceof ProxyQueryInterface) {
-            $sortBy = $query->getSortBy();
-
-            if (!empty($sortBy)) {
-                $query->addOrderBy($sortBy, $query->getSortOrder());
-                $query = $query->getQuery();
-                $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
-            } else {
-                $query = $query->getQuery();
-            }
-        }
-
-        return new DoctrineORMQuerySourceIterator($query, $fields);
     }
 
     public function getExportFields(string $class): array

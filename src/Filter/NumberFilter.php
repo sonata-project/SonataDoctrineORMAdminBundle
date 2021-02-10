@@ -18,10 +18,7 @@ use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\NumberType as FormNumberType;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class NumberFilter extends Filter
+final class NumberFilter extends Filter
 {
     public const CHOICES = [
         NumberOperatorType::TYPE_EQUAL => '=',
