@@ -74,6 +74,13 @@ class StringFilter extends Filter
             return;
         }
 
+        // NEXT_MAJOR: Remove this if and the (int) cast.
+        if (!\is_int($type)) {
+            @trigger_error(
+                'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0.',
+            );
+        }
         $operator = $this->getOperator((int) $type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
@@ -148,6 +155,20 @@ class StringFilter extends Filter
 
     private function getOperator(int $type): string
     {
+        if (!isset(self::CHOICES[$type])) {
+            // NEXT_MAJOR: Throw an \OutOfRangeException instead.
+            @trigger_error(
+                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw an \OutOfRangeException error in version 4.0.',
+            );
+//            throw new \OutOfRangeException(sprintf(
+//                'The type "%s" is not supported, allowed one are "%s".',
+//                $type,
+//                implode('", "', array_keys(self::CHOICES))
+//            ));
+        }
+
+        // NEXT_MAJOR: Remove the default value
         return self::CHOICES[$type] ?? self::CHOICES[StringOperatorType::TYPE_CONTAINS];
     }
 
