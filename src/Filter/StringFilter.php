@@ -17,10 +17,7 @@ use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class StringFilter extends Filter
+final class StringFilter extends Filter
 {
     public const TRIM_NONE = 0;
     public const TRIM_LEFT = 1;

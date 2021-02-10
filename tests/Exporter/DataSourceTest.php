@@ -61,9 +61,7 @@ final class DataSourceTest extends TestCase
         $em = $this->createStub(EntityManager::class);
         $em->method('getConfiguration')->willReturn($configuration);
 
-        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
-            ->setConstructorArgs([$em])
-            ->getMock();
+        $queryBuilder = $this->createMock(QueryBuilder::class);
 
         $queryBuilder->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())->method('addOrderBy');
         $queryBuilder->method('getRootAliases')->willReturn(['a']);
@@ -71,13 +69,13 @@ final class DataSourceTest extends TestCase
         $query = new Query($em);
         $queryBuilder->method('getQuery')->willReturn($query);
 
-        $proxyQuery = $this->getMockBuilder(ProxyQuery::class)
-            ->setConstructorArgs([$queryBuilder])
-            ->onlyMethods(['getSortBy', 'getSortOrder'])
-            ->getMock();
-
-        $proxyQuery->method('getSortOrder')->willReturn($sortOrder);
-        $proxyQuery->method('getSortBy')->willReturn($sortBy);
+        $proxyQuery = new ProxyQuery($queryBuilder);
+        if (null !== $sortBy) {
+            $proxyQuery->setSortBy([], ['fieldName' => $sortBy]);
+        }
+        if (null !== $sortOrder) {
+            $proxyQuery->setSortOrder($sortOrder);
+        }
 
         $this->dataSource->createIterator($proxyQuery, []);
 

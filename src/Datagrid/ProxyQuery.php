@@ -23,8 +23,6 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 /**
  * This class try to unify the query usage with Doctrine.
  *
- * @final since sonata-project/doctrine-orm-admin-bundle 3.x
- *
  * @method Query\Expr    expr()
  * @method QueryBuilder  setCacheable($cacheable)
  * @method bool          isCacheable()
@@ -75,32 +73,32 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
  * @method QueryBuilder  resetDQLParts($parts = null)
  * @method QueryBuilder  resetDQLPart($part)
  */
-class ProxyQuery implements ProxyQueryInterface
+final class ProxyQuery implements ProxyQueryInterface
 {
     /**
      * @var QueryBuilder
      */
-    protected $queryBuilder;
+    private $queryBuilder;
 
     /**
      * @var string|null
      */
-    protected $sortBy;
+    private $sortBy;
 
     /**
      * @var string|null
      */
-    protected $sortOrder;
+    private $sortOrder;
 
     /**
      * @var int
      */
-    protected $uniqueParameterId;
+    private $uniqueParameterId;
 
     /**
      * @var string[]
      */
-    protected $entityJoinAliases;
+    private $entityJoinAliases;
 
     /**
      * For BC reasons, this property is true by default.
@@ -142,7 +140,7 @@ class ProxyQuery implements ProxyQueryInterface
      * Optimize queries with a lot of rows.
      * It is not recommended to use "false" with left joins.
      */
-    final public function setDistinct(bool $distinct): ProxyQueryInterface
+    public function setDistinct(bool $distinct): ProxyQueryInterface
     {
         if (!\is_bool($distinct)) {
             throw new \InvalidArgumentException('$distinct is not a boolean');
@@ -153,7 +151,7 @@ class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
-    final public function isDistinct(): bool
+    public function isDistinct(): bool
     {
         return $this->distinct;
     }
@@ -336,7 +334,7 @@ class ProxyQuery implements ProxyQueryInterface
      * @see \Doctrine\ORM\Query::setHint
      * @see \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER
      */
-    final public function setHint(string $name, $value): ProxyQueryInterface
+    public function setHint(string $name, $value): ProxyQueryInterface
     {
         $this->hints[$name] = $value;
 
@@ -347,7 +345,7 @@ class ProxyQuery implements ProxyQueryInterface
      * This method alters the query to return a clean set of object with a working
      * set of Object.
      */
-    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
+    private function getFixedQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
         $queryBuilderId = clone $queryBuilder;
         $rootAlias = current($queryBuilderId->getRootAliases());

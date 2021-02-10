@@ -20,10 +20,7 @@ use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-/**
- * @final since sonata-project/doctrine-orm-admin-bundle 3.24
- */
-class ModelFilter extends Filter
+final class ModelFilter extends Filter
 {
     public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
