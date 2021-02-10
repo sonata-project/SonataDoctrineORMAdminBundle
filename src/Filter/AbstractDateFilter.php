@@ -111,7 +111,15 @@ abstract class AbstractDateFilter extends Filter
             }
 
             // default type for simple filter
-            $data['type'] = !isset($data['type']) || !is_numeric($data['type']) ? DateOperatorType::TYPE_EQUAL : $data['type'];
+            $data['type'] = $data['type'] ?? DateOperatorType::TYPE_EQUAL;
+
+            // NEXT_MAJOR: Remove this if.
+            if (!\is_int($data['type'])) {
+                @trigger_error(
+                    'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                    .' and will throw a \TypeError error in version 4.0.',
+                );
+            }
 
             // just find an operator and apply query
             $operator = $this->getOperator($data['type']);
@@ -174,6 +182,7 @@ abstract class AbstractDateFilter extends Filter
 
     /**
      * NEXT_MAJOR: Change the visibility for private.
+     * NEXT_MAJOR: Add typehint and remove the int cast.
      *
      * Resolves DateOperatorType:: constants to SQL operators.
      *
@@ -185,6 +194,20 @@ abstract class AbstractDateFilter extends Filter
     {
         $type = (int) $type;
 
+        if (!isset(self::CHOICES[$type])) {
+            // NEXT_MAJOR: Throw an \OutOfRangeException instead.
+            @trigger_error(
+                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw an \OutOfRangeException error in version 4.0.',
+            );
+//            throw new \OutOfRangeException(sprintf(
+//                'The type "%s" is not supported, allowed one are "%s".',
+//                $type,
+//                implode('", "', array_keys(self::CHOICES))
+//            ));
+        }
+
+        // NEXT_MAJOR: Remove the default value
         return self::CHOICES[$type] ?? self::CHOICES[DateOperatorType::TYPE_EQUAL];
     }
 }
