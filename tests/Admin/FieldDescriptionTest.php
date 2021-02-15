@@ -198,10 +198,10 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetValue(): void
     {
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
-        $mockedObject->expects($this->once())->method('myMethod')->willReturn('myMethodValue');
+        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFoo'])->getMock();
+        $mockedObject->expects($this->once())->method('getFoo')->willReturn('myMethodValue');
 
-        $field = new FieldDescription('name', ['code' => 'myMethod']);
+        $field = new FieldDescription('name', ['accessor' => 'foo']);
 
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }
