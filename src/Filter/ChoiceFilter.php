@@ -58,28 +58,26 @@ final class ChoiceFilter extends Filter
         }
 
         $isNullSelected = \in_array(null, $data['value'], true);
-        $data['value'] = array_filter($data['value'], static function ($data): bool {
-            return null !== $data;
-        });
-
-        // Have to pass IN array value as parameter. See: http://www.doctrine-project.org/jira/browse/DDC-3759
         $completeField = sprintf('%s.%s', $alias, $field);
         $parameterName = $this->getNewParameterName($query);
+
+        $or = $query->getQueryBuilder()->expr()->orX();
         if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
-            $andConditions = [$query->getQueryBuilder()->expr()->isNotNull($completeField)];
-            if (0 !== \count($data['value'])) {
-                $andConditions[] = $query->getQueryBuilder()->expr()->notIn($completeField, ':'.$parameterName);
-                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+            $or->add($query->getQueryBuilder()->expr()->notIn($completeField, ':'.$parameterName));
+
+            if (!$isNullSelected) {
+                $or->add($query->getQueryBuilder()->expr()->isNull($completeField));
             }
-            $this->applyWhere($query, $query->getQueryBuilder()->expr()->andX()->addMultiple($andConditions));
         } else {
-            $orConditions = [$query->getQueryBuilder()->expr()->in($completeField, ':'.$parameterName)];
+            $or->add($query->getQueryBuilder()->expr()->in($completeField, ':'.$parameterName));
+
             if ($isNullSelected) {
-                $orConditions[] = $query->getQueryBuilder()->expr()->isNull($completeField);
+                $or->add($query->getQueryBuilder()->expr()->isNull($completeField));
             }
-            $this->applyWhere($query, $query->getQueryBuilder()->expr()->orX()->addMultiple($orConditions));
-            $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
         }
+
+        $this->applyWhere($query, $or);
+        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
     }
 
     private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data = []): void
@@ -89,19 +87,23 @@ final class ChoiceFilter extends Filter
         }
 
         $parameterName = $this->getNewParameterName($query);
+        $completeField = sprintf('%s.%s', $alias, $field);
 
         if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
             if (null === $data['value']) {
-                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNotNull(sprintf('%s.%s', $alias, $field)));
+                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNotNull($completeField));
             } else {
-                $this->applyWhere($query, sprintf('%s.%s != :%s', $alias, $field, $parameterName));
+                $this->applyWhere(
+                    $query,
+                    sprintf('%s != :%s OR %s IS NULL', $completeField, $parameterName, $completeField)
+                );
                 $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
             }
         } else {
             if (null === $data['value']) {
-                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+                $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNull($completeField));
             } else {
-                $this->applyWhere($query, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+                $this->applyWhere($query, sprintf('%s = :%s', $completeField, $parameterName));
                 $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
             }
         }

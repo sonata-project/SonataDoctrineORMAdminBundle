@@ -14,25 +14,12 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 
 class ModelFilterTest extends FilterTestCase
 {
-    /**
-     * @return \Sonata\AdminBundle\Admin\FieldDescriptionInterface
-     */
-    public function getFieldDescription(array $options)
-    {
-        $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
-        $fieldDescription->expects($this->once())->method('getOptions')->willReturn($options);
-        $fieldDescription->expects($this->once())->method('getName')->willReturn('field_name');
-
-        return $fieldDescription;
-    }
-
     public function testFilterEmpty(): void
     {
         $filter = new ModelFilter();
