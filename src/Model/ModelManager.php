@@ -33,7 +33,6 @@ use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
 final class ModelManager implements ModelManagerInterface, LockInterface
@@ -55,47 +54,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
      */
     private $cache = [];
 
-    /**
-     * NEXT_MAJOR: Make $propertyAccessor mandatory.
-     */
-    public function __construct(ManagerRegistry $registry, ?PropertyAccessorInterface $propertyAccessor = null)
+    public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor)
     {
         $this->registry = $registry;
-
-        // NEXT_MAJOR: Remove this block.
-        if (null === $propertyAccessor) {
-            @trigger_error(sprintf(
-                'Constructing "%s" without passing an instance of "%s" as second argument is deprecated since'
-                .' sonata-project/doctrine-orm-admin-bundle 3.22 and will be mandatory in 4.0.',
-                __CLASS__,
-                PropertyAccessorInterface::class
-            ), \E_USER_DEPRECATED);
-
-            $propertyAccessor = PropertyAccess::createPropertyAccessor();
-        }
-
         $this->propertyAccessor = $propertyAccessor;
-    }
-
-    /**
-     * NEXT_MAJOR: Change visibility to private.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be private in version 4.0
-     *
-     * @phpstan-param class-string $class
-     */
-    public function getMetadata(string $class): ClassMetadata
-    {
-        // NEXT_MAJOR: Remove this block.
-        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
-            @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
-                .' will be private in version 4.0.',
-                __METHOD__
-            ), \E_USER_DEPRECATED);
-        }
-
-        return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
 
     /**
@@ -117,8 +79,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         $parentAssociationMappings = [];
 
         foreach ($nameElements as $nameElement) {
-            // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-            $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
+            $metadata = $this->getMetadata($class);
 
             if (isset($metadata->associationMappings[$nameElement])) {
                 $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
@@ -133,36 +94,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         $properties = \array_slice($nameElements, \count($parentAssociationMappings));
         $properties[] = $lastPropertyName;
 
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
         return [
-            $this->getMetadata($class, 'sonata_deprecation_mute'),
+            $this->getMetadata($class),
             implode('.', $properties),
             $parentAssociationMappings,
         ];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0
-     *
-     * @param string $class
-     *
-     * @return bool
-     *
-     * @phpstan-param class-string $class
-     */
-    public function hasMetadata($class)
-    {
-        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
-            @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and'
-                .' will be removed in version 4.0.',
-                __METHOD__
-            ), \E_USER_DEPRECATED);
-        }
-
-        return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
     public function getNewFieldDescriptionInstance(string $class, string $name, array $options = []): FieldDescriptionInterface
@@ -252,8 +188,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getLockVersion(object $object)
     {
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
+        $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
         if (!$metadata->isVersioned) {
             return null;
@@ -264,8 +199,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function lock(object $object, ?int $expectedVersion): void
     {
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-        $metadata = $this->getMetadata(ClassUtils::getClass($object), 'sonata_deprecation_mute');
+        $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
         if (!$metadata->isVersioned) {
             return;
@@ -351,16 +285,12 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             return $query->execute();
         }
 
-        // NEXT_MAJOR: Throw an InvalidArgumentException instead.
-        @trigger_error(sprintf(
-            'Not passing an instance of %s or %s as param 1 of %s() is deprecated since'
-            .' sonata-project/doctrine-orm-admin-bundle 3.24 and will throw an exception in 4.0.',
+        throw new \InvalidArgumentException(sprintf(
+            'Argument 1 passed to %s() must be an instance of %s or %s',
+            __METHOD__,
             QueryBuilder::class,
             ProxyQuery::class,
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return $query->execute();
+        ));
     }
 
     public function getIdentifierValues(object $entity): array
@@ -372,8 +302,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         //}
 
         $class = ClassUtils::getClass($entity);
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
-        $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
+        $metadata = $this->getMetadata($class);
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
@@ -393,8 +322,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
                 continue;
             }
 
-            // NEXT_MAJOR: Remove `sonata_deprecation_mute`
-            $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value), 'sonata_deprecation_mute');
+            $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value));
 
             foreach ($identifierMetadata->getIdentifierValues($value) as $value) {
                 $identifiers[] = $value;
@@ -406,8 +334,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getIdentifierFieldNames(string $class): array
     {
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
-        return $this->getMetadata($class, 'sonata_deprecation_mute')->getIdentifierFieldNames();
+        return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
     public function getNormalizedIdentifier(object $entity): ?string
@@ -521,59 +448,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return new $class();
     }
 
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
-     */
-    public function getDefaultSortValues(string $class): array
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return [
-            '_page' => 1,
-            '_per_page' => 25,
-        ];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
-     */
-    public function getDefaultPerPageOptions(string $class): array
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return [10, 25, 50, 100, 250];
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.
-     */
-    public function modelTransform(string $class, object $instance): object
-    {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
-
-        return $instance;
-    }
-
     public function modelReverseTransform(string $class, array $array = []): object
     {
         $instance = $this->getModelInstance($class);
-        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
-        $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
+        $metadata = $this->getMetadata($class);
 
         foreach ($array as $name => $value) {
             $property = $this->getFieldName($metadata, $name);
@@ -581,6 +459,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         return $instance;
+    }
+
+    /**
+     * @phpstan-param class-string $class
+     */
+    private function getMetadata(string $class): ClassMetadata
+    {
+        return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
     }
 
     private function getFieldName(ClassMetadata $metadata, string $name): string

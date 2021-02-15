@@ -595,21 +595,6 @@ final class ModelManagerTest extends TestCase
         $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
-    /**
-     * NEXT_MAJOR: Remove this test.
-     *
-     * @group legacy
-     */
-    public function testModelTransform(): void
-    {
-        $this->expectDeprecation('Method Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelTransform() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in version 4.0.');
-
-        $object = new \stdClass();
-        $result = $this->modelManager->modelTransform('thisIsNotUsed', $object);
-
-        $this->assertSame($object, $result);
-    }
-
     public function testGetModelInstanceException(): void
     {
         $this->expectException(\RuntimeException::class);
@@ -738,18 +723,6 @@ final class ModelManagerTest extends TestCase
         $this->expectException(ModelManagerException::class);
 
         $this->modelManager->delete(new VersionedEntity());
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @group legacy
-     *
-     * @expectedDeprecation Passing null as argument 1 for Sonata\DoctrineORMAdminBundle\Model\ModelManager::find() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.
-     */
-    public function testFindBadId(): void
-    {
-        $this->assertNull($this->modelManager->find('notImportant', null));
     }
 
     /**
