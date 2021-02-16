@@ -28,17 +28,10 @@ final class CallbackFilter extends Filter
 
         $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $data);
         if (!\is_bool($isActive)) {
-            @trigger_error(
-                'Using another return type than boolean for the callback option is deprecated'
-                .' since sonata-project/doctrine-orm-admin-bundle 3.25 and will throw an exception in version 4.0.',
-                \E_USER_DEPRECATED
-            );
-
-            // NEXT_MAJOR: Uncomment the following code instead of the deprecation.
-//            throw new \UnexpectedValueException(sprintf(
-//                'The callback should return a boolean, %s returned',
-//                \is_object($isActive) ? 'instance of "'.\get_class($isActive).'"' : '"'.\gettype($isActive).'"'
-//            ));
+            throw new \UnexpectedValueException(sprintf(
+                'The callback should return a boolean, %s returned',
+                \is_object($isActive) ? 'instance of "'.\get_class($isActive).'"' : '"'.\gettype($isActive).'"'
+            ));
         }
 
         $this->active = $isActive;

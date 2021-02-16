@@ -59,14 +59,7 @@ final class StringFilter extends Filter
             return;
         }
 
-        // NEXT_MAJOR: Remove this if and the (int) cast.
-        if (!\is_int($type)) {
-            @trigger_error(
-                'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw a \TypeError error in version 4.0.',
-            );
-        }
-        $operator = $this->getOperator((int) $type);
+        $operator = $this->getOperator($type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
@@ -97,16 +90,7 @@ final class StringFilter extends Filter
                 $format = '%%%s';
                 break;
             default:
-                // NEXT_MAJOR: Remove this line, uncomment the following and remove the deprecation
-                $format = $this->getOption('format');
-                // $format = '%%%s%%';
-
-                if ('%%%s%%' !== $format) {
-                    @trigger_error(
-                        'The "format" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.21 and will be removed in version 4.0.',
-                        \E_USER_DEPRECATED
-                    );
-                }
+                $format = '%%%s%%';
         }
 
         $query->getQueryBuilder()->setParameter(
@@ -121,8 +105,6 @@ final class StringFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
-            // NEXT_MAJOR: Remove the format option.
-            'format' => '%%%s%%',
             'case_sensitive' => true,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,
@@ -141,20 +123,14 @@ final class StringFilter extends Filter
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            // NEXT_MAJOR: Throw an \OutOfRangeException instead.
-            @trigger_error(
-                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw an \OutOfRangeException error in version 4.0.',
-            );
-//            throw new \OutOfRangeException(sprintf(
-//                'The type "%s" is not supported, allowed one are "%s".',
-//                $type,
-//                implode('", "', array_keys(self::CHOICES))
-//            ));
+            throw new \OutOfRangeException(sprintf(
+                'The type "%s" is not supported, allowed one are "%s".',
+                $type,
+                implode('", "', array_keys(self::CHOICES))
+            ));
         }
 
-        // NEXT_MAJOR: Remove the default value
-        return self::CHOICES[$type] ?? self::CHOICES[StringOperatorType::TYPE_CONTAINS];
+        return self::CHOICES[$type];
     }
 
     private function trim(string $string): string

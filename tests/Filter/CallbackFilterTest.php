@@ -111,33 +111,4 @@ class CallbackFilterTest extends FilterTestCase
         $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
         $this->assertTrue($filter->isActive());
     }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @group legacy
-     */
-    public function testWrongCallbackReturnType(): void
-    {
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-
-        $filter = new CallbackFilter();
-        $filter->initialize('field_name', [
-            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data) {
-                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
-
-                return 1;
-            },
-        ]);
-
-        $this->expectDeprecation(
-            'Using another return type than boolean for the callback option is deprecated'
-            .' since sonata-project/doctrine-orm-admin-bundle 3.25 and will throw an exception in version 4.0.'
-        );
-        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
-
-        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
-    }
 }
