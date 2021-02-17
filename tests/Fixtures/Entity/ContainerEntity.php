@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 /*
  * This file is part of the Sonata Project package.
  *
@@ -28,10 +30,6 @@ class ContainerEntity
      */
     protected $embeddedEntity;
 
-    /**
-     * @param AssociatedEntity          $associatedEntity
-     * @param Embeddable\EmbeddedEntity $embeddedEntity
-     */
     public function __construct(AssociatedEntity $associatedEntity, Embeddable\EmbeddedEntity $embeddedEntity)
     {
         $this->associatedEntity = $associatedEntity;
