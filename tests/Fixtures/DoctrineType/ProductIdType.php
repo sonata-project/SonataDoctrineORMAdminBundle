@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 /*
@@ -36,7 +37,7 @@ final class ProductIdType extends Type
      */
     public function convertToPHPValue($value, AbstractPlatform $platform): ?ProductId
     {
-        if ($value === null || $value instanceof ProductId) {
+        if (null === $value || $value instanceof ProductId) {
             return $value;
         }
 
@@ -54,7 +55,7 @@ final class ProductIdType extends Type
     {
         $value = $this->convertToPHPValue($value, $platform);
 
-        return $value !== null ? $value->getId() : null;
+        return null !== $value ? $value->getId() : null;
     }
 
     public function getName(): string
