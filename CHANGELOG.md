@@ -10,7 +10,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 - [[#1291](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1291)] Passing another `type` value to a filter than an integer handled ([@VincentLanglet](https://github.com/VincentLanglet))
 
 ### Fixed
-- [[#1314](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1314)] Unavoidable deprecation about the `code` option. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1314](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1314)] Unavoidable deprecation about the `code` option ([@VincentLanglet](https://github.com/VincentLanglet))
 - [[#1247](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1247)] `ChoiceFilter` returns `null` values when used with the type `NOT_EQUAL` ([@VincentLanglet](https://github.com/VincentLanglet))
 
 ## [3.29.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.28.0...3.29.0) - 2021-02-08
