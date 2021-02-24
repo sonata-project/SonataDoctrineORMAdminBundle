@@ -50,7 +50,7 @@ final class CountFilter extends Filter
         // NEXT_MAJOR: Remove this if and the (int) cast.
         if (!\is_int($type)) {
             @trigger_error(
-                'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.30'
                 .' and will throw a \TypeError error in version 4.0.',
             );
         }
@@ -85,7 +85,7 @@ final class CountFilter extends Filter
         if (!isset(self::CHOICES[$type])) {
             // NEXT_MAJOR: Throw an \OutOfRangeException instead.
             @trigger_error(
-                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.30'
                 .' and will throw an \OutOfRangeException error in version 4.0.',
             );
 //            throw new \OutOfRangeException(sprintf(
