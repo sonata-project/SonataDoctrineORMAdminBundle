@@ -4,7 +4,7 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [3.30.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.29.0...3.30.0) - 2021-02-24
 ### Added
-- [[#1285](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1285)] Added support for PHP 8.0 ([@Yozhef](https://github.com/Yozhef))
+- [[#1285](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1285)] Added support for PHP 8.x ([@Yozhef](https://github.com/Yozhef))
 
 ### Deprecated
 - [[#1291](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1291)] Passing another `type` value to a filter than an integer handled ([@VincentLanglet](https://github.com/VincentLanglet))
