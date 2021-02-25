@@ -118,11 +118,8 @@ class ProxyQueryTest extends TestCase
 
         $q = $this->getMockBuilder(AbstractQuery::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setHint', 'execute'])
+            ->setMethods(['execute'])
             ->getMockForAbstractClass();
-        $q->expects($this->once())
-           ->method('setHint')
-           ->willReturn($q);
         $q->expects($this->any())
             ->method('execute')
             ->willReturn([[$id => $value]]);
@@ -130,9 +127,8 @@ class ProxyQueryTest extends TestCase
         $qb = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
             ->getMock();
-        $qb->expects($this->once())
-            ->method('distinct')
-            ->with($this->equalTo($distinct));
+        $qb->expects($distinct ? $this->once() : $this->never())
+            ->method('groupBy');
         $qb->expects($this->any())
             ->method('getEntityManager')
             ->willReturn($em);
