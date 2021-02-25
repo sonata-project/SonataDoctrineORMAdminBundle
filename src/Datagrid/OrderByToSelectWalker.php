@@ -21,6 +21,10 @@ use Doctrine\ORM\Query\AST\SelectStatement;
 use Doctrine\ORM\Query\TreeWalkerAdapter;
 
 /**
+ * NEXT_MAJOR: Remove this file.
+ *
+ * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x
+ *
  * Finds all PathExpressions in an AST's OrderByClause, and ensures that
  * the referenced fields are present in the SelectClause of the passed AST.
  *
@@ -30,6 +34,16 @@ use Doctrine\ORM\Query\TreeWalkerAdapter;
  */
 final class OrderByToSelectWalker extends TreeWalkerAdapter
 {
+    public function __construct($query, $parserResult, array $queryComponents)
+    {
+        parent::__construct($query, $parserResult, $queryComponents);
+
+        @trigger_error(sprintf(
+            'The %s class is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.',
+            __CLASS__,
+        ), \E_USER_DEPRECATED);
+    }
+
     public function walkSelectStatement(SelectStatement $AST)
     {
         if (!$AST->orderByClause instanceof OrderByClause) {

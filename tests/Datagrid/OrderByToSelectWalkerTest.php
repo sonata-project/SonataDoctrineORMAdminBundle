@@ -22,6 +22,10 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\StoreProduct;
 use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 /**
+ * NEXT_MAJOR: Remove this test.
+ *
+ * @group legacy
+ *
  * @author Dariusz Markowicz <dmarkowicz77@gmail.com>
  */
 final class OrderByToSelectWalkerTest extends TestCase

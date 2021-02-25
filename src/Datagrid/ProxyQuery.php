@@ -377,38 +377,29 @@ class ProxyQuery implements ProxyQueryInterface
         $idNames = $metadata->getIdentifierFieldNames();
 
         // step 3 : retrieve the different subjects ids
+        $queryBuilderId->resetDQLPart('select');
+
         $selects = [];
-        $idxSelect = '';
         foreach ($idNames as $idName) {
             $select = sprintf('%s.%s', $rootAlias, $idName);
+
             // Put the ID select on this array to use it on results QB
             $selects[$idName] = $select;
+
             // Use IDENTITY if id is a relation too.
             // See: http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
-            // Should work only with doctrine/orm: ~2.2
-            $idSelect = $select;
             if ($metadata->hasAssociation($idName)) {
-                $idSelect = sprintf('IDENTITY(%s) as %s', $idSelect, $idName);
+                $queryBuilderId->addSelect(sprintf('IDENTITY(%s) as %s', $select, $idName));
+            } else {
+                $queryBuilderId->addSelect($select);
             }
-            $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
         }
-
-        $queryBuilderId->select($idxSelect);
-        $queryBuilderId->distinct($this->isDistinct());
 
         if ($this->isDistinct()) {
             $queryBuilderId->groupBy(implode(', ', $selects));
         }
 
-        // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
-        /* Consider
-            SELECT DISTINCT x FROM tab ORDER BY y;
-        For any particular x-value in the table there might be many different y
-        values.  Which one will you use to sort that x-value in the output?
-        */
-        $queryId = $queryBuilderId->getQuery();
-        $queryId->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
-        $results = $queryId->execute([], Query::HYDRATE_ARRAY);
+        $results = $queryBuilderId->getQuery()->execute([], Query::HYDRATE_ARRAY);
         $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
         $idxMatrix = [];
         foreach ($results as $id) {
