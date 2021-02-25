@@ -392,8 +392,13 @@ class ProxyQuery implements ProxyQueryInterface
             }
             $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
         }
+
         $queryBuilderId->select($idxSelect);
         $queryBuilderId->distinct($this->isDistinct());
+
+        if ($this->isDistinct()) {
+            $queryBuilderId->groupBy($idxSelect);
+        }
 
         // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
         /* Consider
