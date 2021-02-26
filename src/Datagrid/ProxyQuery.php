@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -190,37 +189,8 @@ class ProxyQuery implements ProxyQueryInterface
             }
         }
 
-        /* By default, always add a sort on the identifier fields of the first
-         * used entity in the query, because RDBMS do not guarantee a
-         * particular order when no ORDER BY clause is specified, or when
-         * the field used for sorting is not unique.
-         */
-
-        $identifierFields = $queryBuilder
-            ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($queryBuilder->getRootEntities()))
-            ->getIdentifierFieldNames();
-
-        $existingOrders = [];
-        /** @var Query\Expr\OrderBy $order */
-        foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
-            foreach ($order->getParts() as $part) {
-                $existingOrders[] = trim(str_replace([Criteria::DESC, Criteria::ASC], '', $part));
-            }
-        }
-
-        foreach ($identifierFields as $identifierField) {
-            $order = $rootAlias.'.'.$identifierField;
-            if (!\in_array($order, $existingOrders, true)) {
-                $queryBuilder->addOrderBy(
-                    $order,
-                    $this->getSortOrder() // reusing the sort order is the most natural way to go
-                );
-            }
-        }
-
         $query = $this->getFixedQueryBuilder($queryBuilder)->getQuery();
+
         foreach ($this->hints as $name => $value) {
             $query->setHint($name, $value);
         }
@@ -358,8 +328,12 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * This method alters the query to return a clean set of object with a working
-     * set of Object.
+     * This method alters the query in order to
+     *     - add a sort on the identifier fields of the first used entity in the query,
+     *       because RDBMS do not guarantee a particular order when no ORDER BY clause
+     *       is specified, or when the field used for sorting is not unique.
+     *     - add a group by on the identifier fields in order to not display the same
+     *       entity twice if entityJoin was used with a one to many relation.
      *
      * @return QueryBuilder
      */
@@ -367,18 +341,27 @@ class ProxyQuery implements ProxyQueryInterface
     {
         $rootAlias = current($queryBuilder->getRootAliases());
 
-        // step 1 : retrieve the identifier columns
         $identifierFields = $queryBuilder
             ->getEntityManager()
             ->getMetadataFactory()
             ->getMetadataFor(current($queryBuilder->getRootEntities()))
             ->getIdentifierFieldNames();
 
-        // step 2 : group by identifier columns
-        if ($this->isDistinct()) {
-            $queryBuilder->resetDQLPart('groupBy');
-            foreach ($identifierFields as $identifierField) {
-                $queryBuilder->addGroupBy(sprintf('%s.%s', $rootAlias, $identifierField));
+        $existingOrders = [];
+        foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
+            foreach ($order->getParts() as $part) {
+                $existingOrders[] = trim(str_replace([Criteria::DESC, Criteria::ASC], '', $part));
+            }
+        }
+
+        $queryBuilder->resetDQLPart('groupBy');
+
+        foreach ($identifierFields as $identifierField) {
+            $field = $rootAlias.'.'.$identifierField;
+
+            $queryBuilder->addGroupBy($field);
+            if (!\in_array($field, $existingOrders, true)) {
+                $queryBuilder->addOrderBy($field, $this->getSortOrder());
             }
         }
 
