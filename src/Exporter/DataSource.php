@@ -51,7 +51,7 @@ class DataSource implements DataSourceInterface
                 $doctrineQuery = $query->getQuery();
             }
         } else {
-            // Distinct is need to iterate, even if group by is used
+            // Distinct is needed to iterate, even if group by is used
             // @see https://github.com/doctrine/orm/issues/5868
             $query->getQueryBuilder()->distinct();
             $query->setFirstResult(null);
