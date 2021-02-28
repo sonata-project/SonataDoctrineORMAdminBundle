@@ -31,7 +31,7 @@ interface ProxyQueryInterface extends BaseProxyQueryInterface
 
 //    /**
 //     * This method should be preferred over `$this->getQueryBuilder()->getQuery()`
-//     * since some changed are done to the query builder in order to handle all the
+//     * since some changes are done to the query builder in order to handle all the
 //     * previously called Sonata\AdminBundle\Datagrid\ProxyQueryInterface methods.
 //     *
 //     * @return Query
