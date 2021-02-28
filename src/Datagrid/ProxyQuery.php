@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\Common\Collections\Criteria;
+use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -101,6 +102,8 @@ class ProxyQuery implements ProxyQueryInterface
     protected $entityJoinAliases;
 
     /**
+     * NEXT_MAJOR: Remove this property.
+     *
      * For BC reasons, this property is true by default.
      *
      * @var bool
@@ -140,6 +143,10 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
      * Optimize queries with a lot of rows.
      * It is not recommended to use "false" with left joins.
      *
@@ -149,6 +156,12 @@ class ProxyQuery implements ProxyQueryInterface
      */
     final public function setDistinct($distinct)
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         if (!\is_bool($distinct)) {
             throw new \InvalidArgumentException('$distinct is not a boolean');
         }
@@ -159,10 +172,20 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
      * @return bool
      */
     final public function isDistinct()
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         return $this->distinct;
     }
 
@@ -189,7 +212,7 @@ class ProxyQuery implements ProxyQueryInterface
             }
         }
 
-        $query = $this->getFixedQueryBuilder($queryBuilder)->getQuery();
+        $query = $this->getFixedQueryBuilder2($queryBuilder)->getQuery();
 
         foreach ($this->hints as $name => $value) {
             $query->setHint($name, $value);
@@ -328,6 +351,92 @@ class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
+     * This method alters the query to return a clean set of object with a working
+     * set of Object.
+     *
+     * @return QueryBuilder
+     */
+    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder)
+    {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
+        $queryBuilderId = clone $queryBuilder;
+        $rootAlias = current($queryBuilderId->getRootAliases());
+
+        // step 1 : retrieve the targeted class
+        $from = $queryBuilderId->getDQLPart('from');
+        $class = $from[0]->getFrom();
+        $metadata = $queryBuilderId->getEntityManager()->getMetadataFactory()->getMetadataFor($class);
+
+        // step 2 : retrieve identifier columns
+        $idNames = $metadata->getIdentifierFieldNames();
+
+        // step 3 : retrieve the different subjects ids
+        $selects = [];
+        $idxSelect = '';
+        foreach ($idNames as $idName) {
+            $select = sprintf('%s.%s', $rootAlias, $idName);
+            // Put the ID select on this array to use it on results QB
+            $selects[$idName] = $select;
+            // Use IDENTITY if id is a relation too.
+            // See: http://doctrine-orm.readthedocs.org/en/latest/reference/dql-doctrine-query-language.html
+            // Should work only with doctrine/orm: ~2.2
+            $idSelect = $select;
+            if ($metadata->hasAssociation($idName)) {
+                $idSelect = sprintf('IDENTITY(%s) as %s', $idSelect, $idName);
+            }
+            $idxSelect .= ('' !== $idxSelect ? ', ' : '').$idSelect;
+        }
+        $queryBuilderId->select($idxSelect);
+        $queryBuilderId->distinct($this->isDistinct());
+
+        // for SELECT DISTINCT, ORDER BY expressions must appear in idxSelect list
+        /* Consider
+            SELECT DISTINCT x FROM tab ORDER BY y;
+        For any particular x-value in the table there might be many different y
+        values.  Which one will you use to sort that x-value in the output?
+        */
+        $queryId = $queryBuilderId->getQuery();
+        $queryId->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
+        $results = $queryId->execute([], Query::HYDRATE_ARRAY);
+        $platform = $queryBuilderId->getEntityManager()->getConnection()->getDatabasePlatform();
+        $idxMatrix = [];
+        foreach ($results as $id) {
+            foreach ($idNames as $idName) {
+                // Convert ids to database value in case of custom type, if provided.
+                $fieldType = $metadata->getTypeOfField($idName);
+                $idxMatrix[$idName][] = $fieldType && Type::hasType($fieldType)
+                    ? Type::getType($fieldType)->convertToDatabaseValue($id[$idName], $platform)
+                    : $id[$idName];
+            }
+        }
+
+        // step 4 : alter the query to match the targeted ids
+        foreach ($idxMatrix as $idName => $idx) {
+            if (\count($idx) > 0) {
+                $idxParamName = sprintf('%s_idx', $idName);
+                $idxParamName = preg_replace('/[^\w]+/', '_', $idxParamName);
+                $queryBuilder->andWhere(sprintf('%s IN (:%s)', $selects[$idName], $idxParamName));
+                $queryBuilder->setParameter($idxParamName, $idx);
+                $queryBuilder->setMaxResults(null);
+                $queryBuilder->setFirstResult(null);
+            }
+        }
+
+        return $queryBuilder;
+    }
+
+    /**
+     * NEXT_MAJOR: Rename this method `getFixedQueryBuilder`.
+     *
      * This method alters the query in order to
      *     - add a sort on the identifier fields of the first used entity in the query,
      *       because RDBMS do not guarantee a particular order when no ORDER BY clause
@@ -337,7 +446,7 @@ class ProxyQuery implements ProxyQueryInterface
      *
      * @return QueryBuilder
      */
-    protected function getFixedQueryBuilder(QueryBuilder $queryBuilder)
+    private function getFixedQueryBuilder2(QueryBuilder $queryBuilder)
     {
         $rootAlias = current($queryBuilder->getRootAliases());
 
