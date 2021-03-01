@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
@@ -104,7 +103,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testGetAssociationAdmin(): void
     {
-        $adminMock = $this->createMock(AbstractAdmin::class);
+        $adminMock = $this->createMock(AdminInterface::class);
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf(FieldDescriptionInterface::class));
@@ -117,7 +116,7 @@ class FieldDescriptionTest extends TestCase
 
     public function testHasAssociationAdmin(): void
     {
-        $adminMock = $this->createMock(AbstractAdmin::class);
+        $adminMock = $this->createMock(AdminInterface::class);
         $adminMock->expects($this->once())
             ->method('setParentFieldDescription')
             ->with($this->isInstanceOf(FieldDescriptionInterface::class));
