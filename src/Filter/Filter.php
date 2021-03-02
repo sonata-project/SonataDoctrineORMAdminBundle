@@ -26,6 +26,10 @@ abstract class Filter extends BaseFilter
 
     /**
      * Apply the filter to the QueryBuilder instance.
+     *
+     * @param mixed[] $data
+     *
+     * @phpstan-param array{type?: string|int, value?: mixed} $data
      */
     abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void;
 
@@ -47,6 +51,13 @@ abstract class Filter extends BaseFilter
         return $this->active;
     }
 
+    /**
+     * @param mixed[] $data
+     *
+     * @return string[]
+     *
+     * @phpstan-param array{type?: string|int, value?: mixed} $data
+     */
     protected function association(ProxyQueryInterface $query, array $data): array
     {
         $alias = $query->entityJoin($this->getParentAssociationMappings());

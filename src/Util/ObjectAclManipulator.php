@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Util;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Security\Handler\AclSecurityHandlerInterface;
@@ -23,6 +25,16 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
 final class ObjectAclManipulator extends BaseObjectAclManipulator
 {
+    /**
+     * @var ManagerRegistry
+     */
+    private $registry;
+
+    public function __construct(ManagerRegistry $registry)
+    {
+        $this->registry = $registry;
+    }
+
     public function batchConfigureAcls(OutputInterface $output, AdminInterface $admin, ?UserSecurityIdentity $securityIdentity = null): void
     {
         $securityHandler = $admin->getSecurityHandler();
@@ -35,7 +47,9 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
         $output->writeln(sprintf(' > generate ACLs for %s', $admin->getCode()));
         $objectOwnersMsg = null === $securityIdentity ? '' : ' and set the object owner';
 
-        $em = $admin->getModelManager()->getEntityManager($admin->getClass());
+        $em = $this->registry->getManagerForClass($admin->getClass());
+        \assert($em instanceof EntityManager);
+
         $qb = $em->createQueryBuilder();
         $qb->select('o')->from($admin->getClass(), 'o');
 
