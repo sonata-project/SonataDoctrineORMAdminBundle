@@ -13,10 +13,13 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Util;
 
+use Doctrine\ORM\EntityManager;
+use Doctrine\Persistence\ManagerRegistry;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Security\Handler\AclSecurityHandlerInterface;
 use Sonata\AdminBundle\Util\ObjectAclManipulator as BaseObjectAclManipulator;
+use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Security\Acl\Domain\ObjectIdentity;
 use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
@@ -26,6 +29,28 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
  */
 class ObjectAclManipulator extends BaseObjectAclManipulator
 {
+    /**
+     * NEXT_MAJOR: Remove null.
+     *
+     * @var ManagerRegistry|null
+     */
+    private $registry;
+
+    public function __construct(?ManagerRegistry $registry = null)
+    {
+        if (null === $registry) {
+            @trigger_error(sprintf(
+                'Not passing a "%s" instance as argument 1 for "%s()" is deprecated since'
+                .' sonata-project/doctrine-orm-admin-bundle 3.x and will throw a %s error in 4.0.',
+                ManagerRegistry::class,
+                __METHOD__,
+                \TypeError::class
+            ), \E_USER_DEPRECATED);
+        }
+
+        $this->registry = $registry;
+    }
+
     public function batchConfigureAcls(OutputInterface $output, AdminInterface $admin, ?UserSecurityIdentity $securityIdentity = null)
     {
         $securityHandler = $admin->getSecurityHandler();
@@ -38,7 +63,16 @@ class ObjectAclManipulator extends BaseObjectAclManipulator
         $output->writeln(sprintf(' > generate ACLs for %s', $admin->getCode()));
         $objectOwnersMsg = null === $securityIdentity ? '' : ' and set the object owner';
 
-        $em = $admin->getModelManager()->getEntityManager($admin->getClass());
+        // NEXT_MAJOR: Completely remove the "else" part and the "if" check.
+        if (null !== $this->registry) {
+            $em = $this->registry->getManagerForClass($admin->getClass());
+            \assert($em instanceof EntityManager);
+        } else {
+            $modelManager = $admin->getModelManager();
+            \assert($modelManager instanceof ModelManager);
+            $em = $modelManager->getEntityManager($admin->getClass());
+        }
+
         $qb = $em->createQueryBuilder();
         $qb->select('o')->from($admin->getClass(), 'o');
 
