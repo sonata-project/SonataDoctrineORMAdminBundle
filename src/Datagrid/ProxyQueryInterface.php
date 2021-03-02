@@ -18,5 +18,12 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 
 interface ProxyQueryInterface extends BaseProxyQueryInterface
 {
+    public function getUniqueParameterId(): int;
+
+    /**
+     * @param mixed[] $associationMappings
+     */
+    public function entityJoin(array $associationMappings): string;
+
     public function getQueryBuilder(): QueryBuilder;
 }
