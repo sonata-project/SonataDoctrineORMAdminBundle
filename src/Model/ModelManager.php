@@ -27,7 +27,7 @@ use Doctrine\Persistence\ManagerRegistry;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
-use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Model\LockInterface;
@@ -35,6 +35,7 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 use Symfony\Component\PropertyAccess\PropertyAccess;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -523,8 +524,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
      *
      * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
      */
-    public function addIdentifiersToQuery($class, ProxyQueryInterface $query, array $idx)
+    public function addIdentifiersToQuery($class, BaseProxyQueryInterface $query, array $idx)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 2 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         if ([] === $idx) {
             throw new \InvalidArgumentException(sprintf(
                 'Array passed as argument 3 to "%s()" must not be empty.',
@@ -553,8 +565,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    public function batchDelete($class, ProxyQueryInterface $query)
+    public function batchDelete($class, BaseProxyQueryInterface $query)
     {
+        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
+        if (!$query instanceof ProxyQueryInterface) {
+            @trigger_error(sprintf(
+                'Passing %s as argument 2 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                \get_class($query),
+                __METHOD__,
+                ProxyQueryInterface::class
+            ));
+        }
+
         $query->select('DISTINCT '.current($query->getRootAliases()));
 
         try {
@@ -598,7 +621,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         $query->setFirstResult($firstResult);
         $query->setMaxResults($maxResult);
 
-        if ($query instanceof ProxyQueryInterface) {
+        if ($query instanceof BaseProxyQueryInterface) {
             $sortBy = $query->getSortBy();
 
             if (!empty($sortBy)) {
