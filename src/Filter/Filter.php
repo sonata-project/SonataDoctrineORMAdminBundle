@@ -32,6 +32,8 @@ abstract class Filter extends BaseFilter
      * @param string  $alias
      * @param string  $field
      * @param mixed[] $data
+     *
+     * @phpstan-param array{type?: string|int, value?: mixed} $data
      */
     abstract public function filter(BaseProxyQueryInterface $query, $alias, $field, $data);
 
@@ -54,6 +56,8 @@ abstract class Filter extends BaseFilter
      * @param mixed[] $data
      *
      * @return string[]
+     *
+     * @phpstan-param array{type?: string|int, value?: mixed} $data
      */
     protected function association(BaseProxyQueryInterface $query, array $data)
     {
