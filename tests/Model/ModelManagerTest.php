@@ -21,7 +21,6 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
@@ -111,11 +110,8 @@ final class ModelManagerTest extends TestCase
         $classMetadata->method('getIdentifierValues')->willReturn([$entity->getId()]);
         $classMetadata->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
 
-        $classMetadataFactory = $this->createMock(ClassMetadataFactory::class);
-        $classMetadataFactory->method('getMetadataFor')->willReturn($classMetadata);
-
         $entityManager = $this->createMock(EntityManager::class);
-        $entityManager->method('getMetadataFactory')->willReturn($classMetadataFactory);
+        $entityManager->method('getClassMetadata')->willReturn($classMetadata);
         $entityManager->method('getConnection')->willReturn($connection);
 
         $this->registry->method('getManagerForClass')->willReturn($entityManager);
@@ -222,21 +218,14 @@ final class ModelManagerTest extends TestCase
         $em = $this->createMock(EntityManagerInterface::class);
         $this->registry->expects($this->atLeastOnce())
             ->method('getManagerForClass')
-            ->willReturn($em)
-        ;
-
-        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
-        $em->expects($this->atLeastOnce())
-            ->method('getMetadataFactory')
-            ->willReturn($metadataFactory)
-        ;
+            ->willReturn($em);
 
         $containerEntityMetadata = $this->getMetadataForContainerEntity();
         $associatedEntityMetadata = $this->getMetadataForAssociatedEntity();
         $embeddedEntityMetadata = $this->getMetadataForEmbeddedEntity();
 
-        $metadataFactory->expects($this->atLeastOnce())
-            ->method('getMetadataFor')
+        $em->expects($this->atLeastOnce())
+            ->method('getClassMetadata')
             ->willReturnMap(
                 [
                     [$containerEntityClass, $containerEntityMetadata],
@@ -386,11 +375,6 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
 
-        $mf = $this->createMock(ClassMetadataFactory::class);
-        $mf->expects($this->any())
-            ->method('getMetadataFor')
-            ->willReturn($meta);
-
         $platform = $this->createMock(PostgreSqlPlatform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
@@ -408,8 +392,8 @@ final class ModelManagerTest extends TestCase
 
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
-            ->method('getMetadataFactory')
-            ->willReturn($mf);
+            ->method('getClassMetadata')
+            ->willReturn($meta);
         $em->expects($this->any())
             ->method('getConnection')
             ->willReturn($conn);
@@ -436,11 +420,6 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
-        $mf = $this->createMock(ClassMetadataFactory::class);
-        $mf->expects($this->any())
-            ->method('getMetadataFor')
-            ->willReturn($meta);
-
         $platform = $this->createMock(PostgreSqlPlatform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
@@ -456,8 +435,8 @@ final class ModelManagerTest extends TestCase
 
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
-            ->method('getMetadataFactory')
-            ->willReturn($mf);
+            ->method('getClassMetadata')
+            ->willReturn($meta);
         $em->expects($this->any())
             ->method('getConnection')
             ->willReturn($conn);
@@ -484,11 +463,6 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(ProductIdType::NAME);
 
-        $mf = $this->createMock(ClassMetadataFactory::class);
-        $mf->expects($this->any())
-            ->method('getMetadataFor')
-            ->willReturn($meta);
-
         $platform = $this->createMock(PostgreSqlPlatform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
@@ -504,8 +478,8 @@ final class ModelManagerTest extends TestCase
 
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
-            ->method('getMetadataFactory')
-            ->willReturn($mf);
+            ->method('getClassMetadata')
+            ->willReturn($meta);
         $em->expects($this->any())
             ->method('getConnection')
             ->willReturn($conn);
@@ -531,11 +505,6 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(null);
 
-        $mf = $this->createMock(ClassMetadataFactory::class);
-        $mf->expects($this->any())
-            ->method('getMetadataFor')
-            ->willReturn($meta);
-
         $platform = $this->createMock(PostgreSqlPlatform::class);
         $platform->expects($this->never())
             ->method('hasDoctrineTypeMappingFor');
@@ -547,8 +516,8 @@ final class ModelManagerTest extends TestCase
 
         $em = $this->createMock(EntityManager::class);
         $em->expects($this->any())
-            ->method('getMetadataFactory')
-            ->willReturn($mf);
+            ->method('getClassMetadata')
+            ->willReturn($meta);
         $em->expects($this->any())
             ->method('getConnection')
             ->willReturn($conn);
@@ -566,17 +535,13 @@ final class ModelManagerTest extends TestCase
     {
         $class = SimpleEntity::class;
 
-        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $objectManager = $this->createMock(EntityManagerInterface::class);
 
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
 
         $objectManager->expects($this->once())
-            ->method('getMetadataFactory')
-            ->willReturn($metadataFactory);
-        $metadataFactory->expects($this->once())
-            ->method('getMetadataFor')
+            ->method('getClassMetadata')
             ->with($class)
             ->willReturn($classMetadata);
         $this->registry->expects($this->once())
@@ -760,7 +725,7 @@ final class ModelManagerTest extends TestCase
 
         $this->modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
 
-        $this->assertCount(\count($expectedParameters), $proxyQuery->getParameters());
+        $this->assertCount(\count($expectedParameters), $proxyQuery->getQueryBuilder()->getParameters());
 
         foreach ($proxyQuery->getParameters() as $offset => $parameter) {
             $this->assertSame($expectedParameters[$offset], $parameter->getValue());
@@ -835,20 +800,11 @@ final class ModelManagerTest extends TestCase
         $this->registry->expects($this->atLeastOnce())
             ->method('getManagerForClass')
             ->with($class)
-            ->willReturn($em)
-        ;
+            ->willReturn($em);
 
-        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $em->expects($this->atLeastOnce())
-            ->method('getMetadataFactory')
-            ->willReturn($metadataFactory)
-        ;
-
-        $metadataFactory->expects($this->atLeastOnce())
-            ->method('getMetadataFor')
-            ->with($class)
-            ->willReturn($classMetadata)
-        ;
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
 
         return $em;
     }
