@@ -4,6 +4,8 @@
         <parameter key="sonata.admin.manipulator.acl.object.orm.class">Sonata\DoctrineORMAdminBundle\Util\ObjectAclManipulator</parameter>
     </parameters>
     <services>
-        <service id="sonata.admin.manipulator.acl.object.orm" class="%sonata.admin.manipulator.acl.object.orm.class%" public="true"/>
+        <service id="sonata.admin.manipulator.acl.object.orm" class="%sonata.admin.manipulator.acl.object.orm.class%" public="true">
+            <argument type="service" id="doctrine"/>
+        </service>
     </services>
 </container>
