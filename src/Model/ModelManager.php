@@ -19,11 +19,12 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -69,7 +70,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
      *                                 property string)
      *
      * @phpstan-param class-string $baseClass
-     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadata, string, array}
+     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadataInfo, string, array}
      */
     public function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
@@ -266,6 +267,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     public function createQuery(string $class, $alias = 'o'): ProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
+        \assert($repository instanceof EntityRepository);
 
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
@@ -403,13 +405,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function batchDelete(string $class, ProxyQueryInterface $query): void
     {
-        $query->select('DISTINCT '.current($query->getRootAliases()));
+        $qb = $query->getQueryBuilder();
+        $qb->select('DISTINCT '.current($qb->getRootAliases()));
 
         try {
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($query->getQuery()->iterate() as $pos => $object) {
+            foreach ($qb->getQuery()->iterate() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
                 if (0 === (++$i % 20)) {
@@ -427,9 +430,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getExportFields(string $class): array
     {
-        $metadata = $this->getEntityManager($class)->getClassMetadata($class);
-
-        return $metadata->getFieldNames();
+        return $this->getMetadata($class)->getFieldNames();
     }
 
     public function getModelInstance(string $class): object
@@ -464,12 +465,12 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @phpstan-param class-string $class
      */
-    private function getMetadata(string $class): ClassMetadata
+    private function getMetadata(string $class): ClassMetadataInfo
     {
-        return $this->getEntityManager($class)->getMetadataFactory()->getMetadataFor($class);
+        return $this->getEntityManager($class)->getClassMetadata($class);
     }
 
-    private function getFieldName(ClassMetadata $metadata, string $name): string
+    private function getFieldName(ClassMetadataInfo $metadata, string $name): string
     {
         if (\array_key_exists($name, $metadata->fieldMappings)) {
             return $metadata->fieldMappings[$name]['fieldName'];
