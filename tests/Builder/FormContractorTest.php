@@ -75,6 +75,7 @@ final class FormContractorTest extends TestCase
         $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
         $fieldDescription->method('getAdmin')->willReturn($admin);
         $fieldDescription->method('getTargetModel')->willReturn($modelClass);
+        $fieldDescription->method('hasAssociationAdmin')->willReturn(true);
         $fieldDescription->method('getAssociationAdmin')->willReturn($admin);
         $admin->method('getNewInstance')->willReturn($model);
 

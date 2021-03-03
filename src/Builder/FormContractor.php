@@ -90,7 +90,7 @@ final class FormContractor implements FormContractorInterface
             $options['model_manager'] = $fieldDescription->getAdmin()->getModelManager();
 
             if ($this->isAnyInstanceOf($type, [ModelAutocompleteType::class])) {
-                if (!$fieldDescription->getAssociationAdmin()) {
+                if (!$fieldDescription->hasAssociationAdmin()) {
                     throw new \RuntimeException(sprintf(
                         'The current field `%s` is not linked to an admin.'
                         .' Please create one for the target entity: `%s`',
@@ -100,7 +100,7 @@ final class FormContractor implements FormContractorInterface
                 }
             }
         } elseif ($this->isAnyInstanceOf($type, [AdminType::class])) {
-            if (!$fieldDescription->getAssociationAdmin()) {
+            if (!$fieldDescription->hasAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
                     .' Please create one for the target entity : `%s`',
@@ -132,7 +132,7 @@ final class FormContractor implements FormContractorInterface
             };
             $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'admin'));
         } elseif ($this->isAnyInstanceOf($type, [CollectionType::class])) {
-            if (!$fieldDescription->getAssociationAdmin()) {
+            if (!$fieldDescription->hasAssociationAdmin()) {
                 throw new \RuntimeException(sprintf(
                     'The current field `%s` is not linked to an admin.'
                     .' Please create one for the target entity : `%s`',
