@@ -101,6 +101,8 @@ final class ProxyQuery implements ProxyQueryInterface
     private $entityJoinAliases;
 
     /**
+     * NEXT_MAJOR: Remove this property.
+     *
      * For BC reasons, this property is true by default.
      *
      * @var bool
@@ -137,11 +139,21 @@ final class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
      * Optimize queries with a lot of rows.
      * It is not recommended to use "false" with left joins.
      */
     public function setDistinct(bool $distinct): ProxyQueryInterface
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         if (!\is_bool($distinct)) {
             throw new \InvalidArgumentException('$distinct is not a boolean');
         }
@@ -151,39 +163,64 @@ final class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     */
     public function isDistinct(): bool
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         return $this->distinct;
     }
 
     public function execute(array $params = [], ?int $hydrationMode = null)
     {
-        // always clone the original queryBuilder
+        $query = $this->getDoctrineQuery();
+
+        foreach ($this->hints as $name => $value) {
+            $query->setHint($name, $value);
+        }
+
+        return $query->execute($params, $hydrationMode);
+    }
+
+    /**
+     * This method alters the query in order to
+     *     - update the sortBy of the doctrine query in order to use the one provided
+     *       by the ProxyQueryInterface Api.
+     *     - add a sort on the identifier fields of the first used entity in the query,
+     *       because RDBMS do not guarantee a particular order when no ORDER BY clause
+     *       is specified, or when the field used for sorting is not unique.
+     *     - add a group by on the identifier fields in order to not display the same
+     *       entity twice if entityJoin was used with a one to many relation.
+     */
+    public function getDoctrineQuery(): Query
+    {
+        // Always clone the original queryBuilder
         $queryBuilder = clone $this->queryBuilder;
 
         $rootAlias = current($queryBuilder->getRootAliases());
 
-        // todo : check how doctrine behave, potential SQL injection here ...
         if ($this->getSortBy()) {
             $orderByDQLPart = $queryBuilder->getDQLPart('orderBy');
             $queryBuilder->resetDQLPart('orderBy');
 
             $sortBy = $this->getSortBy();
-            if (false === strpos($sortBy, '.')) { // add the current alias
+            if (false === strpos($sortBy, '.')) {
                 $sortBy = $rootAlias.'.'.$sortBy;
             }
-            $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
 
+            $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
             foreach ($orderByDQLPart as $orderBy) {
                 $queryBuilder->addOrderBy($orderBy);
             }
         }
-
-        /* By default, always add a sort on the identifier fields of the first
-         * used entity in the query, because RDBMS do not guarantee a
-         * particular order when no ORDER BY clause is specified, or when
-         * the field used for sorting is not unique.
-         */
 
         $identifierFields = $queryBuilder
             ->getEntityManager()
@@ -192,29 +229,24 @@ final class ProxyQuery implements ProxyQueryInterface
             ->getIdentifierFieldNames();
 
         $existingOrders = [];
-        /** @var Query\Expr\OrderBy $order */
         foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
             foreach ($order->getParts() as $part) {
                 $existingOrders[] = trim(str_replace([Criteria::DESC, Criteria::ASC], '', $part));
             }
         }
 
+        $queryBuilder->resetDQLPart('groupBy');
+
         foreach ($identifierFields as $identifierField) {
-            $order = $rootAlias.'.'.$identifierField;
-            if (!\in_array($order, $existingOrders, true)) {
-                $queryBuilder->addOrderBy(
-                    $order,
-                    $this->getSortOrder() // reusing the sort order is the most natural way to go
-                );
+            $field = $rootAlias.'.'.$identifierField;
+
+            $queryBuilder->addGroupBy($field);
+            if (!\in_array($field, $existingOrders, true)) {
+                $queryBuilder->addOrderBy($field, $this->getSortOrder());
             }
         }
 
-        $query = $this->getFixedQueryBuilder($queryBuilder)->getQuery();
-        foreach ($this->hints as $name => $value) {
-            $query->setHint($name, $value);
-        }
-
-        return $query->execute($params, $hydrationMode);
+        return $queryBuilder->getQuery();
     }
 
     public function setSortBy(array $parentAssociationMappings, array $fieldMapping): BaseProxyQueryInterface
@@ -249,8 +281,19 @@ final class ProxyQuery implements ProxyQueryInterface
         return $this->sortOrder;
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     */
     public function getSingleScalarResult()
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         $query = $this->queryBuilder->getQuery();
 
         return $query->getSingleScalarResult();
@@ -342,11 +385,21 @@ final class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
      * This method alters the query to return a clean set of object with a working
      * set of Object.
      */
     private function getFixedQueryBuilder(QueryBuilder $queryBuilder): QueryBuilder
     {
+        @trigger_error(sprintf(
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            .' and will be removed in version 4.0.',
+            __METHOD__,
+        ), \E_USER_DEPRECATED);
+
         $queryBuilderId = clone $queryBuilder;
         $rootAlias = current($queryBuilderId->getRootAliases());
 

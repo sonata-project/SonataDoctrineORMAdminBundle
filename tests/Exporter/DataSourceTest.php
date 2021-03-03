@@ -18,9 +18,11 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Exporter\DataSource;
+use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 
 final class DataSourceTest extends TestCase
 {
@@ -48,6 +50,10 @@ final class DataSourceTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider getSortableInDataSourceIteratorDataProvider
      */
     public function testSortableInDataSourceIterator(
@@ -61,21 +67,16 @@ final class DataSourceTest extends TestCase
         $em = $this->createStub(EntityManager::class);
         $em->method('getConfiguration')->willReturn($configuration);
 
-        $queryBuilder = $this->createMock(QueryBuilder::class);
-
-        $queryBuilder->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())->method('addOrderBy');
-        $queryBuilder->method('getRootAliases')->willReturn(['a']);
-
         $query = new Query($em);
-        $queryBuilder->method('getQuery')->willReturn($query);
+        $proxyQuery = $this->getMockBuilder(BaseProxyQueryInterface::class)
+            ->addMethods(['select', 'getRootAliases', 'addOrderBy', 'getQuery'])
+            ->getMockForAbstractClass();
 
-        $proxyQuery = new ProxyQuery($queryBuilder);
-        if (null !== $sortBy) {
-            $proxyQuery->setSortBy([], ['fieldName' => $sortBy]);
-        }
-        if (null !== $sortOrder) {
-            $proxyQuery->setSortOrder($sortOrder);
-        }
+        $proxyQuery->method('getRootAliases')->willReturn(['a']);
+        $proxyQuery->method('getSortOrder')->willReturn($sortOrder);
+        $proxyQuery->method('getSortBy')->willReturn($sortBy);
+        $proxyQuery->expects($isAddOrderBy ? $this->atLeastOnce() : $this->never())->method('addOrderBy');
+        $proxyQuery->method('getQuery')->willReturn($query);
 
         $this->dataSource->createIterator($proxyQuery, []);
 
@@ -83,5 +84,31 @@ final class DataSourceTest extends TestCase
             $this->assertArrayHasKey($key = 'doctrine.customTreeWalkers', $hints = $query->getHints());
             $this->assertContains(OrderByToSelectWalker::class, $hints[$key]);
         }
+    }
+
+    public function testCreateIterator(): void
+    {
+        $configuration = $this->createStub(Configuration::class);
+        $configuration->method('getDefaultQueryHints')->willReturn([]);
+
+        $em = $this->createStub(EntityManager::class);
+        $em->method('getConfiguration')->willReturn($configuration);
+
+        $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
+            ->setConstructorArgs([$em])
+            ->getMock();
+        $query = new Query($em);
+
+        $queryBuilder->expects($this->once())->method('distinct');
+
+        $proxyQuery = $this->createMock(ProxyQueryInterface::class);
+
+        $proxyQuery->method('getQueryBuilder')->willReturn($queryBuilder);
+        $proxyQuery->method('getDoctrineQuery')->willReturn($query);
+        $proxyQuery->expects($this->once())->method('setFirstResult')->with(null);
+        $proxyQuery->expects($this->once())->method('setMaxResults')->with(null);
+
+        $iterator = $this->dataSource->createIterator($proxyQuery, []);
+        $this->assertInstanceOf(DoctrineORMQuerySourceIterator::class, $iterator);
     }
 }
