@@ -191,6 +191,14 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function execute(array $params = [], $hydrationMode = null)
     {
+        // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
+        if ([] !== $params || null !== $hydrationMode) {
+            @trigger_error(sprintf(
+                'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.',
+                __METHOD__,
+            ), \E_USER_DEPRECATED);
+        }
+
         $query = $this->getDoctrineQuery();
 
         foreach ($this->hints as $name => $value) {
