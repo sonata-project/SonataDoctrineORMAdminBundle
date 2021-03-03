@@ -246,7 +246,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         if (!isset($this->cache[$class])) {
             $em = $this->registry->getManagerForClass($class);
 
-            if (!$em) {
+            if (!$em instanceof EntityManagerInterface) {
                 throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
             }
 
