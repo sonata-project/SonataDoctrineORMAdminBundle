@@ -120,6 +120,15 @@ final class DatagridBuilderTest extends TestCase
         $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
     }
 
+    public function testFixFieldDescriptionWithoutFieldName(): void
+    {
+        $fieldDescription = new FieldDescription('test', [], [], [], [], 'fieldName');
+
+        $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
+
+        $this->assertSame('fieldName', $fieldDescription->getOption('field_name'));
+    }
+
     public function testAddFilterNoType(): void
     {
         $datagrid = $this->createStub(DatagridInterface::class);
