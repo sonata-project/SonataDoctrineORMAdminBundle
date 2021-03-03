@@ -578,13 +578,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
             ), \E_USER_DEPRECATED);
         }
 
-        $query->select('DISTINCT '.current($query->getRootAliases()));
+        $qb = $query->getQueryBuilder();
+        $qb->select('DISTINCT '.current($qb->getRootAliases()));
 
         try {
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($query->getQuery()->iterate() as $pos => $object) {
+            foreach ($qb->getQuery()->iterate() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
                 if (0 === (++$i % 20)) {
