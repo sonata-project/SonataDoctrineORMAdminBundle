@@ -217,15 +217,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function find(string $class, $id): ?object
     {
-        if (null === $id) {
-            @trigger_error(sprintf(
-                'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
-                __METHOD__
-            ), \E_USER_DEPRECATED);
-
-            return null;
-        }
-
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
 
         return $this->getEntityManager($class)->getRepository($class)->find($values);
@@ -376,15 +367,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function addIdentifiersToQuery(string $class, BaseProxyQueryInterface $query, array $idx): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 2 to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ), \E_USER_DEPRECATED);
+            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         if ([] === $idx) {
@@ -417,15 +401,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function batchDelete(string $class, BaseProxyQueryInterface $query): void
     {
-        /* NEXT_MAJOR: Remove this deprecation and update the typehint */
         if (!$query instanceof ProxyQueryInterface) {
-            @trigger_error(sprintf(
-                'Passing %s as argument 2 to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
-                \get_class($query),
-                __METHOD__,
-                ProxyQueryInterface::class
-            ), \E_USER_DEPRECATED);
+            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $qb = $query->getQueryBuilder();
