@@ -22,6 +22,12 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class FieldDescriptionTest extends TestCase
 {
+    /**
+     * NEXT_MAJOR: Remove the "legacy" group when `Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter`
+     * class is removed or stops extending `NullFilter`.
+     *
+     * @group legacy
+     */
     public function testOptions(): void
     {
         $field = new FieldDescription('name', [
@@ -255,7 +261,7 @@ class FieldDescriptionTest extends TestCase
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
         $mockedObject->expects($this->once())->method('myMethod')->willReturn('myMethodValue');
 
-        $field = new FieldDescription('name', ['code' => 'myMethod']);
+        $field = new FieldDescription('name', ['accessor' => 'myMethod']);
 
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
     }
