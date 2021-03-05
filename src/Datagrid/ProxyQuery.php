@@ -181,7 +181,7 @@ final class ProxyQuery implements ProxyQueryInterface
     public function execute(array $params = [], ?int $hydrationMode = null)
     {
         // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
-        if ([] !== $params || null !== $hydrationMode) {
+        if (\func_num_args() > 0) {
             @trigger_error(sprintf(
                 'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.',
                 __METHOD__,
