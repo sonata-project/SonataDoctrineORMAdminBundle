@@ -10,6 +10,10 @@
             <argument type="service" id="property_accessor"/>
             <tag name="sonata.admin.manager"/>
         </service>
+        <!-- Extension -->
+        <service id="Sonata\DoctrineORMAdminBundle\Admin\Extension\SearchableAdminExtension">
+            <tag name="sonata.admin.extension" global="true"/>
+        </service>
         <!-- FormBuilder -->
         <service id="sonata.admin.builder.orm_form" class="Sonata\DoctrineORMAdminBundle\Builder\FormContractor">
             <argument type="service" id="form.factory"/>
