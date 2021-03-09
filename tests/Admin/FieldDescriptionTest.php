@@ -22,6 +22,12 @@ use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 
 class FieldDescriptionTest extends TestCase
 {
+    /**
+     * NEXT_MAJOR: Remove the "legacy" group when `Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter`
+     * class is removed or stops extending `NullFilter`.
+     *
+     * @group legacy
+     */
     public function testOptions(): void
     {
         $field = new FieldDescription('name', [
