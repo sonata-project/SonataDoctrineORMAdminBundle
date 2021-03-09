@@ -2,6 +2,28 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.31.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.30.0...3.31.0) - 2021-03-11
+### Added
+- [[#1335](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1335)] Support for symfony/config:^5.2 ([@phansys](https://github.com/phansys))
+- [[#1335](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1335)] Support for symfony/dependency-injection:^5.2 ([@phansys](https://github.com/phansys))
+- [[#1335](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1335)] Support for symfony/http-foundation:^5.2 ([@phansys](https://github.com/phansys))
+- [[#1319](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1319)] `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface::getDoctrineQuery()` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Changed
+- [[#1336](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1336)] Update constraint for "sonata-project/admin-bundle" from ^3.88 to ^3.89.1 ([@phansys](https://github.com/phansys))
+
+### Deprecated
+- [[#1333](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1333)] Deprecate passing arguments to `ProxyQuery::execute()` method ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1326](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1326)] Not passing a `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface` as argument 2 of `ModelManager::addIdentifiersToQuery()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1326](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1326)] Not passing a `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface` as argument 2 of `ModelManager::batchDelete()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1319](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1319)] Class `Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1319](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1319)] `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery::getFixedQueryBuilder()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1319](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1319)] `Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery::getSingleScalarResult()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1323](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1323)] Not passing a `ManagerRegistry` as first argument of `ObjectAclManipulator` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1319](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1319)] Do not display multiple times the same row in the admin list and the export list ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.30.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.29.0...3.30.0) - 2021-02-24
 ### Added
 - [[#1285](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1285)] Added support for PHP 8.x ([@Yozhef](https://github.com/Yozhef))
