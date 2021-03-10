@@ -30,6 +30,7 @@ jobs:
                   php-version: 8.0
                   coverage: none
                   tools: composer:v2
+                  extensions: zip
 
             - name: Install Composer dependencies (highest)
               uses: "ramsey/composer-install@v1"
@@ -54,6 +55,7 @@ jobs:
                   php-version: 8.0
                   coverage: none
                   tools: composer:v2
+                  extensions: zip
 
             - name: Install Composer dependencies (highest)
               uses: "ramsey/composer-install@v1"
