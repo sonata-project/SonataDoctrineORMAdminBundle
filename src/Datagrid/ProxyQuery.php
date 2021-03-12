@@ -183,7 +183,7 @@ final class ProxyQuery implements ProxyQueryInterface
         // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
         if (\func_num_args() > 0) {
             @trigger_error(sprintf(
-                'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.',
+                'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31.',
                 __METHOD__,
             ), \E_USER_DEPRECATED);
         }
@@ -291,12 +291,12 @@ final class ProxyQuery implements ProxyQueryInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.31, to be removed in 4.0.
      */
     public function getSingleScalarResult()
     {
         @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31'
             .' and will be removed in version 4.0.',
             __METHOD__,
         ), \E_USER_DEPRECATED);
