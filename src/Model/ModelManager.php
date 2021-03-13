@@ -110,6 +110,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     *
      * Returns the model's metadata holding the fully qualified property, and the last
      * property name.
      *
@@ -124,6 +128,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getParentMetadataForProperty($baseClass, $propertyFullName)
     {
+        if ('sonata_deprecation_mute' !== (\func_get_args()[2] ?? null)) {
+            @trigger_error(sprintf(
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                .' will be removed in version 4.0.',
+                __METHOD__
+            ), \E_USER_DEPRECATED);
+        }
+
         $nameElements = explode('.', $propertyFullName);
         $lastPropertyName = array_pop($nameElements);
         $class = $baseClass;
@@ -178,8 +190,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getMetadataFactory()->hasMetadataFor($class);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x to be removed in 4.0.
+     */
     public function getNewFieldDescriptionInstance($class, $name, array $options = [])
     {
+        @trigger_error(sprintf(
+            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+            .' will be removed in version 4.0.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
+
         if (!\is_string($name)) {
             throw new \RuntimeException('The name argument must be a string');
         }
@@ -192,7 +215,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             $options['route']['parameters'] = [];
         }
 
-        [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
+        [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name, 'sonata_deprecation_mute');
 
         return new FieldDescription(
             $name,
@@ -644,8 +667,22 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $metadata->getFieldNames();
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     */
     public function getModelInstance($class)
     {
+        // NEXT_MAJOR: Remove this block.
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                .' will be removed in version 4.0.',
+                __METHOD__
+            ), \E_USER_DEPRECATED);
+        }
+
         $r = new \ReflectionClass($class);
         if ($r->isAbstract()) {
             throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
@@ -763,7 +800,8 @@ class ModelManager implements ModelManagerInterface, LockInterface
 
     public function modelReverseTransform($class, array $array = [])
     {
-        $instance = $this->getModelInstance($class);
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+        $instance = $this->getModelInstance($class, 'sonata_deprecation_mute');
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`
         $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
 

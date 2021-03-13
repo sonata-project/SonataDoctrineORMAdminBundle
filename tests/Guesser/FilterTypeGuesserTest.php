@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
@@ -44,6 +45,11 @@ class FilterTypeGuesserTest extends TestCase
         $this->metadata = $this->createStub(ClassMetadata::class);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testThrowsOnMissingField(): void
     {
         $this->expectException(MissingPropertyMetadataException::class);
@@ -58,6 +64,11 @@ class FilterTypeGuesserTest extends TestCase
         $this->guesser->guessType($class, $property, $this->modelManager);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGuessTypeNoMetadata(): void
     {
         $this->modelManager->method('getParentMetadataForProperty')->with(
@@ -70,6 +81,11 @@ class FilterTypeGuesserTest extends TestCase
         $this->assertFalse($result);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGuessTypeWithAssociation(): void
     {
         $property = 'fakeProperty';
@@ -106,6 +122,10 @@ class FilterTypeGuesserTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider noAssociationData
      */
     public function testGuessTypeNoAssociation($type, $resultType, $confidence, $fieldType = null): void
@@ -138,6 +158,9 @@ class FilterTypeGuesserTest extends TestCase
         }
     }
 
+    /**
+     * NEXT_MAJOR: Remove this dataProvider.
+     */
     public function noAssociationData()
     {
         return [
@@ -234,6 +257,119 @@ class FilterTypeGuesserTest extends TestCase
                 StringFilter::class,
                 Guess::LOW_CONFIDENCE,
             ],
+        ];
+    }
+
+    /**
+     * @param int|string|null $mappingType
+     *
+     * @dataProvider guessDataProvider
+     */
+    public function testGuess(
+        $mappingType,
+        string $expectedType,
+        array $expectedOptions,
+        int $expectedConfidence
+    ): void {
+        $fieldDescription = $this->createStub(FieldDescriptionInterface::class);
+        $fieldDescription->method('getFieldName')->willReturn('foo');
+        $fieldDescription->method('getMappingType')->willReturn($mappingType);
+        $fieldDescription->method('getParentAssociationMappings')->willReturn([]);
+        $fieldDescription->method('getTargetEntity')->willReturn('Foo');
+
+        $guess = $this->guesser->guess($fieldDescription);
+
+        $this->assertSame($expectedType, $guess->getType());
+        $this->assertSame($expectedOptions, $guess->getOptions());
+        $this->assertSame($expectedConfidence, $guess->getConfidence());
+    }
+
+    public function guessDataProvider(): iterable
+    {
+        yield [
+            null,
+            StringFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::LOW_CONFIDENCE,
+        ];
+
+        yield [
+            'time',
+            TimeFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'boolean',
+            BooleanFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'datetime',
+            DateTimeFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'date',
+            DateFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'float',
+            NumberFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'integer',
+            NumberFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => [], 'field_type' => IntegerType::class],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'string',
+            StringFilter::class,
+            ['field_name' => 'foo', 'parent_association_mappings' => []],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            ClassMetadata::ONE_TO_ONE,
+            ModelFilter::class,
+            [
+                'field_name' => 'foo',
+                'parent_association_mappings' => [],
+                'operator_type' => EqualOperatorType::class,
+                'operator_options' => [],
+                'field_type' => EntityType::class,
+                'field_options' => ['class' => 'Foo'],
+                'mapping_type' => ClassMetadata::ONE_TO_ONE,
+            ],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            ClassMetadata::ONE_TO_MANY,
+            ModelFilter::class,
+            [
+                'field_name' => 'foo',
+                'parent_association_mappings' => [],
+                'operator_type' => EqualOperatorType::class,
+                'operator_options' => [],
+                'field_type' => EntityType::class,
+                'field_options' => ['class' => 'Foo'],
+                'mapping_type' => ClassMetadata::ONE_TO_MANY,
+            ],
+            Guess::HIGH_CONFIDENCE,
         ];
     }
 }
