@@ -28,7 +28,7 @@ final class AuditBlockService extends AbstractBlockService
     /**
      * @var AuditReader
      */
-    protected $auditReader;
+    private $auditReader;
 
     public function __construct(Environment $twig, AuditReader $auditReader)
     {
