@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
+use SimpleThings\EntityAudit\Exception\AuditException;
 use Sonata\AdminBundle\Model\AuditReaderInterface;
 
 final class AuditReader implements AuditReaderInterface
@@ -30,7 +31,11 @@ final class AuditReader implements AuditReaderInterface
 
     public function find(string $className, $id, $revisionId): ?object
     {
-        return $this->auditReader->find($className, $id, $revisionId);
+        try {
+            return $this->auditReader->find($className, $id, $revisionId);
+        } catch (AuditException $exception) {
+            return null;
+        }
     }
 
     public function findRevisionHistory(string $className, ?int $limit = 20, ?int $offset = 0): array
@@ -40,16 +45,28 @@ final class AuditReader implements AuditReaderInterface
 
     public function findRevision(string $className, $revisionId): ?object
     {
-        return $this->auditReader->findRevision($revisionId);
+        try {
+            return $this->auditReader->findRevision($revisionId);
+        } catch (AuditException $exception) {
+            return null;
+        }
     }
 
     public function findRevisions(string $className, $id): array
     {
-        return $this->auditReader->findRevisions($className, $id);
+        try {
+            return $this->auditReader->findRevisions($className, $id);
+        } catch (AuditException $exception) {
+            return [];
+        }
     }
 
     public function diff(string $className, $id, $oldRevisionId, $newRevisionId): array
     {
-        return $this->auditReader->diff($className, $id, $oldRevisionId, $newRevisionId);
+        try {
+            return $this->auditReader->diff($className, $id, $oldRevisionId, $newRevisionId);
+        } catch (AuditException $exception) {
+            return [];
+        }
     }
 }
