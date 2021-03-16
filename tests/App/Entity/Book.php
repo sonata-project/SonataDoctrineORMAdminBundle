@@ -37,11 +37,18 @@ class Book
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Author")
+     * @ORM\ManyToOne(targetEntity="Author", inversedBy="books")
      *
      * @var Author|null
      */
     private $author;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Reader::class, cascade="persist")
+     *
+     * @var Collection<array-key, Reader>
+     */
+    private $readers;
 
     /**
      * @ORM\ManyToMany(targetEntity="Category")
@@ -59,6 +66,7 @@ class Book
         $this->name = $name;
         $this->author = $author;
         $this->categories = new ArrayCollection();
+        $this->readers = new ArrayCollection();
     }
 
     public function __toString(): string
@@ -109,5 +117,15 @@ class Book
     public function getCategories(): Collection
     {
         return $this->categories;
+    }
+
+    public function addReader(Reader $reader): void
+    {
+        $this->readers->add($reader);
+    }
+
+    public function getReaders(): Collection
+    {
+        return $this->readers;
     }
 }

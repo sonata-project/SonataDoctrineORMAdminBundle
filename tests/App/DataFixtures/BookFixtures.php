@@ -17,6 +17,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Reader;
 
 final class BookFixtures extends Fixture implements DependentFixtureInterface
 {
@@ -28,6 +29,19 @@ final class BookFixtures extends Fixture implements DependentFixtureInterface
         $book->addCategory($this->getReference(CategoryFixtures::CATEGORY));
 
         $manager->persist($book);
+
+        $book1 = new Book('book_1', 'Book 1', $this->getReference(AuthorFixtures::AUTHOR_WITH_TWO_BOOKS));
+        $book1->addCategory($this->getReference(CategoryFixtures::CATEGORY));
+
+        $this->addReaders($book1, 100);
+
+        $book2 = new Book('book_2', 'Book 2', $this->getReference(AuthorFixtures::AUTHOR_WITH_TWO_BOOKS));
+        $book2->addCategory($this->getReference(CategoryFixtures::CATEGORY));
+
+        $this->addReaders($book2, 100);
+
+        $manager->persist($book1);
+        $manager->persist($book2);
         $manager->flush();
 
         $this->addReference(self::BOOK, $book);
@@ -42,5 +56,12 @@ final class BookFixtures extends Fixture implements DependentFixtureInterface
             CategoryFixtures::class,
             AuthorFixtures::class,
         ];
+    }
+
+    private function addReaders(Book $book, int $readers): void
+    {
+        for ($i = 0; $i < $readers; ++$i) {
+            $book->addReader(new Reader());
+        }
     }
 }
