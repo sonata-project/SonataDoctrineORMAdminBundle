@@ -65,6 +65,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 Author::class,
                 null,
             ])
+            ->call('setTemplate', ['outer_list_rows_list', 'author/list_outer_list_rows_list.html.twig'])
 
         ->set(CarAdmin::class)
             ->public()
