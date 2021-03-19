@@ -49,9 +49,6 @@ final class FormContractor implements FormContractorInterface
             ));
         }
 
-        // NEXT_MAJOR: Remove this line.
-        $fieldDescription->setAdmin($admin);
-
         $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'standard'));
 
         if ($this->hasAssociation($fieldDescription) || $fieldDescription->getOption('admin_code')) {
@@ -181,6 +178,11 @@ final class FormContractor implements FormContractorInterface
         return false;
     }
 
+    /**
+     * @param array<string, mixed> $formOptions
+     *
+     * @return array<string, mixed>
+     */
     private function getDefaultAdminTypeOptions(FieldDescriptionInterface $fieldDescription, array $formOptions): array
     {
         $typeOptions = [

@@ -130,6 +130,7 @@ final class DatagridBuilderTest extends TestCase
         $guessType = $this->createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription('test');
+        $fieldDescription->setAdmin($this->admin);
 
         $this->admin->expects($this->once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');

@@ -64,11 +64,7 @@ final class Pager extends BasePager
         $query = $this->getQuery();
 
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf(
-                'The pager query MUST implement %s, %s provided.',
-                ProxyQueryInterface::class,
-                \is_object($query) ? sprintf('instance of %s', \get_class($query)) : \gettype($query)
-            ));
+            throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $paginator = new Paginator($query->getQueryBuilder());

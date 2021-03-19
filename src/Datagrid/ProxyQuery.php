@@ -100,15 +100,6 @@ final class ProxyQuery implements ProxyQueryInterface
     private $entityJoinAliases;
 
     /**
-     * NEXT_MAJOR: Remove this property.
-     *
-     * For BC reasons, this property is true by default.
-     *
-     * @var bool
-     */
-    private $distinct = true;
-
-    /**
      * The map of query hints.
      *
      * @var array<string,mixed>
@@ -122,11 +113,19 @@ final class ProxyQuery implements ProxyQueryInterface
         $this->entityJoinAliases = [];
     }
 
+    /**
+     * @param mixed[] $args
+     *
+     * @return mixed
+     */
     public function __call(string $name, array $args)
     {
         return $this->queryBuilder->$name(...$args);
     }
 
+    /**
+     * @return mixed
+     */
     public function __get(string $name)
     {
         return $this->queryBuilder->$name;
@@ -137,64 +136,15 @@ final class ProxyQuery implements ProxyQueryInterface
         $this->queryBuilder = clone $this->queryBuilder;
     }
 
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
-     *
-     * Optimize queries with a lot of rows.
-     * It is not recommended to use "false" with left joins.
-     */
-    public function setDistinct(bool $distinct): ProxyQueryInterface
+    public function execute()
     {
-        @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-            .' and will be removed in version 4.0.',
-            __METHOD__,
-        ), \E_USER_DEPRECATED);
-
-        if (!\is_bool($distinct)) {
-            throw new \InvalidArgumentException('$distinct is not a boolean');
-        }
-
-        $this->distinct = $distinct;
-
-        return $this;
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
-     */
-    public function isDistinct(): bool
-    {
-        @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-            .' and will be removed in version 4.0.',
-            __METHOD__,
-        ), \E_USER_DEPRECATED);
-
-        return $this->distinct;
-    }
-
-    public function execute(array $params = [], ?int $hydrationMode = null)
-    {
-        // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
-        if (\func_num_args() > 0) {
-            @trigger_error(sprintf(
-                'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31.',
-                __METHOD__,
-            ), \E_USER_DEPRECATED);
-        }
-
         $query = $this->getDoctrineQuery();
 
         foreach ($this->hints as $name => $value) {
             $query->setHint($name, $value);
         }
 
-        return $query->execute($params, $hydrationMode);
+        return $query->execute();
     }
 
     /**
@@ -286,24 +236,6 @@ final class ProxyQuery implements ProxyQueryInterface
     public function getSortOrder(): ?string
     {
         return $this->sortOrder;
-    }
-
-    /**
-     * NEXT_MAJOR: Remove this method.
-     *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.31, to be removed in 4.0.
-     */
-    public function getSingleScalarResult()
-    {
-        @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31'
-            .' and will be removed in version 4.0.',
-            __METHOD__,
-        ), \E_USER_DEPRECATED);
-
-        $query = $this->queryBuilder->getQuery();
-
-        return $query->getSingleScalarResult();
     }
 
     public function getQueryBuilder(): QueryBuilder

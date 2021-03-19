@@ -20,11 +20,11 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
-use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -190,7 +190,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $this->cache[$class];
     }
 
-    public function createQuery(string $class, $alias = 'o'): BaseProxyQueryInterface
+    public function createQuery(string $class, string $alias = 'o'): BaseProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
         \assert($repository instanceof EntityRepository);
