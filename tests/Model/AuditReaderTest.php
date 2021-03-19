@@ -42,6 +42,21 @@ class AuditReaderTest extends TestCase
         $this->auditReader->find($className, $id, $revision);
     }
 
+    public function testFindWithException(): void
+    {
+        $className = 'fakeClass';
+        $id = 1;
+        $revision = 2;
+
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('find')
+            ->with($className, $id, $revision)
+            ->willThrowException(new \Exception());
+
+        $this->assertNull($this->auditReader->find($className, $id, $revision));
+    }
+
     public function testFindRevisionHistory(): void
     {
         $limit = 20;
@@ -65,6 +80,19 @@ class AuditReaderTest extends TestCase
         $this->auditReader->findRevision('class', $revision);
     }
 
+    public function testFindRevisionWithException(): void
+    {
+        $revision = 2;
+
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('findRevision')
+            ->with($revision)
+            ->willThrowException(new \Exception());
+
+        $this->assertNull($this->auditReader->findRevision('class', $revision));
+    }
+
     public function testFindRevisions(): void
     {
         $className = 'fakeClass';
@@ -77,6 +105,20 @@ class AuditReaderTest extends TestCase
             ->willReturn([]);
 
         $this->auditReader->findRevisions($className, $id);
+    }
+
+    public function testFindRevisionsWithException(): void
+    {
+        $className = 'fakeClass';
+        $id = 2;
+
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('findRevisions')
+            ->with($className, $id)
+            ->willThrowException(new \Exception());
+
+        $this->assertSame([], $this->auditReader->findRevisions($className, $id));
     }
 
     public function testDiff(): void
@@ -93,5 +135,21 @@ class AuditReaderTest extends TestCase
             ->willReturn([]);
 
         $this->auditReader->diff($className, $id, $oldRevision, $newRevision);
+    }
+
+    public function testDiffWithException(): void
+    {
+        $className = 'fakeClass';
+        $id = 1;
+        $oldRevision = 1;
+        $newRevision = 2;
+
+        $this->simpleThingsAuditReader
+            ->expects($this->once())
+            ->method('diff')
+            ->with($className, $id, $oldRevision, $newRevision)
+            ->willThrowException(new \Exception());
+
+        $this->assertSame([], $this->auditReader->diff($className, $id, $oldRevision, $newRevision));
     }
 }
