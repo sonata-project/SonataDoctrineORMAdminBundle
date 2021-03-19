@@ -76,7 +76,9 @@ class FormContractor implements FormContractorInterface
             ));
         }
 
+        // NEXT_MAJOR: Remove this line.
         $fieldDescription->setAdmin($admin);
+
         $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'standard'));
 
         if ($this->hasAssociation($fieldDescription) || $fieldDescription->getOption('admin_code')) {

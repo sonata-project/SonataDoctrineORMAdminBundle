@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Guesser;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Symfony\Component\Form\Guess\Guess;
@@ -23,7 +24,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
-class TypeGuesser extends AbstractTypeGuesser
+class TypeGuesser extends AbstractTypeGuesser implements TypeGuesserInterface
 {
     /**
      * This is a mapping between the old deprecated value we provided in the TypeGuesser
@@ -42,9 +43,20 @@ class TypeGuesser extends AbstractTypeGuesser
         'number' => FieldDescriptionInterface::TYPE_FLOAT,
     ];
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     */
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
-        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
+        @trigger_error(sprintf(
+            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+            .' will be removed in version 4.0.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
+
+        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager, 'sonata_deprecation_mute')) {
             // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE)
             return new TypeGuess('text', [], Guess::LOW_CONFIDENCE);
         }
@@ -106,6 +118,62 @@ class TypeGuesser extends AbstractTypeGuesser
             case 'time':
             case 'time_immutable':
                 return new TypeGuess(FieldDescriptionInterface::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
+            default:
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE)
+                return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::LOW_CONFIDENCE);
+        }
+    }
+
+    public function guess(FieldDescriptionInterface $fieldDescription): TypeGuess
+    {
+        switch ($fieldDescription->getMappingType()) {
+            case 'array':
+            case 'simple_array':
+            case 'json':
+            case 'json_array':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_ARRAY, [], Guess::HIGH_CONFIDENCE);
+            case 'boolean':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_BOOLEAN, [], Guess::HIGH_CONFIDENCE);
+            case 'datetime':
+            case 'datetime_immutable':
+            case 'vardatetime':
+            case 'datetimetz':
+            case 'datetimetz_immutable':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_DATETIME, [], Guess::HIGH_CONFIDENCE);
+            case 'date':
+            case 'date_immutable':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_DATE, [], Guess::HIGH_CONFIDENCE);
+            case 'decimal':
+            case 'float':
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_FLOAT, [], Guess::LOW_CONFIDENCE)
+                return new TypeGuess('number', [], Guess::MEDIUM_CONFIDENCE);
+            case 'integer':
+            case 'bigint':
+            case 'smallint':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_INTEGER, [], Guess::MEDIUM_CONFIDENCE);
+            case 'string':
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::MEDIUM_CONFIDENCE)
+                return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::MEDIUM_CONFIDENCE);
+            case 'text':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_TEXTAREA, [], Guess::MEDIUM_CONFIDENCE);
+            case 'time':
+            case 'time_immutable':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
+            case ClassMetadata::ONE_TO_MANY:
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE)
+                return new TypeGuess('orm_one_to_many', [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::MANY_TO_MANY:
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE)
+                return new TypeGuess('orm_many_to_many', [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::MANY_TO_ONE:
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE)
+                return new TypeGuess('orm_many_to_one', [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::ONE_TO_ONE:
+                // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE)
+                return new TypeGuess('orm_one_to_one', [], Guess::HIGH_CONFIDENCE);
             default:
                 // NEXT_MAJOR: return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE)
                 return new TypeGuess(TemplateRegistry::TYPE_TEXT, [], Guess::LOW_CONFIDENCE);

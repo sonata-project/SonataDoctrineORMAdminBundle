@@ -50,5 +50,8 @@
             <argument/>
         </service>
         <service id="sonata.admin.data_source.orm" class="Sonata\DoctrineORMAdminBundle\Exporter\DataSource"/>
+        <service id="sonata.admin.field_description_factory.orm" class="Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescriptionFactory">
+            <argument type="service" id="doctrine"/>
+        </service>
     </services>
 </container>

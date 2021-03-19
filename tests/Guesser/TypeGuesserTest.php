@@ -16,6 +16,8 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Guesser;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\MappingException;
 use PHPUnit\Framework\TestCase;
+use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
+use Sonata\AdminBundle\Templating\TemplateRegistry;
 use Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\Guess\Guess;
@@ -34,6 +36,11 @@ class TypeGuesserTest extends TestCase
         $this->guesser = new TypeGuesser();
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGuessTypeNoMetadata(): void
     {
         $class = 'FakeClass';
@@ -49,6 +56,10 @@ class TypeGuesserTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider associationData
      */
     public function testGuessTypeWithAssociation($mappingType, $type): void
@@ -70,6 +81,9 @@ class TypeGuesserTest extends TestCase
         $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this dataProvider.
+     */
     public function associationData()
     {
         return [
@@ -93,6 +107,10 @@ class TypeGuesserTest extends TestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
      * @dataProvider noAssociationData
      */
     public function testGuessTypeNoAssociation($type, $resultType, $confidence): void
@@ -114,6 +132,9 @@ class TypeGuesserTest extends TestCase
         $this->assertSame($confidence, $result->getConfidence());
     }
 
+    /**
+     * NEXT_MAJOR: Remove this dataProvider.
+     */
     public function noAssociationData()
     {
         return [
@@ -227,6 +248,115 @@ class TypeGuesserTest extends TestCase
                 $text,
                 Guess::LOW_CONFIDENCE,
             ],
+        ];
+    }
+
+    /**
+     * @param int|string|null $mappingType
+     *
+     * @dataProvider guessDataProvider
+     */
+    public function testGuess(
+        $mappingType,
+        string $expectedType,
+        array $expectedOptions,
+        int $expectedConfidence
+    ): void {
+        $fieldDescription = $this->createStub(FieldDescriptionInterface::class);
+        $fieldDescription->method('getFieldName')->willReturn('foo');
+        $fieldDescription->method('getMappingType')->willReturn($mappingType);
+
+        $guess = $this->guesser->guess($fieldDescription);
+
+        $this->assertSame($expectedType, $guess->getType());
+        $this->assertSame($expectedOptions, $guess->getOptions());
+        $this->assertSame($expectedConfidence, $guess->getConfidence());
+    }
+
+    public function guessDataProvider(): iterable
+    {
+        yield [
+            null,
+            TemplateRegistry::TYPE_TEXT,
+            [],
+            Guess::LOW_CONFIDENCE,
+        ];
+
+        yield [
+            'array',
+            FieldDescriptionInterface::TYPE_ARRAY,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'time',
+            FieldDescriptionInterface::TYPE_TIME,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'boolean',
+            FieldDescriptionInterface::TYPE_BOOLEAN,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'datetime',
+            FieldDescriptionInterface::TYPE_DATETIME,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'date',
+            FieldDescriptionInterface::TYPE_DATE,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            'float',
+            'number',
+            [],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'integer',
+            FieldDescriptionInterface::TYPE_INTEGER,
+            [],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'string',
+            TemplateRegistry::TYPE_TEXT,
+            [],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'text',
+            FieldDescriptionInterface::TYPE_TEXTAREA,
+            [],
+            Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            ClassMetadata::ONE_TO_ONE,
+            'orm_one_to_one',
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
+
+        yield [
+            ClassMetadata::ONE_TO_MANY,
+            'orm_one_to_many',
+            [],
+            Guess::HIGH_CONFIDENCE,
         ];
     }
 }

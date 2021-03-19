@@ -302,6 +302,11 @@ final class ModelManagerTest extends TestCase
         $modelManager->lock($object, 123);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGetParentMetadataForProperty(): void
     {
         $containerEntityClass = ContainerEntity::class;
@@ -744,7 +749,6 @@ final class ModelManagerTest extends TestCase
 
         $metadataFactory = $this->createMock(ClassMetadataFactory::class);
         $objectManager = $this->createMock(ObjectManager::class);
-        $registry = $this->createMock(ManagerRegistry::class);
 
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
@@ -838,6 +842,11 @@ final class ModelManagerTest extends TestCase
         $this->assertSame($name, $result['filter']['_sort_by']);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGetModelInstanceException(): void
     {
         $this->expectException(\RuntimeException::class);
@@ -845,6 +854,11 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->getModelInstance(AbstractEntity::class);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGetModelInstanceForProtectedEntity(): void
     {
         $this->assertInstanceOf(ProtectedEntity::class, $this->modelManager->getModelInstance(ProtectedEntity::class));
@@ -857,6 +871,11 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->getEntityManager(VersionedEntity::class);
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testGetNewFieldDescriptionInstanceException(): void
     {
         $this->expectException(\RuntimeException::class);

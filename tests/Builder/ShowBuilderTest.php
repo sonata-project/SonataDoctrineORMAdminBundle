@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -32,6 +32,7 @@ class ShowBuilderTest extends TestCase
     private $guesser;
     private $showBuilder;
     private $admin;
+    // NEXT_MAJOR: Remove this property and all the occurences.
     private $modelManager;
 
     protected function setUp(): void
@@ -72,7 +73,7 @@ class ShowBuilderTest extends TestCase
 
         $typeGuess->method('getType')->willReturn('fakeType');
 
-        $this->guesser->method('guessType')->with($this->anything(), $this->anything(), $this->modelManager)->willReturn($typeGuess);
+        $this->guesser->method('guess')->willReturn($typeGuess);
         $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(

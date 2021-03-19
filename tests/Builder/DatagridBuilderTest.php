@@ -22,8 +22,8 @@ use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\AdminBundle\Translator\FormLabelTranslatorStrategy;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
@@ -47,6 +47,7 @@ final class DatagridBuilderTest extends TestCase
     private $formFactory;
     private $filterFactory;
     private $admin;
+    // NEXT_MAJOR: Remove this property and all the occurences.
     private $modelManager;
 
     protected function setUp(): void
@@ -147,7 +148,7 @@ final class DatagridBuilderTest extends TestCase
         $this->admin->expects($this->once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
-        $this->typeGuesser->method('guessType')->willReturn($guessType);
+        $this->typeGuesser->method('guess')->willReturn($guessType);
         // NEXT_MAJOR: Remove the next line.
         $this->modelManager->expects($this->once())->method('hasMetadata')->willReturn(false);
         $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());

@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\ListBuilder;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
@@ -32,6 +32,7 @@ class ListBuilderTest extends TestCase
     private $typeGuesser;
     private $listBuilder;
     private $admin;
+    // NEXT_MAJOR: Remove this property and all the occurences.
     private $modelManager;
 
     protected function setUp(): void
@@ -65,7 +66,7 @@ class ListBuilderTest extends TestCase
     public function testCorrectFixedActionsFieldType(): void
     {
         $this->admin->expects($this->once())->method('addListFieldDescription');
-        $this->typeGuesser->method('guessType')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
+        $this->typeGuesser->method('guess')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription('_action');
         $fieldDescription->setOption('actions', ['test' => []]);
