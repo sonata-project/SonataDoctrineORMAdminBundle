@@ -776,6 +776,37 @@ final class ModelManagerTest extends TestCase
         $this->assertSame('hello', $object->getMultiWordProperty());
     }
 
+    public function testReverseTransform(): void
+    {
+        $object = new SimpleEntity();
+        $class = SimpleEntity::class;
+
+        $metadataFactory = $this->createMock(ClassMetadataFactory::class);
+        $objectManager = $this->createMock(ObjectManager::class);
+
+        $classMetadata = new ClassMetadata($class);
+        $classMetadata->reflClass = new \ReflectionClass($class);
+
+        $objectManager->expects($this->once())
+            ->method('getMetadataFactory')
+            ->willReturn($metadataFactory);
+        $metadataFactory->expects($this->once())
+            ->method('getMetadataFor')
+            ->with($class)
+            ->willReturn($classMetadata);
+        $this->registry->expects($this->once())
+            ->method('getManagerForClass')
+            ->with($class)
+            ->willReturn($objectManager);
+
+        $this->modelManager->reverseTransform($object, [
+            'schmeckles' => 42,
+            'multi_word_property' => 'hello',
+        ]);
+        $this->assertSame(42, $object->getSchmeckles());
+        $this->assertSame('hello', $object->getMultiWordProperty());
+    }
+
     /**
      * NEXT_MAJOR: Remove this test.
      *

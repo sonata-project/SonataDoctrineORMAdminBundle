@@ -798,8 +798,19 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $instance;
     }
 
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0. Use "reverseTransform()" instead.
+     */
     public function modelReverseTransform($class, array $array = [])
     {
+        @trigger_error(sprintf(
+            'Method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+            .' Use "reverseTransform()" instead.',
+            __METHOD__
+        ), \E_USER_DEPRECATED);
+
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`
         $instance = $this->getModelInstance($class, 'sonata_deprecation_mute');
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`
@@ -811,6 +822,17 @@ class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         return $instance;
+    }
+
+    public function reverseTransform(object $object, array $array = []): void
+    {
+        // NEXT_MAJOR: Remove `sonata_deprecation_mute`
+        $metadata = $this->getMetadata(\get_class($object), 'sonata_deprecation_mute');
+
+        foreach ($array as $name => $value) {
+            $property = $this->getFieldName($metadata, $name);
+            $this->propertyAccessor->setValue($object, $property, $value);
+        }
     }
 
     /**
