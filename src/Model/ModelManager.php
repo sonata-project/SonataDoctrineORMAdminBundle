@@ -20,19 +20,16 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Datagrid\DatagridInterface;
+use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -60,69 +57,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     {
         $this->registry = $registry;
         $this->propertyAccessor = $propertyAccessor;
-    }
-
-    /**
-     * Returns the model's metadata holding the fully qualified property, and the last
-     * property name.
-     *
-     * @param string $baseClass        The base class of the model holding the fully qualified property
-     * @param string $propertyFullName The name of the fully qualified property (dot ('.') separated
-     *                                 property string)
-     *
-     * @phpstan-param class-string $baseClass
-     * @phpstan-return array{\Doctrine\ORM\Mapping\ClassMetadataInfo, string, array}
-     */
-    public function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
-    {
-        $nameElements = explode('.', $propertyFullName);
-        $lastPropertyName = array_pop($nameElements);
-        $class = $baseClass;
-        $parentAssociationMappings = [];
-
-        foreach ($nameElements as $nameElement) {
-            $metadata = $this->getMetadata($class);
-
-            if (isset($metadata->associationMappings[$nameElement])) {
-                $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
-                $class = $metadata->getAssociationTargetClass($nameElement);
-
-                continue;
-            }
-
-            break;
-        }
-
-        $properties = \array_slice($nameElements, \count($parentAssociationMappings));
-        $properties[] = $lastPropertyName;
-
-        return [
-            $this->getMetadata($class),
-            implode('.', $properties),
-            $parentAssociationMappings,
-        ];
-    }
-
-    public function getNewFieldDescriptionInstance(string $class, string $name, array $options = []): FieldDescriptionInterface
-    {
-        if (!isset($options['route']['name'])) {
-            $options['route']['name'] = 'show';
-        }
-
-        if (!isset($options['route']['parameters'])) {
-            $options['route']['parameters'] = [];
-        }
-
-        [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
-
-        return new FieldDescription(
-            $name,
-            $options,
-            $metadata->fieldMappings[$propertyName] ?? [],
-            $metadata->associationMappings[$propertyName] ?? [],
-            $parentAssociationMappings,
-            $propertyName
-        );
     }
 
     public function create(object $object): void
@@ -350,8 +284,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * {@inheritdoc}
-     *
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
@@ -433,44 +365,25 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getMetadata($class)->getFieldNames();
     }
 
-    public function getModelInstance(string $class): object
+    public function reverseTransform(object $object, array $array = []): void
     {
-        $r = new \ReflectionClass($class);
-        if ($r->isAbstract()) {
-            throw new \RuntimeException(sprintf('Cannot initialize abstract class: %s', $class));
-        }
-
-        $constructor = $r->getConstructor();
-
-        if (null !== $constructor && (!$constructor->isPublic() || $constructor->getNumberOfRequiredParameters() > 0)) {
-            return $r->newInstanceWithoutConstructor();
-        }
-
-        return new $class();
-    }
-
-    public function modelReverseTransform(string $class, array $array = []): object
-    {
-        $instance = $this->getModelInstance($class);
-        $metadata = $this->getMetadata($class);
+        $metadata = $this->getMetadata(\get_class($object));
 
         foreach ($array as $name => $value) {
             $property = $this->getFieldName($metadata, $name);
-            $this->propertyAccessor->setValue($instance, $property, $value);
+            $this->propertyAccessor->setValue($object, $property, $value);
         }
-
-        return $instance;
     }
 
     /**
      * @phpstan-param class-string $class
      */
-    private function getMetadata(string $class): ClassMetadataInfo
+    private function getMetadata(string $class): ClassMetadata
     {
         return $this->getEntityManager($class)->getClassMetadata($class);
     }
 
-    private function getFieldName(ClassMetadataInfo $metadata, string $name): string
+    private function getFieldName(ClassMetadata $metadata, string $name): string
     {
         if (\array_key_exists($name, $metadata->fieldMappings)) {
             return $metadata->fieldMappings[$name]['fieldName'];
@@ -481,18 +394,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         return $name;
-    }
-
-    private function isFieldAlreadySorted(FieldDescriptionInterface $fieldDescription, DatagridInterface $datagrid): bool
-    {
-        $values = $datagrid->getValues();
-
-        if (!isset($values['_sort_by']) || !$values['_sort_by'] instanceof FieldDescriptionInterface) {
-            return false;
-        }
-
-        return $values['_sort_by']->getName() === $fieldDescription->getName()
-            || $values['_sort_by']->getName() === $fieldDescription->getOption('sortable');
     }
 
     /**

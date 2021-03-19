@@ -16,10 +16,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Builder\ListBuilder;
+use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
@@ -32,16 +31,13 @@ class ListBuilderTest extends TestCase
     private $typeGuesser;
     private $listBuilder;
     private $admin;
-    private $modelManager;
 
     protected function setUp(): void
     {
         $this->typeGuesser = $this->createStub(TypeGuesserInterface::class);
-        $this->modelManager = $this->createStub(ModelManagerInterface::class);
         $this->admin = $this->createMock(AdminInterface::class);
 
         $this->admin->method('getClass')->willReturn('Foo');
-        $this->admin->method('getModelManager')->willReturn($this->modelManager);
 
         $this->listBuilder = new ListBuilder($this->typeGuesser);
     }
@@ -65,7 +61,7 @@ class ListBuilderTest extends TestCase
     public function testCorrectFixedActionsFieldType(): void
     {
         $this->admin->expects($this->once())->method('addListFieldDescription');
-        $this->typeGuesser->method('guessType')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
+        $this->typeGuesser->method('guess')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription('_action');
         $fieldDescription->setOption('actions', ['test' => []]);

@@ -16,18 +16,17 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
 use Sonata\AdminBundle\Translator\FormLabelTranslatorStrategy;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
+use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -47,7 +46,6 @@ final class DatagridBuilderTest extends TestCase
     private $formFactory;
     private $filterFactory;
     private $admin;
-    private $modelManager;
 
     protected function setUp(): void
     {
@@ -62,9 +60,7 @@ final class DatagridBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->createMock(ModelManagerInterface::class);
         $this->admin->method('getClass')->willReturn('FakeClass');
-        $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
 
     /**
@@ -79,7 +75,6 @@ final class DatagridBuilderTest extends TestCase
         $this->admin->method('getPagerType')->willReturn($pagerType);
         $this->admin->method('createQuery')->willReturn($proxyQuery);
         $this->admin->method('getList')->willReturn($fieldDescription);
-        $this->modelManager->method('getIdentifierFieldNames')->willReturn(['id']);
         $this->formFactory->method('createNamedBuilder')->willReturn($formBuilder);
 
         $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin);
@@ -139,7 +134,7 @@ final class DatagridBuilderTest extends TestCase
         $this->admin->expects($this->once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
-        $this->typeGuesser->method('guessType')->willReturn($guessType);
+        $this->typeGuesser->method('guess')->willReturn($guessType);
         $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());
 
         $guessType->method('getOptions')->willReturn(['name' => 'value']);

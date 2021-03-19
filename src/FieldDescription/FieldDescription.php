@@ -11,9 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\DoctrineORMAdminBundle\Admin;
+namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
-use Sonata\AdminBundle\Admin\BaseFieldDescription;
+use Sonata\AdminBundle\FieldDescription\BaseFieldDescription;
 
 final class FieldDescription extends BaseFieldDescription
 {

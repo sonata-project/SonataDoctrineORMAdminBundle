@@ -15,14 +15,14 @@ namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
 use Sonata\AdminBundle\Datagrid\DatagridInterface;
 use Sonata\AdminBundle\Datagrid\PagerInterface;
 use Sonata\AdminBundle\Datagrid\SimplePager;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -64,7 +64,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
-        // set default values
+        // NEXT_MAJOR: Remove this line.
         $fieldDescription->setAdmin($admin);
 
         if ([] !== $fieldDescription->getFieldMapping()) {
@@ -109,15 +109,12 @@ final class DatagridBuilder implements DatagridBuilderInterface
     public function addFilter(DatagridInterface $datagrid, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null === $type) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
+            $guessType = $this->guesser->guess($fieldDescription);
 
             $type = $guessType->getType();
-
             $fieldDescription->setType($type);
 
-            $options = $guessType->getOptions();
-
-            foreach ($options as $name => $value) {
+            foreach ($guessType->getOptions() as $name => $value) {
                 if (\is_array($value)) {
                     $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, [])));
                 } else {

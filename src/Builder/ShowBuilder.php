@@ -15,10 +15,10 @@ namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 
 final class ShowBuilder implements ShowBuilderInterface
 {
@@ -49,7 +49,7 @@ final class ShowBuilder implements ShowBuilderInterface
     public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null === $type) {
-            $guessType = $this->guesser->guessType($admin->getClass(), $fieldDescription->getName(), $admin->getModelManager());
+            $guessType = $this->guesser->guess($fieldDescription);
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
@@ -63,6 +63,7 @@ final class ShowBuilder implements ShowBuilderInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
+        // NEXT_MAJOR: Remove this line.
         $fieldDescription->setAdmin($admin);
 
         if (!$fieldDescription->getType()) {

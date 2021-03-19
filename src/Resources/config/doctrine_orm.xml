@@ -19,10 +19,10 @@
             <argument type="service" id="sonata.admin.guesser.orm_list_chain"/>
             <argument/>
         </service>
-        <service id="sonata.admin.guesser.orm_list" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
+        <service id="sonata.admin.guesser.orm_list" class="Sonata\DoctrineORMAdminBundle\FieldDescription\TypeGuesser">
             <tag name="sonata.admin.guesser.orm_list"/>
         </service>
-        <service id="sonata.admin.guesser.orm_list_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_list_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <!-- ShowBuilder  -->
@@ -30,10 +30,10 @@
             <argument type="service" id="sonata.admin.guesser.orm_show_chain"/>
             <argument/>
         </service>
-        <service id="sonata.admin.guesser.orm_show" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
+        <service id="sonata.admin.guesser.orm_show" class="Sonata\DoctrineORMAdminBundle\FieldDescription\TypeGuesser">
             <tag name="sonata.admin.guesser.orm_show"/>
         </service>
-        <service id="sonata.admin.guesser.orm_show_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_show_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <!-- DatagridBuilder guesser -->
@@ -43,12 +43,15 @@
             <argument type="service" id="sonata.admin.guesser.orm_datagrid_chain"/>
             <argument>%form.type_extension.csrf.enabled%</argument>
         </service>
-        <service id="sonata.admin.guesser.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser">
+        <service id="sonata.admin.guesser.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\FieldDescription\FilterTypeGuesser">
             <tag name="sonata.admin.guesser.orm_datagrid"/>
         </service>
-        <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <service id="sonata.admin.data_source.orm" class="Sonata\DoctrineORMAdminBundle\Exporter\DataSource"/>
+        <service id="sonata.admin.field_description_factory.orm" class="Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescriptionFactory">
+            <argument type="service" id="doctrine"/>
+        </service>
     </services>
 </container>

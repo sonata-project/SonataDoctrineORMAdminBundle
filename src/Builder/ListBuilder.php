@@ -15,10 +15,11 @@ namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Builder\ListBuilderInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
+use Sonata\AdminBundle\Datagrid\ListMapper;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 
 final class ListBuilder implements ListBuilderInterface
 {
@@ -49,11 +50,9 @@ final class ListBuilder implements ListBuilderInterface
     public function buildField(?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
     {
         if (null === $type) {
-            $guessType = $this->guesser->guessType(
-                $admin->getClass(),
-                $fieldDescription->getName(),
-                $admin->getModelManager()
-            );
+            $guessType = $this->guesser->guess($fieldDescription);
+
+            // NEXT_MAJOR: Remove the `?: '_actions' part.
             $fieldDescription->setType($guessType->getType() ?: '_action');
         } else {
             $fieldDescription->setType($type);
@@ -72,10 +71,13 @@ final class ListBuilder implements ListBuilderInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
-        if ('_action' === $fieldDescription->getName() || 'actions' === $fieldDescription->getType()) {
-            $this->buildActionFieldDescription($fieldDescription);
+        // NEXT_MAJOR: Remove the `_action` name check.
+        if ('_action' === $fieldDescription->getName() || ListMapper::TYPE_ACTIONS === $fieldDescription->getType()) {
+            // NEXT_MAJOR: Remove 'sonata_deprecation_mute'.
+            $this->buildActionFieldDescription($fieldDescription, 'sonata_deprecation_mute');
         }
 
+        // NEXT_MAJOR: Remove this line.
         $fieldDescription->setAdmin($admin);
 
         if ([] !== $fieldDescription->getFieldMapping()) {
@@ -139,12 +141,24 @@ final class ListBuilder implements ListBuilderInterface
         }
     }
 
+    /**
+     * NEXT_MAJOR: Change visibility to private.
+     */
     public function buildActionFieldDescription(FieldDescriptionInterface $fieldDescription): FieldDescriptionInterface
     {
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                .' will be removed in version 4.0.',
+                __METHOD__
+            ), \E_USER_DEPRECATED);
+        }
+
         if (null === $fieldDescription->getTemplate()) {
             $fieldDescription->setTemplate('@SonataAdmin/CRUD/list__action.html.twig');
         }
 
+        // NEXT_MAJOR: Remove the three following lines.
         if (\in_array($fieldDescription->getType(), [null, '_action'], true)) {
             $fieldDescription->setType('actions');
         }

@@ -11,43 +11,19 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\DoctrineORMAdminBundle\Guesser;
+namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
 
-final class TypeGuesser extends AbstractTypeGuesser
+final class TypeGuesser implements TypeGuesserInterface
 {
-    public function guessType(string $class, string $property, ModelManagerInterface $modelManager): ?TypeGuess
+    public function guess(FieldDescriptionInterface $fieldDescription): TypeGuess
     {
-        if (!$ret = $this->getParentMetadataForProperty($class, $property, $modelManager)) {
-            return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
-        }
-
-        [$metadata, $propertyName] = $ret;
-
-        if ($metadata->hasAssociation($propertyName)) {
-            $mapping = $metadata->getAssociationMapping($propertyName);
-
-            switch ($mapping['type']) {
-                case ClassMetadata::ONE_TO_MANY:
-                    return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE);
-
-                case ClassMetadata::MANY_TO_MANY:
-                    return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE);
-
-                case ClassMetadata::MANY_TO_ONE:
-                    return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE);
-
-                case ClassMetadata::ONE_TO_ONE:
-                    return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE);
-            }
-        }
-
-        switch ($metadata->getTypeOfField($propertyName)) {
+        switch ($fieldDescription->getMappingType()) {
             case 'array':
             case 'simple_array':
             case 'json':
@@ -78,6 +54,17 @@ final class TypeGuesser extends AbstractTypeGuesser
             case 'time':
             case 'time_immutable':
                 return new TypeGuess(FieldDescriptionInterface::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
+            case ClassMetadata::ONE_TO_MANY:
+                return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::MANY_TO_MANY:
+                return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::MANY_TO_ONE:
+                return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE);
+
+            case ClassMetadata::ONE_TO_ONE:
+                return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE);
             default:
                 return new TypeGuess(FieldDescriptionInterface::TYPE_STRING, [], Guess::LOW_CONFIDENCE);
         }

@@ -11,13 +11,13 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
-namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
+namespace Sonata\DoctrineORMAdminBundle\Tests\FieldDescription;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
 
 class FieldDescriptionTest extends TestCase
 {

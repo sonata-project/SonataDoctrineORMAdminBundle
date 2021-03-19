@@ -16,12 +16,11 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
-use Sonata\AdminBundle\Admin\FieldDescriptionCollection;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
-use Sonata\AdminBundle\Guesser\TypeGuesserInterface;
-use Sonata\AdminBundle\Model\ModelManagerInterface;
-use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
+use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Builder\ShowBuilder;
+use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
 use Symfony\Component\Form\Guess\TypeGuess;
 
 /**
@@ -32,7 +31,6 @@ class ShowBuilderTest extends TestCase
     private $guesser;
     private $showBuilder;
     private $admin;
-    private $modelManager;
 
     protected function setUp(): void
     {
@@ -50,10 +48,8 @@ class ShowBuilderTest extends TestCase
         );
 
         $this->admin = $this->createMock(AdminInterface::class);
-        $this->modelManager = $this->createStub(ModelManagerInterface::class);
 
         $this->admin->method('getClass')->willReturn('FakeClass');
-        $this->admin->method('getModelManager')->willReturn($this->modelManager);
     }
 
     public function testGetBaseList(): void
@@ -72,7 +68,7 @@ class ShowBuilderTest extends TestCase
 
         $typeGuess->method('getType')->willReturn('fakeType');
 
-        $this->guesser->method('guessType')->with($this->anything(), $this->anything(), $this->modelManager)->willReturn($typeGuess);
+        $this->guesser->method('guess')->willReturn($typeGuess);
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
