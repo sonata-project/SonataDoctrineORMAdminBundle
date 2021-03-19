@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
-use SimpleThings\EntityAudit\Exception\AuditException;
 use Sonata\AdminBundle\Model\AuditReaderInterface;
 
 final class AuditReader implements AuditReaderInterface
@@ -33,7 +32,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->find($className, $id, $revisionId);
-        } catch (AuditException $exception) {
+        } catch (\Throwable $exception) {
             return null;
         }
     }
@@ -47,7 +46,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->findRevision($revisionId);
-        } catch (AuditException $exception) {
+        } catch (\Throwable $exception) {
             return null;
         }
     }
@@ -56,7 +55,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->findRevisions($className, $id);
-        } catch (AuditException $exception) {
+        } catch (\Throwable $exception) {
             return [];
         }
     }
@@ -65,7 +64,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->diff($className, $id, $oldRevisionId, $newRevisionId);
-        } catch (AuditException $exception) {
+        } catch (\Throwable $exception) {
             return [];
         }
     }
