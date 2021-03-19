@@ -1,4 +1,4 @@
-UPGRADE FROM 3.X to 3.0
+UPGRADE FROM 3.X to 4.0
 =======================
 
 ## Deprecations
@@ -9,8 +9,8 @@ Please read [3.x](https://github.com/sonata-project/SonataDoctrineORMAdminBundle
 
 See also the [diff code](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.x...4.0.0).
 
-## ModelManager
+# FieldDescription and TypeGuesser
 
-The default route name for association links is `show` instead of `edit`.
-
-If you want to keep the old behaviour, you SHOULD override the `getNewFieldDescriptionInstance()` method.
+Moved `Sonata\DoctrineORMAdminBundle\Admin\FieldDescription` to `Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription`.
+Moved `Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser` to `Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser`.
+Moved `Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser` to `Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser`.
