@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Builder\FormContractorInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\AdminType;
@@ -39,20 +38,20 @@ final class FormContractor implements FormContractorInterface
         $this->formFactory = $formFactory;
     }
 
-    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
+    public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         if (!$fieldDescription->getType()) {
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
-                \get_class($admin)
+                \get_class($fieldDescription->getAdmin())
             ));
         }
 
         $fieldDescription->setOption('edit', $fieldDescription->getOption('edit', 'standard'));
 
         if ($this->hasAssociation($fieldDescription) || $fieldDescription->getOption('admin_code')) {
-            $admin->attachAdminClass($fieldDescription);
+            $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
         }
     }
 

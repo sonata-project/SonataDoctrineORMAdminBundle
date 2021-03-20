@@ -62,6 +62,7 @@ class ShowBuilderTest extends TestCase
         $typeGuess = $this->createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => ClassMetadata::MANY_TO_ONE]);
+        $fieldDescription->setAdmin($this->admin);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
         $this->admin->expects($this->once())->method('addShowFieldDescription');
@@ -73,22 +74,21 @@ class ShowBuilderTest extends TestCase
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
             null,
-            $fieldDescription,
-            $this->admin
+            $fieldDescription
         );
     }
 
     public function testAddFieldWithType(): void
     {
         $fieldDescription = new FieldDescription('FakeName');
+        $fieldDescription->setAdmin($this->admin);
 
         $this->admin->expects($this->once())->method('addShowFieldDescription');
 
         $this->showBuilder->addField(
             new FieldDescriptionCollection(),
             'someType',
-            $fieldDescription,
-            $this->admin
+            $fieldDescription
         );
     }
 
@@ -99,10 +99,11 @@ class ShowBuilderTest extends TestCase
     {
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => $mappingType]);
         $fieldDescription->setType($type);
+        $fieldDescription->setAdmin($this->admin);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
 
-        $this->showBuilder->fixFieldDescription($this->admin, $fieldDescription);
+        $this->showBuilder->fixFieldDescription($fieldDescription);
 
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
@@ -137,6 +138,8 @@ class ShowBuilderTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $this->showBuilder->fixFieldDescription($this->admin, new FieldDescription('name'));
+        $fieldDescription = new FieldDescription('name');
+        $fieldDescription->setAdmin($this->admin);
+        $this->showBuilder->fixFieldDescription($fieldDescription);
     }
 }

@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Builder\ListBuilderInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
@@ -47,7 +46,7 @@ final class ListBuilder implements ListBuilderInterface
         return new FieldDescriptionCollection();
     }
 
-    public function buildField(?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function buildField(?string $type, FieldDescriptionInterface $fieldDescription): void
     {
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
@@ -57,18 +56,18 @@ final class ListBuilder implements ListBuilderInterface
             $fieldDescription->setType($type);
         }
 
-        $this->fixFieldDescription($admin, $fieldDescription);
+        $this->fixFieldDescription($fieldDescription);
     }
 
-    public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription): void
     {
-        $this->buildField($type, $fieldDescription, $admin);
-        $admin->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
+        $this->buildField($type, $fieldDescription);
+        $fieldDescription->getAdmin()->addListFieldDescription($fieldDescription->getName(), $fieldDescription);
 
         $list->add($fieldDescription);
     }
 
-    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
+    public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         if (ListMapper::TYPE_ACTIONS === $fieldDescription->getType()) {
             $this->buildActionFieldDescription($fieldDescription);
@@ -88,7 +87,7 @@ final class ListBuilder implements ListBuilderInterface
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
-                \get_class($admin)
+                \get_class($fieldDescription->getAdmin())
             ));
         }
 
@@ -131,7 +130,7 @@ final class ListBuilder implements ListBuilderInterface
             ClassMetadata::ONE_TO_MANY,
             ClassMetadata::MANY_TO_MANY,
         ], true)) {
-            $admin->attachAdminClass($fieldDescription);
+            $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
         }
     }
 
