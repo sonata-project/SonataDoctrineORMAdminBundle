@@ -63,9 +63,6 @@ final class ShowBuilder implements ShowBuilderInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
-        // NEXT_MAJOR: Remove this line.
-        $fieldDescription->setAdmin($admin);
-
         if (!$fieldDescription->getType()) {
             throw new \RuntimeException(sprintf('Please define a type for field `%s` in `%s`', $fieldDescription->getName(), \get_class($admin)));
         }

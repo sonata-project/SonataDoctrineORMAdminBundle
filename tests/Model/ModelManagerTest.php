@@ -20,7 +20,6 @@ use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Doctrine\ORM\Mapping\ClassMetadataInfo;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\Persistence\ManagerRegistry;
@@ -103,7 +102,7 @@ final class ModelManagerTest extends TestCase
         $connection = $this->createMock(Connection::class);
         $connection->method('getDatabasePlatform')->willReturn($platform);
 
-        $classMetadata = $this->createMock(ClassMetadataInfo::class);
+        $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata->method('getIdentifierValues')->willReturn([$entity->getId()]);
         $classMetadata->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
 

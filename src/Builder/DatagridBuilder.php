@@ -24,6 +24,7 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -64,9 +65,6 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
     public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
     {
-        // NEXT_MAJOR: Remove this line.
-        $fieldDescription->setAdmin($admin);
-
         if ([] !== $fieldDescription->getFieldMapping()) {
             $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
 
@@ -150,6 +148,8 @@ final class DatagridBuilder implements DatagridBuilderInterface
      * Get pager by pagerType.
      *
      * @throws \RuntimeException If invalid pager type is set
+     *
+     * @return PagerInterface<ProxyQueryInterface>
      */
     private function getPager(string $pagerType): PagerInterface
     {
@@ -158,7 +158,10 @@ final class DatagridBuilder implements DatagridBuilderInterface
                 return new Pager();
 
             case Pager::TYPE_SIMPLE:
-                return new SimplePager();
+                /** @var SimplePager<ProxyQueryInterface> $simplePager */
+                $simplePager = new SimplePager();
+
+                return $simplePager;
 
             default:
                 throw new \RuntimeException(sprintf('Unknown pager type "%s".', $pagerType));

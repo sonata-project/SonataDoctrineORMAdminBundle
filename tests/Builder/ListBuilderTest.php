@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
+use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Builder\ListBuilder;
 use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
@@ -61,7 +62,7 @@ class ListBuilderTest extends TestCase
     public function testCorrectFixedActionsFieldType(): void
     {
         $this->admin->expects($this->once())->method('addListFieldDescription');
-        $this->typeGuesser->method('guess')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
+        $this->typeGuesser->method('guess')->willReturn(new TypeGuess(ListMapper::TYPE_ACTIONS, [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription('_action');
         $fieldDescription->setOption('actions', ['test' => []]);
@@ -70,7 +71,7 @@ class ListBuilderTest extends TestCase
         $this->listBuilder->addField($list, null, $fieldDescription, $this->admin);
 
         $this->assertSame(
-            'actions',
+            ListMapper::TYPE_ACTIONS,
             $list->get('_action')->getType(),
             'Standard list _action field has "actions" type'
         );

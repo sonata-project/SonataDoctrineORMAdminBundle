@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\Persistence\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionFactoryInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -53,6 +53,9 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
         );
     }
 
+    /**
+     * @phpstan-return array{ClassMetadata, string, mixed[]}
+     */
     private function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
         $nameElements = explode('.', $propertyFullName);
