@@ -27,13 +27,13 @@ class TimeFilterTest extends FilterTestCase
         $filter = new TimeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', '');
-        $filter->filter($builder, 'alias', 'field', ['value' => '']);
+        $filter->filter($proxyQuery, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', '');
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => '']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 

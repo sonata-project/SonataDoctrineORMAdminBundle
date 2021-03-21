@@ -27,12 +27,12 @@ class DateFilterTest extends FilterTestCase
         $filter = new DateFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', '');
+        $filter->filter($proxyQuery, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', '');
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -46,10 +46,17 @@ class DateFilterTest extends FilterTestCase
         $filter = new DateFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $filter->filter($builder, 'alias', 'field', ['value' => new \DateTime()]);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => new \DateTime()]);
 
+        $this->assertSameQuery([
+            'WHERE alias.field >= :field_name_0',
+            'WHERE alias.field < :field_name_1',
+        ], $proxyQuery);
+        $this->assertTrue($filter->isActive());
+
+        $builder = $proxyQuery->getQueryBuilder();
+        \assert($builder instanceof TestQueryBuilder);
         $this->assertCount(2, $builder->queryParameters);
-        $this->assertCount(2, $builder->query);
     }
 }

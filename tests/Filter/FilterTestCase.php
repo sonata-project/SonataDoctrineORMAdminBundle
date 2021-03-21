@@ -18,17 +18,34 @@ use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
+use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 
-class FilterTestCase extends TestCase
+abstract class FilterTestCase extends TestCase
 {
-    public function createQueryBuilderStub(): QueryBuilder
+    final protected function assertSameQuery(array $expected, ProxyQuery $proxyQuery): void
+    {
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+        if (!$queryBuilder instanceof TestQueryBuilder) {
+            throw new \InvalidArgumentException('The query builder should be build with "createQueryBuilderStub()".');
+        }
+
+        $this->assertSame($expected, $queryBuilder->query);
+    }
+
+    final protected function assertSameQueryParameters(array $expected, ProxyQuery $proxyQuery): void
+    {
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+        if (!$queryBuilder instanceof TestQueryBuilder) {
+            throw new \InvalidArgumentException('The query builder should be build with "createQueryBuilderStub()".');
+        }
+
+        $this->assertSame($expected, $queryBuilder->queryParameters);
+    }
+
+    final protected function createQueryBuilderStub(): TestQueryBuilder
     {
         $testCase = $this;
-
-        $queryBuilder = $this->createStub(QueryBuilder::class);
-
-        $queryBuilder->queryParameters = [];
-        $queryBuilder->query = [];
+        $queryBuilder = $this->createStub(TestQueryBuilder::class);
 
         $queryBuilder->method('setParameter')->willReturnCallback(
             static function (string $name, $value) use ($queryBuilder): void {
@@ -131,4 +148,13 @@ class FilterTestCase extends TestCase
 
         return $expr;
     }
+}
+
+class TestQueryBuilder extends QueryBuilder
+{
+    /** @var string[] */
+    public $query = [];
+
+    /** @var string[] */
+    public $queryParameters = [];
 }

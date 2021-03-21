@@ -26,11 +26,11 @@ final class NullFilterTest extends FilterTestCase
             'field_options' => ['class' => 'FooBar'],
         ]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', null);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -45,12 +45,12 @@ final class NullFilterTest extends FilterTestCase
             'inverse' => $inverse,
         ]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value]);
 
-        $this->assertSame([$expectedQuery], $builder->query);
+        $this->assertSameQuery([$expectedQuery], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
