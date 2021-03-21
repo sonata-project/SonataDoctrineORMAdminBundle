@@ -59,16 +59,16 @@
         "phpstan/phpstan": "^0.12.52",
         "phpstan/phpstan-symfony": "^0.12.10",
         "psalm/plugin-symfony": "^2.0",
-        "simplethings/entity-audit-bundle": "^0.9 || ^1.0",
         "sonata-project/block-bundle": "^3.17 || ^4.0",
-        "symfony/panther": "^0.9.0",
+        "sonata-project/entity-audit-bundle": "^1.1",
+        "symfony/panther": "^1.0",
         "symfony/phpunit-bridge": "^5.2",
         "symfony/templating": "^4.4 || ^5.2",
         "symfony/yaml": "^4.4 || ^5.2",
         "vimeo/psalm": "^4.1.1"
     },
     "suggest": {
-        "simplethings/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
+        "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
     "config": {
         "sort-packages": true
