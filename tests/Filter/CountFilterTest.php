@@ -24,12 +24,12 @@ class CountFilterTest extends FilterTestCase
         $filter = new CountFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', 'asds');
+        $filter->filter($proxyQuery, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', 'asds');
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -38,11 +38,11 @@ class CountFilterTest extends FilterTestCase
         $filter = new CountFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -54,11 +54,11 @@ class CountFilterTest extends FilterTestCase
         $filter = new CountFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => $type, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => $type, 'value' => 42]);
 
-        $this->assertSame(['GROUP BY o', $expected], $builder->query);
+        $this->assertSameQuery(['GROUP BY o', $expected], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 

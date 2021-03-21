@@ -35,17 +35,17 @@ class BooleanFilterTest extends FilterTestCase
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', '');
-        $filter->filter($builder, 'alias', 'field', 'test');
-        $filter->filter($builder, 'alias', 'field', false);
+        $filter->filter($proxyQuery, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', '');
+        $filter->filter($proxyQuery, 'alias', 'field', 'test');
+        $filter->filter($proxyQuery, 'alias', 'field', false);
 
-        $filter->filter($builder, 'alias', 'field', []);
-        $filter->filter($builder, 'alias', 'field', [null, 'test']);
+        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', [null, 'test']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -54,12 +54,12 @@ class BooleanFilterTest extends FilterTestCase
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_NO]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_NO]);
 
-        $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 0], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -68,12 +68,12 @@ class BooleanFilterTest extends FilterTestCase
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_YES]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_YES]);
 
-        $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => 1], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => 1], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -82,11 +82,11 @@ class BooleanFilterTest extends FilterTestCase
         $filter = new BooleanFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
-        $this->assertSame(['WHERE alias.field IN ("0")'], $builder->query);
+        $this->assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 }

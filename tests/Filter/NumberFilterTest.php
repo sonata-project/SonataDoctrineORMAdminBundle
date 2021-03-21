@@ -24,12 +24,12 @@ class NumberFilterTest extends FilterTestCase
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', null);
-        $filter->filter($builder, 'alias', 'field', 'asds');
+        $filter->filter($proxyQuery, 'alias', 'field', null);
+        $filter->filter($proxyQuery, 'alias', 'field', 'asds');
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -38,11 +38,11 @@ class NumberFilterTest extends FilterTestCase
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -51,14 +51,14 @@ class NumberFilterTest extends FilterTestCase
         $filter = new NumberFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_THAN, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_EQUAL, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_THAN, 'value' => 42]);
-        $filter->filter($builder, 'alias', 'field', ['value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_EQUAL, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_EQUAL, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_THAN, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_EQUAL, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_THAN, 'value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 42]);
 
         $expected = [
             'WHERE alias.field = :field_name_0',
@@ -69,7 +69,7 @@ class NumberFilterTest extends FilterTestCase
             'WHERE alias.field = :field_name_5',
         ];
 
-        $this->assertSame($expected, $builder->query);
+        $this->assertSameQuery($expected, $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 }
