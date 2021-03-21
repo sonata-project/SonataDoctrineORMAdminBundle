@@ -63,7 +63,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
         $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
-    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
+    public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         if ([] !== $fieldDescription->getFieldMapping()) {
             $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
@@ -89,7 +89,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetModel(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
-                'admin_code' => $admin->getCode(),
+                'admin_code' => $fieldDescription->getAdmin()->getCode(),
                 'context' => 'filter',
             ]);
         }
@@ -100,11 +100,11 @@ final class DatagridBuilder implements DatagridBuilderInterface
             ClassMetadata::MANY_TO_ONE,
             ClassMetadata::ONE_TO_ONE,
         ], true)) {
-            $admin->attachAdminClass($fieldDescription);
+            $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
         }
     }
 
-    public function addFilter(DatagridInterface $datagrid, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function addFilter(DatagridInterface $datagrid, ?string $type, FieldDescriptionInterface $fieldDescription): void
     {
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
@@ -123,8 +123,8 @@ final class DatagridBuilder implements DatagridBuilderInterface
             $fieldDescription->setType($type);
         }
 
-        $this->fixFieldDescription($admin, $fieldDescription);
-        $admin->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
+        $this->fixFieldDescription($fieldDescription);
+        $fieldDescription->getAdmin()->addFilterFieldDescription($fieldDescription->getName(), $fieldDescription);
 
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
         $datagrid->addFilter($filter);

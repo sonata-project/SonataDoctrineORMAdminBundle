@@ -48,9 +48,10 @@ class ListBuilderTest extends TestCase
         $this->admin->expects($this->once())->method('addListFieldDescription');
 
         $fieldDescription = new FieldDescription('foo');
+        $fieldDescription->setAdmin($this->admin);
 
         $list = $this->listBuilder->getBaseList();
-        $this->listBuilder->addField($list, 'actions', $fieldDescription, $this->admin);
+        $this->listBuilder->addField($list, 'actions', $fieldDescription);
 
         $this->assertSame(
             '@SonataAdmin/CRUD/list__action.html.twig',
@@ -66,9 +67,10 @@ class ListBuilderTest extends TestCase
 
         $fieldDescription = new FieldDescription('_action');
         $fieldDescription->setOption('actions', ['test' => []]);
+        $fieldDescription->setAdmin($this->admin);
 
         $list = $this->listBuilder->getBaseList();
-        $this->listBuilder->addField($list, null, $fieldDescription, $this->admin);
+        $this->listBuilder->addField($list, null, $fieldDescription);
 
         $this->assertSame(
             ListMapper::TYPE_ACTIONS,
@@ -92,8 +94,9 @@ class ListBuilderTest extends TestCase
         $fieldDescription = new FieldDescription('test', [], ['type' => $type]);
         $fieldDescription->setOption('sortable', true);
         $fieldDescription->setType('fakeType');
+        $fieldDescription->setAdmin($this->admin);
 
-        $this->listBuilder->fixFieldDescription($this->admin, $fieldDescription);
+        $this->listBuilder->fixFieldDescription($fieldDescription);
 
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
@@ -124,6 +127,8 @@ class ListBuilderTest extends TestCase
     {
         $this->expectException(\RuntimeException::class);
 
-        $this->listBuilder->fixFieldDescription($this->admin, new FieldDescription('name'));
+        $fieldDescription = new FieldDescription('name');
+        $fieldDescription->setAdmin($this->admin);
+        $this->listBuilder->fixFieldDescription($fieldDescription);
     }
 }

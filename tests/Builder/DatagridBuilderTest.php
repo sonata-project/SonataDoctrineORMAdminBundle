@@ -69,12 +69,12 @@ final class DatagridBuilderTest extends TestCase
     public function testGetBaseDatagrid($pagerType, $pager): void
     {
         $proxyQuery = $this->createStub(ProxyQueryInterface::class);
-        $fieldDescription = new FieldDescriptionCollection();
+        $fieldDescriptionCollection = new FieldDescriptionCollection();
         $formBuilder = $this->createStub(FormBuilderInterface::class);
 
         $this->admin->method('getPagerType')->willReturn($pagerType);
         $this->admin->method('createQuery')->willReturn($proxyQuery);
-        $this->admin->method('getList')->willReturn($fieldDescription);
+        $this->admin->method('getList')->willReturn($fieldDescriptionCollection);
         $this->formFactory->method('createNamedBuilder')->willReturn($formBuilder);
 
         $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin);
@@ -109,17 +109,19 @@ final class DatagridBuilderTest extends TestCase
     public function testFixFieldDescription(): void
     {
         $fieldDescription = new FieldDescription('test', [], ['type' => ClassMetadata::ONE_TO_MANY]);
+        $fieldDescription->setAdmin($this->admin);
 
         $this->admin->expects($this->once())->method('attachAdminClass');
 
-        $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
+        $this->datagridBuilder->fixFieldDescription($fieldDescription);
     }
 
     public function testFixFieldDescriptionWithoutFieldName(): void
     {
         $fieldDescription = new FieldDescription('test', [], [], [], [], 'fieldName');
+        $fieldDescription->setAdmin($this->admin);
 
-        $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
+        $this->datagridBuilder->fixFieldDescription($fieldDescription);
 
         $this->assertSame('fieldName', $fieldDescription->getOption('field_name'));
     }
@@ -142,6 +144,6 @@ final class DatagridBuilderTest extends TestCase
         $guessType->method('getType')->willReturn(ModelAutocompleteFilter::class);
         $datagrid->method('addFilter')->with($this->isInstanceOf(ModelAutocompleteFilter::class));
 
-        $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription, $this->admin);
+        $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription);
     }
 }

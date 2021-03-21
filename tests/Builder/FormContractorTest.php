@@ -132,6 +132,7 @@ final class FormContractorTest extends TestCase
         $admin = $this->createMock(AdminInterface::class);
 
         $fieldDescription = $this->createMock(FieldDescriptionInterface::class);
+        $fieldDescription->method('getAdmin')->willReturn($admin);
         $fieldDescription->method('getMappingType')->willReturn('simple');
         $fieldDescription->method('getType')->willReturn(ModelListType::class);
         $fieldDescription->method('getOption')->with($this->logicalOr(
@@ -144,6 +145,6 @@ final class FormContractorTest extends TestCase
             ->method('attachAdminClass')
             ->with($fieldDescription);
 
-        $this->formContractor->fixFieldDescription($admin, $fieldDescription);
+        $this->formContractor->fixFieldDescription($fieldDescription);
     }
 }

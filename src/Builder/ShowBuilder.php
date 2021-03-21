@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
@@ -46,7 +45,7 @@ final class ShowBuilder implements ShowBuilderInterface
         return new FieldDescriptionCollection();
     }
 
-    public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin): void
+    public function addField(FieldDescriptionCollection $list, ?string $type, FieldDescriptionInterface $fieldDescription): void
     {
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
@@ -55,16 +54,20 @@ final class ShowBuilder implements ShowBuilderInterface
             $fieldDescription->setType($type);
         }
 
-        $this->fixFieldDescription($admin, $fieldDescription);
-        $admin->addShowFieldDescription($fieldDescription->getName(), $fieldDescription);
+        $this->fixFieldDescription($fieldDescription);
+        $fieldDescription->getAdmin()->addShowFieldDescription($fieldDescription->getName(), $fieldDescription);
 
         $list->add($fieldDescription);
     }
 
-    public function fixFieldDescription(AdminInterface $admin, FieldDescriptionInterface $fieldDescription): void
+    public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         if (!$fieldDescription->getType()) {
-            throw new \RuntimeException(sprintf('Please define a type for field `%s` in `%s`', $fieldDescription->getName(), \get_class($admin)));
+            throw new \RuntimeException(sprintf(
+                'Please define a type for field `%s` in `%s`',
+                $fieldDescription->getName(),
+                \get_class($fieldDescription->getAdmin())
+            ));
         }
 
         if (!$fieldDescription->getTemplate()) {
@@ -76,7 +79,7 @@ final class ShowBuilder implements ShowBuilderInterface
             case ClassMetadata::ONE_TO_ONE:
             case ClassMetadata::ONE_TO_MANY:
             case ClassMetadata::MANY_TO_MANY:
-                $admin->attachAdminClass($fieldDescription);
+                $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
 
                 break;
         }
