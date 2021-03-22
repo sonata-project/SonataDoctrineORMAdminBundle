@@ -35,7 +35,7 @@ class CallbackFilterTest extends FilterTestCase
 
     public function testFilterClosure(): void
     {
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
@@ -47,26 +47,26 @@ class CallbackFilterTest extends FilterTestCase
             },
         ]);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
 
-        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
+        $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
     public function testFilterMethod(): void
     {
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
             'callback' => [$this, 'customCallback'],
         ]);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
 
-        $this->assertSame(['WHERE CUSTOM QUERY alias.field'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
+        $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -80,19 +80,18 @@ class CallbackFilterTest extends FilterTestCase
 
     public function testFilterException(): void
     {
-        $this->expectException(\RuntimeException::class);
-
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', []);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'myValue']);
+        $this->expectException(\RuntimeException::class);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
     }
 
     public function testApplyMethod(): void
     {
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
@@ -105,10 +104,10 @@ class CallbackFilterTest extends FilterTestCase
             'field_name' => 'field_name_test',
         ]);
 
-        $filter->apply($builder, ['value' => 'myValue']);
+        $filter->apply($proxyQuery, ['value' => 'myValue']);
 
-        $this->assertSame(['WHERE CUSTOM QUERY o.field_name_test'], $builder->query);
-        $this->assertSame(['value' => 'myValue'], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE CUSTOM QUERY o.field_name_test'], $proxyQuery);
+        $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 }

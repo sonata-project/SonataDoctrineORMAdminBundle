@@ -27,11 +27,11 @@ class DateTimeRangeFilterTest extends FilterTestCase
         $filter = new DateTimeRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', []);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 

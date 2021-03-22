@@ -24,11 +24,11 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', []);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -55,17 +55,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => null]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => null]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
-            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -78,17 +78,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
-            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -101,17 +101,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
-            $this->assertSame(['field_name_0' => sprintf('%s%%', $value)], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%s%%', $value)], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -124,17 +124,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['WHERE alias.field LIKE :field_name_0'], $builder->query);
-            $this->assertSame(['field_name_0' => sprintf('%%%s', $value)], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s', $value)], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -147,17 +147,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
 
         if ('' !== (string) $value) {
-            $this->assertSame(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $builder->query);
-            $this->assertSame(['field_name_0' => sprintf('%%%s%%', $value)], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -170,17 +170,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]);
 
         if ('' !== (string) $value || $allowEmpty) {
-            $this->assertSame(['WHERE alias.field = :field_name_0'], $builder->query);
-            $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -193,17 +193,17 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
 
         if ('' !== (string) $value || $allowEmpty) {
-            $this->assertSame(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $builder->query);
-            $this->assertSame(['field_name_0' => (string) ($value ?? '')], $builder->queryParameters);
+            $this->assertSameQuery(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
-            $this->assertSame([], $builder->query);
+            $this->assertSameQuery([], $proxyQuery);
             $this->assertFalse($filter->isActive());
         }
     }
@@ -226,28 +226,18 @@ class StringFilterTest extends FilterTestCase
             ],
         ]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->apply($builder, ['type' => StringOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, ['type' => StringOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
-        $this->assertSame(
+        $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
-            $builder->query[0]
-        );
-        $this->assertSame(
             'LEFT JOIN s_association_mapping.sub_association_mapping AS s_association_mapping_sub_association_mapping',
-            $builder->query[1]
-        );
-        $this->assertSame(
             'LEFT JOIN s_association_mapping_sub_association_mapping.sub_sub_association_mapping AS s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
-            $builder->query[2]
-        );
-        $this->assertSame(
             'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
-            $builder->query[3]
-        );
-        $this->assertSame(['field_name_0' => 'asd'], $builder->queryParameters);
+        ], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => 'asd'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -259,12 +249,12 @@ class StringFilterTest extends FilterTestCase
         $filter = new StringFilter();
         $filter->initialize('field_name', ['case_sensitive' => $caseSensitive]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
-        $this->assertSame([], $builder->query);
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+        $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($builder, 'alias', 'field', ['value' => 'FooBar', 'type' => $operatorType]);
-        $this->assertSame([$expectedQuery], $builder->query);
-        $this->assertSame(['field_name_0' => $expectedParameter], $builder->queryParameters);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'FooBar', 'type' => $operatorType]);
+        $this->assertSameQuery([$expectedQuery], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => $expectedParameter], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 

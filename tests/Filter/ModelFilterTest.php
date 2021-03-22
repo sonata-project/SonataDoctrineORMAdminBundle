@@ -25,11 +25,11 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', []);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -38,16 +38,16 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', [
             'type' => EqualOperatorType::TYPE_EQUAL,
             'value' => ['1', '2'],
         ]);
 
         // the alias is now computer by the entityJoin method
-        $this->assertSame(['WHERE alias IN :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => ['1', '2']], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -56,19 +56,19 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', [
             'type' => EqualOperatorType::TYPE_NOT_EQUAL,
             'value' => ['1', '2'],
         ]);
 
         // the alias is now computer by the entityJoin method
-        $this->assertSame(
-            'WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
-            $builder->query[0]
+        $this->assertSameQuery(
+            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
+            $proxyQuery
         );
-        $this->assertSame(['field_name_0' => ['1', '2']], $builder->queryParameters);
+        $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -77,12 +77,12 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]);
 
-        $this->assertSame(['WHERE alias IN :field_name_0'], $builder->query);
-        $this->assertSame(['field_name_0' => [2]], $builder->queryParameters);
+        $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
+        $this->assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -91,16 +91,16 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]);
 
-        $this->assertSame(
-            'WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($builder->getRootAliases())).'.field_name) IS NULL',
-            $builder->query[0]
+        $this->assertSameQuery(
+            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
+            $proxyQuery
         );
 
-        $this->assertSame(['field_name_0' => [2]], $builder->queryParameters);
+        $this->assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -111,9 +111,9 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['mapping_type' => 'foo']);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($builder, ['value' => 'asd']);
+        $filter->apply($proxyQuery, ['value' => 'asd']);
     }
 
     public function testAssociationWithValidMappingAndEmptyFieldName(): void
@@ -123,9 +123,9 @@ class ModelFilterTest extends FilterTestCase
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['mapping_type' => ClassMetadata::ONE_TO_ONE]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($builder, ['value' => 'asd']);
+        $filter->apply($proxyQuery, ['value' => 'asd']);
         $this->assertTrue($filter->isActive());
     }
 
@@ -140,14 +140,14 @@ class ModelFilterTest extends FilterTestCase
             ],
         ]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($builder, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
-        $this->assertSame([
+        $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'WHERE s_association_mapping IN :field_name_0',
-        ], $builder->query);
+        ], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
@@ -170,16 +170,16 @@ class ModelFilterTest extends FilterTestCase
             ],
         ]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($builder, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
 
-        $this->assertSame([
+        $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'LEFT JOIN s_association_mapping.sub_association_mapping AS s_association_mapping_sub_association_mapping',
             'LEFT JOIN s_association_mapping_sub_association_mapping.sub_sub_association_mapping AS s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
             'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
-        ], $builder->query);
+        ], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 }

@@ -34,11 +34,11 @@ class ClassFilterTest extends FilterTestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['value' => '']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => '']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -47,11 +47,11 @@ class ClassFilterTest extends FilterTestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => 'foo']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
 
-        $this->assertSame([], $builder->query);
+        $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
     }
 
@@ -60,11 +60,11 @@ class ClassFilterTest extends FilterTestCase
         $filter = new ClassFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $builder = new ProxyQuery($this->createQueryBuilderStub());
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']);
-        $filter->filter($builder, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']);
-        $filter->filter($builder, 'alias', 'field', ['value' => 'type']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'type']);
 
         $expected = [
             'WHERE alias INSTANCE OF type',
@@ -72,7 +72,7 @@ class ClassFilterTest extends FilterTestCase
             'WHERE alias INSTANCE OF type',
         ];
 
-        $this->assertSame($expected, $builder->query);
+        $this->assertSameQuery($expected, $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 }
