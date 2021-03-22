@@ -76,10 +76,11 @@ class StringFilter extends Filter
 
         // NEXT_MAJOR: Remove this if and the (int) cast.
         if (!\is_int($type)) {
-            @trigger_error(
+            @trigger_error(sprintf(
                 'Passing a non integer type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.30'
-                .' and will throw a \TypeError error in version 4.0.',
-            );
+                .' and will throw a %s error in version 4.0.',
+                \TypeError::class
+            ), \E_USER_DEPRECATED);
         }
         $operator = $this->getOperator((int) $type);
 
@@ -157,10 +158,11 @@ class StringFilter extends Filter
     {
         if (!isset(self::CHOICES[$type])) {
             // NEXT_MAJOR: Throw an \OutOfRangeException instead.
-            @trigger_error(
+            @trigger_error(sprintf(
                 'Passing a non supported type is deprecated since sonata-project/doctrine-orm-admin-bundle 3.30'
-                .' and will throw an \OutOfRangeException error in version 4.0.',
-            );
+                .' and will throw an %s exception in version 4.0.',
+                \OutOfRangeException::class
+            ), \E_USER_DEPRECATED);
 //            throw new \OutOfRangeException(sprintf(
 //                'The type "%s" is not supported, allowed one are "%s".',
 //                $type,

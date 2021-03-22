@@ -65,11 +65,12 @@ abstract class Filter extends BaseFilter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         $alias = $query->entityJoin($this->getParentAssociationMappings());
@@ -86,11 +87,12 @@ abstract class Filter extends BaseFilter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         if (self::CONDITION_OR === $this->getCondition()) {
@@ -127,11 +129,12 @@ abstract class Filter extends BaseFilter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         // dots are not accepted in a DQL identifier so replace them

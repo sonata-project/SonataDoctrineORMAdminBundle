@@ -31,11 +31,12 @@ class ModelAutocompleteFilter extends Filter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         if (!$data || !\is_array($data) || !\array_key_exists('value', $data)) {
@@ -90,9 +91,10 @@ class ModelAutocompleteFilter extends Filter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
             ), \E_USER_DEPRECATED);
         }
@@ -124,11 +126,12 @@ class ModelAutocompleteFilter extends Filter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         if (empty($data['value'])) {
@@ -159,11 +162,12 @@ class ModelAutocompleteFilter extends Filter
         if (!$query instanceof ProxyQueryInterface) {
             @trigger_error(sprintf(
                 'Passing %s as argument 1 to %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27'
-                .' and will throw a \TypeError error in version 4.0. You MUST pass an instance of %s instead.',
+                .' and will throw a %s error in version 4.0. You MUST pass an instance of %s instead.',
                 \get_class($query),
                 __METHOD__,
+                \TypeError::class,
                 ProxyQueryInterface::class
-            ));
+            ), \E_USER_DEPRECATED);
         }
 
         $associationMappings = $this->getParentAssociationMappings();
