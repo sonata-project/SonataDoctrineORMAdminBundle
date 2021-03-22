@@ -44,7 +44,6 @@ abstract class FilterTestCase extends TestCase
 
     final protected function createQueryBuilderStub(): TestQueryBuilder
     {
-        $testCase = $this;
         $queryBuilder = $this->createStub(TestQueryBuilder::class);
 
         $queryBuilder->method('setParameter')->willReturnCallback(
@@ -72,8 +71,8 @@ abstract class FilterTestCase extends TestCase
         );
 
         $queryBuilder->method('expr')->willReturnCallback(
-            static function () use ($testCase): Expr {
-                return $testCase->createExprStub();
+            function (): Expr {
+                return $this->createExprStub();
             }
         );
 
