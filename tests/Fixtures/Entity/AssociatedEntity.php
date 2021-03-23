@@ -25,12 +25,7 @@ class AssociatedEntity
      */
     protected $embeddedEntity;
 
-    /**
-     * AssociatedEntity constructor.
-     *
-     * @param int $plainField
-     */
-    public function __construct($plainField = null, Embeddable\EmbeddedEntity $embeddedEntity)
+    public function __construct(int $plainField, Embeddable\EmbeddedEntity $embeddedEntity)
     {
         $this->plainField = $plainField;
         $this->embeddedEntity = $embeddedEntity;
