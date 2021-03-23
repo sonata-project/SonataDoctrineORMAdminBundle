@@ -29,7 +29,7 @@ class Command
     /**
      * @ORM\Column(type="datetime")
      *
-     * @param \DateTime
+     * @var \DateTime
      */
     private $createdAt;
 

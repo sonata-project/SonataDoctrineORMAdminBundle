@@ -57,7 +57,9 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.52",
+        "phpstan/phpstan-phpunit": "^0.12.18",
         "phpstan/phpstan-symfony": "^0.12.10",
+        "psalm/plugin-phpunit": "^0.15.1",
         "psalm/plugin-symfony": "^2.0",
         "sonata-project/block-bundle": "^4.2",
         "sonata-project/entity-audit-bundle": "^1.1",
@@ -87,5 +89,13 @@
         "psr-4": {
             "Sonata\\DoctrineORMAdminBundle\\Tests\\": "tests/"
         }
+    },
+    "scripts": {
+        "post-install-cmd": [
+            "[ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/simple-phpunit install"
+        ],
+        "post-update-cmd": [
+            "[ $COMPOSER_DEV_MODE -eq 0 ] || vendor/bin/simple-phpunit install"
+        ]
     }
 }

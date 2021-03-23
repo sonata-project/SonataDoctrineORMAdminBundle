@@ -24,7 +24,7 @@ final class ValueObjectWithToStringImpl
 
     public function getValue()
     {
-        return (string) $this;
+        return (string) $this->uuid;
     }
 
     public function toString()
