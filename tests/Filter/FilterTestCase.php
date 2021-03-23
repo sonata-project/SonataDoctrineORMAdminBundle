@@ -154,6 +154,6 @@ class TestQueryBuilder extends QueryBuilder
     /** @var string[] */
     public $query = [];
 
-    /** @var string[] */
+    /** @var mixed[] */
     public $queryParameters = [];
 }
