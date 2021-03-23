@@ -1,3 +1,6 @@
+includes:
+    - phpstan-baseline.neon
+
 parameters:
     level: 2
     bootstrapFiles:
@@ -5,6 +8,4 @@ parameters:
     paths:
         - src
         - tests
-    ignoreErrors:
-        - '#Trying to mock an undefined method [a-zA-Z]*\(\) on class stdClass\.#'
     treatPhpDocTypesAsCertain: false
