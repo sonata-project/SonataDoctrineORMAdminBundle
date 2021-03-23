@@ -78,6 +78,19 @@ class Pager extends BasePager
             ));
         }
 
+        $identifierFieldNames = $query
+            ->getQueryBuilder()
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
+            ->getIdentifierFieldNames();
+
+        if (\count($identifierFieldNames) > 1) {
+            // Paginator doesn't work with composite primary keys
+            // https://github.com/doctrine/orm/issues/2910
+            return $query->execute();
+        }
+
         $paginator = new Paginator($query->getDoctrineQuery());
 
         return $paginator->getIterator();
