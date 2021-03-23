@@ -27,10 +27,6 @@ class Reader
      */
     private $id;
 
-    public function __construct()
-    {
-    }
-
     public function getId(): ?int
     {
         return $this->id;

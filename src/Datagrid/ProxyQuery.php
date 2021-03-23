@@ -253,18 +253,15 @@ class ProxyQuery implements ProxyQueryInterface
             }
         }
 
-        $queryBuilder->resetDQLPart('groupBy');
-
         foreach ($identifierFields as $identifierField) {
             $field = $rootAlias.'.'.$identifierField;
 
-            $queryBuilder->addGroupBy($field);
             if (!\in_array($field, $existingOrders, true)) {
                 $queryBuilder->addOrderBy($field, $this->getSortOrder());
             }
         }
 
-        return $queryBuilder->getQuery();
+        return $queryBuilder->distinct()->getQuery();
     }
 
     public function setSortBy($parentAssociationMappings, $fieldMapping)
