@@ -70,7 +70,17 @@ class Pager extends BasePager
 
     public function getCurrentPageResults(): iterable
     {
-        return $this->getQuery()->execute();
+        $query = $this->getQuery();
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf(
+                'The pager query MUST implement %s.',
+                ProxyQueryInterface::class,
+            ));
+        }
+
+        $paginator = new Paginator($query->getDoctrineQuery());
+
+        return $paginator->getIterator();
     }
 
     /**
@@ -196,7 +206,7 @@ class Pager extends BasePager
             $query->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        $paginator = new Paginator($query->getQueryBuilder());
+        $paginator = new Paginator($query->getDoctrineQuery());
 
         return \count($paginator);
     }

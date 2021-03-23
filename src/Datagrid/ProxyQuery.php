@@ -215,8 +215,6 @@ class ProxyQuery implements ProxyQueryInterface
      *     - add a sort on the identifier fields of the first used entity in the query,
      *       because RDBMS do not guarantee a particular order when no ORDER BY clause
      *       is specified, or when the field used for sorting is not unique.
-     *     - add a group by on the identifier fields in order to not display the same
-     *       entity twice if entityJoin was used with a one to many relation.
      */
     public function getDoctrineQuery(): Query
     {
@@ -253,12 +251,9 @@ class ProxyQuery implements ProxyQueryInterface
             }
         }
 
-        $queryBuilder->resetDQLPart('groupBy');
-
         foreach ($identifierFields as $identifierField) {
             $field = $rootAlias.'.'.$identifierField;
 
-            $queryBuilder->addGroupBy($field);
             if (!\in_array($field, $existingOrders, true)) {
                 $queryBuilder->addOrderBy($field, $this->getSortOrder());
             }
