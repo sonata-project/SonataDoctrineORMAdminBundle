@@ -85,13 +85,9 @@ class Pager extends BasePager
             ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
             ->getIdentifierFieldNames();
 
-        if (\count($identifierFieldNames) > 1) {
-            // Paginator doesn't work with composite primary keys
-            // https://github.com/doctrine/orm/issues/2910
-            return $query->execute();
-        }
-
-        $paginator = new Paginator($query->getDoctrineQuery());
+        // Paginator with fetchJoinCollection doesn't work with composite primary keys
+        // https://github.com/doctrine/orm/issues/2910
+        $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
 
         return $paginator->getIterator();
     }
