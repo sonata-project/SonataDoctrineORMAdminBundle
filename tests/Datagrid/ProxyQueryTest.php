@@ -60,6 +60,7 @@ class ProxyQueryTest extends TestCase
 
     protected function tearDown(): void
     {
+        /** @phpstan-ignore-next-line */
         $this->em = null;
     }
 

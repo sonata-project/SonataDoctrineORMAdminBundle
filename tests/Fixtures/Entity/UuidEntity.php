@@ -13,16 +13,27 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
+
 final class UuidEntity
 {
+    /**
+     * @var NonIntegerIdentifierTestClass
+     */
     private $uuid;
 
+    /**
+     * @param NonIntegerIdentifierTestClass $uuid
+     */
     public function __construct($uuid)
     {
         $this->uuid = $uuid;
     }
 
-    public function getId()
+    /**
+     * @return NonIntegerIdentifierTestClass
+     */
+    public function getId(): NonIntegerIdentifierTestClass
     {
         return $this->uuid;
     }

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
 use Sonata\DoctrineORMAdminBundle\Model\AuditReader;
@@ -22,7 +23,14 @@ use Sonata\DoctrineORMAdminBundle\Model\AuditReader;
  */
 class AuditReaderTest extends TestCase
 {
+    /**
+     * @var MockObject&SimpleThingsAuditReader
+     */
     private $simpleThingsAuditReader;
+
+    /**
+     * @var AuditReader
+     */
     private $auditReader;
 
     protected function setUp(): void
@@ -33,7 +41,7 @@ class AuditReaderTest extends TestCase
 
     public function testFind(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 1;
         $revision = 2;
 
@@ -44,7 +52,7 @@ class AuditReaderTest extends TestCase
 
     public function testFindWithException(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 1;
         $revision = 2;
 
@@ -68,7 +76,7 @@ class AuditReaderTest extends TestCase
             ->with($limit, $offset)
             ->willReturn([]);
 
-        $this->auditReader->findRevisionHistory('class', $limit, $offset);
+        $this->auditReader->findRevisionHistory(\stdClass::class, $limit, $offset);
     }
 
     public function testFindRevision(): void
@@ -77,7 +85,7 @@ class AuditReaderTest extends TestCase
 
         $this->simpleThingsAuditReader->expects($this->once())->method('findRevision')->with($revision);
 
-        $this->auditReader->findRevision('class', $revision);
+        $this->auditReader->findRevision(\stdClass::class, $revision);
     }
 
     public function testFindRevisionWithException(): void
@@ -90,12 +98,12 @@ class AuditReaderTest extends TestCase
             ->with($revision)
             ->willThrowException(new \Exception());
 
-        $this->assertNull($this->auditReader->findRevision('class', $revision));
+        $this->assertNull($this->auditReader->findRevision(\stdClass::class, $revision));
     }
 
     public function testFindRevisions(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 2;
 
         $this->simpleThingsAuditReader
@@ -109,7 +117,7 @@ class AuditReaderTest extends TestCase
 
     public function testFindRevisionsWithException(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 2;
 
         $this->simpleThingsAuditReader
@@ -123,7 +131,7 @@ class AuditReaderTest extends TestCase
 
     public function testDiff(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 1;
         $oldRevision = 1;
         $newRevision = 2;
@@ -139,7 +147,7 @@ class AuditReaderTest extends TestCase
 
     public function testDiffWithException(): void
     {
-        $className = 'fakeClass';
+        $className = \stdClass::class;
         $id = 1;
         $oldRevision = 1;
         $newRevision = 2;

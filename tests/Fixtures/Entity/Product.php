@@ -15,8 +15,14 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
 final class Product
 {
+    /**
+     * @var ProductId
+     */
     private $id;
 
+    /**
+     * @var string
+     */
     private $name;
 
     public function __construct(ProductId $id, string $name)
