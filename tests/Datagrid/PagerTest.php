@@ -23,7 +23,10 @@ use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 class PagerTest extends TestCase
 {
-    public function entityClassDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{class-string}>
+     */
+    public function entityClassDataProvider(): iterable
     {
         return [
             [User::class], // single identifier
@@ -32,6 +35,8 @@ class PagerTest extends TestCase
     }
 
     /**
+     * @param class-string $className
+     *
      * @dataProvider entityClassDataProvider
      */
     public function testCountResults(string $className): void

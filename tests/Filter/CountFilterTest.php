@@ -61,7 +61,10 @@ class CountFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function filterDataProvider(): array
+    /**
+     * @return iterable<array{string, int}>
+     */
+    public function filterDataProvider(): iterable
     {
         return [
             ['HAVING COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL],

@@ -20,7 +20,10 @@ use Symfony\Component\DependencyInjection\Definition;
 
 class AddAuditEntityCompilerPassTest extends TestCase
 {
-    public function processDataProvider()
+    /**
+     * @phpstan-return iterable<array{bool, array<string, array{audit: bool|null, audited: bool}>}>
+     */
+    public function processDataProvider(): iterable
     {
         return [
             [true, [
@@ -37,9 +40,11 @@ class AddAuditEntityCompilerPassTest extends TestCase
     }
 
     /**
+     * @phpstan-param array<string, array{audit: bool|null, audited: bool}> $services
+     *
      * @dataProvider processDataProvider
      */
-    public function testProcess($force, array $services): void
+    public function testProcess(bool $force, array $services): void
     {
         $container = $this->createMock(ContainerBuilder::class);
 

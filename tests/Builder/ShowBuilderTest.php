@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
@@ -28,8 +30,19 @@ use Symfony\Component\Form\Guess\TypeGuess;
  */
 class ShowBuilderTest extends TestCase
 {
+    /**
+     * @var Stub|TypeGuesserInterface
+     */
     private $guesser;
+
+    /**
+     * @var ShowBuilder
+     */
     private $showBuilder;
+
+    /**
+     * @var MockObject|AdminInterface<object>
+     */
     private $admin;
 
     protected function setUp(): void
@@ -108,6 +121,9 @@ class ShowBuilderTest extends TestCase
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
 
+    /**
+     * @phpstan-return iterable<array{string, int, string}>
+     */
     public function fixFieldDescriptionData(): iterable
     {
         return [

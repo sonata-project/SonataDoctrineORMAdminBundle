@@ -22,17 +22,11 @@ final class UuidEntity
      */
     private $uuid;
 
-    /**
-     * @param NonIntegerIdentifierTestClass $uuid
-     */
-    public function __construct($uuid)
+    public function __construct(NonIntegerIdentifierTestClass $uuid)
     {
         $this->uuid = $uuid;
     }
 
-    /**
-     * @return NonIntegerIdentifierTestClass
-     */
     public function getId(): NonIntegerIdentifierTestClass
     {
         return $this->uuid;

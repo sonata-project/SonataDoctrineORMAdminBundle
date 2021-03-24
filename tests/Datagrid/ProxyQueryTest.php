@@ -60,7 +60,7 @@ class ProxyQueryTest extends TestCase
 
     protected function tearDown(): void
     {
-        /** @phpstan-ignore-next-line */
+        // @phpstan-ignore-next-line
         $this->em = null;
     }
 
@@ -99,7 +99,10 @@ class ProxyQueryTest extends TestCase
         $query->setSortOrder('ASC,injection');
     }
 
-    public function validSortOrders()
+    /**
+     * @phpstan-return iterable<array{string}>
+     */
+    public function validSortOrders(): iterable
     {
         return [
             ['ASC'],
@@ -114,7 +117,7 @@ class ProxyQueryTest extends TestCase
     /**
      * @dataProvider validSortOrders
      */
-    public function testItAllowsSortOrdersWithStrangeCase($validValue): void
+    public function testItAllowsSortOrdersWithStrangeCase(string $validValue): void
     {
         $query = new ProxyQuery($this->em->createQueryBuilder());
         $query->setSortOrder($validValue);

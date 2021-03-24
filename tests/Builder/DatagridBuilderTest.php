@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
@@ -42,9 +44,25 @@ final class DatagridBuilderTest extends TestCase
      * @var DatagridBuilder
      */
     private $datagridBuilder;
+
+    /**
+     * @var Stub&TypeGuesserInterface
+     */
     private $typeGuesser;
+
+    /**
+     * @var Stub&FormFactoryInterface
+     */
     private $formFactory;
+
+    /**
+     * @var Stub&FilterFactoryInterface
+     */
     private $filterFactory;
+
+    /**
+     * @var MockObject&AdminInterface<object>
+     */
     private $admin;
 
     protected function setUp(): void
@@ -64,9 +82,11 @@ final class DatagridBuilderTest extends TestCase
     }
 
     /**
+     * @param class-string $pager
+     *
      * @dataProvider getBaseDatagridData
      */
-    public function testGetBaseDatagrid($pagerType, $pager): void
+    public function testGetBaseDatagrid(string $pagerType, string $pager): void
     {
         $proxyQuery = $this->createStub(ProxyQueryInterface::class);
         $fieldDescriptionCollection = new FieldDescriptionCollection();
@@ -83,7 +103,10 @@ final class DatagridBuilderTest extends TestCase
         $this->assertInstanceOf($pager, $datagrid->getPager());
     }
 
-    public function getBaseDatagridData(): array
+    /**
+     * @phpstan-return iterable<array{string, class-string}>
+     */
+    public function getBaseDatagridData(): iterable
     {
         return [
             'simple' => [

@@ -35,7 +35,8 @@ class TypeGuesserTest extends TestCase
     }
 
     /**
-     * @param int|string|null $mappingType
+     * @param int|string|null      $mappingType
+     * @param array<string, mixed> $expectedOptions
      *
      * @dataProvider guessDataProvider
      */
@@ -56,6 +57,9 @@ class TypeGuesserTest extends TestCase
         $this->assertSame($expectedConfidence, $guess->getConfidence());
     }
 
+    /**
+     * @phpstan-return iterable<array{int|string|null, string, array<string, mixed>, int}>
+     */
     public function guessDataProvider(): iterable
     {
         yield [

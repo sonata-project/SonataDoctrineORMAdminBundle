@@ -94,9 +94,9 @@ class ConfigurationTest extends TestCase
     /**
      * Processes an array of configurations and returns a compiled version.
      *
-     * @param array $configs An array of raw configurations
+     * @param mixed[] $configs An array of raw configurations
      *
-     * @return array A normalized array
+     * @return mixed[] A normalized array
      */
     protected function process($configs)
     {
