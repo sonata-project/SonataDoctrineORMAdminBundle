@@ -16,11 +16,13 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\ItemAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\SubAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Car;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Sub;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -88,6 +90,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->args([
                 '',
                 Item::class,
+                null,
+            ])
+
+        ->set(SubAdmin::class)
+            ->public()
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'label' => 'Inheritance',
+            ])
+            ->args([
+                '',
+                Sub::class,
                 null,
             ]);
 };
