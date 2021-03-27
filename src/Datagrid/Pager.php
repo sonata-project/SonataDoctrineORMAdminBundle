@@ -85,9 +85,14 @@ class Pager extends BasePager
             ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
             ->getIdentifierFieldNames();
 
-        // Paginator with fetchJoinCollection doesn't work with composite primary keys
-        // https://github.com/doctrine/orm/issues/2910
-        $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
+        // NEXT_MAJOR: Remove the check and the else part.
+        if (method_exists($query, 'getDoctrineQuery')) {
+            // Paginator with fetchJoinCollection doesn't work with composite primary keys
+            // https://github.com/doctrine/orm/issues/2910
+            $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
+        } else {
+            $paginator = new Paginator($query->getQueryBuilder(), 1 === \count($identifierFieldNames));
+        }
 
         return $paginator->getIterator();
     }
@@ -215,7 +220,12 @@ class Pager extends BasePager
             $query->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        $paginator = new Paginator($query->getDoctrineQuery());
+        // NEXT_MAJOR: Remove the check and the else part.
+        if (method_exists($query, 'getDoctrineQuery')) {
+            $paginator = new Paginator($query->getDoctrineQuery());
+        } else {
+            $paginator = new Paginator($query->getQueryBuilder());
+        }
 
         return \count($paginator);
     }
