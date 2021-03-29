@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Admin;
 
-use Sonata\AdminBundle\Admin\BaseFieldDescription;
+use Sonata\AdminBundle\FieldDescription\BaseFieldDescription;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
