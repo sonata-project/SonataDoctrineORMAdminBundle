@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Admin;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -312,5 +313,59 @@ class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.child.myMethod');
 
         $this->assertSame('myMethodValue', $field->getValue($mockedObject));
+    }
+
+    /**
+     * @dataProvider getDescribesSingleValuedAssociationProvider
+     *
+     * @param string|int $mappingType
+     */
+    public function testDescribesSingleValuedAssociation($mappingType, bool $expected): void
+    {
+        $fd = new FieldDescription();
+        $fd->setAssociationMapping([
+            'fieldName' => 'foo',
+            'type' => $mappingType,
+        ]);
+        $this->assertSame($expected, $fd->describesSingleValuedAssociation());
+    }
+
+    /**
+     * @phpstan-return iterable<array{0: string|int, 1: bool}>
+     */
+    public function getDescribesSingleValuedAssociationProvider(): iterable
+    {
+        yield 'one to one' => [ClassMetadata::ONE_TO_ONE, true];
+        yield 'many to one' => [ClassMetadata::MANY_TO_ONE, true];
+        yield 'one to many' => [ClassMetadata::ONE_TO_MANY, false];
+        yield 'many to many' => [ClassMetadata::MANY_TO_MANY, false];
+        yield 'string' => ['string', false];
+    }
+
+    /**
+     * @dataProvider getDescribesCollectionValuedAssociationProvider
+     *
+     * @param string|int $mappingType
+     */
+    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected)
+    {
+        $fd = new FieldDescription();
+        $fd->setAssociationMapping([
+            'fieldName' => 'foo',
+            'type' => $mappingType,
+        ]);
+        $this->assertSame($expected, $fd->describesCollectionValuedAssociation());
+    }
+
+    /**
+     * @phpstan-return iterable<array{0: string|int, 1: bool}>
+     */
+    public function getDescribesCollectionValuedAssociationProvider(): iterable
+    {
+        yield 'one to one' => [ClassMetadata::ONE_TO_ONE, false];
+        yield 'many to one' => [ClassMetadata::MANY_TO_ONE, false];
+        yield 'one to many' => [ClassMetadata::ONE_TO_MANY, true];
+        yield 'many to many' => [ClassMetadata::MANY_TO_MANY, true];
+        yield 'string' => ['string', false];
     }
 }
