@@ -15,8 +15,8 @@ namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\Mapping\ClassMetadata;
-use Sonata\AdminBundle\Admin\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionFactoryInterface;
+use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
 
