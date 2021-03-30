@@ -68,13 +68,13 @@ class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
             // Symfony 5.1+
             $deprecatedEmptyFilterDefinition->setDeprecated(
                 'sonata-project/doctrine-orm-admin-bundle',
-                '3.x',
-                'The "%service_id%" service is deprecated since sonata-project/doctrine-orm-admin-bundle version 3.x and will be removed in 4.0.'
+                '3.32',
+                'The "%service_id%" service is deprecated since sonata-project/doctrine-orm-admin-bundle version 3.32 and will be removed in 4.0.'
             );
         } else {
             // Symfony < 5.1
             $deprecatedEmptyFilterDefinition->setDeprecated(
-                'The "%service_id%" service is deprecated since sonata-project/doctrine-orm-admin-bundle version 3.x and will be removed in 4.0.'
+                'The "%service_id%" service is deprecated since sonata-project/doctrine-orm-admin-bundle version 3.32 and will be removed in 4.0.'
             );
         }
     }

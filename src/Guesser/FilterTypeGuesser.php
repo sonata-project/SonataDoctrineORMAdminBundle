@@ -39,12 +39,12 @@ class FilterTypeGuesser extends AbstractTypeGuesser implements TypeGuesserInterf
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      */
     public function guessType($class, $property, ModelManagerInterface $modelManager)
     {
         @trigger_error(sprintf(
-            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and'
             .' will be removed in version 4.0.',
             __METHOD__
         ), \E_USER_DEPRECATED);

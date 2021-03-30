@@ -20,14 +20,14 @@ use Sonata\AdminBundle\Model\ModelManagerInterface;
 /**
  * NEXT_MAJOR: Remove this class.
  *
- * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+ * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
  */
 abstract class AbstractTypeGuesser implements TypeGuesserInterface
 {
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      *
      * @param string $baseClass
      * @param string $propertyFullName
@@ -42,7 +42,7 @@ abstract class AbstractTypeGuesser implements TypeGuesserInterface
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[3] ?? null)) {
             @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and'
                 .' will be removed in version 4.0.',
                 __METHOD__
             ), \E_USER_DEPRECATED);
