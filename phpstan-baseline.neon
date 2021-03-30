@@ -1,4 +1,8 @@
 parameters:
     ignoreErrors:
-        # https://github.com/phpstan/phpstan-phpunit/issues/87
-        - '#^Trying to mock an undefined method [a-zA-Z]*\(\) on class stdClass\.$#'
+        - # https://github.com/phpstan/phpstan-phpunit/issues/87
+            message: '#^Trying to mock an undefined method [a-zA-Z]*\(\) on class stdClass\.$#'
+            path: tests/
+        - # https://github.com/phpstan/phpstan/issues/4734
+            message: '#^Access to an undefined static property Sonata\\DoctrineORMAdminBundle\\Tests\\Filter\\FilterTest\:\:\$groupedOrExpressions\.$#'
+            path: tests/Filter/FilterTest.php
