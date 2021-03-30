@@ -322,7 +322,7 @@ class FieldDescriptionTest extends TestCase
      */
     public function testDescribesSingleValuedAssociation($mappingType, bool $expected): void
     {
-        $fd = new FieldDescription();
+        $fd = new FieldDescription('foo');
         $fd->setAssociationMapping([
             'fieldName' => 'foo',
             'type' => $mappingType,
@@ -349,7 +349,7 @@ class FieldDescriptionTest extends TestCase
      */
     public function testDescribesCollectionValuedAssociation($mappingType, bool $expected)
     {
-        $fd = new FieldDescription();
+        $fd = new FieldDescription('foo');
         $fd->setAssociationMapping([
             'fieldName' => 'foo',
             'type' => $mappingType,
