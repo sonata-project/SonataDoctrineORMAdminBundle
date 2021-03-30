@@ -145,7 +145,7 @@ class ProxyQuery implements ProxyQueryInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      *
      * Optimize queries with a lot of rows.
      * It is not recommended to use "false" with left joins.
@@ -157,7 +157,7 @@ class ProxyQuery implements ProxyQueryInterface
     final public function setDistinct($distinct)
     {
         @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32'
             .' and will be removed in version 4.0.',
             __METHOD__,
         ), \E_USER_DEPRECATED);
@@ -174,14 +174,14 @@ class ProxyQuery implements ProxyQueryInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      *
      * @return bool
      */
     final public function isDistinct()
     {
         @trigger_error(sprintf(
-            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+            'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32'
             .' and will be removed in version 4.0.',
             __METHOD__,
         ), \E_USER_DEPRECATED);

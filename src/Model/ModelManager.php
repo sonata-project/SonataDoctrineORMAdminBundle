@@ -112,7 +112,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      *
      * Returns the model's metadata holding the fully qualified property, and the last
      * property name.
@@ -130,7 +130,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     {
         if ('sonata_deprecation_mute' !== (\func_get_args()[2] ?? null)) {
             @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and'
                 .' will be removed in version 4.0.',
                 __METHOD__
             ), \E_USER_DEPRECATED);
@@ -193,12 +193,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 to be removed in 4.0.
      */
     public function getNewFieldDescriptionInstance($class, $name, array $options = [])
     {
         @trigger_error(sprintf(
-            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+            'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and'
             .' will be removed in version 4.0.',
             __METHOD__
         ), \E_USER_DEPRECATED);
@@ -670,14 +670,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, to be removed in 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32, to be removed in 4.0.
      */
     public function getModelInstance($class)
     {
         // NEXT_MAJOR: Remove this block.
         if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
             @trigger_error(sprintf(
-                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and'
+                'The "%s()" method is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and'
                 .' will be removed in version 4.0.',
                 __METHOD__
             ), \E_USER_DEPRECATED);
@@ -801,12 +801,12 @@ class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * NEXT_MAJOR: Remove this method.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0. Use "reverseTransform()" instead.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and will be removed in version 4.0. Use "reverseTransform()" instead.
      */
     public function modelReverseTransform($class, array $array = [])
     {
         @trigger_error(sprintf(
-            'Method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+            'Method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32 and will be removed in version 4.0.'
             .' Use "reverseTransform()" instead.',
             __METHOD__
         ), \E_USER_DEPRECATED);
