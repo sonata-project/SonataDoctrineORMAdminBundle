@@ -2,6 +2,29 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.32.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.31.0...3.32.0) - 2021-03-30
+### Added
+- [[#1355](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1355)] `ModelManager::reverseTransform()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] Added `FieldDescriptionFactory` class ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1341](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1341)] Deprecated the `Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter` service since its class is already deprecated since version 3.27 ([@dmaicher](https://github.com/dmaicher))
+- [[#1355](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1355)] `ModelManager::modelReverseTransform()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `AbstractTypeGuesser` class ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `FilterTypeGuesser::guessType()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `TypeGuesser::guessType()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `ModelManager:: getParentMetadataForProperty()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `ModelManager:: getNewFieldDescriptionInstance()` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1350](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1350)] `ModelManager:: getModelInstance()` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1376](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1376)] Fixed triggering deprecation because audit reader is not tagged ([@franmomu](https://github.com/franmomu))
+- [[#1374](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1374)] Fixed deprecations about not implementing `FieldDescriptionInterface` methods ([@franmomu](https://github.com/franmomu))
+- [[#1358](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1358)] Resulting `WHERE` clause from `Filter::applyWhere()` when using `OR` conditions on queries that already have previous conditions ([@phansys](https://github.com/phansys))
+- [[#1368](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1368)] Fetch join queries for Pager ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1368](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1368)] Pager when using entity inheritance ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1365](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1365)] Missing argument 2 in calls to `trigger_error()` ([@phansys](https://github.com/phansys))
+
 ## [3.31.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.30.0...3.31.0) - 2021-03-11
 ### Added
 - [[#1335](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1335)] Support for symfony/config:^5.2 ([@phansys](https://github.com/phansys))
