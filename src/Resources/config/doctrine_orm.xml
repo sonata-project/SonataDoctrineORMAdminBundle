@@ -22,7 +22,7 @@
         <service id="sonata.admin.guesser.orm_list" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
             <tag name="sonata.admin.guesser.orm_list"/>
         </service>
-        <service id="sonata.admin.guesser.orm_list_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_list_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <!-- ShowBuilder  -->
@@ -33,7 +33,7 @@
         <service id="sonata.admin.guesser.orm_show" class="Sonata\DoctrineORMAdminBundle\Guesser\TypeGuesser">
             <tag name="sonata.admin.guesser.orm_show"/>
         </service>
-        <service id="sonata.admin.guesser.orm_show_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_show_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <!-- DatagridBuilder guesser -->
@@ -46,7 +46,7 @@
         <service id="sonata.admin.guesser.orm_datagrid" class="Sonata\DoctrineORMAdminBundle\Guesser\FilterTypeGuesser">
             <tag name="sonata.admin.guesser.orm_datagrid"/>
         </service>
-        <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\Guesser\TypeGuesserChain">
+        <service id="sonata.admin.guesser.orm_datagrid_chain" class="Sonata\AdminBundle\FieldDescription\TypeGuesserChain">
             <argument/>
         </service>
         <service id="sonata.admin.data_source.orm" class="Sonata\DoctrineORMAdminBundle\Exporter\DataSource"/>
