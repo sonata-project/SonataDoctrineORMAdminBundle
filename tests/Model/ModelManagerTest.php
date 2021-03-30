@@ -616,7 +616,7 @@ final class ModelManagerTest extends TestCase
 
     public function testAssociationIdentifierType(): void
     {
-        $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
+        $entity = new ContainerEntity(new AssociatedEntity(new EmbeddedEntity(), 42), new EmbeddedEntity());
 
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())
@@ -743,6 +743,11 @@ final class ModelManagerTest extends TestCase
         }
     }
 
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     */
     public function testModelReverseTransform(): void
     {
         $class = SimpleEntity::class;

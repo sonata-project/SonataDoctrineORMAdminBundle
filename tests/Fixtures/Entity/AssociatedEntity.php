@@ -30,10 +30,10 @@ class AssociatedEntity
      *
      * @param int $plainField
      */
-    public function __construct($plainField = null, Embeddable\EmbeddedEntity $embeddedEntity)
+    public function __construct(Embeddable\EmbeddedEntity $embeddedEntity, ?int $plainField = null)
     {
-        $this->plainField = $plainField;
         $this->embeddedEntity = $embeddedEntity;
+        $this->plainField = $plainField;
     }
 
     /**
