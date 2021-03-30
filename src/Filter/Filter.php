@@ -26,13 +26,12 @@ abstract class Filter extends BaseFilter
     protected $active = false;
 
     /**
-     * Holds an array of `orX` expressions used by each admin when the condition
-     * equals the value on `FilterInterface::CONDITION_OR`, using the admin code
-     * as index.
+     * Holds an array of grouped `orX` filter expressions that must be used within
+     * the same query builder.
      *
      * @var array<string, Orx>
      */
-    private static $orExpressionsByAdmin = [];
+    private static $groupedOrExpressions = [];
 
     /**
      * Apply the filter to the QueryBuilder instance.
@@ -115,7 +114,7 @@ abstract class Filter extends BaseFilter
     /**
      * Adds the parameter to the corresponding `Orx` expression used in the `where` clause.
      * If it doesn't exist, a new one is created.
-     * This method groups the filter "OR" conditions based on the "admin_code" option. If this
+     * This method groups the filter "OR" conditions based on the "or_group" option. If this
      * option is not set, it uses a marker (":sonata_admin_datagrid_filter_query_marker") in
      * the resulting DQL in order to identify the corresponding "WHERE (...)" condition
      * group each time it is required.
@@ -124,15 +123,12 @@ abstract class Filter extends BaseFilter
      * instead of having unfolded "WHERE ..." clauses like "WHERE previous_condition = previous_value OR filter_1 = value OR filter_2 = value OR ...",
      * which will produce undesired results.
      *
-     * TODO: Remove the logic related to the ":sonata_admin_datagrid_filter_query_marker" marker when
-     * the constraint for "sonata-project/admin-bundle" guarantees that the "admin_code" option is set.
-     *
      * @param mixed $parameter
      */
     private function addOrParameter(ProxyQueryInterface $query, $parameter): void
     {
-        $adminCode = $this->getOption('admin_code');
-        $orExpression = self::$orExpressionsByAdmin[$adminCode] ?? null;
+        $groupName = $this->getOption('or_group');
+        $orExpression = self::$groupedOrExpressions[$groupName] ?? null;
         if ($orExpression instanceof Orx) {
             $orExpression->add($parameter);
 
@@ -144,7 +140,7 @@ abstract class Filter extends BaseFilter
 
         // Search for the ":sonata_admin_datagrid_filter_query_marker" marker in order to
         // get the `Orx` expression.
-        if (null === $adminCode && null !== $where) {
+        if (null === $groupName && null !== $where) {
             foreach ($where->getParts() as $expression) {
                 if (!$expression instanceof Orx) {
                     continue;
@@ -165,12 +161,12 @@ abstract class Filter extends BaseFilter
         // Create a new `Orx` expression.
         $orExpression = $qb->expr()->orX();
 
-        if (null === $adminCode) {
+        if (null === $groupName) {
             // Add the ":sonata_admin_datagrid_filter_query_marker" parameter as marker for the `Orx` expression.
             $orExpression->add($qb->expr()->isNull(':sonata_admin_datagrid_filter_query_marker'));
             $qb->setParameter('sonata_admin_datagrid_filter_query_marker', 'sonata_admin.datagrid.filter_query.marker');
         } else {
-            self::$orExpressionsByAdmin[$adminCode] = $orExpression;
+            self::$groupedOrExpressions[$groupName] = $orExpression;
         }
 
         $orExpression->add($parameter);

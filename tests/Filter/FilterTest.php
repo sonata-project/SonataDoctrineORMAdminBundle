@@ -34,10 +34,21 @@ final class FilterTest extends FilterTestCase
         $this->filter = $this->createFilter();
     }
 
+    protected function tearDown(): void
+    {
+        parent::tearDown();
+
+        $resetFilterOrConditions = \Closure::bind(static function (): void {
+            static::$groupedOrExpressions = [];
+        }, null, Filter::class);
+
+        $resetFilterOrConditions();
+    }
+
     /**
      * @dataProvider orExpressionProvider
      */
-    public function testOrExpression(string $expected, array $filterOptions = []): void
+    public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
     {
         $entityManager = $this->createStub(EntityManagerInterface::class);
         $entityManager->method('getExpressionBuilder')->willReturn(new Expr());
@@ -56,20 +67,20 @@ final class FilterTest extends FilterTestCase
             )
             ->setParameter('parameter_1', 3);
 
+        $this->assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
+
         $proxyQuery = new ProxyQuery($queryBuilder);
-        $this->assertSameQuery([], $proxyQuery);
 
-        $filter1 = new StringFilter();
-        $filter1->setCondition(Filter::CONDITION_OR);
-        $filter1->initialize('field_name', $filterOptions);
+        foreach ($filterOptionsCollection as [$type, $orGroup, $defaultOptions, $field, $options]) {
+            $filter = new $type();
+            $filter->initialize($field, $defaultOptions);
+            $filter->setCondition(Filter::CONDITION_OR);
+            if (null !== $orGroup) {
+                $filter->setOption('or_group', $orGroup);
+            }
 
-        $filter1->filter($proxyQuery, 'e', 'project', ['value' => 'sonata-project']);
-
-        $filter2 = new StringFilter();
-        $filter2->setCondition(Filter::CONDITION_OR);
-        $filter2->initialize('field_name', $filterOptions);
-
-        $filter2->filter($proxyQuery, 'e', 'version', ['value' => '3.x']);
+            $filter->apply($proxyQuery, $options);
+        }
 
         // More custom conditions set after the filters.
         $queryBuilder->andWhere($queryBuilder->expr()->eq(7, 8));
@@ -79,21 +90,85 @@ final class FilterTest extends FilterTestCase
 
     public function orExpressionProvider(): iterable
     {
-        yield 'Using "admin_code" option' => [
+        yield 'Using "or_group" option' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (e.project LIKE :field_name_0 OR e.version LIKE :field_name_1) AND 7 = 8',
+            .' AND (e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
-                'allow_empty' => false,
-                'admin_code' => 'my_admin',
+                [
+                    StringFilter::class,
+                    'my_admin',
+                    [
+                        'field_name' => 'project',
+                        'allow_empty' => false,
+                    ],
+                    'project',
+                    [
+                        'value' => 'sonata-project',
+                    ],
+                ],
+                [
+                    StringFilter::class,
+                    'my_admin',
+                    [
+                        'field_name' => 'version',
+                        'allow_empty' => false,
+                    ],
+                    'version',
+                    [
+                        'value' => '3.x',
+                    ],
+                ],
             ],
         ];
 
-        yield 'Missing "admin_code" option, fallback to DQL marker' => [
+        yield 'Using "or_group" option with single filter' => [
+            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
+            .' AND e.project LIKE :project_0 AND 7 = 8',
+            [
+                [
+                    StringFilter::class,
+                    'my_admin',
+                    [
+                        'field_name' => 'project',
+                        'allow_empty' => false,
+                    ],
+                    'project',
+                    [
+                        'value' => 'sonata-project',
+                    ],
+                ],
+            ],
+        ];
+
+        yield 'Missing "or_group" option, fallback to DQL marker' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
             .' AND (:sonata_admin_datagrid_filter_query_marker IS NULL'
-            .' OR e.project LIKE :field_name_0 OR e.version LIKE :field_name_1) AND 7 = 8',
+            .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
-                'allow_empty' => false,
+                [
+                    StringFilter::class,
+                    null,
+                    [
+                        'field_name' => 'project',
+                        'allow_empty' => false,
+                    ],
+                    'project',
+                    [
+                        'value' => 'sonata-project',
+                    ],
+                ],
+                [
+                    StringFilter::class,
+                    null,
+                    [
+                        'field_name' => 'version',
+                        'allow_empty' => false,
+                    ],
+                    'version',
+                    [
+                        'value' => '3.x',
+                    ],
+                ],
             ],
         ];
     }
