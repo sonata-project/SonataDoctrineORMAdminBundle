@@ -34,33 +34,6 @@ final class FilterTest extends FilterTestCase
         $this->filter = $this->createFilter();
     }
 
-    public function testFieldDescription(): void
-    {
-        $this->assertSame(['option1' => 2], $this->filter->getDefaultOptions());
-        $this->assertNull($this->filter->getOption('1'));
-
-        $this->filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
-
-        $this->assertSame(2, $this->filter->getOption('option1'));
-        $this->assertNull($this->filter->getOption('foo'));
-        $this->assertSame('bar', $this->filter->getOption('foo', 'bar'));
-
-        $this->assertSame('field_name', $this->filter->getName());
-        $this->assertSame(['class' => 'FooBar'], $this->filter->getFieldOptions());
-    }
-
-    public function testExceptionOnEmptyFieldName(): void
-    {
-        $this->expectException(\RuntimeException::class);
-
-        $this->filter->getFieldName();
-    }
-
-    public function testIsActive(): void
-    {
-        $this->assertFalse($this->filter->isActive());
-    }
-
     /**
      * @dataProvider orExpressionProvider
      */
@@ -128,7 +101,7 @@ final class FilterTest extends FilterTestCase
     private function createFilter(): Filter
     {
         return new class() extends Filter {
-            public function filter(ProxyQueryInterface $queryBuilder, string $alias, string $field, array $data): void
+            public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
             {
                 // TODO: Implement filter() method.
                 throw new \BadMethodCallException(sprintf(
