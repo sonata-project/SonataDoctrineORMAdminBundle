@@ -48,10 +48,12 @@ final class ManyToOneMappingTest extends BasePantherTestCase
 
     private function createAuthorForm(Crawler $crawler): Form
     {
+        $authorAttributeId = $crawler->filter('.author_id')->attr('name');
         $authorAttributeName = $crawler->filter('.author_name')->attr('name');
         $addressAttributeName = $crawler->filter('.author_address')->attr('name');
 
         $authorForm = $crawler->filter('.modal-content button[name="btn_create"]')->form();
+        $authorForm[$authorAttributeId] = 'Wonderful Id';
         $authorForm[$authorAttributeName] = 'Wonderful Author';
         $authorForm[$addressAttributeName] = 'Wonderful street';
 

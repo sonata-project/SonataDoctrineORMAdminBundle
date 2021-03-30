@@ -32,7 +32,31 @@ final class Pager extends BasePager
 
     public function getCurrentPageResults(): iterable
     {
-        return $this->getQuery()->execute();
+        $query = $this->getQuery();
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf(
+                'The pager query MUST implement %s.',
+                ProxyQueryInterface::class,
+            ));
+        }
+
+        $identifierFieldNames = $query
+            ->getQueryBuilder()
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
+            ->getIdentifierFieldNames();
+
+        // NEXT_MAJOR: Remove the check and the else part.
+        if (method_exists($query, 'getDoctrineQuery')) {
+            // Paginator with fetchJoinCollection doesn't work with composite primary keys
+            // https://github.com/doctrine/orm/issues/2910
+            $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
+        } else {
+            $paginator = new Paginator($query->getQueryBuilder(), 1 === \count($identifierFieldNames));
+        }
+
+        return $paginator->getIterator();
     }
 
     public function countResults(): int
@@ -67,7 +91,12 @@ final class Pager extends BasePager
             throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
-        $paginator = new Paginator($query->getQueryBuilder());
+        // NEXT_MAJOR: Remove the check and the else part.
+        if (method_exists($query, 'getDoctrineQuery')) {
+            $paginator = new Paginator($query->getDoctrineQuery());
+        } else {
+            $paginator = new Paginator($query->getQueryBuilder());
+        }
 
         return \count($paginator);
     }

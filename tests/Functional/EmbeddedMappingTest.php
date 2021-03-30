@@ -35,10 +35,12 @@ final class EmbeddedMappingTest extends BasePantherTestCase
     {
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/create');
 
+        $attributeId = $crawler->filter('.author_id')->attr('name');
         $attributeName = $crawler->filter('.author_name')->attr('name');
         $attributeAddressStreet = $crawler->filter('.author_address')->attr('name');
 
         $form = $crawler->selectButton('Create and return to list')->form();
+        $form[$attributeId] = 'new_id';
         $form[$attributeName] = 'A wonderful author';
         $form[$attributeAddressStreet] = 'A wonderful street to live';
 

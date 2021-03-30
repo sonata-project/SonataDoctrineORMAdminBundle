@@ -1,7 +1,7 @@
 UPGRADE 3.x
 ===========
 
-UPGRADE FROM 3.xx to 3.xx
+UPGRADE FROM 3.31 to 3.32
 =========================
 
 ### Deprecated Sonata\DoctrineORMAdminBundle\Model\ModelManager::modelReverseTransform()

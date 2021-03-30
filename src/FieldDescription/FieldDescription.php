@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\FieldDescription\BaseFieldDescription;
 
 final class FieldDescription extends BaseFieldDescription
@@ -38,6 +39,16 @@ final class FieldDescription extends BaseFieldDescription
         }
 
         return $this->getFieldValue($object, $this->getFieldName());
+    }
+
+    public function describesSingleValuedAssociation(): bool
+    {
+        return \is_int($this->mappingType) && $this->mappingType === ($this->mappingType & ClassMetadata::TO_ONE);
+    }
+
+    public function describesCollectionValuedAssociation(): bool
+    {
+        return \is_int($this->mappingType) && $this->mappingType === ($this->mappingType & ClassMetadata::TO_MANY);
     }
 
     protected function setFieldMapping(array $fieldMapping): void

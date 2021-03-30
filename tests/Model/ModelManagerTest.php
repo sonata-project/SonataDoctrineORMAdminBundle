@@ -441,7 +441,7 @@ final class ModelManagerTest extends TestCase
 
     public function testAssociationIdentifierType(): void
     {
-        $entity = new ContainerEntity(new AssociatedEntity(42, new EmbeddedEntity()), new EmbeddedEntity());
+        $entity = new ContainerEntity(new AssociatedEntity(new EmbeddedEntity(), 42), new EmbeddedEntity());
 
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects($this->any())

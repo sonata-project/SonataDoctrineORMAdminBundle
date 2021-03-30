@@ -25,10 +25,10 @@ class AssociatedEntity
      */
     protected $embeddedEntity;
 
-    public function __construct(int $plainField, Embeddable\EmbeddedEntity $embeddedEntity)
+    public function __construct(Embeddable\EmbeddedEntity $embeddedEntity, int $plainField)
     {
-        $this->plainField = $plainField;
         $this->embeddedEntity = $embeddedEntity;
+        $this->plainField = $plainField;
     }
 
     /**
