@@ -45,22 +45,19 @@ class AddTemplatesCompilerPassTest extends TestCase
                         'filter' => ['default_filter.twig.html'],
                     ];
                 }
-            })
-        ;
+            });
 
         $container
             ->expects($this->any())
             ->method('findTaggedServiceIds')
-            ->willReturn(['my.admin' => [['manager_type' => 'orm']]])
-        ;
+            ->willReturn(['my.admin' => [['manager_type' => 'orm']]]);
 
         $definition = new Definition(null);
 
         $container
             ->expects($this->any())
             ->method('getDefinition')
-            ->willReturn($definition)
-        ;
+            ->willReturn($definition);
 
         $definition->addMethodCall('setFilterTheme', [['custom_call.twig.html']]);
 

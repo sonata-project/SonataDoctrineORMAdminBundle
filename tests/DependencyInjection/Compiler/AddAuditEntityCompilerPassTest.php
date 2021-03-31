@@ -50,8 +50,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
                 if ('simplethings_entityaudit.config' === $id) {
                     return true;
                 }
-            })
-        ;
+            });
 
         $container
             ->expects($this->any())
@@ -64,8 +63,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
                 if ('simplethings.entityaudit.audited_entities' === $id) {
                     return [];
                 }
-            })
-        ;
+            });
 
         $container
             ->expects($this->any())
@@ -86,16 +84,14 @@ class AddAuditEntityCompilerPassTest extends TestCase
 
                     return $tags;
                 }
-            })
-        ;
+            });
 
         $container
             ->expects($this->any())
             ->method('getDefinition')
             ->willReturnCallback(static function ($id) {
                 return new Definition(null, [null, $id]);
-            })
-        ;
+            });
 
         $expectedAuditedEntities = [];
 
@@ -108,8 +104,7 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->once())
             ->method('setParameter')
-            ->with('simplethings.entityaudit.audited_entities', $expectedAuditedEntities)
-        ;
+            ->with('simplethings.entityaudit.audited_entities', $expectedAuditedEntities);
 
         $compilerPass = new AddAuditEntityCompilerPass();
         $compilerPass->process($container);
