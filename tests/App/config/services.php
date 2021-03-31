@@ -89,6 +89,5 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 '',
                 Item::class,
                 null,
-            ])
-    ;
+            ]);
 };
