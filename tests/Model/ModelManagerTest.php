@@ -125,8 +125,7 @@ final class ModelManagerTest extends TestCase
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with('x')
-            ->willReturn($em)
-        ;
+            ->willReturn($em);
         $this->assertSame($em, $this->modelManager->getEntityManager('x'));
     }
 
@@ -621,8 +620,7 @@ final class ModelManagerTest extends TestCase
         $metadata = $this->createMock(ClassMetadata::class);
         $metadata->expects($this->once())
             ->method('getIdentifierFieldNames')
-            ->willReturn($identifierFieldNames)
-        ;
+            ->willReturn($identifierFieldNames);
         $this->setGetMetadataExpectation(Product::class, $metadata);
 
         $this->modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
