@@ -38,8 +38,7 @@ final class AuthorAdmin extends AbstractAdmin
             ])
             ->add('numberOfReaders', FieldDescriptionInterface::TYPE_INTEGER, [
                 'template' => 'author/list_number_of_readers_field.html.twig',
-            ])
-            ;
+            ]);
     }
 
     protected function configureDatagridFilters(DatagridMapper $filter): void
@@ -68,8 +67,7 @@ final class AuthorAdmin extends AbstractAdmin
                 'attr' => [
                     'class' => 'author_address',
                 ],
-            ])
-        ;
+            ]);
     }
 
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
