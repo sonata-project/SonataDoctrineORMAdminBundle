@@ -127,6 +127,9 @@ class Book
         $this->readers->add($reader);
     }
 
+    /**
+     * @return Collection<array-key, Reader>
+     */
     public function getReaders(): Collection
     {
         return $this->readers;

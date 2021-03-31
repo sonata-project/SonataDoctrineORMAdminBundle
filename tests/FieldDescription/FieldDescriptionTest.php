@@ -291,7 +291,7 @@ class FieldDescriptionTest extends TestCase
      *
      * @param string|int $mappingType
      */
-    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected)
+    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
             'fieldName' => 'foo',

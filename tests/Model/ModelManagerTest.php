@@ -231,7 +231,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForSubEmbeddedEntity()
+    public function getMetadataForSubEmbeddedEntity(): ClassMetadata
     {
         $metadata = new ClassMetadata(SubEmbeddedEntity::class);
 
@@ -246,7 +246,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForAssociatedEntity()
+    public function getMetadataForAssociatedEntity(): ClassMetadata
     {
         $embeddedEntityClass = EmbeddedEntity::class;
         $subEmbeddedEntityClass = SubEmbeddedEntity::class;
@@ -278,7 +278,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForContainerEntity()
+    public function getMetadataForContainerEntity(): ClassMetadata
     {
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;

@@ -62,7 +62,7 @@ class CountFilterTest extends FilterTestCase
     }
 
     /**
-     * @return iterable<array{string, int}>
+     * @phpstan-return iterable<array{string, int|null}>
      */
     public function filterDataProvider(): iterable
     {

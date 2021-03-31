@@ -46,6 +46,8 @@ final class FilterTest extends FilterTestCase
     }
 
     /**
+     * @phpstan-param array<array{class-string, string|null, array<string, mixed>, string, array<string, mixed>}> $filterOptionsCollection
+     *
      * @dataProvider orExpressionProvider
      */
     public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
@@ -88,6 +90,9 @@ final class FilterTest extends FilterTestCase
         $this->assertSame($expected, $queryBuilder->getDQL());
     }
 
+    /**
+     * @phpstan-return iterable<array{string, array<array{class-string, string|null, array<string, mixed>, string, array<string, mixed>}>}>
+     */
     public function orExpressionProvider(): iterable
     {
         yield 'Using "or_group" option' => [
