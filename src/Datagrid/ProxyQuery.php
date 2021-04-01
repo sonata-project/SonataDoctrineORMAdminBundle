@@ -159,7 +159,7 @@ class ProxyQuery implements ProxyQueryInterface
         @trigger_error(sprintf(
             'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32'
             .' and will be removed in version 4.0.',
-            __METHOD__,
+            __METHOD__
         ), \E_USER_DEPRECATED);
 
         if (!\is_bool($distinct)) {
@@ -183,7 +183,7 @@ class ProxyQuery implements ProxyQueryInterface
         @trigger_error(sprintf(
             'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.32'
             .' and will be removed in version 4.0.',
-            __METHOD__,
+            __METHOD__
         ), \E_USER_DEPRECATED);
 
         return $this->distinct;
@@ -195,7 +195,7 @@ class ProxyQuery implements ProxyQueryInterface
         if (\func_num_args() > 0) {
             @trigger_error(sprintf(
                 'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31.',
-                __METHOD__,
+                __METHOD__
             ), \E_USER_DEPRECATED);
         }
 
@@ -304,7 +304,7 @@ class ProxyQuery implements ProxyQueryInterface
         @trigger_error(sprintf(
             'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31'
             .' and will be removed in version 4.0.',
-            __METHOD__,
+            __METHOD__
         ), \E_USER_DEPRECATED);
 
         $query = $this->queryBuilder->getQuery();
@@ -417,7 +417,7 @@ class ProxyQuery implements ProxyQueryInterface
         @trigger_error(sprintf(
             'The method "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31'
             .' and will be removed in version 4.0.',
-            __METHOD__,
+            __METHOD__
         ), \E_USER_DEPRECATED);
 
         $queryBuilderId = clone $queryBuilder;
