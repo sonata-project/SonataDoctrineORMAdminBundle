@@ -82,7 +82,7 @@ final class DatagridBuilderTest extends TestCase
     }
 
     /**
-     * @param class-string $pager
+     * @phpstan-param class-string $pager
      *
      * @dataProvider getBaseDatagridData
      */

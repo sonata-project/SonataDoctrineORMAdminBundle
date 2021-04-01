@@ -23,7 +23,7 @@ final class DoubleNameEntity
     /**
      * @Column(type="string")
      *
-     * @var string|null
+     * @var string
      */
     public $name;
 
@@ -38,7 +38,7 @@ final class DoubleNameEntity
      * @Id
      * @Column(type="integer")
      *
-     * @var int|null
+     * @var int
      */
     private $id;
 

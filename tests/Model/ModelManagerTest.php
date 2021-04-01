@@ -54,7 +54,7 @@ final class ModelManagerTest extends TestCase
     use ExpectDeprecationTrait;
 
     /**
-     * @var ManagerRegistry|MockObject
+     * @var ManagerRegistry&MockObject
      */
     private $registry;
 
@@ -83,7 +83,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @return iterable<array{class-string}>
+     * @phpstan-return iterable<array{class-string}>
      */
     public function valueObjectDataProvider(): iterable
     {
@@ -180,7 +180,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @return iterable<array{bool, bool}>
+     * @phpstan-return iterable<array{bool, bool}>
      */
     public function lockDataProvider(): iterable
     {
@@ -654,7 +654,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @return iterable<array{string[], string[], array<int|string>}>
+     * @phpstan-return iterable<array{string[], string[], array<int|string>}>
      */
     public function addIdentifiersToQueryProvider(): iterable
     {

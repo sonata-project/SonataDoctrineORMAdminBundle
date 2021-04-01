@@ -47,7 +47,7 @@ class FilterTypeGuesserTest extends TestCase
      *
      * @dataProvider guessDataProvider
      *
-     * @param class-string $expectedType
+     * @phpstan-param class-string $expectedType
      */
     public function testGuess(
         $mappingType,

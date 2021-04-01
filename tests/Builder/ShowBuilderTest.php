@@ -31,7 +31,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
 class ShowBuilderTest extends TestCase
 {
     /**
-     * @var Stub|TypeGuesserInterface
+     * @var Stub&TypeGuesserInterface
      */
     private $guesser;
 
@@ -41,7 +41,7 @@ class ShowBuilderTest extends TestCase
     private $showBuilder;
 
     /**
-     * @var MockObject|AdminInterface<object>
+     * @var MockObject&AdminInterface<object>
      */
     private $admin;
 

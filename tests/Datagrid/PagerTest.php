@@ -35,7 +35,7 @@ class PagerTest extends TestCase
     }
 
     /**
-     * @param class-string $className
+     * @phpstan-param class-string $className
      *
      * @dataProvider entityClassDataProvider
      */

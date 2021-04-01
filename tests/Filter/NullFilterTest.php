@@ -66,7 +66,7 @@ final class NullFilterTest extends FilterTestCase
     }
 
     /**
-     * @return iterable<array{bool, int, string}>
+     * @phpstan-return iterable<array{bool, int, string}>
      */
     public function valueDataProvider(): iterable
     {
