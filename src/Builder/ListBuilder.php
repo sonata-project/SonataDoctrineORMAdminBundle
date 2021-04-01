@@ -50,6 +50,12 @@ final class ListBuilder implements ListBuilderInterface
     {
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
+            if (null === $guessType) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Cannot guess a type for the field description "%s", You MUST provide a type.',
+                    $fieldDescription->getName()
+                ));
+            }
 
             $fieldDescription->setType($guessType->getType());
         } else {
@@ -69,7 +75,16 @@ final class ListBuilder implements ListBuilderInterface
 
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
-        if (ListMapper::TYPE_ACTIONS === $fieldDescription->getType()) {
+        $type = $fieldDescription->getType();
+        if (!$type) {
+            throw new \RuntimeException(sprintf(
+                'Please define a type for field `%s` in `%s`',
+                $fieldDescription->getName(),
+                \get_class($fieldDescription->getAdmin())
+            ));
+        }
+
+        if (ListMapper::TYPE_ACTIONS === $type) {
             $this->buildActionFieldDescription($fieldDescription);
         }
 
@@ -83,16 +98,8 @@ final class ListBuilder implements ListBuilderInterface
             $fieldDescription->setOption('_sort_order', $fieldDescription->getOption('_sort_order', 'ASC'));
         }
 
-        if (!$fieldDescription->getType()) {
-            throw new \RuntimeException(sprintf(
-                'Please define a type for field `%s` in `%s`',
-                $fieldDescription->getName(),
-                \get_class($fieldDescription->getAdmin())
-            ));
-        }
-
         if (!$fieldDescription->getTemplate()) {
-            $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
+            $fieldDescription->setTemplate($this->getTemplate($type));
 
             if (!$fieldDescription->getTemplate()) {
                 switch ($fieldDescription->getMappingType()) {

@@ -38,6 +38,7 @@ final class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $loader->load('doctrine_orm_filter_types.xml');
 
         $bundles = $container->getParameter('kernel.bundles');
+        \assert(\is_array($bundles));
 
         if (isset($bundles['SimpleThingsEntityAuditBundle'])) {
             $loader->load('audit.xml');

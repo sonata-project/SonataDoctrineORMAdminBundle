@@ -58,7 +58,12 @@ final class AddAuditEntityCompilerPass implements CompilerPassInterface
     private function getModelName(ContainerBuilder $container, string $name): string
     {
         if ('%' === $name[0]) {
-            return $container->getParameter(substr($name, 1, -1));
+            $parameter = $container->getParameter(substr($name, 1, -1));
+            if (!\is_string($parameter)) {
+                throw new \InvalidArgumentException(sprintf('Cannot find the model name "%s"', $name));
+            }
+
+            return $parameter;
         }
 
         return $name;

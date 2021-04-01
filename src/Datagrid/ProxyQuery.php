@@ -163,11 +163,11 @@ final class ProxyQuery implements ProxyQueryInterface
 
         $rootAlias = current($queryBuilder->getRootAliases());
 
-        if ($this->getSortBy()) {
+        $sortBy = $this->getSortBy();
+        if (null !== $sortBy) {
             $orderByDQLPart = $queryBuilder->getDQLPart('orderBy');
             $queryBuilder->resetDQLPart('orderBy');
 
-            $sortBy = $this->getSortBy();
             if (false === strpos($sortBy, '.')) {
                 $sortBy = $rootAlias.'.'.$sortBy;
             }

@@ -49,6 +49,13 @@ final class ShowBuilder implements ShowBuilderInterface
     {
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
+            if (null === $guessType) {
+                throw new \InvalidArgumentException(sprintf(
+                    'Cannot guess a type for the field description "%s", You MUST provide a type.',
+                    $fieldDescription->getName()
+                ));
+            }
+
             $fieldDescription->setType($guessType->getType());
         } else {
             $fieldDescription->setType($type);
@@ -62,7 +69,8 @@ final class ShowBuilder implements ShowBuilderInterface
 
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
-        if (!$fieldDescription->getType()) {
+        $type = $fieldDescription->getType();
+        if (!$type) {
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
@@ -71,7 +79,7 @@ final class ShowBuilder implements ShowBuilderInterface
         }
 
         if (!$fieldDescription->getTemplate()) {
-            $fieldDescription->setTemplate($this->getTemplate($fieldDescription->getType()));
+            $fieldDescription->setTemplate($this->getTemplate($type));
         }
 
         switch ($fieldDescription->getMappingType()) {

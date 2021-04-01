@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
+use Doctrine\Bundle\DoctrineBundle\Registry;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -65,7 +66,9 @@ final class CRUDTest extends BaseFunctionalTestCase
 
     public function testDelete(): void
     {
-        $entityManager = static::bootKernel()->getContainer()->get('doctrine')->getManager();
+        $doctrine = static::bootKernel()->getContainer()->get('doctrine');
+        \assert($doctrine instanceof Registry);
+        $entityManager = $doctrine->getManager();
 
         $entityManager->persist(new Category('category_to_remove', 'name'));
         $entityManager->flush();

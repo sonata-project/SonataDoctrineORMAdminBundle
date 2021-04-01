@@ -47,14 +47,9 @@ final class Pager extends BasePager
             ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
             ->getIdentifierFieldNames();
 
-        // NEXT_MAJOR: Remove the check and the else part.
-        if (method_exists($query, 'getDoctrineQuery')) {
-            // Paginator with fetchJoinCollection doesn't work with composite primary keys
-            // https://github.com/doctrine/orm/issues/2910
-            $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
-        } else {
-            $paginator = new Paginator($query->getQueryBuilder(), 1 === \count($identifierFieldNames));
-        }
+        // Paginator with fetchJoinCollection doesn't work with composite primary keys
+        // https://github.com/doctrine/orm/issues/2910
+        $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
 
         return $paginator->getIterator();
     }
@@ -68,8 +63,13 @@ final class Pager extends BasePager
     {
         $this->resultsCount = $this->computeResultsCount();
 
-        $this->getQuery()->setFirstResult(null);
-        $this->getQuery()->setMaxResults(null);
+        $query = $this->getQuery();
+        if (null === $query) {
+            throw new \LogicException('The pager need a query to be initialised');
+        }
+
+        $query->setFirstResult(null);
+        $query->setMaxResults(null);
 
         if (0 === $this->getPage() || 0 === $this->getMaxPerPage() || 0 === $this->countResults()) {
             $this->setLastPage(0);
@@ -78,8 +78,8 @@ final class Pager extends BasePager
 
             $this->setLastPage((int) ceil($this->countResults() / $this->getMaxPerPage()));
 
-            $this->getQuery()->setFirstResult($offset);
-            $this->getQuery()->setMaxResults($this->getMaxPerPage());
+            $query->setFirstResult($offset);
+            $query->setMaxResults($this->getMaxPerPage());
         }
     }
 
@@ -91,12 +91,7 @@ final class Pager extends BasePager
             throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
-        // NEXT_MAJOR: Remove the check and the else part.
-        if (method_exists($query, 'getDoctrineQuery')) {
-            $paginator = new Paginator($query->getDoctrineQuery());
-        } else {
-            $paginator = new Paginator($query->getQueryBuilder());
-        }
+        $paginator = new Paginator($query->getDoctrineQuery());
 
         return \count($paginator);
     }

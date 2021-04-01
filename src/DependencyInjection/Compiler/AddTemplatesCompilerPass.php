@@ -25,7 +25,9 @@ final class AddTemplatesCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
+        \assert(\is_array($overwrite));
         $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
+        \assert(\is_array($templates));
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
             if (!isset($attributes[0]['manager_type']) || 'orm' !== $attributes[0]['manager_type']) {
