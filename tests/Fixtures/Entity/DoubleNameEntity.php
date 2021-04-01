@@ -20,15 +20,29 @@ use Doctrine\ORM\Mapping\Id;
 /** @Entity */
 final class DoubleNameEntity
 {
-    /** @Column(type="string") */
+    /**
+     * @Column(type="string")
+     *
+     * @var string
+     */
     public $name;
 
-    /** @Column(type="string", nullable=true) */
+    /**
+     * @Column(type="string", nullable=true)
+     *
+     * @var string|null
+     */
     public $name2;
-    /** @Id @Column(type="integer") */
+
+    /**
+     * @Id
+     * @Column(type="integer")
+     *
+     * @var int
+     */
     private $id;
 
-    public function __construct($id, $name, $name2)
+    public function __construct(int $id, string $name, ?string $name2)
     {
         $this->id = $id;
         $this->name = $name;

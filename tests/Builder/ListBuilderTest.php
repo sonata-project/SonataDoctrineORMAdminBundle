@@ -14,6 +14,8 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Datagrid\ListMapper;
@@ -29,8 +31,19 @@ use Symfony\Component\Form\Guess\TypeGuess;
  */
 class ListBuilderTest extends TestCase
 {
+    /**
+     * @var Stub&TypeGuesserInterface
+     */
     private $typeGuesser;
+
+    /**
+     * @var ListBuilder
+     */
     private $listBuilder;
+
+    /**
+     * @var MockObject&AdminInterface<object>
+     */
     private $admin;
 
     protected function setUp(): void
@@ -87,7 +100,7 @@ class ListBuilderTest extends TestCase
     /**
      * @dataProvider fixFieldDescriptionData
      */
-    public function testFixFieldDescription($type, $template): void
+    public function testFixFieldDescription(int $type, string $template): void
     {
         $this->admin->expects($this->once())->method('attachAdminClass');
 
@@ -101,7 +114,10 @@ class ListBuilderTest extends TestCase
         $this->assertSame($template, $fieldDescription->getTemplate());
     }
 
-    public function fixFieldDescriptionData(): array
+    /**
+     * @phpstan-return iterable<array{int, string}>
+     */
+    public function fixFieldDescriptionData(): iterable
     {
         return [
             'one-to-one' => [

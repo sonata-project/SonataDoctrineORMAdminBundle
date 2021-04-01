@@ -63,6 +63,9 @@ class StringListFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
+    /**
+     * @phpstan-return iterable<array{int|null}>
+     */
     public function containsDataProvider(): iterable
     {
         yield 'explicit contains' => [ContainsOperatorType::TYPE_CONTAINS];
@@ -118,6 +121,9 @@ class StringListFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
+    /**
+     * @phpstan-return iterable<array{string[], int, string[], array<string, string>}>
+     */
     public function multipleValuesDataProvider(): iterable
     {
         yield 'equal choice' => [

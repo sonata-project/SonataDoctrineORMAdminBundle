@@ -20,6 +20,9 @@ use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelListType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @phpstan-extends AbstractAdmin<\Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book>
+ */
 final class BookAdmin extends AbstractAdmin
 {
     protected function configureListFields(ListMapper $list): void

@@ -175,12 +175,12 @@ class FieldDescriptionTest extends TestCase
         $associationMapping = [
             'type' => 'integer',
             'fieldName' => 'position',
-            'targetEntity' => 'someValue',
+            'targetEntity' => \stdClass::class,
         ];
 
         $field = new FieldDescription('position', [], [], $associationMapping);
 
-        $this->assertSame('someValue', $field->getTargetModel());
+        $this->assertSame(\stdClass::class, $field->getTargetModel());
     }
 
     public function testIsIdentifierFromFieldMapping(): void
@@ -291,7 +291,7 @@ class FieldDescriptionTest extends TestCase
      *
      * @param string|int $mappingType
      */
-    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected)
+    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
             'fieldName' => 'foo',

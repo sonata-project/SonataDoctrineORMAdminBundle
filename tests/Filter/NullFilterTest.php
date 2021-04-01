@@ -65,7 +65,10 @@ final class NullFilterTest extends FilterTestCase
         $this->assertSame(BooleanType::class, $options['field_type']);
     }
 
-    public function valueDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{bool, int, string}>
+     */
+    public function valueDataProvider(): iterable
     {
         return [
             [false, BooleanType::TYPE_YES, 'WHERE alias.field IS NULL'],

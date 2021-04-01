@@ -15,9 +15,12 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util;
 
 class ClassWithToStringSupport
 {
+    /**
+     * @var string
+     */
     private $stringValue;
 
-    public function __construct($stringValue)
+    public function __construct(string $stringValue)
     {
         $this->stringValue = $stringValue;
     }

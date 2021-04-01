@@ -15,14 +15,17 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
 final class UuidBinaryEntity
 {
+    /**
+     * @var object
+     */
     private $uuid;
 
-    public function __construct($uuid)
+    public function __construct(object $uuid)
     {
         $this->uuid = $uuid;
     }
 
-    public function getId()
+    public function getId(): object
     {
         return $this->uuid;
     }

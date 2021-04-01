@@ -42,9 +42,12 @@ class FilterTypeGuesserTest extends TestCase
     }
 
     /**
-     * @param int|string|null $mappingType
+     * @param int|string|null      $mappingType
+     * @param array<string, mixed> $expectedOptions
      *
      * @dataProvider guessDataProvider
+     *
+     * @phpstan-param class-string $expectedType
      */
     public function testGuess(
         $mappingType,
@@ -65,6 +68,9 @@ class FilterTypeGuesserTest extends TestCase
         $this->assertSame($expectedConfidence, $guess->getConfidence());
     }
 
+    /**
+     * @phpstan-return iterable<array{int|string|null, class-string, array<string, mixed>, int}>
+     */
     public function guessDataProvider(): iterable
     {
         yield [

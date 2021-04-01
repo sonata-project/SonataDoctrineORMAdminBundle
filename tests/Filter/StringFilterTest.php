@@ -32,6 +32,9 @@ class StringFilterTest extends FilterTestCase
         $this->assertFalse($filter->isActive());
     }
 
+    /**
+     * @phpstan-return iterable<array{mixed, bool}>
+     */
     public function getValues(): iterable
     {
         return [
@@ -48,6 +51,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testDefaultType($value, bool $allowEmpty): void
@@ -71,6 +76,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testContains($value, bool $allowEmpty): void
@@ -94,6 +101,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testStartsWith($value, bool $allowEmpty): void
@@ -117,6 +126,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testEndsWith($value, bool $allowEmpty): void
@@ -140,6 +151,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testNotContains($value, bool $allowEmpty): void
@@ -163,6 +176,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testEquals($value, bool $allowEmpty): void
@@ -186,6 +201,8 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * @param mixed $value
+     *
      * @dataProvider getValues
      */
     public function testNotEquals($value, bool $allowEmpty): void
@@ -258,7 +275,10 @@ class StringFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function caseSensitiveDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{bool, int, string, string}>
+     */
+    public function caseSensitiveDataProvider(): iterable
     {
         return [
             [false, StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'],

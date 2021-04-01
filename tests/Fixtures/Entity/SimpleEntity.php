@@ -15,25 +15,32 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
 class SimpleEntity
 {
+    /**
+     * @var int|null
+     */
     private $schmeckles;
+
+    /**
+     * @var string|null
+     */
     private $multiWordProperty;
 
-    public function getSchmeckles()
+    public function getSchmeckles(): ?int
     {
         return $this->schmeckles;
     }
 
-    public function setSchmeckles($value): void
+    public function setSchmeckles(?int $value): void
     {
         $this->schmeckles = $value;
     }
 
-    public function getMultiWordProperty()
+    public function getMultiWordProperty(): ?string
     {
         return $this->multiWordProperty;
     }
 
-    public function setMultiWordProperty($value): void
+    public function setMultiWordProperty(?string $value): void
     {
         $this->multiWordProperty = $value;
     }

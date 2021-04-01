@@ -54,7 +54,7 @@ final class ModelManagerTest extends TestCase
     use ExpectDeprecationTrait;
 
     /**
-     * @var ManagerRegistry|MockObject
+     * @var ManagerRegistry&MockObject
      */
     private $registry;
 
@@ -82,7 +82,10 @@ final class ModelManagerTest extends TestCase
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
     }
 
-    public function valueObjectDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{class-string}>
+     */
+    public function valueObjectDataProvider(): iterable
     {
         return [
             'value object with toString implementation' => [ValueObjectWithToStringImpl::class],
@@ -124,9 +127,9 @@ final class ModelManagerTest extends TestCase
 
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
-            ->with('x')
+            ->with(\stdClass::class)
             ->willReturn($em);
-        $this->assertSame($em, $this->modelManager->getEntityManager('x'));
+        $this->assertSame($em, $this->modelManager->getEntityManager(\stdClass::class));
     }
 
     /**
@@ -137,6 +140,9 @@ final class ModelManagerTest extends TestCase
         $this->assertSame($expected, $this->modelManager->supportsQuery($object));
     }
 
+    /**
+     * @phpstan-return iterable<array{bool, object}>
+     */
     public function supportsQueryDataProvider(): iterable
     {
         yield [true, new ProxyQuery($this->createMock(QueryBuilder::class))];
@@ -144,7 +150,10 @@ final class ModelManagerTest extends TestCase
         yield [false, new \stdClass()];
     }
 
-    public function getVersionDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{bool}>
+     */
+    public function getVersionDataProvider(): iterable
     {
         return [
             [true],
@@ -155,7 +164,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @dataProvider getVersionDataProvider
      */
-    public function testGetVersion($isVersioned): void
+    public function testGetVersion(bool $isVersioned): void
     {
         $object = new VersionedEntity();
 
@@ -170,7 +179,10 @@ final class ModelManagerTest extends TestCase
         }
     }
 
-    public function lockDataProvider(): array
+    /**
+     * @phpstan-return iterable<array{bool, bool}>
+     */
+    public function lockDataProvider(): iterable
     {
         return [
             [true,  false],
@@ -182,7 +194,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @dataProvider lockDataProvider
      */
-    public function testLock($isVersioned, $expectsException): void
+    public function testLock(bool $isVersioned, bool $expectsException): void
     {
         $object = new VersionedEntity();
 
@@ -204,7 +216,7 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->lock($object, 123);
     }
 
-    public function getMetadataForEmbeddedEntity()
+    public function getMetadataForEmbeddedEntity(): ClassMetadata
     {
         $metadata = new ClassMetadata(EmbeddedEntity::class);
 
@@ -219,7 +231,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForSubEmbeddedEntity()
+    public function getMetadataForSubEmbeddedEntity(): ClassMetadata
     {
         $metadata = new ClassMetadata(SubEmbeddedEntity::class);
 
@@ -234,7 +246,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForAssociatedEntity()
+    public function getMetadataForAssociatedEntity(): ClassMetadata
     {
         $embeddedEntityClass = EmbeddedEntity::class;
         $subEmbeddedEntityClass = SubEmbeddedEntity::class;
@@ -266,7 +278,7 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
-    public function getMetadataForContainerEntity()
+    public function getMetadataForContainerEntity(): ClassMetadata
     {
         $containerEntityClass = ContainerEntity::class;
         $associatedEntityClass = AssociatedEntity::class;
@@ -513,7 +525,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testCreate($exception): void
+    public function testCreate(\Throwable $exception): void
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
@@ -533,7 +545,10 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->create(new VersionedEntity());
     }
 
-    public function createUpdateRemoveData(): array
+    /**
+     * @phpstan-return iterable<array{\Throwable}>
+     */
+    public function createUpdateRemoveData(): iterable
     {
         return [
             'PDOException' => [
@@ -548,7 +563,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testUpdate($exception): void
+    public function testUpdate(\Throwable $exception): void
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
@@ -571,7 +586,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @dataProvider createUpdateRemoveData
      */
-    public function testRemove($exception): void
+    public function testRemove(\Throwable $exception): void
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
@@ -592,7 +607,13 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * @param string[]          $expectedParameters
+     * @param string[]          $identifierFieldNames
+     * @param array<int|string> $ids
+     *
      * @dataProvider addIdentifiersToQueryProvider
+     *
+     * @phpstan-param non-empty-array<int|string> $ids
      */
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
     {
@@ -632,6 +653,9 @@ final class ModelManagerTest extends TestCase
         }
     }
 
+    /**
+     * @phpstan-return iterable<array{string[], string[], array<int|string>}>
+     */
     public function addIdentifiersToQueryProvider(): iterable
     {
         yield [['1', '2'], ['id'], [1, 2]];
@@ -673,6 +697,7 @@ final class ModelManagerTest extends TestCase
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Array passed as argument 3 to "Sonata\DoctrineORMAdminBundle\Model\ModelManager::addIdentifiersToQuery()" must not be empty.');
 
+        // @phpstan-ignore-next-line
         $this->modelManager->addIdentifiersToQuery(\stdClass::class, $datagrid, []);
     }
 

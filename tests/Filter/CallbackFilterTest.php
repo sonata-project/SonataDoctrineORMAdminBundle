@@ -70,6 +70,9 @@ class CallbackFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
+    /**
+     * @phpstan-param array{value: mixed} $data
+     */
     public function customCallback(ProxyQueryInterface $query, string $alias, string $field, array $data): bool
     {
         $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
