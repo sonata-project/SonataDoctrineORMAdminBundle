@@ -22,6 +22,12 @@ use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
 
 class FieldDescriptionTest extends TestCase
 {
+    /**
+     * NEXT_MAJOR: Remove the group legacy.
+     * It's only used because the EmptyFilter is triggering a deprecation in the first test of the test suite.
+     *
+     * @group legacy
+     */
     public function testOptions(): void
     {
         $field = new FieldDescription('name', [
