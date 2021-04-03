@@ -142,8 +142,7 @@ final class ModelManagerTest extends TestCase
         $this->registry->expects($this->once())
             ->method('getManagerForClass')
             ->with('x')
-            ->willReturn($em)
-        ;
+            ->willReturn($em);
         $this->assertSame($em, $this->modelManager->getEntityManager('x'));
     }
 
