@@ -9,22 +9,14 @@ on:
 
 jobs:
     test-mysql:
-        name: PHP ${{ matrix.php-version }} + MySQL + ${{ matrix.dependencies }} + ${{ matrix.variant }}
+        name: PHP 8.0 + MySQL + highest
 
         runs-on: ubuntu-latest
 
-        continue-on-error: ${{ matrix.allowed-to-fail }}
+        continue-on-error: false
 
         env:
             DATABASE_URL: "mysql://root@127.0.0.1:3306/sonata_tests"
-
-        strategy:
-            matrix:
-                php-version:
-                    - '8.0'
-                dependencies: [highest]
-                allowed-to-fail: [false]
-                variant: [normal]
 
         services:
             mysql:
@@ -44,7 +36,7 @@ jobs:
             - name: Install PHP with extensions
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php-version }}
+                  php-version: 8.0
                   coverage: pcov
                   tools: composer:v2
                   extensions: zip, mysqli, pdo_mysql
@@ -52,36 +44,24 @@ jobs:
             - name: Add PHPUnit matcher
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-            - name: Install variant
-              if: matrix.variant != 'normal'
-              run: composer require ${{ matrix.variant }} --no-update
-
-            - name: "Install Composer dependencies (${{ matrix.dependencies }})"
+            - name: "Install Composer dependencies (highest)"
               uses: "ramsey/composer-install@v1"
               with:
-                  dependency-versions: "${{ matrix.dependencies }}"
+                  dependency-versions: "highest"
                   composer-options: "--prefer-dist --prefer-stable"
 
             - name: Run Tests
               run: make test
 
     test-postgres:
-        name: PHP ${{ matrix.php-version }} + ${{ matrix.dependencies }} + Postgres + ${{ matrix.variant }}
+        name: PHP 8.0 + highest + Postgres
 
         runs-on: ubuntu-latest
 
-        continue-on-error: ${{ matrix.allowed-to-fail }}
+        continue-on-error: false
 
         env:
             DATABASE_URL: "postgresql://postgres:postgres@127.0.0.1:5432/postgres?serverVersion=13&charset=utf8"
-
-        strategy:
-            matrix:
-                php-version:
-                    - '8.0'
-                dependencies: [highest]
-                allowed-to-fail: [false]
-                variant: [normal]
 
         services:
             postgres:
@@ -101,7 +81,7 @@ jobs:
             - name: Install PHP with extensions
               uses: shivammathur/setup-php@v2
               with:
-                  php-version: ${{ matrix.php-version }}
+                  php-version: 8.0
                   coverage: pcov
                   tools: composer:v2
                   extensions: zip
@@ -109,14 +89,10 @@ jobs:
             - name: Add PHPUnit matcher
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
 
-            - name: Install variant
-              if: matrix.variant != 'normal'
-              run: composer require ${{ matrix.variant }} --no-update
-
-            - name: "Install Composer dependencies (${{ matrix.dependencies }})"
+            - name: "Install Composer dependencies (highest)"
               uses: "ramsey/composer-install@v1"
               with:
-                  dependency-versions: "${{ matrix.dependencies }}"
+                  dependency-versions: "highest"
                   composer-options: "--prefer-dist --prefer-stable"
 
             - name: Run Tests
