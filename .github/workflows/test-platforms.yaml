@@ -54,7 +54,7 @@ jobs:
               run: make test
 
     test-postgres:
-        name: PHP 8.0 + highest + PostgreSQL
+        name: PHP 8.0 + PostgreSQL + highest
 
         runs-on: ubuntu-latest
 
