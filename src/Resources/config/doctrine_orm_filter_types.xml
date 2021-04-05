@@ -43,7 +43,7 @@
         <service id="sonata.admin.orm.filter.type.string" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_string"/>
         </service>
-        <service id="sonata.admin.orm.filter.type.string_list" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
+        <service id="sonata.admin.orm.filter.type.string_list" class="Sonata\DoctrineORMAdminBundle\Filter\StringListFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_string_list"/>
         </service>
         <service id="sonata.admin.orm.filter.type.time" class="Sonata\DoctrineORMAdminBundle\Filter\TimeFilter">
