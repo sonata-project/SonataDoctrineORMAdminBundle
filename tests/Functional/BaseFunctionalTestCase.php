@@ -27,6 +27,7 @@ abstract class BaseFunctionalTestCase extends WebTestCase
     protected function setUp(): void
     {
         $this->client = static::createClient();
+        $this->client->followRedirects();
     }
 
     protected static function getKernelClass(): string
