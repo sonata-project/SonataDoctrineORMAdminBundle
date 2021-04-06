@@ -755,10 +755,13 @@ class ModelManager implements ModelManagerInterface, LockInterface
      */
     public function getDefaultSortValues($class)
     {
-        @trigger_error(sprintf(
-            'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
-            __METHOD__
-        ), \E_USER_DEPRECATED);
+        // NEXT_MAJOR: Remove this block.
+        if ('sonata_deprecation_mute' !== (\func_get_args()[1] ?? null)) {
+            @trigger_error(sprintf(
+                'Method %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.27 and will be removed in 4.0.',
+                __METHOD__
+            ), \E_USER_DEPRECATED);
+        }
 
         return [
             '_sort_order' => 'ASC',
