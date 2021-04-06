@@ -15,10 +15,12 @@ twig:
     exception_controller: null
     strict_variables: false
 
+parameters:
+    env(DATABASE_URL): 'sqlite:////%kernel.cache_dir%/test_database.db'
+
 doctrine:
     dbal:
-        driver: pdo_sqlite
-        path: "%kernel.cache_dir%/test_database.db"
+        url: "%env(resolve:DATABASE_URL)%"
     orm:
         auto_generate_proxy_classes: true
         auto_mapping: true

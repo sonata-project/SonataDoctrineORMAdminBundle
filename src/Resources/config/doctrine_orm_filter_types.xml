@@ -10,17 +10,11 @@
         <service id="sonata.admin.orm.filter.type.choice" class="Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_choice"/>
         </service>
-        <service id="sonata.admin.orm.filter.type.model" class="Sonata\DoctrineORMAdminBundle\Filter\ModelFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_model"/>
+        <service id="sonata.admin.orm.filter.type.class" class="Sonata\DoctrineORMAdminBundle\Filter\ClassFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_class"/>
         </service>
-        <service id="sonata.admin.orm.filter.type.model_autocomplete" class="Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_model_autocomplete"/>
-        </service>
-        <service id="sonata.admin.orm.filter.type.string" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_string"/>
-        </service>
-        <service id="sonata.admin.orm.filter.type.number" class="Sonata\DoctrineORMAdminBundle\Filter\NumberFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_number"/>
+        <service id="sonata.admin.orm.filter.type.count" class="Sonata\DoctrineORMAdminBundle\Filter\CountFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_count"/>
         </service>
         <service id="sonata.admin.orm.filter.type.date" class="Sonata\DoctrineORMAdminBundle\Filter\DateFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_date"/>
@@ -31,14 +25,29 @@
         <service id="sonata.admin.orm.filter.type.datetime" class="Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_datetime"/>
         </service>
-        <service id="sonata.admin.orm.filter.type.time" class="Sonata\DoctrineORMAdminBundle\Filter\TimeFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_time"/>
-        </service>
         <service id="sonata.admin.orm.filter.type.datetime_range" class="Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter">
             <tag name="sonata.admin.filter.type" alias="doctrine_orm_datetime_range"/>
         </service>
-        <service id="sonata.admin.orm.filter.type.class" class="Sonata\DoctrineORMAdminBundle\Filter\ClassFilter">
-            <tag name="sonata.admin.filter.type" alias="doctrine_orm_class"/>
+        <service id="sonata.admin.orm.filter.type.model_autocomplete" class="Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_model_autocomplete"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.model" class="Sonata\DoctrineORMAdminBundle\Filter\ModelFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_model"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.null" class="Sonata\DoctrineORMAdminBundle\Filter\NullFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_null"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.number" class="Sonata\DoctrineORMAdminBundle\Filter\NumberFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_number"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.string" class="Sonata\DoctrineORMAdminBundle\Filter\StringFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_string"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.string_list" class="Sonata\DoctrineORMAdminBundle\Filter\StringListFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_string_list"/>
+        </service>
+        <service id="sonata.admin.orm.filter.type.time" class="Sonata\DoctrineORMAdminBundle\Filter\TimeFilter">
+            <tag name="sonata.admin.filter.type" alias="doctrine_orm_time"/>
         </service>
     </services>
 </container>
