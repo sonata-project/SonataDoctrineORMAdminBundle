@@ -73,9 +73,17 @@ StringFilter
 
 The string filter has additional options:
 
-* ``case_sensitive`` - set to ``false`` to make the search case insensitive. By default ``true`` is used;
+* ``case_sensitive`` - set to ``false`` to make the search case insensitive. By default ``null`` is used;
 * ``trim`` - use one of ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_*`` constants to control the clearing of blank spaces around in the value. By default ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_BOTH`` is used;
 * ``allow_empty`` - set to ``true`` to enable search by empty value. By default ``false`` is used.
+
+.. versionadded:: 3.x
+
+    In order to perform real case sensitive comparisons along the MySQL platform, the ``BINARY()`` function
+    will be used when "case_sensitive" option is set to ``true`` and the `DoctrineExtensions\Query\Mysql\Binary <https://github.com/beberlei/DoctrineExtensions#doctrineextensions>`_
+    DQL extension is registered using the name "binary". This behavior requires the package "beberlei/doctrineextensions".
+    If you want to keep the previous behavior, you can use ``null`` as value for the ``case_sensitive`` option.
+    For more information, see https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like.
 
 StringListFilter
 ----------------

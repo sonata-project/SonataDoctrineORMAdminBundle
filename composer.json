@@ -54,6 +54,7 @@
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
     },
     "require-dev": {
+        "beberlei/doctrineextensions": "^1.3",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.52",
@@ -69,6 +70,7 @@
         "vimeo/psalm": "^4.1.1"
     },
     "suggest": {
+        "beberlei/doctrineextensions": "If you need case sensitive comparisons using MySQL.",
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
     "config": {
