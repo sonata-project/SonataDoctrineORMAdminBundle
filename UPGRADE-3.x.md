@@ -1,6 +1,22 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.x to 3.x
+=======================
+
+### Sonata\DoctrineORMAdminBundle\Filter\StringFilter
+
+* Omitting or not passing an instance of `Doctrine\ORM\EntityManagerInterface` as argument 1 to `StringFilter::__construct()`
+  is deprecated.
+
+* The default value for the "case_sensitive" option is changed from `true` to `null`, keeping the behavior of its previous value.
+
+* In order to perform real case sensitive comparisons along the MySQL platform, the `BINARY()` function
+  will be used when "case_sensitive" option is set to `true` and the [`DoctrineExtensions\Query\Mysql\Binary`](https://github.com/beberlei/DoctrineExtensions#doctrineextensions)
+  DQL extension is registered using the name "binary". This behavior requires the package "beberlei/doctrineextensions".
+  If you want to keep the previous behavior, you can use `null` as value for the "case_sensitive" option.
+  For more information, see https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like.
+
 UPGRADE FROM 3.31 to 3.32
 =========================
 

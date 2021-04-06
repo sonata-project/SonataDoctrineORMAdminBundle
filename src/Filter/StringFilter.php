@@ -13,6 +13,9 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\EntityManagerInterface;
+use DoctrineExtensions\Query\Mysql\Binary;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
@@ -46,6 +49,29 @@ class StringFilter extends Filter
         StringOperatorType::TYPE_ENDS_WITH,
         StringOperatorType::TYPE_NOT_CONTAINS,
     ];
+
+    /**
+     * @var Configuration|null
+     */
+    private $doctrineConfig;
+
+    /**
+     * NEXT_MAJOR: Do not accept null value in argument 1.
+     */
+    public function __construct(?EntityManagerInterface $em = null)
+    {
+        if (null === $em) {
+            @trigger_error(sprintf(
+                'Omitting or passing other type than "%s" as argument 1 to "%s()" is deprecated since'
+                .' sonata-project/doctrine-orm-admin-bundle 3.x and will be not allowed in version 4.0.',
+                EntityManagerInterface::class,
+                __METHOD__
+            ), \E_USER_DEPRECATED);
+        }
+        $this->doctrineConfig = $em ? $em->getConfiguration() : null;
+        // NEXT_MAJOR: Replace the previous line with the following one.
+        // $this->doctrineConfig = $em->getConfiguration();
+    }
 
     public function filter(BaseProxyQueryInterface $query, $alias, $field, $data)
     {
@@ -87,13 +113,23 @@ class StringFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
 
-        $or = $query->getQueryBuilder()->expr()->orX();
+        $caseSensitive = $this->getOption('case_sensitive');
 
-        if ($this->getOption('case_sensitive')) {
-            $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        if (false === $caseSensitive && '' !== $data['value']) {
+            $clause = 'LOWER(%s.%s) %s :%s';
+        } elseif (true === $caseSensitive && '' !== $data['value'] && null !== $this->doctrineConfig
+            && Binary::class === $this->doctrineConfig->getCustomStringFunction('binary')
+        ) {
+            // NEXT_MAJOR: Remove the type check against `$this->doctrineConfig` in the `elseif` condition.
+            // @see https://dev.mysql.com/doc/refman/8.0/en/string-comparison-functions.html#operator_like.
+            $clause = '%s.%s %s BINARY(:%s)';
         } else {
-            $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+            $clause = '%s.%s %s :%s';
         }
+
+        $or = $query->getQueryBuilder()->expr()->orX(
+            sprintf($clause, $alias, $field, $operator, $parameterName)
+        );
 
         if (StringOperatorType::TYPE_NOT_CONTAINS === $type || StringOperatorType::TYPE_NOT_EQUAL === $type) {
             $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
@@ -129,7 +165,7 @@ class StringFilter extends Filter
             $parameterName,
             sprintf(
                 $format,
-                $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+                false !== $caseSensitive || '' === $data['value'] ? $data['value'] : mb_strtolower($data['value'])
             )
         );
     }
@@ -139,7 +175,7 @@ class StringFilter extends Filter
         return [
             // NEXT_MAJOR: Remove the format option.
             'format' => '%%%s%%',
-            'case_sensitive' => true,
+            'case_sensitive' => null,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,
         ];

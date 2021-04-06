@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
@@ -98,8 +99,7 @@ final class FilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
-        foreach ($filterOptionsCollection as [$type, $orGroup, $defaultOptions, $field, $options]) {
-            $filter = new $type();
+        foreach ($filterOptionsCollection as [$filter, $orGroup, $defaultOptions, $field, $options]) {
             $filter->initialize($field, $defaultOptions);
             $filter->setCondition(Filter::CONDITION_OR);
             if (null !== $orGroup) {
@@ -117,12 +117,21 @@ final class FilterTest extends FilterTestCase
 
     public function orExpressionProvider(): iterable
     {
+        $doctrineConfig = $this->createMock(Configuration::class);
+        $doctrineConfig->method('getCustomStringFunction')
+            ->with('binary')
+            ->willReturn(null);
+
+        $em = $this->createStub(EntityManagerInterface::class);
+        $em->method('getConfiguration')
+            ->willReturn($doctrineConfig);
+
         yield 'Using "or_group" option' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
             .' AND (e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
                 [
-                    StringFilter::class,
+                    new StringFilter($em),
                     'my_admin',
                     [
                         'field_name' => 'project',
@@ -134,7 +143,7 @@ final class FilterTest extends FilterTestCase
                     ],
                 ],
                 [
-                    StringFilter::class,
+                    new StringFilter($em),
                     'my_admin',
                     [
                         'field_name' => 'version',
@@ -153,7 +162,7 @@ final class FilterTest extends FilterTestCase
             .' AND e.project LIKE :project_0 AND 7 = 8',
             [
                 [
-                    StringFilter::class,
+                    new StringFilter($em),
                     'my_admin',
                     [
                         'field_name' => 'project',
@@ -173,7 +182,7 @@ final class FilterTest extends FilterTestCase
             .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
                 [
-                    StringFilter::class,
+                    new StringFilter($em),
                     null,
                     [
                         'field_name' => 'project',
@@ -185,7 +194,7 @@ final class FilterTest extends FilterTestCase
                     ],
                 ],
                 [
-                    StringFilter::class,
+                    new StringFilter($em),
                     null,
                     [
                         'field_name' => 'version',
