@@ -23,6 +23,9 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface as ORMProxyQueryI
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
+/**
+ * @phpstan-extends AbstractAdmin<\Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author>
+ */
 final class AuthorAdmin extends AbstractAdmin
 {
     protected function configureListFields(ListMapper $list): void

@@ -16,6 +16,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 
+/**
+ * @phpstan-extends AbstractAdmin<\Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Sub>
+ */
 final class SubAdmin extends AbstractAdmin
 {
     protected function configureListFields(ListMapper $list)
