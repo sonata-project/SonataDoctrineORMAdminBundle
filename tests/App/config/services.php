@@ -16,11 +16,13 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\ItemAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\SubAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Car;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Sub;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -31,7 +33,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->load('Sonata\\DoctrineORMAdminBundle\\Tests\\App\\DataFixtures\\', dirname(__DIR__).'/DataFixtures')
 
         ->set(CategoryAdmin::class)
-            ->public()
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Category',
@@ -43,7 +44,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set(BookAdmin::class)
-            ->public()
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Book',
@@ -55,7 +55,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set(AuthorAdmin::class)
-            ->public()
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Author',
@@ -68,7 +67,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->call('setTemplate', ['outer_list_rows_list', 'author/list_outer_list_rows_list.html.twig'])
 
         ->set(CarAdmin::class)
-            ->public()
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Car',
@@ -80,7 +78,6 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ])
 
         ->set(ItemAdmin::class)
-            ->public()
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Command item',
@@ -88,6 +85,17 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->args([
                 '',
                 Item::class,
+                null,
+            ])
+
+        ->set(SubAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'label' => 'Inheritance',
+            ])
+            ->args([
+                '',
+                Sub::class,
                 null,
             ]);
 };

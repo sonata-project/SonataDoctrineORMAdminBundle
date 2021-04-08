@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.32.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.32.0...3.32.1) - 2021-04-06
+### Fixed
+- [[#1393](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1393)] Added missing filter declaration in the config ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.32.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.31.0...3.32.0) - 2021-03-30
 ### Added
 - [[#1355](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1355)] `ModelManager::reverseTransform()` ([@VincentLanglet](https://github.com/VincentLanglet))

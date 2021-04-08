@@ -16,22 +16,8 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Symfony\Component\HttpFoundation\Request;
 
-final class CRUDTest extends BasePantherTestCase
+final class CRUDTest extends BaseFunctionalTestCase
 {
-    public function testFilter(): void
-    {
-        $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/list');
-
-        $this->client->clickLink('Filters');
-        $this->client->clickLink('Name');
-
-        $this->client->submitForm('Filter', [
-            'filter[name][value]' => 'Novel',
-        ]);
-
-        self::assertSelectorTextContains('.sonata-link-identifier', 'Novel');
-    }
-
     public function testList(): void
     {
         $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/list');

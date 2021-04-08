@@ -63,6 +63,7 @@
         "psalm/plugin-symfony": "^2.0",
         "sonata-project/block-bundle": "^4.2",
         "sonata-project/entity-audit-bundle": "^1.1",
+        "symfony/css-selector": "^4.4 || ^5.2",
         "symfony/panther": "^1.0",
         "symfony/phpunit-bridge": "^5.2",
         "symfony/templating": "^4.4 || ^5.2",
