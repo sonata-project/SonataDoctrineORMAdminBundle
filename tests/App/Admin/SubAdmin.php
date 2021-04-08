@@ -21,7 +21,7 @@ use Sonata\AdminBundle\Datagrid\ListMapper;
  */
 final class SubAdmin extends AbstractAdmin
 {
-    protected function configureListFields(ListMapper $list)
+    protected function configureListFields(ListMapper $list): void
     {
         $list->addIdentifier('id');
         $list->add('otherField');

@@ -25,5 +25,5 @@ class Sub extends Base
      *
      * @var string
      */
-    private $otherField = 'HELLO WORLD';
+    public $otherField = 'HELLO WORLD';
 }
