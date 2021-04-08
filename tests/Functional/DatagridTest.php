@@ -30,4 +30,32 @@ final class DatagridTest extends BasePantherTestCase
 
         self::assertSelectorTextContains('.sonata-link-identifier', 'Dystopian');
     }
+
+    public function testFilterRespectingCaseSensitivity(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
+
+        $this->client->clickLink('Filters');
+        $this->client->clickLink('Address Street');
+
+        $this->client->submitForm('Filter', [
+            'filter[address__street][value]' => 'Mancha',
+        ]);
+
+        self::assertSelectorTextContains('.sonata-link-identifier', 'Miguel de Cervantes');
+    }
+
+    public function testFilterNotRespectingCaseSensitivity(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
+
+        $this->client->clickLink('Filters');
+        $this->client->clickLink('Address Street');
+
+        $this->client->submitForm('Filter', [
+            'filter[address__street][value]' => 'mancha',
+        ]);
+
+        self::assertSelectorTextNotContains('.sonata-link-identifier', 'Miguel de Cervantes');
+    }
 }

@@ -20,6 +20,7 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface as ORMProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
@@ -47,8 +48,8 @@ final class AuthorAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('name')
-            ->add('address.street');
+            ->add('name', StringFilter::class)
+            ->add('address.street', StringFilter::class, ['case_sensitive' => true]);
     }
 
     protected function configureFormFields(FormMapper $form): void
