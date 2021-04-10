@@ -54,7 +54,7 @@ final class ChoiceFilter extends Filter
     /**
      * @param mixed[] $data
      *
-     * @phpstan-param array{type: string|int|null, value: mixed} $data
+     * @phpstan-param array{type: int|null, value: mixed} $data
      */
     private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
@@ -88,7 +88,7 @@ final class ChoiceFilter extends Filter
     /**
      * @param mixed[] $data
      *
-     * @phpstan-param array{type: string|int|null, value: mixed} $data
+     * @phpstan-param array{type: int|null, value: mixed} $data
      */
     private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
