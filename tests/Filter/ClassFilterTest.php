@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ClassFilter;
@@ -36,7 +37,7 @@ class ClassFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => '']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => '']));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -49,7 +50,7 @@ class ClassFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => 42]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -62,9 +63,9 @@ class ClassFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']);
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'type']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'type']));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 'type']));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'type']));
 
         $expected = [
             'WHERE alias INSTANCE OF type',

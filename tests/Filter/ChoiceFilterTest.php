@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
@@ -36,7 +37,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -49,7 +50,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', '2']]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', '2']]));
 
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
@@ -57,7 +58,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', '2']]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', '2']]));
 
         $this->assertSameQuery(['WHERE alias.field NOT IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
@@ -71,7 +72,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', null]]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', null]]));
 
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
@@ -79,7 +80,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', null]]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', null]]));
 
         $this->assertSameQuery(['WHERE alias.field NOT IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
@@ -93,7 +94,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => '1']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => '1']));
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '1'], $proxyQuery);
@@ -101,7 +102,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => '1']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => '1']));
 
         $this->assertSameQuery(['WHERE alias.field != :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '1'], $proxyQuery);
@@ -115,7 +116,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => null]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => null]));
 
         $this->assertSameQuery(['WHERE alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters([], $proxyQuery);
@@ -123,7 +124,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => null]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => null]));
 
         $this->assertSameQuery(['WHERE alias.field IS NOT NULL'], $proxyQuery);
         $this->assertSameQueryParameters([], $proxyQuery);
@@ -137,7 +138,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 0]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 0]));
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
@@ -39,15 +40,15 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
+            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
                 $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
+                $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;
             },
         ]);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'myValue']));
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
@@ -63,20 +64,17 @@ class CallbackFilterTest extends FilterTestCase
             'callback' => [$this, 'customCallback'],
         ]);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'myValue']));
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
         $this->assertTrue($filter->isActive());
     }
 
-    /**
-     * @phpstan-param array{value: mixed} $data
-     */
-    public function customCallback(ProxyQueryInterface $query, string $alias, string $field, array $data): bool
+    public function customCallback(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
     {
         $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-        $query->getQueryBuilder()->setParameter('value', $data['value']);
+        $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
         return true;
     }
@@ -89,7 +87,7 @@ class CallbackFilterTest extends FilterTestCase
         $filter->initialize('field_name', []);
 
         $this->expectException(\RuntimeException::class);
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'myValue']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'myValue']));
     }
 
     public function testApplyMethod(): void
@@ -98,16 +96,16 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
-            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
+            'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
                 $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
+                $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;
             },
             'field_name' => 'field_name_test',
         ]);
 
-        $filter->apply($proxyQuery, ['value' => 'myValue']);
+        $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'myValue']));
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY o.field_name_test'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);

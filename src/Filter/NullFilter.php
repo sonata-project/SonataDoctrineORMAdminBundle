@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Form\Type\BooleanType;
@@ -20,14 +21,14 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 final class NullFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        $isYes = BooleanType::TYPE_YES === (int) $data['value'];
-        $isNo = BooleanType::TYPE_NO === (int) $data['value'];
+        $isYes = BooleanType::TYPE_YES === (int) $data->getValue();
+        $isNo = BooleanType::TYPE_NO === (int) $data->getValue();
 
         if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
             $this->applyWhere(

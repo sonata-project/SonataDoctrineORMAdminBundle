@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 
@@ -28,17 +29,17 @@ final class DateRangeFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
-        $filter->filter($proxyQuery, 'alias', 'field', [null, 'test']);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => []]);
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([null, 'test']));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => []]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => ['start' => null, 'end' => null],
-        ]);
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        ]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => ['start' => '', 'end' => ''],
-        ]);
+        ]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -54,13 +55,13 @@ final class DateRangeFilterTest extends FilterTestCase
         $startDateTime = new \DateTime('2016-08-01');
         $endDateTime = new \DateTime('2016-08-31');
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
                 'start' => $startDateTime,
                 'end' => $endDateTime,
             ],
-        ]);
+        ]));
 
         $this->assertSameQuery(['WHERE alias.field >= :field_name_0', 'WHERE alias.field <= :field_name_1'], $proxyQuery);
         $this->assertSameQueryParameters([
@@ -79,13 +80,13 @@ final class DateRangeFilterTest extends FilterTestCase
 
         $startDateTime = new \DateTime('2016-08-01');
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
                 'start' => $startDateTime,
                 'end' => '',
             ],
-        ]);
+        ]));
 
         $this->assertSameQuery(['WHERE alias.field >= :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => $startDateTime], $proxyQuery);
@@ -101,13 +102,13 @@ final class DateRangeFilterTest extends FilterTestCase
 
         $endDateTime = new \DateTime('2016-08-31');
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
                 'start' => '',
                 'end' => $endDateTime,
             ],
-        ]);
+        ]));
 
         $this->assertSameQuery(['WHERE alias.field <= :field_name_1'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_1' => $endDateTime], $proxyQuery);
@@ -133,13 +134,13 @@ final class DateRangeFilterTest extends FilterTestCase
         $this->assertSame($modelTimeZone->getName(), $modelEndDateTime->getTimezone()->getName());
         $this->assertNotSame($modelTimeZone->getName(), $viewEndDateTime->getTimezone()->getName());
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
                 'start' => '',
                 'end' => $modelEndDateTime,
             ],
-        ]);
+        ]));
 
         $this->assertTrue($filter->isActive());
         $this->assertSameQuery(['WHERE alias.field <= :field_name_1'], $proxyQuery);
@@ -192,13 +193,13 @@ final class DateRangeFilterTest extends FilterTestCase
 
         $endDateTime = new \DateTimeImmutable('2016-08-31');
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
                 'start' => '',
                 'end' => $endDateTime,
             ],
-        ]);
+        ]));
 
         $this->assertSameQuery(['WHERE alias.field <= :field_name_1'], $proxyQuery);
         $this->assertTrue($filter->isActive());

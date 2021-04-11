@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Form\Type\BooleanType;
@@ -20,15 +21,17 @@ use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 final class BooleanFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        if (\is_array($data['value'])) {
+        $value = $data->getValue();
+
+        if (\is_array($value)) {
             $values = [];
-            foreach ($data['value'] as $v) {
+            foreach ($value as $v) {
                 if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                     continue;
                 }
@@ -42,13 +45,13 @@ final class BooleanFilter extends Filter
 
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
         } else {
-            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+            if (!\in_array($value, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
                 return;
             }
 
             $parameterName = $this->getNewParameterName($query);
             $this->applyWhere($query, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
+            $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $value) ? 1 : 0);
         }
     }
 

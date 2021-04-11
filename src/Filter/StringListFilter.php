@@ -13,34 +13,37 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 final class StringListFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        if (!\is_array($data['value'])) {
-            $data['value'] = [$data['value']];
+        $value = $data->getValue();
+
+        if (!\is_array($value)) {
+            $data = $data->changeValue([$value]);
         }
 
-        $operator = ContainsOperatorType::TYPE_NOT_CONTAINS === $data['type'] ? 'NOT LIKE' : 'LIKE';
+        $operator = $data->isType(ContainsOperatorType::TYPE_NOT_CONTAINS) ? 'NOT LIKE' : 'LIKE';
 
         $andConditions = $query->getQueryBuilder()->expr()->andX();
-        foreach ($data['value'] as $item) {
+        foreach ($data->getValue() as $item) {
             $parameterName = $this->getNewParameterName($query);
             $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
             $query->getQueryBuilder()->setParameter($parameterName, '%'.serialize($item).'%');
         }
 
-        if (ContainsOperatorType::TYPE_EQUAL === $data['type']) {
-            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data['value'])));
+        if ($data->isType(ContainsOperatorType::TYPE_EQUAL)) {
+            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data->getValue())));
         }
 
         $this->applyWhere($query, $andConditions);

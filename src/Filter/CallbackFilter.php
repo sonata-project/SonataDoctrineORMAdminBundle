@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -20,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 final class CallbackFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         if (!\is_callable($this->getOption('callback'))) {
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
@@ -58,7 +59,7 @@ final class CallbackFilter extends Filter
         ]];
     }
 
-    protected function association(ProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
         $alias = $query->entityJoin($this->getParentAssociationMappings());
 
