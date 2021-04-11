@@ -39,7 +39,7 @@ class CountFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
+        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 42]);
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());

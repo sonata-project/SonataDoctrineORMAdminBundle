@@ -83,12 +83,12 @@ class Author
         $this->name = $name;
     }
 
-    public function getAddress(): ?Address
+    public function getAddress(): Address
     {
         return $this->address;
     }
 
-    public function setAddress(?Address $address): void
+    public function setAddress(Address $address): void
     {
         $this->address = $address;
     }

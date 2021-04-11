@@ -54,9 +54,9 @@ final class ChoiceFilter extends Filter
     /**
      * @param mixed[] $data
      *
-     * @phpstan-param array{type?: string|int|null, value?: mixed} $data
+     * @phpstan-param array{type: int|null, value: mixed} $data
      */
-    private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
         if (0 === \count($data['value'])) {
             return;
@@ -88,9 +88,9 @@ final class ChoiceFilter extends Filter
     /**
      * @param mixed[] $data
      *
-     * @phpstan-param array{type?: string|int|null, value?: mixed} $data
+     * @phpstan-param array{type: int|null, value: mixed} $data
      */
-    private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data): void
     {
         if ('' === $data['value'] || false === $data['value']) {
             return;

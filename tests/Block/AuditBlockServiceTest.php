@@ -58,7 +58,7 @@ class AuditBlockServiceTest extends BlockServiceTestCase
             ->expects($this->once())
             ->method('findRevisionHistory')
             ->with($limit, 0)
-            ->willReturn([$revision = new Revision('test', '123', 'test')]);
+            ->willReturn([$revision = new Revision('test', new \DateTime(), 'test')]);
 
         $this->simpleThingsAuditReader
             ->expects($this->once())

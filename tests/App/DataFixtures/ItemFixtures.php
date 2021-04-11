@@ -16,16 +16,22 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Command;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Product;
 
 final class ItemFixtures extends Fixture implements DependentFixtureInterface
 {
     public function load(ObjectManager $manager): void
     {
         $command1 = $this->getReference(CommandFixtures::COMMAND_1);
+        \assert($command1 instanceof Command);
         $command2 = $this->getReference(CommandFixtures::COMMAND_2);
+        \assert($command2 instanceof Command);
         $product1 = $this->getReference(ProductFixtures::PRODUCT_1);
+        \assert($product1 instanceof Product);
         $product2 = $this->getReference(ProductFixtures::PRODUCT_2);
+        \assert($product2 instanceof Product);
 
         $item1 = new Item($command1, $product1);
         $item2 = new Item($command1, $product2);

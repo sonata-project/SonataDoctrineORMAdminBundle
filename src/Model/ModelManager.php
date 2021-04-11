@@ -126,7 +126,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     {
         $metadata = $this->getMetadata(ClassUtils::getClass($object));
 
-        if (!$metadata->isVersioned) {
+        if (!$metadata->isVersioned || !isset($metadata->reflFields[$metadata->versionField])) {
             return null;
         }
 
@@ -243,17 +243,16 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             }
 
             $fieldType = $metadata->getTypeOfField($name);
-            $type = $fieldType && Type::hasType($fieldType) ? Type::getType($fieldType) : null;
-            if ($type) {
-                $identifiers[] = $this->getValueFromType($value, $type, $fieldType, $platform);
+            if (null !== $fieldType && Type::hasType($fieldType)) {
+                $identifiers[] = $this->getValueFromType($value, Type::getType($fieldType), $fieldType, $platform);
 
                 continue;
             }
 
             $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value));
 
-            foreach ($identifierMetadata->getIdentifierValues($value) as $value) {
-                $identifiers[] = $value;
+            foreach ($identifierMetadata->getIdentifierValues($value) as $identifierValue) {
+                $identifiers[] = $identifierValue;
             }
         }
 
@@ -396,10 +395,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $name;
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function getValueFromType($value, Type $type, string $fieldType, AbstractPlatform $platform): string
+    private function getValueFromType(object $value, Type $type, string $fieldType, AbstractPlatform $platform): string
     {
         if ($platform->hasDoctrineTypeMappingFor($fieldType) &&
             'binary' === $platform->getDoctrineTypeMapping($fieldType)

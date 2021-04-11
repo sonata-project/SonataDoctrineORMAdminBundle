@@ -16,7 +16,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\DataFixtures;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Persistence\ObjectManager;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Reader;
 
 final class BookFixtures extends Fixture implements DependentFixtureInterface
@@ -25,18 +27,26 @@ final class BookFixtures extends Fixture implements DependentFixtureInterface
 
     public function load(ObjectManager $manager): void
     {
-        $book = new Book('book_id', 'Don Quixote', $this->getReference(AuthorFixtures::AUTHOR));
-        $book->addCategory($this->getReference(CategoryFixtures::CATEGORY));
+        $author = $this->getReference(AuthorFixtures::AUTHOR);
+        \assert($author instanceof Author);
+        $category = $this->getReference(CategoryFixtures::CATEGORY);
+        \assert($category instanceof Category);
+
+        $book = new Book('book_id', 'Don Quixote', $author);
+        $book->addCategory($category);
 
         $manager->persist($book);
 
-        $book1 = new Book('book_1', 'Book 1', $this->getReference(AuthorFixtures::AUTHOR_WITH_TWO_BOOKS));
-        $book1->addCategory($this->getReference(CategoryFixtures::CATEGORY));
+        $authorWithTwoBooks = $this->getReference(AuthorFixtures::AUTHOR_WITH_TWO_BOOKS);
+        \assert($authorWithTwoBooks instanceof Author);
+
+        $book1 = new Book('book_1', 'Book 1', $authorWithTwoBooks);
+        $book1->addCategory($category);
 
         $this->addReaders($book1, 100);
 
-        $book2 = new Book('book_2', 'Book 2', $this->getReference(AuthorFixtures::AUTHOR_WITH_TWO_BOOKS));
-        $book2->addCategory($this->getReference(CategoryFixtures::CATEGORY));
+        $book2 = new Book('book_2', 'Book 2', $authorWithTwoBooks);
+        $book2->addCategory($category);
 
         $this->addReaders($book2, 100);
 
