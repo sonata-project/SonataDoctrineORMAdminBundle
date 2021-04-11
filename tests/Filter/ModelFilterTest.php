@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
@@ -27,7 +28,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -40,10 +41,10 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => EqualOperatorType::TYPE_EQUAL,
             'value' => ['1', '2'],
-        ]);
+        ]));
 
         // the alias is now computer by the entityJoin method
         $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
@@ -58,10 +59,10 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', [
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => EqualOperatorType::TYPE_NOT_EQUAL,
             'value' => ['1', '2'],
-        ]);
+        ]));
 
         // the alias is now computer by the entityJoin method
         $this->assertSameQuery(
@@ -79,7 +80,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]));
 
         $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
@@ -93,7 +94,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
         $this->assertSameQuery(
             ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
@@ -106,14 +107,14 @@ class ModelFilterTest extends FilterTestCase
 
     public function testAssociationWithInvalidMapping(): void
     {
-        $this->expectException(\RuntimeException::class);
-
         $filter = new ModelFilter();
         $filter->initialize('field_name', ['mapping_type' => 'foo']);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, ['value' => 'asd']);
+        $this->expectException(\RuntimeException::class);
+
+        $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'asd']));
     }
 
     public function testAssociationWithValidMappingAndEmptyFieldName(): void
@@ -125,7 +126,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, ['value' => 'asd']);
+        $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'asd']));
         $this->assertTrue($filter->isActive());
     }
 
@@ -142,7 +143,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
 
         $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
@@ -172,7 +173,7 @@ class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, ['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
 
         $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',

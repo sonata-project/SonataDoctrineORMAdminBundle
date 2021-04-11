@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
@@ -21,17 +22,19 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 final class ModelAutocompleteFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        if ($data['value'] instanceof Collection) {
-            $data['value'] = $data['value']->toArray();
+        $value = $data->getValue();
+
+        if ($value instanceof Collection) {
+            $data = $data->changeValue($value->toArray());
         }
 
-        if (\is_array($data['value'])) {
+        if (\is_array($data->getValue())) {
             $this->handleMultiple($query, $alias, $data);
         } else {
             $this->handleModel($query, $alias, $data);
@@ -63,47 +66,42 @@ final class ModelAutocompleteFilter extends Filter
     /**
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
-     *
-     * @param mixed[] $data
      */
-    protected function handleMultiple(ProxyQueryInterface $query, string $alias, array $data): void
+    protected function handleMultiple(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($data->getValue())) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
         } else {
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
-    /**
-     * @param mixed[] $data
-     */
-    protected function handleModel(ProxyQueryInterface $query, string $alias, array $data): void
+    protected function handleModel(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
-        if (empty($data['value'])) {
+        if (empty($data->getValue())) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             $this->applyWhere($query, sprintf('%s != :%s', $alias, $parameterName));
         } else {
             $this->applyWhere($query, sprintf('%s = :%s', $alias, $parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
-    protected function association(ProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();

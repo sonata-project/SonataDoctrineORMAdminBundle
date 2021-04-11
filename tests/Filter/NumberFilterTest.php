@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
@@ -26,7 +27,7 @@ class NumberFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -39,7 +40,7 @@ class NumberFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => 42]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -52,12 +53,12 @@ class NumberFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_EQUAL, 'value' => 42]);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_EQUAL, 'value' => 42]);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_GREATER_THAN, 'value' => 42]);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_EQUAL, 'value' => 42]);
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => NumberOperatorType::TYPE_LESS_THAN, 'value' => 42]);
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 42]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => NumberOperatorType::TYPE_EQUAL, 'value' => 42]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => NumberOperatorType::TYPE_GREATER_EQUAL, 'value' => 42]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => NumberOperatorType::TYPE_GREATER_THAN, 'value' => 42]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => NumberOperatorType::TYPE_LESS_EQUAL, 'value' => 42]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => NumberOperatorType::TYPE_LESS_THAN, 'value' => 42]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 42]));
 
         $expected = [
             'WHERE alias.field = :field_name_0',

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
@@ -26,7 +27,7 @@ class StringFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -63,7 +64,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => null]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => null]));
 
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
@@ -88,7 +89,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]));
 
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
@@ -113,7 +114,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]));
 
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
@@ -138,7 +139,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]));
 
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
@@ -163,7 +164,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]));
 
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $proxyQuery);
@@ -188,7 +189,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]));
 
         if ('' !== (string) $value || $allowEmpty) {
             $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
@@ -213,7 +214,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]));
 
         if ('' !== (string) $value || $allowEmpty) {
             $this->assertSameQuery(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $proxyQuery);
@@ -246,7 +247,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->apply($proxyQuery, ['type' => StringOperatorType::TYPE_EQUAL, 'value' => 'asd']);
+        $filter->apply($proxyQuery, FilterData::fromArray(['type' => StringOperatorType::TYPE_EQUAL, 'value' => 'asd']));
 
         $this->assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
@@ -271,7 +272,7 @@ class StringFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'FooBar', 'type' => $operatorType]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'FooBar', 'type' => $operatorType]));
         $this->assertSameQuery([$expectedQuery], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => $expectedParameter], $proxyQuery);
         $this->assertTrue($filter->isActive());

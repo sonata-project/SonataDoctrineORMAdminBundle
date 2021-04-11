@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -22,18 +23,18 @@ use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 final class ModelFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data) || empty($data['value'])) {
+        if (!$data->hasValue() || empty($data->getValue())) {
             return;
         }
 
-        if ($data['value'] instanceof Collection) {
-            $data['value'] = $data['value']->toArray();
-        }
+        $value = $data->getValue();
 
-        if (!\is_array($data['value'])) {
-            $data['value'] = [$data['value']];
+        if ($value instanceof Collection) {
+            $data = $data->changeValue($value->toArray());
+        } elseif (!\is_array($value)) {
+            $data = $data->changeValue([$value]);
         }
 
         $this->handleMultiple($query, $alias, $data);
@@ -65,18 +66,16 @@ final class ModelFilter extends Filter
     /**
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
-     *
-     * @param mixed[] $data
      */
-    protected function handleMultiple(ProxyQueryInterface $query, string $alias, array $data): void
+    protected function handleMultiple(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($data->getValue())) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
 
-        if (isset($data['type']) && EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             $or = $query->getQueryBuilder()->expr()->orX();
 
             $or->add($query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
@@ -96,10 +95,10 @@ final class ModelFilter extends Filter
             $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
-    protected function association(ProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
         $types = [
             ClassMetadata::ONE_TO_ONE,

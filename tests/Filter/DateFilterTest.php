@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
@@ -29,7 +30,7 @@ class DateFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -46,7 +47,7 @@ class DateFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
-        $filter->filter($proxyQuery, 'alias', 'field', ['value' => new \DateTime()]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => new \DateTime()]));
 
         $this->assertSameQuery([
             'WHERE alias.field >= :field_name_0',

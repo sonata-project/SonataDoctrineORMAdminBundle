@@ -16,6 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class Filter extends BaseFilter
@@ -35,20 +36,16 @@ abstract class Filter extends BaseFilter
 
     /**
      * Apply the filter to the QueryBuilder instance.
-     *
-     * @param mixed[] $data
-     *
-     * @phpstan-param array{type?: int|null, value?: mixed} $data
      */
-    abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void;
+    abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void;
 
-    public function apply(BaseProxyQueryInterface $query, array $filterData): void
+    public function apply(BaseProxyQueryInterface $query, FilterData $filterData): void
     {
         if (!$query instanceof ProxyQueryInterface) {
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
-        if (\array_key_exists('value', $filterData)) {
+        if ($filterData->hasValue()) {
             [$alias, $field] = $this->association($query, $filterData);
 
             $this->filter($query, $alias, $field, $filterData);
@@ -61,14 +58,10 @@ abstract class Filter extends BaseFilter
     }
 
     /**
-     * @param mixed[] $data
-     *
      * @return string[]
-     *
-     * @phpstan-param array{type?: int|null, value?: mixed} $data
      * @phpstan-return array{string, string}
      */
-    protected function association(ProxyQueryInterface $query, array $data): array
+    protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
         $alias = $query->entityJoin($this->getParentAssociationMappings());
 

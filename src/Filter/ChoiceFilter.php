@@ -13,19 +13,20 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 final class ChoiceFilter extends Filter
 {
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('type', $data) || !\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        if (\is_array($data['value'])) {
+        if (\is_array($data->getValue())) {
             $this->filterWithMultipleValues($query, $alias, $field, $data);
         } else {
             $this->filterWithSingleValue($query, $alias, $field, $data);
@@ -51,23 +52,18 @@ final class ChoiceFilter extends Filter
         ]];
     }
 
-    /**
-     * @param mixed[] $data
-     *
-     * @phpstan-param array{type: int|null, value: mixed} $data
-     */
-    private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (0 === \count($data['value'])) {
+        if (0 === \count($data->getValue())) {
             return;
         }
 
-        $isNullSelected = \in_array(null, $data['value'], true);
+        $isNullSelected = \in_array(null, $data->getValue(), true);
         $completeField = sprintf('%s.%s', $alias, $field);
         $parameterName = $this->getNewParameterName($query);
 
         $or = $query->getQueryBuilder()->expr()->orX();
-        if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
+        if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             $or->add($query->getQueryBuilder()->expr()->notIn($completeField, ':'.$parameterName));
 
             if (!$isNullSelected) {
@@ -82,39 +78,34 @@ final class ChoiceFilter extends Filter
         }
 
         $this->applyWhere($query, $or);
-        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
-    /**
-     * @param mixed[] $data
-     *
-     * @phpstan-param array{type: int|null, value: mixed} $data
-     */
-    private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if ('' === $data['value'] || false === $data['value']) {
+        if ('' === $data->getValue() || false === $data->getValue()) {
             return;
         }
 
         $parameterName = $this->getNewParameterName($query);
         $completeField = sprintf('%s.%s', $alias, $field);
 
-        if (EqualOperatorType::TYPE_NOT_EQUAL === $data['type']) {
-            if (null === $data['value']) {
+        if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
+            if (null === $data->getValue()) {
                 $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNotNull($completeField));
             } else {
                 $this->applyWhere(
                     $query,
                     sprintf('%s != :%s OR %s IS NULL', $completeField, $parameterName, $completeField)
                 );
-                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+                $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
             }
         } else {
-            if (null === $data['value']) {
+            if (null === $data->getValue()) {
                 $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNull($completeField));
             } else {
                 $this->applyWhere($query, sprintf('%s = :%s', $completeField, $parameterName));
-                $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+                $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
             }
         }
     }
