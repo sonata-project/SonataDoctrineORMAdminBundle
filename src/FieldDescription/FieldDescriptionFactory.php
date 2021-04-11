@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
-use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\Mapping\ClassMetadata;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionFactoryInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
@@ -97,11 +97,11 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
      *
      * @throw \UnexpectedValueException
      */
-    private function getEntityManager(string $class): EntityManager
+    private function getEntityManager(string $class): EntityManagerInterface
     {
         $em = $this->registry->getManagerForClass($class);
 
-        if (!$em instanceof EntityManager) {
+        if (!$em instanceof EntityManagerInterface) {
             throw new \UnexpectedValueException(sprintf('No entity manager defined for class "%s".', $class));
         }
 
