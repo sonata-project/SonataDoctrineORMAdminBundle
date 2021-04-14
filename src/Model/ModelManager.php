@@ -439,7 +439,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
     public function getModelIdentifier($class)
     {
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`.
-        return implode(',', $this->getMetadata($class, 'sonata_deprecation_mute')->identifier);
+        return implode(self::ID_SEPARATOR, $this->getMetadata($class, 'sonata_deprecation_mute')->identifier);
     }
 
     public function getIdentifierValues($entity)
