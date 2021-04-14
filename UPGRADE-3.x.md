@@ -1,6 +1,18 @@
 UPGRADE 3.x
 ===========
 
+UPGRADE FROM 3.x to 3.x
+=======================
+
+### Sonata\DoctrineORMAdminBundle\Filter\StringFilter
+
+The option "case_sensitive" is deprecated in favor of "force_case_insensitivity".
+You must pass `true` in this option when you need to force the matching criteria
+to avoid honoring the case sensitivity in the filter values. Any other values than
+`true` will cause the database to use its default behavior.
+The option "case_sensitive" will be respected only if "force_case_insensitivity"
+is not set.
+
 UPGRADE FROM 3.31 to 3.32
 =========================
 

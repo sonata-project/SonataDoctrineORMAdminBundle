@@ -244,12 +244,18 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove the "legacy" group annotation.
+     *
+     * @group legacy
+     *
      * @dataProvider caseSensitiveDataProvider
+     *
+     * @param array<string, mixed> $options
      */
-    public function testCaseSensitive(bool $caseSensitive, int $operatorType, string $expectedQuery, string $expectedParameter): void
+    public function testCaseSensitive(array $options, int $operatorType, string $expectedQuery, string $expectedParameter): void
     {
         $filter = new StringFilter();
-        $filter->initialize('field_name', ['case_sensitive' => $caseSensitive]);
+        $filter->initialize('field_name', $options);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $this->assertSameQuery([], $proxyQuery);
@@ -260,22 +266,42 @@ class StringFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function caseSensitiveDataProvider(): array
+    public function caseSensitiveDataProvider(): iterable
     {
-        return [
-            [false, StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'],
-            [false, StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'],
-            [false, StringOperatorType::TYPE_EQUAL, 'WHERE LOWER(alias.field) = :field_name_0', 'foobar'],
-            [false, StringOperatorType::TYPE_NOT_EQUAL, 'WHERE LOWER(alias.field) <> :field_name_0 OR alias.field IS NULL', 'foobar'],
-            [false, StringOperatorType::TYPE_STARTS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', 'foobar%'],
-            [false, StringOperatorType::TYPE_ENDS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar'],
-            [true, StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'],
-            [true, StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'],
-            [true, StringOperatorType::TYPE_EQUAL, 'WHERE alias.field = :field_name_0', 'FooBar'],
-            [true, StringOperatorType::TYPE_NOT_EQUAL, 'WHERE alias.field <> :field_name_0 OR alias.field IS NULL', 'FooBar'],
-            [true, StringOperatorType::TYPE_STARTS_WITH, 'WHERE alias.field LIKE :field_name_0', 'FooBar%'],
-            [true, StringOperatorType::TYPE_ENDS_WITH, 'WHERE alias.field LIKE :field_name_0', '%FooBar'],
-        ];
+        yield [[], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => null], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_EQUAL, 'WHERE alias.field = :field_name_0', 'FooBar'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_NOT_EQUAL, 'WHERE alias.field <> :field_name_0 OR alias.field IS NULL', 'FooBar'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_STARTS_WITH, 'WHERE alias.field LIKE :field_name_0', 'FooBar%'];
+        yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_ENDS_WITH, 'WHERE alias.field LIKE :field_name_0', '%FooBar'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_EQUAL, 'WHERE LOWER(alias.field) = :field_name_0', 'foobar'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_NOT_EQUAL, 'WHERE LOWER(alias.field) <> :field_name_0 OR alias.field IS NULL', 'foobar'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_STARTS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', 'foobar%'];
+        yield [['force_case_insensitivity' => true], StringOperatorType::TYPE_ENDS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar'];
+
+        // NEXT_MAJOR: Remove the following test cases.
+        yield [['force_case_insensitivity' => null, 'case_sensitive' => null], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => null, 'case_sensitive' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'];
+        yield [['force_case_insensitivity' => null, 'case_sensitive' => true], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => false, 'case_sensitive' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['force_case_insensitivity' => true, 'case_sensitive' => true], StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'];
+
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar%'];
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE LOWER(alias.field) NOT LIKE :field_name_0 OR alias.field IS NULL', '%foobar%'];
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_EQUAL, 'WHERE LOWER(alias.field) = :field_name_0', 'foobar'];
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_NOT_EQUAL, 'WHERE LOWER(alias.field) <> :field_name_0 OR alias.field IS NULL', 'foobar'];
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_STARTS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', 'foobar%'];
+        yield [['case_sensitive' => false], StringOperatorType::TYPE_ENDS_WITH, 'WHERE LOWER(alias.field) LIKE :field_name_0', '%foobar'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_EQUAL, 'WHERE alias.field = :field_name_0', 'FooBar'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_NOT_EQUAL, 'WHERE alias.field <> :field_name_0 OR alias.field IS NULL', 'FooBar'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_STARTS_WITH, 'WHERE alias.field LIKE :field_name_0', 'FooBar%'];
+        yield [['case_sensitive' => true], StringOperatorType::TYPE_ENDS_WITH, 'WHERE alias.field LIKE :field_name_0', '%FooBar'];
     }
 
     /**
