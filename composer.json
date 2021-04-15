@@ -47,8 +47,7 @@
     },
     "conflict": {
         "simplethings/entity-audit-bundle": ">=2.0",
-        "sonata-project/block-bundle": "<4.2",
-        "sonata-project/core-bundle": "<3.20"
+        "sonata-project/block-bundle": "<4.2"
     },
     "provide": {
         "sonata-project/admin-bundle-persistency-layer": "1.0.0"
