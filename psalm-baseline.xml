@@ -5,4 +5,12 @@
             <code>[CollectionType::class, 'Sonata\CoreBundle\Form\Type\CollectionType']</code>
         </UndefinedClass>
     </file>
+    <file src="tests/Filter/FilterTest.php">
+        <UndefinedPropertyFetch occurrences="1">
+            <code>static::$groupedOrExpressions</code>
+        </UndefinedPropertyFetch>
+        <UndefinedPropertyAssignment occurrences="1">
+            <code>static::$groupedOrExpressions</code>
+        </UndefinedPropertyAssignment>
+    </file>
 </files>
