@@ -64,13 +64,30 @@ final class StringFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
 
-        $or = $query->getQueryBuilder()->expr()->orX();
+        $forceCaseInsensitivity = true === $this->getOption('force_case_insensitivity', false);
 
-        if ($this->getOption('case_sensitive')) {
-            $or->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
-        } else {
-            $or->add(sprintf('LOWER(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+        // NEXT_MAJOR: Remove the following condition and its body.
+        if (null !== $this->getOption('case_sensitive')) {
+            @trigger_error(
+                'Option "case_sensitive" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                .' and will be removed in version 4.x. Use the "force_case_insensitivity" option instead.',
+                \E_USER_DEPRECATED
+            );
+
+            if (null === $this->getOption('force_case_insensitivity')) {
+                $forceCaseInsensitivity = false === $this->getOption('case_sensitive', true);
+            }
         }
+
+        if ($forceCaseInsensitivity && '' !== $data['value']) {
+            $clause = 'LOWER(%s.%s) %s :%s';
+        } else {
+            $clause = '%s.%s %s :%s';
+        }
+
+        $or = $query->getQueryBuilder()->expr()->orX(
+            sprintf($clause, $alias, $field, $operator, $parameterName)
+        );
 
         if (StringOperatorType::TYPE_NOT_CONTAINS === $type || StringOperatorType::TYPE_NOT_EQUAL === $type) {
             $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
@@ -97,7 +114,7 @@ final class StringFilter extends Filter
             $parameterName,
             sprintf(
                 $format,
-                $this->getOption('case_sensitive') ? $data['value'] : mb_strtolower($data['value'])
+                true !== $forceCaseInsensitivity || '' === $data['value'] ? $data['value'] : mb_strtolower($data['value'])
             )
         );
     }
@@ -105,7 +122,12 @@ final class StringFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
-            'case_sensitive' => true,
+            // NEXT_MAJOR: Remove the "format" option.
+            'format' => '%%%s%%',
+            // NEXT_MAJOR: Remove the "case_sensitive" option.
+            'case_sensitive' => null,
+            // NEXT_MAJOR: Use `false` as default value for the "force_case_insensitivity" option.
+            'force_case_insensitivity' => null,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,
         ];
