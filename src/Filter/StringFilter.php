@@ -66,19 +66,6 @@ final class StringFilter extends Filter
 
         $forceCaseInsensitivity = true === $this->getOption('force_case_insensitivity', false);
 
-        // NEXT_MAJOR: Remove the following condition and its body.
-        if (null !== $this->getOption('case_sensitive')) {
-            @trigger_error(
-                'Option "case_sensitive" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
-                .' and will be removed in version 4.x. Use the "force_case_insensitivity" option instead.',
-                \E_USER_DEPRECATED
-            );
-
-            if (null === $this->getOption('force_case_insensitivity')) {
-                $forceCaseInsensitivity = false === $this->getOption('case_sensitive', true);
-            }
-        }
-
         if ($forceCaseInsensitivity && '' !== $data['value']) {
             $clause = 'LOWER(%s.%s) %s :%s';
         } else {
@@ -122,12 +109,7 @@ final class StringFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
-            // NEXT_MAJOR: Remove the "format" option.
-            'format' => '%%%s%%',
-            // NEXT_MAJOR: Remove the "case_sensitive" option.
-            'case_sensitive' => null,
-            // NEXT_MAJOR: Use `false` as default value for the "force_case_insensitivity" option.
-            'force_case_insensitivity' => null,
+            'force_case_insensitivity' => false,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,
         ];
