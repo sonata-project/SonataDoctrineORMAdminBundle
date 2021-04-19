@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="3.16@d03e5ef057d6adc656c0ff7e166c50b73b4f48f3">
-    <file src="src/Builder/FormContractor.php">
-        <UndefinedClass occurrences="1">
-            <code>[CollectionType::class, 'Sonata\CoreBundle\Form\Type\CollectionType']</code>
-        </UndefinedClass>
+    <!-- https://github.com/vimeo/psalm/issues/5643 -->
+    <file src="src/Model/ModelManager.php">
+        <TypeDoesNotContainType occurrences="1">
+            <code>[] === $idx</code>
+        </TypeDoesNotContainType>
     </file>
+    <!-- https://github.com/vimeo/psalm/issues/5551 -->
     <file src="tests/Filter/FilterTest.php">
         <UndefinedPropertyFetch occurrences="1">
             <code>static::$groupedOrExpressions</code>

@@ -151,7 +151,7 @@ final class DatagridBuilderTest extends TestCase
 
     public function testAddFilterNoType(): void
     {
-        $datagrid = $this->createStub(DatagridInterface::class);
+        $datagrid = $this->createMock(DatagridInterface::class);
         $guessType = $this->createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription('test');

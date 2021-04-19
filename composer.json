@@ -67,7 +67,8 @@
         "symfony/phpunit-bridge": "^5.2",
         "symfony/templating": "^4.4 || ^5.2",
         "symfony/yaml": "^4.4 || ^5.2",
-        "vimeo/psalm": "^4.1.1"
+        "vimeo/psalm": "^4.1.1",
+        "weirdan/doctrine-psalm-plugin": "^1.0"
     },
     "suggest": {
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
