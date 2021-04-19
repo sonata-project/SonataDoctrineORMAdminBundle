@@ -28,7 +28,9 @@ final class AddAuditEntityCompilerPass implements CompilerPassInterface
         }
 
         $auditedEntities = $container->getParameter('simplethings.entityaudit.audited_entities');
+        \assert(\is_array($auditedEntities));
         $force = $container->getParameter('sonata_doctrine_orm_admin.audit.force');
+        \assert(\is_bool($force));
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
             if ('orm' !== $attributes[0]['manager_type']) {

@@ -34,6 +34,11 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * @phpstan-template T of object
+ * @phpstan-implements ModelManagerInterface<T>
+ * @phpstan-implements LockInterface<T>
+ */
 final class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
@@ -151,7 +156,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @param string|object $class
      *
-     * @phpstan-param class-string|object $class
+     * @phpstan-param class-string<T>|T $class
      */
     public function getEntityManager($class): EntityManagerInterface
     {
