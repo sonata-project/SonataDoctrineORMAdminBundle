@@ -49,8 +49,8 @@ class DateFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => new \DateTime()]);
 
         $this->assertSameQuery([
-            'WHERE alias.field >= :field_name_0',
-            'WHERE alias.field < :field_name_1',
+            'WHERE alias.field < :field_name_0',
+            'WHERE alias.field >= :field_name_1',
         ], $proxyQuery);
         $this->assertTrue($filter->isActive());
 
