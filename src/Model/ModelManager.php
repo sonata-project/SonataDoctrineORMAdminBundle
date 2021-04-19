@@ -136,6 +136,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return T|null
+     */
     public function find(string $class, $id): ?object
     {
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
@@ -143,11 +147,19 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return array<T>
+     */
     public function findBy(string $class, array $criteria = []): array
     {
         return $this->getEntityManager($class)->getRepository($class)->findBy($criteria);
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return T|null
+     */
     public function findOneBy(string $class, array $criteria = []): ?object
     {
         return $this->getEntityManager($class)->getRepository($class)->findOneBy($criteria);
@@ -156,7 +168,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     /**
      * @param string|object $class
      *
-     * @phpstan-param class-string<T>|T $class
+     * @phpstan-param class-string|object $class
      */
     public function getEntityManager($class): EntityManagerInterface
     {
@@ -279,8 +291,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @phpstan-param non-empty-array<string|int> $idx
-     *
      * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
      */
     public function addIdentifiersToQuery(string $class, BaseProxyQueryInterface $query, array $idx): void
