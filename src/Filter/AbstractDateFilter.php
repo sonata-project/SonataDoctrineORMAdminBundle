@@ -129,7 +129,7 @@ abstract class AbstractDateFilter extends Filter
     {
         // additional data check for ranged items
         if (
-            !is_array($data['value'])
+            !\is_array($data['value'])
             || !\array_key_exists('start', $data['value'])
             || !\array_key_exists('end', $data['value'])
         ) {
@@ -201,8 +201,6 @@ abstract class AbstractDateFilter extends Filter
 
     /**
      * @param \DateTime|\DateTimeImmutable|int $parameter
-     *
-     * @return string
      */
     private function getParameterType($parameter): string
     {

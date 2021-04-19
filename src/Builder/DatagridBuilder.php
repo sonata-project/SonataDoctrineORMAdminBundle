@@ -153,7 +153,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
         $query = $admin->createQuery();
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \InvalidArgumentException();
+            throw new \TypeError(sprintf('The admin query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         return new Datagrid($query, $admin->getList(), $pager, $formBuilder, $values);
