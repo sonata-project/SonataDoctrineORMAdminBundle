@@ -92,7 +92,7 @@ class StringFilter extends Filter
         // NEXT_MAJOR: Remove the following condition and its body.
         if (null !== $this->getOption('case_sensitive')) {
             @trigger_error(
-                'Option "case_sensitive" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x'
+                'Option "case_sensitive" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.33'
                 .' and will be removed in version 4.x. Use the "force_case_insensitivity" option instead.',
                 \E_USER_DEPRECATED
             );
