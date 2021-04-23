@@ -42,9 +42,8 @@ Here's one way to do it:
       }
 
 
-2. Add the your service to the services definition.::
+2. Add the your service in the ``config/services.yaml`` definition.::
 
-      # config/services.yaml
       services:
           ...
           App\Service\Admin\DecoratingDataSource:
