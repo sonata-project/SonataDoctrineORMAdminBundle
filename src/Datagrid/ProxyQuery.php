@@ -18,6 +18,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -205,7 +206,23 @@ class ProxyQuery implements ProxyQueryInterface
             $query->setHint($name, $value);
         }
 
-        return $query->execute($params, $hydrationMode);
+        // NEXT_MAJOR: Remove this.
+        if (\func_num_args() > 0) {
+            return $query->execute($params, $hydrationMode);
+        }
+
+        $identifierFieldNames = $this
+            ->getQueryBuilder()
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
+            ->getIdentifierFieldNames();
+
+        // Paginator with fetchJoinCollection doesn't work with composite primary keys
+        // https://github.com/doctrine/orm/issues/2910
+        $paginator = new Paginator($query, 1 === \count($identifierFieldNames));
+
+        return $paginator->getIterator();
     }
 
     /**
