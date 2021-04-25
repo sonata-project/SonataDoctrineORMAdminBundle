@@ -142,7 +142,7 @@ class ProxyQueryTest extends TestCase
                 ['id' => 2],
                 ['id' => 3],
             ],
-            $query->execute()
+            iterator_to_array($query->execute())
         );
 
         $query2 = new ProxyQuery(
@@ -156,7 +156,7 @@ class ProxyQueryTest extends TestCase
                 ['id' => 1],
                 ['id' => 3],
             ],
-            $query2->execute()
+            iterator_to_array($query2->execute())
         );
     }
 }
