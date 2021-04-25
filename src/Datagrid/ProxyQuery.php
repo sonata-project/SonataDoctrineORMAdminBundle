@@ -220,9 +220,7 @@ class ProxyQuery implements ProxyQueryInterface
 
         // Paginator with fetchJoinCollection doesn't work with composite primary keys
         // https://github.com/doctrine/orm/issues/2910
-        $paginator = new Paginator($query, 1 === \count($identifierFieldNames));
-
-        return $paginator->getIterator();
+        return new Paginator($query, 1 === \count($identifierFieldNames));
     }
 
     /**

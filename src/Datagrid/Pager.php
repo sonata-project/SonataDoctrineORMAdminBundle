@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
@@ -70,31 +69,7 @@ class Pager extends BasePager
 
     public function getCurrentPageResults(): iterable
     {
-        $query = $this->getQuery();
-        if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf(
-                'The pager query MUST implement %s.',
-                ProxyQueryInterface::class,
-            ));
-        }
-
-        $identifierFieldNames = $query
-            ->getQueryBuilder()
-            ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($query->getQueryBuilder()->getRootEntities()))
-            ->getIdentifierFieldNames();
-
-        // NEXT_MAJOR: Remove the check and the else part.
-        if (method_exists($query, 'getDoctrineQuery')) {
-            // Paginator with fetchJoinCollection doesn't work with composite primary keys
-            // https://github.com/doctrine/orm/issues/2910
-            $paginator = new Paginator($query->getDoctrineQuery(), 1 === \count($identifierFieldNames));
-        } else {
-            $paginator = new Paginator($query->getQueryBuilder(), 1 === \count($identifierFieldNames));
-        }
-
-        return $paginator->getIterator();
+        return $this->getQuery()->execute();
     }
 
     /**
@@ -207,27 +182,12 @@ class Pager extends BasePager
         // NEXT_MAJOR: remove the clone.
         $query = clone $this->getQuery();
 
-        if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf(
-                'The pager query MUST implement %s, %s provided.',
-                ProxyQueryInterface::class,
-                \is_object($query) ? sprintf('instance of %s', \get_class($query)) : \gettype($query)
-            ));
-        }
-
         // NEXT_MAJOR: Remove this code.
         if (\count($this->getParameters('sonata_deprecation_mute')) > 0) {
             $query->setParameters($this->getParameters('sonata_deprecation_mute'));
         }
 
-        // NEXT_MAJOR: Remove the check and the else part.
-        if (method_exists($query, 'getDoctrineQuery')) {
-            $paginator = new Paginator($query->getDoctrineQuery());
-        } else {
-            $paginator = new Paginator($query->getQueryBuilder());
-        }
-
-        return \count($paginator);
+        return \count($this->getQuery()->execute());
     }
 
     private function setResultsCount(int $count): void

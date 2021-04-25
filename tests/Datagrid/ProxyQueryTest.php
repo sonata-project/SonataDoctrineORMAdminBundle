@@ -83,7 +83,7 @@ class ProxyQueryTest extends TestCase
         );
         $pq->setHint('hint', 'value');
 
-        $result = $pq->execute();
+        $result = iterator_to_array($pq->execute());
 
         $this->assertSame(2, $result[0]['id']);
     }
