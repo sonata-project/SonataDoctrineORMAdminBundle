@@ -29,7 +29,7 @@
         "doctrine/doctrine-bundle": "^2.3",
         "doctrine/orm": "^2.5",
         "doctrine/persistence": "^2.0",
-        "sonata-project/admin-bundle": "^4.0@alpha",
+        "sonata-project/admin-bundle": "dev-master",
         "sonata-project/exporter": "^2.0",
         "sonata-project/form-extensions": "^1.4",
         "symfony/config": "^4.4 || ^5.2",
