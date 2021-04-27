@@ -209,7 +209,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if ($query instanceof ProxyQuery) {
-            return $query->execute();
+            /** @phpstan-var \Doctrine\ORM\Tools\Pagination\Paginator<T> $results */
+            $results = $query->execute();
+
+            return $results;
         }
 
         throw new \InvalidArgumentException(sprintf(
