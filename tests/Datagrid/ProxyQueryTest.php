@@ -72,9 +72,7 @@ class ProxyQueryTest extends TestCase
         $this->em->persist($entity2);
         $this->em->flush();
 
-        $qb = $this->em->createQueryBuilder()
-            ->select('o.id')
-            ->from(DoubleNameEntity::class, 'o');
+        $qb = $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o');
 
         $pq = new ProxyQuery($qb);
         $pq->setHint(
@@ -85,7 +83,7 @@ class ProxyQueryTest extends TestCase
 
         $result = $pq->execute();
 
-        $this->assertSame(2, $result[0]['id']);
+        $this->assertSame([$entity2, $entity1], $result);
     }
 
     public function testSortOrderValidatesItsInput(): void
@@ -135,31 +133,17 @@ class ProxyQueryTest extends TestCase
         $this->em->flush();
 
         $query = new ProxyQuery(
-            $this->em->createQueryBuilder()->select('o.id')->from(DoubleNameEntity::class, 'o')
+            $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o')
         );
         $query->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
 
-        $this->assertSame(
-            [
-                ['id' => 1],
-                ['id' => 2],
-                ['id' => 3],
-            ],
-            $query->execute()
-        );
+        $this->assertSame([$entity1, $entity2, $entity3], $query->execute());
 
         $query2 = new ProxyQuery(
-            $this->em->createQueryBuilder()->select('o.id')->from(DoubleNameEntity::class, 'o')->addOrderBy('o.name')
+            $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o')->addOrderBy('o.name')
         );
         $query2->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
 
-        $this->assertSame(
-            [
-                ['id' => 2],
-                ['id' => 1],
-                ['id' => 3],
-            ],
-            $query2->execute()
-        );
+        $this->assertSame([$entity2, $entity1, $entity3], $query2->execute());
     }
 }
