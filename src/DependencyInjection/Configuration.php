@@ -56,11 +56,15 @@ class Configuration implements ConfigurationInterface
                 ->arrayNode('templates')
                     ->addDefaultsIfNotSet()
                     ->children()
+                        // NEXT_MAJOR: Remove this option.
                         ->arrayNode('form')
+                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/admin-bundle 3.x.')
                             ->prototype('scalar')->end()
                             ->defaultValue(['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'])
                         ->end()
+                        // NEXT_MAJOR: Remove this option.
                         ->arrayNode('filter')
+                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/admin-bundle 3.x.')
                             ->prototype('scalar')->end()
                             ->defaultValue(['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'])
                         ->end()

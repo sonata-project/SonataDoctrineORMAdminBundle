@@ -18,6 +18,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
+ * NEXT_MAJOR: Remove the "since" part of the internal annotation.
+ *
+ * @internal since sonata-project/admin-bundle version 4.0
+ *
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -26,7 +30,7 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container)
     {
-        $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
+        // NEXT_MAJOR: Remove this line.
         $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
 
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
@@ -36,32 +40,30 @@ class AddTemplatesCompilerPass implements CompilerPassInterface
 
             $definition = $container->getDefinition($id);
 
-            if (!$definition->hasMethodCall('setFormTheme')) {
-                $definition->addMethodCall('setFormTheme', [$templates['form']]);
-            }
+            // NEXT_MAJOR: Remove this line and uncomment the following
+            $this->mergeMethodCall($definition, 'setFormTheme', $templates['form']);
+//          $this->mergeMethodCall($definition, 'setFormTheme', ['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']);
 
-            if (isset($overwrite[$id]['templates']['form'])) {
-                $this->mergeMethodCall($definition, 'setFormTheme', $overwrite[$id]['templates']['form']);
-            }
-
-            if (!$definition->hasMethodCall('setFilterTheme')) {
-                $definition->addMethodCall('setFilterTheme', [$templates['filter']]);
-            }
-
-            if (isset($overwrite[$id]['templates']['filter'])) {
-                $this->mergeMethodCall($definition, 'setFilterTheme', $overwrite[$id]['templates']['filter']);
-            }
+            // NEXT_MAJOR: Remove this line and uncomment the following
+            $this->mergeMethodCall($definition, 'setFilterTheme', $templates['filter']);
+//          $this->mergeMethodCall($definition, 'setFilterTheme', ['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig']);
         }
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
+     * @param string       $name
+     * @param array<mixed> $value
      *
      * @return void
      */
     public function mergeMethodCall(Definition $definition, $name, $value)
     {
+        if (!$definition->hasMethodCall($name)) {
+            $definition->addMethodCall($name, [$value]);
+
+            return;
+        }
+
         $methodCalls = $definition->getMethodCalls();
 
         foreach ($methodCalls as &$calls) {
