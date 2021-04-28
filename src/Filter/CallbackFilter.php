@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
@@ -37,11 +38,31 @@ class CallbackFilter extends Filter
             ), \E_USER_DEPRECATED);
         }
 
-        if (!\is_callable($this->getOption('callback'))) {
+        $callable = $this->getOption('callback');
+
+        if (!\is_callable($callable)) {
             throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
-        $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $data);
+        // NEXT_MAJOR: Remove next line
+        $callbackReflection = $this->reflectCallable($callable);
+
+        // NEXT_MAJOR: Remove the entire if block
+        if (null !== $callbackReflection && isset($callbackReflection->getParameters()[3])) {
+            if ($callbackReflection->getParameters()[3]->hasType()
+                && FilterData::class === $callbackReflection->getParameters()[3]->getType()->getName()
+            ) {
+                $data = FilterData::fromArray($data);
+            } else {
+                @trigger_error(sprintf(
+                    'Not adding "%1$s" as type declaration for argument 4 is deprecated since'
+                    .' sonata-project/doctrine-orm-admin-bundle 3.x and the argument will be a "%1$s" instance in version 4.0.',
+                    FilterData::class
+                ), \E_USER_DEPRECATED);
+            }
+        }
+
+        $isActive = \call_user_func($callable, $query, $alias, $field, $data);
         if (!\is_bool($isActive)) {
             @trigger_error(
                 'Using another return type than boolean for the callback option is deprecated'
@@ -101,5 +122,23 @@ class CallbackFilter extends Filter
         $alias = $query->entityJoin($this->getParentAssociationMappings());
 
         return [$this->getOption('alias', $alias), $this->getFieldName()];
+    }
+
+    /**
+     * NEXT_MAJOR: Remove this method.
+     *
+     * extracted from https://github.com/getsentry/sentry-php/blob/4f6f8fa701e5db53c04f471b139e7d4f85831f17/src/Serializer/AbstractSerializer.php#L272-L283
+     */
+    private function reflectCallable(callable $callable): ?\ReflectionFunctionAbstract
+    {
+        if (\is_array($callable)) {
+            return new \ReflectionMethod($callable[0], $callable[1]);
+        } elseif ($callable instanceof \Closure || (\is_string($callable) && \function_exists($callable))) {
+            return new \ReflectionFunction($callable);
+        } elseif (\is_object($callable) && method_exists($callable, '__invoke')) {
+            return new \ReflectionMethod($callable, '__invoke');
+        }
+
+        return null;
     }
 }
