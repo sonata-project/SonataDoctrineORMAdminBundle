@@ -13,8 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\CallbackClass;
 use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
@@ -38,9 +40,9 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => static function (ProxyQuery $query, string $alias, string $field, array $data): bool {
+            'callback' => static function (ProxyQuery $query, string $alias, string $field, FilterData $data): bool {
                 $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
+                $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;
             },
@@ -69,10 +71,10 @@ class CallbackFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function customCallback(ProxyQuery $query, string $alias, string $field, array $data): bool
+    public function customCallback(ProxyQuery $query, string $alias, string $field, FilterData $data): bool
     {
         $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-        $query->getQueryBuilder()->setParameter('value', $data['value']);
+        $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
         return true;
     }
@@ -94,9 +96,9 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
-            'callback' => static function (ProxyQuery $query, string $alias, string $field, array $data): bool {
+            'callback' => static function (ProxyQuery $query, string $alias, string $field, FilterData $data): bool {
                 $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
+                $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;
             },
@@ -121,9 +123,9 @@ class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => static function (ProxyQuery $query, string $alias, string $field, array $data): int {
+            'callback' => static function (ProxyQuery $query, string $alias, string $field, FilterData $data): int {
                 $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
-                $query->getQueryBuilder()->setParameter('value', $data['value']);
+                $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return 1;
             },
@@ -137,5 +139,40 @@ class CallbackFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
+    }
+
+    /**
+     * NEXT_MAJOR: Remove this test.
+     *
+     * @group legacy
+     *
+     * @dataProvider provideCallables
+     */
+    public function testItThrowsDeprecationWithoutFilterData(callable $callable): void
+    {
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $filter = new CallbackFilter();
+
+        $filter->initialize('field_name_test', [
+            'callback' => $callable,
+            'field_name' => 'field_name_test',
+        ]);
+
+        $this->expectDeprecation('Not adding "Sonata\AdminBundle\Filter\Model\FilterData" as type declaration for argument 4 is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and the argument will be a "Sonata\AdminBundle\Filter\Model\FilterData" instance in version 4.0.');
+
+        $filter->apply($proxyQuery, ['value' => 'myValue']);
+        $this->assertTrue($filter->isActive());
+    }
+
+    /**
+     * @phpstan-return iterable<array{callable}>
+     */
+    public function provideCallables(): iterable
+    {
+        yield 'static class method call' => [[CallbackClass::class, 'staticCallback']];
+        yield 'object method call as array' => [[new CallbackClass(), 'callback']];
+        yield 'invokable class with array type declaration' => [new CallbackClass()];
+        yield 'anonymous function' => [static function ($query, $alias, $field, $data): bool { return true; }];
     }
 }
