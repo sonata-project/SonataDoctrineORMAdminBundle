@@ -20,7 +20,7 @@ use Symfony\Component\DependencyInjection\Definition;
 /**
  * NEXT_MAJOR: Remove the "since" part of the internal annotation.
  *
- * @internal since sonata-project/admin-bundle version 4.0
+ * @internal since sonata-project/doctrine-orm-admin-bundle version 4.0
  *
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  *
