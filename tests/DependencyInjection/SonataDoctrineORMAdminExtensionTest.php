@@ -19,26 +19,16 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 class SonataDoctrineORMAdminExtensionTest extends TestCase
 {
-    /**
-     * @var ContainerBuilder
-     */
-    protected $configuration;
-
-    protected function tearDown(): void
-    {
-        unset($this->configuration);
-    }
-
     public function testEntityManagerSetFactory(): void
     {
-        $this->configuration = new ContainerBuilder();
-        $this->configuration->setParameter('kernel.bundles', ['SimpleThingsEntityAuditBundle' => true]);
+        $configuration = new ContainerBuilder();
+        $configuration->setParameter('kernel.bundles', ['SimpleThingsEntityAuditBundle' => true]);
         $loader = new SonataDoctrineORMAdminExtension();
-        $loader->load([], $this->configuration);
+        $loader->load([], $configuration);
 
-        $definition = $this->configuration->getDefinition('sonata.admin.entity_manager');
+        $definition = $configuration->getDefinition('sonata.admin.entity_manager');
 
         $this->assertNotNull($definition->getFactory());
-        $this->assertNotFalse($this->configuration->getParameter('sonata_doctrine_orm_admin.audit.force'));
+        $this->assertNotFalse($configuration->getParameter('sonata_doctrine_orm_admin.audit.force'));
     }
 }

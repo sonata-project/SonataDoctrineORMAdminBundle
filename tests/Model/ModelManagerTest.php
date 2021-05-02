@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQL94Platform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -91,6 +91,8 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
+     * @param class-string $vbClassName
+     *
      * @dataProvider valueObjectDataProvider
      */
     public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod(string $vbClassName): void
@@ -329,7 +331,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
 
-        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform = $this->createMock(PostgreSQL94Platform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidBinaryType::NAME)
@@ -374,7 +376,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
-        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform = $this->createMock(PostgreSQL94Platform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidType::NAME)
@@ -417,7 +419,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(ProductIdType::NAME);
 
-        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform = $this->createMock(PostgreSQL94Platform::class);
         $platform->expects($this->any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(ProductIdType::NAME)
@@ -459,7 +461,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(null);
 
-        $platform = $this->createMock(PostgreSqlPlatform::class);
+        $platform = $this->createMock(PostgreSQL94Platform::class);
         $platform->expects($this->never())
             ->method('hasDoctrineTypeMappingFor');
 
