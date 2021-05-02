@@ -64,8 +64,8 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
             $batchSizeOutput = 200;
             $objectIds = [];
 
-            foreach ($qb->getQuery()->toIterable() as $row) {
-                $objectIds[] = ObjectIdentity::fromDomainObject($row[0]);
+            foreach ($qb->getQuery()->toIterable() as $object) {
+                $objectIds[] = ObjectIdentity::fromDomainObject($object);
 
                 ++$count;
 
