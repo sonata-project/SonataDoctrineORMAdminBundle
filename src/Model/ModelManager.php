@@ -344,7 +344,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
             $i = 0;
             foreach ($qb->getQuery()->toIterable() as $pos => $object) {
-                $entityManager->remove($object[0]);
+                $entityManager->remove($object);
 
                 if (0 === (++$i % 20)) {
                     $entityManager->flush();
