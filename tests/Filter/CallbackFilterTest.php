@@ -159,7 +159,7 @@ class CallbackFilterTest extends FilterTestCase
             'field_name' => 'field_name_test',
         ]);
 
-        $this->expectDeprecation('Not adding "Sonata\AdminBundle\Filter\Model\FilterData" as type declaration for argument 4 is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and the argument will be a "Sonata\AdminBundle\Filter\Model\FilterData" instance in version 4.0.');
+        $this->expectDeprecation('Not adding "Sonata\AdminBundle\Filter\Model\FilterData" as type declaration for argument 4 is deprecated since sonata-project/doctrine-orm-admin-bundle 3.34 and the argument will be a "Sonata\AdminBundle\Filter\Model\FilterData" instance in version 4.0.');
 
         $filter->apply($proxyQuery, ['value' => 'myValue']);
         $this->assertTrue($filter->isActive());
