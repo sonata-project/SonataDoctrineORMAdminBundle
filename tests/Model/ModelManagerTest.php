@@ -618,6 +618,7 @@ final class ModelManagerTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        /** @var QueryBuilder&MockObject $queryBuilder */
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
             ->setMethodsExcept(['getParameters', 'setParameter'])
@@ -687,6 +688,9 @@ final class ModelManagerTest extends TestCase
         ];
     }
 
+    /**
+     * @psalm-suppress InvalidArgument
+     */
     public function testAddIdentifiersToQueryWithEmptyIdentifiers(): void
     {
         $datagrid = $this->createStub(ProxyQueryInterface::class);
