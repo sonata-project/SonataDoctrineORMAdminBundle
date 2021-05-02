@@ -17,13 +17,10 @@ use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
-use Symfony\Bridge\PhpUnit\ExpectDeprecationTrait;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
 class CallbackFilterTest extends FilterTestCase
 {
-    use ExpectDeprecationTrait;
-
     public function testRenderSettings(): void
     {
         $filter = new CallbackFilter();
