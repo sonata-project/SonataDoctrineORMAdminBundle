@@ -15,6 +15,7 @@ use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorWithSimplePagerAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookWithAuthorAutocompleteAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\ItemAdmin;
@@ -49,6 +50,18 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Book',
+                'default' => true,
+            ])
+            ->args([
+                '',
+                Book::class,
+                null,
+            ])
+
+        ->set(BookWithAuthorAutocompleteAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'label' => 'Book with Author autocomplete',
             ])
             ->args([
                 '',
