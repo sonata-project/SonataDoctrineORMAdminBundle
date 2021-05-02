@@ -2,6 +2,19 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.34.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.33.0...3.34.0) - 2021-05-02
+### Changed
+- [[#1425](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1425)] `ProxyQuery::execute()` is now returning a Paginator instead of an array. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1427](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1427)] `templates.form` and `templates.filter` config ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1428](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1428)] Deprecated not adding `FilterData` as type declaration of argument 4 in the callable passed to `CallbackFilter` ([@franmomu](https://github.com/franmomu))
+
+### Fixed
+- [[#1427](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1427)] Always merge `SonataDoctrineORMAdmin` form and filter templates. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1427](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1427)] Using `sonata_admin` configuration. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1425](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1425)] Support for fetch join with simple pager. ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.33.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.32.1...3.33.0) - 2021-04-19
 ### Added
 - [[#1416](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1416)] "force_case_insensitivity" option to `StringFilter` in order to force the database to ignore the case sensitivity when matching filters. ([@phansys](https://github.com/phansys))

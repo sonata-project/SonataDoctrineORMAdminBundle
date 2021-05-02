@@ -58,13 +58,13 @@ class Configuration implements ConfigurationInterface
                     ->children()
                         // NEXT_MAJOR: Remove this option.
                         ->arrayNode('form')
-                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.')
+                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.34.')
                             ->prototype('scalar')->end()
                             ->defaultValue(['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'])
                         ->end()
                         // NEXT_MAJOR: Remove this option.
                         ->arrayNode('filter')
-                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x.')
+                            ->setDeprecated('The "%node%" option is deprecated since sonata-project/doctrine-orm-admin-bundle 3.34.')
                             ->prototype('scalar')->end()
                             ->defaultValue(['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'])
                         ->end()

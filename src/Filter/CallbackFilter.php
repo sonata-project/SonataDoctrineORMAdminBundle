@@ -56,7 +56,7 @@ class CallbackFilter extends Filter
             } else {
                 @trigger_error(sprintf(
                     'Not adding "%1$s" as type declaration for argument 4 is deprecated since'
-                    .' sonata-project/doctrine-orm-admin-bundle 3.x and the argument will be a "%1$s" instance in version 4.0.',
+                    .' sonata-project/doctrine-orm-admin-bundle 3.34 and the argument will be a "%1$s" instance in version 4.0.',
                     FilterData::class
                 ), \E_USER_DEPRECATED);
             }
