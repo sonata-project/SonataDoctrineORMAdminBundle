@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
@@ -73,7 +74,7 @@ final class FilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
-        foreach ($filterOptionsCollection as [$type, $orGroup, $defaultOptions, $field, $options]) {
+        foreach ($filterOptionsCollection as [$type, $orGroup, $defaultOptions, $field, $filterData]) {
             $filter = new $type();
             $filter->initialize($field, $defaultOptions);
             $filter->setCondition(Filter::CONDITION_OR);
@@ -81,7 +82,7 @@ final class FilterTest extends FilterTestCase
                 $filter->setOption('or_group', $orGroup);
             }
 
-            $filter->apply($proxyQuery, $options);
+            $filter->apply($proxyQuery, $filterData);
         }
 
         // More custom conditions set after the filters.
@@ -91,7 +92,7 @@ final class FilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string, array<array{class-string, string|null, array<string, mixed>, string, array<string, mixed>}>}>
+     * @phpstan-return iterable<array{string, array<array{class-string, string|null, array<string, mixed>, string, FilterData}>}>
      */
     public function orExpressionProvider(): iterable
     {
@@ -107,9 +108,9 @@ final class FilterTest extends FilterTestCase
                         'allow_empty' => false,
                     ],
                     'project',
-                    [
+                    FilterData::fromArray([
                         'value' => 'sonata-project',
-                    ],
+                    ]),
                 ],
                 [
                     StringFilter::class,
@@ -119,9 +120,9 @@ final class FilterTest extends FilterTestCase
                         'allow_empty' => false,
                     ],
                     'version',
-                    [
+                    FilterData::fromArray([
                         'value' => '3.x',
-                    ],
+                    ]),
                 ],
             ],
         ];
@@ -138,9 +139,9 @@ final class FilterTest extends FilterTestCase
                         'allow_empty' => false,
                     ],
                     'project',
-                    [
+                    FilterData::fromArray([
                         'value' => 'sonata-project',
-                    ],
+                    ]),
                 ],
             ],
         ];
@@ -158,9 +159,9 @@ final class FilterTest extends FilterTestCase
                         'allow_empty' => false,
                     ],
                     'project',
-                    [
+                    FilterData::fromArray([
                         'value' => 'sonata-project',
-                    ],
+                    ]),
                 ],
                 [
                     StringFilter::class,
@@ -170,9 +171,9 @@ final class FilterTest extends FilterTestCase
                         'allow_empty' => false,
                     ],
                     'version',
-                    [
+                    FilterData::fromArray([
                         'value' => '3.x',
-                    ],
+                    ]),
                 ],
             ],
         ];
@@ -181,7 +182,7 @@ final class FilterTest extends FilterTestCase
     private function createFilter(): Filter
     {
         return new class() extends Filter {
-            public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+            public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
             {
                 // TODO: Implement filter() method.
                 throw new \BadMethodCallException(sprintf(

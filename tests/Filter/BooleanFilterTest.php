@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\Form\Type\BooleanType;
@@ -37,8 +38,8 @@ class BooleanFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', []);
-        $filter->filter($proxyQuery, 'alias', 'field', [null, 'test']);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([null, 'test']));
 
         $this->assertSameQuery([], $proxyQuery);
         $this->assertFalse($filter->isActive());
@@ -51,7 +52,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_NO]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => BooleanType::TYPE_NO]));
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
@@ -65,7 +66,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => BooleanType::TYPE_YES]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => BooleanType::TYPE_YES]));
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 1], $proxyQuery);
@@ -79,7 +80,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => [BooleanType::TYPE_NO]]));
 
         $this->assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
         $this->assertTrue($filter->isActive());

@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\NumberType;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -28,13 +29,13 @@ final class CountFilter extends Filter
         NumberOperatorType::TYPE_LESS_THAN => '<',
     ];
 
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data) || !is_numeric($data['value'])) {
+        if (!$data->hasValue() || !is_numeric($data->getValue())) {
             return;
         }
 
-        $type = $data['type'] ?? NumberOperatorType::TYPE_EQUAL;
+        $type = $data->getType() ?? NumberOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator($type);
 
         // c.name > '1' => c.name OPERATOR :FIELDNAME
@@ -42,7 +43,7 @@ final class CountFilter extends Filter
         $rootAlias = current($query->getQueryBuilder()->getRootAliases());
         $query->getQueryBuilder()->addGroupBy($rootAlias);
         $this->applyHaving($query, sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
-        $query->getQueryBuilder()->setParameter($parameterName, $data['value']);
+        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
     public function getDefaultOptions(): array

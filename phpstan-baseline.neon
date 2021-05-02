@@ -3,9 +3,6 @@ parameters:
         - # https://github.com/phpstan/phpstan-phpunit/issues/87
             message: '#^Trying to mock an undefined method [a-zA-Z]*\(\) on class stdClass\.$#'
             path: tests/
-        - # https://github.com/phpstan/phpstan/issues/4650 & https://github.com/phpstan/phpstan-src/pull/476
-            message: '#^Strict comparison using === between array\(\) and array<int\|string>\&nonEmpty will always evaluate to false.$#'
-            path: src/Model/ModelManager.php
         - # https://github.com/doctrine/persistence/pull/163
             message: '#Parameter \#1 \$class of method Sonata\\DoctrineORMAdminBundle\\FieldDescription\\FieldDescriptionFactory\:\:getMetadata\(\) expects class-string, string given.$#'
             path: src/FieldDescription/FieldDescriptionFactory.php

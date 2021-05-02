@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Util;
 
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManager;
 use Doctrine\Persistence\ManagerRegistry;
 use Sonata\AdminBundle\Admin\AdminInterface;
@@ -47,11 +48,12 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
         $output->writeln(sprintf(' > generate ACLs for %s', $admin->getCode()));
         $objectOwnersMsg = null === $securityIdentity ? '' : ' and set the object owner';
 
-        $em = $this->registry->getManagerForClass($admin->getClass());
+        $class = $admin->getClass();
+        $em = $this->registry->getManagerForClass($class);
         \assert($em instanceof EntityManager);
 
         $qb = $em->createQueryBuilder();
-        $qb->select('o')->from($admin->getClass(), 'o');
+        $qb->select('o')->from($class, 'o');
 
         $count = 0;
         $countUpdated = 0;
@@ -62,11 +64,8 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
             $batchSizeOutput = 200;
             $objectIds = [];
 
-            foreach ($qb->getQuery()->iterate() as $row) {
+            foreach ($qb->getQuery()->toIterable() as $row) {
                 $objectIds[] = ObjectIdentity::fromDomainObject($row[0]);
-
-                // detach from Doctrine, so that it can be Garbage-Collected immediately
-                $em->detach($row[0]);
 
                 ++$count;
 
@@ -87,8 +86,12 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
-        } catch (\PDOException $e) {
-            throw new ModelManagerException('', 0, $e);
+        } catch (\PDOException | Exception $e) {
+            throw new ModelManagerException(
+                sprintf('Failed to configure acl for class: %s', $class),
+                (int) $e->getCode(),
+                $e
+            );
         }
 
         $output->writeln(sprintf(

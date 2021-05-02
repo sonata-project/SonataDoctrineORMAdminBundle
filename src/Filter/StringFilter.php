@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -43,17 +44,17 @@ final class StringFilter extends Filter
         StringOperatorType::TYPE_NOT_CONTAINS,
     ];
 
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        $data['value'] = $this->trim((string) ($data['value'] ?? ''));
-        $type = $data['type'] ?? StringOperatorType::TYPE_CONTAINS;
+        $value = $this->trim((string) ($data->getValue() ?? ''));
+        $type = $data->getType() ?? StringOperatorType::TYPE_CONTAINS;
 
         // ignore empty value if it doesn't make sense
-        if ('' === $data['value'] &&
+        if ('' === $value &&
             (!$this->getOption('allow_empty') || \in_array($type, self::MEANINGLESS_TYPES, true))
         ) {
             return;
@@ -64,9 +65,9 @@ final class StringFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
 
-        $forceCaseInsensitivity = true === $this->getOption('force_case_insensitivity', false);
+        $forceCaseInsensitivity = $this->getOption('force_case_insensitivity', false);
 
-        if ($forceCaseInsensitivity && '' !== $data['value']) {
+        if ($forceCaseInsensitivity && '' !== $value) {
             $clause = 'LOWER(%s.%s) %s :%s';
         } else {
             $clause = '%s.%s %s :%s';
@@ -101,7 +102,7 @@ final class StringFilter extends Filter
             $parameterName,
             sprintf(
                 $format,
-                true !== $forceCaseInsensitivity || '' === $data['value'] ? $data['value'] : mb_strtolower($data['value'])
+                $forceCaseInsensitivity && '' !== $value ? mb_strtolower($value) : $value
             )
         );
     }

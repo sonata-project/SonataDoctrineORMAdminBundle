@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection;
 
+use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -32,9 +33,10 @@ final class Configuration implements ConfigurationInterface
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sonata_doctrine_orm_admin');
+        $rootNode = $treeBuilder->getRootNode();
+        \assert($rootNode instanceof ArrayNodeDefinition);
 
-        $treeBuilder
-            ->getRootNode()
+        $rootNode
             ->children()
                 ->scalarNode('entity_manager')->defaultNull()->end()
                 ->arrayNode('audit')
@@ -46,14 +48,6 @@ final class Configuration implements ConfigurationInterface
                 ->arrayNode('templates')
                     ->addDefaultsIfNotSet()
                     ->children()
-                        ->arrayNode('form')
-                            ->prototype('scalar')->end()
-                            ->defaultValue(['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig'])
-                        ->end()
-                        ->arrayNode('filter')
-                            ->prototype('scalar')->end()
-                            ->defaultValue(['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig'])
-                        ->end()
                         ->arrayNode('types')
                             ->children()
                                 ->arrayNode('list')

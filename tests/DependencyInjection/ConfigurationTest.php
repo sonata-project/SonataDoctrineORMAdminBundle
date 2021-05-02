@@ -27,14 +27,6 @@ class ConfigurationTest extends TestCase
 
         $this->assertNull($config['entity_manager']);
         $this->assertTrue($config['audit']['force']);
-        $this->assertContains(
-            '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig',
-            $config['templates']['form']
-        );
-        $this->assertContains(
-            '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig',
-            $config['templates']['filter']
-        );
         $this->assertArrayNotHasKey('types', $config['templates']);
     }
 
@@ -53,8 +45,6 @@ class ConfigurationTest extends TestCase
     {
         $config = $this->process([[
             'templates' => [
-                'form' => ['form.twig.html', 'form_extra.twig.html'],
-                'filter' => ['filter.twig.html'],
                 'types' => [
                     'list' => [
                         'array' => 'list_array.twig.html',
@@ -66,8 +56,6 @@ class ConfigurationTest extends TestCase
             ],
         ]]);
 
-        $this->assertSame(['form.twig.html', 'form_extra.twig.html'], $config['templates']['form']);
-        $this->assertSame(['filter.twig.html'], $config['templates']['filter']);
         $this->assertSame([
             'list' => [
                 'array' => 'list_array.twig.html',

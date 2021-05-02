@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -25,20 +26,20 @@ final class ClassFilter extends Filter
         EqualOperatorType::TYPE_NOT_EQUAL => 'NOT INSTANCE OF',
     ];
 
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, array $data): void
+    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!\array_key_exists('value', $data)) {
+        if (!$data->hasValue()) {
             return;
         }
 
-        if (0 === \strlen($data['value'])) {
+        if (0 === \strlen($data->getValue())) {
             return;
         }
 
-        $type = $data['type'] ?? EqualOperatorType::TYPE_EQUAL;
+        $type = $data->getType() ?? EqualOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator($type);
 
-        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $data['value']));
+        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $data->getValue()));
     }
 
     public function getDefaultOptions(): array

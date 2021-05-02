@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use Doctrine\Common\Util\ClassUtils;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -34,6 +34,11 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
 
+/**
+ * @phpstan-template T of object
+ * @phpstan-implements ModelManagerInterface<T>
+ * @phpstan-implements LockInterface<T>
+ */
 final class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
@@ -65,16 +70,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\PDOException | Exception $e) {
             throw new ModelManagerException(
                 sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
+                (int) $e->getCode(),
                 $e
             );
         }
@@ -86,16 +85,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\PDOException | Exception $e) {
             throw new ModelManagerException(
                 sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
+                (int) $e->getCode(),
                 $e
             );
         }
@@ -107,16 +100,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->remove($object);
             $entityManager->flush();
-        } catch (\PDOException $e) {
+        } catch (\PDOException | Exception $e) {
             throw new ModelManagerException(
                 sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
-                $e
-            );
-        } catch (DBALException $e) {
-            throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                $e->getCode(),
+                (int) $e->getCode(),
                 $e
             );
         }
@@ -145,10 +132,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->lock($object, LockMode::OPTIMISTIC, $expectedVersion);
         } catch (OptimisticLockException $e) {
-            throw new LockException($e->getMessage(), $e->getCode(), $e);
+            throw new LockException($e->getMessage(), (int) $e->getCode(), $e);
         }
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return T|null
+     */
     public function find(string $class, $id): ?object
     {
         $values = array_combine($this->getIdentifierFieldNames($class), explode(self::ID_SEPARATOR, (string) $id));
@@ -156,11 +147,19 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getEntityManager($class)->getRepository($class)->find($values);
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return array<T>
+     */
     public function findBy(string $class, array $criteria = []): array
     {
         return $this->getEntityManager($class)->getRepository($class)->findBy($criteria);
     }
 
+    /**
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return T|null
+     */
     public function findOneBy(string $class, array $criteria = []): ?object
     {
         return $this->getEntityManager($class)->getRepository($class)->findOneBy($criteria);
@@ -210,7 +209,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if ($query instanceof ProxyQuery) {
-            return $query->execute();
+            /** @phpstan-var \Doctrine\ORM\Tools\Pagination\Paginator<T> $results */
+            $results = $query->execute();
+
+            return $results;
         }
 
         throw new \InvalidArgumentException(sprintf(
@@ -292,8 +294,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @phpstan-param non-empty-array<string|int> $idx
-     *
      * @throws \InvalidArgumentException if value passed as argument 3 is an empty array
      */
     public function addIdentifiersToQuery(string $class, BaseProxyQueryInterface $query, array $idx): void
@@ -343,7 +343,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($qb->getQuery()->iterate() as $pos => $object) {
+            foreach ($qb->getQuery()->toIterable() as $pos => $object) {
                 $entityManager->remove($object[0]);
 
                 if (0 === (++$i % 20)) {
@@ -354,8 +354,12 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
             $entityManager->flush();
             $entityManager->clear();
-        } catch (\PDOException | DBALException $e) {
-            throw new ModelManagerException('', 0, $e);
+        } catch (\PDOException | Exception $e) {
+            throw new ModelManagerException(
+                sprintf('Failed to delete object: %s', $class),
+                (int) $e->getCode(),
+                $e
+            );
         }
     }
 

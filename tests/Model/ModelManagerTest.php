@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\DBALException;
+use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\MySqlPlatform;
 use Doctrine\DBAL\Platforms\PostgreSqlPlatform;
 use Doctrine\DBAL\Types\Type;
@@ -59,7 +59,7 @@ final class ModelManagerTest extends TestCase
     private $registry;
 
     /**
-     * @var ModelManager
+     * @var ModelManager<object>
      */
     private $modelManager;
 
@@ -555,7 +555,7 @@ final class ModelManagerTest extends TestCase
                 new \PDOException(),
             ],
             'DBALException' => [
-                new DBALException(),
+                new Exception(),
             ],
         ];
     }

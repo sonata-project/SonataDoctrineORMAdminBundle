@@ -23,7 +23,7 @@ class AddGuesserCompilerPassTest extends TestCase
 {
     public function testProcess(): void
     {
-        $containerBuilder = $this->createStub(ContainerBuilder::class);
+        $containerBuilder = $this->createMock(ContainerBuilder::class);
         $definition = $this->createMock(Definition::class);
         $definition->expects($this->exactly(3))->method('replaceArgument')->with(0, [new Reference('some.id')]);
 

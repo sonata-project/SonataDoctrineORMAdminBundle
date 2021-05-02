@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.33.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.32.1...3.33.0) - 2021-04-19
+### Added
+- [[#1416](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1416)] "force_case_insensitivity" option to `StringFilter` in order to force the database to ignore the case sensitivity when matching filters. ([@phansys](https://github.com/phansys))
+
+### Changed
+- [[#1395](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1395)] Default value for the "case_sensitive" option from `true` to `null` in `StringFilter`. ([@phansys](https://github.com/phansys))
+
+### Deprecated
+- [[#1416](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1416)] "case_sensitive" option in `StringFilter`. ([@phansys](https://github.com/phansys))
+
+### Fixed
+- [[#1408](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1408)] Allow to decorate EntityManager ([@michkinn](https://github.com/michkinn))
+- [[#1414](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1414)] Return type for `ModelManager::getModelIdentifier()`. ([@phansys](https://github.com/phansys))
+- [[#1399](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1399)] Fixed triggering always deprecation when calling `ModelManager::getDefaultSortValues()` method ([@franmomu](https://github.com/franmomu))
+
 ## [3.32.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.32.0...3.32.1) - 2021-04-06
 ### Fixed
 - [[#1393](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1393)] Added missing filter declaration in the config ([@VincentLanglet](https://github.com/VincentLanglet))

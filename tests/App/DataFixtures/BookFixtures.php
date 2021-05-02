@@ -58,7 +58,7 @@ final class BookFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @phpstan-return class-string[]
+     * @phpstan-return array<class-string<\Doctrine\Common\DataFixtures\FixtureInterface>>
      */
     public function getDependencies(): array
     {
