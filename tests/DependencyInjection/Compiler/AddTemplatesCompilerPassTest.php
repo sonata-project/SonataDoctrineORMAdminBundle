@@ -24,38 +24,25 @@ class AddTemplatesCompilerPassTest extends TestCase
     {
         $container = $this->createMock(ContainerBuilder::class);
 
+        // NEXT_MAJOR: Remove this.
         $container
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getParameter')
-            ->willReturnCallback(static function ($value) {
-                if ('sonata.admin.configuration.admin_services' === $value) {
-                    return [
-                        'my.admin' => [
-                            'templates' => [
-                                'form' => ['myform.twig.html'],
-                                'filter' => ['myfilter.twig.html'],
-                            ],
-                        ],
-                    ];
-                }
-
-                if ('sonata_doctrine_orm_admin.templates' === $value) {
-                    return [
-                        'form' => ['default_form.twig.html'],
-                        'filter' => ['default_filter.twig.html'],
-                    ];
-                }
-            });
+            ->with('sonata_doctrine_orm_admin.templates')
+            ->willReturn([
+                'form' => ['default_form.twig.html'],
+                'filter' => ['default_filter.twig.html'],
+            ]);
 
         $container
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('findTaggedServiceIds')
             ->willReturn(['my.admin' => [['manager_type' => 'orm']]]);
 
         $definition = new Definition(null);
 
         $container
-            ->expects($this->any())
+            ->expects($this->once())
             ->method('getDefinition')
             ->willReturn($definition);
 
@@ -65,8 +52,12 @@ class AddTemplatesCompilerPassTest extends TestCase
         $compilerPass->process($container);
 
         $expected = [
-            ['setFilterTheme', [['custom_call.twig.html', 'myfilter.twig.html']]],
-            ['setFormTheme', [['default_form.twig.html', 'myform.twig.html']]],
+            // NEXT_MAJOR: Uncomment the following line instead.
+            ['setFilterTheme', [['custom_call.twig.html', 'default_filter.twig.html']]],
+//            ['setFilterTheme', [['custom_call.twig.html', '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig']]],
+            // NEXT_MAJOR: Uncomment the following line instead.
+            ['setFormTheme', [['default_form.twig.html']]],
+//            ['setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]],
         ];
 
         $this->assertSame($expected, $definition->getMethodCalls());
