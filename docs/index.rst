@@ -18,6 +18,7 @@ The ``Doctrine ORM Admin`` provides services to work with the ``Admin Bundle`` a
    reference/templates
    reference/audit
    reference/query_proxy
+   reference/data_source
    reference/troubleshootings
 
 .. toctree::

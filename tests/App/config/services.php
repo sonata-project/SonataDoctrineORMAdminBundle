@@ -11,7 +11,9 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+use Sonata\AdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\AuthorWithSimplePagerAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
@@ -58,6 +60,20 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
                 'label' => 'Author',
+                'default' => true,
+            ])
+            ->args([
+                '',
+                Author::class,
+                null,
+            ])
+            ->call('setTemplate', ['outer_list_rows_list', 'author/list_outer_list_rows_list.html.twig'])
+
+        ->set(AuthorWithSimplePagerAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'label' => 'Author with Simple Pager',
+                'pager_type' => Pager::TYPE_SIMPLE,
             ])
             ->args([
                 '',

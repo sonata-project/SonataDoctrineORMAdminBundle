@@ -4,6 +4,15 @@ UPGRADE 3.x
 UPGRADE FROM 3.x to 3.x
 =======================
 
+### Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter
+
+Not adding `Sonata\AdminBundle\Filter\Model\FilterData` as type declaration of argument 4 of the callable passed to
+`Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter` is deprecated. In version 4.0 this argument will be an instance
+of `Sonata\AdminBundle\Filter\Model\FilterData`.
+
+UPGRADE FROM 3.32 to 3.33
+=========================
+
 ### Sonata\DoctrineORMAdminBundle\Filter\StringFilter
 
 The option "case_sensitive" is deprecated in favor of "force_case_insensitivity".

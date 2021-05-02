@@ -18,17 +18,14 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 /**
+ * @internal
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 final class AddTemplatesCompilerPass implements CompilerPassInterface
 {
     public function process(ContainerBuilder $container): void
     {
-        $overwrite = $container->getParameter('sonata.admin.configuration.admin_services');
-        \assert(\is_array($overwrite));
-        $templates = $container->getParameter('sonata_doctrine_orm_admin.templates');
-        \assert(\is_array($templates));
-
         foreach ($container->findTaggedServiceIds('sonata.admin') as $id => $attributes) {
             if (!isset($attributes[0]['manager_type']) || 'orm' !== $attributes[0]['manager_type']) {
                 continue;
@@ -36,29 +33,22 @@ final class AddTemplatesCompilerPass implements CompilerPassInterface
 
             $definition = $container->getDefinition($id);
 
-            if (!$definition->hasMethodCall('setFormTheme')) {
-                $definition->addMethodCall('setFormTheme', [$templates['form']]);
-            }
-
-            if (isset($overwrite[$id]['templates']['form'])) {
-                $this->mergeMethodCall($definition, 'setFormTheme', $overwrite[$id]['templates']['form']);
-            }
-
-            if (!$definition->hasMethodCall('setFilterTheme')) {
-                $definition->addMethodCall('setFilterTheme', [$templates['filter']]);
-            }
-
-            if (isset($overwrite[$id]['templates']['filter'])) {
-                $this->mergeMethodCall($definition, 'setFilterTheme', $overwrite[$id]['templates']['filter']);
-            }
+            $this->mergeMethodCall($definition, 'setFormTheme', ['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']);
+            $this->mergeMethodCall($definition, 'setFilterTheme', ['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig']);
         }
     }
 
     /**
-     * @param mixed $value
+     * @param array<mixed> $value
      */
     public function mergeMethodCall(Definition $definition, string $name, $value): void
     {
+        if (!$definition->hasMethodCall($name)) {
+            $definition->addMethodCall($name, [$value]);
+
+            return;
+        }
+
         $methodCalls = $definition->getMethodCalls();
 
         foreach ($methodCalls as &$calls) {

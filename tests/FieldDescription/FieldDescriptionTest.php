@@ -66,8 +66,6 @@ class FieldDescriptionTest extends TestCase
 
         $expected = [
             'misc' => 'foobar',
-            'placeholder' => 'short_object_description_placeholder',
-            'link_parameters' => [],
             'array' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',

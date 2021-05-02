@@ -17,6 +17,8 @@ use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
+ * @internal
+ *
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
  */
 final class AddAuditEntityCompilerPass implements CompilerPassInterface
