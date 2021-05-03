@@ -38,6 +38,9 @@ class DateTimeRangeFilterTest extends FilterTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(DateTimeRangeType::class, (new DateTimeRangeFilter())->getFieldType());
+        $filter = new DateTimeRangeFilter();
+        $filter->initialize('foo');
+
+        $this->assertSame(DateTimeRangeType::class, $filter->getFieldType());
     }
 }
