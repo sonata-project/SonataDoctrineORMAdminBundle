@@ -31,8 +31,8 @@ final class DateTimeRangeFilter extends AbstractDateFilter
      */
     protected $range = true;
 
-    public function getFieldType(): string
+    public function getDefaultOptions(): array
     {
-        return $this->getOption('field_type', DateTimeRangeType::class);
+        return ['field_type' => DateTimeRangeType::class];
     }
 }

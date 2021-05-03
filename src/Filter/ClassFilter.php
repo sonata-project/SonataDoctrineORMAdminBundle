@@ -45,14 +45,10 @@ final class ClassFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
+            'field_type' => ChoiceType::class,
             'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
-    }
-
-    public function getFieldType(): string
-    {
-        return $this->getOption('field_type', ChoiceType::class);
     }
 
     public function getFieldOptions(): array
