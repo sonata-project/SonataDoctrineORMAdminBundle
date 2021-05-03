@@ -51,23 +51,16 @@ final class ClassFilter extends Filter
         ];
     }
 
-    public function getFieldOptions(): array
-    {
-        $choiceOptions = [
-            'required' => false,
-            'choices' => $this->getOption('sub_classes'),
-        ];
-
-        return $this->getOption('choices', $choiceOptions);
-    }
-
     public function getRenderSettings(): array
     {
         return [DefaultType::class, [
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'field_type' => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
+            'field_options' => [
+                'required' => false,
+                'choices' => $this->getOption('sub_classes'),
+            ],
             'label' => $this->getLabel(),
         ]];
     }
