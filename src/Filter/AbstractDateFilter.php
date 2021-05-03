@@ -98,13 +98,6 @@ abstract class AbstractDateFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $value, $this->getParameterType($value));
     }
 
-    final public function getDefaultOptions(): array
-    {
-        return [
-            'input_type' => 'datetime',
-        ];
-    }
-
     final public function getRenderSettings(): array
     {
         $name = DateType::class;
