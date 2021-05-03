@@ -47,7 +47,7 @@ abstract class AbstractDateFilter extends Filter
      */
     protected $time = false;
 
-    public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
+    final public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         // check data sanity
         if (!$data->hasValue()) {
@@ -98,14 +98,14 @@ abstract class AbstractDateFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $value, $this->getParameterType($value));
     }
 
-    public function getDefaultOptions(): array
+    final public function getDefaultOptions(): array
     {
         return [
             'input_type' => 'datetime',
         ];
     }
 
-    public function getRenderSettings(): array
+    final public function getRenderSettings(): array
     {
         $name = DateType::class;
 
@@ -124,7 +124,7 @@ abstract class AbstractDateFilter extends Filter
         ]];
     }
 
-    public function filterRange(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
+    private function filterRange(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         $value = $data->getValue();
 
