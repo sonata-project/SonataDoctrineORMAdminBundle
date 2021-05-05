@@ -19,6 +19,11 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 
 interface ProxyQueryInterface extends BaseProxyQueryInterface
 {
+    /**
+     * @return array<object>|(\Traversable<object>&\Countable)
+     */
+    public function execute();
+
     public function getUniqueParameterId(): int;
 
     /**

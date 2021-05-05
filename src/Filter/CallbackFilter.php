@@ -35,7 +35,7 @@ final class CallbackFilter extends Filter
             ));
         }
 
-        $this->active = $isActive;
+        $this->setActive($isActive);
     }
 
     public function getDefaultOptions(): array

@@ -38,6 +38,9 @@ class DateTimeFilterTest extends FilterTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(DateTimeType::class, (new DateTimeFilter())->getFieldType());
+        $filter = new DateTimeFilter();
+        $filter->initialize('foo');
+
+        $this->assertSame(DateTimeType::class, $filter->getFieldType());
     }
 }

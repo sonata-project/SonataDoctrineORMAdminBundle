@@ -45,24 +45,10 @@ final class ClassFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
+            'field_type' => ChoiceType::class,
             'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
-    }
-
-    public function getFieldType(): string
-    {
-        return $this->getOption('field_type', ChoiceType::class);
-    }
-
-    public function getFieldOptions(): array
-    {
-        $choiceOptions = [
-            'required' => false,
-            'choices' => $this->getOption('sub_classes'),
-        ];
-
-        return $this->getOption('choices', $choiceOptions);
     }
 
     public function getRenderSettings(): array
@@ -71,7 +57,10 @@ final class ClassFilter extends Filter
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'field_type' => $this->getFieldType(),
-            'field_options' => $this->getFieldOptions(),
+            'field_options' => [
+                'required' => false,
+                'choices' => $this->getOption('sub_classes'),
+            ],
             'label' => $this->getLabel(),
         ]];
     }

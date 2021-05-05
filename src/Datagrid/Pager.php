@@ -32,8 +32,8 @@ final class Pager extends BasePager
     public function getCurrentPageResults(): iterable
     {
         $query = $this->getQuery();
-        if (null === $query) {
-            throw new \LogicException('The pager need a query to display results');
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         return $query->execute();
@@ -47,8 +47,8 @@ final class Pager extends BasePager
     public function init(): void
     {
         $query = $this->getQuery();
-        if (null === $query) {
-            throw new \LogicException('The pager need a query to be initialised');
+        if (!$query instanceof ProxyQueryInterface) {
+            throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $this->resultsCount = \count($query->execute());

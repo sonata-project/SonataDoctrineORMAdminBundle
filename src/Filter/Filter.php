@@ -22,11 +22,6 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 abstract class Filter extends BaseFilter
 {
     /**
-     * @var bool
-     */
-    protected $active = false;
-
-    /**
      * Holds an array of grouped `orX` filter expressions that must be used within
      * the same query builder.
      *
@@ -39,7 +34,7 @@ abstract class Filter extends BaseFilter
      */
     abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void;
 
-    public function apply(BaseProxyQueryInterface $query, FilterData $filterData): void
+    final public function apply(BaseProxyQueryInterface $query, FilterData $filterData): void
     {
         if (!$query instanceof ProxyQueryInterface) {
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
@@ -50,11 +45,6 @@ abstract class Filter extends BaseFilter
 
             $this->filter($query, $alias, $field, $filterData);
         }
-    }
-
-    public function isActive(): bool
-    {
-        return $this->active;
     }
 
     /**
@@ -72,7 +62,7 @@ abstract class Filter extends BaseFilter
     /**
      * @param mixed $parameter
      */
-    protected function applyWhere(ProxyQueryInterface $query, $parameter): void
+    final protected function applyWhere(ProxyQueryInterface $query, $parameter): void
     {
         if (self::CONDITION_OR === $this->getCondition()) {
             $this->addOrParameter($query, $parameter);
@@ -81,13 +71,13 @@ abstract class Filter extends BaseFilter
         }
 
         // filter is active since it's added to the queryBuilder
-        $this->active = true;
+        $this->setActive(true);
     }
 
     /**
      * @param mixed $parameter
      */
-    protected function applyHaving(ProxyQueryInterface $query, $parameter): void
+    final protected function applyHaving(ProxyQueryInterface $query, $parameter): void
     {
         if (self::CONDITION_OR === $this->getCondition()) {
             $query->getQueryBuilder()->orHaving($parameter);
@@ -96,10 +86,10 @@ abstract class Filter extends BaseFilter
         }
 
         // filter is active since it's added to the queryBuilder
-        $this->active = true;
+        $this->setActive(true);
     }
 
-    protected function getNewParameterName(ProxyQueryInterface $query): string
+    final protected function getNewParameterName(ProxyQueryInterface $query): string
     {
         // dots are not accepted in a DQL identifier so replace them
         // by underscores.

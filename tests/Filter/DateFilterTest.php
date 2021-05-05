@@ -38,7 +38,10 @@ class DateFilterTest extends FilterTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(DateType::class, (new DateFilter())->getFieldType());
+        $filter = new DateFilter();
+        $filter->initialize('foo');
+
+        $this->assertSame(DateType::class, $filter->getFieldType());
     }
 
     public function testFilterRecordsWholeDay(): void

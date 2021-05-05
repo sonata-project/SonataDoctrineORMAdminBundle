@@ -39,6 +39,9 @@ class TimeFilterTest extends FilterTestCase
 
     public function testGetType(): void
     {
-        $this->assertSame(TimeType::class, (new TimeFilter())->getFieldType());
+        $filter = new TimeFilter();
+        $filter->initialize('foo');
+
+        $this->assertSame(TimeType::class, $filter->getFieldType());
     }
 }
