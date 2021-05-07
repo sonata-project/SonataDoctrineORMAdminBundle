@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
@@ -189,8 +190,8 @@ abstract class Filter extends BaseFilter
 
                 $expressionParts = $expression->getParts();
 
-                if (isset($expressionParts[0]) && \is_string($expressionParts[0]) &&
-                    0 === strpos($expressionParts[0], ':sonata_admin_datagrid_filter_query_marker')
+                if (isset($expressionParts[0]) && $expressionParts[0] instanceof Comparison &&
+                    "'sonata_admin_datagrid_filter_query_marker_a'" === $expressionParts[0]->getLeftExpr()
                 ) {
                     $expression->add($parameter);
 
@@ -204,8 +205,7 @@ abstract class Filter extends BaseFilter
 
         if (null === $groupName) {
             // Add the ":sonata_admin_datagrid_filter_query_marker" parameter as marker for the `Orx` expression.
-            $orExpression->add($qb->expr()->isNull(':sonata_admin_datagrid_filter_query_marker'));
-            $qb->setParameter('sonata_admin_datagrid_filter_query_marker', 'sonata_admin.datagrid.filter_query.marker');
+            $orExpression->add($qb->expr()->neq("'sonata_admin_datagrid_filter_query_marker_a'", "'sonata_admin_datagrid_filter_query_marker_b'"));
         } else {
             self::$groupedOrExpressions[$groupName] = $orExpression;
         }
