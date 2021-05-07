@@ -169,7 +169,7 @@ final class FilterTest extends FilterTestCase
 
         yield 'Missing "or_group" option, fallback to DQL marker' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (:sonata_admin_datagrid_filter_query_marker IS NULL'
+            .' AND (\'sonata_admin_datagrid_filter_query_marker_a\' <> \'sonata_admin_datagrid_filter_query_marker_b\''
             .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
                 [
