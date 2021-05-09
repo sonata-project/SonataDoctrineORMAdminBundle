@@ -25,7 +25,7 @@ class UserBrowser
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      *
-     * @var int
+     * @var int|null
      */
     private $userId;
 
@@ -34,7 +34,27 @@ class UserBrowser
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      *
-     * @var int
+     * @var int|null
      */
     private $browserId;
+
+    public function setUserId(int $userId): void
+    {
+        $this->userId = $userId;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->userId;
+    }
+
+    public function setBrowserId(int $browserId): void
+    {
+        $this->browserId = $browserId;
+    }
+
+    public function getBrowserId(): ?int
+    {
+        return $this->browserId;
+    }
 }

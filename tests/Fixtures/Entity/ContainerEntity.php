@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 class ContainerEntity
 {
     /**
-     * @var int
+     * @var int|null
      */
     protected $plainField;
 

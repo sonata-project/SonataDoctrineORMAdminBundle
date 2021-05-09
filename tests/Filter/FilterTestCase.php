@@ -108,13 +108,13 @@ abstract class FilterTestCase extends TestCase
         $expr = $this->createStub(Expr::class);
 
         $expr->method('orX')->willReturnCallback(
-            static function ($x = null): Orx {
+            static function (): Orx {
                 return new Orx(\func_get_args());
             }
         );
 
         $expr->method('andX')->willReturnCallback(
-            static function ($x = null): Andx {
+            static function (): Andx {
                 return new Andx(\func_get_args());
             }
         );

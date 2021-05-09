@@ -16,11 +16,32 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable;
 class EmbeddedEntity
 {
     /**
-     * @var bool
+     * @var bool|null
      */
-    protected $plainField;
+    public $plainField;
+
     /**
-     * @var SubEmbeddedEntity
+     * @var SubEmbeddedEntity|null
      */
-    protected $subEmbeddedEntity;
+    private $subEmbeddedEntity;
+
+    public function setPlainField(bool $plainField): void
+    {
+        $this->plainField = $plainField;
+    }
+
+    public function getPlaingField(): ?bool
+    {
+        return $this->plainField;
+    }
+
+    public function setSubEmbeddedEntity(SubEmbeddedEntity $subEmbeddedEntity): void
+    {
+        $this->subEmbeddedEntity = $subEmbeddedEntity;
+    }
+
+    public function getSubEmbeddedEntity(): ?SubEmbeddedEntity
+    {
+        return $this->subEmbeddedEntity;
+    }
 }

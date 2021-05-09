@@ -61,8 +61,9 @@ final class CallbackFilter extends Filter
 
     protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
-        $alias = $query->entityJoin($this->getParentAssociationMappings());
+        $alias = $this->getOption('alias', $query->entityJoin($this->getParentAssociationMappings()));
+        \assert(\is_string($alias));
 
-        return [$this->getOption('alias', $alias), $this->getFieldName()];
+        return [$alias, $this->getFieldName()];
     }
 }
