@@ -18,8 +18,8 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -211,14 +211,9 @@ class ProxyQuery implements ProxyQueryInterface
             ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
             ->getIdentifierFieldNames();
         $hasSingleIdentifierName = 1 === \count($identifierFieldNames);
-        $hasNoJoins = 0 ===  \count($queryBuilder->getDQLPart('join'));
+        $hasNoJoins = 0 === \count($queryBuilder->getDQLPart('join'));
         $havingPart = $queryBuilder->getDQLPart('having');
-
-        if (\is_array($havingPart)  && (\count($havingPart) > 0)) {
-            $hasHavingPart = true;
-        } else {
-            $hasHavingPart = false;
-        }
+        $hasHavingPart = \is_array($havingPart) && (\count($havingPart) > 0);
 
         if ($hasNoJoins) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
