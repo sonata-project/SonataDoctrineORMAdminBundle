@@ -19,6 +19,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
+use Doctrine\ORM\Tools\Pagination\CountWalker;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -201,6 +202,27 @@ class ProxyQuery implements ProxyQueryInterface
         }
 
         $query = $this->getDoctrineQuery();
+        $queryBuilder = $this->getQueryBuilder();
+
+        $identifierFieldNames = $this
+            ->getQueryBuilder()
+            ->getEntityManager()
+            ->getMetadataFactory()
+            ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
+            ->getIdentifierFieldNames();
+        $hasSingleIdentifierName = 1 === \count($identifierFieldNames);
+        $hasNoJoins = 0 ===  \count($queryBuilder->getDQLPart('join'));
+        $havingPart = $queryBuilder->getDQLPart('having');
+
+        if (\is_array($havingPart)  && (\count($havingPart) > 0)) {
+            $hasHavingPart = true;
+        } else {
+            $hasHavingPart = false;
+        }
+
+        if ($hasNoJoins) {
+            $query->setHint(CountWalker::HINT_DISTINCT, false);
+        }
 
         foreach ($this->hints as $name => $value) {
             $query->setHint($name, $value);
@@ -211,16 +233,17 @@ class ProxyQuery implements ProxyQueryInterface
             return $query->execute($params, $hydrationMode);
         }
 
-        $identifierFieldNames = $this
-            ->getQueryBuilder()
-            ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
-            ->getIdentifierFieldNames();
-
         // Paginator with fetchJoinCollection doesn't work with composite primary keys
         // https://github.com/doctrine/orm/issues/2910
-        return new Paginator($query, 1 === \count($identifierFieldNames));
+        // To stay safe fetch join always except for queries with single primary key and no joins
+        $paginator = new Paginator($query, !($hasSingleIdentifierName && $hasNoJoins));
+
+        // it is only safe to disable output walkers for really simple queries
+        if (!$hasHavingPart && $hasNoJoins && $hasSingleIdentifierName) {
+            $paginator->setUseOutputWalkers(false);
+        }
+
+        return $paginator;
     }
 
     /**
