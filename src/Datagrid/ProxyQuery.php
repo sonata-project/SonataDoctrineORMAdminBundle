@@ -193,7 +193,7 @@ class ProxyQuery implements ProxyQueryInterface
 
     public function execute(array $params = [], $hydrationMode = null)
     {
-        // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
+                // NEXT_MAJOR: Remove this check and update method signature to `execute()`.
         if (\func_num_args() > 0) {
             @trigger_error(sprintf(
                 'Passing arguments to "%s()" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.31.',
@@ -211,11 +211,11 @@ class ProxyQuery implements ProxyQueryInterface
             ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
             ->getIdentifierFieldNames();
         $hasSingleIdentifierName = 1 === \count($identifierFieldNames);
-        $hasNoJoins = 0 === \count($queryBuilder->getDQLPart('join'));
+        $hasJoins = 0 !== \count($queryBuilder->getDQLPart('join'));
         $havingPart = $queryBuilder->getDQLPart('having');
         $hasHavingPart = \is_array($havingPart) && (\count($havingPart) > 0);
 
-        if ($hasNoJoins) {
+        if (!$hasJoins) {
             $query->setHint(CountWalker::HINT_DISTINCT, false);
         }
 
@@ -230,11 +230,11 @@ class ProxyQuery implements ProxyQueryInterface
 
         // Paginator with fetchJoinCollection doesn't work with composite primary keys
         // https://github.com/doctrine/orm/issues/2910
-        // To stay safe fetch join always except for queries with single primary key and no joins
-        $paginator = new Paginator($query, !($hasSingleIdentifierName && $hasNoJoins));
+        // To stay safe fetch join only when we have single primary key and joins
+        $paginator = new Paginator($query, $hasSingleIdentifierName && $hasJoins);
 
         // it is only safe to disable output walkers for really simple queries
-        if (!$hasHavingPart && $hasNoJoins && $hasSingleIdentifierName) {
+        if (!$hasHavingPart && !$hasJoins && $hasSingleIdentifierName) {
             $paginator->setUseOutputWalkers(false);
         }
 
