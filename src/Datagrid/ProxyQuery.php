@@ -204,8 +204,7 @@ class ProxyQuery implements ProxyQueryInterface
         $query = $this->getDoctrineQuery();
         $queryBuilder = $this->getQueryBuilder();
 
-        $identifierFieldNames = $this
-            ->getQueryBuilder()
+        $identifierFieldNames = $queryBuilder
             ->getEntityManager()
             ->getMetadataFactory()
             ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
