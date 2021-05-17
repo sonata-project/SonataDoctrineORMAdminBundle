@@ -205,7 +205,7 @@ abstract class Filter extends BaseFilter
 
         if (null === $groupName) {
             // Add the "sonata_admin_datagrid_filter_query_marker_left" parameter as marker for the `Orx` expression.
-            $orExpression->add($qb->expr()->neq("'sonata_admin_datagrid_filter_query_marker_left'", "'sonata_admin_datagrid_filter_query_marker_right'"));
+            $orExpression->add($qb->expr()->eq("'sonata_admin_datagrid_filter_query_marker_left'", "'sonata_admin_datagrid_filter_query_marker_right'"));
         } else {
             self::$groupedOrExpressions[$groupName] = $orExpression;
         }
