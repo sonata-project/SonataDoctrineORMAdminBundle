@@ -34,6 +34,9 @@ final class AuthorFixtures extends Fixture
         $authorWithTwoBooks = new Author('author_with_two_books', 'Author with 2 books');
         $manager->persist($authorWithTwoBooks);
 
+        $authorForAutocompletion = new Author('autocompletion_author', 'autocompletion author');
+        $manager->persist($authorForAutocompletion);
+
         $manager->flush();
 
         $this->addReference(self::AUTHOR, $author);
