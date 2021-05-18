@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
+use Doctrine\ORM\Query\Expr\Comparison;
 use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
@@ -100,7 +101,7 @@ abstract class Filter extends BaseFilter
      * Adds the parameter to the corresponding `Orx` expression used in the `where` clause.
      * If it doesn't exist, a new one is created.
      * This method groups the filter "OR" conditions based on the "or_group" option. If this
-     * option is not set, it uses a marker (":sonata_admin_datagrid_filter_query_marker") in
+     * option is not set, it uses a marker ("sonata_admin_datagrid_filter_query_marker_left") in
      * the resulting DQL in order to identify the corresponding "WHERE (...)" condition
      * group each time it is required.
      * It allows to get queries like "WHERE previous_condition = previous_value AND (filter_1 = value OR filter_2 = value OR ...)",
@@ -123,7 +124,7 @@ abstract class Filter extends BaseFilter
         $qb = $query->getQueryBuilder();
         $where = $qb->getDQLPart('where');
 
-        // Search for the ":sonata_admin_datagrid_filter_query_marker" marker in order to
+        // Search for the "sonata_admin_datagrid_filter_query_marker_left" marker in order to
         // get the `Orx` expression.
         if (null === $groupName && null !== $where) {
             foreach ($where->getParts() as $expression) {
@@ -133,8 +134,8 @@ abstract class Filter extends BaseFilter
 
                 $expressionParts = $expression->getParts();
 
-                if (isset($expressionParts[0]) && \is_string($expressionParts[0]) &&
-                    0 === strpos($expressionParts[0], ':sonata_admin_datagrid_filter_query_marker')
+                if (isset($expressionParts[0]) && $expressionParts[0] instanceof Comparison &&
+                    "'sonata_admin_datagrid_filter_query_marker_left'" === $expressionParts[0]->getLeftExpr()
                 ) {
                     $expression->add($parameter);
 
@@ -147,9 +148,8 @@ abstract class Filter extends BaseFilter
         $orExpression = $qb->expr()->orX();
 
         if (null === $groupName) {
-            // Add the ":sonata_admin_datagrid_filter_query_marker" parameter as marker for the `Orx` expression.
-            $orExpression->add($qb->expr()->isNull(':sonata_admin_datagrid_filter_query_marker'));
-            $qb->setParameter('sonata_admin_datagrid_filter_query_marker', 'sonata_admin.datagrid.filter_query.marker');
+            // Add the "sonata_admin_datagrid_filter_query_marker_left" parameter as marker for the `Orx` expression.
+            $orExpression->add($qb->expr()->eq("'sonata_admin_datagrid_filter_query_marker_left'", "'sonata_admin_datagrid_filter_query_marker_right'"));
         } else {
             self::$groupedOrExpressions[$groupName] = $orExpression;
         }
