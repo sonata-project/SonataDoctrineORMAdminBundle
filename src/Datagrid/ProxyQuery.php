@@ -18,8 +18,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\CountWalker;
-use Doctrine\ORM\Tools\Pagination\Paginator;
+use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -201,43 +200,18 @@ class ProxyQuery implements ProxyQueryInterface
             ), \E_USER_DEPRECATED);
         }
 
-        $query = $this->getDoctrineQuery();
-        $queryBuilder = $this->getQueryBuilder();
-
-        $identifierFieldNames = $queryBuilder
-            ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
-            ->getIdentifierFieldNames();
-        $hasSingleIdentifierName = 1 === \count($identifierFieldNames);
-        $hasJoins = 0 !== \count($queryBuilder->getDQLPart('join'));
-        $havingPart = $queryBuilder->getDQLPart('having');
-        $hasHavingPart = \is_array($havingPart) && (\count($havingPart) > 0);
-
-        if (!$hasJoins) {
-            $query->setHint(CountWalker::HINT_DISTINCT, false);
-        }
-
-        foreach ($this->hints as $name => $value) {
-            $query->setHint($name, $value);
-        }
-
         // NEXT_MAJOR: Remove this.
         if (\func_num_args() > 0) {
+            $query = $this->getDoctrineQuery();
+
+            foreach ($this->hints as $name => $value) {
+                $query->setHint($name, $value);
+            }
+
             return $query->execute($params, $hydrationMode);
         }
 
-        // Paginator with fetchJoinCollection doesn't work with composite primary keys
-        // https://github.com/doctrine/orm/issues/2910
-        // To stay safe fetch join only when we have single primary key and joins
-        $paginator = new Paginator($query, $hasSingleIdentifierName && $hasJoins);
-
-        // it is only safe to disable output walkers for really simple queries
-        if (!$hasHavingPart && !$hasJoins && $hasSingleIdentifierName) {
-            $paginator->setUseOutputWalkers(false);
-        }
-
-        return $paginator;
+        return SmartPaginatorFactory::create($this, $this->hints);
     }
 
     /**
