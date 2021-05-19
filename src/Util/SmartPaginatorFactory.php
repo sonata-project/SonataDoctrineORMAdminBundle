@@ -24,6 +24,8 @@ final class SmartPaginatorFactory
 {
     /**
      * @param array<string, mixed> $hints
+     *
+     * @phpstan-return Paginator<object>
      */
     public static function create(ProxyQueryInterface $proxyQuery, array $hints = []): Paginator
     {
