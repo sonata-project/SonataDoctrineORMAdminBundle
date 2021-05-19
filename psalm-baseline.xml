@@ -14,5 +14,8 @@
         <UndefinedPropertyAssignment occurrences="1">
             <code>static::$groupedOrExpressions</code>
         </UndefinedPropertyAssignment>
+        <PossiblyInvalidFunctionCall occurrences="1">
+            <code>$resetFilterOrConditions()</code>
+        </PossiblyInvalidFunctionCall>
     </file>
 </files>

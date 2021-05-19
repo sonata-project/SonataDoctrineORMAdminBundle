@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\DependencyInjection;
 
-use Symfony\Component\Config\Definition\Builder\ArrayNodeDefinition;
 use Symfony\Component\Config\Definition\Builder\TreeBuilder;
 use Symfony\Component\Config\Definition\ConfigurationInterface;
 
@@ -28,15 +27,15 @@ use Symfony\Component\Config\Definition\ConfigurationInterface;
 final class Configuration implements ConfigurationInterface
 {
     /**
-     * Generates the configuration tree.
+     * @psalm-suppress PossiblyNullReference, PossiblyUndefinedMethod
+     *
+     * @see https://github.com/psalm/psalm-plugin-symfony/issues/174
      */
     public function getConfigTreeBuilder(): TreeBuilder
     {
         $treeBuilder = new TreeBuilder('sonata_doctrine_orm_admin');
-        $rootNode = $treeBuilder->getRootNode();
-        \assert($rootNode instanceof ArrayNodeDefinition);
 
-        $rootNode
+        $treeBuilder->getRootNode()
             ->children()
                 ->scalarNode('entity_manager')->defaultNull()->end()
                 ->arrayNode('audit')
