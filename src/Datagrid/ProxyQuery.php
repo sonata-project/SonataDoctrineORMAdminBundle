@@ -18,8 +18,8 @@ use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
-use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
 
 /**
  * This class try to unify the query usage with Doctrine.
@@ -143,22 +143,7 @@ final class ProxyQuery implements ProxyQueryInterface
      */
     public function execute()
     {
-        $query = $this->getDoctrineQuery();
-
-        foreach ($this->hints as $name => $value) {
-            $query->setHint($name, $value);
-        }
-
-        $identifierFieldNames = $this
-            ->getQueryBuilder()
-            ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($this->getQueryBuilder()->getRootEntities()))
-            ->getIdentifierFieldNames();
-
-        // Paginator with fetchJoinCollection doesn't work with composite primary keys
-        // https://github.com/doctrine/orm/issues/2910
-        return new Paginator($query, 1 === \count($identifierFieldNames));
+        return SmartPaginatorFactory::create($this, $this->hints);
     }
 
     /**
