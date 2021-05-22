@@ -97,7 +97,7 @@ class ProxyQueryTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string}>
+     * @phpstan-return iterable<array-key, array{string}>
      */
     public function validSortOrders(): iterable
     {

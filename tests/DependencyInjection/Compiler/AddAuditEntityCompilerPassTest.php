@@ -21,7 +21,7 @@ use Symfony\Component\DependencyInjection\Definition;
 class AddAuditEntityCompilerPassTest extends TestCase
 {
     /**
-     * @phpstan-return iterable<array{bool, array<string, array{audit: bool|null, audited: bool}>}>
+     * @phpstan-return iterable<array-key, array{bool, array<string, array{audit: bool|null, audited: bool}>}>
      */
     public function processDataProvider(): iterable
     {
@@ -51,16 +51,14 @@ class AddAuditEntityCompilerPassTest extends TestCase
         $container
             ->expects($this->any())
             ->method('hasDefinition')
-            ->willReturnCallback(static function ($id) {
-                if ('simplethings_entityaudit.config' === $id) {
-                    return true;
-                }
+            ->willReturnCallback(static function (string $id): bool {
+                return 'simplethings_entityaudit.config' === $id;
             });
 
         $container
             ->expects($this->any())
             ->method('getParameter')
-            ->willReturnCallback(static function ($id) use ($force) {
+            ->willReturnCallback(static function (string $id) use ($force) {
                 if ('sonata_doctrine_orm_admin.audit.force' === $id) {
                     return $force;
                 }
@@ -68,33 +66,36 @@ class AddAuditEntityCompilerPassTest extends TestCase
                 if ('simplethings.entityaudit.audited_entities' === $id) {
                     return [];
                 }
+
+                return null;
             });
 
         $container
             ->expects($this->any())
             ->method('findTaggedServiceIds')
-            ->willReturnCallback(static function ($id) use ($services) {
-                if ('sonata.admin' === $id) {
-                    $tags = [];
+            ->willReturnCallback(static function (string $id) use ($services): array {
+                if ('sonata.admin' !== $id) {
+                    return [];
+                }
 
-                    foreach ($services as $id => $service) {
-                        $attributes = ['manager_type' => 'orm'];
+                $tags = [];
+                foreach ($services as $id => $service) {
+                    $attributes = ['manager_type' => 'orm'];
 
-                        if (null !== $audit = $service['audit']) {
-                            $attributes['audit'] = $audit;
-                        }
-
-                        $tags[$id] = [0 => $attributes];
+                    if (null !== $audit = $service['audit']) {
+                        $attributes['audit'] = $audit;
                     }
 
-                    return $tags;
+                    $tags[$id] = [0 => $attributes];
                 }
+
+                return $tags;
             });
 
         $container
             ->expects($this->any())
             ->method('getDefinition')
-            ->willReturnCallback(static function ($id) {
+            ->willReturnCallback(static function (string $id): Definition {
                 return new Definition(null, [null, $id]);
             });
 

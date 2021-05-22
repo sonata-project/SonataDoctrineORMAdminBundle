@@ -58,7 +58,7 @@ class TypeGuesserTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{int|string|null, string, array<string, mixed>, int}>
+     * @phpstan-return iterable<array-key, array{int|string|null, string, array<string, mixed>, int}>
      */
     public function guessDataProvider(): iterable
     {

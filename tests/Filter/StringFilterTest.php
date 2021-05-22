@@ -34,29 +34,39 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{mixed, bool}>
+     * @phpstan-return iterable<array-key, array{string|null, bool, bool}>
      */
     public function getValues(): iterable
     {
         return [
-            'filter by normal value' => ['asd', false],
-            'not filter by empty string' => ['', false],
-            'filter by empty string' => ['', true],
-            'not filter by null' => [null, false],
-            'filter by null' => [null, true],
-            'not filter by 0' => [0, false],
-            'filter by 0' => [0, true],
-            'not filter by \'0\'' => ['0', false],
-            'filter by \'0\'' => ['0', true],
+            'filter by normal value' => ['asd', false, true],
+            'not filter by empty string' => ['', false, false],
+            'filter by empty string' => ['', true, true],
+            'not filter by null' => [null, false, false],
+            'filter by null' => [null, true, true],
+            'filter by \'0\'' => ['0', false, true],
         ];
     }
 
     /**
-     * @param mixed $value
-     *
-     * @dataProvider getValues
+     * @phpstan-return iterable<array-key, array{string|null, bool, bool}>
      */
-    public function testDefaultType($value, bool $allowEmpty): void
+    public function getValuesForMeaningLessType(): iterable
+    {
+        return [
+            'filter by normal value' => ['asd', false, true],
+            'not filter by empty string' => ['', false, false],
+            'still not filter by empty string with allow empty' => ['', true, false],
+            'not filter by null' => [null, false, false],
+            'still not filter by null with allow empty' => [null, true, false],
+            'filter by \'0\'' => ['0', false, true],
+        ];
+    }
+
+    /**
+     * @dataProvider getValuesForMeaningLessType
+     */
+    public function testDefaultType(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -66,9 +76,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => null]));
 
-        if ('' !== (string) $value) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -77,11 +87,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
-     * @dataProvider getValues
+     * @dataProvider getValuesForMeaningLessType
      */
-    public function testContains($value, bool $allowEmpty): void
+    public function testContains(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -91,9 +99,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_CONTAINS]));
 
-        if ('' !== (string) $value) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -102,11 +110,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
-     * @dataProvider getValues
+     * @dataProvider getValuesForMeaningLessType
      */
-    public function testStartsWith($value, bool $allowEmpty): void
+    public function testStartsWith(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -116,9 +122,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_STARTS_WITH]));
 
-        if ('' !== (string) $value) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => sprintf('%s%%', $value)], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%s%%', $value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -127,11 +133,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
-     * @dataProvider getValues
+     * @dataProvider getValuesForMeaningLessType
      */
-    public function testEndsWith($value, bool $allowEmpty): void
+    public function testEndsWith(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -141,9 +145,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_ENDS_WITH]));
 
-        if ('' !== (string) $value) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s', $value)], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s', $value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -152,11 +156,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
-     * @dataProvider getValues
+     * @dataProvider getValuesForMeaningLessType
      */
-    public function testNotContains($value, bool $allowEmpty): void
+    public function testNotContains(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -166,9 +168,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_NOT_CONTAINS]));
 
-        if ('' !== (string) $value) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -177,11 +179,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
      * @dataProvider getValues
      */
-    public function testEquals($value, bool $allowEmpty): void
+    public function testEquals(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -191,9 +191,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_EQUAL]));
 
-        if ('' !== (string) $value || $allowEmpty) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => $value ?? ''], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -202,11 +202,9 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @param mixed $value
-     *
      * @dataProvider getValues
      */
-    public function testNotEquals($value, bool $allowEmpty): void
+    public function testNotEquals(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', ['allow_empty' => $allowEmpty]);
@@ -216,9 +214,9 @@ class StringFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value, 'type' => StringOperatorType::TYPE_NOT_EQUAL]));
 
-        if ('' !== (string) $value || $allowEmpty) {
+        if ($shouldBeActive) {
             $this->assertSameQuery(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $proxyQuery);
-            $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
+            $this->assertSameQueryParameters(['field_name_0' => $value ?? ''], $proxyQuery);
             $this->assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
@@ -279,7 +277,7 @@ class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{array{force_case_insensitivity?: bool|null}, int, string, string}>
+     * @phpstan-return iterable<array-key, array{array{force_case_insensitivity?: bool|null}, int, string, string}>
      */
     public function caseSensitiveDataProvider(): iterable
     {

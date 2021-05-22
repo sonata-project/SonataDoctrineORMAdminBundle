@@ -25,8 +25,16 @@ class ConfigurationTest extends TestCase
     {
         $config = $this->process([]);
 
+        $this->assertArrayHasKey('entity_manager', $config);
         $this->assertNull($config['entity_manager']);
+
+        $this->assertArrayHasKey('audit', $config);
+        $this->assertIsArray($config['audit']);
+        $this->assertArrayHasKey('force', $config['audit']);
         $this->assertTrue($config['audit']['force']);
+
+        $this->assertArrayHasKey('templates', $config);
+        $this->assertIsArray($config['templates']);
         $this->assertArrayNotHasKey('types', $config['templates']);
     }
 
@@ -56,6 +64,9 @@ class ConfigurationTest extends TestCase
             ],
         ]]);
 
+        $this->assertArrayHasKey('templates', $config);
+        $this->assertIsArray($config['templates']);
+        $this->assertArrayHasKey('types', $config['templates']);
         $this->assertSame([
             'list' => [
                 'array' => 'list_array.twig.html',

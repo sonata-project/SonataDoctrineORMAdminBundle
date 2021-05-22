@@ -44,7 +44,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{QueryBuilder, bool}>
+     * @phpstan-return iterable<array-key, array{QueryBuilder, bool}>
      */
     public function getQueriesForFetchJoinedCollection(): iterable
     {
@@ -94,7 +94,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{QueryBuilder, bool|null}>
+     * @phpstan-return iterable<array-key, array{QueryBuilder, bool|null}>
      */
     public function getQueriesForOutputWalker(): iterable
     {
@@ -147,14 +147,14 @@ final class SmartPaginatorFactoryTest extends TestCase
             ->method('getDoctrineQuery')
             ->willReturn($query);
 
-        $paginator = SmartPaginatorFactory::create($proxyQuery);
+        SmartPaginatorFactory::create($proxyQuery);
 
         $this->assertSame($hasHint, $query->hasHint(CountWalker::HINT_DISTINCT));
         $this->assertSame($expected, $query->getHint(CountWalker::HINT_DISTINCT));
     }
 
     /**
-     * @phpstan-return iterable<array{QueryBuilder, bool, bool}>
+     * @phpstan-return iterable<array-key, array{QueryBuilder, bool, bool}>
      */
     public function getQueriesForCountWalkerDistinct(): iterable
     {

@@ -80,7 +80,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{class-string}>
+     * @phpstan-return iterable<array-key, array{class-string}>
      */
     public function valueObjectDataProvider(): iterable
     {
@@ -140,7 +140,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{bool, object}>
+     * @phpstan-return iterable<array-key, array{bool, object}>
      */
     public function supportsQueryDataProvider(): iterable
     {
@@ -150,7 +150,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{bool}>
+     * @phpstan-return iterable<array-key, array{bool}>
      */
     public function getVersionDataProvider(): iterable
     {
@@ -179,7 +179,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{bool, bool}>
+     * @phpstan-return iterable<array-key, array{bool, bool}>
      */
     public function lockDataProvider(): iterable
     {
@@ -561,7 +561,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{\Throwable}>
+     * @phpstan-return iterable<array-key, array{\Throwable}>
      */
     public function createUpdateRemoveData(): iterable
     {
@@ -670,7 +670,7 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string[], string[], array<int|string>}>
+     * @phpstan-return iterable<array-key, array{string[], string[], non-empty-array<int|string>}>
      */
     public function addIdentifiersToQueryProvider(): iterable
     {

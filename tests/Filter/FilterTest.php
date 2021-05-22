@@ -47,7 +47,7 @@ final class FilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-param array<array{class-string, string|null, array<string, mixed>, string, array<string, mixed>}> $filterOptionsCollection
+     * @phpstan-param array<array{string|null, array<string, mixed>, string, FilterData}> $filterOptionsCollection
      *
      * @dataProvider orExpressionProvider
      */
@@ -74,8 +74,8 @@ final class FilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
-        foreach ($filterOptionsCollection as [$type, $orGroup, $defaultOptions, $field, $filterData]) {
-            $filter = new $type();
+        foreach ($filterOptionsCollection as [$orGroup, $defaultOptions, $field, $filterData]) {
+            $filter = new StringFilter();
             $filter->initialize($field, $defaultOptions);
             $filter->setCondition(Filter::CONDITION_OR);
             if (null !== $orGroup) {
@@ -92,7 +92,7 @@ final class FilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string, array<array{class-string, string|null, array<string, mixed>, string, FilterData}>}>
+     * @phpstan-return iterable<array-key, array{string, array<array{string|null, array<string, mixed>, string, FilterData}>}>
      */
     public function orExpressionProvider(): iterable
     {
@@ -101,7 +101,6 @@ final class FilterTest extends FilterTestCase
             .' AND (e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
                 [
-                    StringFilter::class,
                     'my_admin',
                     [
                         'field_name' => 'project',
@@ -113,7 +112,6 @@ final class FilterTest extends FilterTestCase
                     ]),
                 ],
                 [
-                    StringFilter::class,
                     'my_admin',
                     [
                         'field_name' => 'version',
@@ -132,7 +130,6 @@ final class FilterTest extends FilterTestCase
             .' AND e.project LIKE :project_0 AND 7 = 8',
             [
                 [
-                    StringFilter::class,
                     'my_admin',
                     [
                         'field_name' => 'project',
@@ -152,7 +149,6 @@ final class FilterTest extends FilterTestCase
             .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
                 [
-                    StringFilter::class,
                     null,
                     [
                         'field_name' => 'project',
@@ -164,7 +160,6 @@ final class FilterTest extends FilterTestCase
                     ]),
                 ],
                 [
-                    StringFilter::class,
                     null,
                     [
                         'field_name' => 'version',

@@ -24,7 +24,7 @@ use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 class PagerTest extends TestCase
 {
     /**
-     * @phpstan-return iterable<array{class-string}>
+     * @phpstan-return iterable<array-key, array{class-string}>
      */
     public function entityClassDataProvider(): iterable
     {

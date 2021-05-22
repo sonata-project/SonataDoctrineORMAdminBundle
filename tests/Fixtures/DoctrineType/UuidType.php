@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\StringType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 
@@ -26,24 +27,38 @@ class UuidType extends StringType
 {
     const NAME = 'uuid';
 
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $value
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?NonIntegerIdentifierTestClass
     {
-        return !empty($value) ? new NonIntegerIdentifierTestClass($value) : null;
+        if (null === $value || '' === $value) {
+            return null;
+        }
+
+        if (!is_string($value)) {
+            throw ConversionException::conversionFailedInvalidType(
+                $value,
+                $this->getName(),
+                ['null', 'string', NonIntegerIdentifierTestClass::class]
+            );
+        }
+
+        return new NonIntegerIdentifierTestClass($value);
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $value
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        return $value->toString();
+        $value = $this->convertToPHPValue($value, $platform);
+
+        return null !== $value ? $value->toString() : null;
     }
 }
