@@ -65,7 +65,7 @@ class StringListFilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{int|null}>
+     * @phpstan-return iterable<array-key, array{int|null}>
      */
     public function containsDataProvider(): iterable
     {
@@ -123,7 +123,7 @@ class StringListFilterTest extends FilterTestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string[], int, string[], array<string, string>}>
+     * @phpstan-return iterable<array-key, array{string[], int, string[], array<string, string>}>
      */
     public function multipleValuesDataProvider(): iterable
     {

@@ -122,7 +122,7 @@ class ShowBuilderTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string, int, string}>
+     * @phpstan-return iterable<array-key, array{string, int, string}>
      */
     public function fixFieldDescriptionData(): iterable
     {

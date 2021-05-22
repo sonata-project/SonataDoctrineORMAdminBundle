@@ -23,12 +23,15 @@ final class RetrieveAutocompleteItemsActionTest extends BaseFunctionalTestCase
 
         $content = $this->client->getResponse()->getContent();
         self::assertIsString($content);
+
         $response = json_decode($content, true);
+        self::assertIsArray($response);
 
         self::assertIsArray($response['items']);
         self::assertCount(1, $response['items']);
 
         $author = reset($response['items']);
+        self::assertIsArray($author);
 
         self::assertArrayHasKey('id', $author);
         self::assertSame('autocompletion_author', $author['id']);

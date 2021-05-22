@@ -43,7 +43,7 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertFalse($filter->isActive());
     }
 
-    public function testFilterArray(): void
+    public function testFilterArrayEqual(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -55,6 +55,12 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
         $this->assertTrue($filter->isActive());
+    }
+
+    public function testFilterArrayNotEqual(): void
+    {
+        $filter = new ChoiceFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -65,7 +71,7 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterArrayWithNullValue(): void
+    public function testFilterArrayEqualWithNullValue(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -77,6 +83,12 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
         $this->assertTrue($filter->isActive());
+    }
+
+    public function testFilterArrayNotEqualWithNullValue(): void
+    {
+        $filter = new ChoiceFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -87,7 +99,7 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterScalar(): void
+    public function testFilterEqualScalar(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -99,6 +111,12 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '1'], $proxyQuery);
         $this->assertTrue($filter->isActive());
+    }
+
+    public function testFilterNotEqualScalar(): void
+    {
+        $filter = new ChoiceFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -109,7 +127,7 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertTrue($filter->isActive());
     }
 
-    public function testFilterNull(): void
+    public function testFilterEqualNull(): void
     {
         $filter = new ChoiceFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
@@ -121,6 +139,12 @@ class ChoiceFilterTest extends FilterTestCase
         $this->assertSameQuery(['WHERE alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters([], $proxyQuery);
         $this->assertTrue($filter->isActive());
+    }
+
+    public function testFilterNotEqualNull(): void
+    {
+        $filter = new ChoiceFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 

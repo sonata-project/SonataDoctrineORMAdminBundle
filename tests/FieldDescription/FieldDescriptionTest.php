@@ -273,7 +273,7 @@ class FieldDescriptionTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{0: string|int, 1: bool}>
+     * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
     public function getDescribesSingleValuedAssociationProvider(): iterable
     {
@@ -299,7 +299,7 @@ class FieldDescriptionTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{0: string|int, 1: bool}>
+     * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
     public function getDescribesCollectionValuedAssociationProvider(): iterable
     {

@@ -19,7 +19,7 @@ final class FetchJoinListTest extends BasePantherTestCase
 {
     public function testCountFetchJoined(): void
     {
-        $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
 
         self::assertSelectorTextContains('tr[data-author-id="author_with_two_books"] .js-number-of-books', '2');
         self::assertSelectorTextContains('tr[data-author-id="author_with_two_books"] .js-number-of-readers', '200');

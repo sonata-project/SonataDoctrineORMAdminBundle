@@ -41,11 +41,15 @@ final class ProductIdType extends Type
             return $value;
         }
 
-        try {
-            return new ProductId((int) $value);
-        } catch (\Throwable $e) {
-            throw ConversionException::conversionFailed($value, $this->getName());
+        if (!is_numeric($value)) {
+            throw ConversionException::conversionFailedInvalidType(
+                $value,
+                $this->getName(),
+                ['null', 'int', 'ProductId']
+            );
         }
+
+        return new ProductId((int) $value);
     }
 
     /**

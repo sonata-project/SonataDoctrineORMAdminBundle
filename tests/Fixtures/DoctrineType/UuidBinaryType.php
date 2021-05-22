@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
+use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\StringType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 
@@ -26,27 +27,38 @@ final class UuidBinaryType extends StringType
 {
     const NAME = 'uuid_binary';
 
-    /**
-     * {@inheritdoc}
-     */
-    public function getName()
+    public function getName(): string
     {
         return self::NAME;
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $value
      */
-    public function convertToPHPValue($value, AbstractPlatform $platform)
+    public function convertToPHPValue($value, AbstractPlatform $platform): ?NonIntegerIdentifierTestClass
     {
-        return !empty($value) ? new NonIntegerIdentifierTestClass($value->toString()) : null;
+        if (null === $value || $value instanceof NonIntegerIdentifierTestClass) {
+            return $value;
+        }
+
+        if (!is_string($value)) {
+            throw ConversionException::conversionFailedInvalidType(
+                $value,
+                $this->getName(),
+                ['null', 'string', NonIntegerIdentifierTestClass::class]
+            );
+        }
+
+        return new NonIntegerIdentifierTestClass($value);
     }
 
     /**
-     * {@inheritdoc}
+     * @param mixed $value
      */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform)
+    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
     {
-        return hex2bin(str_replace('-', '', (string) $value));
+        $value = $this->convertToPHPValue($value, $platform);
+
+        return null !== $value ? hex2bin(str_replace('-', '', $value->toString())) : null;
     }
 }

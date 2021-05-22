@@ -91,6 +91,11 @@ class ListBuilderTest extends TestCase
             'Standard list _action field has "actions" type'
         );
 
+        $actions = $fieldDescription->getOption('actions');
+        $this->assertIsArray($actions);
+        $this->assertArrayHasKey('test', $actions);
+        $this->assertIsArray($actions['test']);
+        $this->assertArrayHasKey('template', $actions['test']);
         $this->assertSame(
             '@SonataAdmin/CRUD/list__action_test.html.twig',
             $fieldDescription->getOption('actions')['test']['template']
@@ -115,7 +120,7 @@ class ListBuilderTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{int, string}>
+     * @phpstan-return iterable<array-key, array{int, string}>
      */
     public function fixFieldDescriptionData(): iterable
     {

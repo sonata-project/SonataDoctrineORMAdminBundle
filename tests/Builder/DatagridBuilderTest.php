@@ -104,7 +104,7 @@ final class DatagridBuilderTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array{string, class-string}>
+     * @phpstan-return iterable<array-key, array{string, class-string}>
      */
     public function getBaseDatagridData(): iterable
     {
