@@ -41,7 +41,7 @@ class UuidType extends StringType
             return null;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw ConversionException::conversionFailedInvalidType(
                 $value,
                 $this->getName(),

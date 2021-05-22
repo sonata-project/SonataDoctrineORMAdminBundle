@@ -41,7 +41,7 @@ final class UuidBinaryType extends StringType
             return $value;
         }
 
-        if (!is_string($value)) {
+        if (!\is_string($value)) {
             throw ConversionException::conversionFailedInvalidType(
                 $value,
                 $this->getName(),
@@ -59,6 +59,15 @@ final class UuidBinaryType extends StringType
     {
         $value = $this->convertToPHPValue($value, $platform);
 
-        return null !== $value ? hex2bin(str_replace('-', '', $value->toString())) : null;
+        if (null === $value) {
+            return null;
+        }
+
+        $bin = hex2bin(str_replace('-', '', $value->toString()));
+        if (false === $bin) {
+            throw ConversionException::conversionFailed($value->toString(), $this->getName());
+        }
+
+        return $bin;
     }
 }
