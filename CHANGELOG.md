@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.34.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.1...3.34.2) - 2021-05-26
+### Fixed
+- [[#1444](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1444)] Fixed issue where pagination of large dataset would take very long time or cause database engine  to swap even for simplest queries without joins. ([@alfabetagama](https://github.com/alfabetagama))
+
 ## [3.34.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.0...3.34.1) - 2021-05-18
 ### Fixed
 - [[#1439](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1439)] Bind arbitrary params as part of a value expression in the query filter at `Filter::applyWhere()` with PostgreSQL. ([@phansys](https://github.com/phansys))
