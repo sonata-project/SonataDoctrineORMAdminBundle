@@ -442,7 +442,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return implode(self::ID_SEPARATOR, $this->getMetadata($class, 'sonata_deprecation_mute')->identifier);
     }
 
-    public function getIdentifierValues($entity)
+    public function getIdentifierValues($model)
     {
         // Fix code has an impact on performance, so disable it ...
         //$entityManager = $this->getEntityManager($entity);
@@ -450,14 +450,14 @@ class ModelManager implements ModelManagerInterface, LockInterface
         //    throw new \RuntimeException('Entities passed to the choice field must be managed');
         //}
 
-        $class = ClassUtils::getClass($entity);
+        $class = ClassUtils::getClass($model);
         // NEXT_MAJOR: Remove `sonata_deprecation_mute`
         $metadata = $this->getMetadata($class, 'sonata_deprecation_mute');
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
 
-        foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
+        foreach ($metadata->getIdentifierValues($model) as $name => $value) {
             if (!\is_object($value)) {
                 $identifiers[] = $value;
 
@@ -489,10 +489,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getMetadata($class, 'sonata_deprecation_mute')->getIdentifierFieldNames();
     }
 
-    public function getNormalizedIdentifier($entity)
+    public function getNormalizedIdentifier($model)
     {
         // NEXT_MAJOR: Remove the following 2 checks and declare "object" as type for argument 1.
-        if (null === $entity) {
+        if (null === $model) {
             @trigger_error(sprintf(
                 'Passing null as argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
@@ -501,18 +501,18 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return null;
         }
 
-        if (!\is_object($entity)) {
+        if (!\is_object($model)) {
             throw new \RuntimeException('Invalid argument, object or null required');
         }
 
-        if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
+        if (\in_array($this->getEntityManager($model)->getUnitOfWork()->getEntityState($model), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
             return null;
         }
 
-        $values = $this->getIdentifierValues($entity);
+        $values = $this->getIdentifierValues($model);
 
         if (0 === \count($values)) {
             return null;
@@ -527,10 +527,10 @@ class ModelManager implements ModelManagerInterface, LockInterface
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
-    public function getUrlSafeIdentifier($entity)
+    public function getUrlSafeIdentifier($model)
     {
         // NEXT_MAJOR: Remove the following check and declare "object" as type for argument 1.
-        if (!\is_object($entity)) {
+        if (!\is_object($model)) {
             @trigger_error(sprintf(
                 'Passing other type than object for argument 1 for %s() is deprecated since sonata-project/doctrine-orm-admin-bundle 3.20 and will be not allowed in version 4.0.',
                 __METHOD__
@@ -539,7 +539,7 @@ class ModelManager implements ModelManagerInterface, LockInterface
             return null;
         }
 
-        return $this->getNormalizedIdentifier($entity);
+        return $this->getNormalizedIdentifier($model);
     }
 
     /**
