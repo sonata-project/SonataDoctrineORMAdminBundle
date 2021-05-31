@@ -44,7 +44,7 @@ class Book
     private $author;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Reader::class, cascade="persist")
+     * @ORM\ManyToMany(targetEntity=Reader::class, cascade={"persist"})
      *
      * @var Collection<array-key, Reader>
      */
