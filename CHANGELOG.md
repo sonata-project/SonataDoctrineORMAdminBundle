@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [3.34.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.1...3.34.2) - 2021-05-26
+## [3.34.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.1...3.34.2) - 2021-05-31
 ### Fixed
 - [[#1444](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1444)] Fixed issue where pagination of large dataset would take very long time or cause database engine  to swap even for simplest queries without joins. ([@alfabetagama](https://github.com/alfabetagama))
 
