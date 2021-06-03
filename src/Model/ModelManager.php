@@ -223,7 +223,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         ));
     }
 
-    public function getIdentifierValues(object $entity): array
+    public function getIdentifierValues(object $model): array
     {
         // Fix code has an impact on performance, so disable it ...
         //$entityManager = $this->getEntityManager($entity);
@@ -231,13 +231,13 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         //    throw new \RuntimeException('Entities passed to the choice field must be managed');
         //}
 
-        $class = ClassUtils::getClass($entity);
+        $class = ClassUtils::getClass($model);
         $metadata = $this->getMetadata($class);
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
 
-        foreach ($metadata->getIdentifierValues($entity) as $name => $value) {
+        foreach ($metadata->getIdentifierValues($model) as $name => $value) {
             if (!\is_object($value)) {
                 $identifiers[] = $value;
 
@@ -266,16 +266,16 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         return $this->getMetadata($class)->getIdentifierFieldNames();
     }
 
-    public function getNormalizedIdentifier(object $entity): ?string
+    public function getNormalizedIdentifier(object $model): ?string
     {
-        if (\in_array($this->getEntityManager($entity)->getUnitOfWork()->getEntityState($entity), [
+        if (\in_array($this->getEntityManager($model)->getUnitOfWork()->getEntityState($model), [
             UnitOfWork::STATE_NEW,
             UnitOfWork::STATE_REMOVED,
         ], true)) {
             return null;
         }
 
-        $values = $this->getIdentifierValues($entity);
+        $values = $this->getIdentifierValues($model);
 
         if (0 === \count($values)) {
             return null;
@@ -288,9 +288,9 @@ final class ModelManager implements ModelManagerInterface, LockInterface
      * The ORM implementation does nothing special but you still should use
      * this method when using the id in a URL to allow for future improvements.
      */
-    public function getUrlSafeIdentifier(object $entity): ?string
+    public function getUrlSafeIdentifier(object $model): ?string
     {
-        return $this->getNormalizedIdentifier($entity);
+        return $this->getNormalizedIdentifier($model);
     }
 
     /**
