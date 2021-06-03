@@ -56,7 +56,7 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
     /**
      * @phpstan-param class-string $baseClass
      *
-     * @phpstan-return array{ClassMetadata, string, mixed[]}
+     * @phpstan-return array{ClassMetadata<object>, string, mixed[]}
      */
     private function getParentMetadataForProperty(string $baseClass, string $propertyFullName): array
     {
@@ -89,7 +89,9 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
     }
 
     /**
-     * @param class-string $class
+     * @phpstan-template TObject of object
+     * @phpstan-param class-string<TObject> $class
+     * @phpstan-return ClassMetadata<TObject>
      */
     private function getMetadata(string $class): ClassMetadata
     {

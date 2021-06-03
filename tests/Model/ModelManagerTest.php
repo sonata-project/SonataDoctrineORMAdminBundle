@@ -215,6 +215,9 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->lock($object, 123);
     }
 
+    /**
+     * @return ClassMetadata<EmbeddedEntity>
+     */
     public function getMetadataForEmbeddedEntity(): ClassMetadata
     {
         $metadata = new ClassMetadata(EmbeddedEntity::class);
@@ -224,12 +227,16 @@ final class ModelManagerTest extends TestCase
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'boolean',
+                'options' => [],
             ],
         ];
 
         return $metadata;
     }
 
+    /**
+     * @return ClassMetadata<SubEmbeddedEntity>
+     */
     public function getMetadataForSubEmbeddedEntity(): ClassMetadata
     {
         $metadata = new ClassMetadata(SubEmbeddedEntity::class);
@@ -239,12 +246,16 @@ final class ModelManagerTest extends TestCase
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'boolean',
+                'options' => [],
             ],
         ];
 
         return $metadata;
     }
 
+    /**
+     * @return ClassMetadata<AssociatedEntity>
+     */
     public function getMetadataForAssociatedEntity(): ClassMetadata
     {
         $embeddedEntityClass = EmbeddedEntity::class;
@@ -257,6 +268,7 @@ final class ModelManagerTest extends TestCase
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'string',
+                'options' => [],
             ],
         ];
 
@@ -277,6 +289,9 @@ final class ModelManagerTest extends TestCase
         return $metadata;
     }
 
+    /**
+     * @return ClassMetadata<ContainerEntity>
+     */
     public function getMetadataForContainerEntity(): ClassMetadata
     {
         $containerEntityClass = ContainerEntity::class;
@@ -291,6 +306,7 @@ final class ModelManagerTest extends TestCase
                 'fieldName' => 'plainField',
                 'columnName' => 'plainField',
                 'type' => 'integer',
+                'options' => [],
             ],
         ];
 
@@ -704,6 +720,11 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->addIdentifiersToQuery(\stdClass::class, $datagrid, []);
     }
 
+    /**
+     * @phpstan-template T of object
+     * @phpstan-param class-string<T> $class
+     * @phpstan-return ClassMetadata<T>
+     */
     private function getMetadata(string $class, bool $isVersioned = false): ClassMetadata
     {
         $metadata = new ClassMetadata($class);
@@ -721,6 +742,10 @@ final class ModelManagerTest extends TestCase
 
     /**
      * @return EntityManagerInterface&MockObject
+     *
+     * @phpstan-template T of object
+     * @phpstan-param class-string<T> $class
+     * @phpstan-param ClassMetadata<T> $classMetadata
      */
     private function setGetMetadataExpectation(string $class, ClassMetadata $classMetadata): EntityManagerInterface
     {
@@ -732,6 +757,7 @@ final class ModelManagerTest extends TestCase
 
         $em->expects($this->atLeastOnce())
             ->method('getClassMetadata')
+            ->with($class)
             ->willReturn($classMetadata);
 
         return $em;

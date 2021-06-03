@@ -379,13 +379,18 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
-     * @phpstan-param class-string $class
+     * @phpstan-template TObject of object
+     * @phpstan-param class-string<TObject> $class
+     * @phpstan-return ClassMetadata<TObject>
      */
     private function getMetadata(string $class): ClassMetadata
     {
         return $this->getEntityManager($class)->getClassMetadata($class);
     }
 
+    /**
+     * @phpstan-param ClassMetadata<object> $metadata
+     */
     private function getFieldName(ClassMetadata $metadata, string $name): string
     {
         if (\array_key_exists($name, $metadata->fieldMappings)) {
