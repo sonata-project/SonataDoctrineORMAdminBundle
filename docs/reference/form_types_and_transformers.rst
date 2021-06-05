@@ -39,9 +39,9 @@ Now you can edit the settings array with::
 
     final class PageAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper): void
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->add('enabled')
                 ->add('settings', ImmutableArrayType::class, [
                     'keys' => [
@@ -70,9 +70,9 @@ Other options::
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper): void
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
                     ->add('author', ModelType::class, [], ['edit' => 'list'])
