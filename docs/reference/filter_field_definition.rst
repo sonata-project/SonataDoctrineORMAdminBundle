@@ -8,24 +8,26 @@ Filter field definition
 
 These fields are displayed inside the filter box. They allow you to filter the list of entities by a number of different methods.
 
-A filter instance is always linked to a Form Type, there are 3 types available:
+A filter instance is always linked to a Form Type, there are 7 types available:
 
-* `sonata_type_filter_number`: display 2 widgets, the operator ( >, >=, <= , <, =) and the value,
-* `sonata_type_filter_choice`: display 2 widgets, the operator (yes and no) and the value,
-* `sonata_type_filter_default`: display 2 widgets, an hidden operator (can be changed on demand) and the value,
-* `sonata_type_filter_date`, not implemented yet!
+* `Sonata\AdminBundle\Form\Type\Filter\NumberType`: display 2 widgets, the operator ( >, >=, <=, <, =) and the value,
+* `Sonata\AdminBundle\Form\Type\Filter\ChoiceType`: display 2 widgets, the operator (yes and no) and the value,
+* `Sonata\AdminBundle\Form\Type\Filter\DefaultType`: display 2 widgets, an hidden operator (can be changed on demand) and the value,
+* `Sonata\AdminBundle\Form\Type\Filter\DateType`: display 2 widgets, the operator ( >, >=, <= , <, =) and the value,
+* `Sonata\AdminBundle\Form\Type\Filter\DateRangeType`: display 3 widgets, the operator (between and not between) and the two values,
+* `Sonata\AdminBundle\Form\Type\Filter\DateTimeType`: display 2 widgets, the operator ( >, >=, <= , <, =) and the value,
+* `Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType`: display 3 widgets, the operator (between and not between) and the two values,
 
 The `Form Type` configuration is provided by the filter itself.
 But they can be tweaked in the ``configureDatagridFilters`` process with the ``add`` method.
 
-The ``add`` method accepts 5 arguments:
+The ``add`` method accepts 4 arguments:
 
 * the `field name`, fields of relations (of relations of relations … ) can be
-  specified with a dot-separated syntax.
+  specified with a dot-separated syntax,
 * the `filter type`, the filter name,
 * the `filter options`, the options related to the filter,
-* the `field type`, the type of widget used to render the value part,
-* the `field options`, the type options.
+* the `field description options`, the options related to the field.
 
 Available filter types
 ----------------------
@@ -59,12 +61,14 @@ Example
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true]);
+                ->add('tags', null, [
+                    'field_options' => ['expanded' => true, 'multiple' => true],
+                ]);
         }
     }
 
@@ -89,15 +93,18 @@ this filter can provide some basic queries::
     protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('labels', StringListFilter::class, [], ChoiceType::class, [
-                'choices' => [
-                    'patch' => 'patch',
-                    'minor' => 'minor',
-                    'major' => 'major',
-                    'approved' => 'approved',
-                    // ...
+            ->add('labels', StringListFilter::class, [
+                'field_type' => ChoiceType::class,
+                'field_options' => [
+                    'choices' => [
+                        'patch' => 'patch',
+                        'minor' => 'minor',
+                        'major' => 'major',
+                        'approved' => 'approved',
+                        // ...
+                    ],
+                    'multiple' => true,
                 ],
-                'multiple' => true,
             ]);
     }
 
@@ -113,12 +120,12 @@ This filter type uses ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for
 Can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many related items that cannot be loaded into memory.
 This form type requires ``property`` option. See documentation of ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for all available options for this form type::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('category', ModelAutocompleteFilter::class, [], null, [
+            ->add('category', ModelAutocompleteFilter::class, [
                 // in related CategoryAdmin there must be datagrid filter on `title` field to make the autocompletion work
-                'property'=>'title',
+                'field_options' => ['property'=>'title'],
             ]);
     }
 
@@ -128,7 +135,7 @@ DateRangeFilter
 The ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter`` filter renders two fields to filter all records between two dates.
 If only one date is set it will filter for all records until or since the given date::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper->add('created', DateRangeFilter::class);
     }
@@ -147,7 +154,7 @@ support filtering of timestamp fields by specifying ``'input_type' => 'timestamp
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('timestamp', DateTimeRangeFilter::class, ['input_type' => 'timestamp']);
@@ -167,7 +174,7 @@ ClassFilter
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('type', ClassFilter::class, ['sub_classes' => $this->getSubClasses()]);
@@ -187,7 +194,7 @@ Empty
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('deleted', NullFilter::class, ['field_name' => 'deletedAt']);
@@ -211,7 +218,7 @@ If you need to filter your base entities by the value of a sub entity property, 
 
     final class UserAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('id')
@@ -232,10 +239,13 @@ Label
 
 You can customize the label which appears on the main widget by using a ``label`` option::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
     {
         $datagridMapper
-            ->add('tags', null, ['label' => 'les tags'], null, ['expanded' => true, 'multiple' => true]);
+            ->add('tags', null, [
+                'label' => 'les tags'
+                'field_options' => ['expanded' => true, 'multiple' => true],
+            ]);
     }
 
 Callback
@@ -260,12 +270,14 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper)
+        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
         {
             $datagridMapper
                 ->add('title')
                 ->add('enabled')
-                ->add('tags', null, [], null, ['expanded' => true, 'multiple' => true])
+                ->add('tags', null, [
+                    'field_options' => ['expanded' => true, 'multiple' => true],
+                ])
                 ->add('author')
                 ->add('with_open_comments', CallbackFilter::class, [
     //                'callback'   => [$this, 'getWithOpenCommentFilter'],
