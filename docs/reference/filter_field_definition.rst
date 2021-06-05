@@ -61,9 +61,9 @@ Example
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('title')
                 ->add('enabled')
                 ->add('tags', null, [
@@ -90,9 +90,9 @@ This filter is made for filtering on values saved in databases as serialized arr
 if you want to make complex ``SQL`` queries or if your table is too big and you get performance issues but
 this filter can provide some basic queries::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('labels', StringListFilter::class, [
                 'field_type' => ChoiceType::class,
                 'field_options' => [
@@ -120,9 +120,9 @@ This filter type uses ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for
 Can be used as replacement of ``Sonata\DoctrineORMAdminBundle\Filter\ModelFilter`` to handle too many related items that cannot be loaded into memory.
 This form type requires ``property`` option. See documentation of ``Sonata\AdminBundle\Form\Type\ModelAutocompleteType`` for all available options for this form type::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('category', ModelAutocompleteFilter::class, [
                 // in related CategoryAdmin there must be datagrid filter on `title` field to make the autocompletion work
                 'field_options' => ['property'=>'title'],
@@ -135,9 +135,9 @@ DateRangeFilter
 The ``Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter`` filter renders two fields to filter all records between two dates.
 If only one date is set it will filter for all records until or since the given date::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper->add('created', DateRangeFilter::class);
+        $filter->add('created', DateRangeFilter::class);
     }
 
 Timestamps
@@ -154,9 +154,9 @@ support filtering of timestamp fields by specifying ``'input_type' => 'timestamp
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('timestamp', DateTimeRangeFilter::class, ['input_type' => 'timestamp']);
         }
     }
@@ -174,9 +174,9 @@ ClassFilter
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('type', ClassFilter::class, ['sub_classes' => $this->getSubClasses()]);
         }
     }
@@ -194,9 +194,9 @@ Empty
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('deleted', NullFilter::class, ['field_name' => 'deletedAt']);
         }
     }
@@ -218,9 +218,9 @@ If you need to filter your base entities by the value of a sub entity property, 
 
     final class UserAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('id')
                 ->add('firstName')
                 ->add('lastName')
@@ -239,9 +239,9 @@ Label
 
 You can customize the label which appears on the main widget by using a ``label`` option::
 
-    protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+    protected function configureDatagridFilters(DatagridMapper $filter): void
     {
-        $datagridMapper
+        $filter
             ->add('tags', null, [
                 'label' => 'les tags'
                 'field_options' => ['expanded' => true, 'multiple' => true],
@@ -270,9 +270,9 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureDatagridFilters(DatagridMapper $datagridMapper): void
+        protected function configureDatagridFilters(DatagridMapper $filter): void
         {
-            $datagridMapper
+            $filter
                 ->add('title')
                 ->add('enabled')
                 ->add('tags', null, [

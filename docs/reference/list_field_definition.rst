@@ -24,9 +24,9 @@ Example
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper): void
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('title')
                 ->add('author')
                 ->add('enabled')
@@ -124,9 +124,9 @@ If you need to display only one field from a sub entity or embedded object in a 
 
     final class UserAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper): void
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('id')
                 ->addIdentifier('firstName')
                 ->addIdentifier('lastName')
@@ -156,9 +156,9 @@ If you need a specific layout for a row cell, you can define a custom template::
 
    final class MediaAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper)
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('id')
                 ->add('image', 'string', ['template' => '@SonataMedia/MediaAdmin/list_image.html.twig'])
                 ->add('custom', 'string', ['template' => '@SonataMedia/MediaAdmin/list_custom.html.twig'])
@@ -195,9 +195,9 @@ Using this, the route can be customized as follows::
 
     final class MediaAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper): void
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('field', null, [
                     'route' => [
                         'name' => 'edit'
