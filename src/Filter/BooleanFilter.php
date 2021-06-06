@@ -90,8 +90,8 @@ class BooleanFilter extends Filter
         $or = $query->getQueryBuilder()->expr()->orX();
         $treatNullAs = $this->getOption('treat_null_as');
         if (
-            false === $treatNullAs && in_array(0, $values)
-            || true === $treatNullAs && in_array(1, $values)
+            false === $treatNullAs && \in_array(0, $values, true)
+            || true === $treatNullAs && \in_array(1, $values, true)
         ) {
             $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
         }
