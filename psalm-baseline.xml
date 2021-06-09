@@ -18,4 +18,11 @@
             <code>$resetFilterOrConditions()</code>
         </PossiblyInvalidFunctionCall>
     </file>
+    <!-- # TODO: Remove this when doctrine/orm 2.9.3 is released and do the same for phpstan. -->
+    <file src="tests/Model/ModelManagerTest.php">
+        <InvalidArgument occurrences="4">
+            <code>$this-&gt;getMetadataForEmbeddedEntity()</code>
+            <code>$this-&gt;getMetadataForSubEmbeddedEntity()</code>
+        </InvalidArgument>
+    </file>
 </files>
