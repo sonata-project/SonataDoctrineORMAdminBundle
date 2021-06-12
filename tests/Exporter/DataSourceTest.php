@@ -48,6 +48,8 @@ final class DataSourceTest extends TestCase
         $query = new Query($em);
 
         $queryBuilder->expects($this->once())->method('distinct');
+        $queryBuilder->expects($this->once())->method('getRootAliases')->willReturn(['o', 'a', 'e']);
+        $queryBuilder->expects($this->once())->method('select')->with('o');
 
         $proxyQuery = $this->createMock(ProxyQueryInterface::class);
 

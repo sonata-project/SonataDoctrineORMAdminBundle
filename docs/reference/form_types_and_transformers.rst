@@ -5,7 +5,7 @@
 Form types and data transformers
 ================================
 
-The `AdminBundle` is shipped with custom form types and data transfomers in order to handle the different model's workflows and lifecycle.
+The `AdminBundle` is shipped with custom form types and data transformers in order to handle the different model's workflows and lifecycle.
 
 Form types
 ----------
@@ -39,9 +39,9 @@ Now you can edit the settings array with::
 
     final class PageAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->add('enabled')
                 ->add('settings', ImmutableArrayType::class, [
                     'keys' => [
@@ -70,9 +70,9 @@ Other options::
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
                     ->add('author', ModelType::class, [], ['edit' => 'list'])
@@ -86,7 +86,7 @@ Other options::
                 ->with('Options', ['collapsed' => true])
                     ->add('commentsCloseAt')
                     ->add('commentsEnabled', null, ['required' => false])
-                    ->add('commentsDefaultStatus', 'choice', [
+                    ->add('commentsDefaultStatus', ChoiceType::class, [
                         'choices' => Comment::getStatusList()
                     ])
                 ->end()

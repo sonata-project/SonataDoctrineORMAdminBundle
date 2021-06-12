@@ -21,17 +21,6 @@ You can customize the global layout by tweaking the ``SonataAdminBundle`` config
             show:    '@SonataAdmin/CRUD/show.html.twig'
             edit:    '@SonataAdmin/CRUD/edit.html.twig'
 
-You can also configure the templates used by the `Form Framework` while rendering the widget:
-
-.. code-block:: yaml
-
-    # config/packages/sonata_doctrine_orm_admin.yaml
-
-    sonata_doctrine_orm_admin:
-        templates:
-            form: [ '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig' ]
-            filter: [ "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig' ]
-
 You can also customize field types by adding types in your configuration file.
 The default values are:
 

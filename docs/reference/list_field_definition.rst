@@ -24,9 +24,9 @@ Example
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper)
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('title')
                 ->add('author')
                 ->add('enabled')
@@ -47,23 +47,12 @@ Example
 Types available
 ---------------
 
-The most important option for each field is the ``type``. The available `types` include:
-
-* `boolean`,
-* `datetime`,
-* `decimal`,
-* `identifier`,
-* `integer`,
-* `many_to_one`,
-* `string`,
-* `text`,
-* `date`,
-* `time`,
-* `array`.
+The most important option for each field is the ``type``. The available `types` are the
+``Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface::TYPE_*`` constant.
 
 .. note::
 
-    For the `many_to_one` type, a link will be added to the related `Edit` action.
+    For the `FieldDescriptionInterface::TYPE_MANY_TO_ONE` type, a link will be added to the related `show` action.
 
 .. note::
 
@@ -96,7 +85,7 @@ List actions
 You can set actions for the list items by adding an '_action' field in ``configureListFields``::
 
     $listMapper
-        ->add('_action', 'actions', []
+        ->add(ListMapper::NAME_ACTIONS, ListMapper::TYPE_ACTIONS, []
             'actions' => [
                 'show' => [],
                 'edit' => [],
@@ -109,7 +98,7 @@ Default template file is: ``@SonataAdmin/CRUD/list__action_[ACTION_NAME].html.tw
 You can specify your own by setting up the 'template' option like so::
 
     $listMapper
-        ->add('_action', 'actions', [
+        ->add(ListMapper::NAME_ACTIONS, ListMapper::TYPE_ACTIONS, [
             'actions' => [
                 'show' => [],
                 'edit' => [],
@@ -135,9 +124,9 @@ If you need to display only one field from a sub entity or embedded object in a 
 
     final class UserAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper)
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('id')
                 ->addIdentifier('firstName')
                 ->addIdentifier('lastName')
@@ -167,9 +156,9 @@ If you need a specific layout for a row cell, you can define a custom template::
 
    final class MediaAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper)
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('id')
                 ->add('image', 'string', ['template' => '@SonataMedia/MediaAdmin/list_image.html.twig'])
                 ->add('custom', 'string', ['template' => '@SonataMedia/MediaAdmin/list_custom.html.twig'])
@@ -193,7 +182,7 @@ The related template:
 Custom route
 ^^^^^^^^^^^^
 
-Default route for a link is `edit` (`many_to_one`, `one_to_one`, etc.).
+Default route for a link is `show` (for `FieldDescriptionInterface::TYPE_MANY_TO_ONE` and `FieldDescriptionInterface::TYPE_ONE_TO_ONE`).
 Using this, the route can be customized as follows::
 
     namespace Sonata\MediaBundle\Admin;
@@ -206,12 +195,12 @@ Using this, the route can be customized as follows::
 
     final class MediaAdmin extends AbstractAdmin
     {
-        protected function configureListFields(ListMapper $listMapper)
+        protected function configureListFields(ListMapper $list): void
         {
-            $listMapper
+            $list
                 ->addIdentifier('field', null, [
                     'route' => [
-                        'name' => 'show'
+                        'name' => 'edit'
                     ]
                 ]);
         }

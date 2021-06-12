@@ -19,9 +19,9 @@ Example
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->add('author', ModelListType::class, [])
                 ->add('enabled')
                 // you can define help messages using Symfony help option
@@ -29,41 +29,12 @@ Example
                 ->add('abstract', null, ['required' => false])
                 ->add('content');
         }
-
-        public function validate(ErrorElement $errorElement, $object)
-        {
-            // conditional validation, see the related section for more information
-            if ($object->getEnabled()) {
-
-                // abstract cannot be empty when the post is enabled
-                $errorElement
-                    ->with('abstract')
-                        ->assertNotBlank()
-                        ->assertNotNull()
-                    ->end();
-            }
-        }
     }
 
 .. note::
 
     By default, the form framework always sets ``required=true`` for each field.
     This can be an issue for HTML5 browsers as they provide client-side validation.
-
-Types available
----------------
-
-* `array`,
-* `checkbox`,
-* `choice`,
-* `decimal`,
-* `integer`,
-* `text`,
-* `date`,
-* `time`,
-* `datetime`.
-
-If no type is set, the `Admin` class will use the one set in the doctrine mapping definition.
 
 Short Object Placeholder
 ------------------------
@@ -81,9 +52,9 @@ you can use the corresponding option in the form field definition::
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
                     ->add('author', ModelListType::class, [], [
@@ -106,9 +77,9 @@ If you want to use custom types from the Form framework you must use the ``addTy
 
     final class MediaAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->add('name', null, ['required' => false])
                 ->add('enabled', null, ['required' => false])
                 ->add('authorName', null, ['required' => false])
@@ -149,9 +120,9 @@ The following example shows both types in action::
 
     final class PostAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->with('General')
                     ->add('enabled', null, ['required' => false])
                     ->add('author', ModelListType::class, [
@@ -201,9 +172,9 @@ The following example shows the ``CollectionType`` in action::
 
     final class GalleryAdmin extends AbstractAdmin
     {
-        protected function configureFormFields(FormMapper $formMapper)
+        protected function configureFormFields(FormMapper $form): void
         {
-            $formMapper
+            $form
                 ->add('code')
                 ->add('enabled')
                 ->add('name')
@@ -227,20 +198,11 @@ The following example shows the ``CollectionType`` in action::
 By default, position row will be rendered. If you want to hide it, you will need to alter child  admin class and add hidden position field.
 Use code like::
 
-    protected function configureFormFields(FormMapper $formMapper)
+    protected function configureFormFields(FormMapper $form): void
     {
-        $formMapper
+        $form
             ->add('position', 'hidden', [
                 'attr' => ['hidden' => true]
             ]);
     }
 
-To render child help messages you must use 'sonata_help' instead of 'help'::
-
-    protected function configureFormFields(FormMapper $formMapper)
-    {
-        $formMapper
-            ->add('image', 'file', [
-                'sonata_help' => 'help message rendered in parent CollectionType'
-            ]);
-    }

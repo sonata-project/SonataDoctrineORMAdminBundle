@@ -30,6 +30,7 @@ final class DataSource implements DataSourceInterface
         // Distinct is needed to iterate, even if group by is used
         // @see https://github.com/doctrine/orm/issues/5868
         $query->getQueryBuilder()->distinct();
+        $query->getQueryBuilder()->select(current($query->getQueryBuilder()->getRootAliases()));
         $query->setFirstResult(null);
         $query->setMaxResults(null);
 
