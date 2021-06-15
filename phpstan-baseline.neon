@@ -3,6 +3,9 @@ parameters:
         - # https://github.com/phpstan/phpstan-phpunit/issues/87
             message: '#^Trying to mock an undefined method [a-zA-Z]*\(\) on class stdClass\.$#'
             path: tests/
-        - # TODO: Remove this when doctrine/orm 2.9.3 is released and do the same for psalm.
-            message: '#Doctrine\\ORM\\Mapping\\ClassMetadata\<object\>\.$#'
-            path: ./
+        - # https://github.com/doctrine/orm/pull/8767
+            message: '#Method Sonata\\DoctrineORMAdminBundle\\FieldDescription\\FieldDescriptionFactory::getMetadata\(\) should return Doctrine\\ORM\\Mapping\\ClassMetadata\<TObject of object\> but returns Doctrine\\ORM\\Mapping\\ClassMetadata\<object\>\.$#'
+            path: src/FieldDescription/FieldDescriptionFactory.php
+        - # https://github.com/doctrine/orm/pull/8767
+            message: '#Method Sonata\\DoctrineORMAdminBundle\\Model\\ModelManager::getMetadata\(\) should return Doctrine\\ORM\\Mapping\\ClassMetadata\<TObject of object\> but returns Doctrine\\ORM\\Mapping\\ClassMetadata\<object\>\.$#'
+            path: src/Model/ModelManager.php
