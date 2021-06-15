@@ -19,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\User;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\UserBrowser;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
 class PagerTest extends TestCase
 {
@@ -36,7 +36,7 @@ class PagerTest extends TestCase
      */
     public function testCountResults(string $className): void
     {
-        $em = DoctrineTestHelper::createTestEntityManager();
+        $em = TestEntityManagerFactory::create();
         $schemaTool = new SchemaTool($em);
         $schemaTool->createSchema([
             $em->getClassMetadata($className),

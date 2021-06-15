@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\OrderByToSelectWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\Menu;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\StoreProduct;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
 /**
  * NEXT_MAJOR: Remove this test.
@@ -37,7 +37,7 @@ final class OrderByToSelectWalkerTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->em = DoctrineTestHelper::createTestEntityManager();
+        $this->em = TestEntityManagerFactory::create();
     }
 
     protected function tearDown(): void
