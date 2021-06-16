@@ -22,7 +22,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\DoubleNameEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
 class ProxyQueryTest extends TestCase
 {
@@ -40,7 +40,7 @@ class ProxyQueryTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->em = DoctrineTestHelper::createTestEntityManager();
+        $this->em = TestEntityManagerFactory::create();
 
         $schemaTool = new SchemaTool($this->em);
         $classes = [

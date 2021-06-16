@@ -19,8 +19,8 @@ use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
-use Symfony\Bridge\Doctrine\Test\DoctrineTestHelper;
 
 final class SmartPaginatorFactoryTest extends TestCase
 {
@@ -49,14 +49,14 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function getQueriesForFetchJoinedCollection(): iterable
     {
         yield 'Without joins' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author'),
             false,
         ];
 
         yield 'With joins and simple identifier' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author')
                 ->leftJoin('author.books', 'book'),
@@ -64,7 +64,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
 
         yield 'With joins and composite identifier' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Item::class, 'item')
                 ->leftJoin('item.product', 'product'),
@@ -99,14 +99,14 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function getQueriesForOutputWalker(): iterable
     {
         yield 'Simple query without joins' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author'),
             false,
         ];
 
         yield 'Simple query with having' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author')
                 ->groupBy('author.name')
@@ -115,7 +115,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
 
         yield 'With joins and simple identifier' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author')
                 ->leftJoin('author.books', 'book'),
@@ -123,7 +123,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
 
         yield 'With joins and composite identifier' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Item::class, 'item')
                 ->leftJoin('item.product', 'product'),
@@ -159,7 +159,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function getQueriesForCountWalkerDistinct(): iterable
     {
         yield 'Simple query without joins' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author'),
             true,
@@ -167,7 +167,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
 
         yield 'With joins and simple identifier' => [
-            DoctrineTestHelper::createTestEntityManager()
+            TestEntityManagerFactory::create()
                 ->createQueryBuilder()
                 ->from(Author::class, 'author')
                 ->leftJoin('author.books', 'book'),
