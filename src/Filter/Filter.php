@@ -13,13 +13,13 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
-use Doctrine\ORM\Query\Expr\Comparison;
+use Doctrine\ORM\Query\Expr\Composite;
 use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
-abstract class Filter extends BaseFilter
+abstract class Filter extends BaseFilter implements GroupableConditionAwareInterface
 {
     /**
      * @var bool
@@ -27,8 +27,15 @@ abstract class Filter extends BaseFilter
     protected $active = false;
 
     /**
+     * @var Composite|null
+     */
+    private $conditionGroup;
+
+    /**
      * Holds an array of grouped `orX` filter expressions that must be used within
      * the same query builder.
+     *
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, will be removed in version 4.0.
      *
      * @var array<string, Orx>
      */
@@ -60,6 +67,21 @@ abstract class Filter extends BaseFilter
     public function isActive()
     {
         return $this->active;
+    }
+
+    public function setConditionGroup(Composite $conditionGroup): void
+    {
+        $this->conditionGroup = $conditionGroup;
+    }
+
+    public function getConditionGroup(): ?Composite
+    {
+        return $this->conditionGroup;
+    }
+
+    public function hasConditionGroup(): bool
+    {
+        return null !== $this->conditionGroup;
     }
 
     /**
@@ -156,10 +178,7 @@ abstract class Filter extends BaseFilter
     /**
      * Adds the parameter to the corresponding `Orx` expression used in the `where` clause.
      * If it doesn't exist, a new one is created.
-     * This method groups the filter "OR" conditions based on the "or_group" option. If this
-     * option is not set, it uses a marker ("sonata_admin_datagrid_filter_query_marker_left") in
-     * the resulting DQL in order to identify the corresponding "WHERE (...)" condition
-     * group each time it is required.
+     * This method groups the filter "OR" conditions based on the "or_group" option.
      * It allows to get queries like "WHERE previous_condition = previous_value AND (filter_1 = value OR filter_2 = value OR ...)",
      * where the logical "OR" operators added by the filters are grouped inside a condition,
      * instead of having unfolded "WHERE ..." clauses like "WHERE previous_condition = previous_value OR filter_1 = value OR filter_2 = value OR ...",
@@ -169,50 +188,55 @@ abstract class Filter extends BaseFilter
      */
     private function addOrParameter(BaseProxyQueryInterface $query, $parameter): void
     {
-        $groupName = $this->getOption('or_group');
-        $orExpression = self::$groupedOrExpressions[$groupName] ?? null;
-        if ($orExpression instanceof Orx) {
-            $orExpression->add($parameter);
+        $conditionGroup = null;
 
-            return;
-        }
+        if ($this->hasPreviousFilter()) {
+            $previousFilter = $this->getPreviousFilter();
 
-        $qb = $query->getQueryBuilder();
-        $where = $qb->getDQLPart('where');
+            if ($previousFilter->hasConditionGroup()) {
+                $conditionGroup = $previousFilter->getConditionGroup();
+                $conditionGroup->add($parameter);
 
-        // Search for the "sonata_admin_datagrid_filter_query_marker_left" marker in order to
-        // get the `Orx` expression.
-        if (null === $groupName && null !== $where) {
-            foreach ($where->getParts() as $expression) {
-                if (!$expression instanceof Orx) {
-                    continue;
-                }
+                $this->setConditionGroup($conditionGroup);
 
-                $expressionParts = $expression->getParts();
-
-                if (isset($expressionParts[0]) && $expressionParts[0] instanceof Comparison &&
-                    "'sonata_admin_datagrid_filter_query_marker_left'" === $expressionParts[0]->getLeftExpr()
-                ) {
-                    $expression->add($parameter);
-
-                    return;
-                }
+                return;
             }
         }
 
-        // Create a new `Orx` expression.
-        $orExpression = $qb->expr()->orX();
+        $groupName = $this->getOption('or_group');
+        // NEXT_MAJOR: Remove the previous assignment and the next conditional block.
+        if (null !== $groupName) {
+            @trigger_error(sprintf(
+                'Option "or_group" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+                .' Use "%s::setConditionGroup()" instead.',
+                static::class
+            ), \E_USER_DEPRECATED);
 
-        if (null === $groupName) {
-            // Add the "sonata_admin_datagrid_filter_query_marker_left" parameter as marker for the `Orx` expression.
-            $orExpression->add($qb->expr()->eq("'sonata_admin_datagrid_filter_query_marker_left'", "'sonata_admin_datagrid_filter_query_marker_right'"));
-        } else {
-            self::$groupedOrExpressions[$groupName] = $orExpression;
+            $conditionGroup = self::$groupedOrExpressions[$groupName] ?? null;
+            if ($conditionGroup instanceof Orx) {
+                $conditionGroup->add($parameter);
+
+                $this->setConditionGroup($conditionGroup);
+
+                return;
+            }
         }
 
-        $orExpression->add($parameter);
+        $qb = $query->getQueryBuilder();
+
+        // Create a new `Orx` expression.
+        $conditionGroup = $qb->expr()->orX();
+
+        $conditionGroup->add($parameter);
 
         // Add the `Orx` expression to the `where` clause.
-        $qb->andWhere($orExpression);
+        $qb->andWhere($conditionGroup);
+
+        $this->setConditionGroup($conditionGroup);
+
+        // NEXT_MAJOR: Remove the following block.
+        if (null !== $groupName) {
+            self::$groupedOrExpressions[$groupName] = $conditionGroup;
+        }
     }
 }
