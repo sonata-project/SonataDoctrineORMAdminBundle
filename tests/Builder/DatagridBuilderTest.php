@@ -27,7 +27,10 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Translator\FormLabelTranslatorStrategy;
 use Sonata\DoctrineORMAdminBundle\Admin\FieldDescription;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
+use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Model\ModelManager;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -136,6 +139,35 @@ final class DatagridBuilderTest extends TestCase
             ->willReturn([$classMetadata, 'someField', []]);
 
         $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
+    }
+
+    public function fixFieldDescriptionGlobalSearchDataProvider(): array
+    {
+        return [
+            [StringFilter::class, true],
+            ['doctrine_orm_string', true], // NEXT_MAJOR: Remove this line.
+            [ChoiceFilter::class, null],
+            [BooleanFilter::class, null],
+        ];
+    }
+
+    /**
+     * @dataProvider fixFieldDescriptionGlobalSearchDataProvider
+     */
+    public function testFixFieldDescriptionGlobalSearch(string $type, ?bool $hasGlobalSearch): void
+    {
+        // NEXT_MAJOR: Remove the next 4 lines.
+        $classMetadata = $this->createStub(ClassMetadata::class);
+        $classMetadata->fieldMappings = ['someField' => []];
+        $this->modelManager->method('hasMetadata')->willReturn(true);
+        $this->modelManager->expects($this->once())->method('getParentMetadataForProperty')
+            ->willReturn([$classMetadata, 'someField', []]);
+
+        $fieldDescription = new FieldDescription('test', [], ['type' => ClassMetadata::ONE_TO_MANY]);
+        $fieldDescription->setType($type);
+
+        $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
+        $this->assertSame($hasGlobalSearch, $fieldDescription->getOption('global_search'));
     }
 
     public function testAddFilterNoType(): void

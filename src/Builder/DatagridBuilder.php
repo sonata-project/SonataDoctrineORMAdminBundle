@@ -26,6 +26,7 @@ use Sonata\AdminBundle\Filter\FilterFactoryInterface;
 use Sonata\AdminBundle\Guesser\TypeGuesserInterface as DeprecatedTypeGuesserInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -94,7 +95,7 @@ class DatagridBuilder implements DatagridBuilderInterface
                     )
                 );
 
-                if ('string' === $fieldMapping['type']) {
+                if (\in_array($fieldDescription->getType(), [StringFilter::class, 'doctrine_orm_string'], true)) {
                     $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
                 }
 
@@ -131,7 +132,7 @@ class DatagridBuilder implements DatagridBuilderInterface
         //if ([] !== $fieldDescription->getFieldMapping()) {
         //    $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
         //
-        //    if ('string' === $fieldDescription->getFieldMapping()['type']) {
+        //    if (StringFilter::class === $fieldDescription->getType()) {
         //        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
         //    }
         //}
