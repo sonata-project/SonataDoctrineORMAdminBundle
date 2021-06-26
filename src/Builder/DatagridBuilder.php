@@ -86,8 +86,6 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->setOption('field_name', $fieldDescription->getOption('field_name', $fieldDescription->getFieldName()));
 
-        $fieldDescription->mergeOption('field_options', ['required' => false]);
-
         if (ModelAutocompleteFilter::class === $fieldDescription->getType()) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetModel(),
