@@ -127,23 +127,6 @@ class DatagridBuilder implements DatagridBuilderInterface
             );
         }
 
-        // NEXT_MAJOR: Uncomment this code.
-        //if ([] !== $fieldDescription->getFieldMapping()) {
-        //    $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
-        //
-        //    if ('string' === $fieldDescription->getFieldMapping()['type']) {
-        //        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-        //    }
-        //}
-        //
-        //if ([] !== $fieldDescription->getAssociationMapping()) {
-        //    $fieldDescription->setOption('association_mapping', $fieldDescription->getOption('association_mapping', $fieldDescription->getAssociationMapping()));
-        //}
-        //
-        //if ([] !== $fieldDescription->getParentAssociationMappings()) {
-        //    $fieldDescription->setOption('parent_association_mappings', $fieldDescription->getOption('parent_association_mappings', $fieldDescription->getParentAssociationMappings()));
-        //}
-
         if (\in_array($fieldDescription->getMappingType(), [
             ClassMetadata::ONE_TO_MANY,
             ClassMetadata::MANY_TO_MANY,
@@ -154,7 +137,38 @@ class DatagridBuilder implements DatagridBuilderInterface
         }
     }
 
-    public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin)
+    public function getDefaultOptions(?string $type, FieldDescriptionInterface $fieldDescription): array
+    {
+        $options = [];
+        if ([] !== $fieldDescription->getFieldMapping()) {
+            $options['field_mapping'] = $fieldDescription->getFieldMapping();
+
+            if ('string' === $fieldDescription->getFieldMapping()['type']) {
+                $options['global_search'] = true; // always search on string field only
+            }
+        }
+
+        if ([] !== $fieldDescription->getAssociationMapping()) {
+            $options['association_mapping'] = $fieldDescription->getAssociationMapping();
+        }
+
+        if ([] !== $fieldDescription->getParentAssociationMappings()) {
+            $options['parent_association_mappings'] = $fieldDescription->getParentAssociationMappings();
+        }
+
+        if (ModelAutocompleteFilter::class === $type) {
+            $options['field_options'] = [
+                'class' => $fieldDescription->getTargetModel(),
+                'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
+                'admin_code' => $fieldDescription->getAdmin()->getCode(),
+                'context' => 'filter',
+            ];
+        }
+
+        return $options;
+    }
+
+    public function addFilter(DatagridInterface $datagrid, $type, FieldDescriptionInterface $fieldDescription, AdminInterface $admin, array $filterOptions = [])
     {
         if (null === $type) {
             // NEXT_MAJOR: Remove the condition and keep the if part.
@@ -171,6 +185,7 @@ class DatagridBuilder implements DatagridBuilderInterface
             $type = $guessType->getType();
             $fieldDescription->setType($type);
 
+            // NEXT_MAJOR: Remove the foreach
             foreach ($guessType->getOptions() as $name => $value) {
                 if (\is_array($value)) {
                     $fieldDescription->setOption($name, array_merge($value, $fieldDescription->getOption($name, [])));
@@ -178,6 +193,8 @@ class DatagridBuilder implements DatagridBuilderInterface
                     $fieldDescription->setOption($name, $fieldDescription->getOption($name, $value));
                 }
             }
+
+            $filterOptions = array_replace($filterOptions, $guessType->getOptions());
         } else {
             $fieldDescription->setType($type);
         }
@@ -197,6 +214,7 @@ class DatagridBuilder implements DatagridBuilderInterface
             ]);
         }
 
+        // NEXT_MAJOR: replace $fieldDescription->getOptions() by $filterOptions
         $filter = $this->filterFactory->create($fieldDescription->getName(), $type, $fieldDescription->getOptions());
 
         // NEXT_MAJOR: Remove this code since it was introduced in SonataAdmin (https://github.com/sonata-project/SonataAdminBundle/pull/6571)
