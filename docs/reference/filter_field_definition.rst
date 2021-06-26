@@ -56,7 +56,7 @@ Example
 
     namespace Sonata\NewsBundle\Admin;
 
-    use Sonata\AdminBundle\Admin\Abstractdmin;
+    use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
 
     final class PostAdmin extends AbstractAdmin
@@ -78,9 +78,10 @@ StringFilter
 The string filter has additional options:
 
 * ``force_case_insensitivity`` - set to ``true`` to make the search case insensitive. By default ``false`` is used,
-  letting the database to apply its default behavior;
-* ``trim`` - use one of ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_*`` constants to control the clearing of blank spaces around in the value. By default ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_BOTH`` is used;
+  letting the database to apply its default behavior.
+* ``trim`` - use one of ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_*`` constants to control the clearing of blank spaces around in the value. By default ``Sonata\DoctrineORMAdminBundle\Filter\TRIM_BOTH`` is used.
 * ``allow_empty`` - set to ``true`` to enable search by empty value. By default ``false`` is used.
+* ``global_search`` - set to ``true`` to enable the use of this filter in the global search. By default ``true`` is used.
 
 StringListFilter
 ----------------

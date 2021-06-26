@@ -16,12 +16,13 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
+use Sonata\AdminBundle\Search\SearchableFilterInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 /**
  * @final since sonata-project/doctrine-orm-admin-bundle 3.24
  */
-class StringFilter extends Filter
+class StringFilter extends Filter implements SearchableFilterInterface
 {
     public const TRIM_NONE = 0;
     public const TRIM_LEFT = 1;
@@ -151,6 +152,11 @@ class StringFilter extends Filter
         );
     }
 
+    public function isSearchEnabled(): bool
+    {
+        return $this->getOption('global_search');
+    }
+
     public function getDefaultOptions()
     {
         return [
@@ -162,6 +168,7 @@ class StringFilter extends Filter
             'force_case_insensitivity' => null,
             'trim' => self::TRIM_BOTH,
             'allow_empty' => false,
+            'global_search' => true,
         ];
     }
 
