@@ -94,10 +94,6 @@ class DatagridBuilder implements DatagridBuilderInterface
                     )
                 );
 
-                if ('string' === $fieldMapping['type']) {
-                    $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-                }
-
                 // NEXT_MAJOR: Remove this, the fieldName should be correctly set at the creation.
                 if (!empty($embeddedClasses = $metadata->embeddedClasses)
                     && isset($fieldMapping['declaredField'])
@@ -130,10 +126,6 @@ class DatagridBuilder implements DatagridBuilderInterface
         // NEXT_MAJOR: Uncomment this code.
         //if ([] !== $fieldDescription->getFieldMapping()) {
         //    $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
-        //
-        //    if ('string' === $fieldDescription->getFieldMapping()['type']) {
-        //        $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-        //    }
         //}
         //
         //if ([] !== $fieldDescription->getAssociationMapping()) {
