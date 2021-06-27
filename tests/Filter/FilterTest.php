@@ -167,37 +167,37 @@ final class FilterTest extends FilterTestCase
             ],
         ];
 
-        yield 'Missing "or_group" option, fallback to DQL marker' => [
-            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (\'sonata_admin_datagrid_filter_query_marker_left\' = \'sonata_admin_datagrid_filter_query_marker_right\''
-            .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
-            [
-                [
-                    StringFilter::class,
-                    null,
-                    [
-                        'field_name' => 'project',
-                        'allow_empty' => false,
-                    ],
-                    'project',
-                    [
-                        'value' => 'sonata-project',
-                    ],
-                ],
-                [
-                    StringFilter::class,
-                    null,
-                    [
-                        'field_name' => 'version',
-                        'allow_empty' => false,
-                    ],
-                    'version',
-                    [
-                        'value' => '3.x',
-                    ],
-                ],
-            ],
-        ];
+//        yield 'Missing "or_group" option, fallback to DQL marker' => [
+//            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
+//            .' AND (\'sonata_admin_datagrid_filter_query_marker_left\' = \'sonata_admin_datagrid_filter_query_marker_right\''
+//            .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
+//            [
+//                [
+//                    StringFilter::class,
+//                    null,
+//                    [
+//                        'field_name' => 'project',
+//                        'allow_empty' => false,
+//                    ],
+//                    'project',
+//                    [
+//                        'value' => 'sonata-project',
+//                    ],
+//                ],
+//                [
+//                    StringFilter::class,
+//                    null,
+//                    [
+//                        'field_name' => 'version',
+//                        'allow_empty' => false,
+//                    ],
+//                    'version',
+//                    [
+//                        'value' => '3.x',
+//                    ],
+//                ],
+//            ],
+//        ];
     }
 
     private function createFilter(): Filter
