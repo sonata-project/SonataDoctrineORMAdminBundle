@@ -50,10 +50,6 @@ class FieldDescriptionTest extends TestCase
 
         $this->assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
-        $field->mergeOptions(['array' => ['key3' => 'key_3']]);
-
-        $this->assertSame(['key1' => 'key_1', 'key2' => 'key_2', 'key3' => 'key_3'], $field->getOption('array'));
-
         $field->setOption('integer', 1);
 
         try {
@@ -62,21 +58,17 @@ class FieldDescriptionTest extends TestCase
         } catch (\RuntimeException $e) {
         }
 
-        $field->mergeOptions(['final' => 'test']);
-
         $expected = [
             'misc' => 'foobar',
             'array' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
-                'key3' => 'key_3',
             ],
             'non_existent' => [
                 'key1' => 'key_1',
                 'key2' => 'key_2',
             ],
             'integer' => 1,
-            'final' => 'test',
         ];
 
         $this->assertSame($expected, $field->getOptions());
