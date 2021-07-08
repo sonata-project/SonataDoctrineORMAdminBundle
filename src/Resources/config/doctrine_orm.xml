@@ -13,6 +13,7 @@
         <!-- FormBuilder -->
         <service id="sonata.admin.builder.orm_form" class="Sonata\DoctrineORMAdminBundle\Builder\FormContractor">
             <argument type="service" id="form.factory"/>
+            <argument type="service" id="form.registry"/>
         </service>
         <!-- ListBuilder -->
         <service id="sonata.admin.builder.orm_list" class="Sonata\DoctrineORMAdminBundle\Builder\ListBuilder">
