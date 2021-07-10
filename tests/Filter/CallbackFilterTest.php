@@ -19,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class CallbackFilterTest extends FilterTestCase
+final class CallbackFilterTest extends FilterTestCase
 {
     public function testRenderSettings(): void
     {

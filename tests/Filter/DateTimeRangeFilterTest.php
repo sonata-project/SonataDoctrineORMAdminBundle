@@ -21,7 +21,7 @@ use Sonata\Form\Type\DateTimeRangeType;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class DateTimeRangeFilterTest extends FilterTestCase
+final class DateTimeRangeFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {

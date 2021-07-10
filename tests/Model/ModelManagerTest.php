@@ -38,7 +38,6 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithToS
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
-use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\SubEmbeddedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
@@ -213,124 +212,6 @@ final class ModelManagerTest extends TestCase
         }
 
         $this->modelManager->lock($object, 123);
-    }
-
-    /**
-     * @return ClassMetadata<EmbeddedEntity>
-     */
-    public function getMetadataForEmbeddedEntity(): ClassMetadata
-    {
-        $metadata = new ClassMetadata(EmbeddedEntity::class);
-
-        $metadata->fieldMappings = [
-            'plainField' => [
-                'fieldName' => 'plainField',
-                'columnName' => 'plainField',
-                'type' => 'boolean',
-                'options' => [],
-            ],
-        ];
-
-        return $metadata;
-    }
-
-    /**
-     * @return ClassMetadata<SubEmbeddedEntity>
-     */
-    public function getMetadataForSubEmbeddedEntity(): ClassMetadata
-    {
-        $metadata = new ClassMetadata(SubEmbeddedEntity::class);
-
-        $metadata->fieldMappings = [
-            'plainField' => [
-                'fieldName' => 'plainField',
-                'columnName' => 'plainField',
-                'type' => 'boolean',
-                'options' => [],
-            ],
-        ];
-
-        return $metadata;
-    }
-
-    /**
-     * @return ClassMetadata<AssociatedEntity>
-     */
-    public function getMetadataForAssociatedEntity(): ClassMetadata
-    {
-        $embeddedEntityClass = EmbeddedEntity::class;
-        $subEmbeddedEntityClass = SubEmbeddedEntity::class;
-
-        $metadata = new ClassMetadata(AssociatedEntity::class);
-
-        $metadata->fieldMappings = [
-            'plainField' => [
-                'fieldName' => 'plainField',
-                'columnName' => 'plainField',
-                'type' => 'string',
-                'options' => [],
-            ],
-        ];
-
-        $metadata->embeddedClasses['embeddedEntity'] = [
-            'class' => $embeddedEntityClass,
-            'columnPrefix' => 'embedded_entity_',
-        ];
-        $metadata->embeddedClasses['embeddedEntity.subEmbeddedEntity'] = [
-            'class' => $subEmbeddedEntityClass,
-            'columnPrefix' => 'embedded_entity_sub_embedded_entity_',
-            'declaredField' => 'embeddedEntity',
-            'originalField' => 'subEmbeddedEntity',
-        ];
-
-        $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
-        $metadata->inlineEmbeddable('embeddedEntity.subEmbeddedEntity', $this->getMetadataForSubEmbeddedEntity());
-
-        return $metadata;
-    }
-
-    /**
-     * @return ClassMetadata<ContainerEntity>
-     */
-    public function getMetadataForContainerEntity(): ClassMetadata
-    {
-        $containerEntityClass = ContainerEntity::class;
-        $associatedEntityClass = AssociatedEntity::class;
-        $embeddedEntityClass = EmbeddedEntity::class;
-        $subEmbeddedEntityClass = SubEmbeddedEntity::class;
-
-        $metadata = new ClassMetadata($containerEntityClass);
-
-        $metadata->fieldMappings = [
-            'plainField' => [
-                'fieldName' => 'plainField',
-                'columnName' => 'plainField',
-                'type' => 'integer',
-                'options' => [],
-            ],
-        ];
-
-        $metadata->associationMappings['associatedEntity'] = [
-            'fieldName' => 'associatedEntity',
-            'targetEntity' => $associatedEntityClass,
-            'sourceEntity' => $containerEntityClass,
-        ];
-
-        $metadata->embeddedClasses['embeddedEntity'] = [
-            'class' => $embeddedEntityClass,
-            'columnPrefix' => 'embeddedEntity',
-        ];
-        $metadata->embeddedClasses['embeddedEntity.subEmbeddedEntity'] = [
-            'class' => $subEmbeddedEntityClass,
-            'columnPrefix' => 'embedded_entity_sub_embedded_entity_',
-            'declaredField' => 'embeddedEntity',
-            'originalField' => 'subEmbeddedEntity',
-        ];
-
-        $metadata->inlineEmbeddable('embeddedEntity', $this->getMetadataForEmbeddedEntity());
-        $metadata->inlineEmbeddable('embeddedEntity.subEmbeddedEntity', $this->getMetadataForSubEmbeddedEntity());
-
-        return $metadata;
     }
 
     public function testGetIdentifierValuesForIdInObjectTypeBinaryToStringSupport(): void

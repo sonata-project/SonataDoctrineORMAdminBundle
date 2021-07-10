@@ -28,7 +28,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class ShowBuilderTest extends TestCase
+final class ShowBuilderTest extends TestCase
 {
     /**
      * @var Stub&TypeGuesserInterface

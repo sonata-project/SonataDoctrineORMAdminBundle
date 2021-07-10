@@ -18,7 +18,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util;
  *
  * @author Jeroen Thora <jeroen.thora@gmail.com>
  */
-class NonIntegerIdentifierTestClass
+final class NonIntegerIdentifierTestClass
 {
     /**
      * @var string

@@ -18,7 +18,7 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCom
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class AddAuditEntityCompilerPassTest extends TestCase
+final class AddAuditEntityCompilerPassTest extends TestCase
 {
     /**
      * @phpstan-return iterable<array-key, array{bool, array<string, array{audit: bool|null, audited: bool}>}>
