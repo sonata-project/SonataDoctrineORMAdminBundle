@@ -21,7 +21,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\User;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\UserBrowser;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
-class PagerTest extends TestCase
+final class PagerTest extends TestCase
 {
     /**
      * @phpstan-return iterable<array-key, array{class-string}>

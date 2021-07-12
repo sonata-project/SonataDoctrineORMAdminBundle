@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\TimeType;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class TimeFilterTest extends FilterTestCase
+final class TimeFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {

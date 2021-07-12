@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\SonataDoctrineORMAdminExtension;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
-class SonataDoctrineORMAdminExtensionTest extends TestCase
+final class SonataDoctrineORMAdminExtensionTest extends TestCase
 {
     public function testEntityManagerSetFactory(): void
     {

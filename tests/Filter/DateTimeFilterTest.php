@@ -21,7 +21,7 @@ use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class DateTimeFilterTest extends FilterTestCase
+final class DateTimeFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {

@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 
-class ChoiceFilterTest extends FilterTestCase
+final class ChoiceFilterTest extends FilterTestCase
 {
     public function testRenderSettings(): void
     {

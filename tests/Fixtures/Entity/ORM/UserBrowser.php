@@ -18,7 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  */
-class UserBrowser
+final class UserBrowser
 {
     /**
      * @ORM\Id

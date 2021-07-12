@@ -13,17 +13,17 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
-class AssociatedEntity
+final class AssociatedEntity
 {
     /**
      * @var int
      */
-    protected $plainField;
+    private $plainField;
 
     /**
      * @var Embeddable\EmbeddedEntity
      */
-    protected $embeddedEntity;
+    private $embeddedEntity;
 
     public function __construct(Embeddable\EmbeddedEntity $embeddedEntity, int $plainField)
     {

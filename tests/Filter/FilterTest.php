@@ -17,24 +17,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
-use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 
 final class FilterTest extends FilterTestCase
 {
-    /**
-     * @var Filter
-     */
-    private $filter;
-
-    protected function setUp(): void
-    {
-        parent::setUp();
-
-        $this->filter = $this->createFilter();
-    }
-
     protected function tearDown(): void
     {
         parent::tearDown();
@@ -172,32 +159,5 @@ final class FilterTest extends FilterTestCase
                 ],
             ],
         ];
-    }
-
-    private function createFilter(): Filter
-    {
-        return new class() extends Filter {
-            public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
-            {
-                // TODO: Implement filter() method.
-                throw new \BadMethodCallException(sprintf(
-                    'Method "%s()" is not implemented.',
-                    __METHOD__
-                ));
-            }
-
-            public function getDefaultOptions(): array
-            {
-                return ['option1' => 2];
-            }
-
-            public function getRenderSettings(): array
-            {
-                return ['sonata_type_filter_default', [
-                    'type' => $this->getFieldType(),
-                    'options' => $this->getFieldOptions(),
-                ]];
-            }
-        };
     }
 }

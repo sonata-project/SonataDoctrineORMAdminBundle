@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable;
 
-class SubEmbeddedEntity
+final class SubEmbeddedEntity
 {
     /**
      * @var bool|null

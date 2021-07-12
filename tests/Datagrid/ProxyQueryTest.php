@@ -24,7 +24,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\DoubleNameEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query\FooWalker;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
-class ProxyQueryTest extends TestCase
+final class ProxyQueryTest extends TestCase
 {
     /**
      * @var EntityManagerInterface

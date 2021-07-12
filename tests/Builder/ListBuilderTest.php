@@ -29,7 +29,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
  * @author Andrew Mor-Yaroslavtsev <andrejs@gmail.com>
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class ListBuilderTest extends TestCase
+final class ListBuilderTest extends TestCase
 {
     /**
      * @var Stub&TypeGuesserInterface

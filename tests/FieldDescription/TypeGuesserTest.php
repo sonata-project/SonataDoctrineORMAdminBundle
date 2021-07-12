@@ -22,7 +22,7 @@ use Symfony\Component\Form\Guess\Guess;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class TypeGuesserTest extends TestCase
+final class TypeGuesserTest extends TestCase
 {
     /**
      * @var TypeGuesser
