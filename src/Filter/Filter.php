@@ -178,7 +178,6 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     /**
      * Adds the parameter to the corresponding `Orx` expression used in the `where` clause.
      * If it doesn't exist, a new one is created.
-     * This method groups the filter "OR" conditions based on the "or_group" option.
      * It allows to get queries like "WHERE previous_condition = previous_value AND (filter_1 = value OR filter_2 = value OR ...)",
      * where the logical "OR" operators added by the filters are grouped inside a condition,
      * instead of having unfolded "WHERE ..." clauses like "WHERE previous_condition = previous_value OR filter_1 = value OR filter_2 = value OR ...",
@@ -203,8 +202,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
             }
         }
 
+        // NEXT_MAJOR: Remove the next assignment and the next conditional block.
         $groupName = $this->getOption('or_group');
-        // NEXT_MAJOR: Remove the previous assignment and the next conditional block.
         if (null !== $groupName) {
             @trigger_error(sprintf(
                 'Option "or_group" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'

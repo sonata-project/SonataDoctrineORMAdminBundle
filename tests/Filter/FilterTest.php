@@ -73,6 +73,10 @@ final class FilterTest extends FilterTestCase
     }
 
     /**
+     * NEXT_MAJOR: Remove the group legacy.
+     *
+     * @group legacy
+     *
      * @dataProvider orExpressionProvider
      */
     public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
@@ -117,7 +121,8 @@ final class FilterTest extends FilterTestCase
 
     public function orExpressionProvider(): iterable
     {
-        yield 'Using "or_group" option' => [
+        // NEXT_MAJOR: Remove this case.
+        yield 'Using deprecated "or_group" option' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
             .' AND (e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
             [
@@ -148,7 +153,8 @@ final class FilterTest extends FilterTestCase
             ],
         ];
 
-        yield 'Using "or_group" option with single filter' => [
+        // NEXT_MAJOR: Remove this case.
+        yield 'Using deprecated "or_group" option with single filter' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
             .' AND e.project LIKE :project_0 AND 7 = 8',
             [
@@ -167,10 +173,9 @@ final class FilterTest extends FilterTestCase
             ],
         ];
 
-        yield 'Missing "or_group" option, fallback to DQL marker' => [
+        yield 'Default behavior' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (\'sonata_admin_datagrid_filter_query_marker_left\' = \'sonata_admin_datagrid_filter_query_marker_right\''
-            .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
+            .' AND e.project LIKE :project_0 AND e.version LIKE :version_1 AND 7 = 8',
             [
                 [
                     StringFilter::class,
