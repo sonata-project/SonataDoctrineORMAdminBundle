@@ -14,7 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\Query\Expr\Composite;
-use Sonata\AdminBundle\Filter\ChainableFilterInterface;
+use Sonata\AdminBundle\Search\ChainableFilterInterface;
 
 /**
  * @author Javier Spagnoletti <phansys@gmail.com>
