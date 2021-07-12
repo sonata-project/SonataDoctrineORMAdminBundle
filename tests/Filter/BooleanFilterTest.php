@@ -19,7 +19,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
 use Sonata\Form\Type\BooleanType;
 use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 
-class BooleanFilterTest extends FilterTestCase
+final class BooleanFilterTest extends FilterTestCase
 {
     public function testRenderSettings(): void
     {

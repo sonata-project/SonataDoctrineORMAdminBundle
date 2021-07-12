@@ -19,7 +19,6 @@ use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
@@ -137,6 +136,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * @param int|string $id
+     *
      * @phpstan-param class-string<T> $class
      * @phpstan-return T|null
      */
@@ -192,7 +193,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     public function createQuery(string $class, string $alias = 'o'): BaseProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
-        \assert($repository instanceof EntityRepository);
 
         return new ProxyQuery($repository->createQueryBuilder($alias));
     }
@@ -343,7 +343,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($qb->getQuery()->toIterable() as $pos => $object) {
+            foreach ($qb->getQuery()->toIterable() as $object) {
                 $entityManager->remove($object);
 
                 if (0 === (++$i % 20)) {

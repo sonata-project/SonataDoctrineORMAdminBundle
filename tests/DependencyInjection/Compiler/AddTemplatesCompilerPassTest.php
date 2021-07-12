@@ -18,7 +18,7 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompi
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-class AddTemplatesCompilerPassTest extends TestCase
+final class AddTemplatesCompilerPassTest extends TestCase
 {
     public function testDefaultBehavior(): void
     {

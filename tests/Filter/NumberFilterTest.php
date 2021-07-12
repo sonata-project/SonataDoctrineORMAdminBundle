@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 
-class NumberFilterTest extends FilterTestCase
+final class NumberFilterTest extends FilterTestCase
 {
     public function testFilterEmpty(): void
     {

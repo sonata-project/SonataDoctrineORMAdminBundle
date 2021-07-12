@@ -18,7 +18,7 @@ use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 
-class StringFilterTest extends FilterTestCase
+final class StringFilterTest extends FilterTestCase
 {
     public function testEmpty(): void
     {

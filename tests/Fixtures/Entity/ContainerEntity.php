@@ -13,22 +13,22 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
-class ContainerEntity
+final class ContainerEntity
 {
     /**
      * @var int|null
      */
-    protected $plainField;
+    private $plainField;
 
     /**
      * @var AssociatedEntity
      */
-    protected $associatedEntity;
+    private $associatedEntity;
 
     /**
      * @var Embeddable\EmbeddedEntity
      */
-    protected $embeddedEntity;
+    private $embeddedEntity;
 
     public function __construct(AssociatedEntity $associatedEntity, Embeddable\EmbeddedEntity $embeddedEntity)
     {
