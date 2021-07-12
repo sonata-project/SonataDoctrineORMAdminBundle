@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Builder\DatagridBuilderInterface;
 use Sonata\AdminBundle\Datagrid\Datagrid;
@@ -91,12 +90,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
             ]);
         }
 
-        if (\in_array($fieldDescription->getMappingType(), [
-            ClassMetadata::ONE_TO_MANY,
-            ClassMetadata::MANY_TO_MANY,
-            ClassMetadata::MANY_TO_ONE,
-            ClassMetadata::ONE_TO_ONE,
-        ], true)) {
+        if ($fieldDescription->describesAssociation()) {
             $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
         }
     }
