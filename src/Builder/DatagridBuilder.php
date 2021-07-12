@@ -70,10 +70,6 @@ final class DatagridBuilder implements DatagridBuilderInterface
     {
         if ([] !== $fieldDescription->getFieldMapping()) {
             $fieldDescription->setOption('field_mapping', $fieldDescription->getOption('field_mapping', $fieldDescription->getFieldMapping()));
-
-            if ('string' === $fieldDescription->getFieldMapping()['type']) {
-                $fieldDescription->setOption('global_search', $fieldDescription->getOption('global_search', true)); // always search on string field only
-            }
         }
 
         if ([] !== $fieldDescription->getAssociationMapping()) {
