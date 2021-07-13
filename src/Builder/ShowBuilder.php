@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Builder;
 
-use Doctrine\ORM\Mapping\ClassMetadata;
 use Sonata\AdminBundle\Builder\ShowBuilderInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
@@ -82,14 +81,8 @@ final class ShowBuilder implements ShowBuilderInterface
             $fieldDescription->setTemplate($this->getTemplate($type));
         }
 
-        switch ($fieldDescription->getMappingType()) {
-            case ClassMetadata::MANY_TO_ONE:
-            case ClassMetadata::ONE_TO_ONE:
-            case ClassMetadata::ONE_TO_MANY:
-            case ClassMetadata::MANY_TO_MANY:
-                $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
-
-                break;
+        if ($fieldDescription->describesAssociation()) {
+            $fieldDescription->getAdmin()->attachAdminClass($fieldDescription);
         }
     }
 
