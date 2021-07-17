@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Datagrid;
 
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\Pager as BasePager;
 
 /**
@@ -36,7 +37,16 @@ final class Pager extends BasePager
             throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
-        return $query->execute();
+        $results = $query->execute();
+
+        // We're often both counting and iterating on the current page results.
+        // Doing this on the Paginator ends up with two executed queries instead of one.
+        // @see https://github.com/sonata-project/SonataAdminBundle/issues/7328#issuecomment-881373378
+        if ($results instanceof Paginator) {
+            return $results->getIterator();
+        }
+
+        return $results;
     }
 
     public function countResults(): int
