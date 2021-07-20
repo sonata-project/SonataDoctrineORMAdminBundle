@@ -72,6 +72,14 @@ Example
         }
     }
 
+BooleanFilter
+-------------
+
+The boolean filter has additional options:
+
+* ``treat_null_as`` - set to ``false``, ``null`` values in database will be considered as falsy. Set to ``true``,
+  ``null`` values in database will be considered as truthy. By default ``null`` is used.
+
 StringFilter
 ------------
 
@@ -182,8 +190,8 @@ ClassFilter
         }
     }
 
-Empty
------
+NullFilter
+----------
 
 ``Sonata\DoctrineORMAdminBundle\Filter\NullFilter`` supports filtering for null entity fields::
 
@@ -202,7 +210,7 @@ Empty
         }
     }
 
-The ``inverse`` option can be used to filter values that are not empty.
+The ``inverse`` option can be used to filter values that are not null.
 
 Advanced usage
 --------------

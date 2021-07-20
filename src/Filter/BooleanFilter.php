@@ -42,28 +42,9 @@ class BooleanFilter extends Filter
         }
 
         if (\is_array($data['value'])) {
-            $values = [];
-            foreach ($data['value'] as $v) {
-                if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
-                    continue;
-                }
-
-                $values[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
-            }
-
-            if (0 === \count($values)) {
-                return;
-            }
-
-            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
+            $this->filterWithMultipleValues($query, $alias, $field, $data);
         } else {
-            if (!\in_array($data['value'], [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
-                return;
-            }
-
-            $parameterName = $this->getNewParameterName($query);
-            $this->applyWhere($query, sprintf('%s.%s = :%s', $alias, $field, $parameterName));
-            $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
+            $this->filterWithSingleValue($query, $alias, $field, $data);
         }
     }
 
@@ -73,6 +54,7 @@ class BooleanFilter extends Filter
             'field_type' => BooleanType::class,
             'operator_type' => HiddenType::class,
             'operator_options' => [],
+            'treat_null_as' => null,
         ];
     }
 
@@ -85,5 +67,58 @@ class BooleanFilter extends Filter
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
         ]];
+    }
+
+    /**
+     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
+     */
+    private function filterWithMultipleValues(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    {
+        $values = [];
+        foreach ($data['value'] as $v) {
+            if (!\in_array($v, [BooleanType::TYPE_NO, BooleanType::TYPE_YES], true)) {
+                continue;
+            }
+
+            $values[] = (BooleanType::TYPE_YES === $v) ? 1 : 0;
+        }
+
+        if (0 === \count($values)) {
+            return;
+        }
+
+        $or = $query->getQueryBuilder()->expr()->orX();
+        $treatNullAs = $this->getOption('treat_null_as');
+        if (
+            false === $treatNullAs && \in_array(0, $values, true)
+            || true === $treatNullAs && \in_array(1, $values, true)
+        ) {
+            $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+        }
+
+        $or->add($query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
+
+        $this->applyWhere($query, $or);
+    }
+
+    /**
+     * NEXT_MAJOR: Change the typehint to ProxyQueryInterface.
+     */
+    private function filterWithSingleValue(BaseProxyQueryInterface $query, string $alias, string $field, array $data = []): void
+    {
+        $or = $query->getQueryBuilder()->expr()->orX();
+        $treatNullAs = $this->getOption('treat_null_as');
+        if (
+            false === $treatNullAs && BooleanType::TYPE_NO === $data['value']
+            || true === $treatNullAs && BooleanType::TYPE_YES === $data['value']
+        ) {
+            $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+        }
+
+        $parameterName = $this->getNewParameterName($query);
+        $or->add(sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+        $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $data['value']) ? 1 : 0);
+
+        $this->applyWhere($query, $or);
     }
 }
