@@ -35,7 +35,7 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
      * Holds an array of grouped `orX` filter expressions that must be used within
      * the same query builder.
      *
-     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.x, will be removed in version 4.0.
+     * @deprecated since sonata-project/doctrine-orm-admin-bundle 3.35, will be removed in version 4.0.
      *
      * @var array<string, Orx>
      */
@@ -206,7 +206,7 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
         $groupName = $this->getOption('or_group');
         if (null !== $groupName) {
             @trigger_error(sprintf(
-                'Option "or_group" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.x and will be removed in version 4.0.'
+                'Option "or_group" is deprecated since sonata-project/doctrine-orm-admin-bundle 3.35 and will be removed in version 4.0.'
                 .' Use "%s::setConditionGroup()" instead.',
                 static::class
             ), \E_USER_DEPRECATED);
