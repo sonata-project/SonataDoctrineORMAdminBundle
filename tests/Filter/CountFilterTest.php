@@ -29,8 +29,8 @@ final class CountFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator(): void
@@ -42,8 +42,8 @@ final class CountFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => 42]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     /**
@@ -58,8 +58,8 @@ final class CountFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => $type, 'value' => 42]));
 
-        $this->assertSameQuery(['GROUP BY o', $expected], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQuery(['GROUP BY o', $expected], $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 
     /**

@@ -54,10 +54,11 @@ final class StringFilter extends Filter implements SearchableFilterInterface
         $value = $this->trim((string) ($data->getValue() ?? ''));
         $type = $data->getType() ?? StringOperatorType::TYPE_CONTAINS;
 
+        $allowEmpty = $this->getOption('allow_empty', false);
+        \assert(\is_bool($allowEmpty));
+
         // ignore empty value if it doesn't make sense
-        if ('' === $value &&
-            (!$this->getOption('allow_empty') || \in_array($type, self::MEANINGLESS_TYPES, true))
-        ) {
+        if ('' === $value && (!$allowEmpty || \in_array($type, self::MEANINGLESS_TYPES, true))) {
             return;
         }
 
@@ -67,6 +68,7 @@ final class StringFilter extends Filter implements SearchableFilterInterface
         $parameterName = $this->getNewParameterName($query);
 
         $forceCaseInsensitivity = $this->getOption('force_case_insensitivity', false);
+        \assert(\is_bool($forceCaseInsensitivity));
 
         if ($forceCaseInsensitivity && '' !== $value) {
             $clause = 'LOWER(%s.%s) %s :%s';
@@ -147,13 +149,13 @@ final class StringFilter extends Filter implements SearchableFilterInterface
 
     private function trim(string $string): string
     {
-        $trimMode = $this->getOption('trim');
+        $trimMode = $this->getOption('trim', self::TRIM_BOTH);
 
-        if ($trimMode & self::TRIM_LEFT) {
+        if (0 !== ($trimMode & self::TRIM_LEFT)) {
             $string = ltrim($string);
         }
 
-        if ($trimMode & self::TRIM_RIGHT) {
+        if (0 !== ($trimMode & self::TRIM_RIGHT)) {
             $string = rtrim($string);
         }
 

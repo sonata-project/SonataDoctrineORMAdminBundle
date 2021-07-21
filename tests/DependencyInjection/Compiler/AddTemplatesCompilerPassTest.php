@@ -25,14 +25,14 @@ final class AddTemplatesCompilerPassTest extends TestCase
         $container = $this->createMock(ContainerBuilder::class);
 
         $container
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('findTaggedServiceIds')
             ->willReturn(['my.admin' => [['manager_type' => 'orm']]]);
 
         $definition = new Definition(null);
 
         $container
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('getDefinition')
             ->willReturn($definition);
 
@@ -46,6 +46,6 @@ final class AddTemplatesCompilerPassTest extends TestCase
             ['setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]],
         ];
 
-        $this->assertSame($expected, $definition->getMethodCalls());
+        self::assertSame($expected, $definition->getMethodCalls());
     }
 }

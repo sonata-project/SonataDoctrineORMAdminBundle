@@ -59,6 +59,7 @@
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpstan": "^0.12.52",
         "phpstan/phpstan-phpunit": "^0.12.18",
+        "phpstan/phpstan-strict-rules": "^0.12.10",
         "phpstan/phpstan-symfony": "^0.12.10",
         "psalm/plugin-phpunit": "^0.15.1",
         "psalm/plugin-symfony": "^2.0",
