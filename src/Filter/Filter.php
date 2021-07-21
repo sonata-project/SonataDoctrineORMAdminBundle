@@ -50,8 +50,13 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
         $this->conditionGroup = $conditionGroup;
     }
 
-    public function getConditionGroup(): ?Composite
+    public function getConditionGroup(): Composite
     {
+        if (!$this->hasConditionGroup()) {
+            throw new \LogicException(sprintf('Filter "%s" has no condition group.', $this->getName()));
+        }
+        \assert(null !== $this->conditionGroup);
+
         return $this->conditionGroup;
     }
 
@@ -126,7 +131,10 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
         if ($this->hasPreviousFilter()) {
             $previousFilter = $this->getPreviousFilter();
 
-            if ($previousFilter->hasConditionGroup()) {
+            if (
+                $previousFilter instanceof GroupableConditionAwareInterface
+                && $previousFilter->hasConditionGroup()
+            ) {
                 $conditionGroup = $previousFilter->getConditionGroup();
                 $conditionGroup->add($parameter);
 

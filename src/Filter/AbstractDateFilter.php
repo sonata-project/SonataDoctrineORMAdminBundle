@@ -64,7 +64,6 @@ abstract class AbstractDateFilter extends Filter
         if (!$value instanceof \DateTimeInterface) {
             return;
         }
-        \assert($value instanceof \DateTime || $value instanceof \DateTimeImmutable);
 
         // default type for simple filter
         $type = $data->getType() ?? DateOperatorType::TYPE_EQUAL;
@@ -79,9 +78,12 @@ abstract class AbstractDateFilter extends Filter
 
             if ('timestamp' === $this->getOption('input_type')) {
                 $endValue = strtotime('+1 day', $value->getTimestamp());
-            } else {
+            } elseif ($value instanceof \DateTime) {
                 $endValue = clone $value;
                 $endValue->add(new \DateInterval('P1D'));
+            } else {
+                /** @var \DateTimeImmutable $value */
+                $endValue = $value->add(new \DateInterval('P1D'));
             }
 
             $query->getQueryBuilder()->setParameter($endDateParameterName, $endValue, $this->getParameterType($endValue));
@@ -194,7 +196,7 @@ abstract class AbstractDateFilter extends Filter
     }
 
     /**
-     * @param \DateTime|\DateTimeImmutable|int $parameter
+     * @param \DateTimeInterface|int $parameter
      */
     private function getParameterType($parameter): string
     {

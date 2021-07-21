@@ -23,7 +23,7 @@ interface GroupableConditionAwareInterface extends ChainableFilterInterface
 {
     public function setConditionGroup(Composite $conditionGroup): void;
 
-    public function getConditionGroup(): ?Composite;
+    public function getConditionGroup(): Composite;
 
     public function hasConditionGroup(): bool;
 }
