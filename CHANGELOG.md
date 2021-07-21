@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.35.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.3...3.35.0) - 2021-07-20
+### Added
+- [[#1470](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1470)] `global_search` option to the `StringFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1457](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1457)] `treat_null_as` option to BooleanFilter ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1477](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1477)] `GroupableConditionAwareInterface` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1477](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1477)] "or_group" option in `Filter` objects ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1477](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1477)] `Filter::$groupedOrExpressions` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1473](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1473)] Deprecation from SonataAdminBundle 3.x ([@dmaicher](https://github.com/dmaicher))
+- [[#1470](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1470)] Stop using `ChoiceTypeFilter` for global search ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1477](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1477)] Not resetting `Filter::$groupedOrExpressions` static property (see sonata-project/SonataAdminBundle#7096) ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [3.34.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.2...3.34.3) - 2021-06-13
 ### Fixed
 - [[#1455](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1455)] Export for admin with fetch join in the `configureQuery()` method ([@VincentLanglet](https://github.com/VincentLanglet))

@@ -22,17 +22,6 @@ use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 
 final class FilterTest extends FilterTestCase
 {
-    protected function tearDown(): void
-    {
-        parent::tearDown();
-
-        $resetFilterOrConditions = \Closure::bind(static function (): void {
-            static::$groupedOrExpressions = [];
-        }, null, Filter::class);
-
-        $resetFilterOrConditions();
-    }
-
     /**
      * @phpstan-param array<array{string|null, array<string, mixed>, string, FilterData}> $filterOptionsCollection
      *
@@ -83,57 +72,9 @@ final class FilterTest extends FilterTestCase
      */
     public function orExpressionProvider(): iterable
     {
-        yield 'Using "or_group" option' => [
+        yield 'Default behavior' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
-            [
-                [
-                    'my_admin',
-                    [
-                        'field_name' => 'project',
-                        'allow_empty' => false,
-                    ],
-                    'project',
-                    FilterData::fromArray([
-                        'value' => 'sonata-project',
-                    ]),
-                ],
-                [
-                    'my_admin',
-                    [
-                        'field_name' => 'version',
-                        'allow_empty' => false,
-                    ],
-                    'version',
-                    FilterData::fromArray([
-                        'value' => '3.x',
-                    ]),
-                ],
-            ],
-        ];
-
-        yield 'Using "or_group" option with single filter' => [
-            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND e.project LIKE :project_0 AND 7 = 8',
-            [
-                [
-                    'my_admin',
-                    [
-                        'field_name' => 'project',
-                        'allow_empty' => false,
-                    ],
-                    'project',
-                    FilterData::fromArray([
-                        'value' => 'sonata-project',
-                    ]),
-                ],
-            ],
-        ];
-
-        yield 'Missing "or_group" option, fallback to DQL marker' => [
-            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
-            .' AND (\'sonata_admin_datagrid_filter_query_marker_left\' = \'sonata_admin_datagrid_filter_query_marker_right\''
-            .' OR e.project LIKE :project_0 OR e.version LIKE :version_1) AND 7 = 8',
+            .' AND e.project LIKE :project_0 AND e.version LIKE :version_1 AND 7 = 8',
             [
                 [
                     null,
