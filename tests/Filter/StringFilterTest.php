@@ -293,7 +293,6 @@ final class StringFilterTest extends FilterTestCase
     public function caseSensitiveDataProvider(): iterable
     {
         yield [[], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
-        yield [['force_case_insensitivity' => null], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
         yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
         yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_NOT_CONTAINS, 'WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL', '%FooBar%'];
         yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_EQUAL, 'WHERE alias.field = :field_name_0', 'FooBar'];
