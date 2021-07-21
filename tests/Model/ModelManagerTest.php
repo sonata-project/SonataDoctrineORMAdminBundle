@@ -72,7 +72,7 @@ final class ModelManagerTest extends TestCase
         }
     }
 
-    protected function setup(): void
+    protected function setUp(): void
     {
         $this->registry = $this->createMock(ManagerRegistry::class);
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
@@ -113,7 +113,7 @@ final class ModelManagerTest extends TestCase
 
         $this->registry->method('getManagerForClass')->willReturn($entityManager);
 
-        $this->assertSame(
+        self::assertSame(
             ['a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'],
             $this->modelManager->getIdentifierValues($entity)
         );
@@ -123,11 +123,11 @@ final class ModelManagerTest extends TestCase
     {
         $em = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(self::once())
             ->method('getManagerForClass')
             ->with(\stdClass::class)
             ->willReturn($em);
-        $this->assertSame($em, $this->modelManager->getEntityManager(\stdClass::class));
+        self::assertSame($em, $this->modelManager->getEntityManager(\stdClass::class));
     }
 
     /**
@@ -135,7 +135,7 @@ final class ModelManagerTest extends TestCase
      */
     public function testSupportsQuery(bool $expected, object $object): void
     {
-        $this->assertSame($expected, $this->modelManager->supportsQuery($object));
+        self::assertSame($expected, $this->modelManager->supportsQuery($object));
     }
 
     /**
@@ -171,9 +171,9 @@ final class ModelManagerTest extends TestCase
         if ($isVersioned) {
             $object->version = 123;
 
-            $this->assertNotNull($this->modelManager->getLockVersion($object));
+            self::assertNotNull($this->modelManager->getLockVersion($object));
         } else {
-            $this->assertNull($this->modelManager->getLockVersion($object));
+            self::assertNull($this->modelManager->getLockVersion($object));
         }
     }
 
@@ -200,13 +200,13 @@ final class ModelManagerTest extends TestCase
 
         $em = $this->setGetMetadataExpectation(\get_class($object), $metadata);
 
-        $em->expects($isVersioned ? $this->once() : $this->never())
+        $em->expects($isVersioned ? self::once() : self::never())
             ->method('lock');
 
         if ($expectsException) {
-            $em->expects($this->once())
+            $em->expects(self::once())
                 ->method('lock')
-                ->will($this->throwException(OptimisticLockException::lockFailed($object)));
+                ->will(self::throwException(OptimisticLockException::lockFailed($object)));
 
             $this->expectException(LockException::class);
         }
@@ -221,43 +221,43 @@ final class ModelManagerTest extends TestCase
         $entity = new UuidEntity($uuid);
 
         $meta = $this->createMock(ClassMetadata::class);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getId()]);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getTypeOfField')
             ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
 
         $platform = $this->createMock(PostgreSQL94Platform::class);
-        $platform->expects($this->any())
+        $platform->expects(self::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidBinaryType::NAME)
             ->willReturn(true);
-        $platform->expects($this->any())
+        $platform->expects(self::any())
             ->method('getDoctrineTypeMapping')
             ->with(UuidBinaryType::NAME)
             ->willReturn('binary');
 
         $conn = $this->createMock(Connection::class);
-        $conn->expects($this->any())
+        $conn->expects(self::any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
         $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getClassMetadata')
             ->willReturn($meta);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getConnection')
             ->willReturn($conn);
 
-        $this->registry->expects($this->any())
+        $this->registry->expects(self::any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
         $result = $this->modelManager->getIdentifierValues($entity);
 
-        $this->assertSame($entity->getId()->toString(), $result[0]);
+        self::assertSame($entity->getId()->toString(), $result[0]);
     }
 
     public function testNonIntegerIdentifierType(): void
@@ -266,41 +266,41 @@ final class ModelManagerTest extends TestCase
         $entity = new UuidEntity($uuid);
 
         $meta = $this->createMock(ClassMetadata::class);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getId()]);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
         $platform = $this->createMock(PostgreSQL94Platform::class);
-        $platform->expects($this->any())
+        $platform->expects(self::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidType::NAME)
             ->willReturn(false);
-        $platform->expects($this->never())
+        $platform->expects(self::never())
             ->method('getDoctrineTypeMapping');
 
         $conn = $this->createMock(Connection::class);
-        $conn->expects($this->any())
+        $conn->expects(self::any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
         $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getClassMetadata')
             ->willReturn($meta);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getConnection')
             ->willReturn($conn);
 
-        $this->registry->expects($this->any())
+        $this->registry->expects(self::any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
         $result = $this->modelManager->getIdentifierValues($entity);
 
-        $this->assertSame($entity->getId()->toString(), $result[0]);
+        self::assertSame($entity->getId()->toString(), $result[0]);
     }
 
     public function testIntegerIdentifierType(): void
@@ -309,41 +309,41 @@ final class ModelManagerTest extends TestCase
         $entity = new Product($id, 'Some product');
 
         $meta = $this->createMock(ClassMetadata::class);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getId()]);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getTypeOfField')
             ->willReturn(ProductIdType::NAME);
 
         $platform = $this->createMock(PostgreSQL94Platform::class);
-        $platform->expects($this->any())
+        $platform->expects(self::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(ProductIdType::NAME)
             ->willReturn(false);
-        $platform->expects($this->never())
+        $platform->expects(self::never())
             ->method('getDoctrineTypeMapping');
 
         $conn = $this->createMock(Connection::class);
-        $conn->expects($this->any())
+        $conn->expects(self::any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
         $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getClassMetadata')
             ->willReturn($meta);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getConnection')
             ->willReturn($conn);
 
-        $this->registry->expects($this->any())
+        $this->registry->expects(self::any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
         $result = $this->modelManager->getIdentifierValues($entity);
 
-        $this->assertSame((string) $entity->getId()->getId(), $result[0]);
+        self::assertSame((string) $entity->getId()->getId(), $result[0]);
     }
 
     public function testAssociationIdentifierType(): void
@@ -351,37 +351,37 @@ final class ModelManagerTest extends TestCase
         $entity = new ContainerEntity(new AssociatedEntity(new EmbeddedEntity(), 42), new EmbeddedEntity());
 
         $meta = $this->createMock(ClassMetadata::class);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getIdentifierValues')
             ->willReturn([$entity->getAssociatedEntity()->getPlainField()]);
-        $meta->expects($this->any())
+        $meta->expects(self::any())
             ->method('getTypeOfField')
             ->willReturn(null);
 
         $platform = $this->createMock(PostgreSQL94Platform::class);
-        $platform->expects($this->never())
+        $platform->expects(self::never())
             ->method('hasDoctrineTypeMappingFor');
 
         $conn = $this->createMock(Connection::class);
-        $conn->expects($this->any())
+        $conn->expects(self::any())
             ->method('getDatabasePlatform')
             ->willReturn($platform);
 
         $em = $this->createMock(EntityManagerInterface::class);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getClassMetadata')
             ->willReturn($meta);
-        $em->expects($this->any())
+        $em->expects(self::any())
             ->method('getConnection')
             ->willReturn($conn);
 
-        $this->registry->expects($this->any())
+        $this->registry->expects(self::any())
             ->method('getManagerForClass')
             ->willReturn($em);
 
         $result = $this->modelManager->getIdentifierValues($entity);
 
-        $this->assertSame(42, $result[0]);
+        self::assertSame(42, $result[0]);
     }
 
     public function testReverseTransform(): void
@@ -394,11 +394,11 @@ final class ModelManagerTest extends TestCase
         $classMetadata = new ClassMetadata($class);
         $classMetadata->reflClass = new \ReflectionClass($class);
 
-        $objectManager->expects($this->once())
+        $objectManager->expects(self::once())
             ->method('getClassMetadata')
             ->with($class)
             ->willReturn($classMetadata);
-        $this->registry->expects($this->once())
+        $this->registry->expects(self::once())
             ->method('getManagerForClass')
             ->with($class)
             ->willReturn($objectManager);
@@ -407,8 +407,8 @@ final class ModelManagerTest extends TestCase
             'schmeckles' => 42,
             'multi_word_property' => 'hello',
         ]);
-        $this->assertSame(42, $object->getSchmeckles());
-        $this->assertSame('hello', $object->getMultiWordProperty());
+        self::assertSame(42, $object->getSchmeckles());
+        self::assertSame('hello', $object->getMultiWordProperty());
     }
 
     public function testGetEntityManagerException(): void
@@ -425,14 +425,14 @@ final class ModelManagerTest extends TestCase
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('persist');
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('flush')
             ->willThrowException($exception);
 
@@ -463,14 +463,14 @@ final class ModelManagerTest extends TestCase
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('persist');
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('flush')
             ->willThrowException($exception);
 
@@ -486,14 +486,14 @@ final class ModelManagerTest extends TestCase
     {
         $entityManger = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects($this->once())
+        $this->registry->expects(self::once())
             ->method('getManagerForClass')
             ->willReturn($entityManger);
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('remove');
 
-        $entityManger->expects($this->once())
+        $entityManger->expects(self::once())
             ->method('flush')
             ->willThrowException($exception);
 
@@ -524,29 +524,29 @@ final class ModelManagerTest extends TestCase
             ->getMock();
 
         $queryBuilder
-            ->expects($this->exactly(\count($expectedParameters)))
+            ->expects(self::exactly(\count($expectedParameters)))
             ->method('getRootAliases')
             ->willReturn(['p']);
 
         $queryBuilder
-            ->expects($this->once())
+            ->expects(self::once())
             ->method('andWhere')
-            ->with($this->stringContains(sprintf('( p.%s = :field_', $identifierFieldNames[0])));
+            ->with(self::stringContains(sprintf('( p.%s = :field_', $identifierFieldNames[0])));
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
         $metadata = $this->createMock(ClassMetadata::class);
-        $metadata->expects($this->once())
+        $metadata->expects(self::once())
             ->method('getIdentifierFieldNames')
             ->willReturn($identifierFieldNames);
         $this->setGetMetadataExpectation(Product::class, $metadata);
 
         $this->modelManager->addIdentifiersToQuery(Product::class, $proxyQuery, $ids);
 
-        $this->assertCount(\count($expectedParameters), $proxyQuery->getQueryBuilder()->getParameters());
+        self::assertCount(\count($expectedParameters), $proxyQuery->getQueryBuilder()->getParameters());
 
         foreach ($proxyQuery->getParameters() as $offset => $parameter) {
-            $this->assertSame($expectedParameters[$offset], $parameter->getValue());
+            self::assertSame($expectedParameters[$offset], $parameter->getValue());
         }
     }
 
@@ -631,12 +631,12 @@ final class ModelManagerTest extends TestCase
     private function setGetMetadataExpectation(string $class, ClassMetadata $classMetadata): EntityManagerInterface
     {
         $em = $this->createMock(EntityManagerInterface::class);
-        $this->registry->expects($this->atLeastOnce())
+        $this->registry->expects(self::atLeastOnce())
             ->method('getManagerForClass')
             ->with($class)
             ->willReturn($em);
 
-        $em->expects($this->atLeastOnce())
+        $em->expects(self::atLeastOnce())
             ->method('getClassMetadata')
             ->with($class)
             ->willReturn($classMetadata);

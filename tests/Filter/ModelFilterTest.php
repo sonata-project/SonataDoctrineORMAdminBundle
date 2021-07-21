@@ -30,8 +30,8 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testFilterArray(): void
@@ -47,9 +47,9 @@ final class ModelFilterTest extends FilterTestCase
         ]));
 
         // the alias is now computer by the entityJoin method
-        $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
-        $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 
     public function testFilterArrayTypeIsNotEqual(): void
@@ -65,12 +65,12 @@ final class ModelFilterTest extends FilterTestCase
         ]));
 
         // the alias is now computer by the entityJoin method
-        $this->assertSameQuery(
+        self::assertSameQuery(
             ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
             $proxyQuery
         );
-        $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 
     public function testFilterScalar(): void
@@ -82,9 +82,9 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]));
 
-        $this->assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
-        $this->assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 
     public function testFilterScalarTypeIsNotEqual(): void
@@ -96,13 +96,13 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
-        $this->assertSameQuery(
+        self::assertSameQuery(
             ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
             $proxyQuery
         );
 
-        $this->assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 
     public function testAssociationWithInvalidMapping(): void
@@ -127,7 +127,7 @@ final class ModelFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'asd']));
-        $this->assertTrue($filter->isActive());
+        self::assertTrue($filter->isActive());
     }
 
     public function testAssociationWithValidMapping(): void
@@ -145,11 +145,11 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
 
-        $this->assertSameQuery([
+        self::assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'WHERE s_association_mapping IN :field_name_0',
         ], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertTrue($filter->isActive());
     }
 
     public function testAssociationWithValidParentAssociationMappings(): void
@@ -175,12 +175,12 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
 
-        $this->assertSameQuery([
+        self::assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'LEFT JOIN s_association_mapping.sub_association_mapping AS s_association_mapping_sub_association_mapping',
             'LEFT JOIN s_association_mapping_sub_association_mapping.sub_sub_association_mapping AS s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
             'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
         ], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertTrue($filter->isActive());
     }
 }

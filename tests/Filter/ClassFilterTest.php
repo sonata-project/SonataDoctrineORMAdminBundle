@@ -26,8 +26,8 @@ final class ClassFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(EqualOperatorType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
+        self::assertSame(EqualOperatorType::class, $options['operator_type']);
+        self::assertSame([], $options['operator_options']);
     }
 
     public function testFilterEmpty(): void
@@ -39,8 +39,8 @@ final class ClassFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => '']));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator(): void
@@ -52,8 +52,8 @@ final class ClassFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => 42]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testFilter(): void
@@ -73,7 +73,7 @@ final class ClassFilterTest extends FilterTestCase
             'WHERE alias INSTANCE OF type',
         ];
 
-        $this->assertSameQuery($expected, $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertSameQuery($expected, $proxyQuery);
+        self::assertTrue($filter->isActive());
     }
 }

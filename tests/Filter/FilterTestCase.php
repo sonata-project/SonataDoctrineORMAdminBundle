@@ -32,7 +32,7 @@ abstract class FilterTestCase extends TestCase
             throw new \InvalidArgumentException('The query builder should be build with "createQueryBuilderStub()".');
         }
 
-        $this->assertSame($expected, $queryBuilder->query);
+        self::assertSame($expected, $queryBuilder->query);
     }
 
     /**
@@ -45,7 +45,7 @@ abstract class FilterTestCase extends TestCase
             throw new \InvalidArgumentException('The query builder should be build with "createQueryBuilderStub()".');
         }
 
-        $this->assertSame($expected, $queryBuilder->queryParameters);
+        self::assertSame($expected, $queryBuilder->queryParameters);
     }
 
     final protected function createQueryBuilderStub(): TestQueryBuilder

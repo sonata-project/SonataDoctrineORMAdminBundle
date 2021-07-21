@@ -25,17 +25,17 @@ final class ConfigurationTest extends TestCase
     {
         $config = $this->process([]);
 
-        $this->assertArrayHasKey('entity_manager', $config);
-        $this->assertNull($config['entity_manager']);
+        self::assertArrayHasKey('entity_manager', $config);
+        self::assertNull($config['entity_manager']);
 
-        $this->assertArrayHasKey('audit', $config);
-        $this->assertIsArray($config['audit']);
-        $this->assertArrayHasKey('force', $config['audit']);
-        $this->assertTrue($config['audit']['force']);
+        self::assertArrayHasKey('audit', $config);
+        self::assertIsArray($config['audit']);
+        self::assertArrayHasKey('force', $config['audit']);
+        self::assertTrue($config['audit']['force']);
 
-        $this->assertArrayHasKey('templates', $config);
-        $this->assertIsArray($config['templates']);
-        $this->assertArrayNotHasKey('types', $config['templates']);
+        self::assertArrayHasKey('templates', $config);
+        self::assertIsArray($config['templates']);
+        self::assertArrayNotHasKey('types', $config['templates']);
     }
 
     public function testAuditForceWithInvalidFormat(): void
@@ -64,10 +64,10 @@ final class ConfigurationTest extends TestCase
             ],
         ]]);
 
-        $this->assertArrayHasKey('templates', $config);
-        $this->assertIsArray($config['templates']);
-        $this->assertArrayHasKey('types', $config['templates']);
-        $this->assertSame([
+        self::assertArrayHasKey('templates', $config);
+        self::assertIsArray($config['templates']);
+        self::assertArrayHasKey('types', $config['templates']);
+        self::assertSame([
             'list' => [
                 'array' => 'list_array.twig.html',
             ],

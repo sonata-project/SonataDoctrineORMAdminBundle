@@ -38,9 +38,9 @@ final class CRUDTest extends BaseFunctionalTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/create');
 
         $attributeId = $crawler->filter('.category_id')->attr('name');
-        $this->assertNotNull($attributeId);
+        self::assertNotNull($attributeId);
         $attributeName = $crawler->filter('.category_name')->attr('name');
-        $this->assertNotNull($attributeName);
+        self::assertNotNull($attributeName);
 
         $this->client->submitForm('Create and return to list', [
             $attributeId => 'new id',
@@ -55,7 +55,7 @@ final class CRUDTest extends BaseFunctionalTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/category/category_novel/edit');
 
         $attributeName = $crawler->filter('.category_name')->attr('name');
-        $this->assertNotNull($attributeName);
+        self::assertNotNull($attributeName);
 
         $this->client->submitForm('Update and close', [
             $attributeName => 'edited name',

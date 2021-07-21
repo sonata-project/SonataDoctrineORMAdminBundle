@@ -30,12 +30,15 @@ final class EmptyFilter extends Filter
         $isYes = BooleanType::TYPE_YES === (int) $data->getValue();
         $isNo = BooleanType::TYPE_NO === (int) $data->getValue();
 
-        if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
+        $inverse = $this->getOption('inverse', false);
+        \assert(\is_bool($inverse));
+
+        if (!$inverse && $isYes || $inverse && $isNo) {
             $this->applyWhere(
                 $query,
                 sprintf('%s.%s IS EMPTY', $alias, $field)
             );
-        } elseif (!$this->getOption('inverse') && $isNo || $this->getOption('inverse') && $isYes) {
+        } else {
             $this->applyWhere(
                 $query,
                 sprintf('%s.%s IS NOT EMPTY', $alias, $field)

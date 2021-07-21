@@ -32,8 +32,8 @@ final class DateFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testGetType(): void
@@ -41,7 +41,7 @@ final class DateFilterTest extends FilterTestCase
         $filter = new DateFilter();
         $filter->initialize('foo');
 
-        $this->assertSame(DateType::class, $filter->getFieldType());
+        self::assertSame(DateType::class, $filter->getFieldType());
     }
 
     public function testFilterRecordsWholeDay(): void
@@ -52,14 +52,14 @@ final class DateFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => new \DateTime()]));
 
-        $this->assertSameQuery([
+        self::assertSameQuery([
             'WHERE alias.field < :field_name_0',
             'WHERE alias.field >= :field_name_1',
         ], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        self::assertTrue($filter->isActive());
 
         $builder = $proxyQuery->getQueryBuilder();
         \assert($builder instanceof TestQueryBuilder);
-        $this->assertCount(2, $builder->queryParameters);
+        self::assertCount(2, $builder->queryParameters);
     }
 }

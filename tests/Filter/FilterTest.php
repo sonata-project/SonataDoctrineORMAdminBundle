@@ -46,7 +46,7 @@ final class FilterTest extends FilterTestCase
             )
             ->setParameter('parameter_1', 3);
 
-        $this->assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
+        self::assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
@@ -64,7 +64,7 @@ final class FilterTest extends FilterTestCase
         // More custom conditions set after the filters.
         $queryBuilder->andWhere($queryBuilder->expr()->eq(7, 8));
 
-        $this->assertSame($expected, $queryBuilder->getDQL());
+        self::assertSame($expected, $queryBuilder->getDQL());
     }
 
     /**

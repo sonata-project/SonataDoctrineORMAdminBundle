@@ -86,10 +86,6 @@ final class ModelAutocompleteFilter extends Filter
 
     protected function handleModel(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
-        if (empty($data->getValue())) {
-            return;
-        }
-
         $parameterName = $this->getNewParameterName($query);
 
         if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {

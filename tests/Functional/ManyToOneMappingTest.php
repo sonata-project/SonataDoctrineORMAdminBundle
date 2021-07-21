@@ -24,9 +24,9 @@ final class ManyToOneMappingTest extends BasePantherTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/book/create');
 
         $attributeId = $crawler->filter('.book_id')->attr('name');
-        $this->assertNotNull($attributeId);
+        self::assertNotNull($attributeId);
         $attributeName = $crawler->filter('.book_name')->attr('name');
-        $this->assertNotNull($attributeName);
+        self::assertNotNull($attributeName);
 
         $form = $crawler->selectButton('Create and return to list')->form();
         $form[$attributeId] = 'book_new_id';
@@ -51,11 +51,11 @@ final class ManyToOneMappingTest extends BasePantherTestCase
     private function createAuthorForm(Crawler $crawler): Form
     {
         $authorAttributeId = $crawler->filter('.author_id')->attr('name');
-        $this->assertNotNull($authorAttributeId);
+        self::assertNotNull($authorAttributeId);
         $authorAttributeName = $crawler->filter('.author_name')->attr('name');
-        $this->assertNotNull($authorAttributeName);
+        self::assertNotNull($authorAttributeName);
         $addressAttributeName = $crawler->filter('.author_address')->attr('name');
-        $this->assertNotNull($addressAttributeName);
+        self::assertNotNull($addressAttributeName);
 
         $authorForm = $crawler->filter('.modal-content button[name="btn_create"]')->form();
         $authorForm[$authorAttributeId] = 'Wonderful Id';

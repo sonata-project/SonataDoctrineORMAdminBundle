@@ -69,7 +69,7 @@ final class ShowBuilder implements ShowBuilderInterface
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         $type = $fieldDescription->getType();
-        if (!$type) {
+        if (null === $type) {
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
@@ -77,7 +77,7 @@ final class ShowBuilder implements ShowBuilderInterface
             ));
         }
 
-        if (!$fieldDescription->getTemplate()) {
+        if (null === $fieldDescription->getTemplate()) {
             $fieldDescription->setTemplate($this->getTemplate($type));
         }
 

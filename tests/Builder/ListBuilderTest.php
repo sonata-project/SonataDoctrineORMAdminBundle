@@ -58,7 +58,7 @@ final class ListBuilderTest extends TestCase
 
     public function testAddListActionField(): void
     {
-        $this->admin->expects($this->once())->method('addListFieldDescription');
+        $this->admin->expects(self::once())->method('addListFieldDescription');
 
         $fieldDescription = new FieldDescription('foo');
         $fieldDescription->setAdmin($this->admin);
@@ -66,7 +66,7 @@ final class ListBuilderTest extends TestCase
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, 'actions', $fieldDescription);
 
-        $this->assertSame(
+        self::assertSame(
             '@SonataAdmin/CRUD/list__action.html.twig',
             $list->get('foo')->getTemplate(),
             'Custom list action field has a default list action template assigned'
@@ -75,7 +75,7 @@ final class ListBuilderTest extends TestCase
 
     public function testCorrectFixedActionsFieldType(): void
     {
-        $this->admin->expects($this->once())->method('addListFieldDescription');
+        $this->admin->expects(self::once())->method('addListFieldDescription');
         $this->typeGuesser->method('guess')->willReturn(new TypeGuess(ListMapper::TYPE_ACTIONS, [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription('_action');
@@ -85,18 +85,18 @@ final class ListBuilderTest extends TestCase
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, null, $fieldDescription);
 
-        $this->assertSame(
+        self::assertSame(
             ListMapper::TYPE_ACTIONS,
             $list->get('_action')->getType(),
             'Standard list _action field has "actions" type'
         );
 
         $actions = $fieldDescription->getOption('actions');
-        $this->assertIsArray($actions);
-        $this->assertArrayHasKey('test', $actions);
-        $this->assertIsArray($actions['test']);
-        $this->assertArrayHasKey('template', $actions['test']);
-        $this->assertSame(
+        self::assertIsArray($actions);
+        self::assertArrayHasKey('test', $actions);
+        self::assertIsArray($actions['test']);
+        self::assertArrayHasKey('template', $actions['test']);
+        self::assertSame(
             '@SonataAdmin/CRUD/list__action_test.html.twig',
             $fieldDescription->getOption('actions')['test']['template']
         );
@@ -107,7 +107,7 @@ final class ListBuilderTest extends TestCase
      */
     public function testFixFieldDescription(int $type, string $template): void
     {
-        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects(self::once())->method('attachAdminClass');
 
         $fieldDescription = new FieldDescription('test', [], ['type' => $type]);
         $fieldDescription->setOption('sortable', true);
@@ -116,7 +116,7 @@ final class ListBuilderTest extends TestCase
 
         $this->listBuilder->fixFieldDescription($fieldDescription);
 
-        $this->assertSame($template, $fieldDescription->getTemplate());
+        self::assertSame($template, $fieldDescription->getTemplate());
     }
 
     /**

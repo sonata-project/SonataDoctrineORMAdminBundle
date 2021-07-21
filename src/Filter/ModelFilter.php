@@ -25,7 +25,7 @@ final class ModelFilter extends Filter
 {
     public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
-        if (!$data->hasValue() || empty($data->getValue())) {
+        if (!$data->hasValue()) {
             return;
         }
 

@@ -25,7 +25,7 @@ final class AddGuesserCompilerPassTest extends TestCase
     {
         $containerBuilder = $this->createMock(ContainerBuilder::class);
         $definition = $this->createMock(Definition::class);
-        $definition->expects($this->exactly(3))->method('replaceArgument')->with(0, [new Reference('some.id')]);
+        $definition->expects(self::exactly(3))->method('replaceArgument')->with(0, [new Reference('some.id')]);
 
         $containerBuilder->method('getDefinition')->withConsecutive(
             ['sonata.admin.guesser.orm_list_chain'],

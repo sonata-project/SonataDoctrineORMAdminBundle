@@ -30,12 +30,15 @@ final class NullFilter extends Filter
         $isYes = BooleanType::TYPE_YES === (int) $data->getValue();
         $isNo = BooleanType::TYPE_NO === (int) $data->getValue();
 
-        if (!$this->getOption('inverse') && $isYes || $this->getOption('inverse') && $isNo) {
+        $inverse = $this->getOption('inverse', false);
+        \assert(\is_bool($inverse));
+
+        if (!$inverse && $isYes || $inverse && $isNo) {
             $this->applyWhere(
                 $query,
                 $query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field))
             );
-        } elseif (!$this->getOption('inverse') && $isNo || $this->getOption('inverse') && $isYes) {
+        } else {
             $this->applyWhere(
                 $query,
                 $query->getQueryBuilder()->expr()->isNotNull(sprintf('%s.%s', $alias, $field))
