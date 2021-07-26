@@ -76,7 +76,7 @@ final class ListBuilder implements ListBuilderInterface
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
     {
         $type = $fieldDescription->getType();
-        if (!$type) {
+        if (null === $type) {
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
@@ -98,10 +98,10 @@ final class ListBuilder implements ListBuilderInterface
             $fieldDescription->setOption('_sort_order', $fieldDescription->getOption('_sort_order', 'ASC'));
         }
 
-        if (!$fieldDescription->getTemplate()) {
+        if (null === $fieldDescription->getTemplate()) {
             $fieldDescription->setTemplate($this->getTemplate($type));
 
-            if (!$fieldDescription->getTemplate()) {
+            if (null === $fieldDescription->getTemplate()) {
                 switch ($fieldDescription->getMappingType()) {
                     case ClassMetadata::MANY_TO_ONE:
                         $fieldDescription->setTemplate(

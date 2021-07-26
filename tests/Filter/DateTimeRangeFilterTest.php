@@ -32,8 +32,8 @@ final class DateTimeRangeFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
-        $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        self::assertSameQuery([], $proxyQuery);
+        self::assertFalse($filter->isActive());
     }
 
     public function testGetType(): void
@@ -41,6 +41,6 @@ final class DateTimeRangeFilterTest extends FilterTestCase
         $filter = new DateTimeRangeFilter();
         $filter->initialize('foo');
 
-        $this->assertSame(DateTimeRangeType::class, $filter->getFieldType());
+        self::assertSame(DateTimeRangeType::class, $filter->getFieldType());
     }
 }

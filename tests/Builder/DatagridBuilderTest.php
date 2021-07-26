@@ -99,8 +99,8 @@ final class DatagridBuilderTest extends TestCase
 
         $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin);
 
-        $this->assertInstanceOf(Datagrid::class, $datagrid);
-        $this->assertInstanceOf($pager, $datagrid->getPager());
+        self::assertInstanceOf(Datagrid::class, $datagrid);
+        self::assertInstanceOf($pager, $datagrid->getPager());
     }
 
     /**
@@ -134,7 +134,7 @@ final class DatagridBuilderTest extends TestCase
         $fieldDescription = new FieldDescription('test', [], ['type' => ClassMetadata::ONE_TO_MANY]);
         $fieldDescription->setAdmin($this->admin);
 
-        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects(self::once())->method('attachAdminClass');
 
         $this->datagridBuilder->fixFieldDescription($fieldDescription);
     }
@@ -146,7 +146,7 @@ final class DatagridBuilderTest extends TestCase
 
         $this->datagridBuilder->fixFieldDescription($fieldDescription);
 
-        $this->assertSame('fieldName', $fieldDescription->getOption('field_name'));
+        self::assertSame('fieldName', $fieldDescription->getOption('field_name'));
     }
 
     public function testAddFilterNoType(): void
@@ -157,7 +157,7 @@ final class DatagridBuilderTest extends TestCase
         $fieldDescription = new FieldDescription('test');
         $fieldDescription->setAdmin($this->admin);
 
-        $this->admin->expects($this->once())->method('addFilterFieldDescription');
+        $this->admin->expects(self::once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
         $this->typeGuesser->method('guess')->willReturn($guessType);
@@ -165,7 +165,7 @@ final class DatagridBuilderTest extends TestCase
 
         $guessType->method('getOptions')->willReturn(['name' => 'value']);
         $guessType->method('getType')->willReturn(ModelAutocompleteFilter::class);
-        $datagrid->method('addFilter')->with($this->isInstanceOf(ModelAutocompleteFilter::class));
+        $datagrid->method('addFilter')->with(self::isInstanceOf(ModelAutocompleteFilter::class));
 
         $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription);
     }

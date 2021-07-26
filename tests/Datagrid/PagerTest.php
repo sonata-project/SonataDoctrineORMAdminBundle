@@ -72,6 +72,6 @@ final class PagerTest extends TestCase
         $pager->setQuery($pq);
         $pager->init();
 
-        $this->assertSame(0, $pager->countResults());
+        self::assertSame(0, $pager->countResults());
     }
 }
