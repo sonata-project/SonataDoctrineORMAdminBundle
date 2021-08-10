@@ -2,6 +2,27 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0-rc.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0-alpha-2...4.0.0-rc.1) - 2021-08-10
+### Added
+- [[#1458](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1458)] `EmptyFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Changed
+- [[#1480](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1480)] `Pager::getCurrentPageResults()` does not return `Paginator` anymore. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+## [4.0.0-alpha-2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0-alpha-1...4.0.0-alpha-2) - 2021-05-14
+### Added
+- [[#1412](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1412)] Add compatiblity with all SonataAdmin 4.0 versions ([@jordisala1991](https://github.com/jordisala1991))
+
+### Changed
+- [[#1421](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1421)] Use `FilterData` instead of `array` in filters. ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1438](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1438)] Add final to abstract classes method. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1435](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1435)] BatchDelete method. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+## [4.0.0-alpha-1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.0...4.0.0-alpha-1) - 2021-04-11
+See Changelog
+
 ## [3.35.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.3...3.35.0) - 2021-07-20
 ### Added
 - [[#1470](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1470)] `global_search` option to the `StringFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
