@@ -73,7 +73,6 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 
             $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
             $class = $metadata->getAssociationTargetClass($nameElement);
-            \assert(null !== $class); // https://github.com/doctrine/persistence/pull/192
         }
 
         $properties = \array_slice($nameElements, \count($parentAssociationMappings));
