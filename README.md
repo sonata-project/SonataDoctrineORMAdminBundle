@@ -17,14 +17,14 @@ Integrate Doctrine ORM into the SonataAdminBundle
 [![Monthly Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/monthly)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 [![Daily Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/d/daily)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 
-Branch | Github Actions | Code Coverage |
------- | -------------- | ------------- |
-4.x    | [![Test][test_stable_badge]][test_stable_link]     | [![Coverage Status][coverage_stable_badge]][coverage_stable_link]     |
-master | [![Test][test_unstable_badge]][test_unstable_link] | [![Coverage Status][coverage_unstable_badge]][coverage_unstable_link] |
+Branch | Github Actions | Code Coverage | Documentation |
+------ | -------------- | ------------- | ------------- |
+4.x    | [![Test][test_stable_badge]][test_stable_link]     | [![Coverage Status][coverage_stable_badge]][coverage_stable_link]     | [![Documentation Status][documentation_stable_badge]][documentation_stable_link]     |
+master | [![Test][test_unstable_badge]][test_unstable_link] | [![Coverage Status][coverage_unstable_badge]][coverage_unstable_link] | [![Documentation Status][documentation_unstable_badge]][documentation_unstable_link] |
 
 ## Documentation
 
-Check out the documentation on the [official website](https://sonata-project.org/bundles/doctrine-orm-admin).
+Check out the documentation on the [official website](https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle).
 
 ## Support
 
@@ -48,3 +48,8 @@ This package is available under the [MIT license](LICENSE).
 [coverage_unstable_link]: https://codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/branch/master
 [shepherd_stable_badge]: https://shepherd.dev/github/sonata-project/SonataDoctrineORMAdminBundle/coverage.svg
 [shepherd_stable_link]: https://shepherd.dev/github/sonata-project/SonataDoctrineORMAdminBundle
+
+[documentation_stable_badge]: https://readthedocs.org/projects/sonata-project-doctrineormadminbundle/badge/?version=4.x
+[documentation_stable_link]: https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle/en/4.x/?badge=4.x
+[documentation_unstable_badge]: https://readthedocs.org/projects/sonata-project-doctrineormadminbundle/badge/?version=master
+[documentation_unstable_link]: https://docs.readthedocs.org/projects/SonataDoctrineORMAdminBundle/en/master/?badge=master
