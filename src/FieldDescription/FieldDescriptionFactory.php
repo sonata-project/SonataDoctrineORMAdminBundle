@@ -67,15 +67,13 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 
         foreach ($nameElements as $nameElement) {
             $metadata = $this->getMetadata($class);
-
-            if (isset($metadata->associationMappings[$nameElement])) {
-                $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
-                $class = $metadata->getAssociationTargetClass($nameElement);
-
-                continue;
+            if (!isset($metadata->associationMappings[$nameElement])) {
+                break;
             }
 
-            break;
+            $parentAssociationMappings[] = $metadata->associationMappings[$nameElement];
+            $class = $metadata->getAssociationTargetClass($nameElement);
+            \assert(null !== $class); // https://github.com/doctrine/persistence/pull/192
         }
 
         $properties = \array_slice($nameElements, \count($parentAssociationMappings));
