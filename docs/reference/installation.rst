@@ -10,7 +10,7 @@ As such, ``SonataDoctrineORMAdminBundle`` depends on ``SonataAdminBundle`` and w
 .. note::
 
     These installation instructions are meant to be used only as part of SonataAdminBundle's installation process,
-    which is documented `here <https://docs.sonata-project.org/projects/SonataAdminBundle/en/3.x/getting_started/installation>`_.
+    which is documented `here <https://docs.sonata-project.org/projects/SonataAdminBundle/en/3.x/getting_started/installation/>`_.
 
 Download the bundle
 -------------------
