@@ -10,7 +10,7 @@ As such, ``SonataDoctrineORMAdminBundle`` depends on ``SonataAdminBundle`` and w
 .. note::
 
     These installation instructions are meant to be used only as part of SonataAdminBundle's installation process,
-    which is documented `here <https://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_.
+    which is documented `here <https://docs.sonata-project.org/projects/SonataAdminBundle/en/3.x/getting_started/installation/>`_.
 
 Download the bundle
 -------------------
@@ -34,5 +34,5 @@ are not already enabled::
 
 .. note::
 
-    Don't forget that, as part of `SonataAdminBundle's installation instructions <https://sonata-project.org/bundles/admin/master/doc/reference/installation.html>`_,
+    Don't forget that, as part of `SonataAdminBundle's installation instructions <https://docs.sonata-project.org/projects/SonataAdminBundle/en/3.x/getting_started/installation/>`_,
     you need to enable additional bundles on `bundles.php`.
