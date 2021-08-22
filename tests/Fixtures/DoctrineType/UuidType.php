@@ -24,7 +24,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestCl
  */
 class UuidType extends StringType
 {
-    const NAME = 'uuid';
+    public const NAME = 'uuid';
 
     public function getName()
     {
