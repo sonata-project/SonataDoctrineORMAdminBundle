@@ -20,7 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 
 final class ProductIdType extends Type
 {
-    const NAME = 'ProductId';
+    public const NAME = 'ProductId';
 
     public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
