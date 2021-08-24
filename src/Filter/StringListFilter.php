@@ -39,7 +39,7 @@ final class StringListFilter extends Filter
             $parameterName = $this->getNewParameterName($query);
             $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
-            $query->getQueryBuilder()->setParameter($parameterName, '%'.serialize($item).'%');
+            $query->getQueryBuilder()->setParameter($parameterName, '%'.$item.'%');
         }
 
         if ($data->isType(ContainsOperatorType::TYPE_EQUAL)) {
