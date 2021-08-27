@@ -48,21 +48,14 @@ final class DatagridBuilder implements DatagridBuilderInterface
      */
     private $guesser;
 
-    /**
-     * @var bool
-     */
-    private $csrfTokenEnabled;
-
     public function __construct(
         FormFactoryInterface $formFactory,
         FilterFactoryInterface $filterFactory,
-        TypeGuesserInterface $guesser,
-        bool $csrfTokenEnabled = true
+        TypeGuesserInterface $guesser
     ) {
         $this->formFactory = $formFactory;
         $this->filterFactory = $filterFactory;
         $this->guesser = $guesser;
-        $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void
