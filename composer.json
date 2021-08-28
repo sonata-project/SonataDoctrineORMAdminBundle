@@ -47,6 +47,7 @@
         "twig/twig": "^2.10 || ^3.0"
     },
     "conflict": {
+        "sonata-project/admin-bundle": "<4.0.0-rc.2",
         "sonata-project/block-bundle": "<4.2",
         "sonata-project/entity-audit-bundle": ">=2.0"
     },

@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
 use SimpleThings\EntityAudit\AuditReader as SimpleThingsAuditReader;
+use SimpleThings\EntityAudit\Revision as EntityAuditRevision;
 use Sonata\AdminBundle\Model\AuditReaderInterface;
+use Sonata\AdminBundle\Model\Revision;
 
 final class AuditReader implements AuditReaderInterface
 {
@@ -39,13 +41,16 @@ final class AuditReader implements AuditReaderInterface
 
     public function findRevisionHistory(string $className, ?int $limit = 20, ?int $offset = 0): array
     {
-        return $this->auditReader->findRevisionHistory($limit, $offset);
+        return array_map(
+            [$this, 'createRevisionFromEntityAuditRevision'],
+            $this->auditReader->findRevisionHistory($limit, $offset)
+        );
     }
 
-    public function findRevision(string $className, $revisionId): ?object
+    public function findRevision(string $className, $revisionId): ?Revision
     {
         try {
-            return $this->auditReader->findRevision($revisionId);
+            return $this->createRevisionFromEntityAuditRevision($this->auditReader->findRevision($revisionId));
         } catch (\Throwable $exception) {
             return null;
         }
@@ -54,7 +59,10 @@ final class AuditReader implements AuditReaderInterface
     public function findRevisions(string $className, $id): array
     {
         try {
-            return $this->auditReader->findRevisions($className, $id);
+            return array_map(
+                [$this, 'createRevisionFromEntityAuditRevision'],
+                $this->auditReader->findRevisions($className, $id)
+            );
         } catch (\Throwable $exception) {
             return [];
         }
@@ -67,5 +75,10 @@ final class AuditReader implements AuditReaderInterface
         } catch (\Throwable $exception) {
             return [];
         }
+    }
+
+    private function createRevisionFromEntityAuditRevision(EntityAuditRevision $revision): Revision
+    {
+        return new Revision($revision->getRev(), $revision->getTimestamp(), $revision->getUsername());
     }
 }
