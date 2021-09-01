@@ -48,5 +48,6 @@ Here's one way to do it:
           ...
           App\Service\Admin\DecoratingDataSource:
               decorates: 'sonata.admin.data_source.orm'
+              arguments: ['@App\Services\Admin\DecoratingDataSource.inner']              
 
 
