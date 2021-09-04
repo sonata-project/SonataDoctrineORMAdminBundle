@@ -30,7 +30,7 @@ class NumberFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', 'asds');
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator(): void
@@ -43,7 +43,7 @@ class NumberFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilter(): void
@@ -70,6 +70,6 @@ class NumberFilterTest extends FilterTestCase
         ];
 
         $this->assertSameQuery($expected, $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 }

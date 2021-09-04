@@ -37,7 +37,7 @@ class AuditReaderTest extends TestCase
         $id = 1;
         $revision = 2;
 
-        $this->simpleThingsAuditReader->expects($this->once())->method('find')->with($className, $id, $revision);
+        $this->simpleThingsAuditReader->expects(static::once())->method('find')->with($className, $id, $revision);
 
         $this->auditReader->find($className, $id, $revision);
     }
@@ -47,7 +47,7 @@ class AuditReaderTest extends TestCase
         $limit = 20;
         $offset = 0;
 
-        $this->simpleThingsAuditReader->expects($this->once())->method('findRevisionHistory')->with($limit, $offset);
+        $this->simpleThingsAuditReader->expects(static::once())->method('findRevisionHistory')->with($limit, $offset);
 
         $this->auditReader->findRevisionHistory(null, $limit, $offset);
     }
@@ -56,7 +56,7 @@ class AuditReaderTest extends TestCase
     {
         $revision = 2;
 
-        $this->simpleThingsAuditReader->expects($this->once())->method('findRevision')->with($revision);
+        $this->simpleThingsAuditReader->expects(static::once())->method('findRevision')->with($revision);
 
         $this->auditReader->findRevision(null, $revision);
     }
@@ -66,7 +66,7 @@ class AuditReaderTest extends TestCase
         $className = 'fakeClass';
         $id = 2;
 
-        $this->simpleThingsAuditReader->expects($this->once())->method('findRevisions')->with($className, $id);
+        $this->simpleThingsAuditReader->expects(static::once())->method('findRevisions')->with($className, $id);
 
         $this->auditReader->findRevisions($className, $id);
     }
@@ -78,7 +78,7 @@ class AuditReaderTest extends TestCase
         $oldRevision = 1;
         $newRevision = 2;
 
-        $this->simpleThingsAuditReader->expects($this->once())->method('diff')
+        $this->simpleThingsAuditReader->expects(static::once())->method('diff')
             ->with($className, $id, $oldRevision, $newRevision);
 
         $this->auditReader->diff($className, $id, $oldRevision, $newRevision);

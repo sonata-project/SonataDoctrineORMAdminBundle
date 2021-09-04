@@ -59,7 +59,7 @@ class ShowBuilderTest extends TestCase
 
     public function testGetBaseList(): void
     {
-        $this->assertInstanceOf(FieldDescriptionCollection::class, $this->showBuilder->getBaseList());
+        static::assertInstanceOf(FieldDescriptionCollection::class, $this->showBuilder->getBaseList());
     }
 
     public function testAddFieldNoType(): void
@@ -68,8 +68,8 @@ class ShowBuilderTest extends TestCase
 
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => ClassMetadata::MANY_TO_ONE]);
 
-        $this->admin->expects($this->once())->method('attachAdminClass');
-        $this->admin->expects($this->once())->method('addShowFieldDescription');
+        $this->admin->expects(static::once())->method('attachAdminClass');
+        $this->admin->expects(static::once())->method('addShowFieldDescription');
 
         $typeGuess->method('getType')->willReturn('fakeType');
 
@@ -88,7 +88,7 @@ class ShowBuilderTest extends TestCase
     {
         $fieldDescription = new FieldDescription('FakeName');
 
-        $this->admin->expects($this->once())->method('addShowFieldDescription');
+        $this->admin->expects(static::once())->method('addShowFieldDescription');
         $this->modelManager->method('hasMetadata')->willReturn(false);
 
         $this->showBuilder->addField(
@@ -113,14 +113,14 @@ class ShowBuilderTest extends TestCase
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => $mappingType]);
         $fieldDescription->setType($type);
 
-        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects(static::once())->method('attachAdminClass');
         // NEXT_MAJOR: Remove the next 2 lines.
         $this->modelManager->method('hasMetadata')->willReturn(true);
         $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
 
         $this->showBuilder->fixFieldDescription($this->admin, $fieldDescription);
 
-        $this->assertSame($template, $fieldDescription->getTemplate());
+        static::assertSame($template, $fieldDescription->getTemplate());
     }
 
     public function fixFieldDescriptionData(): iterable

@@ -86,8 +86,8 @@ final class DatagridBuilderTest extends TestCase
 
         $datagrid = $this->datagridBuilder->getBaseDatagrid($this->admin);
 
-        $this->assertInstanceOf(Datagrid::class, $datagrid);
-        $this->assertInstanceOf($pager, $datagrid->getPager());
+        static::assertInstanceOf(Datagrid::class, $datagrid);
+        static::assertInstanceOf($pager, $datagrid->getPager());
     }
 
     public function getBaseDatagridData()
@@ -129,10 +129,10 @@ final class DatagridBuilderTest extends TestCase
 
         $fieldDescription = new FieldDescription('test', [], ['type' => ClassMetadata::ONE_TO_MANY]);
 
-        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects(static::once())->method('attachAdminClass');
         // NEXT_MAJOR: Remove the next 2 lines.
         $this->modelManager->method('hasMetadata')->willReturn(true);
-        $this->modelManager->expects($this->once())->method('getParentMetadataForProperty')
+        $this->modelManager->expects(static::once())->method('getParentMetadataForProperty')
             ->willReturn([$classMetadata, 'someField', []]);
 
         $this->datagridBuilder->fixFieldDescription($this->admin, $fieldDescription);
@@ -145,17 +145,17 @@ final class DatagridBuilderTest extends TestCase
 
         $fieldDescription = new FieldDescription('test');
 
-        $this->admin->expects($this->once())->method('addFilterFieldDescription');
+        $this->admin->expects(static::once())->method('addFilterFieldDescription');
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
         $this->typeGuesser->method('guess')->willReturn($guessType);
         // NEXT_MAJOR: Remove the next line.
-        $this->modelManager->expects($this->once())->method('hasMetadata')->willReturn(false);
+        $this->modelManager->expects(static::once())->method('hasMetadata')->willReturn(false);
         $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());
 
         $guessType->method('getOptions')->willReturn(['name' => 'value']);
         $guessType->method('getType')->willReturn(ModelAutocompleteFilter::class);
-        $datagrid->method('addFilter')->with($this->isInstanceOf(ModelAutocompleteFilter::class));
+        $datagrid->method('addFilter')->with(static::isInstanceOf(ModelAutocompleteFilter::class));
 
         $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription, $this->admin);
     }

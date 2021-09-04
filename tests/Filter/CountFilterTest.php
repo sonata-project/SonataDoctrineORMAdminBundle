@@ -30,7 +30,7 @@ class CountFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', 'asds');
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator(): void
@@ -43,7 +43,7 @@ class CountFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => 'foo']);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     /**
@@ -59,7 +59,7 @@ class CountFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => $type, 'value' => 42]);
 
         $this->assertSameQuery(['GROUP BY o', $expected], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function filterDataProvider(): array

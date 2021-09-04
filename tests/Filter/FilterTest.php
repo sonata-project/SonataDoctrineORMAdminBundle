@@ -47,17 +47,17 @@ final class FilterTest extends FilterTestCase
 
     public function testFieldDescription(): void
     {
-        $this->assertSame(['option1' => 2], $this->filter->getDefaultOptions());
-        $this->assertNull($this->filter->getOption('1'));
+        static::assertSame(['option1' => 2], $this->filter->getDefaultOptions());
+        static::assertNull($this->filter->getOption('1'));
 
         $this->filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
 
-        $this->assertSame(2, $this->filter->getOption('option1'));
-        $this->assertNull($this->filter->getOption('foo'));
-        $this->assertSame('bar', $this->filter->getOption('foo', 'bar'));
+        static::assertSame(2, $this->filter->getOption('option1'));
+        static::assertNull($this->filter->getOption('foo'));
+        static::assertSame('bar', $this->filter->getOption('foo', 'bar'));
 
-        $this->assertSame('field_name', $this->filter->getName());
-        $this->assertSame(['class' => 'FooBar'], $this->filter->getFieldOptions());
+        static::assertSame('field_name', $this->filter->getName());
+        static::assertSame(['class' => 'FooBar'], $this->filter->getFieldOptions());
     }
 
     public function testExceptionOnEmptyFieldName(): void
@@ -69,7 +69,7 @@ final class FilterTest extends FilterTestCase
 
     public function testIsActive(): void
     {
-        $this->assertFalse($this->filter->isActive());
+        static::assertFalse($this->filter->isActive());
     }
 
     /**
@@ -98,7 +98,7 @@ final class FilterTest extends FilterTestCase
             )
             ->setParameter('parameter_1', 3);
 
-        $this->assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
+        static::assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
@@ -116,7 +116,7 @@ final class FilterTest extends FilterTestCase
         // More custom conditions set after the filters.
         $queryBuilder->andWhere($queryBuilder->expr()->eq(7, 8));
 
-        $this->assertSame($expected, $queryBuilder->getDQL());
+        static::assertSame($expected, $queryBuilder->getDQL());
     }
 
     public function orExpressionProvider(): iterable

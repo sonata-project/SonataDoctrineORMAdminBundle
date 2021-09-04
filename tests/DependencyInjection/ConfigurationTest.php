@@ -25,17 +25,17 @@ class ConfigurationTest extends TestCase
     {
         $config = $this->process([]);
 
-        $this->assertNull($config['entity_manager']);
-        $this->assertTrue($config['audit']['force']);
-        $this->assertContains(
+        static::assertNull($config['entity_manager']);
+        static::assertTrue($config['audit']['force']);
+        static::assertContains(
             '@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig',
             $config['templates']['form']
         );
-        $this->assertContains(
+        static::assertContains(
             '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig',
             $config['templates']['filter']
         );
-        $this->assertArrayNotHasKey('types', $config['templates']);
+        static::assertArrayNotHasKey('types', $config['templates']);
     }
 
     public function testAuditForceWithInvalidFormat(): void
@@ -66,9 +66,9 @@ class ConfigurationTest extends TestCase
             ],
         ]]);
 
-        $this->assertSame(['form.twig.html', 'form_extra.twig.html'], $config['templates']['form']);
-        $this->assertSame(['filter.twig.html'], $config['templates']['filter']);
-        $this->assertSame([
+        static::assertSame(['form.twig.html', 'form_extra.twig.html'], $config['templates']['form']);
+        static::assertSame(['filter.twig.html'], $config['templates']['filter']);
+        static::assertSame([
             'list' => [
                 'array' => 'list_array.twig.html',
             ],

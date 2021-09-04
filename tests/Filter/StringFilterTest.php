@@ -23,11 +23,11 @@ class StringFilterTest extends FilterTestCase
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', []);
-        $this->assertTrue($filter->isSearchEnabled());
+        static::assertTrue($filter->isSearchEnabled());
 
         $filter = new StringFilter();
         $filter->initialize('field_name', ['global_search' => false]);
-        $this->assertFalse($filter->isSearchEnabled());
+        static::assertFalse($filter->isSearchEnabled());
     }
 
     public function testEmpty(): void
@@ -42,7 +42,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', []);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function getValues(): iterable
@@ -76,10 +76,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -99,10 +99,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -122,10 +122,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => sprintf('%s%%', $value)], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -145,10 +145,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s', $value)], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -168,10 +168,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value) {
             $this->assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value)], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -191,10 +191,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value || $allowEmpty) {
             $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -214,10 +214,10 @@ class StringFilterTest extends FilterTestCase
         if ('' !== (string) $value || $allowEmpty) {
             $this->assertSameQuery(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $proxyQuery);
             $this->assertSameQueryParameters(['field_name_0' => (string) ($value ?? '')], $proxyQuery);
-            $this->assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             $this->assertSameQuery([], $proxyQuery);
-            $this->assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -251,7 +251,7 @@ class StringFilterTest extends FilterTestCase
             'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
         ], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 'asd'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**
@@ -274,7 +274,7 @@ class StringFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'FooBar', 'type' => $operatorType]);
         $this->assertSameQuery([$expectedQuery], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => $expectedParameter], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function caseSensitiveDataProvider(): iterable

@@ -26,7 +26,7 @@ class AddTemplatesCompilerPassTest extends TestCase
 
         // NEXT_MAJOR: Remove this.
         $container
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getParameter')
             ->with('sonata_doctrine_orm_admin.templates')
             ->willReturn([
@@ -35,14 +35,14 @@ class AddTemplatesCompilerPassTest extends TestCase
             ]);
 
         $container
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('findTaggedServiceIds')
             ->willReturn(['my.admin' => [['manager_type' => 'orm']]]);
 
         $definition = new Definition(null);
 
         $container
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('getDefinition')
             ->willReturn($definition);
 
@@ -60,6 +60,6 @@ class AddTemplatesCompilerPassTest extends TestCase
 //            ['setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]],
         ];
 
-        $this->assertSame($expected, $definition->getMethodCalls());
+        static::assertSame($expected, $definition->getMethodCalls());
     }
 }

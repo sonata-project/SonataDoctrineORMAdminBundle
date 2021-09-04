@@ -78,7 +78,7 @@ class FilterTypeGuesserTest extends TestCase
 
         $result = $this->guesser->guessType($class, $property, $this->modelManager);
 
-        $this->assertFalse($result);
+        static::assertFalse($result);
     }
 
     /**
@@ -110,15 +110,15 @@ class FilterTypeGuesserTest extends TestCase
 
         $options = $result->getOptions();
 
-        $this->assertSame(ModelFilter::class, $result->getType());
-        $this->assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
-        $this->assertSame($parentAssociation, $options['parent_association_mappings']);
-        $this->assertSame(ClassMetadata::MANY_TO_ONE, $options['mapping_type']);
-        $this->assertSame(EqualOperatorType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
-        $this->assertSame($fieldName, $options['field_name']);
-        $this->assertSame(EntityType::class, $options['field_type']);
-        $this->assertSame($targetEntity, $options['field_options']['class']);
+        static::assertSame(ModelFilter::class, $result->getType());
+        static::assertSame(Guess::HIGH_CONFIDENCE, $result->getConfidence());
+        static::assertSame($parentAssociation, $options['parent_association_mappings']);
+        static::assertSame(ClassMetadata::MANY_TO_ONE, $options['mapping_type']);
+        static::assertSame(EqualOperatorType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
+        static::assertSame($fieldName, $options['field_name']);
+        static::assertSame(EntityType::class, $options['field_type']);
+        static::assertSame($targetEntity, $options['field_options']['class']);
     }
 
     /**
@@ -147,14 +147,14 @@ class FilterTypeGuesserTest extends TestCase
 
         $options = $result->getOptions();
 
-        $this->assertSame($resultType, $result->getType());
-        $this->assertSame($type, $options['field_name']);
-        $this->assertSame($confidence, $result->getConfidence());
+        static::assertSame($resultType, $result->getType());
+        static::assertSame($type, $options['field_name']);
+        static::assertSame($confidence, $result->getConfidence());
 
         if ($fieldType) {
-            $this->assertSame($fieldType, $options['field_type']);
+            static::assertSame($fieldType, $options['field_type']);
         } else {
-            $this->assertArrayNotHasKey('field_type', $options);
+            static::assertArrayNotHasKey('field_type', $options);
         }
     }
 
@@ -279,9 +279,9 @@ class FilterTypeGuesserTest extends TestCase
 
         $guess = $this->guesser->guess($fieldDescription);
 
-        $this->assertSame($expectedType, $guess->getType());
-        $this->assertSame($expectedOptions, $guess->getOptions());
-        $this->assertSame($expectedConfidence, $guess->getConfidence());
+        static::assertSame($expectedType, $guess->getType());
+        static::assertSame($expectedOptions, $guess->getOptions());
+        static::assertSame($expectedConfidence, $guess->getConfidence());
     }
 
     public function guessDataProvider(): iterable

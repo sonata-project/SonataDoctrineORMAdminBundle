@@ -26,8 +26,8 @@ class BooleanFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(HiddenType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
+        static::assertSame(HiddenType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
     }
 
     public function testFilterEmpty(): void
@@ -46,7 +46,7 @@ class BooleanFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', [null, 'test']);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilterNo(): void
@@ -60,7 +60,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterNoWithTreatNullAsTrue(): void
@@ -77,7 +77,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterNoWithTreatNullAsFalse(): void
@@ -94,7 +94,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IS NULL OR alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterYes(): void
@@ -108,7 +108,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 1], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterYesWithTreatNullAsFalse(): void
@@ -125,7 +125,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 1], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterYesWithTreatNullAsTrue(): void
@@ -142,7 +142,7 @@ class BooleanFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IS NULL OR alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 1], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterArray(): void
@@ -155,7 +155,7 @@ class BooleanFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
         $this->assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterArrayWithTreatNullAsFalse(): void
@@ -171,7 +171,7 @@ class BooleanFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
         $this->assertSameQuery(['WHERE alias.field IS NULL OR alias.field IN ("0")'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterArrayWithTreatNullAsTrue(): void
@@ -187,6 +187,6 @@ class BooleanFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['type' => null, 'value' => [BooleanType::TYPE_NO]]);
 
         $this->assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 }

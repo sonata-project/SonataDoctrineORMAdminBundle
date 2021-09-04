@@ -30,7 +30,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', '');
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilteringWithNullReturnsArraysThatContainNull(): void
@@ -44,7 +44,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => null, 'type' => null]);
         $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '%N;%'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**
@@ -61,7 +61,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'asd', 'type' => $type]);
         $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '%s:3:"asd";%'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function containsDataProvider(): iterable
@@ -81,7 +81,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_NOT_CONTAINS]);
         $this->assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '%s:3:"asd";%'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testEquals(): void
@@ -95,7 +95,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => 'asd', 'type' => ContainsOperatorType::TYPE_EQUAL]);
         $this->assertSameQuery(['WHERE alias.field LIKE :field_name_0 AND alias.field LIKE \'a:1:%\''], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '%s:3:"asd";%'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**
@@ -116,7 +116,7 @@ class StringListFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value, 'type' => $type]);
         $this->assertSameQuery($query, $proxyQuery);
         $this->assertSameQueryParameters($parameters, $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function multipleValuesDataProvider(): iterable

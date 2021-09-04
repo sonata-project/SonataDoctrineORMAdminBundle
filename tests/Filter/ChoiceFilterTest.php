@@ -25,8 +25,8 @@ class ChoiceFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(EqualOperatorType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
+        static::assertSame(EqualOperatorType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
     }
 
     public function testFilterEmpty(): void
@@ -41,7 +41,7 @@ class ChoiceFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', []);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilterArray(): void
@@ -55,7 +55,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -63,7 +63,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field NOT IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterArrayWithNullValue(): void
@@ -77,7 +77,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -85,7 +85,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field NOT IN :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterScalar(): void
@@ -99,7 +99,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '1'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -107,7 +107,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field != :field_name_0 OR alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => '1'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterNull(): void
@@ -121,7 +121,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IS NULL'], $proxyQuery);
         $this->assertSameQueryParameters([], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -129,7 +129,7 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field IS NOT NULL'], $proxyQuery);
         $this->assertSameQueryParameters([], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterZero(): void
@@ -143,6 +143,6 @@ class ChoiceFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
         $this->assertSameQueryParameters(['field_name_0' => 0], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 }

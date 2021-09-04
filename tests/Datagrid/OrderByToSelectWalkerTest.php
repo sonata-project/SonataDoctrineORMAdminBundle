@@ -57,7 +57,7 @@ final class OrderByToSelectWalkerTest extends TestCase
         $query = $qb->getQuery();
         $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
 
-        $this->assertSame(
+        static::assertSame(
             'SELECT DISTINCT s0_.store_id AS sclr_0, s0_.product_id AS sclr_1, s0_.name AS name_2 FROM StoreProduct s0_ ORDER BY s0_.name ASC, s0_.product_id DESC',
             $query->getSQL()
         );
@@ -75,7 +75,7 @@ final class OrderByToSelectWalkerTest extends TestCase
         $query = $qb->getQuery();
         $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
 
-        $this->assertSame(
+        static::assertSame(
             'SELECT DISTINCT s0_.name AS name_0, s0_.store_id AS store_id_1, s0_.product_id AS product_id_2 FROM StoreProduct s0_ ORDER BY s0_.name ASC, s0_.product_id DESC',
             $query->getSQL()
         );
@@ -92,7 +92,7 @@ final class OrderByToSelectWalkerTest extends TestCase
         $query = $qb->getQuery();
         $query->setHint(Query::HINT_CUSTOM_TREE_WALKERS, [OrderByToSelectWalker::class]);
 
-        $this->assertSame(
+        static::assertSame(
             'SELECT DISTINCT m0_.id AS id_0, m0_.tree_root AS sclr_1, m0_.lft AS lft_2 FROM Menu m0_ ORDER BY m0_.tree_root ASC, m0_.lft ASC',
             $query->getSQL()
         );
