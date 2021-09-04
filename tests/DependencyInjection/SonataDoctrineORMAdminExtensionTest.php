@@ -38,7 +38,7 @@ class SonataDoctrineORMAdminExtensionTest extends TestCase
 
         $definition = $this->configuration->getDefinition('sonata.admin.entity_manager');
 
-        $this->assertNotNull($definition->getFactory());
-        $this->assertNotFalse($this->configuration->getParameter('sonata_doctrine_orm_admin.audit.force'));
+        static::assertNotNull($definition->getFactory());
+        static::assertNotFalse($this->configuration->getParameter('sonata_doctrine_orm_admin.audit.force'));
     }
 }

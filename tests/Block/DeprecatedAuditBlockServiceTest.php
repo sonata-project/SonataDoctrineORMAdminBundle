@@ -36,7 +36,7 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
     protected function setUp(): void
     {
         if (!property_exists($this, 'templating')) {
-            $this->markTestSkipped(sprintf(
+            static::markTestSkipped(sprintf(
                 '%s requires sonata-project/block-bundle < 3.18.4.',
                 __CLASS__
             ));
@@ -75,10 +75,10 @@ class DeprecatedAuditBlockServiceTest extends BlockServiceTestCase
 
         $this->blockService->execute($blockContext->reveal());
 
-        $this->assertSame('template', $this->templating->view);
-        $this->assertIsArray($this->templating->parameters['settings']);
-        $this->assertSame($revision, $this->templating->parameters['revisions'][0]['revision']);
-        $this->assertSame($block, $this->templating->parameters['block']);
+        static::assertSame('template', $this->templating->view);
+        static::assertIsArray($this->templating->parameters['settings']);
+        static::assertSame($revision, $this->templating->parameters['revisions'][0]['revision']);
+        static::assertSame($block, $this->templating->parameters['block']);
     }
 
     /**

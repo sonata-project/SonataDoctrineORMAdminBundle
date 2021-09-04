@@ -36,7 +36,7 @@ final class EmptyFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', null);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     /**
@@ -56,7 +56,7 @@ final class EmptyFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => $value]);
 
         $this->assertSameQuery([$expectedQuery], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testRenderSettings(): void
@@ -67,7 +67,7 @@ final class EmptyFilterTest extends FilterTestCase
         ]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(BooleanType::class, $options['field_type']);
+        static::assertSame(BooleanType::class, $options['field_type']);
     }
 
     public function valueDataProvider(): array

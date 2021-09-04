@@ -49,14 +49,14 @@ class ListBuilderTest extends TestCase
 
     public function testAddListActionField(): void
     {
-        $this->admin->expects($this->once())->method('addListFieldDescription');
+        $this->admin->expects(static::once())->method('addListFieldDescription');
 
         $fieldDescription = new FieldDescription('foo');
 
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, 'actions', $fieldDescription, $this->admin);
 
-        $this->assertSame(
+        static::assertSame(
             '@SonataAdmin/CRUD/list__action.html.twig',
             $list->get('foo')->getTemplate(),
             'Custom list action field has a default list action template assigned'
@@ -65,7 +65,7 @@ class ListBuilderTest extends TestCase
 
     public function testCorrectFixedActionsFieldType(): void
     {
-        $this->admin->expects($this->once())->method('addListFieldDescription');
+        $this->admin->expects(static::once())->method('addListFieldDescription');
         $this->typeGuesser->method('guess')->willReturn(new TypeGuess('_action', [], Guess::LOW_CONFIDENCE));
 
         $fieldDescription = new FieldDescription('_action');
@@ -74,13 +74,13 @@ class ListBuilderTest extends TestCase
         $list = $this->listBuilder->getBaseList();
         $this->listBuilder->addField($list, null, $fieldDescription, $this->admin);
 
-        $this->assertSame(
+        static::assertSame(
             'actions',
             $list->get('_action')->getType(),
             'Standard list _action field has "actions" type'
         );
 
-        $this->assertSame(
+        static::assertSame(
             '@SonataAdmin/CRUD/list__action_test.html.twig',
             $fieldDescription->getOption('actions')['test']['template']
         );
@@ -96,7 +96,7 @@ class ListBuilderTest extends TestCase
         $classMetadata->fieldMappings = [2 => [1 => 'test', 'type' => 'string']];
         $classMetadata->associationMappings = [2 => ['fieldName' => 'fake']];
 
-        $this->admin->expects($this->once())->method('attachAdminClass');
+        $this->admin->expects(static::once())->method('attachAdminClass');
         // NEXT_MAJOR: Remove the next 2 lines.
         $this->modelManager->method('hasMetadata')->willReturn(true);
         $this->modelManager->method('getParentMetadataForProperty')->willReturn([$classMetadata, 2, []]);
@@ -107,7 +107,7 @@ class ListBuilderTest extends TestCase
 
         $this->listBuilder->fixFieldDescription($this->admin, $fieldDescription);
 
-        $this->assertSame($template, $fieldDescription->getTemplate());
+        static::assertSame($template, $fieldDescription->getTemplate());
     }
 
     public function fixFieldDescriptionData()

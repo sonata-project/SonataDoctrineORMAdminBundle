@@ -30,8 +30,8 @@ class CallbackFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        $this->assertSame(HiddenType::class, $options['operator_type']);
-        $this->assertSame([], $options['operator_options']);
+        static::assertSame(HiddenType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
     }
 
     public function testFilterClosure(): void
@@ -52,7 +52,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterMethod(): void
@@ -68,7 +68,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function customCallback(ProxyQuery $query, string $alias, string $field, FilterData $data): bool
@@ -109,7 +109,7 @@ class CallbackFilterTest extends FilterTestCase
 
         $this->assertSameQuery(['WHERE CUSTOM QUERY o.field_name_test'], $proxyQuery);
         $this->assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**
@@ -162,7 +162,7 @@ class CallbackFilterTest extends FilterTestCase
         $this->expectDeprecation('Not adding "Sonata\AdminBundle\Filter\Model\FilterData" as type declaration for argument 4 is deprecated since sonata-project/doctrine-orm-admin-bundle 3.34 and the argument will be a "Sonata\AdminBundle\Filter\Model\FilterData" instance in version 4.0.');
 
         $filter->apply($proxyQuery, ['value' => 'myValue']);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**

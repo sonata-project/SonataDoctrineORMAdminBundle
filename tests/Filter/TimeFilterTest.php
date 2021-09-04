@@ -34,11 +34,11 @@ class TimeFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', ['value' => '']);
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testGetType(): void
     {
-        $this->assertSame(TimeType::class, (new TimeFilter())->getFieldType());
+        static::assertSame(TimeType::class, (new TimeFilter())->getFieldType());
     }
 }

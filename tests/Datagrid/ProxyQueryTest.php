@@ -85,7 +85,7 @@ class ProxyQueryTest extends TestCase
 
         $result = iterator_to_array($pq->execute());
 
-        $this->assertSame(2, $result[0]['id']);
+        static::assertSame(2, $result[0]['id']);
     }
 
     public function testSortOrderValidatesItsInput(): void
@@ -117,7 +117,7 @@ class ProxyQueryTest extends TestCase
     {
         $query = new ProxyQuery($this->em->createQueryBuilder());
         $query->setSortOrder($validValue);
-        $this->assertSame($validValue, $query->getSortOrder());
+        static::assertSame($validValue, $query->getSortOrder());
     }
 
     public function testExecuteWithOrderBy(): void
@@ -136,7 +136,7 @@ class ProxyQueryTest extends TestCase
         );
         $query->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['id' => 1],
                 ['id' => 2],
@@ -150,7 +150,7 @@ class ProxyQueryTest extends TestCase
         );
         $query2->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
 
-        $this->assertSame(
+        static::assertSame(
             [
                 ['id' => 2],
                 ['id' => 1],

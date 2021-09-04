@@ -33,12 +33,12 @@ class DateFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', '');
 
         $this->assertSameQuery([], $proxyQuery);
-        $this->assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testGetType(): void
     {
-        $this->assertSame(DateType::class, (new DateFilter())->getFieldType());
+        static::assertSame(DateType::class, (new DateFilter())->getFieldType());
     }
 
     public function testFilterRecordsWholeDay(): void
@@ -53,10 +53,10 @@ class DateFilterTest extends FilterTestCase
             'WHERE alias.field >= :field_name_0',
             'WHERE alias.field < :field_name_1',
         ], $proxyQuery);
-        $this->assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
 
         $builder = $proxyQuery->getQueryBuilder();
         \assert($builder instanceof TestQueryBuilder);
-        $this->assertCount(2, $builder->queryParameters);
+        static::assertCount(2, $builder->queryParameters);
     }
 }

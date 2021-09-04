@@ -51,25 +51,25 @@ class AuditBlockServiceTest extends BlockServiceTestCase
     {
         $blockContext = $this->createMock(BlockContextInterface::class);
 
-        $blockContext->expects($this->once())->method('getBlock')->willReturn($block = new Block());
-        $blockContext->expects($this->once())->method('getSetting')->with('limit')->willReturn($limit = 10);
+        $blockContext->expects(static::once())->method('getBlock')->willReturn($block = new Block());
+        $blockContext->expects(static::once())->method('getSetting')->with('limit')->willReturn($limit = 10);
 
         $this->simpleThingsAuditReader
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('findRevisionHistory')
             ->with($limit, 0)
             ->willReturn([$revision = new Revision('test', new \DateTime(), 'test')]);
 
         $this->simpleThingsAuditReader
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('findEntitiesChangedAtRevision')
             ->willReturn([]);
 
-        $blockContext->expects($this->once())->method('getTemplate')->willReturn('template');
-        $blockContext->expects($this->once())->method('getSettings')->willReturn([]);
+        $blockContext->expects(static::once())->method('getTemplate')->willReturn('template');
+        $blockContext->expects(static::once())->method('getSettings')->willReturn([]);
 
         $this->twig
-            ->expects($this->once())
+            ->expects(static::once())
             ->method('render')
             ->with('template', [
                 'block' => $block,
@@ -80,7 +80,7 @@ class AuditBlockServiceTest extends BlockServiceTestCase
 
         $response = $this->blockService->execute($blockContext);
 
-        $this->assertSame('content', $response->getContent());
+        static::assertSame('content', $response->getContent());
     }
 
     public function testDefaultSettings(): void
