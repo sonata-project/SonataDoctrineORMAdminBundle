@@ -63,9 +63,9 @@ final class FilterTypeGuesserTest extends TestCase
 
         $guess = $this->guesser->guess($fieldDescription);
 
-        self::assertSame($expectedType, $guess->getType());
-        self::assertSame($expectedOptions, $guess->getOptions());
-        self::assertSame($expectedConfidence, $guess->getConfidence());
+        static::assertSame($expectedType, $guess->getType());
+        static::assertSame($expectedOptions, $guess->getOptions());
+        static::assertSame($expectedConfidence, $guess->getConfidence());
     }
 
     /**

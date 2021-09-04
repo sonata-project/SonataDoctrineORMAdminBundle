@@ -31,30 +31,30 @@ final class FieldDescriptionTest extends TestCase
         ]);
 
         // test method shortcut
-        self::assertNull($field->getOption('template'));
-        self::assertNull($field->getOption('type'));
+        static::assertNull($field->getOption('template'));
+        static::assertNull($field->getOption('type'));
 
-        self::assertSame('foo', $field->getTemplate());
-        self::assertSame('bar', $field->getType());
+        static::assertSame('foo', $field->getTemplate());
+        static::assertSame('bar', $field->getType());
 
         // test the default value option
-        self::assertSame('default', $field->getOption('template', 'default'));
+        static::assertSame('default', $field->getOption('template', 'default'));
 
         // test the merge options
         $field->setOption('array', ['key1' => 'val1']);
         $field->mergeOption('array', ['key1' => 'key_1', 'key2' => 'key_2']);
 
-        self::assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
+        static::assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
         $field->mergeOption('non_existent', ['key1' => 'key_1', 'key2' => 'key_2']);
 
-        self::assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
+        static::assertSame(['key1' => 'key_1', 'key2' => 'key_2'], $field->getOption('array'));
 
         $field->setOption('integer', 1);
 
         try {
             $field->mergeOption('integer', []);
-            self::fail('no exception raised !!');
+            static::fail('no exception raised !!');
         } catch (\RuntimeException $e) {
         }
 
@@ -71,7 +71,7 @@ final class FieldDescriptionTest extends TestCase
             'integer' => 1,
         ];
 
-        self::assertSame($expected, $field->getOptions());
+        static::assertSame($expected, $field->getOptions());
     }
 
     public function testGetParent(): void
@@ -80,7 +80,7 @@ final class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('name');
         $field->setParent($adminMock);
 
-        self::assertSame($adminMock, $field->getParent());
+        static::assertSame($adminMock, $field->getParent());
     }
 
     public function testGetAdmin(): void
@@ -89,36 +89,36 @@ final class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('name');
         $field->setAdmin($adminMock);
 
-        self::assertSame($adminMock, $field->getAdmin());
+        static::assertSame($adminMock, $field->getAdmin());
     }
 
     public function testGetAssociationAdmin(): void
     {
         $adminMock = $this->createMock(AdminInterface::class);
-        $adminMock->expects(self::once())
+        $adminMock->expects(static::once())
             ->method('setParentFieldDescription')
-            ->with(self::isInstanceOf(FieldDescriptionInterface::class));
+            ->with(static::isInstanceOf(FieldDescriptionInterface::class));
 
         $field = new FieldDescription('name');
         $field->setAssociationAdmin($adminMock);
 
-        self::assertSame($adminMock, $field->getAssociationAdmin());
+        static::assertSame($adminMock, $field->getAssociationAdmin());
     }
 
     public function testHasAssociationAdmin(): void
     {
         $adminMock = $this->createMock(AdminInterface::class);
-        $adminMock->expects(self::once())
+        $adminMock->expects(static::once())
             ->method('setParentFieldDescription')
-            ->with(self::isInstanceOf(FieldDescriptionInterface::class));
+            ->with(static::isInstanceOf(FieldDescriptionInterface::class));
 
         $field = new FieldDescription('name');
 
-        self::assertFalse($field->hasAssociationAdmin());
+        static::assertFalse($field->hasAssociationAdmin());
 
         $field->setAssociationAdmin($adminMock);
 
-        self::assertTrue($field->hasAssociationAdmin());
+        static::assertTrue($field->hasAssociationAdmin());
     }
 
     public function testSetFieldMapping(): void
@@ -127,9 +127,9 @@ final class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription('position', [], $fieldMapping);
 
-        self::assertSame('integer', $field->getType());
-        self::assertSame('integer', $field->getMappingType());
-        self::assertSame($fieldMapping, $field->getFieldMapping());
+        static::assertSame('integer', $field->getType());
+        static::assertSame('integer', $field->getMappingType());
+        static::assertSame($fieldMapping, $field->getFieldMapping());
     }
 
     public function testSetAssociationMapping(): void
@@ -138,9 +138,9 @@ final class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription('name', [], [], $associationMapping);
 
-        self::assertSame('integer', $field->getType());
-        self::assertSame('integer', $field->getMappingType());
-        self::assertSame($associationMapping, $field->getAssociationMapping());
+        static::assertSame('integer', $field->getType());
+        static::assertSame('integer', $field->getMappingType());
+        static::assertSame($associationMapping, $field->getAssociationMapping());
     }
 
     public function testSetParentAssociationMappings(): void
@@ -149,7 +149,7 @@ final class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription('name', [], [], [], $parentAssociationMappings);
 
-        self::assertSame($parentAssociationMappings, $field->getParentAssociationMappings());
+        static::assertSame($parentAssociationMappings, $field->getParentAssociationMappings());
     }
 
     public function testSetInvalidParentAssociationMappings(): void
@@ -170,7 +170,7 @@ final class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription('position', [], [], $associationMapping);
 
-        self::assertSame(\stdClass::class, $field->getTargetModel());
+        static::assertSame(\stdClass::class, $field->getTargetModel());
     }
 
     public function testIsIdentifierFromFieldMapping(): void
@@ -183,30 +183,30 @@ final class FieldDescriptionTest extends TestCase
 
         $field = new FieldDescription('position', [], $fieldMapping);
 
-        self::assertTrue($field->isIdentifier());
+        static::assertTrue($field->isIdentifier());
     }
 
     public function testGetValue(): void
     {
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFoo'])->getMock();
-        $mockedObject->expects(self::once())->method('getFoo')->willReturn('myMethodValue');
+        $mockedObject->expects(static::once())->method('getFoo')->willReturn('myMethodValue');
 
         $field = new FieldDescription('name', ['accessor' => 'foo']);
 
-        self::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     public function testGetValueWithParentAssociationMappings(): void
     {
         $mockedSubObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFieldName'])->getMock();
-        $mockedSubObject->expects(self::once())->method('getFieldName')->willReturn('value');
+        $mockedSubObject->expects(static::once())->method('getFieldName')->willReturn('value');
 
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getSubObject'])->getMock();
-        $mockedObject->expects(self::once())->method('getSubObject')->willReturn($mockedSubObject);
+        $mockedObject->expects(static::once())->method('getSubObject')->willReturn($mockedSubObject);
 
         $field = new FieldDescription('name', [], [], [], [['fieldName' => 'subObject']], 'fieldName');
 
-        self::assertSame('value', $field->getValue($mockedObject));
+        static::assertSame('value', $field->getValue($mockedObject));
     }
 
     public function testGetValueWhenCannotRetrieve(): void
@@ -214,40 +214,40 @@ final class FieldDescriptionTest extends TestCase
         $this->expectException(NoValueException::class);
 
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
-        $mockedObject->expects(self::never())->method('myMethod')->willReturn('myMethodValue');
+        $mockedObject->expects(static::never())->method('myMethod')->willReturn('myMethodValue');
 
         $field = new FieldDescription('name');
 
-        self::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     public function testGetValueForEmbeddedObject(): void
     {
         $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
-        $mockedEmbeddedObject->expects(self::once())->method('getMyMethod')->willReturn('myMethodValue');
+        $mockedEmbeddedObject->expects(static::once())->method('getMyMethod')->willReturn('myMethodValue');
 
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
-        $mockedObject->expects(self::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
+        $mockedObject->expects(static::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
 
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.myMethod');
 
-        self::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     public function testGetValueForMultiLevelEmbeddedObject(): void
     {
         $mockedChildEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
-        $mockedChildEmbeddedObject->expects(self::once())->method('getMyMethod')->willReturn('myMethodValue');
+        $mockedChildEmbeddedObject->expects(static::once())->method('getMyMethod')->willReturn('myMethodValue');
 
         $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getChild'])->getMock();
-        $mockedEmbeddedObject->expects(self::once())->method('getChild')->willReturn($mockedChildEmbeddedObject);
+        $mockedEmbeddedObject->expects(static::once())->method('getChild')->willReturn($mockedChildEmbeddedObject);
 
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
-        $mockedObject->expects(self::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
+        $mockedObject->expects(static::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
 
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.child.myMethod');
 
-        self::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
     /**
@@ -261,7 +261,7 @@ final class FieldDescriptionTest extends TestCase
             'fieldName' => 'foo',
             'type' => $mappingType,
         ]);
-        self::assertSame($expected, $fd->describesSingleValuedAssociation());
+        static::assertSame($expected, $fd->describesSingleValuedAssociation());
     }
 
     /**
@@ -287,7 +287,7 @@ final class FieldDescriptionTest extends TestCase
             'fieldName' => 'foo',
             'type' => $mappingType,
         ]);
-        self::assertSame($expected, $fd->describesCollectionValuedAssociation());
+        static::assertSame($expected, $fd->describesCollectionValuedAssociation());
     }
 
     /**

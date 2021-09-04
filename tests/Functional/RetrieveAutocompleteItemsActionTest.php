@@ -22,19 +22,19 @@ final class RetrieveAutocompleteItemsActionTest extends BaseFunctionalTestCase
         $this->client->request(Request::METHOD_GET, '/admin/core/get-autocomplete-items?q=autocompletion&_per_page=10&_page=1&uniqid=s608eac968661e&_sonata_admin=Sonata%5CDoctrineORMAdminBundle%5CTests%5CApp%5CAdmin%5CBookWithAuthorAutocompleteAdmin&field=author');
 
         $content = $this->client->getResponse()->getContent();
-        self::assertIsString($content);
+        static::assertIsString($content);
 
         $response = json_decode($content, true);
-        self::assertIsArray($response);
+        static::assertIsArray($response);
 
-        self::assertIsArray($response['items']);
-        self::assertCount(1, $response['items']);
+        static::assertIsArray($response['items']);
+        static::assertCount(1, $response['items']);
 
         $author = reset($response['items']);
-        self::assertIsArray($author);
+        static::assertIsArray($author);
 
-        self::assertArrayHasKey('id', $author);
-        self::assertSame('autocompletion_author', $author['id']);
+        static::assertArrayHasKey('id', $author);
+        static::assertSame('autocompletion_author', $author['id']);
 
         self::assertResponseIsSuccessful();
     }

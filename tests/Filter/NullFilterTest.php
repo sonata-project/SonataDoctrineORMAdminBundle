@@ -32,7 +32,7 @@ final class NullFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         self::assertSameQuery([], $proxyQuery);
-        self::assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     /**
@@ -52,7 +52,7 @@ final class NullFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => $value]));
 
         self::assertSameQuery([$expectedQuery], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testRenderSettings(): void
@@ -63,7 +63,7 @@ final class NullFilterTest extends FilterTestCase
         ]);
         $options = $filter->getRenderSettings()[1];
 
-        self::assertSame(BooleanType::class, $options['field_type']);
+        static::assertSame(BooleanType::class, $options['field_type']);
     }
 
     /**

@@ -36,11 +36,11 @@ final class EmbeddedMappingTest extends BasePantherTestCase
         $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/create');
 
         $attributeId = $crawler->filter('.author_id')->attr('name');
-        self::assertNotNull($attributeId);
+        static::assertNotNull($attributeId);
         $attributeName = $crawler->filter('.author_name')->attr('name');
-        self::assertNotNull($attributeName);
+        static::assertNotNull($attributeName);
         $attributeAddressStreet = $crawler->filter('.author_address')->attr('name');
-        self::assertNotNull($attributeAddressStreet);
+        static::assertNotNull($attributeAddressStreet);
 
         $form = $crawler->selectButton('Create and return to list')->form();
         $form[$attributeId] = 'new_id';

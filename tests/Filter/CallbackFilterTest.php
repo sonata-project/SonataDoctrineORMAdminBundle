@@ -27,8 +27,8 @@ final class CallbackFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        self::assertSame(HiddenType::class, $options['operator_type']);
-        self::assertSame([], $options['operator_options']);
+        static::assertSame(HiddenType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
     }
 
     public function testFilterClosure(): void
@@ -49,7 +49,7 @@ final class CallbackFilterTest extends FilterTestCase
 
         self::assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         self::assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function testFilterMethod(): void
@@ -65,7 +65,7 @@ final class CallbackFilterTest extends FilterTestCase
 
         self::assertSameQuery(['WHERE CUSTOM QUERY alias.field'], $proxyQuery);
         self::assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     public function customCallback(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
@@ -106,6 +106,6 @@ final class CallbackFilterTest extends FilterTestCase
 
         self::assertSameQuery(['WHERE CUSTOM QUERY o.field_name_test'], $proxyQuery);
         self::assertSameQueryParameters(['value' => 'myValue'], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 }

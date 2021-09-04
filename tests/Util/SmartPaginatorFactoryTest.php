@@ -40,7 +40,7 @@ final class SmartPaginatorFactoryTest extends TestCase
 
         $paginator = SmartPaginatorFactory::create($proxyQuery);
 
-        self::assertSame($expected, $paginator->getFetchJoinCollection());
+        static::assertSame($expected, $paginator->getFetchJoinCollection());
     }
 
     /**
@@ -90,7 +90,7 @@ final class SmartPaginatorFactoryTest extends TestCase
 
         $paginator = SmartPaginatorFactory::create($proxyQuery);
 
-        self::assertSame($expected, $paginator->getUseOutputWalkers());
+        static::assertSame($expected, $paginator->getUseOutputWalkers());
     }
 
     /**
@@ -149,8 +149,8 @@ final class SmartPaginatorFactoryTest extends TestCase
 
         SmartPaginatorFactory::create($proxyQuery);
 
-        self::assertSame($hasHint, $query->hasHint(CountWalker::HINT_DISTINCT));
-        self::assertSame($expected, $query->getHint(CountWalker::HINT_DISTINCT));
+        static::assertSame($hasHint, $query->hasHint(CountWalker::HINT_DISTINCT));
+        static::assertSame($expected, $query->getHint(CountWalker::HINT_DISTINCT));
     }
 
     /**
