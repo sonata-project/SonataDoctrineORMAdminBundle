@@ -26,8 +26,8 @@ final class ClassFilterTest extends FilterTestCase
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
         $options = $filter->getRenderSettings()[1];
 
-        self::assertSame(EqualOperatorType::class, $options['operator_type']);
-        self::assertSame([], $options['operator_options']);
+        static::assertSame(EqualOperatorType::class, $options['operator_type']);
+        static::assertSame([], $options['operator_options']);
     }
 
     public function testFilterEmpty(): void
@@ -40,7 +40,7 @@ final class ClassFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => '']));
 
         self::assertSameQuery([], $proxyQuery);
-        self::assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilterInvalidOperator(): void
@@ -53,7 +53,7 @@ final class ClassFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => 42]));
 
         self::assertSameQuery([], $proxyQuery);
-        self::assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     public function testFilter(): void
@@ -74,6 +74,6 @@ final class ClassFilterTest extends FilterTestCase
         ];
 
         self::assertSameQuery($expected, $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 }

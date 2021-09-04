@@ -25,6 +25,6 @@ final class SimplePagerTest extends BaseFunctionalTestCase
 
         $crawlerWithSimplePager = $this->client->request(Request::METHOD_GET, '/admin/author-with-simple-pager/list');
 
-        self::assertCount($numberOfAuthors, $crawlerWithSimplePager->filter('.js-author-item'));
+        static::assertCount($numberOfAuthors, $crawlerWithSimplePager->filter('.js-author-item'));
     }
 }

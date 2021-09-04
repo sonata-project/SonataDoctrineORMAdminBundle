@@ -30,7 +30,7 @@ final class PagerTest extends TestCase
         $iterator = new \ArrayIterator([new \stdClass()]);
 
         $paginator = $this->createMock(Paginator::class);
-        $paginator->expects(self::once())->method('getIterator')->willReturn($iterator);
+        $paginator->expects(static::once())->method('getIterator')->willReturn($iterator);
 
         $pq = $this->createMock(ProxyQueryInterface::class);
         $pq->method('execute')->willReturn($paginator);
@@ -38,7 +38,7 @@ final class PagerTest extends TestCase
         $pager = new Pager();
         $pager->setQuery($pq);
 
-        self::assertSame($iterator, $pager->getCurrentPageResults());
+        static::assertSame($iterator, $pager->getCurrentPageResults());
     }
 
     /**
@@ -72,6 +72,6 @@ final class PagerTest extends TestCase
         $pager->setQuery($pq);
         $pager->init();
 
-        self::assertSame(0, $pager->countResults());
+        static::assertSame(0, $pager->countResults());
     }
 }

@@ -47,18 +47,18 @@ final class DataSourceTest extends TestCase
             ->getMock();
         $query = new Query($em);
 
-        $queryBuilder->expects(self::once())->method('distinct');
-        $queryBuilder->expects(self::once())->method('getRootAliases')->willReturn(['o', 'a', 'e']);
-        $queryBuilder->expects(self::once())->method('select')->with('o');
+        $queryBuilder->expects(static::once())->method('distinct');
+        $queryBuilder->expects(static::once())->method('getRootAliases')->willReturn(['o', 'a', 'e']);
+        $queryBuilder->expects(static::once())->method('select')->with('o');
 
         $proxyQuery = $this->createMock(ProxyQueryInterface::class);
 
         $proxyQuery->method('getQueryBuilder')->willReturn($queryBuilder);
         $proxyQuery->method('getDoctrineQuery')->willReturn($query);
-        $proxyQuery->expects(self::once())->method('setFirstResult')->with(null);
-        $proxyQuery->expects(self::once())->method('setMaxResults')->with(null);
+        $proxyQuery->expects(static::once())->method('setFirstResult')->with(null);
+        $proxyQuery->expects(static::once())->method('setMaxResults')->with(null);
 
         $iterator = $this->dataSource->createIterator($proxyQuery, []);
-        self::assertInstanceOf(DoctrineORMQuerySourceIterator::class, $iterator);
+        static::assertInstanceOf(DoctrineORMQuerySourceIterator::class, $iterator);
     }
 }

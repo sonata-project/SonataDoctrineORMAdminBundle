@@ -24,11 +24,11 @@ final class StringFilterTest extends FilterTestCase
     {
         $filter = new StringFilter();
         $filter->initialize('field_name', []);
-        self::assertTrue($filter->isSearchEnabled());
+        static::assertTrue($filter->isSearchEnabled());
 
         $filter = new StringFilter();
         $filter->initialize('field_name', ['global_search' => false]);
-        self::assertFalse($filter->isSearchEnabled());
+        static::assertFalse($filter->isSearchEnabled());
     }
 
     public function testEmpty(): void
@@ -41,7 +41,7 @@ final class StringFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
 
         self::assertSameQuery([], $proxyQuery);
-        self::assertFalse($filter->isActive());
+        static::assertFalse($filter->isActive());
     }
 
     /**
@@ -90,10 +90,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -113,10 +113,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -136,10 +136,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => sprintf('%s%%', $value ?? '')], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -159,10 +159,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field LIKE :field_name_0'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => sprintf('%%%s', $value ?? '')], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -182,10 +182,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field NOT LIKE :field_name_0 OR alias.field IS NULL'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => sprintf('%%%s%%', $value ?? '')], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -205,10 +205,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field = :field_name_0'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => $value ?? ''], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -228,10 +228,10 @@ final class StringFilterTest extends FilterTestCase
         if ($shouldBeActive) {
             self::assertSameQuery(['WHERE alias.field <> :field_name_0 OR alias.field IS NULL'], $proxyQuery);
             self::assertSameQueryParameters(['field_name_0' => $value ?? ''], $proxyQuery);
-            self::assertTrue($filter->isActive());
+            static::assertTrue($filter->isActive());
         } else {
             self::assertSameQuery([], $proxyQuery);
-            self::assertFalse($filter->isActive());
+            static::assertFalse($filter->isActive());
         }
     }
 
@@ -265,7 +265,7 @@ final class StringFilterTest extends FilterTestCase
             'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping.field_name = :field_name_0',
         ], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => 'asd'], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**
@@ -284,7 +284,7 @@ final class StringFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'FooBar', 'type' => $operatorType]));
         self::assertSameQuery([$expectedQuery], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => $expectedParameter], $proxyQuery);
-        self::assertTrue($filter->isActive());
+        static::assertTrue($filter->isActive());
     }
 
     /**

@@ -45,7 +45,7 @@ final class AuditReaderTest extends TestCase
         $id = 1;
         $revision = 2;
 
-        $this->simpleThingsAuditReader->expects(self::once())->method('find')->with($className, $id, $revision);
+        $this->simpleThingsAuditReader->expects(static::once())->method('find')->with($className, $id, $revision);
 
         $this->auditReader->find($className, $id, $revision);
     }
@@ -57,12 +57,12 @@ final class AuditReaderTest extends TestCase
         $revision = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('find')
             ->with($className, $id, $revision)
             ->willThrowException(new \Exception());
 
-        self::assertNull($this->auditReader->find($className, $id, $revision));
+        static::assertNull($this->auditReader->find($className, $id, $revision));
     }
 
     public function testFindRevisionHistory(): void
@@ -71,7 +71,7 @@ final class AuditReaderTest extends TestCase
         $offset = 0;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('findRevisionHistory')
             ->with($limit, $offset)
             ->willReturn([]);
@@ -83,7 +83,7 @@ final class AuditReaderTest extends TestCase
     {
         $revision = 2;
 
-        $this->simpleThingsAuditReader->expects(self::once())->method('findRevision')->with($revision);
+        $this->simpleThingsAuditReader->expects(static::once())->method('findRevision')->with($revision);
 
         $this->auditReader->findRevision(\stdClass::class, $revision);
     }
@@ -93,12 +93,12 @@ final class AuditReaderTest extends TestCase
         $revision = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('findRevision')
             ->with($revision)
             ->willThrowException(new \Exception());
 
-        self::assertNull($this->auditReader->findRevision(\stdClass::class, $revision));
+        static::assertNull($this->auditReader->findRevision(\stdClass::class, $revision));
     }
 
     public function testFindRevisions(): void
@@ -107,7 +107,7 @@ final class AuditReaderTest extends TestCase
         $id = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('findRevisions')
             ->with($className, $id)
             ->willReturn([]);
@@ -121,12 +121,12 @@ final class AuditReaderTest extends TestCase
         $id = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('findRevisions')
             ->with($className, $id)
             ->willThrowException(new \Exception());
 
-        self::assertSame([], $this->auditReader->findRevisions($className, $id));
+        static::assertSame([], $this->auditReader->findRevisions($className, $id));
     }
 
     public function testDiff(): void
@@ -137,7 +137,7 @@ final class AuditReaderTest extends TestCase
         $newRevision = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('diff')
             ->with($className, $id, $oldRevision, $newRevision)
             ->willReturn([]);
@@ -153,11 +153,11 @@ final class AuditReaderTest extends TestCase
         $newRevision = 2;
 
         $this->simpleThingsAuditReader
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('diff')
             ->with($className, $id, $oldRevision, $newRevision)
             ->willThrowException(new \Exception());
 
-        self::assertSame([], $this->auditReader->diff($className, $id, $oldRevision, $newRevision));
+        static::assertSame([], $this->auditReader->diff($className, $id, $oldRevision, $newRevision));
     }
 }

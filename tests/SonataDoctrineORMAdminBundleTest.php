@@ -29,10 +29,10 @@ class SonataDoctrineORMAdminBundleTest extends TestCase
     {
         $containerBuilder = $this->createMock(ContainerBuilder::class);
 
-        $containerBuilder->expects(self::exactly(3))->method('addCompilerPass')->withConsecutive(
-            [self::isInstanceOf(AddGuesserCompilerPass::class)],
-            [self::isInstanceOf(AddTemplatesCompilerPass::class)],
-            [self::isInstanceOf(AddAuditEntityCompilerPass::class)]
+        $containerBuilder->expects(static::exactly(3))->method('addCompilerPass')->withConsecutive(
+            [static::isInstanceOf(AddGuesserCompilerPass::class)],
+            [static::isInstanceOf(AddTemplatesCompilerPass::class)],
+            [static::isInstanceOf(AddAuditEntityCompilerPass::class)]
         );
 
         $bundle = new SonataDoctrineORMAdminBundle();

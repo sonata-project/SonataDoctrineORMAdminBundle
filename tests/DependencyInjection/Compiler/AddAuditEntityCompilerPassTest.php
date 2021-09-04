@@ -49,14 +49,14 @@ final class AddAuditEntityCompilerPassTest extends TestCase
         $container = $this->createMock(ContainerBuilder::class);
 
         $container
-            ->expects(self::any())
+            ->expects(static::any())
             ->method('hasDefinition')
             ->willReturnCallback(static function (string $id): bool {
                 return 'simplethings_entityaudit.config' === $id;
             });
 
         $container
-            ->expects(self::any())
+            ->expects(static::any())
             ->method('getParameter')
             ->willReturnCallback(static function (string $id) use ($force) {
                 if ('sonata_doctrine_orm_admin.audit.force' === $id) {
@@ -71,7 +71,7 @@ final class AddAuditEntityCompilerPassTest extends TestCase
             });
 
         $container
-            ->expects(self::any())
+            ->expects(static::any())
             ->method('findTaggedServiceIds')
             ->willReturnCallback(static function (string $id) use ($services): array {
                 if ('sonata.admin' !== $id) {
@@ -94,7 +94,7 @@ final class AddAuditEntityCompilerPassTest extends TestCase
             });
 
         $container
-            ->expects(self::any())
+            ->expects(static::any())
             ->method('getDefinition')
             ->willReturnCallback(static function (string $id): Definition {
                 return new Definition(null, [null, $id]);
@@ -109,7 +109,7 @@ final class AddAuditEntityCompilerPassTest extends TestCase
         }
 
         $container
-            ->expects(self::once())
+            ->expects(static::once())
             ->method('setParameter')
             ->with('simplethings.entityaudit.audited_entities', $expectedAuditedEntities);
 
