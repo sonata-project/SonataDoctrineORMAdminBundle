@@ -33,14 +33,6 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 
     public function create(string $class, string $name, array $options = []): FieldDescriptionInterface
     {
-        if (!isset($options['route']['name'])) {
-            $options['route']['name'] = 'show';
-        }
-
-        if (!isset($options['route']['parameters'])) {
-            $options['route']['parameters'] = [];
-        }
-
         [$metadata, $propertyName, $parentAssociationMappings] = $this->getParentMetadataForProperty($class, $name);
 
         return new FieldDescription(
