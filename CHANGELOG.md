@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.0.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0-rc.2...4.0.0) - 2021-09-06
+### Changed
+- [[#1523](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1523)] Do not set a default route option to `FieldDescription` in `FieldDescriptionFactory` ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.0.0-rc.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0-rc.1...4.0.0-rc.2) - 2021-08-28
 ### Fixed
 - [[#1510](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1510)] `AuditReader` compatibility with sonata-admin@4.0.0-rc.2 ([@VincentLanglet](https://github.com/VincentLanglet))
