@@ -211,13 +211,14 @@ final class FieldDescriptionTest extends TestCase
 
     public function testGetValueWhenCannotRetrieve(): void
     {
-        $this->expectException(NoValueException::class);
-
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
         $mockedObject->expects(static::never())->method('myMethod')->willReturn('myMethodValue');
 
+        $admin = $this->createStub(AdminInterface::class);
         $field = new FieldDescription('name');
+        $field->setAdmin($admin);
 
+        $this->expectException(NoValueException::class);
         static::assertSame('myMethodValue', $field->getValue($mockedObject));
     }
 
