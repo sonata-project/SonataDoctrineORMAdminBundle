@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\ORM\Query\Expr\Composite;
-use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Filter\Filter as BaseFilter;
 use Sonata\AdminBundle\Filter\Model\FilterData;
@@ -126,8 +125,6 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
      */
     private function addOrParameter(ProxyQueryInterface $query, $parameter): void
     {
-        $conditionGroup = null;
-
         if ($this->hasPreviousFilter()) {
             $previousFilter = $this->getPreviousFilter();
 

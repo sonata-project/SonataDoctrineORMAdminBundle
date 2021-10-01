@@ -17,7 +17,9 @@ use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Datagrid\DatagridMapper;
 use Sonata\AdminBundle\Datagrid\ListMapper;
 use Sonata\AdminBundle\Form\FormMapper;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\AdminBundle\Form\Type\ModelListType;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
@@ -37,7 +39,10 @@ final class BookAdmin extends AbstractAdmin
     protected function configureDatagridFilters(DatagridMapper $filter): void
     {
         $filter
-            ->add('author')
+            ->add('author', ModelFilter::class, [
+                'field_type' => ModelAutocompleteType::class,
+                'field_options' => ['property' => 'name'],
+            ])
             ->add('categories');
     }
 
