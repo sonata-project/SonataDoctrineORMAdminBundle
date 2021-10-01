@@ -29,7 +29,7 @@ use Sonata\AdminBundle\Translator\FormLabelTranslatorStrategy;
 use Sonata\DoctrineORMAdminBundle\Builder\DatagridBuilder;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
-use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\Guess\TypeGuess;
@@ -161,11 +161,11 @@ final class DatagridBuilderTest extends TestCase
         $this->admin->method('getCode')->willReturn('someFakeCode');
         $this->admin->method('getLabelTranslatorStrategy')->willReturn(new FormLabelTranslatorStrategy());
         $this->typeGuesser->method('guess')->willReturn($guessType);
-        $this->filterFactory->method('create')->willReturn(new ModelAutocompleteFilter());
+        $this->filterFactory->method('create')->willReturn(new ModelFilter());
 
         $guessType->method('getOptions')->willReturn(['name' => 'value']);
-        $guessType->method('getType')->willReturn(ModelAutocompleteFilter::class);
-        $datagrid->method('addFilter')->with(static::isInstanceOf(ModelAutocompleteFilter::class));
+        $guessType->method('getType')->willReturn(ModelFilter::class);
+        $datagrid->method('addFilter')->with(static::isInstanceOf(ModelFilter::class));
 
         $this->datagridBuilder->addFilter($datagrid, null, $fieldDescription);
     }

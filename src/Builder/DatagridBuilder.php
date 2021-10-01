@@ -22,9 +22,12 @@ use Sonata\AdminBundle\Datagrid\SimplePager;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Filter\FilterFactoryInterface;
+use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\FormFactoryInterface;
 
@@ -81,7 +84,20 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
         $fieldDescription->setOption('field_name', $fieldDescription->getOption('field_name', $fieldDescription->getFieldName()));
 
-        if (ModelAutocompleteFilter::class === $fieldDescription->getType()) {
+        if (
+            ModelFilter::class === $fieldDescription->getType()
+            || EntityType::class === $fieldDescription->getOption('field_type')
+        ) {
+            $fieldDescription->mergeOption('field_options', [
+                'class' => $fieldDescription->getTargetModel(),
+            ]);
+        }
+
+        // NEXT_MAJOR: Remove the ModelAutocompleteFilter::class check
+        if (
+            ModelAutocompleteFilter::class === $fieldDescription->getType()
+            || ModelAutocompleteType::class === $fieldDescription->getOption('field_type')
+        ) {
             $fieldDescription->mergeOption('field_options', [
                 'class' => $fieldDescription->getTargetModel(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
