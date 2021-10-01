@@ -85,7 +85,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
         $fieldDescription->setOption('field_name', $fieldDescription->getOption('field_name', $fieldDescription->getFieldName()));
 
         if (
-            ModelFilter::class === $fieldDescription->getType()
+            ModelFilter::class === $fieldDescription->getType() && null === $fieldDescription->getOption('field_type')
             || EntityType::class === $fieldDescription->getOption('field_type')
         ) {
             $fieldDescription->mergeOption('field_options', [
@@ -95,7 +95,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
         // NEXT_MAJOR: Remove the ModelAutocompleteFilter::class check
         if (
-            ModelAutocompleteFilter::class === $fieldDescription->getType()
+            ModelAutocompleteFilter::class === $fieldDescription->getType() && null === $fieldDescription->getOption('field_type')
             || ModelAutocompleteType::class === $fieldDescription->getOption('field_type')
         ) {
             $fieldDescription->mergeOption('field_options', [
