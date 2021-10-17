@@ -60,6 +60,7 @@
         "phpstan/phpstan-phpunit": "^0.12.18",
         "phpstan/phpstan-strict-rules": "^0.12.10",
         "phpstan/phpstan-symfony": "^0.12.10",
+        "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.15.1",
         "psalm/plugin-symfony": "^2.0",
         "sonata-project/block-bundle": "^4.2",
