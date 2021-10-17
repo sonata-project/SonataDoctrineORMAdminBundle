@@ -41,6 +41,11 @@ final class CountFilter extends Filter
         // c.name > '1' => c.name OPERATOR :FIELDNAME
         $parameterName = $this->getNewParameterName($query);
         $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+
+        if (false === $rootAlias) {
+            throw new \RuntimeException('There are not root aliases defined in the query.');
+        }
+
         $query->getQueryBuilder()->addGroupBy($rootAlias);
         $this->applyHaving($query, sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
