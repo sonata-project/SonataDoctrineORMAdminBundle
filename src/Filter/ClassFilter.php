@@ -46,7 +46,7 @@ class ClassFilter extends Filter
             return;
         }
 
-        if (0 === \strlen($data['value'])) {
+        if ('' === $data['value']) {
             return;
         }
 
