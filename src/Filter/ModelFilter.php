@@ -125,6 +125,11 @@ final class ModelFilter extends Filter
     private function getParentAlias(ProxyQueryInterface $query, string $alias): string
     {
         $parentAlias = $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+
+        if (false === $parentAlias) {
+            throw new \RuntimeException('There are not root aliases defined in the query.');
+        }
+
         $joins = $query->getQueryBuilder()->getDQLPart('join');
         if (isset($joins[$rootAlias])) {
             foreach ($joins[$rootAlias] as $join) {

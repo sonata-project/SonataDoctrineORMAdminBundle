@@ -32,7 +32,7 @@ final class ClassFilter extends Filter
             return;
         }
 
-        if (0 === \strlen($data->getValue())) {
+        if ('' === $data->getValue()) {
             return;
         }
 

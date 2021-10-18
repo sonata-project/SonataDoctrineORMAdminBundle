@@ -31,9 +31,15 @@ final class SmartPaginatorFactory
     {
         $queryBuilder = $proxyQuery->getQueryBuilder();
 
+        $rootEntity = current($queryBuilder->getRootEntities());
+
+        if (false === $rootEntity) {
+            throw new \RuntimeException('There are not root entities defined in the query.');
+        }
+
         $identifierFieldNames = $queryBuilder
             ->getEntityManager()
-            ->getClassMetadata(current($queryBuilder->getRootEntities()))
+            ->getClassMetadata($rootEntity)
             ->getIdentifierFieldNames();
 
         $hasSingleIdentifierName = 1 === \count($identifierFieldNames);
