@@ -15,8 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
-use Doctrine\DBAL\Platforms\MySqlPlatform;
-use Doctrine\DBAL\Platforms\PostgreSQL94Platform;
+use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
@@ -98,7 +97,7 @@ final class ModelManagerTest extends TestCase
     {
         $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
 
-        $platform = $this->createMock(MySqlPlatform::class);
+        $platform = $this->createMock(AbstractPlatform::class);
 
         $connection = $this->createMock(Connection::class);
         $connection->method('getDatabasePlatform')->willReturn($platform);
@@ -228,7 +227,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
 
-        $platform = $this->createMock(PostgreSQL94Platform::class);
+        $platform = $this->createMock(AbstractPlatform::class);
         $platform->expects(static::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidBinaryType::NAME)
@@ -273,7 +272,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
 
-        $platform = $this->createMock(PostgreSQL94Platform::class);
+        $platform = $this->createMock(AbstractPlatform::class);
         $platform->expects(static::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(UuidType::NAME)
@@ -316,7 +315,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(ProductIdType::NAME);
 
-        $platform = $this->createMock(PostgreSQL94Platform::class);
+        $platform = $this->createMock(AbstractPlatform::class);
         $platform->expects(static::any())
             ->method('hasDoctrineTypeMappingFor')
             ->with(ProductIdType::NAME)
@@ -358,7 +357,7 @@ final class ModelManagerTest extends TestCase
             ->method('getTypeOfField')
             ->willReturn(null);
 
-        $platform = $this->createMock(PostgreSQL94Platform::class);
+        $platform = $this->createMock(AbstractPlatform::class);
         $platform->expects(static::never())
             ->method('hasDoctrineTypeMappingFor');
 
