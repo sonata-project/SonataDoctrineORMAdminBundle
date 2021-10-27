@@ -1,7 +1,0 @@
-security:
-    providers:
-        in_memory:
-            memory: null
-    firewalls:
-        main:
-            anonymous: true
