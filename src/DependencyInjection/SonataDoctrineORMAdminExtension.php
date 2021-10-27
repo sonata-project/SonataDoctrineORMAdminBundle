@@ -17,7 +17,7 @@ use Sonata\AdminBundle\DependencyInjection\AbstractSonataAdminExtension;
 use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Symfony\Component\DependencyInjection\Loader\XmlFileLoader;
+use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -33,20 +33,20 @@ final class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
         $processor = new Processor();
         $config = $processor->processConfiguration($configuration, $configs);
 
-        $loader = new XmlFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
-        $loader->load('doctrine_orm.xml');
-        $loader->load('doctrine_orm_filter_types.xml');
+        $loader = new PhpFileLoader($container, new FileLocator(__DIR__.'/../Resources/config'));
+        $loader->load('doctrine_orm.php');
+        $loader->load('doctrine_orm_filter_types.php');
 
         $bundles = $container->getParameter('kernel.bundles');
         \assert(\is_array($bundles));
 
         if (isset($bundles['SimpleThingsEntityAuditBundle'])) {
-            $loader->load('audit.xml');
+            $loader->load('audit.php');
 
             $container->setParameter('sonata_doctrine_orm_admin.audit.force', $config['audit']['force']);
         }
 
-        $loader->load('security.xml');
+        $loader->load('security.php');
 
         $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
 
