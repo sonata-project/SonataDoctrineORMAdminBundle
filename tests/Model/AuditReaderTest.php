@@ -24,12 +24,12 @@ use Sonata\DoctrineORMAdminBundle\Model\AuditReader;
 final class AuditReaderTest extends TestCase
 {
     /**
-     * @var MockObject&SimpleThingsAuditReader
+     * @var MockObject&SimpleThingsAuditReader<object>
      */
     private $simpleThingsAuditReader;
 
     /**
-     * @var AuditReader
+     * @var AuditReader<object>
      */
     private $auditReader;
 
