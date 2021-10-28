@@ -18,13 +18,21 @@ use SimpleThings\EntityAudit\Revision as EntityAuditRevision;
 use Sonata\AdminBundle\Model\AuditReaderInterface;
 use Sonata\AdminBundle\Model\Revision;
 
+/**
+ * @phpstan-template T of object
+ * @phpstan-implements AuditReaderInterface<T>
+ */
 final class AuditReader implements AuditReaderInterface
 {
     /**
-     * @var SimpleThingsAuditReader
+     * @var SimpleThingsAuditReader<object>
+     * @phpstan-var SimpleThingsAuditReader<T>
      */
     private $auditReader;
 
+    /**
+     * @phpstan-param SimpleThingsAuditReader<T> $auditReader
+     */
     public function __construct(SimpleThingsAuditReader $auditReader)
     {
         $this->auditReader = $auditReader;
