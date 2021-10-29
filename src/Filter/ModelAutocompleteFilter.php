@@ -23,7 +23,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 /**
  * NEXT_MAJOR: Remove this filter.
  *
- * @deprecated since sonata-project/doctrine-orm-admin-bundle version 4.x and will be removed in 5.0.
+ * @deprecated since sonata-project/doctrine-orm-admin-bundle version 4.1 and will be removed in 5.0.
  *             use the ModelFilter instead with the option `'field_type' => ModelAutocompleteType::class`
  */
 final class ModelAutocompleteFilter extends Filter

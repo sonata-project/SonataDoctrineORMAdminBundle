@@ -2,6 +2,20 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.1.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0...4.1.0) - 2021-10-29
+### Added
+- [[#1558](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1558)] Added support for Doctrine DBAL 3. ([@jordisala1991](https://github.com/jordisala1991))
+
+### Changed
+- [[#1545](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1545)] `field_options` are automatically passed to the Filter when an `EntityType` or a `ModelAutocompleteType` is used. ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Deprecated
+- [[#1545](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1545)] `ModelAutocompleteFilter` in favor of `ModelFilter` with a `field_type` `ModelAutocompleteType` ([@VincentLanglet](https://github.com/VincentLanglet))
+- [[#1547](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1547)] Calling `ModelManager::getEntityManager()` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Removed
+- [[#1559](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1559)] Removed support for Symfony 5.2 ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.0.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0-rc.2...4.0.0) - 2021-09-06
 ### Changed
 - [[#1523](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1523)] Do not set a default route option to `FieldDescription` in `FieldDescriptionFactory` ([@VincentLanglet](https://github.com/VincentLanglet))
