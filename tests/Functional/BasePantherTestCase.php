@@ -27,7 +27,7 @@ abstract class BasePantherTestCase extends PantherTestCase
     protected function setUp(): void
     {
         $this->client = static::createPantherClient([
-            'browser' => PantherTestCase::FIREFOX,
+            'browser' => PantherTestCase::CHROME,
             'connection_timeout_in_ms' => 5000,
             'request_timeout_in_ms' => 60000,
         ]);

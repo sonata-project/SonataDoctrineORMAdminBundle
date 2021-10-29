@@ -4,10 +4,6 @@ framework:
     form:
         enabled: true
     secret: '%env(APP_SECRET)%'
-    session:
-        handler_id: session.handler.native_file
-        storage_id: session.storage.mock_file
-        name: MOCKSESSID
     test: true
     translator:
         enabled: true

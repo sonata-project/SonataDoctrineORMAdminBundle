@@ -31,6 +31,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Routing\RouteCollectionBuilder;
+use Symfony\Component\Security\Http\Authentication\AuthenticatorManager;
 
 final class AppKernel extends Kernel
 {
@@ -41,7 +42,7 @@ final class AppKernel extends Kernel
         parent::__construct('test', true);
     }
 
-    public function registerBundles()
+    public function registerBundles(): iterable
     {
         return [
             new DoctrineBundle(),
@@ -87,7 +88,13 @@ final class AppKernel extends Kernel
     protected function configureContainer(ContainerBuilder $containerBuilder, LoaderInterface $loader): void
     {
         $loader->load(__DIR__.'/config/config.yml');
-        $loader->load(__DIR__.'/config/security.yml');
+
+        if (class_exists(AuthenticatorManager::class)) {
+            $loader->load(__DIR__.'/config/config_symfony_v5.yml');
+        } else {
+            $loader->load(__DIR__.'/config/config_symfony_v4.yml');
+        }
+
         $loader->load(__DIR__.'/config/services.php');
     }
 

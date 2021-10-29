@@ -17,7 +17,7 @@ use Doctrine\ORM\Query\SqlWalker;
 
 final class FooWalker extends SqlWalker
 {
-    public function walkOrderByClause($orderByClause)
+    public function walkOrderByClause($orderByClause): string
     {
         return str_replace(' ASC', ' DESC', parent::walkOrderByClause($orderByClause));
     }
