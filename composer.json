@@ -46,6 +46,7 @@
         "twig/twig": "^2.10 || ^3.0"
     },
     "conflict": {
+        "doctrine/dbal": ">=3.0",
         "simplethings/entity-audit-bundle": ">=2.0",
         "sonata-project/block-bundle": "<3.11",
         "sonata-project/core-bundle": "<3.20"
