@@ -167,6 +167,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     }
 
     /**
+     * NEXT_MAJOR: Change the visibility to private.
+     *
      * @param string|object $class
      *
      * @phpstan-param class-string|object $class
