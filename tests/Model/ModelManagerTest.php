@@ -519,7 +519,7 @@ final class ModelManagerTest extends TestCase
         /** @var QueryBuilder&MockObject $queryBuilder */
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
             ->setConstructorArgs([$em])
-            ->setMethodsExcept(['getParameters', 'setParameter'])
+            ->onlyMethods(['getRootAliases', 'andWhere'])
             ->getMock();
 
         $queryBuilder
