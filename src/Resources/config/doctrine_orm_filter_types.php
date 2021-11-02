@@ -59,6 +59,13 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('sonata.admin.orm.filter.type.datetime_range', DateTimeRangeFilter::class)
         ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_datetime_range']);
 
+    /**
+     * NEXT_MAJOR: Remove this service definition.
+     *
+     * @psalm-suppress DeprecatedClass
+     *
+     * @see https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1545
+     */
     $services->set('sonata.admin.orm.filter.type.model_autocomplete', ModelAutocompleteFilter::class)
         ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_model_autocomplete']);
 

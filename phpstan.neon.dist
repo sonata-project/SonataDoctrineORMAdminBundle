@@ -2,12 +2,14 @@ includes:
     - phpstan-baseline.neon
 
 parameters:
-    level: max
+    level: 8
     paths:
         - src
         - tests
     treatPhpDocTypesAsCertain: false
     checkGenericClassInNonGenericObjectType: true
+    checkInternalClassCaseSensitivity: true
     checkMissingIterableValueType: true
     checkMissingVarTagTypehint: true
     checkMissingTypehints: true
+    checkUninitializedProperties: true

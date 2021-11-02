@@ -18,17 +18,17 @@ final class ContainerEntity
     /**
      * @var int|null
      */
-    private $plainField;
+    public $plainField;
+
+    /**
+     * @var Embeddable\EmbeddedEntity
+     */
+    public $embeddedEntity;
 
     /**
      * @var AssociatedEntity
      */
     private $associatedEntity;
-
-    /**
-     * @var Embeddable\EmbeddedEntity
-     */
-    private $embeddedEntity;
 
     public function __construct(AssociatedEntity $associatedEntity, Embeddable\EmbeddedEntity $embeddedEntity)
     {
