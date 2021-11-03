@@ -25,7 +25,7 @@ class Reader
      *
      * @var int|null
      */
-    private $id;
+    public $id;
 
     public function __construct()
     {

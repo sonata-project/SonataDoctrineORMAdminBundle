@@ -16,5 +16,5 @@ parameters:
             message: '#Method Sonata\\DoctrineORMAdminBundle\\Model\\ModelManager::getMetadata\(\) should return Doctrine\\ORM\\Mapping\\ClassMetadata\<TObject of object\> but returns Doctrine\\ORM\\Mapping\\ClassMetadata\<object\>\.$#'
             path: src/Model/ModelManager.php
         - # https://github.com/phpstan/phpstan-strict-rules/issues/131
-            message: '#^Call to function in_array\(\) with arguments (0|1), array<int, 0\|1>&nonEmpty and true will always evaluate to true\.$#'
+            message: '#^Call to function in_array\(\) with arguments (0|1), non-empty-array<int, 0\|1> and true will always evaluate to true\.$#'
             path: src/Filter/BooleanFilter.php

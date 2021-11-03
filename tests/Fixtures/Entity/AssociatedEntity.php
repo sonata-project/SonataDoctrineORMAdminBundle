@@ -16,14 +16,14 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 final class AssociatedEntity
 {
     /**
+     * @var Embeddable\EmbeddedEntity
+     */
+    public $embeddedEntity;
+
+    /**
      * @var int
      */
     private $plainField;
-
-    /**
-     * @var Embeddable\EmbeddedEntity
-     */
-    private $embeddedEntity;
 
     public function __construct(Embeddable\EmbeddedEntity $embeddedEntity, int $plainField)
     {

@@ -33,6 +33,11 @@ use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Routing\RouteCollectionBuilder;
 use Symfony\Component\Security\Http\Authentication\AuthenticatorManager;
 
+/**
+ * @psalm-suppress PropertyNotSetInConstructor
+ *
+ * @see https://github.com/psalm/psalm-plugin-symfony/pull/220
+ */
 final class AppKernel extends Kernel
 {
     use MicroKernelTrait;
@@ -77,6 +82,8 @@ final class AppKernel extends Kernel
 
     /**
      * TODO: Drop RouteCollectionBuilder when support for Symfony < 5.1 is dropped.
+     *
+     * @psalm-suppress DeprecatedClass
      *
      * @param RoutingConfigurator|RouteCollectionBuilder $routes
      */

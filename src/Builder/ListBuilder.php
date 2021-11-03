@@ -20,6 +20,11 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionCollection;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 
+/**
+ * @psalm-suppress DeprecatedInterface
+ *
+ * @see https://github.com/sonata-project/SonataAdminBundle/pull/7519
+ */
 final class ListBuilder implements ListBuilderInterface
 {
     /**

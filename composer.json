@@ -56,10 +56,10 @@
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/extension-installer": "^1.0",
-        "phpstan/phpstan": "^0.12.52",
-        "phpstan/phpstan-phpunit": "^0.12.18",
-        "phpstan/phpstan-strict-rules": "^0.12.10",
-        "phpstan/phpstan-symfony": "^0.12.10",
+        "phpstan/phpstan": "^1.0",
+        "phpstan/phpstan-phpunit": "^1.0",
+        "phpstan/phpstan-strict-rules": "^1.0",
+        "phpstan/phpstan-symfony": "^1.0",
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.16",
         "psalm/plugin-symfony": "^3.0",
@@ -71,7 +71,7 @@
         "symfony/templating": "^4.4 || ^5.3",
         "symfony/yaml": "^4.4 || ^5.3",
         "vimeo/psalm": "^4.1.1",
-        "weirdan/doctrine-psalm-plugin": "^1.0"
+        "weirdan/doctrine-psalm-plugin": "^2.0"
     },
     "suggest": {
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."

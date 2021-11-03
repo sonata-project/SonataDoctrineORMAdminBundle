@@ -33,6 +33,9 @@ use Symfony\Component\Form\FormFactoryInterface;
 
 /**
  * @phpstan-implements DatagridBuilderInterface<ProxyQueryInterface>
+ * @psalm-suppress DeprecatedInterface
+ *
+ * @see https://github.com/sonata-project/SonataAdminBundle/pull/7519
  */
 final class DatagridBuilder implements DatagridBuilderInterface
 {
@@ -93,7 +96,13 @@ final class DatagridBuilder implements DatagridBuilderInterface
             ]);
         }
 
-        // NEXT_MAJOR: Remove the ModelAutocompleteFilter::class check
+        /**
+         * NEXT_MAJOR: Remove the ModelAutocompleteFilter::class check.
+         *
+         * @psalm-suppress DeprecatedClass
+         *
+         * @see https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1545
+         */
         if (
             ModelAutocompleteFilter::class === $fieldDescription->getType() && null === $fieldDescription->getOption('field_type')
             || ModelAutocompleteType::class === $fieldDescription->getOption('field_type')
