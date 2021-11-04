@@ -93,7 +93,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
         ) {
             $fieldDescription->setOption('field_options', array_merge([
                 'class' => $fieldDescription->getTargetModel(),
-            ], $fieldDescription->getOption('field_options')));
+            ], $fieldDescription->getOption('field_options', [])));
         }
 
         /**
@@ -112,7 +112,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
                 'admin_code' => $fieldDescription->getAdmin()->getCode(),
                 'context' => 'filter',
-            ], $fieldDescription->getOption('field_options')));
+            ], $fieldDescription->getOption('field_options', [])));
         }
 
         if ($fieldDescription->describesAssociation()) {
