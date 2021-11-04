@@ -91,9 +91,9 @@ final class DatagridBuilder implements DatagridBuilderInterface
             ModelFilter::class === $fieldDescription->getType() && null === $fieldDescription->getOption('field_type')
             || EntityType::class === $fieldDescription->getOption('field_type')
         ) {
-            $fieldDescription->mergeOption('field_options', [
+            $fieldDescription->setOption('field_options', array_merge([
                 'class' => $fieldDescription->getTargetModel(),
-            ]);
+            ], $fieldDescription->getOption('field_options')));
         }
 
         /**
@@ -107,12 +107,12 @@ final class DatagridBuilder implements DatagridBuilderInterface
             ModelAutocompleteFilter::class === $fieldDescription->getType() && null === $fieldDescription->getOption('field_type')
             || ModelAutocompleteType::class === $fieldDescription->getOption('field_type')
         ) {
-            $fieldDescription->mergeOption('field_options', [
+            $fieldDescription->setOption('field_options', array_merge([
                 'class' => $fieldDescription->getTargetModel(),
                 'model_manager' => $fieldDescription->getAdmin()->getModelManager(),
                 'admin_code' => $fieldDescription->getAdmin()->getCode(),
                 'context' => 'filter',
-            ]);
+            ], $fieldDescription->getOption('field_options')));
         }
 
         if ($fieldDescription->describesAssociation()) {
