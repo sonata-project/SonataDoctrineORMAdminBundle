@@ -43,7 +43,6 @@ final class ModelFilter extends Filter
     public function getDefaultOptions(): array
     {
         return [
-            'mapping_type' => false,
             'field_name' => false,
             'field_type' => EntityType::class,
             'field_options' => [],
@@ -80,7 +79,9 @@ final class ModelFilter extends Filter
 
             $or->add($query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
 
-            if (ClassMetadata::MANY_TO_MANY === $this->getOption('mapping_type')) {
+            $associationMapping = $this->getAssociationMapping();
+
+            if (ClassMetadata::MANY_TO_MANY === $associationMapping['type']) {
                 $or->add(
                     sprintf('%s.%s IS EMPTY', $this->getParentAlias($query, $alias), $this->getFieldName())
                 );
