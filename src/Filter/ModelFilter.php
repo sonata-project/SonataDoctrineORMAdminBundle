@@ -100,17 +100,6 @@ final class ModelFilter extends Filter
 
     protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
-        $types = [
-            ClassMetadata::ONE_TO_ONE,
-            ClassMetadata::ONE_TO_MANY,
-            ClassMetadata::MANY_TO_MANY,
-            ClassMetadata::MANY_TO_ONE,
-        ];
-
-        if (!\in_array($this->getOption('mapping_type'), $types, true)) {
-            throw new \RuntimeException('Invalid mapping type');
-        }
-
         $associationMappings = $this->getParentAssociationMappings();
         $associationMappings[] = $this->getAssociationMapping();
         $alias = $query->entityJoin($associationMappings);
