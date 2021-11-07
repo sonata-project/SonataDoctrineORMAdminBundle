@@ -55,7 +55,7 @@ final class ModelFilterTest extends FilterTestCase
     public function testFilterArrayTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'field_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -90,7 +90,7 @@ final class ModelFilterTest extends FilterTestCase
     public function testFilterScalarTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'field_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -108,7 +108,7 @@ final class ModelFilterTest extends FilterTestCase
     public function testFilterManyToManyIsNotEqual(): void
     {
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'field_mapping' => ['type' => ClassMetadata::MANY_TO_MANY]]);
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_MANY]]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
