@@ -21,6 +21,13 @@ use Sonata\Exporter\Source\SourceIteratorInterface;
 
 final class DataSource implements DataSourceInterface
 {
+    /**
+     * NEXT_MAJOR: Return \Iterator instead.
+     *
+     * @psalm-suppress DeprecatedClass
+     *
+     * @see https://github.com/sonata-project/exporter/pull/532
+     */
     public function createIterator(BaseProxyQueryInterface $query, array $fields): SourceIteratorInterface
     {
         if (!$query instanceof ProxyQueryInterface) {
