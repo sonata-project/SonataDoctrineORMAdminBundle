@@ -41,10 +41,6 @@ jobs:
                     - php-version: '8.0'
                       dependencies: highest
                       allowed-to-fail: false
-                      variant: sonata-project/admin-bundle:"3.*"
-                    - php-version: '8.0'
-                      dependencies: highest
-                      allowed-to-fail: false
                       symfony-require: 4.4.*
                       variant: symfony/symfony:"4.4.*"
 
@@ -76,7 +72,7 @@ jobs:
 
             - name: Remove dev dependencies not compatible with Symfony 6
               if: matrix.symfony-require == '6.0.*'
-              run: composer remove psalm/plugin-symfony symfony/maker-bundle --dev --no-update --no-interaction
+              run: composer remove psalm/plugin-symfony symfony/maker-bundle symfony/panther --dev --no-update --no-interaction
 
             - name: Install Composer dependencies (${{ matrix.dependencies }})
               uses: ramsey/composer-install@v1
