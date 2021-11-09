@@ -139,7 +139,6 @@ final class FilterTypeGuesserTest extends TestCase
                 'operator_options' => [],
                 'field_type' => EntityType::class,
                 'field_options' => ['class' => 'Foo'],
-                'mapping_type' => ClassMetadata::ONE_TO_ONE,
             ],
             Guess::HIGH_CONFIDENCE,
         ];
@@ -154,7 +153,6 @@ final class FilterTypeGuesserTest extends TestCase
                 'operator_options' => [],
                 'field_type' => EntityType::class,
                 'field_options' => ['class' => 'Foo'],
-                'mapping_type' => ClassMetadata::ONE_TO_MANY,
             ],
             Guess::HIGH_CONFIDENCE,
         ];
