@@ -73,7 +73,6 @@ final class FilterTypeGuesser implements TypeGuesserInterface
                 $options['operator_options'] = [];
                 $options['field_type'] = EntityType::class;
                 $options['field_options'] = ['class' => $fieldDescription->getTargetModel()];
-                $options['mapping_type'] = $fieldDescription->getMappingType();
 
                 return new TypeGuess(ModelFilter::class, $options, Guess::HIGH_CONFIDENCE);
             default:
