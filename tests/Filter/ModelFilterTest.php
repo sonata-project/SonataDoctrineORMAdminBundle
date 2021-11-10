@@ -55,7 +55,7 @@ final class ModelFilterTest extends FilterTestCase
     public function testFilterArrayTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -90,7 +90,7 @@ final class ModelFilterTest extends FilterTestCase
     public function testFilterScalarTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
-        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name']);
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_ONE]]);
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
@@ -103,6 +103,21 @@ final class ModelFilterTest extends FilterTestCase
 
         self::assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
         static::assertTrue($filter->isActive());
+    }
+
+    public function testFilterManyToManyIsNotEqual(): void
+    {
+        $filter = new ModelFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar'], 'field_name' => 'field_name', 'association_mapping' => ['type' => ClassMetadata::MANY_TO_MANY]]);
+
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
+
+        self::assertSameQuery(
+            ['WHERE alias NOT IN :field_name_0 OR '.current(($proxyQuery->getRootAliases())).'.field_name IS EMPTY'],
+            $proxyQuery
+        );
     }
 
     public function testAssociationWithInvalidMapping(): void
