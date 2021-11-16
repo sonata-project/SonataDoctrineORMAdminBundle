@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.1.0...4.2.0) - 2021-11-16
+### Added
+- [[#1562](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1562)] Added support for Symfony 6. ([@jordisala1991](https://github.com/jordisala1991))
+
+### Fixed
+- [[#1573](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1573)] Fixed using ModelFilter with ModelAutocompleteType ([@willemverspyck](https://github.com/willemverspyck))
+- [[#1571](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1571)] Fixed non mapped `CallbackFilter` datagrid filter. ([@toooni](https://github.com/toooni))
+
 ## [4.1.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.0.0...4.1.0) - 2021-10-29
 ### Added
 - [[#1558](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1558)] Added support for Doctrine DBAL 3. ([@jordisala1991](https://github.com/jordisala1991))
