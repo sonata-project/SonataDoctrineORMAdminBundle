@@ -17,18 +17,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\AppKernel;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\PantherTestCase;
 
-// TODO: Simplify this once Symfony Panther supports Symfony 6
-if (class_exists(PantherTestCase::class)) {
-    abstract class BCPantherTestCase extends PantherTestCase
-    {
-    }
-} else {
-    abstract class BCPantherTestCase
-    {
-    }
-}
-
-abstract class BasePantherTestCase extends BCPantherTestCase
+abstract class BasePantherTestCase extends PantherTestCase
 {
     /**
      * @var Client
@@ -37,10 +26,6 @@ abstract class BasePantherTestCase extends BCPantherTestCase
 
     protected function setUp(): void
     {
-        if (!class_exists(PantherTestCase::class)) {
-            static::markTestSkipped('Symfony Panther is not compatible with Symfony 6');
-        }
-
         $this->client = static::createPantherClient([
             'browser' => PantherTestCase::CHROME,
             'connection_timeout_in_ms' => 5000,
