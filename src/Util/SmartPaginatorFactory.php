@@ -58,7 +58,7 @@ final class SmartPaginatorFactory
         $hasHavingPart = null !== $queryBuilder->getDQLPart('having');
 
         // it is only safe to disable output walkers for really simple queries
-        if (!$hasHavingPart && !$hasJoins && $hasSingleIdentifierName) {
+        if (!$hasHavingPart && $hasSingleIdentifierName) {
             $paginator->setUseOutputWalkers(false);
         }
 
