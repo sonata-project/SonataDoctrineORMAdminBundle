@@ -119,7 +119,7 @@ final class SmartPaginatorFactoryTest extends TestCase
                 ->createQueryBuilder()
                 ->from(Author::class, 'author')
                 ->leftJoin('author.books', 'book'),
-            null,
+            false,
         ];
 
         yield 'With joins and composite identifier' => [
