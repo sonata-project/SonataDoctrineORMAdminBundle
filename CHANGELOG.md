@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.0...4.2.1) - 2021-11-25
+### Fixed
+- [[#1583](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1583)] Paginator set useOutputWalkers to false for query with joins ([@ossinkine](https://github.com/ossinkine))
+
 ## [4.2.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.1.0...4.2.0) - 2021-11-16
 ### Added
 - [[#1562](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1562)] Added support for Symfony 6. ([@jordisala1991](https://github.com/jordisala1991))
