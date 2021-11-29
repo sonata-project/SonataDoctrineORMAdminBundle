@@ -57,6 +57,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 ## [4.0.0-alpha-1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.0...4.0.0-alpha-1) - 2021-04-11
 See Changelog
 
+## [3.35.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.0...3.35.1) - 2021-11-25
+### Fixed
+- [[#1585](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1585)] Paginator set useOutputWalkers to false for query with joins ([@JustDylan23](https://github.com/JustDylan23))
+
 ## [3.35.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.34.3...3.35.0) - 2021-07-20
 ### Added
 - [[#1470](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1470)] `global_search` option to the `StringFilter` ([@VincentLanglet](https://github.com/VincentLanglet))
