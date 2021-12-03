@@ -68,7 +68,7 @@
         "symfony/browser-kit": "^4.4 || ^5.3 || ^6.0",
         "symfony/css-selector": "^4.4 || ^5.3 || ^6.0",
         "symfony/panther": "^1.0 || ^2.0",
-        "symfony/phpunit-bridge": "^5.3 || ^6.0",
+        "symfony/phpunit-bridge": "^6.0",
         "symfony/templating": "^4.4 || ^5.3 || ^6.0",
         "symfony/yaml": "^4.4 || ^5.3 || ^6.0",
         "vimeo/psalm": "^4.1.1",
