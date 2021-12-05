@@ -1,7 +1,8 @@
 {
     "name": "sonata-project/doctrine-orm-admin-bundle",
-    "type": "symfony-bundle",
     "description": "Integrate Doctrine ORM into the SonataAdminBundle",
+    "license": "MIT",
+    "type": "symfony-bundle",
     "keywords": [
         "admin",
         "admin-generator",
@@ -11,8 +12,6 @@
         "sonata",
         "symfony"
     ],
-    "homepage": "https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle",
-    "license": "MIT",
     "authors": [
         {
             "name": "Thomas Rabaix",
@@ -24,6 +23,7 @@
             "homepage": "https://github.com/sonata-project/SonataDoctrineORMAdminBundle/contributors"
         }
     ],
+    "homepage": "https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle",
     "require": {
         "php": "^7.3 || ^8.0",
         "doctrine/dbal": "^2.13 || ^3.0",
@@ -46,13 +46,6 @@
         "symfony/security-acl": "^3.0",
         "twig/twig": "^2.10 || ^3.0"
     },
-    "conflict": {
-        "sonata-project/block-bundle": "<4.2",
-        "sonata-project/entity-audit-bundle": ">=2.0"
-    },
-    "provide": {
-        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
-    },
     "require-dev": {
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "phpstan/extension-installer": "^1.0",
@@ -74,11 +67,15 @@
         "vimeo/psalm": "^4.1.1",
         "weirdan/doctrine-psalm-plugin": "^2.0"
     },
+    "conflict": {
+        "sonata-project/block-bundle": "<4.2",
+        "sonata-project/entity-audit-bundle": ">=2.0"
+    },
+    "provide": {
+        "sonata-project/admin-bundle-persistency-layer": "1.0.0"
+    },
     "suggest": {
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
-    },
-    "config": {
-        "sort-packages": true
     },
     "autoload": {
         "psr-4": {
@@ -89,5 +86,8 @@
         "psr-4": {
             "Sonata\\DoctrineORMAdminBundle\\Tests\\": "tests/"
         }
+    },
+    "config": {
+        "sort-packages": true
     }
 }
