@@ -123,6 +123,102 @@ this filter can provide some basic queries::
     The filter can give bad results with associative arrays since it is not easy to distinguish between keys
     and values for a serialized associative array.
 
+JsonListFilter and custom filters
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+The ``StringListFilter`` above will only work for columns of type ``array``.
+In order to make a filter which will work with a column of type ``JSON`` you can **create your own filter**.
+
+First you need to install the **Doctrine JSON functions** and enable them:
+
+.. code-block::
+
+    composer update "scienta/doctrine-json-functions"
+
+``config/packages/doctrine.yaml``:
+
+.. code-block:: yml
+
+    doctrine:
+        orm:
+            dql:
+                string_functions:
+                    JSON_CONTAINS: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonContains
+                    JSON_ARRAY: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonArray
+                    JSON_LENGTH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonLength
+
+The new filter can be created from the basic ``Filter`` class:
+
+.. code-block:: php
+
+    <?php
+
+    declare(strict_types=1);
+
+    namespace App\Filter;
+
+    use Sonata\AdminBundle\Filter\Model\FilterData;
+    use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
+    use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
+    use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+    use Sonata\DoctrineORMAdminBundle\Filter\Filter;
+
+    final class JsonListFilter extends Filter
+    {
+        public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
+        {
+            if (!$data->hasValue()) {
+                return;
+            }
+
+            $value = $data->getValue();
+
+            if (!\is_array($value)) {
+                $data = $data->changeValue([$value]);
+            }
+
+            $operator = $data->isType(ContainsOperatorType::TYPE_NOT_CONTAINS) ? 'NOT ' : '';
+
+            $andConditions = $query->getQueryBuilder()->expr()->andX();
+
+            $parameterName = $this->getNewParameterName($query);
+            $andConditions->add(sprintf('%sJSON_CONTAINS(%s.%s, JSON_ARRAY(:%s)) = 1', $operator, $alias, $field, $parameterName));
+
+            $query->getQueryBuilder()->setParameter($parameterName, $value);
+
+            if ($data->isType(ContainsOperatorType::TYPE_EQUAL)) {
+                $parameterName = $this->getNewParameterName($query);
+                $andConditions->add(sprintf('JSON_LENGTH(%s.%s) = :%s', $alias, $field, $parameterName));
+
+                $query->getQueryBuilder()->setParameter($parameterName, \count($data->getValue()));
+            }
+
+            $this->applyWhere($query, $andConditions);
+        }
+
+        public function getDefaultOptions(): array
+        {
+            return [];
+        }
+
+        public function getRenderSettings(): array
+        {
+            return [ChoiceType::class, [
+                'field_type' => $this->getFieldType(),
+                'field_options' => $this->getFieldOptions(),
+                'label' => $this->getLabel(),
+            ]];
+        }
+    }
+
+Lastly you need to enable the newly created filter:
+
+.. code-block:: yml
+
+    App\Filter\JsonListFilter:
+        tags:
+            - { name: sonata.admin.filter.type }
+
 ModelAutocompleteFilter
 -----------------------
 
