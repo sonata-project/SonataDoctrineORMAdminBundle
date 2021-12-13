@@ -29,6 +29,7 @@ jobs:
                     - '7.3'
                     - '7.4'
                     - '8.0'
+                    - '8.1'
                 dependencies: [highest]
                 allowed-to-fail: [false]
                 symfony-require: ['']
@@ -38,26 +39,22 @@ jobs:
                       dependencies: lowest
                       allowed-to-fail: false
                       variant: normal
-                    - php-version: '8.0'
-                      dependencies: highest
-                      allowed-to-fail: false
-                      variant: sonata-project/admin-bundle:"4.*"
-                    - php-version: '8.0'
+                    - php-version: '8.1'
                       dependencies: highest
                       allowed-to-fail: false
                       symfony-require: 4.4.*
                       variant: symfony/symfony:"4.4.*"
-                    - php-version: '8.0'
+                    - php-version: '8.1'
                       dependencies: highest
                       allowed-to-fail: false
                       symfony-require: 5.3.*
                       variant: symfony/symfony:"5.3.*"
-                    - php-version: '8.0'
+                    - php-version: '8.1'
                       dependencies: highest
                       allowed-to-fail: false
                       symfony-require: 5.4.*
                       variant: symfony/symfony:"5.4.*"
-                    - php-version: '8.0'
+                    - php-version: '8.1'
                       dependencies: highest
                       allowed-to-fail: false
                       symfony-require: 6.0.*
@@ -87,11 +84,8 @@ jobs:
               run: composer require ${{ matrix.variant }} --no-update
 
             - name: Allow unstable dependencies
-              run: composer config minimum-stability dev
-
-            - name: Remove dev dependencies not compatible with Symfony 6
               if: matrix.symfony-require == '6.0.*'
-              run: composer remove psalm/plugin-symfony symfony/maker-bundle symfony/panther --dev --no-update --no-interaction
+              run: composer config minimum-stability dev
 
             - name: Install Composer dependencies (${{ matrix.dependencies }})
               uses: ramsey/composer-install@v1
