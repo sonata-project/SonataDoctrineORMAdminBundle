@@ -235,6 +235,38 @@ EmptyFilter
 
 The ``inverse`` option can be used to filter values that are not empty.
 
+ChoiceFilter
+-----------
+``Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter`` supports filtering for custom values::
+
+    // src/Admin/BlogPostAdmin.php
+
+    namespace App\Admin;
+
+    use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
+    use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+
+    final class BlogPostAdmin extends AbstractAdmin
+    {
+        protected function configureDatagridFilters(DatagridMapper $datagrid): void
+        {
+            $datagrid
+                ->add('title')
+                ->add('state',   ChoiceFilter::class, [
+                    'label' => 'State',
+                    'field_type' => ChoiceType::class,
+                    'field_options' => [
+                        'choices' => [
+                            'new' => 'new',
+                            'open' => 'open',
+                            'closed' => 'closed'],                        
+                    ]
+                ])
+            ;
+        }
+    }
+
 Advanced usage
 --------------
 
