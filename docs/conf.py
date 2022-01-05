@@ -50,7 +50,7 @@ source_suffix = '.rst'
 master_doc = 'index'
 
 # General information about the project.
-project = u'SonataDoctrineOrmAdminBundle'
+project = u'SonataDoctrineORMAdminBundle'
 copyright = u'2010-2021, Thomas Rabaix'
 
 # The version info for the project you're documenting, acts as replacement for
