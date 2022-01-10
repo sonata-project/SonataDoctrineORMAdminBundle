@@ -106,6 +106,37 @@ You can specify your own by setting up the 'template' option like so::
             ]
         ]);
 
+Add new item in action list
+---------------------------
+
+You can add a new button in your action list.
+
+let's add a new ``Refund`` button::
+
+    $listMapper
+        ->add(ListMapper::NAME_ACTIONS, ListMapper::TYPE_ACTIONS, [
+            'actions' => [
+                'show' => [],
+                'edit' => [],
+                'refund_payment' => ['template' => 'Admin/list__action_refund_payment.html.twig'],
+            ]
+        ]);
+
+
+Add your twig file here ``templates/Admin/list__action_refund_payment.html.twig``::
+
+    <a class="btn btn-sm btn-warning" href="#">
+          <i class="fa fa-money"></i> Refund
+    </a>
+
+The result is:
+
+.. image:: ../images/list__action_refund_payment.png
+           :alt: List action refund payment example.
+           :width: 460
+
+
+
 Advance Usage
 -------------
 
