@@ -69,11 +69,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException | Exception $e) {
+        } catch (\PDOException | Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
-                (int) $e->getCode(),
-                $e
+                (int) $exception->getCode(),
+                $exception
             );
         }
     }
@@ -84,11 +84,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->persist($object);
             $entityManager->flush();
-        } catch (\PDOException | Exception $e) {
+        } catch (\PDOException | Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
-                (int) $e->getCode(),
-                $e
+                (int) $exception->getCode(),
+                $exception
             );
         }
     }
@@ -99,11 +99,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
             $entityManager = $this->getEntityManager($object);
             $entityManager->remove($object);
             $entityManager->flush();
-        } catch (\PDOException | Exception $e) {
+        } catch (\PDOException | Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
-                (int) $e->getCode(),
-                $e
+                (int) $exception->getCode(),
+                $exception
             );
         }
     }
@@ -130,8 +130,12 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         try {
             $entityManager = $this->getEntityManager($object);
             $entityManager->lock($object, LockMode::OPTIMISTIC, $expectedVersion);
-        } catch (OptimisticLockException $e) {
-            throw new LockException($e->getMessage(), (int) $e->getCode(), $e);
+        } catch (OptimisticLockException $exception) {
+            throw new LockException(
+                $exception->getMessage(),
+                $exception->getCode(),
+                $exception
+            );
         }
     }
 
@@ -356,11 +360,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
             $entityManager->flush();
             $entityManager->clear();
-        } catch (\PDOException | Exception $e) {
+        } catch (\PDOException | Exception $exception) {
             throw new ModelManagerException(
                 sprintf('Failed to delete object: %s', $class),
-                (int) $e->getCode(),
-                $e
+                (int) $exception->getCode(),
+                $exception
             );
         }
     }
