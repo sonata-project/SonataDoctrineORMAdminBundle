@@ -295,6 +295,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
+    use Sonata\AdminBundle\Filter\Model\FilterData;
     use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
     use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
     use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
@@ -314,8 +315,8 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ->add('author')
                 ->add('with_open_comments', CallbackFilter::class, [
     //                'callback'   => [$this, 'getWithOpenCommentFilter'],
-                    'callback' => static function(ProxyQueryInterface $query, string $alias, string $field, array $data): bool {
-                        if (!$data['value']) {
+                    'callback' => static function(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
+                        if (!$data->hasValue()) {
                             return false;
                         }
 
@@ -330,9 +331,9 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ]);
         }
 
-        public function getWithOpenCommentFilter(ProxyQueryInterface $query, string $alias, string $field, array $data): bool
+        public function getWithOpenCommentFilter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
         {
-            if (!$data['value']) {
+            if (!$data->hasValue()) {
                 return false;
             }
 
