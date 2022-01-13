@@ -17,8 +17,10 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Address;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\ProductAttribute;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
 
@@ -127,6 +129,48 @@ final class SmartPaginatorFactoryTest extends TestCase
                 ->createQueryBuilder()
                 ->from(Item::class, 'item')
                 ->leftJoin('item.product', 'product'),
+            null,
+        ];
+
+        yield 'With order by not from join field' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(Author::class, 'author')
+                ->leftJoin('author.books', 'book')
+                ->orderBy('author.name'),
+            false,
+        ];
+
+        yield 'With order by not from join field using an alias contained in order by' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(Author::class, 'author')
+                ->leftJoin('author.books', 'a')
+                ->orderBy('author.name'),
+            false,
+        ];
+
+        yield 'With order by from join field' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(Author::class, 'author')
+                ->leftJoin('author.books', 'book')
+                ->orderBy('book.title'),
+            null,
+        ];
+
+        yield 'With foreign key as identifier' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(ProductAttribute::class, 'productAttribute'),
+            null,
+        ];
+
+        yield 'With multiple FROM' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(Author::class, 'author')
+                ->from(Address::class, 'address'),
             null,
         ];
     }
