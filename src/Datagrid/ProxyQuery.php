@@ -177,10 +177,15 @@ final class ProxyQuery implements ProxyQueryInterface
             }
         }
 
+        $rootEntity = current($queryBuilder->getRootEntities());
+
+        if (false === $rootEntity) {
+            throw new \RuntimeException('There are not root entities defined in the query.');
+        }
+
         $identifierFields = $queryBuilder
             ->getEntityManager()
-            ->getMetadataFactory()
-            ->getMetadataFor(current($queryBuilder->getRootEntities()))
+            ->getClassMetadata($rootEntity)
             ->getIdentifierFieldNames();
 
         $existingOrders = [];
