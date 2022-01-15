@@ -133,7 +133,7 @@ First you need to install the **Doctrine JSON functions** and enable them:
 
 .. code-block:: bash
 
-    composer update "scienta/doctrine-json-functions"
+    composer require "scienta/doctrine-json-functions"
 
 ``config/packages/doctrine.yaml``:
 
