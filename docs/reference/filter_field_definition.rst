@@ -151,8 +151,6 @@ The new filter can be created from the basic ``Filter`` class:
 
 .. code-block:: php
 
-    <?php
-
     declare(strict_types=1);
 
     namespace App\Filter;
