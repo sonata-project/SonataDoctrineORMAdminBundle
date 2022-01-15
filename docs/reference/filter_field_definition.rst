@@ -147,9 +147,7 @@ First you need to install the **Doctrine JSON functions** and enable them:
                     JSON_ARRAY: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonArray
                     JSON_LENGTH: Scienta\DoctrineJsonFunctions\Query\AST\Functions\Mysql\JsonLength
 
-The new filter can be created from the basic ``Filter`` class:
-
-.. code-block:: php
+The new filter can be created from the basic ``Filter`` class::
 
     declare(strict_types=1);
 
