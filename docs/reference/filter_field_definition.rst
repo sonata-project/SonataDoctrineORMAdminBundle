@@ -137,7 +137,7 @@ First you need to install the **Doctrine JSON functions** and enable them:
 
 ``config/packages/doctrine.yaml``:
 
-.. code-block:: yml
+.. code-block:: yaml
 
     doctrine:
         orm:
