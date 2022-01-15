@@ -131,7 +131,7 @@ In order to make a filter which will work with a column of type ``JSON`` you can
 
 First you need to install the **Doctrine JSON functions** and enable them:
 
-.. code-block::
+.. code-block:: bash
 
     composer update "scienta/doctrine-json-functions"
 
