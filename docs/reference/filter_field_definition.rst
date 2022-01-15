@@ -209,7 +209,7 @@ The new filter can be created from the basic ``Filter`` class::
 
 Lastly you need to enable the newly created filter:
 
-.. code-block:: yml
+.. code-block:: yaml
 
     App\Filter\JsonListFilter:
         tags:
