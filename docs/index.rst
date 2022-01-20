@@ -11,7 +11,6 @@ The ``Doctrine ORM Admin`` provides services to work with the ``Admin Bundle`` a
 
    reference/installation
    reference/configuration
-   reference/list_field_definition
    reference/filter_field_definition
    reference/form_field_definition
    reference/form_types_and_transformers
