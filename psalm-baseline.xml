@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="3.16@d03e5ef057d6adc656c0ff7e166c50b73b4f48f3">
-    <!-- https://github.com/vimeo/psalm/issues/5643 -->
     <file src="src/Model/ModelManager.php">
+        <!-- https://github.com/vimeo/psalm/issues/5643 -->
         <TypeDoesNotContainType occurrences="1">
             <code>[] === $idx</code>
         </TypeDoesNotContainType>
+        <!-- https://github.com/vimeo/psalm/issues/4295 -->
+        <InvalidScalarArgument occurrences="1">
+            <code>$exception-&gt;getCode()</code>
+        </InvalidScalarArgument>
     </file>
 </files>
