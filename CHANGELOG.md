@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [3.35.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.1...3.35.2) - 2022-01-21
+### Fixed
+- [[#1623](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1623)] Disabling output walkers when paginating with order by from an association ([@krewetka](https://github.com/krewetka))
+
 ## [3.35.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.0...3.35.1) - 2021-11-25
 ### Fixed
 - [[#1585](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1585)] Paginator set useOutputWalkers to false for query with joins ([@JustDylan23](https://github.com/JustDylan23))
