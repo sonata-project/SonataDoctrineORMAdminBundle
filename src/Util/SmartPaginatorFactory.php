@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Util;
 
+use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -55,13 +56,91 @@ final class SmartPaginatorFactory
         // To stay safe fetch join only when we have single primary key and joins
         $paginator = new Paginator($query, $hasSingleIdentifierName && $hasJoins);
 
-        $hasHavingPart = null !== $queryBuilder->getDQLPart('having');
-
         // it is only safe to disable output walkers for really simple queries
-        if (!$hasHavingPart && $hasSingleIdentifierName) {
+        if (self::canDisableOutPutWalkers($queryBuilder)) {
             $paginator->setUseOutputWalkers(false);
         }
 
         return $paginator;
+    }
+
+    /**
+     * @see https://github.com/doctrine/orm/issues/8278#issue-705517756
+     */
+    private static function canDisableOutPutWalkers(QueryBuilder $queryBuilder): bool
+    {
+        // does not support queries using HAVING
+        if (null !== $queryBuilder->getDQLPart('having')) {
+            return false;
+        }
+
+        $fromParts = $queryBuilder->getDQLPart('from');
+
+        // does not support queries using multiple entities in FROM
+        if (1 !== \count($fromParts)) {
+            return false;
+        }
+
+        $fromPart = current($fromParts);
+
+        $classMetadata = $queryBuilder
+            ->getEntityManager()
+            ->getClassMetadata($fromPart->getFrom());
+
+        $identifierFieldNames = $classMetadata->getIdentifierFieldNames();
+
+        // does not support entities using a composite identifier
+        if (1 !== \count($identifierFieldNames)) {
+            return false;
+        }
+
+        $identifierName = current($identifierFieldNames);
+
+        // does not support entities using a foreign key as identifier
+        if ($classMetadata->hasAssociation($identifierName)) {
+            return false;
+        }
+
+        // does not support queries using a field from a toMany relation in the ORDER BY clause
+        if (self::hasOrderByWithToManyAssociation($queryBuilder)) {
+            return false;
+        }
+
+        return true;
+    }
+
+    private static function hasOrderByWithToManyAssociation(QueryBuilder $queryBuilder): bool
+    {
+        $joinParts = $queryBuilder->getDQLPart('join');
+
+        if (0 === \count($joinParts)) {
+            return false;
+        }
+
+        $orderByParts = $queryBuilder->getDQLPart('orderBy');
+
+        if (0 === \count($orderByParts)) {
+            return false;
+        }
+
+        $joinAliases = [];
+
+        foreach ($joinParts as $joinPart) {
+            foreach ($joinPart as $join) {
+                $joinAliases[] = $join->getAlias();
+            }
+        }
+
+        foreach ($orderByParts as $orderByPart) {
+            foreach ($orderByPart->getParts() as $part) {
+                foreach ($joinAliases as $joinAlias) {
+                    if (0 === strpos($part, $joinAlias.'.')) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 }
