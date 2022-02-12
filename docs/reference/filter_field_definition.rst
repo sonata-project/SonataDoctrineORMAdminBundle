@@ -261,7 +261,8 @@ ChoiceFilter
                         'choices' => [
                             'new' => 'new',
                             'open' => 'open',
-                            'closed' => 'closed'],                        
+                            'closed' => 'closed',
+                        ],                        
                     ]
                 ])
             ;
