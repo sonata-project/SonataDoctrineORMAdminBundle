@@ -236,7 +236,7 @@ EmptyFilter
 The ``inverse`` option can be used to filter values that are not empty.
 
 ChoiceFilter
------------
+------------
 
 ``Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter`` supports filtering for custom values::
 
