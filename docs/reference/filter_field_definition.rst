@@ -254,7 +254,7 @@ ChoiceFilter
         {
             $datagrid
                 ->add('title')
-                ->add('state',   ChoiceFilter::class, [
+                ->add('state', ChoiceFilter::class, [
                     'label' => 'State',
                     'field_type' => ChoiceType::class,
                     'field_options' => [
