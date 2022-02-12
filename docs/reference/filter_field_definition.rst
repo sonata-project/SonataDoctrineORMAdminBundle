@@ -263,7 +263,7 @@ ChoiceFilter
                             'open' => 'open',
                             'closed' => 'closed',
                         ],                        
-                    ]
+                    ],
                 ])
             ;
         }
