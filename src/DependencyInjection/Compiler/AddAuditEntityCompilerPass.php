@@ -48,6 +48,7 @@ final class AddAuditEntityCompilerPass implements CompilerPassInterface
             }
 
             $definition = $container->getDefinition($id);
+            // NEXT_MAJOR: Support only model_class and remove indexed argument support
             $modelClass = $attributes[0]['model_class'] ?? $definition->getArgument(1);
             $auditedEntities[] = $this->getModelName($container, $modelClass);
         }
