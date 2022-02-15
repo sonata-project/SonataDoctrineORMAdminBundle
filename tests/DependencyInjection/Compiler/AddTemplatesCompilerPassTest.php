@@ -42,7 +42,7 @@ final class AddTemplatesCompilerPassTest extends TestCase
         $compilerPass->process($container);
 
         $expected = [
-            ['setFilterTheme', [['custom_call.twig.html', '@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig']]],
+            ['setFilterTheme', [['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig', 'custom_call.twig.html']]],
             ['setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]],
         ];
 
