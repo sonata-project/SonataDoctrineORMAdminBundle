@@ -76,8 +76,6 @@ final class SmartPaginatorFactoryTest extends TestCase
 
     /**
      * @dataProvider getQueriesForOutputWalker
-     *
-     * @param bool|null $expected
      */
     public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
