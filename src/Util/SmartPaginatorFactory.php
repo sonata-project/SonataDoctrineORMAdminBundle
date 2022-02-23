@@ -57,7 +57,7 @@ final class SmartPaginatorFactory
         $paginator = new Paginator($query, $hasSingleIdentifierName && $hasJoins);
 
         // it is only safe to disable output walkers for really simple queries
-        if (self::canDisableOutPutWalkers($queryBuilder)) {
+        if (self::canDisableOutPutWalkers($proxyQuery)) {
             $paginator->setUseOutputWalkers(false);
         }
 
@@ -67,8 +67,10 @@ final class SmartPaginatorFactory
     /**
      * @see https://github.com/doctrine/orm/issues/8278#issue-705517756
      */
-    private static function canDisableOutPutWalkers(QueryBuilder $queryBuilder): bool
+    private static function canDisableOutPutWalkers(ProxyQueryInterface $proxyQuery): bool
     {
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+
         // does not support queries using HAVING
         if (null !== $queryBuilder->getDQLPart('having')) {
             return false;
@@ -102,24 +104,26 @@ final class SmartPaginatorFactory
         }
 
         // does not support queries using a field from a toMany relation in the ORDER BY clause
-        if (self::hasOrderByWithToManyAssociation($queryBuilder)) {
+        if (self::hasOrderByWithToManyAssociation($proxyQuery)) {
             return false;
         }
 
         return true;
     }
 
-    private static function hasOrderByWithToManyAssociation(QueryBuilder $queryBuilder): bool
+    private static function hasOrderByWithToManyAssociation(ProxyQueryInterface $proxyQuery): bool
     {
+        $queryBuilder = $proxyQuery->getQueryBuilder();
+
         $joinParts = $queryBuilder->getDQLPart('join');
 
         if (0 === \count($joinParts)) {
             return false;
         }
 
-        $orderByParts = $queryBuilder->getDQLPart('orderBy');
+        $sortBy = $proxyQuery->getSortBy();
 
-        if (0 === \count($orderByParts)) {
+        if (null === $sortBy) {
             return false;
         }
 
@@ -131,13 +135,9 @@ final class SmartPaginatorFactory
             }
         }
 
-        foreach ($orderByParts as $orderByPart) {
-            foreach ($orderByPart->getParts() as $part) {
-                foreach ($joinAliases as $joinAlias) {
-                    if (0 === strpos($part, $joinAlias.'.')) {
-                        return true;
-                    }
-                }
+        foreach ($joinAliases as $joinAlias) {
+            if (0 === strpos($sortBy, $joinAlias.'.')) {
+                return true;
             }
         }
 
