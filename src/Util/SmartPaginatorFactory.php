@@ -122,8 +122,9 @@ final class SmartPaginatorFactory
         }
 
         $sortBy = $proxyQuery->getSortBy();
+        $orderByParts = $queryBuilder->getDQLPart('orderBy');
 
-        if (null === $sortBy) {
+        if (null === $sortBy && 0 === \count($orderByParts)) {
             return false;
         }
 
@@ -135,9 +136,21 @@ final class SmartPaginatorFactory
             }
         }
 
-        foreach ($joinAliases as $joinAlias) {
-            if (0 === strpos($sortBy, $joinAlias.'.')) {
-                return true;
+        if (null !== $sortBy) {
+            foreach ($joinAliases as $joinAlias) {
+                if (0 === strpos($sortBy, $joinAlias.'.')) {
+                    return true;
+                }
+            }
+        }
+
+        foreach ($orderByParts as $orderByPart) {
+            foreach ($orderByPart->getParts() as $part) {
+                foreach ($joinAliases as $joinAlias) {
+                    if (0 === strpos($part, $joinAlias.'.')) {
+                        return true;
+                    }
+                }
             }
         }
 
