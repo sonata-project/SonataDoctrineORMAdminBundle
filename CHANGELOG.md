@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.3...4.2.4) - 2022-02-19
+### Fixed
+- [[#1589](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1589)] Overrideing the built-in form and filter theme ([@1ed](https://github.com/1ed))
+
 ## [4.2.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.2...4.2.3) - 2022-02-14
 ### Fixed
 - [[#1631](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1631)] Support for the `model_class` attribute for sonata admin classes in `AddAuditEntityCompilerPass`. ([@nocive](https://github.com/nocive))
