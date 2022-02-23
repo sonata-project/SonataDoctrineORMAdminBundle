@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.4...4.2.5) - 2022-02-23
+### Fixed
+- [[#1637](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1637)] Fixed smart pagination disabling output walkers when the orderBy is set to a ToMany at proxy level. ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.2.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.3...4.2.4) - 2022-02-19
 ### Fixed
 - [[#1589](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1589)] Overrideing the built-in form and filter theme ([@1ed](https://github.com/1ed))
