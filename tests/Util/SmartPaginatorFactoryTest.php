@@ -76,10 +76,8 @@ final class SmartPaginatorFactoryTest extends TestCase
 
     /**
      * @dataProvider getQueriesForOutputWalker
-     *
-     * @param bool|null $expected
      */
-    public function testUseOutputWalker(QueryBuilder $queryBuilder, $expected): void
+    public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
         $proxyQuery = $this->createStub(ProxyQuery::class);
         $proxyQuery
@@ -90,13 +88,17 @@ final class SmartPaginatorFactoryTest extends TestCase
             ->method('getDoctrineQuery')
             ->willReturn($queryBuilder->getQuery());
 
+        if (null !== $sortBy) {
+            $proxyQuery->method('getSortBy')->willReturn($sortBy);
+        }
+
         $paginator = SmartPaginatorFactory::create($proxyQuery);
 
         static::assertSame($expected, $paginator->getUseOutputWalkers());
     }
 
     /**
-     * @phpstan-return iterable<array{QueryBuilder, bool|null}>
+     * @phpstan-return iterable<array{0: QueryBuilder, 1: bool|null, 2?: string}>
      */
     public function getQueriesForOutputWalker(): iterable
     {
@@ -157,6 +159,15 @@ final class SmartPaginatorFactoryTest extends TestCase
                 ->leftJoin('author.books', 'book')
                 ->orderBy('book.title'),
             null,
+        ];
+
+        yield 'With order by from join field set on the ProxyQuery' => [
+            TestEntityManagerFactory::create()
+                ->createQueryBuilder()
+                ->from(Author::class, 'author')
+                ->leftJoin('author.books', 'book'),
+            null,
+            'book.title',
         ];
 
         yield 'With foreign key as identifier' => [
