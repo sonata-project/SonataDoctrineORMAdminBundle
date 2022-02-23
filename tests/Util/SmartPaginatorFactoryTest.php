@@ -90,6 +90,14 @@ final class SmartPaginatorFactoryTest extends TestCase
             ->method('getDoctrineQuery')
             ->willReturn($queryBuilder->getQuery());
 
+        $orderBy = $queryBuilder->getDQLPart('orderBy');
+
+        if ([] !== $orderBy) {
+            $orderByParts = explode(' ', $orderBy[0]->getParts()[0]);
+
+            $proxyQuery->method('getSortBy')->willReturn($orderByParts[0]);
+        }
+
         $paginator = SmartPaginatorFactory::create($proxyQuery);
 
         static::assertSame($expected, $paginator->getUseOutputWalkers());
