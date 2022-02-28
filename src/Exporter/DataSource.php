@@ -45,7 +45,7 @@ final class DataSource implements DataSourceInterface
 
         if (null !== $sortBy) {
             $rootAliasSortBy = strstr($sortBy, '.', true);
-            
+
             if ($rootAliasSortBy !== $rootAlias) {
                 $query->getQueryBuilder()->addSelect($rootAliasSortBy);
             }
