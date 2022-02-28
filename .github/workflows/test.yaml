@@ -28,7 +28,6 @@ jobs:
         strategy:
             matrix:
                 php-version:
-                    - '7.3'
                     - '7.4'
                     - '8.0'
                     - '8.1'
@@ -37,7 +36,7 @@ jobs:
                 symfony-require: ['']
                 variant: [normal]
                 include:
-                    - php-version: '7.3'
+                    - php-version: '7.4'
                       dependencies: lowest
                       allowed-to-fail: false
                       variant: normal
@@ -84,10 +83,6 @@ jobs:
             - name: Install variant
               if: matrix.variant != 'normal' && !startsWith(matrix.variant, 'symfony/symfony')
               run: composer require ${{ matrix.variant }} --no-update
-
-            - name: Allow unstable dependencies
-              if: matrix.symfony-require == '6.0.*'
-              run: composer config minimum-stability dev
 
             - name: Install Composer dependencies (${{ matrix.dependencies }})
               uses: ramsey/composer-install@v2

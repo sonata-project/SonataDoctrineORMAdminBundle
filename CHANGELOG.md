@@ -2,6 +2,18 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.4...4.2.5) - 2022-02-23
+### Fixed
+- [[#1637](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1637)] Fixed smart pagination disabling output walkers when the orderBy is set to a ToMany at proxy level. ([@jordisala1991](https://github.com/jordisala1991))
+
+## [4.2.4](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.3...4.2.4) - 2022-02-19
+### Fixed
+- [[#1589](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1589)] Overrideing the built-in form and filter theme ([@1ed](https://github.com/1ed))
+
+## [4.2.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.2...4.2.3) - 2022-02-14
+### Fixed
+- [[#1631](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1631)] Support for the `model_class` attribute for sonata admin classes in `AddAuditEntityCompilerPass`. ([@nocive](https://github.com/nocive))
+
 ## [4.2.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.1...4.2.2) - 2022-01-15
 ### Fixed
 - [[#1616](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1616)] Disabling output walkers when paginating with order by from an association ([@franmomu](https://github.com/franmomu))
@@ -60,6 +72,10 @@ This project adheres to [Semantic Versioning](http://semver.org/).
 
 ## [4.0.0-alpha-1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.0...4.0.0-alpha-1) - 2021-04-11
 See Changelog
+
+## [3.35.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.2...3.35.3) - 2022-02-23
+### Fixed
+- [[#1635](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1635)] Fixed smart pagination disabling output walkers when the orderBy is set to a ToMany at proxy level. ([@jordisala1991](https://github.com/jordisala1991))
 
 ## [3.35.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/3.35.1...3.35.2) - 2022-01-21
 ### Fixed
