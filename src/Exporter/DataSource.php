@@ -43,6 +43,8 @@ final class DataSource implements DataSourceInterface
 
         $sortBy = $query->getSortBy();
 
+        // AddSelect is needed when exporting the results sorted by a column that is part of ManyToOne relation
+        // @see https://github.com/sonata-project/SonataDoctrineORMAdminBundle/issues/1586
         if (null !== $sortBy) {
             $rootAliasSortBy = strstr($sortBy, '.', true);
 
