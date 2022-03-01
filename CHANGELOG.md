@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.6](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.5...4.2.6) - 2022-03-01
+### Fixed
+- [[#1639](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1639)] Add "sortBy" entity to "select" part of DQL to fix sorting on ManyToOne column ([@willemverspyck](https://github.com/willemverspyck))
+
 ## [4.2.5](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.4...4.2.5) - 2022-02-23
 ### Fixed
 - [[#1637](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1637)] Fixed smart pagination disabling output walkers when the orderBy is set to a ToMany at proxy level. ([@jordisala1991](https://github.com/jordisala1991))
