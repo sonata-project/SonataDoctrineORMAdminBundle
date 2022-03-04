@@ -20,6 +20,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NullFilter;
@@ -59,6 +60,9 @@ return static function (ContainerConfigurator $containerConfigurator): void {
     $services->set('sonata.admin.orm.filter.type.datetime_range', DateTimeRangeFilter::class)
         ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_datetime_range']);
 
+    $services->set('sonata.admin.orm.filter.type.empty', EmptyFilter::class)
+        ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_empty']);
+    
     /**
      * NEXT_MAJOR: Remove this service definition.
      *
