@@ -62,7 +62,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $services->set('sonata.admin.orm.filter.type.empty', EmptyFilter::class)
         ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_empty']);
-    
+
     /**
      * NEXT_MAJOR: Remove this service definition.
      *
