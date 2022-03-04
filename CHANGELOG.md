@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.7](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.6...4.2.7) - 2022-03-04
+### Fixed
+- [[#1641](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1641)] Register EmptyFilter as a service ([@willemverspyck](https://github.com/willemverspyck))
+
 ## [4.2.6](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.5...4.2.6) - 2022-03-01
 ### Fixed
 - [[#1639](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1639)] Add "sortBy" entity to "select" part of DQL to fix sorting on ManyToOne column ([@willemverspyck](https://github.com/willemverspyck))
