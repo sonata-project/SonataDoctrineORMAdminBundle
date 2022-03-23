@@ -225,7 +225,7 @@ final class ModelManagerTest extends TestCase
             ->willReturn([$entity->getId()]);
         $meta->expects(static::any())
             ->method('getTypeOfField')
-            ->willReturn(UuidBinaryType::NAME); //'uuid_binary'
+            ->willReturn(UuidBinaryType::NAME);
 
         $platform = $this->createMock(AbstractPlatform::class);
         $platform->expects(static::any())
