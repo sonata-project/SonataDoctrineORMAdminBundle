@@ -231,12 +231,6 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 
     public function getIdentifierValues(object $model): array
     {
-        // Fix code has an impact on performance, so disable it ...
-        //$entityManager = $this->getEntityManager($entity);
-        //if (!$entityManager->getUnitOfWork()->isInIdentityMap($entity)) {
-        //    throw new \RuntimeException('Entities passed to the choice field must be managed');
-        //}
-
         $class = ClassUtils::getClass($model);
         $metadata = $this->getMetadata($class);
         $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
