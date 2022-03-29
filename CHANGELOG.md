@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.2.8](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.7...4.2.8) - 2022-03-29
+### Fixed
+- [[#1646](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1646)] The lastpage is correctly set to 1 when there is no results. ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.2.7](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.6...4.2.7) - 2022-03-04
 ### Fixed
 - [[#1641](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1641)] Register EmptyFilter as a service ([@willemverspyck](https://github.com/willemverspyck))
