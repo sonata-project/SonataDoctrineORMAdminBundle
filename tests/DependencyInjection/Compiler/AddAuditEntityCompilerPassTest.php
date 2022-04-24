@@ -15,105 +15,85 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\UuidEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
 final class AddAuditEntityCompilerPassTest extends TestCase
 {
     /**
-     * @phpstan-return iterable<array-key, array{bool, array<string, array{audit: bool|null, audited: bool}>}>
+     * @phpstan-return iterable<array-key, array{bool, array<string, array{audit?: bool|null, class: class-string}>, class-string[]}>
      */
     public function processDataProvider(): iterable
     {
         return [
-            [true, [
-                'admin1' => ['audit' => null,  'audited' => true],
-                'admin2' => ['audit' => true,  'audited' => true],
-                'admin3' => ['audit' => false, 'audited' => false],
-            ]],
-            [false, [
-                'admin1' => ['audit' => null,  'audited' => false],
-                'admin2' => ['audit' => true,  'audited' => true],
-                'admin3' => ['audit' => false, 'audited' => false],
-            ]],
+            [
+                true,
+                [
+                    'admin1' => ['audit' => null,  'class' => Product::class],
+                    'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
+                    'admin3' => ['audit' => false, 'class' => UuidEntity::class],
+                    'admin4' => ['class' => VersionedEntity::class],
+                ],
+                [
+                    Product::class,
+                    SimpleEntity::class,
+                    VersionedEntity::class,
+                ],
+            ],
+            [
+                false,
+                [
+                    'admin1' => ['audit' => null,  'class' => Product::class],
+                    'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
+                    'admin3' => ['audit' => false, 'class' => UuidEntity::class],
+                    'admin4' => ['class' => VersionedEntity::class],
+                ],
+                [
+                    SimpleEntity::class,
+                ],
+            ],
         ];
     }
 
     /**
-     * @phpstan-param array<string, array{audit: bool|null, audited: bool}> $services
+     * @phpstan-param array<string, array{audit?: bool|null, class: class-string}> $services
+     * @phpstan-param class-string[] $expectedAuditedEntities
      *
      * @dataProvider processDataProvider
      */
-    public function testProcess(bool $force, array $services): void
+    public function testProcess(bool $force, array $services, array $expectedAuditedEntities): void
     {
-        $container = $this->createMock(ContainerBuilder::class);
+        $container = new ContainerBuilder();
+        $container->setDefinition('simplethings_entityaudit.config', new Definition());
+        $container->setDefinition('sonata.admin.audit.manager', new Definition());
 
-        $container
-            ->expects(static::any())
-            ->method('hasDefinition')
-            ->willReturnCallback(static function (string $id): bool {
-                return 'simplethings_entityaudit.config' === $id;
-            });
+        $container->setParameter('sonata_doctrine_orm_admin.audit.force', $force);
+        $container->setParameter('simplethings.entityaudit.audited_entities', []);
 
-        $container
-            ->expects(static::any())
-            ->method('getParameter')
-            ->willReturnCallback(static function (string $id) use ($force) {
-                if ('sonata_doctrine_orm_admin.audit.force' === $id) {
-                    return $force;
-                }
+        foreach ($services as $serviceId => $service) {
+            $definition = new Definition();
 
-                if ('simplethings.entityaudit.audited_entities' === $id) {
-                    return [];
-                }
+            $attributes = [
+                'manager_type' => 'orm',
+                'model_class' => $service['class'],
+            ];
 
-                return null;
-            });
-
-        $container
-            ->expects(static::any())
-            ->method('findTaggedServiceIds')
-            ->willReturnCallback(static function (string $id) use ($services): array {
-                if ('sonata.admin' !== $id) {
-                    return [];
-                }
-
-                $tags = [];
-                foreach ($services as $serviceId => $service) {
-                    $attributes = ['manager_type' => 'orm'];
-
-                    $audit = $service['audit'];
-                    if (null !== $audit) {
-                        $attributes['audit'] = $audit;
-                    }
-
-                    $tags[$serviceId] = [0 => $attributes];
-                }
-
-                return $tags;
-            });
-
-        $container
-            ->expects(static::any())
-            ->method('getDefinition')
-            ->willReturnCallback(static function (string $id): Definition {
-                return new Definition(null, [null, $id]);
-            });
-
-        $expectedAuditedEntities = [];
-
-        foreach ($services as $id => $service) {
-            if ($service['audited']) {
-                $expectedAuditedEntities[] = $id;
+            if (isset($service['audit'])) {
+                $attributes['audit'] = $service['audit'];
             }
-        }
 
-        $container
-            ->expects(static::once())
-            ->method('setParameter')
-            ->with('simplethings.entityaudit.audited_entities', $expectedAuditedEntities);
+            $definition->addTag('sonata.admin', $attributes);
+
+            $container->setDefinition($serviceId, $definition);
+        }
 
         $compilerPass = new AddAuditEntityCompilerPass();
         $compilerPass->process($container);
+
+        static::assertSame($expectedAuditedEntities, $container->getParameter('simplethings.entityaudit.audited_entities'));
     }
 }
