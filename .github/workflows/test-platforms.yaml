@@ -8,6 +8,9 @@ on:
             - 5.x
     pull_request:
 
+permissions:
+  contents: read
+
 jobs:
     test-mysql:
         name: PHP ${{ matrix.php-version }} + MySQL + highest
