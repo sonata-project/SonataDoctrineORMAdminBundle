@@ -14,5 +14,9 @@
         <LessSpecificReturnStatement occurrences="1">
             <code>$alias</code>
         </LessSpecificReturnStatement>
+        <!-- https://github.com/doctrine/orm/pull/9778 -->
+        <ArgumentTypeCoercion occurrences="1">
+            <code>$rootEntity</code>
+        </ArgumentTypeCoercion>
     </file>
 </files>
