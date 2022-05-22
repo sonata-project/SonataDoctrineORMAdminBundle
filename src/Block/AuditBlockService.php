@@ -30,9 +30,6 @@ final class AuditBlockService extends AbstractBlockService
      */
     private $auditReader;
 
-    /**
-     * @param AuditReader $auditReader
-     */
     public function __construct(Environment $twig, AuditReader $auditReader)
     {
         parent::__construct($twig);
