@@ -26,18 +26,21 @@ final class AuditReader implements AuditReaderInterface
 {
     /**
      * @var SimpleThingsAuditReader
-     * @phpstan-var SimpleThingsAuditReader
      */
     private $auditReader;
 
-    /**
-     * @phpstan-param SimpleThingsAuditReader $auditReader
-     */
     public function __construct(SimpleThingsAuditReader $auditReader)
     {
         $this->auditReader = $auditReader;
     }
 
+    /**
+     * @param int|string $id
+     * @param int|string $revisionId
+     *
+     * @phpstan-param class-string<T> $className
+     * @phpstan-return T|null
+     */
     public function find(string $className, $id, $revisionId): ?object
     {
         try {
