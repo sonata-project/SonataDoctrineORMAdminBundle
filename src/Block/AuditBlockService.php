@@ -26,12 +26,12 @@ use Twig\Environment;
 final class AuditBlockService extends AbstractBlockService
 {
     /**
-     * @var AuditReader<object>
+     * @var AuditReader
      */
     private $auditReader;
 
     /**
-     * @param AuditReader<object> $auditReader
+     * @param AuditReader $auditReader
      */
     public function __construct(Environment $twig, AuditReader $auditReader)
     {

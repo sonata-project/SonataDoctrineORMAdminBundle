@@ -25,13 +25,13 @@ use Sonata\AdminBundle\Model\Revision;
 final class AuditReader implements AuditReaderInterface
 {
     /**
-     * @var SimpleThingsAuditReader<object>
-     * @phpstan-var SimpleThingsAuditReader<T>
+     * @var SimpleThingsAuditReader
+     * @phpstan-var SimpleThingsAuditReader
      */
     private $auditReader;
 
     /**
-     * @phpstan-param SimpleThingsAuditReader<T> $auditReader
+     * @phpstan-param SimpleThingsAuditReader $auditReader
      */
     public function __construct(SimpleThingsAuditReader $auditReader)
     {
