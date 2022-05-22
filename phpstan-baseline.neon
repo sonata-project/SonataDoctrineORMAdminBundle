@@ -15,3 +15,6 @@ parameters:
         - # https://github.com/doctrine/orm/pull/8767
             message: '#Method Sonata\\DoctrineORMAdminBundle\\Model\\ModelManager::getMetadata\(\) should return Doctrine\\ORM\\Mapping\\ClassMetadata\<TObject of object\> but returns Doctrine\\ORM\\Mapping\\ClassMetadata\<object\>\.$#'
             path: src/Model/ModelManager.php
+        - # https://github.com/doctrine/orm/pull/9778
+            message: '#Parameter \#1 \$className of method Doctrine\\Persistence\\Mapping\\AbstractClassMetadataFactory<Doctrine\\ORM\\Mapping\\ClassMetadata>::getMetadataFor\(\) expects class-string, string given.#'
+            path: src/Datagrid/ProxyQuery.php
