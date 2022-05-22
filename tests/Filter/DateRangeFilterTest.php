@@ -36,10 +36,6 @@ final class DateRangeFilterTest extends FilterTestCase
             'type' => null,
             'value' => ['start' => null, 'end' => null],
         ]));
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
-            'type' => null,
-            'value' => ['start' => '', 'end' => ''],
-        ]));
 
         self::assertSameQuery([], $proxyQuery);
         static::assertFalse($filter->isActive());
@@ -84,7 +80,7 @@ final class DateRangeFilterTest extends FilterTestCase
             'type' => null,
             'value' => [
                 'start' => $startDateTime,
-                'end' => '',
+                'end' => null,
             ],
         ]));
 
@@ -105,7 +101,7 @@ final class DateRangeFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
-                'start' => '',
+                'start' => null,
                 'end' => $endDateTime,
             ],
         ]));
@@ -137,7 +133,7 @@ final class DateRangeFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
-                'start' => '',
+                'start' => null,
                 'end' => $modelEndDateTime,
             ],
         ]));
@@ -196,7 +192,7 @@ final class DateRangeFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,
             'value' => [
-                'start' => '',
+                'start' => null,
                 'end' => $endDateTime,
             ],
         ]));

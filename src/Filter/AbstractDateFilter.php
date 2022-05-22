@@ -156,8 +156,8 @@ abstract class AbstractDateFilter extends Filter
 
         // transform types
         if ('timestamp' === $this->getOption('input_type')) {
-            $value['start'] = $value['start'] instanceof \DateTimeInterface ? $value['start']->getTimestamp() : 0;
-            $value['end'] = $value['end'] instanceof \DateTimeInterface ? $value['end']->getTimestamp() : 0;
+            $value['start'] = $value['start'] instanceof \DateTimeInterface ? $value['start']->getTimestamp() : null;
+            $value['end'] = $value['end'] instanceof \DateTimeInterface ? $value['end']->getTimestamp() : null;
         }
 
         // default type for range filter
@@ -169,16 +169,16 @@ abstract class AbstractDateFilter extends Filter
         if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $type) {
             $this->applyWhere($query, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
         } else {
-            if ($value['start']) {
+            if (null !== $value['start']) {
                 $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
             }
 
-            if ($value['end']) {
+            if (null !== $value['end']) {
                 $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
             }
         }
 
-        if ($value['start']) {
+        if (null !== $value['start']) {
             $query->getQueryBuilder()->setParameter(
                 $startDateParameterName,
                 $value['start'],
@@ -186,7 +186,7 @@ abstract class AbstractDateFilter extends Filter
             );
         }
 
-        if ($value['end']) {
+        if (null !== $value['end']) {
             $query->getQueryBuilder()->setParameter(
                 $endDateParameterName,
                 $value['end'],

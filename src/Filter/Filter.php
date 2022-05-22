@@ -28,6 +28,9 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
 
     /**
      * Apply the filter to the QueryBuilder instance.
+     *
+     * @phpstan-param literal-string $alias
+     * @phpstan-param literal-string $field
      */
     abstract public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void;
 
@@ -67,13 +70,15 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     /**
      * @return string[]
      *
-     * @phpstan-return array{string, string}
+     * @phpstan-return array{literal-string, literal-string}
      */
     protected function association(ProxyQueryInterface $query, FilterData $data): array
     {
         $alias = $query->entityJoin($this->getParentAssociationMappings());
+        /** @var literal-string $fieldName */
+        $fieldName = $this->getFieldName();
 
-        return [$alias, $this->getFieldName()];
+        return [$alias, $fieldName];
     }
 
     /**
