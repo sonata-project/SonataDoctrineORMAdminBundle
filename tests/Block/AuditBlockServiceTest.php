@@ -27,7 +27,7 @@ use Sonata\DoctrineORMAdminBundle\Block\AuditBlockService;
 final class AuditBlockServiceTest extends BlockServiceTestCase
 {
     /**
-     * @var SimpleThingsAuditReader<object>&MockObject
+     * @var SimpleThingsAuditReader&MockObject
      */
     private $simpleThingsAuditReader;
 

@@ -5,9 +5,18 @@
         <TypeDoesNotContainType occurrences="1">
             <code>[] === $idx</code>
         </TypeDoesNotContainType>
-        <!-- https://github.com/vimeo/psalm/issues/4295 -->
-        <InvalidScalarArgument occurrences="1">
-            <code>$exception-&gt;getCode()</code>
-        </InvalidScalarArgument>
+    </file>
+    <!-- https://github.com/vimeo/psalm/issues/7995 -->
+    <file src="src/Datagrid/ProxyQuery.php">
+        <MoreSpecificReturnType occurrences="1">
+            <code>string</code>
+        </MoreSpecificReturnType>
+        <LessSpecificReturnStatement occurrences="1">
+            <code>$alias</code>
+        </LessSpecificReturnStatement>
+        <!-- https://github.com/doctrine/orm/pull/9778 -->
+        <ArgumentTypeCoercion occurrences="1">
+            <code>$rootEntity</code>
+        </ArgumentTypeCoercion>
     </file>
 </files>

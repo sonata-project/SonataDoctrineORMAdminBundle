@@ -28,6 +28,8 @@ interface ProxyQueryInterface extends BaseProxyQueryInterface
 
     /**
      * @param mixed[] $associationMappings
+     *
+     * @phpstan-return literal-string
      */
     public function entityJoin(array $associationMappings): string;
 

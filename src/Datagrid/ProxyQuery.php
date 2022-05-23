@@ -274,19 +274,28 @@ final class ProxyQuery implements ProxyQueryInterface
 
     public function entityJoin(array $associationMappings): string
     {
+        /** @var literal-string|false $alias */
         $alias = current($this->queryBuilder->getRootAliases());
+        if (false === $alias) {
+            throw new \RuntimeException('There are not root aliases defined in the query.');
+        }
 
         $newAlias = 's';
 
+        /** @var Query\Expr\Join[][] $joinedEntities */
         $joinedEntities = $this->queryBuilder->getDQLPart('join');
 
         foreach ($associationMappings as $associationMapping) {
+            /** @var literal-string $fieldName */
+            $fieldName = $associationMapping['fieldName'];
+
             // Do not add left join to already joined entities with custom query
             foreach ($joinedEntities as $joinExprList) {
                 foreach ($joinExprList as $joinExpr) {
-                    $newAliasTmp = $joinExpr->getAlias();
+                    /** @var literal-string $newAliasTmp */
+                    $newAliasTmp = $joinExpr->getAlias() ?? '';
 
-                    if (sprintf('%s.%s', $alias, $associationMapping['fieldName']) === $joinExpr->getJoin()) {
+                    if (sprintf('%s.%s', $alias, $fieldName) === $joinExpr->getJoin()) {
                         $this->entityJoinAliases[] = $newAliasTmp;
                         $alias = $newAliasTmp;
 
@@ -295,10 +304,10 @@ final class ProxyQuery implements ProxyQueryInterface
                 }
             }
 
-            $newAlias .= '_'.$associationMapping['fieldName'];
+            $newAlias .= '_'.$fieldName;
             if (!\in_array($newAlias, $this->entityJoinAliases, true)) {
                 $this->entityJoinAliases[] = $newAlias;
-                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $associationMapping['fieldName']), $newAlias);
+                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $fieldName), $newAlias);
             }
 
             $alias = $newAlias;
