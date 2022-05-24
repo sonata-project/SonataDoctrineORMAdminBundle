@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.8...4.3.0) - 2022-05-24
+### Added
+- [[#1656](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1656)] Added support for `doctrine/persistence` 3 ([@dmaicher](https://github.com/dmaicher))
+
+### Fixed
+- [[#1655](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1655)] Precise Filter::filter() param as literal-string. ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.2.8](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.7...4.2.8) - 2022-03-29
 ### Fixed
 - [[#1646](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1646)] The lastpage is correctly set to 1 when there is no results. ([@VincentLanglet](https://github.com/VincentLanglet))
