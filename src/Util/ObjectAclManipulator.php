@@ -86,7 +86,7 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
                 $countAdded += $batchAdded;
                 $countUpdated += $batchUpdated;
             }
-        } catch (\PDOException | Exception $e) {
+        } catch (\PDOException|Exception $e) {
             throw new ModelManagerException(
                 sprintf('Failed to configure acl for class: %s', $class),
                 (int) $e->getCode(),
