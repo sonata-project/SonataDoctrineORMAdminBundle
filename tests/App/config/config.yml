@@ -10,7 +10,7 @@ framework:
 
 twig:
     exception_controller: null
-    strict_variables: false
+    strict_variables: true
 
 parameters:
     env(DATABASE_URL): 'sqlite:////%kernel.cache_dir%/test_database.db'
