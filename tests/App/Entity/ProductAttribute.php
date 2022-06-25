@@ -21,17 +21,13 @@ class ProductAttribute
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Product")
-     *
-     * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     public function __construct(Product $product, string $name)
     {

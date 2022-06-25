@@ -24,19 +24,15 @@ final class UserBrowser
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
-     *
-     * @var int|null
      */
-    private $userId;
+    private ?int $userId = null;
 
     /**
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
-     *
-     * @var int|null
      */
-    private $browserId;
+    private ?int $browserId = null;
 
     public function setUserId(int $userId): void
     {

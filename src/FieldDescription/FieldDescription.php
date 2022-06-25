@@ -51,16 +51,16 @@ final class FieldDescription extends BaseFieldDescription
     {
         $this->fieldMapping = $fieldMapping;
 
-        $this->type = $this->type ?? (string) $fieldMapping['type'];
-        $this->mappingType = $this->mappingType ?? $fieldMapping['type'];
+        $this->type ??= (string) $fieldMapping['type'];
+        $this->mappingType ??= $fieldMapping['type'];
     }
 
     protected function setAssociationMapping(array $associationMapping): void
     {
         $this->associationMapping = $associationMapping;
 
-        $this->type = $this->type ?? (string) $associationMapping['type'];
-        $this->mappingType = $this->mappingType ?? $associationMapping['type'];
+        $this->type ??= (string) $associationMapping['type'];
+        $this->mappingType ??= $associationMapping['type'];
     }
 
     protected function setParentAssociationMappings(array $parentAssociationMappings): void

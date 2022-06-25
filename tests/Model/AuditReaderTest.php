@@ -31,7 +31,7 @@ final class AuditReaderTest extends TestCase
     /**
      * @var AuditReader<object>
      */
-    private $auditReader;
+    private AuditReader $auditReader;
 
     protected function setUp(): void
     {

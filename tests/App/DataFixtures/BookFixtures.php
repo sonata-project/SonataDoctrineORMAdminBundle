@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\DataFixtures;
 
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
+use Doctrine\Common\DataFixtures\FixtureInterface;
 use Doctrine\Persistence\ObjectManager;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
@@ -58,7 +59,7 @@ final class BookFixtures extends Fixture implements DependentFixtureInterface
     }
 
     /**
-     * @phpstan-return array<class-string<\Doctrine\Common\DataFixtures\FixtureInterface>>
+     * @phpstan-return array<class-string<FixtureInterface>>
      */
     public function getDependencies(): array
     {

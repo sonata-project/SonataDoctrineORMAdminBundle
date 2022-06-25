@@ -15,15 +15,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
 final class SimpleEntity
 {
-    /**
-     * @var int|null
-     */
-    private $schmeckles;
+    private ?int $schmeckles = null;
 
-    /**
-     * @var string|null
-     */
-    private $multiWordProperty;
+    private ?string $multiWordProperty = null;
 
     public function getSchmeckles(): ?int
     {

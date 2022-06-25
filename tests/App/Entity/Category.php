@@ -22,17 +22,13 @@ class Category
      * @ORM\Id
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
-     *
-     * @var string
      */
-    private $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     public function __construct(string $id = '', string $name = '')
     {

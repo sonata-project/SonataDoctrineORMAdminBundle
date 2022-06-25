@@ -24,10 +24,7 @@ use Sonata\AdminBundle\Model\Revision;
  */
 final class AuditReader implements AuditReaderInterface
 {
-    /**
-     * @var SimpleThingsAuditReader
-     */
-    private $auditReader;
+    private SimpleThingsAuditReader $auditReader;
 
     public function __construct(SimpleThingsAuditReader $auditReader)
     {

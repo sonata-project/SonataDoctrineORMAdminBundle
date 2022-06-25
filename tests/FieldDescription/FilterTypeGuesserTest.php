@@ -31,10 +31,7 @@ use Symfony\Component\Form\Guess\Guess;
 
 final class FilterTypeGuesserTest extends TestCase
 {
-    /**
-     * @var FilterTypeGuesser
-     */
-    private $guesser;
+    private FilterTypeGuesser $guesser;
 
     protected function setUp(): void
     {

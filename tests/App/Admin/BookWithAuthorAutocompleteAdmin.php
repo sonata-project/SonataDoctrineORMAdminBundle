@@ -16,9 +16,10 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Admin;
 use Sonata\AdminBundle\Admin\AbstractAdmin;
 use Sonata\AdminBundle\Form\FormMapper;
 use Sonata\AdminBundle\Form\Type\ModelAutocompleteType;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 
 /**
- * @phpstan-extends AbstractAdmin<\Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book>
+ * @phpstan-extends AbstractAdmin<Book>
  */
 final class BookWithAuthorAutocompleteAdmin extends AbstractAdmin
 {

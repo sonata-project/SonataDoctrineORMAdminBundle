@@ -15,10 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable;
 
 final class SubEmbeddedEntity
 {
-    /**
-     * @var bool|null
-     */
-    private $plainField;
+    private ?bool $plainField = null;
 
     public function setPlainField(bool $plainField): void
     {

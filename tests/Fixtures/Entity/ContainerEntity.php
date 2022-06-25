@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
+
 final class ContainerEntity
 {
     /**
@@ -25,12 +27,9 @@ final class ContainerEntity
      */
     public $embeddedEntity;
 
-    /**
-     * @var AssociatedEntity
-     */
-    private $associatedEntity;
+    private AssociatedEntity $associatedEntity;
 
-    public function __construct(AssociatedEntity $associatedEntity, Embeddable\EmbeddedEntity $embeddedEntity)
+    public function __construct(AssociatedEntity $associatedEntity, EmbeddedEntity $embeddedEntity)
     {
         $this->associatedEntity = $associatedEntity;
         $this->embeddedEntity = $embeddedEntity;

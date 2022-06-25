@@ -21,10 +21,7 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 {
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
+    private ManagerRegistry $registry;
 
     public function __construct(ManagerRegistry $registry)
     {

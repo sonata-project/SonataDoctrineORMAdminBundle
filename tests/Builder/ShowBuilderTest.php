@@ -35,10 +35,7 @@ final class ShowBuilderTest extends TestCase
      */
     private $guesser;
 
-    /**
-     * @var ShowBuilder
-     */
-    private $showBuilder;
+    private ShowBuilder $showBuilder;
 
     /**
      * @var MockObject&AdminInterface<object>

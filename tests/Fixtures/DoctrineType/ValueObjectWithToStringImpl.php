@@ -15,10 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 final class ValueObjectWithToStringImpl
 {
-    /**
-     * @var string
-     */
-    private $uuid;
+    private string $uuid;
 
     public function __construct(string $uuid)
     {

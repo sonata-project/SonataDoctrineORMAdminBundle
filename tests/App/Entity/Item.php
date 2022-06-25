@@ -21,25 +21,19 @@ class Item
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Command")
-     *
-     * @var Command
      */
-    private $command;
+    private Command $command;
 
     /**
      * @ORM\Id
      * @ORM\ManyToOne(targetEntity="Product")
-     *
-     * @var Product
      */
-    private $product;
+    private Product $product;
 
     /**
      * @ORM\Column(type="decimal")
-     *
-     * @var string
      */
-    private $offeredPrice;
+    private string $offeredPrice;
 
     public function __construct(Command $command, Product $product)
     {

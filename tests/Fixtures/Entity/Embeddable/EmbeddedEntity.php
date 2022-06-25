@@ -20,10 +20,7 @@ final class EmbeddedEntity
      */
     public $plainField;
 
-    /**
-     * @var SubEmbeddedEntity|null
-     */
-    private $subEmbeddedEntity;
+    private ?SubEmbeddedEntity $subEmbeddedEntity = null;
 
     public function setPlainField(bool $plainField): void
     {

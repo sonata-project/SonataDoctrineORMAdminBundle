@@ -56,7 +56,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @var ModelManager<object>
      */
-    private $modelManager;
+    private ModelManager $modelManager;
 
     public static function setUpBeforeClass(): void
     {
@@ -446,7 +446,7 @@ final class ModelManagerTest extends TestCase
     public function createUpdateRemoveData(): iterable
     {
         return [
-            'PDOException' => [
+            \PDOException::class => [
                 new \PDOException(),
             ],
             'DBALException' => [

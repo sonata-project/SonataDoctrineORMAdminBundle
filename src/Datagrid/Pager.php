@@ -25,10 +25,7 @@ use Sonata\AdminBundle\Datagrid\Pager as BasePager;
  */
 final class Pager extends BasePager
 {
-    /**
-     * @var int
-     */
-    private $resultsCount = 0;
+    private int $resultsCount = 0;
 
     public function getCurrentPageResults(): iterable
     {

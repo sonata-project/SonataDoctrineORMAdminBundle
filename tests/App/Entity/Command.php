@@ -21,17 +21,13 @@ class Command
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     *
-     * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="datetime")
-     *
-     * @var \DateTime
      */
-    private $createdAt;
+    private \DateTime $createdAt;
 
     public function __construct(int $id)
     {

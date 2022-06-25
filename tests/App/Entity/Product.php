@@ -21,24 +21,18 @@ class Product
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     *
-     * @var int
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Column(type="decimal")
-     *
-     * @var string
      */
-    private $currentPrice;
+    private string $currentPrice;
 
     public function __construct(int $id, string $name = '', string $currentPrice = '0.0')
     {
