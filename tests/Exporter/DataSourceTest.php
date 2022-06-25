@@ -24,10 +24,7 @@ use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
 
 final class DataSourceTest extends TestCase
 {
-    /**
-     * @var DataSource
-     */
-    private $dataSource;
+    private DataSource $dataSource;
 
     protected function setUp(): void
     {

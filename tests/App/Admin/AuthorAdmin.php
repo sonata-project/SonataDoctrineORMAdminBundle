@@ -24,7 +24,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 
 /**
- * @phpstan-extends AbstractAdmin<\Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author>
+ * @phpstan-extends AbstractAdmin<Author>
  */
 class AuthorAdmin extends AbstractAdmin
 {
@@ -34,9 +34,7 @@ class AuthorAdmin extends AbstractAdmin
             ->add('id')
             ->addIdentifier('name')
             ->add('number_of_books', FieldDescriptionInterface::TYPE_INTEGER, [
-                'accessor' => static function (Author $author): int {
-                    return $author->getBooks()->count();
-                },
+                'accessor' => static fn (Author $author): int => $author->getBooks()->count(),
                 'template' => 'author/list_number_of_books_field.html.twig',
             ])
             ->add('numberOfReaders', FieldDescriptionInterface::TYPE_INTEGER, [

@@ -21,18 +21,14 @@ class Car
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
-     *
-     * @var int
      */
-    private $year;
+    private int $year;
 
     public function __construct(string $name = '', int $year = 0)
     {

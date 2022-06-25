@@ -26,10 +26,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\TestEntityManagerFactory;
 
 final class ProxyQueryTest extends TestCase
 {
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
+    private EntityManagerInterface $em;
 
     public static function setUpBeforeClass(): void
     {

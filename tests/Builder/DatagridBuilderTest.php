@@ -40,10 +40,7 @@ use Symfony\Component\Form\Guess\TypeGuess;
  */
 final class DatagridBuilderTest extends TestCase
 {
-    /**
-     * @var DatagridBuilder
-     */
-    private $datagridBuilder;
+    private DatagridBuilder $datagridBuilder;
 
     /**
      * @var Stub&TypeGuesserInterface

@@ -25,15 +25,12 @@ use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
  */
 final class ShowBuilder implements ShowBuilderInterface
 {
-    /**
-     * @var TypeGuesserInterface
-     */
-    private $guesser;
+    private TypeGuesserInterface $guesser;
 
     /**
      * @var string[]
      */
-    private $templates;
+    private array $templates;
 
     /**
      * @param string[] $templates

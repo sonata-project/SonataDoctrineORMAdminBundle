@@ -24,10 +24,7 @@ use Symfony\Component\Form\Guess\Guess;
  */
 final class TypeGuesserTest extends TestCase
 {
-    /**
-     * @var TypeGuesser
-     */
-    private $guesser;
+    private TypeGuesser $guesser;
 
     protected function setUp(): void
     {

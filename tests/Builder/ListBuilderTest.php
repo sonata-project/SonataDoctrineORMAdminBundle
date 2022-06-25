@@ -36,10 +36,7 @@ final class ListBuilderTest extends TestCase
      */
     private $typeGuesser;
 
-    /**
-     * @var ListBuilder
-     */
-    private $listBuilder;
+    private ListBuilder $listBuilder;
 
     /**
      * @var MockObject&AdminInterface<object>

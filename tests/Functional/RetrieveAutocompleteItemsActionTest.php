@@ -24,7 +24,7 @@ final class RetrieveAutocompleteItemsActionTest extends BaseFunctionalTestCase
         $content = $this->client->getResponse()->getContent();
         static::assertIsString($content);
 
-        $response = json_decode($content, true);
+        $response = json_decode($content, true, 512, \JSON_THROW_ON_ERROR);
         static::assertIsArray($response);
 
         static::assertIsArray($response['items']);

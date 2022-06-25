@@ -31,10 +31,7 @@ final class AuditBlockServiceTest extends BlockServiceTestCase
      */
     private $simpleThingsAuditReader;
 
-    /**
-     * @var AuditBlockService
-     */
-    private $blockService;
+    private AuditBlockService $blockService;
 
     protected function setUp(): void
     {

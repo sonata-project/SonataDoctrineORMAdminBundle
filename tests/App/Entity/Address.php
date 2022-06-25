@@ -20,10 +20,8 @@ class Address
 {
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $street;
+    private string $street;
 
     public function __construct(string $street = '')
     {

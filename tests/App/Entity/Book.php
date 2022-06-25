@@ -24,38 +24,32 @@ class Book
      * @ORM\Id
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
-     *
-     * @var string
      */
-    private $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Author", inversedBy="books")
-     *
-     * @var Author|null
      */
-    private $author;
+    private ?Author $author;
 
     /**
      * @ORM\ManyToMany(targetEntity=Reader::class, cascade={"persist"})
      *
      * @var Collection<array-key, Reader>
      */
-    private $readers;
+    private Collection $readers;
 
     /**
      * @ORM\ManyToMany(targetEntity="Category")
      *
      * @var Collection<array-key, Category>
      */
-    private $categories;
+    private Collection $categories;
 
     public function __construct(
         string $id = '',
