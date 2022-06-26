@@ -21,10 +21,7 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 
 abstract class Filter extends BaseFilter implements GroupableConditionAwareInterface
 {
-    /**
-     * @var Composite|null
-     */
-    private $conditionGroup;
+    private ?Composite $conditionGroup = null;
 
     /**
      * Apply the filter to the QueryBuilder instance.

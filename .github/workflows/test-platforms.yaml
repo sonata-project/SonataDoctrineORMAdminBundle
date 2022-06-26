@@ -44,7 +44,7 @@ jobs:
                   php-version: ${{ matrix.php-version }}
                   coverage: pcov
                   tools: composer:v2
-                  extensions: zip, mysqli, pdo_mysql
+                  extensions: mysqli, pdo_mysql
 
             - name: Add PHPUnit matcher
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"
@@ -93,7 +93,6 @@ jobs:
                   php-version: ${{ matrix.php-version }}
                   coverage: pcov
                   tools: composer:v2
-                  extensions: zip
 
             - name: Add PHPUnit matcher
               run: echo "::add-matcher::${{ runner.tool_cache }}/phpunit.json"

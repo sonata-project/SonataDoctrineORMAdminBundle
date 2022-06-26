@@ -86,21 +86,15 @@ abstract class FilterTestCase extends TestCase
         );
 
         $queryBuilder->method('expr')->willReturnCallback(
-            function (): Expr {
-                return $this->createExprStub();
-            }
+            fn (): Expr => $this->createExprStub()
         );
 
         $queryBuilder->method('getRootAliases')->willReturnCallback(
-            static function (): array {
-                return ['o'];
-            }
+            static fn (): array => ['o']
         );
 
         $queryBuilder->method('getDQLPart')->willReturnCallback(
-            static function (): array {
-                return [];
-            }
+            static fn (): array => []
         );
 
         $queryBuilder->method('leftJoin')->willReturnCallback(
@@ -117,15 +111,11 @@ abstract class FilterTestCase extends TestCase
         $expr = $this->createStub(Expr::class);
 
         $expr->method('orX')->willReturnCallback(
-            static function (): Orx {
-                return new Orx(\func_get_args());
-            }
+            static fn (): Orx => new Orx(\func_get_args())
         );
 
         $expr->method('andX')->willReturnCallback(
-            static function (): Andx {
-                return new Andx(\func_get_args());
-            }
+            static fn (): Andx => new Andx(\func_get_args())
         );
 
         $expr->method('in')->willReturnCallback(
@@ -155,15 +145,11 @@ abstract class FilterTestCase extends TestCase
         );
 
         $expr->method('isNull')->willReturnCallback(
-            static function (string $queryPart): string {
-                return $queryPart.' IS NULL';
-            }
+            static fn (string $queryPart): string => $queryPart.' IS NULL'
         );
 
         $expr->method('isNotNull')->willReturnCallback(
-            static function (string $queryPart): string {
-                return $queryPart.' IS NOT NULL';
-            }
+            static fn (string $queryPart): string => $queryPart.' IS NOT NULL'
         );
 
         return $expr;

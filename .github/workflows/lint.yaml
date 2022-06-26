@@ -32,7 +32,6 @@ jobs:
                   php-version: '8.1'
                   coverage: none
                   tools: composer:v2
-                  extensions: zip
 
             - name: Install Composer dependencies (highest)
               uses: ramsey/composer-install@v2

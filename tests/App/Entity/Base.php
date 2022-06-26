@@ -29,10 +29,8 @@ abstract class Base
      * @ORM\Id
      * @ORM\Column(type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
-     *
-     * @var int|null
      */
-    private $id = null;
+    private ?int $id = null;
 
     public function getId(): ?int
     {

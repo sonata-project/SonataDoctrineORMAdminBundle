@@ -20,10 +20,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util;
  */
 final class NonIntegerIdentifierTestClass
 {
-    /**
-     * @var string
-     */
-    private $uuid;
+    private string $uuid;
 
     /**
      * @param string $uuid

@@ -77,37 +77,25 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  */
 final class ProxyQuery implements ProxyQueryInterface
 {
-    /**
-     * @var QueryBuilder
-     */
-    private $queryBuilder;
+    private QueryBuilder $queryBuilder;
 
-    /**
-     * @var string|null
-     */
-    private $sortBy;
+    private ?string $sortBy = null;
 
-    /**
-     * @var string|null
-     */
-    private $sortOrder;
+    private ?string $sortOrder = null;
 
-    /**
-     * @var int
-     */
-    private $uniqueParameterId;
+    private int $uniqueParameterId;
 
     /**
      * @var string[]
      */
-    private $entityJoinAliases;
+    private array $entityJoinAliases;
 
     /**
      * The map of query hints.
      *
      * @var array<string,mixed>
      */
-    private $hints = [];
+    private array $hints = [];
 
     public function __construct(QueryBuilder $queryBuilder)
     {

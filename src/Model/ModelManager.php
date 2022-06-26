@@ -22,6 +22,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
@@ -42,20 +43,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface
 {
     public const ID_SEPARATOR = '~';
 
-    /**
-     * @var ManagerRegistry
-     */
-    private $registry;
+    private ManagerRegistry $registry;
 
-    /**
-     * @var PropertyAccessorInterface
-     */
-    private $propertyAccessor;
+    private PropertyAccessorInterface $propertyAccessor;
 
     /**
      * @var EntityManagerInterface[]
      */
-    private $cache = [];
+    private array $cache = [];
 
     public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor)
     {
@@ -215,7 +210,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface
         }
 
         if ($query instanceof ProxyQuery) {
-            /** @phpstan-var \Doctrine\ORM\Tools\Pagination\Paginator<T> $results */
+            /** @phpstan-var Paginator<T> $results */
             $results = $query->execute();
 
             return $results;

@@ -24,31 +24,25 @@ class Author
      * @ORM\Id
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
-     *
-     * @var string
      */
-    private $id;
+    private string $id;
 
     /**
      * @ORM\Column(type="string")
-     *
-     * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author")
      *
      * @var Collection<array-key, Book>
      */
-    private $books;
+    private Collection $books;
 
     /**
      * @ORM\Embedded(class="Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Address")
-     *
-     * @var Address
      */
-    private $address;
+    private Address $address;
 
     public function __construct(string $id = '', string $name = '')
     {
@@ -103,8 +97,10 @@ class Author
 
     public function getNumberOfReaders(): int
     {
-        return array_sum($this->books->map(static function (Book $book): int {
-            return $book->getReaders()->count();
-        })->toArray());
+        return array_sum(
+            $this->books->map(
+                static fn (Book $book): int => $book->getReaders()->count()
+            )->toArray()
+        );
     }
 }
