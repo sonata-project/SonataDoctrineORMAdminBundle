@@ -48,3 +48,9 @@ $input = new ArrayInput([
     '--symlink' => true,
 ]);
 $application->run($input, new NullOutput());
+
+$input = new ArrayInput([
+    'command' => 'cache:clear',
+    '--no-warmup' => true,
+]);
+$application->run($input, new NullOutput());
