@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Filter\Model\FilterData;
-use Sonata\AdminBundle\Form\Type\Filter\DefaultType;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -51,18 +50,21 @@ final class ClassFilter extends Filter
         ];
     }
 
-    public function getRenderSettings(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function getFormOptions(): array
     {
-        return [DefaultType::class, [
-            'operator_type' => $this->getOption('operator_type'),
-            'operator_options' => $this->getOption('operator_options'),
+        return [
             'field_type' => $this->getFieldType(),
             'field_options' => [
                 'required' => false,
                 'choices' => $this->getOption('sub_classes'),
             ],
+            'operator_type' => $this->getOption('operator_type'),
+            'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
-        ]];
+        ];
     }
 
     private function getOperator(int $type): string
