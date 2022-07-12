@@ -66,7 +66,7 @@ final class ModelFilterTest extends FilterTestCase
 
         // the alias is now computer by the entityJoin method
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
+            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
         self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
@@ -97,7 +97,7 @@ final class ModelFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current(($proxyQuery->getRootAliases())).'.field_name) IS NULL'],
+            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
 
@@ -115,7 +115,7 @@ final class ModelFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR '.current(($proxyQuery->getRootAliases())).'.field_name IS EMPTY'],
+            ['WHERE alias NOT IN :field_name_0 OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
             $proxyQuery
         );
     }
