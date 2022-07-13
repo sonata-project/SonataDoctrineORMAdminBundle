@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Sonata\AdminBundle\Filter\Model\FilterData;
-use Sonata\AdminBundle\Form\Type\Filter\ChoiceType;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\AdminBundle\Search\SearchableFilterInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -125,13 +124,16 @@ final class StringFilter extends Filter implements SearchableFilterInterface
         ];
     }
 
-    public function getRenderSettings(): array
+    /**
+     * @return array<string, mixed>
+     */
+    public function getFormOptions(): array
     {
-        return [ChoiceType::class, [
+        return [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ]];
+        ];
     }
 
     private function getOperator(int $type): string

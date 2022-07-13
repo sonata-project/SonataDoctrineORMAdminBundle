@@ -15,10 +15,6 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\DBAL\Types\Types;
 use Sonata\AdminBundle\Filter\Model\FilterData;
-use Sonata\AdminBundle\Form\Type\Filter\DateRangeType;
-use Sonata\AdminBundle\Form\Type\Filter\DateTimeRangeType;
-use Sonata\AdminBundle\Form\Type\Filter\DateTimeType;
-use Sonata\AdminBundle\Form\Type\Filter\DateType;
 use Sonata\AdminBundle\Form\Type\Operator\DateOperatorType;
 use Sonata\AdminBundle\Form\Type\Operator\DateRangeOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -100,23 +96,16 @@ abstract class AbstractDateFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $value, $this->getParameterType($value));
     }
 
-    final public function getRenderSettings(): array
+    /**
+     * @return array<string, mixed>
+     */
+    final public function getFormOptions(): array
     {
-        $name = DateType::class;
-
-        if ($this->time && $this->range) {
-            $name = DateTimeRangeType::class;
-        } elseif ($this->time) {
-            $name = DateTimeType::class;
-        } elseif ($this->range) {
-            $name = DateRangeType::class;
-        }
-
-        return [$name, [
+        return [
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
-        ]];
+        ];
     }
 
     private function filterRange(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
