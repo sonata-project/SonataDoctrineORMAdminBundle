@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.0...4.3.1) - 2022-07-13
+### Fixed
+- [[#1669](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1669)] Solved deprecation with SonataAdminBundle 4.14 ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Removed
+- [[#1661](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1661)] Support of Symfony 5.3 ([@franmomu](https://github.com/franmomu))
+
 ## [4.3.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.2.8...4.3.0) - 2022-05-24
 ### Added
 - [[#1656](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1656)] Added support for `doctrine/persistence` 3 ([@dmaicher](https://github.com/dmaicher))
