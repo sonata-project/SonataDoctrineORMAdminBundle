@@ -133,6 +133,7 @@ final class StringFilter extends Filter implements SearchableFilterInterface
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
+            'operator_type' => StringOperatorType::class,
         ];
     }
 
