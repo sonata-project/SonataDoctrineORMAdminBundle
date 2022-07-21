@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.3.2](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.1...4.3.2) - 2022-07-21
+### Fixed
+- [[#1674](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1674)] Fix missing 'operator_type' array value returned in `AbstractDateFilter:: getFormOptions()` bug to avoid not rendered advanced filter options in DateFilter or DateTimeFilter. ([@davidromani](https://github.com/davidromani))
+
 ## [4.3.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.0...4.3.1) - 2022-07-13
 ### Fixed
 - [[#1669](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1669)] Solved deprecation with SonataAdminBundle 4.14 ([@VincentLanglet](https://github.com/VincentLanglet))
