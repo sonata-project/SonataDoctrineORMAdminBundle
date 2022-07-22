@@ -105,6 +105,7 @@ abstract class AbstractDateFilter extends Filter
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
+            'operator_type' => $this->range ? DateRangeOperatorType::class : DateOperatorType::class,
         ];
     }
 
