@@ -62,6 +62,7 @@ final class StringListFilter extends Filter
             'field_type' => $this->getFieldType(),
             'field_options' => $this->getFieldOptions(),
             'label' => $this->getLabel(),
+            'operator_type' => ContainsOperatorType::class,
         ];
     }
 }
