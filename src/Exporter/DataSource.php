@@ -17,18 +17,10 @@ use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exporter\DataSourceInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
-use Sonata\Exporter\Source\SourceIteratorInterface;
 
 final class DataSource implements DataSourceInterface
 {
-    /**
-     * NEXT_MAJOR: Return \Iterator instead.
-     *
-     * @psalm-suppress DeprecatedClass
-     *
-     * @see https://github.com/sonata-project/exporter/pull/532
-     */
-    public function createIterator(BaseProxyQueryInterface $query, array $fields): SourceIteratorInterface
+    public function createIterator(BaseProxyQueryInterface $query, array $fields): \Iterator
     {
         if (!$query instanceof ProxyQueryInterface) {
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
