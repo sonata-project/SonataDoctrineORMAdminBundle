@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.4.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.3...4.4.0) - 2022-08-02
+### Added
+- [[#1680](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1680)] Support for sonata-project/exporter ^3 ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.3.3](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.2...4.3.3) - 2022-07-22
 ### Fixed
 - [[#1677](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1677)] Display of advanced filter for CounterFilter, NumberFilter, StringFilter and StringListFilter. ([@VincentLanglet](https://github.com/VincentLanglet))
