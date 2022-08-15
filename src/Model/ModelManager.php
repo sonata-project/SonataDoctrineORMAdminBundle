@@ -30,6 +30,7 @@ use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
 use Sonata\AdminBundle\Model\LockInterface;
 use Sonata\AdminBundle\Model\ModelManagerInterface;
+use Sonata\AdminBundle\Model\ProxyResolverInterface;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
@@ -39,7 +40,7 @@ use Symfony\Component\PropertyAccess\PropertyAccessorInterface;
  * @phpstan-implements ModelManagerInterface<T>
  * @phpstan-implements LockInterface<T>
  */
-final class ModelManager implements ModelManagerInterface, LockInterface
+final class ModelManager implements ModelManagerInterface, LockInterface, ProxyResolverInterface
 {
     public const ID_SEPARATOR = '~';
 
@@ -56,6 +57,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface
     {
         $this->registry = $registry;
         $this->propertyAccessor = $propertyAccessor;
+    }
+
+    public function getRealClass(object $object): string
+    {
+        return ClassUtils::getClass($object);
     }
 
     public function create(object $object): void
