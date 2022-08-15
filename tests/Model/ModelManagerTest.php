@@ -37,6 +37,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\ValueObjectWithToS
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\AssociatedEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ContainerEntity;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM\User;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
@@ -75,6 +76,11 @@ final class ModelManagerTest extends TestCase
     {
         $this->registry = $this->createMock(ManagerRegistry::class);
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
+    }
+
+    public function testGetRealClass(): void
+    {
+        static::assertSame(User::class, $this->modelManager->getRealClass(new User()));
     }
 
     /**
