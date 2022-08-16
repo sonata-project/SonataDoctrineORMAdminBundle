@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.5.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.4.0...4.5.0) - 2022-08-16
+### Added
+- [[#1685](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1685)] ModelManager now implements ProxyResolverInterface ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1685](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1685)] SonataAdminBundle 4.17 deprecations. ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.4.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.3.3...4.4.0) - 2022-08-02
 ### Added
 - [[#1680](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1680)] Support for sonata-project/exporter ^3 ([@VincentLanglet](https://github.com/VincentLanglet))
