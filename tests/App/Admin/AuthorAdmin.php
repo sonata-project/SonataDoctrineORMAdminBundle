@@ -74,7 +74,7 @@ class AuthorAdmin extends AbstractAdmin
     protected function configureQuery(ProxyQueryInterface $query): ProxyQueryInterface
     {
         \assert($query instanceof ORMProxyQueryInterface);
-
+        /** @phpstan-var ORMProxyQueryInterface<Author> $query */
         $alias = $query->getQueryBuilder()->getRootAliases()[0];
 
         $query
