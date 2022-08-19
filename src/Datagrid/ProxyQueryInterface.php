@@ -17,10 +17,14 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 
+/**
+ * @phpstan-template T of object
+ * @phpstan-extends BaseProxyQueryInterface<T>
+ */
 interface ProxyQueryInterface extends BaseProxyQueryInterface
 {
     /**
-     * @return array<object>|(\Traversable<object>&\Countable)
+     * @return array<T>|(\Traversable<T>&\Countable)
      */
     public function execute();
 

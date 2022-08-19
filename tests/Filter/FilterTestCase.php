@@ -23,7 +23,8 @@ use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 abstract class FilterTestCase extends TestCase
 {
     /**
-     * @param string[] $expected
+     * @param string[]           $expected
+     * @param ProxyQuery<object> $proxyQuery
      */
     final protected function assertSameQuery(array $expected, ProxyQuery $proxyQuery): void
     {
@@ -36,7 +37,8 @@ abstract class FilterTestCase extends TestCase
     }
 
     /**
-     * @param mixed[] $expected
+     * @param mixed[]            $expected
+     * @param ProxyQuery<object> $proxyQuery
      */
     final protected function assertSameQueryParameters(array $expected, ProxyQuery $proxyQuery): void
     {

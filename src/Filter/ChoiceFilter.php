@@ -54,6 +54,9 @@ final class ChoiceFilter extends Filter
         ];
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         if (0 === \count($data->getValue())) {
@@ -83,6 +86,9 @@ final class ChoiceFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         if ('' === $data->getValue() || false === $data->getValue()) {

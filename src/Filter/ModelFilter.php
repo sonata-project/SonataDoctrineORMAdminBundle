@@ -67,6 +67,8 @@ final class ModelFilter extends Filter
     /**
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
+     *
+     * @param ProxyQueryInterface<object> $query
      */
     protected function handleMultiple(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
@@ -113,6 +115,8 @@ final class ModelFilter extends Filter
     /**
      * Retrieve the parent alias for given alias.
      * Root alias for direct association or entity joined alias for association depth >= 2.
+     *
+     * @param ProxyQueryInterface<object> $query
      */
     private function getParentAlias(ProxyQueryInterface $query, string $alias): string
     {

@@ -68,6 +68,9 @@ final class CallbackFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     public function customCallback(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
     {
         $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));

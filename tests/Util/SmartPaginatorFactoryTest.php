@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Util;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Address;
@@ -31,6 +32,7 @@ final class SmartPaginatorFactoryTest extends TestCase
      */
     public function testFetchJoinedCollection(QueryBuilder $queryBuilder, bool $expected): void
     {
+        /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
         $proxyQuery = $this->createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')
@@ -79,6 +81,7 @@ final class SmartPaginatorFactoryTest extends TestCase
      */
     public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
+        /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
         $proxyQuery = $this->createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')
@@ -191,6 +194,7 @@ final class SmartPaginatorFactoryTest extends TestCase
      */
     public function testCountWalkerDistinct(QueryBuilder $queryBuilder, bool $hasHint, bool $expected): void
     {
+        /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
         $proxyQuery = $this->createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')

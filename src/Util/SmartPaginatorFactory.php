@@ -25,7 +25,9 @@ final class SmartPaginatorFactory
     /**
      * @param array<string, mixed> $hints
      *
-     * @phpstan-return Paginator<object>
+     * @phpstan-template T of object
+     * @phpstan-param ProxyQueryInterface<T> $proxyQuery
+     * @phpstan-return Paginator<T>
      */
     public static function create(ProxyQueryInterface $proxyQuery, array $hints = []): Paginator
     {
@@ -70,6 +72,8 @@ final class SmartPaginatorFactory
 
     /**
      * @see https://github.com/doctrine/orm/issues/8278#issue-705517756
+     *
+     * @param ProxyQueryInterface<object> $proxyQuery
      */
     private static function canDisableOutPutWalkers(ProxyQueryInterface $proxyQuery): bool
     {
@@ -115,6 +119,9 @@ final class SmartPaginatorFactory
         return true;
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $proxyQuery
+     */
     private static function hasOrderByWithToManyAssociation(ProxyQueryInterface $proxyQuery): bool
     {
         $queryBuilder = $proxyQuery->getQueryBuilder();
