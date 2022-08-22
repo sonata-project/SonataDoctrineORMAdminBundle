@@ -75,7 +75,7 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  * @method QueryBuilder         resetDQLParts($parts = null)
  * @method QueryBuilder         resetDQLPart($part)
  *
- * @phpstan-template T of object
+ * @phpstan-template-covariant T of object
  * @phpstan-implements ProxyQueryInterface<T>
  */
 final class ProxyQuery implements ProxyQueryInterface
