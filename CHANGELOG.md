@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.6.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.5.0...4.6.0) - 2022-08-22
+### Added
+- [[#1687](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1687)] Generics for ProxyQueryInterface and ProxyQuery ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.5.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.4.0...4.5.0) - 2022-08-16
 ### Added
 - [[#1685](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1685)] ModelManager now implements ProxyResolverInterface ([@VincentLanglet](https://github.com/VincentLanglet))
