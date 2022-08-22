@@ -26,6 +26,7 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     /**
      * Apply the filter to the QueryBuilder instance.
      *
+     * @phpstan-param ProxyQueryInterface<object> $query
      * @phpstan-param literal-string $alias
      * @phpstan-param literal-string $field
      */
@@ -65,6 +66,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     }
 
     /**
+     * @param ProxyQueryInterface<object> $query
+     *
      * @return string[]
      *
      * @phpstan-return array{literal-string, literal-string}
@@ -79,7 +82,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     }
 
     /**
-     * @param mixed $parameter
+     * @param ProxyQueryInterface<object> $query
+     * @param mixed                       $parameter
      */
     final protected function applyWhere(ProxyQueryInterface $query, $parameter): void
     {
@@ -94,7 +98,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     }
 
     /**
-     * @param mixed $parameter
+     * @param ProxyQueryInterface<object> $query
+     * @param mixed                       $parameter
      */
     final protected function applyHaving(ProxyQueryInterface $query, $parameter): void
     {
@@ -108,6 +113,9 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
         $this->setActive(true);
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     final protected function getNewParameterName(ProxyQueryInterface $query): string
     {
         // dots are not accepted in a DQL identifier so replace them
@@ -123,7 +131,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
      * instead of having unfolded "WHERE ..." clauses like "WHERE previous_condition = previous_value OR filter_1 = value OR filter_2 = value OR ...",
      * which will produce undesired results.
      *
-     * @param mixed $parameter
+     * @param ProxyQueryInterface<object> $query
+     * @param mixed                       $parameter
      */
     private function addOrParameter(ProxyQueryInterface $query, $parameter): void
     {

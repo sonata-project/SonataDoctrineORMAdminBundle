@@ -74,6 +74,9 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  * @method array                getDQLParts()
  * @method QueryBuilder         resetDQLParts($parts = null)
  * @method QueryBuilder         resetDQLPart($part)
+ *
+ * @phpstan-template T of object
+ * @phpstan-implements ProxyQueryInterface<T>
  */
 final class ProxyQuery implements ProxyQueryInterface
 {
@@ -128,7 +131,7 @@ final class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * @return Paginator<object>
+     * @return Paginator<T>
      */
     public function execute()
     {
@@ -312,6 +315,8 @@ final class ProxyQuery implements ProxyQueryInterface
      *
      * @see \Doctrine\ORM\Query::setHint
      * @see \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER
+     *
+     * @return $this
      */
     public function setHint(string $name, $value): ProxyQueryInterface
     {

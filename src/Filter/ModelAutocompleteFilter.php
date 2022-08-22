@@ -74,6 +74,8 @@ final class ModelAutocompleteFilter extends Filter
     /**
      * For the record, the $alias value is provided by the association method (and the entity join method)
      *  so the field value is not used here.
+     *
+     * @param ProxyQueryInterface<object> $query
      */
     protected function handleMultiple(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
@@ -92,7 +94,19 @@ final class ModelAutocompleteFilter extends Filter
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
-    protected function handleModel(ProxyQueryInterface $query, string $alias, FilterData $data): void
+    protected function association(ProxyQueryInterface $query, FilterData $data): array
+    {
+        $associationMappings = $this->getParentAssociationMappings();
+        $associationMappings[] = $this->getAssociationMapping();
+        $alias = $query->entityJoin($associationMappings);
+
+        return [$alias, ''];
+    }
+
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
+    private function handleModel(ProxyQueryInterface $query, string $alias, FilterData $data): void
     {
         $parameterName = $this->getNewParameterName($query);
 
@@ -103,14 +117,5 @@ final class ModelAutocompleteFilter extends Filter
         }
 
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
-    }
-
-    protected function association(ProxyQueryInterface $query, FilterData $data): array
-    {
-        $associationMappings = $this->getParentAssociationMappings();
-        $associationMappings[] = $this->getAssociationMapping();
-        $alias = $query->entityJoin($associationMappings);
-
-        return [$alias, ''];
     }
 }

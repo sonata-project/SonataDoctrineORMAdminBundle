@@ -200,8 +200,10 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function createQuery(string $class, string $alias = 'o'): BaseProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
+        /** @phpstan-var ProxyQuery<T> $proxyQuery */
+        $proxyQuery = new ProxyQuery($repository->createQueryBuilder($alias));
 
-        return new ProxyQuery($repository->createQueryBuilder($alias));
+        return $proxyQuery;
     }
 
     public function supportsQuery(object $query): bool

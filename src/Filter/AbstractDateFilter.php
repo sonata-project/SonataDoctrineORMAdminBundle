@@ -109,6 +109,9 @@ abstract class AbstractDateFilter extends Filter
         ];
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     private function filterRange(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         $value = $data->getValue();
