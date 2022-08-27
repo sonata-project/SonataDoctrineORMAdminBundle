@@ -218,7 +218,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             return $query->getQuery()->execute();
         }
 
-        if ($query instanceof Query || $query instanceof ProxyQuery) {
+        if ($query instanceof Query) {
+            return $query->execute();
+        }
+
+        if ($query instanceof ProxyQuery) {
             /** @phpstan-var Paginator<T> $results */
             $results = $query->execute();
 
