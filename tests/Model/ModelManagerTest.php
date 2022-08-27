@@ -149,6 +149,7 @@ final class ModelManagerTest extends TestCase
     public function supportsQueryDataProvider(): iterable
     {
         yield [true, new ProxyQuery($this->createMock(QueryBuilder::class))];
+        yield [true, $this->createMock(Query::class)];
         yield [true, $this->createMock(QueryBuilder::class)];
         yield [false, new \stdClass()];
     }
