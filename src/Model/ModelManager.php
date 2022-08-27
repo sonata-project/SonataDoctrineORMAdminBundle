@@ -21,6 +21,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\UnitOfWork;
@@ -208,7 +209,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function supportsQuery(object $query): bool
     {
-        return $query instanceof ProxyQuery || $query instanceof QueryBuilder;
+        return $query instanceof ProxyQuery || $query instanceof Query || $query instanceof QueryBuilder;
     }
 
     public function executeQuery(object $query)
@@ -217,7 +218,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             return $query->getQuery()->execute();
         }
 
-        if ($query instanceof ProxyQuery) {
+        if ($query instanceof Query || $query instanceof ProxyQuery) {
             /** @phpstan-var Paginator<T> $results */
             $results = $query->execute();
 
@@ -225,10 +226,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
         }
 
         throw new \InvalidArgumentException(sprintf(
-            'Argument 1 passed to %s() must be an instance of %s or %s',
+            'Argument 1 passed to %s() must be an instance of %s, %s, or %s',
             __METHOD__,
             QueryBuilder::class,
-            ProxyQuery::class,
+            Query::class,
+            ProxyQuery::class
         ));
     }
 
