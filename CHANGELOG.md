@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.7.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.6.0...4.7.0) - 2022-08-28
+### Added
+- [[#1691](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1691)] ModelManager::supportsQuery now supports AbstractQuery ([@djpretzel](https://github.com/djpretzel))
+- [[#1691](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1691)] ModelManager::execute now supports AbstractQuery ([@djpretzel](https://github.com/djpretzel))
+
 ## [4.6.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.5.0...4.6.0) - 2022-08-22
 ### Added
 - [[#1687](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1687)] Generics for ProxyQueryInterface and ProxyQuery ([@VincentLanglet](https://github.com/VincentLanglet))
