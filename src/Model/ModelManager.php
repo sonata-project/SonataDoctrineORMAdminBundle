@@ -18,10 +18,10 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
-use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\UnitOfWork;
@@ -209,7 +209,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function supportsQuery(object $query): bool
     {
-        return $query instanceof ProxyQuery || $query instanceof Query || $query instanceof QueryBuilder;
+        return $query instanceof ProxyQuery || $query instanceof AbstractQuery || $query instanceof QueryBuilder;
     }
 
     public function executeQuery(object $query)
@@ -218,7 +218,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             return $query->getQuery()->execute();
         }
 
-        if ($query instanceof Query) {
+        if ($query instanceof AbstractQuery) {
             return $query->execute();
         }
 
@@ -233,7 +233,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             'Argument 1 passed to %s() must be an instance of %s, %s, or %s',
             __METHOD__,
             QueryBuilder::class,
-            Query::class,
+            AbstractQuery::class,
             ProxyQuery::class
         ));
     }
