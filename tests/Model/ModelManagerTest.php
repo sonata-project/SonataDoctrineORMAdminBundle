@@ -17,6 +17,7 @@ use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
@@ -149,6 +150,7 @@ final class ModelManagerTest extends TestCase
     public function supportsQueryDataProvider(): iterable
     {
         yield [true, new ProxyQuery($this->createMock(QueryBuilder::class))];
+        yield [true, $this->createMock(AbstractQuery::class)];
         yield [true, $this->createMock(QueryBuilder::class)];
         yield [false, new \stdClass()];
     }
