@@ -38,93 +38,61 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->set(CategoryAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Category::class,
                 'label' => 'Category',
-            ])
-            ->args([
-                '',
-                Category::class,
-                null,
             ])
 
         ->set(BookAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Book::class,
                 'label' => 'Book',
                 'default' => true,
-            ])
-            ->args([
-                '',
-                Book::class,
-                null,
             ])
 
         ->set(BookWithAuthorAutocompleteAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Book::class,
                 'label' => 'Book with Author autocomplete',
-            ])
-            ->args([
-                '',
-                Book::class,
-                null,
             ])
 
         ->set(AuthorAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Author::class,
                 'label' => 'Author',
                 'default' => true,
-            ])
-            ->args([
-                '',
-                Author::class,
-                null,
             ])
             ->call('setTemplate', ['outer_list_rows_list', 'author/list_outer_list_rows_list.html.twig'])
 
         ->set(AuthorWithSimplePagerAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Author::class,
                 'label' => 'Author with Simple Pager',
                 'pager_type' => Pager::TYPE_SIMPLE,
-            ])
-            ->args([
-                '',
-                Author::class,
-                null,
             ])
             ->call('setTemplate', ['outer_list_rows_list', 'author/list_outer_list_rows_list.html.twig'])
 
         ->set(CarAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Car::class,
                 'label' => 'Car',
-            ])
-            ->args([
-                '',
-                Car::class,
-                null,
             ])
 
         ->set(ItemAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Item::class,
                 'label' => 'Command item',
-            ])
-            ->args([
-                '',
-                Item::class,
-                null,
             ])
 
         ->set(SubAdmin::class)
             ->tag('sonata.admin', [
                 'manager_type' => 'orm',
+                'model_class' => Sub::class,
                 'label' => 'Inheritance',
-            ])
-            ->args([
-                '',
-                Sub::class,
-                null,
             ]);
 };

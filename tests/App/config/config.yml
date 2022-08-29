@@ -4,6 +4,7 @@ framework:
     form:
         enabled: true
     secret: '%env(APP_SECRET)%'
+    http_method_override: false
     test: true
     translator:
         enabled: true
@@ -13,7 +14,7 @@ twig:
     strict_variables: true
 
 parameters:
-    env(DATABASE_URL): 'sqlite:////%kernel.cache_dir%/test_database.db'
+    env(DATABASE_URL): 'sqlite:////%app.base_dir%database.db'
 
 doctrine:
     dbal:

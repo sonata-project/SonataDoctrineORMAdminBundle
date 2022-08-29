@@ -15,6 +15,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Admin;
 
 final class AuthorWithSimplePagerAdmin extends AuthorAdmin
 {
-    protected $baseRoutePattern = 'author-with-simple-pager';
-    protected $baseRouteName = 'author_with_simple_pager';
+    protected function generateBaseRouteName(bool $isChildAdmin = false): string
+    {
+        return 'author_with_simple_pager';
+    }
+
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'author-with-simple-pager';
+    }
 }
