@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
-use Sonata\DoctrineORMAdminBundle\Tests\App\AppKernel;
 use Symfony\Component\Panther\Client;
 use Symfony\Component\Panther\PantherTestCase;
 
@@ -31,10 +30,5 @@ abstract class BasePantherTestCase extends PantherTestCase
             'connection_timeout_in_ms' => 5000,
             'request_timeout_in_ms' => 60000,
         ]);
-    }
-
-    protected static function getKernelClass(): string
-    {
-        return AppKernel::class;
     }
 }

@@ -23,8 +23,15 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
  */
 final class BookWithAuthorAutocompleteAdmin extends AbstractAdmin
 {
-    protected $baseRoutePattern = 'book-with-author-autocomplete';
-    protected $baseRouteName = 'book_with_author_autocomplete';
+    protected function generateBaseRouteName(bool $isChildAdmin = false): string
+    {
+        return 'book_with_author_autocomplete';
+    }
+
+    protected function generateBaseRoutePattern(bool $isChildAdmin = false): string
+    {
+        return 'book-with-author-autocomplete';
+    }
 
     protected function configureFormFields(FormMapper $form): void
     {
