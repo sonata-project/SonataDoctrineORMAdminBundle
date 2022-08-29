@@ -27,7 +27,7 @@
     "require": {
         "php": "^7.4 || ^8.0",
         "doctrine/dbal": "^2.13 || ^3.0",
-        "doctrine/doctrine-bundle": "^2.3",
+        "doctrine/doctrine-bundle": "^2.4",
         "doctrine/orm": "^2.8",
         "doctrine/persistence": "^2.1 || ^3.0",
         "sonata-project/admin-bundle": "^4.18",
