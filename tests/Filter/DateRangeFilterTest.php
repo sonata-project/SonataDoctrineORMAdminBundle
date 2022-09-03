@@ -145,7 +145,7 @@ final class DateRangeFilterTest extends FilterTestCase
     }
 
     /**
-     * @return \Generator<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
+     * @return iterable<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
      */
     public function provideDates(): iterable
     {
