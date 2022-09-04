@@ -18,6 +18,7 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\OptimisticLockException;
@@ -200,19 +201,25 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function createQuery(string $class, string $alias = 'o'): BaseProxyQueryInterface
     {
         $repository = $this->getEntityManager($class)->getRepository($class);
+        /** @phpstan-var ProxyQuery<T> $proxyQuery */
+        $proxyQuery = new ProxyQuery($repository->createQueryBuilder($alias));
 
-        return new ProxyQuery($repository->createQueryBuilder($alias));
+        return $proxyQuery;
     }
 
     public function supportsQuery(object $query): bool
     {
-        return $query instanceof ProxyQuery || $query instanceof QueryBuilder;
+        return $query instanceof ProxyQuery || $query instanceof AbstractQuery || $query instanceof QueryBuilder;
     }
 
     public function executeQuery(object $query)
     {
         if ($query instanceof QueryBuilder) {
             return $query->getQuery()->execute();
+        }
+
+        if ($query instanceof AbstractQuery) {
+            return $query->execute();
         }
 
         if ($query instanceof ProxyQuery) {
@@ -223,10 +230,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
         }
 
         throw new \InvalidArgumentException(sprintf(
-            'Argument 1 passed to %s() must be an instance of %s or %s',
+            'Argument 1 passed to %s() must be an instance of %s, %s, or %s',
             __METHOD__,
             QueryBuilder::class,
-            ProxyQuery::class,
+            AbstractQuery::class,
+            ProxyQuery::class
         ));
     }
 

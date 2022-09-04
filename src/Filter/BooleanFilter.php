@@ -57,6 +57,9 @@ final class BooleanFilter extends Filter
         ];
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     private function filterWithMultipleValues(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         $values = [];
@@ -86,6 +89,9 @@ final class BooleanFilter extends Filter
         $this->applyWhere($query, $or);
     }
 
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
     private function filterWithSingleValue(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         $or = $query->getQueryBuilder()->expr()->orX();
