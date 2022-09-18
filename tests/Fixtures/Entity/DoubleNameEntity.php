@@ -22,6 +22,7 @@ final class DoubleNameEntity
 {
     /**
      * @Id
+     *
      * @Column(type="integer")
      *
      * @var int
