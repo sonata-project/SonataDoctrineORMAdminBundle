@@ -145,7 +145,7 @@ final class DateRangeFilterTest extends FilterTestCase
     }
 
     /**
-     * @return \Generator<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
+     * @return iterable<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
      */
     public function provideDates(): iterable
     {
@@ -180,6 +180,9 @@ final class DateRangeFilterTest extends FilterTestCase
         ];
     }
 
+    /**
+     * @psalm-suppress PossiblyFalseReference https://github.com/vimeo/psalm/pull/8462
+     */
     public function testFilterEndDateImmutable(): void
     {
         $filter = new DateRangeFilter();
