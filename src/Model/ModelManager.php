@@ -345,14 +345,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
-        $qb = $query->getQueryBuilder();
-        $qb->select('DISTINCT '.current($qb->getRootAliases()));
-
         try {
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($qb->getQuery()->toIterable() as $object) {
+            foreach ($query->execute() as $object) {
                 $entityManager->remove($object);
 
                 if (0 === (++$i % 20)) {
