@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.8.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.7.0...4.8.0) - 2022-09-28
+### Fixed
+- [[#1695](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1695)] Fix batch delete on entities with json columns on PostgreSQL. ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.7.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.6.0...4.7.0) - 2022-08-28
 ### Added
 - [[#1691](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1691)] ModelManager::supportsQuery now supports AbstractQuery ([@djpretzel](https://github.com/djpretzel))
