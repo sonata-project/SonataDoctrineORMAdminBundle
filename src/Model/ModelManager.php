@@ -349,7 +349,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
-            foreach ($query->toIterable() as $object) {
+            foreach ($query->getQueryBuilder()->getQuery()->toIterable() as $object) {
                 $entityManager->remove($object);
 
                 if (0 === (++$i % 20)) {
