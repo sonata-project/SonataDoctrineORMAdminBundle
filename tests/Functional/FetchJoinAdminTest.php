@@ -15,7 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class FetchJoinListTest extends BasePantherTestCase
+final class FetchJoinAdminTest extends BaseFunctionalTestCase
 {
     public function testCountFetchJoined(): void
     {
@@ -26,5 +26,18 @@ final class FetchJoinListTest extends BasePantherTestCase
         self::assertSelectorExists('tr[data-author-id="author_with_two_books"]');
         self::assertSelectorExists('tr[data-author-id="miguel_de_cervantes"]');
         self::assertSelectorExists('tr[data-author-id="anonymous"]');
+    }
+
+    public function testBatchActionFetchJoined(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
+        $this->client->submitForm('OK', [
+            'all_elements' => true,
+            'action' => 'delete',
+        ]);
+        $this->client->submitForm('Yes, execute');
+        $this->client->followRedirect();
+
+        self::assertResponseIsSuccessful();
     }
 }
