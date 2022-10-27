@@ -28,6 +28,18 @@ final class FetchJoinAdminTest extends BaseFunctionalTestCase
         self::assertSelectorExists('tr[data-author-id="anonymous"]');
     }
 
+    public function testBatchAction(): void
+    {
+        $this->client->request(Request::METHOD_GET, '/admin/tests/app/book/list');
+        $this->client->submitForm('OK', [
+            'all_elements' => true,
+            'action' => 'delete',
+        ]);
+        $this->client->submitForm('Yes, execute');
+
+        self::assertResponseIsSuccessful();
+    }
+
     public function testBatchActionFetchJoined(): void
     {
         $this->client->request(Request::METHOD_GET, '/admin/tests/app/author/list');
@@ -36,7 +48,6 @@ final class FetchJoinAdminTest extends BaseFunctionalTestCase
             'action' => 'delete',
         ]);
         $this->client->submitForm('Yes, execute');
-        $this->client->followRedirect();
 
         self::assertResponseIsSuccessful();
     }
