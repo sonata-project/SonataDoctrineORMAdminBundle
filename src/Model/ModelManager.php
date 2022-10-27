@@ -346,6 +346,15 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
         }
 
         try {
+            $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+
+            if ([] !== $query->getQueryBuilder()->getDQLPart('join')) {
+                // Distinct is needed to iterate, even if group by is used
+                // @see https://github.com/doctrine/orm/issues/5868
+                $query->getQueryBuilder()->distinct();
+                $query->getQueryBuilder()->select($rootAlias);
+            }
+
             $entityManager = $this->getEntityManager($class);
 
             $i = 0;
