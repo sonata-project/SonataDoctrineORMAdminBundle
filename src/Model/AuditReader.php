@@ -47,6 +47,9 @@ final class AuditReader implements AuditReaderInterface
         }
     }
 
+    /**
+     * NEXT_MAJOR: Change the default limit value to `null`.
+     */
     public function findRevisionHistory(string $className, ?int $limit = 20, ?int $offset = 0): array
     {
         // NEXT_MAJOR: Remove this check and restrict offset native type to `int`.
