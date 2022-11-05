@@ -15,7 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
 use Symfony\Component\HttpFoundation\Request;
 
-final class FetchJoinListTest extends BaseFunctionalTestCase
+final class FetchJoinListTest extends BasePantherTestCase
 {
     public function testCountFetchJoined(): void
     {
