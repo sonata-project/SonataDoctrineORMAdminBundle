@@ -22,14 +22,12 @@ final class BatchActionsTest extends BaseFunctionalTestCase
      */
     public function testBatchActions(string $url, string $action): void
     {
-        $client = self::createClient();
-
-        $client->request(Request::METHOD_GET, $url);
-        $client->submitForm('OK', [
+        $this->client->request(Request::METHOD_GET, $url);
+        $this->client->submitForm('OK', [
             'all_elements' => true,
             'action' => $action,
         ]);
-        $client->submitForm('Yes, execute');
+        $this->client->submitForm('Yes, execute');
 
         self::assertResponseIsSuccessful();
     }
