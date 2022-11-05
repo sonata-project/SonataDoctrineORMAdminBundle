@@ -34,6 +34,7 @@ class Book
 
     /**
      * @ORM\ManyToOne(targetEntity="Author", inversedBy="books")
+     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
     private ?Author $author;
 
