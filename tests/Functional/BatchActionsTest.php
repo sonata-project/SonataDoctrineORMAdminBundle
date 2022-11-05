@@ -41,5 +41,6 @@ final class BatchActionsTest extends BaseFunctionalTestCase
     {
         yield 'Normal delete' => ['/admin/tests/app/book/list', 'delete'];
         yield 'Joined delete' => ['/admin/tests/app/author/list', 'delete'];
+        yield 'More than 20 items delete' => ['/admin/tests/app/sub/list', 'delete'];
     }
 }
