@@ -18,17 +18,18 @@ use Symfony\Component\HttpFoundation\Request;
 final class BatchActionsTest extends BaseFunctionalTestCase
 {
     /**
-     * @dataProvider provideBatchActionsCases
+     * @dataProvider provideDeleteBatchActionCases
      */
-    public function testBatchActions(string $url, string $action): void
+    public function testDeleteBatchAction(string $url): void
     {
         $this->client->request(Request::METHOD_GET, $url);
         $this->client->submitForm('OK', [
             'all_elements' => true,
-            'action' => $action,
+            'action' => 'delete',
         ]);
         $this->client->submitForm('Yes, execute');
 
+        self::assertSelectorTextContains('div.alert-success', 'Selected items have been successfully deleted.');
         self::assertResponseIsSuccessful();
     }
 
@@ -37,10 +38,10 @@ final class BatchActionsTest extends BaseFunctionalTestCase
      *
      * @phpstan-return iterable<array{0: string}>
      */
-    public static function provideBatchActionsCases(): iterable
+    public static function provideDeleteBatchActionCases(): iterable
     {
-        yield 'Normal delete' => ['/admin/tests/app/book/list', 'delete'];
-        yield 'Joined delete' => ['/admin/tests/app/author/list', 'delete'];
-        yield 'More than 20 items delete' => ['/admin/tests/app/sub/list', 'delete'];
+        yield 'Normal delete' => ['/admin/tests/app/book/list'];
+        yield 'Joined delete' => ['/admin/tests/app/author/list'];
+        yield 'More than 20 items delete' => ['/admin/tests/app/sub/list'];
     }
 }
