@@ -345,19 +345,19 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
+        if ([] !== $query->getQueryBuilder()->getDQLPart('join')) {
+            $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+
+            // Distinct is needed to iterate, even if group by is used
+            // @see https://github.com/doctrine/orm/issues/5868
+            $query->getQueryBuilder()->distinct();
+            $query->getQueryBuilder()->select($rootAlias);
+        }
+
+        $entityManager = $this->getEntityManager($class);
+        $i = 0;
+
         try {
-            if ([] !== $query->getQueryBuilder()->getDQLPart('join')) {
-                $rootAlias = current($query->getQueryBuilder()->getRootAliases());
-
-                // Distinct is needed to iterate, even if group by is used
-                // @see https://github.com/doctrine/orm/issues/5868
-                $query->getQueryBuilder()->distinct();
-                $query->getQueryBuilder()->select($rootAlias);
-            }
-
-            $entityManager = $this->getEntityManager($class);
-
-            $i = 0;
             foreach ($query->getDoctrineQuery()->toIterable() as $object) {
                 $entityManager->remove($object);
 
