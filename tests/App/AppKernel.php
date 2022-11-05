@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\App;
 
+use DAMA\DoctrineTestBundle\DAMADoctrineTestBundle;
 use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
@@ -41,6 +42,7 @@ final class AppKernel extends Kernel
     {
         return [
             new DoctrineBundle(),
+            new DAMADoctrineTestBundle(),
             new FrameworkBundle(),
             new KnpMenuBundle(),
             new SecurityBundle(),
