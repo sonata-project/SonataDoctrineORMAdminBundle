@@ -39,6 +39,15 @@ class AuthorAdmin extends AbstractAdmin
             ])
             ->add('numberOfReaders', FieldDescriptionInterface::TYPE_INTEGER, [
                 'template' => 'author/list_number_of_readers_field.html.twig',
+            ])
+            ->addIdentifier('firstBook', null, [
+                'sortable' => true,
+                'sort_field_mapping' => [
+                    'fieldName' => 'name',
+                ],
+                'sort_parent_association_mappings' => [[
+                    'fieldName' => 'books',
+                ]],
             ]);
     }
 

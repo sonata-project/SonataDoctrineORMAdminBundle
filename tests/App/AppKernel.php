@@ -22,6 +22,7 @@ use Sonata\BlockBundle\Cache\HttpCacheHandler;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
+use Sonata\Exporter\Bridge\Symfony\SonataExporterBundle;
 use Sonata\Form\Bridge\Symfony\SonataFormBundle;
 use Sonata\Twig\Bridge\Symfony\SonataTwigBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -49,6 +50,7 @@ final class AppKernel extends Kernel
             new SecurityBundle(),
             new SonataAdminBundle(),
             new SonataBlockBundle(),
+            new SonataExporterBundle(),
             new SonataDoctrineBundle(),
             new SonataDoctrineORMAdminBundle(),
             new SonataFormBundle(),
