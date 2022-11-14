@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.9.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.8.0...4.9.0) - 2022-11-14
+### Deprecated
+- [[#1703](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1703)] Passing a null offset to `AuditReader::findRevisionHistory` ([@VincentLanglet](https://github.com/VincentLanglet))
+
+### Fixed
+- [[#1700](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1700)] Fix batch delete for more than 20 entities. ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.8.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.7.0...4.8.0) - 2022-09-28
 ### Fixed
 - [[#1695](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1695)] Fix batch delete on entities with json columns on PostgreSQL. ([@jordisala1991](https://github.com/jordisala1991))
