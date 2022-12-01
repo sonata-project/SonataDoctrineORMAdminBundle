@@ -2,7 +2,7 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
-## [4.9.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.8.0...4.9.0) - 2022-11-14
+## [4.9.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.8.0...4.9.0) - 2022-12-01
 ### Deprecated
 - [[#1703](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1703)] Passing a null offset to `AuditReader::findRevisionHistory` ([@VincentLanglet](https://github.com/VincentLanglet))
 
