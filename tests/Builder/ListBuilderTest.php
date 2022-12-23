@@ -34,14 +34,14 @@ final class ListBuilderTest extends TestCase
     /**
      * @var Stub&TypeGuesserInterface
      */
-    private $typeGuesser;
+    private TypeGuesserInterface $typeGuesser;
 
     private ListBuilder $listBuilder;
 
     /**
      * @var MockObject&AdminInterface<object>
      */
-    private $admin;
+    private AdminInterface $admin;
 
     protected function setUp(): void
     {
