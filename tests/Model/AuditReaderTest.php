@@ -26,7 +26,7 @@ final class AuditReaderTest extends TestCase
     /**
      * @var MockObject&SimpleThingsAuditReader
      */
-    private $simpleThingsAuditReader;
+    private SimpleThingsAuditReader $simpleThingsAuditReader;
 
     /**
      * @var AuditReader<object>

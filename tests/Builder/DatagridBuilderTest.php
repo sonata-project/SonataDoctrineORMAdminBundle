@@ -45,22 +45,22 @@ final class DatagridBuilderTest extends TestCase
     /**
      * @var Stub&TypeGuesserInterface
      */
-    private $typeGuesser;
+    private TypeGuesserInterface $typeGuesser;
 
     /**
      * @var Stub&FormFactoryInterface
      */
-    private $formFactory;
+    private FormFactoryInterface $formFactory;
 
     /**
      * @var Stub&FilterFactoryInterface
      */
-    private $filterFactory;
+    private FilterFactoryInterface $filterFactory;
 
     /**
      * @var MockObject&AdminInterface<object>
      */
-    private $admin;
+    private AdminInterface $admin;
 
     protected function setUp(): void
     {

@@ -29,7 +29,7 @@ final class AuditBlockServiceTest extends BlockServiceTestCase
     /**
      * @var SimpleThingsAuditReader&MockObject
      */
-    private $simpleThingsAuditReader;
+    private SimpleThingsAuditReader $simpleThingsAuditReader;
 
     private AuditBlockService $blockService;
 

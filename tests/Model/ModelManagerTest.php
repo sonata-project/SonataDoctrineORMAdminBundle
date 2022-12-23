@@ -53,7 +53,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @var ManagerRegistry&MockObject
      */
-    private $registry;
+    private ManagerRegistry $registry;
 
     /**
      * @var ModelManager<object>
