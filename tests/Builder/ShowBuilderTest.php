@@ -33,14 +33,14 @@ final class ShowBuilderTest extends TestCase
     /**
      * @var Stub&TypeGuesserInterface
      */
-    private $guesser;
+    private TypeGuesserInterface $guesser;
 
     private ShowBuilder $showBuilder;
 
     /**
      * @var MockObject&AdminInterface<object>
      */
-    private $admin;
+    private AdminInterface $admin;
 
     protected function setUp(): void
     {

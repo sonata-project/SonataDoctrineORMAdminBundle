@@ -22,6 +22,9 @@ use PHPUnit\Framework\TestCase;
 
 final class TestEntityManagerFactory
 {
+    /**
+     * @psalm-suppress DeprecatedMethod
+     */
     public static function create(): EntityManagerInterface
     {
         if (!\extension_loaded('pdo_sqlite')) {
