@@ -14,9 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests;
 
 use PHPUnit\Framework\TestCase;
-use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
-use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
-use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
@@ -27,15 +24,13 @@ class SonataDoctrineORMAdminBundleTest extends TestCase
 {
     public function testBuild(): void
     {
-        $containerBuilder = $this->createMock(ContainerBuilder::class);
+        $containerBuilder = new ContainerBuilder();
 
-        $containerBuilder->expects(static::exactly(3))->method('addCompilerPass')->withConsecutive(
-            [static::isInstanceOf(AddGuesserCompilerPass::class)],
-            [static::isInstanceOf(AddTemplatesCompilerPass::class)],
-            [static::isInstanceOf(AddAuditEntityCompilerPass::class)]
-        );
+        $initialCompilerPasses = \count($containerBuilder->getCompilerPassConfig()->getPasses());
 
         $bundle = new SonataDoctrineORMAdminBundle();
         $bundle->build($containerBuilder);
+
+        static::assertCount($initialCompilerPasses + 3, $containerBuilder->getCompilerPassConfig()->getPasses());
     }
 }

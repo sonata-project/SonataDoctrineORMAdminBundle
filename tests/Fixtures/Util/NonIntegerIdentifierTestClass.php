@@ -30,10 +30,7 @@ final class NonIntegerIdentifierTestClass
         $this->uuid = $uuid;
     }
 
-    /**
-     * @return string
-     */
-    public function __toString()
+    public function __toString(): string
     {
         return $this->toString();
     }

@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
+#[ORM\Entity]
 class Category
 {
     /**
@@ -23,11 +25,15 @@ class Category
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private string $id;
 
     /**
      * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: Types::STRING)]
     private string $name;
 
     public function __construct(string $id = '', string $name = '')
