@@ -13,34 +13,37 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Id;
+use Doctrine\DBAL\Types\Types;
+use Doctrine\ORM\Mapping as ORM;
 
-/** @Entity */
+/** @ORM\Entity */
+#[ORM\Entity]
 final class DoubleNameEntity
 {
     /**
-     * @Id
-     *
-     * @Column(type="integer")
+     * @ORM\Id
+     * @ORM\Column(type="integer")
      *
      * @var int
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
     public $id;
 
     /**
-     * @Column(type="string")
+     * @ORM\Column(type="string")
      *
      * @var string
      */
+    #[ORM\Column(type: Types::STRING)]
     public $name;
 
     /**
-     * @Column(type="string", nullable=true)
+     * @ORM\Column(type="string", nullable=true)
      *
      * @var string|null
      */
+    #[ORM\Column(type: Types::STRING, nullable: true)]
     public $name2;
 
     public function __construct(int $id, string $name, ?string $name2)

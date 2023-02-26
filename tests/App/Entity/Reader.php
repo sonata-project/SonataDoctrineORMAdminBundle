@@ -13,9 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
+#[ORM\Entity]
 class Reader
 {
     /**
@@ -25,11 +27,10 @@ class Reader
      *
      * @var int|null
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\GeneratedValue]
     public $id;
-
-    public function __construct()
-    {
-    }
 
     public function getId(): ?int
     {

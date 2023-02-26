@@ -13,11 +13,13 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ORM;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
  */
+#[ORM\Entity]
 final class UserBrowser
 {
     /**
@@ -25,6 +27,9 @@ final class UserBrowser
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private ?int $userId = null;
 
     /**
@@ -32,6 +37,9 @@ final class UserBrowser
      * @ORM\GeneratedValue(strategy="NONE")
      * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private ?int $browserId = null;
 
     public function setUserId(int $userId): void

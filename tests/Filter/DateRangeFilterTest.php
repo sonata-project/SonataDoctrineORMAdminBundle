@@ -30,7 +30,6 @@ final class DateRangeFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([null, 'test']));
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => []]));
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => null,

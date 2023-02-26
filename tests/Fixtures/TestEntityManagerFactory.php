@@ -13,11 +13,11 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures;
 
-use Doctrine\Common\Annotations\AnnotationReader;
-use Doctrine\ORM\Configuration;
+use Doctrine\Common\EventManager;
+use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Mapping\Driver\AnnotationDriver;
+use Doctrine\ORM\ORMSetup;
 use PHPUnit\Framework\TestCase;
 
 final class TestEntityManagerFactory
@@ -31,23 +31,24 @@ final class TestEntityManagerFactory
             TestCase::markTestSkipped('Extension pdo_sqlite is required.');
         }
 
-        return EntityManager::create(
+        if (version_compare(\PHP_VERSION, '8.0.0', '>=')) {
+            $config = ORMSetup::createAttributeMetadataConfiguration([], true);
+        } else {
+            $config = ORMSetup::createAnnotationMetadataConfiguration([], true);
+        }
+
+        $connection = DriverManager::getConnection(
             [
                 'driver' => 'pdo_sqlite',
                 'memory' => true,
             ],
-            self::createConfiguration()
+            $config
         );
-    }
 
-    private static function createConfiguration(): Configuration
-    {
-        $config = new Configuration();
-        $config->setAutoGenerateProxyClasses(true);
-        $config->setProxyDir(sys_get_temp_dir());
-        $config->setMetadataDriverImpl(new AnnotationDriver(new AnnotationReader()));
-        $config->setProxyNamespace('Sonata\DoctrineORMAdminBundle\Tests');
-
-        return $config;
+        return new EntityManager(
+            $connection,
+            $config,
+            new EventManager()
+        );
     }
 }
