@@ -98,5 +98,5 @@ final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AddAuditEntityCompilerPass());
-	}
+    }
 }
