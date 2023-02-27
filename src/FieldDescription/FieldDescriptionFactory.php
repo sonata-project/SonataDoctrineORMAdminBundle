@@ -86,7 +86,7 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
     /**
      * @param class-string $class
      *
-     * @throw \UnexpectedValueException
+     * @throws \UnexpectedValueException
      */
     private function getEntityManager(string $class): EntityManagerInterface
     {

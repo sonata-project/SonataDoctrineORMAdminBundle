@@ -182,7 +182,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function getEntityManager($class): EntityManagerInterface
     {
         if (\is_object($class)) {
-            $class = \get_class($class);
+            $class = ClassUtils::getClass($class);
         }
 
         if (!isset($this->cache[$class])) {
