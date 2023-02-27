@@ -16,7 +16,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserChain;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
-use Symfony\Component\DependencyInjection\Argument\AbstractArgument;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 use Symfony\Component\DependencyInjection\Reference;
@@ -26,7 +25,7 @@ final class AddGuesserCompilerPassTest extends AbstractCompilerPassTestCase
     public function testProcess(): void
     {
         $guesser = new Definition(TypeGuesserChain::class);
-        $guesser->setArgument(0, new AbstractArgument());
+        $guesser->setArgument(0, []);
         $this->setDefinition('sonata.admin.guesser.orm_list_chain', $guesser);
         $this->setDefinition('sonata.admin.guesser.orm_datagrid_chain', $guesser);
         $this->setDefinition('sonata.admin.guesser.orm_show_chain', $guesser);
