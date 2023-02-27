@@ -27,30 +27,36 @@ final class AddGuesserCompilerPass implements CompilerPassInterface
     public function process(ContainerBuilder $container): void
     {
         // ListBuilder
-        $definition = $container->getDefinition('sonata.admin.guesser.orm_list_chain');
-        $services = [];
-        foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_list') as $id => $attributes) {
-            $services[] = new Reference($id);
-        }
+        if ($container->hasDefinition('sonata.admin.guesser.orm_list_chain')) {
+            $definition = $container->getDefinition('sonata.admin.guesser.orm_list_chain');
+            $services = [];
+            foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_list') as $id => $attributes) {
+                $services[] = new Reference($id);
+            }
 
-        $definition->replaceArgument(0, $services);
+            $definition->replaceArgument(0, $services);
+        }
 
         // DatagridBuilder
-        $definition = $container->getDefinition('sonata.admin.guesser.orm_datagrid_chain');
-        $services = [];
-        foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_datagrid') as $id => $attributes) {
-            $services[] = new Reference($id);
-        }
+        if ($container->hasDefinition('sonata.admin.guesser.orm_datagrid_chain')) {
+            $definition = $container->getDefinition('sonata.admin.guesser.orm_datagrid_chain');
+            $services = [];
+            foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_datagrid') as $id => $attributes) {
+                $services[] = new Reference($id);
+            }
 
-        $definition->replaceArgument(0, $services);
+            $definition->replaceArgument(0, $services);
+        }
 
         // ShowBuilder
-        $definition = $container->getDefinition('sonata.admin.guesser.orm_show_chain');
-        $services = [];
-        foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_show') as $id => $attributes) {
-            $services[] = new Reference($id);
-        }
+        if ($container->hasDefinition('sonata.admin.guesser.orm_show_chain')) {
+            $definition = $container->getDefinition('sonata.admin.guesser.orm_show_chain');
+            $services = [];
+            foreach ($container->findTaggedServiceIds('sonata.admin.guesser.orm_show') as $id => $attributes) {
+                $services[] = new Reference($id);
+            }
 
-        $definition->replaceArgument(0, $services);
+            $definition->replaceArgument(0, $services);
+        }
     }
 }
