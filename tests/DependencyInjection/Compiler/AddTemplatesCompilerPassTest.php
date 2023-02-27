@@ -13,39 +13,29 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
-use PHPUnit\Framework\TestCase;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-final class AddTemplatesCompilerPassTest extends TestCase
+final class AddTemplatesCompilerPassTest extends AbstractCompilerPassTestCase
 {
     public function testDefaultBehavior(): void
     {
-        $container = $this->createMock(ContainerBuilder::class);
+        $admin = new Definition(null);
+        $admin->addMethodCall('setFilterTheme', [['custom_call.twig.html']]);
+        $admin->addTag('sonata.admin', ['manager_type' => 'orm']);
 
-        $container
-            ->expects(static::once())
-            ->method('findTaggedServiceIds')
-            ->willReturn(['my.admin' => [['manager_type' => 'orm']]]);
+        $this->setDefinition('my.admin', $admin);
 
-        $definition = new Definition(null);
+        $this->compile();
 
-        $container
-            ->expects(static::once())
-            ->method('getDefinition')
-            ->willReturn($definition);
-
-        $definition->addMethodCall('setFilterTheme', [['custom_call.twig.html']]);
-
-        $compilerPass = new AddTemplatesCompilerPass();
-        $compilerPass->process($container);
-
-        $expected = [
-            ['setFilterTheme', [['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig', 'custom_call.twig.html']]],
-            ['setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]],
-        ];
-
-        static::assertSame($expected, $definition->getMethodCalls());
+        static::assertContainerBuilderHasServiceDefinitionWithMethodCall('my.admin', 'setFilterTheme', [['@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig', 'custom_call.twig.html']]);
+        static::assertContainerBuilderHasServiceDefinitionWithMethodCall('my.admin', 'setFormTheme', [['@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig']]);
     }
+
+    protected function registerCompilerPass(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new AddTemplatesCompilerPass());
+	}
 }

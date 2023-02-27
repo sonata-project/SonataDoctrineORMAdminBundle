@@ -13,7 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
-use PHPUnit\Framework\TestCase;
+use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
@@ -22,7 +22,7 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Definition;
 
-final class AddAuditEntityCompilerPassTest extends TestCase
+final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
 {
     /**
      * @phpstan-return iterable<array-key, array{bool, array<string, array{audit?: bool|null, class: class-string}>, class-string[]}>
@@ -67,12 +67,11 @@ final class AddAuditEntityCompilerPassTest extends TestCase
      */
     public function testProcess(bool $force, array $services, array $expectedAuditedEntities): void
     {
-        $container = new ContainerBuilder();
-        $container->setDefinition('simplethings_entityaudit.config', new Definition());
-        $container->setDefinition('sonata.admin.audit.manager', new Definition());
+        $this->setDefinition('simplethings_entityaudit.config', new Definition());
+        $this->setDefinition('sonata.admin.audit.manager', new Definition());
 
-        $container->setParameter('sonata_doctrine_orm_admin.audit.force', $force);
-        $container->setParameter('simplethings.entityaudit.audited_entities', []);
+        $this->setParameter('sonata_doctrine_orm_admin.audit.force', $force);
+        $this->setParameter('simplethings.entityaudit.audited_entities', []);
 
         foreach ($services as $serviceId => $service) {
             $definition = new Definition();
@@ -88,12 +87,16 @@ final class AddAuditEntityCompilerPassTest extends TestCase
 
             $definition->addTag('sonata.admin', $attributes);
 
-            $container->setDefinition($serviceId, $definition);
+            $this->setDefinition($serviceId, $definition);
         }
 
-        $compilerPass = new AddAuditEntityCompilerPass();
-        $compilerPass->process($container);
+        $this->compile();
 
-        static::assertSame($expectedAuditedEntities, $container->getParameter('simplethings.entityaudit.audited_entities'));
+        static::assertContainerBuilderHasParameter('simplethings.entityaudit.audited_entities', $expectedAuditedEntities);
     }
+
+    protected function registerCompilerPass(ContainerBuilder $container): void
+    {
+        $container->addCompilerPass(new AddAuditEntityCompilerPass());
+	}
 }
