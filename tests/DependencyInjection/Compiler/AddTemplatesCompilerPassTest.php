@@ -37,5 +37,5 @@ final class AddTemplatesCompilerPassTest extends AbstractCompilerPassTestCase
     protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AddTemplatesCompilerPass());
-	}
+    }
 }

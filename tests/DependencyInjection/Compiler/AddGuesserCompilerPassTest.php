@@ -58,8 +58,8 @@ final class AddGuesserCompilerPassTest extends AbstractCompilerPassTestCase
         );
     }
 
-	protected function registerCompilerPass(ContainerBuilder $container): void
+    protected function registerCompilerPass(ContainerBuilder $container): void
     {
         $container->addCompilerPass(new AddGuesserCompilerPass());
-	}
+    }
 }
