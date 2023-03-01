@@ -22,7 +22,7 @@ final class ValueObjectWithMagicToStringImpl
         $this->uuid = $uuid;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return $this->uuid;
     }

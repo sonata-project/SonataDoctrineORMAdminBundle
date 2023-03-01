@@ -18,6 +18,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity()
  */
+#[ORM\Entity]
 class Sub extends Base
 {
     /**
@@ -25,5 +26,6 @@ class Sub extends Base
      *
      * @var string
      */
+    #[ORM\Column(options: ['default' => 'HELLO WORLD'])]
     public $otherField = 'HELLO WORLD';
 }

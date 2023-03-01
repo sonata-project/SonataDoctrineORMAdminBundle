@@ -15,9 +15,11 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
+#[ORM\Entity]
 class Book
 {
     /**
@@ -25,17 +27,23 @@ class Book
      * @ORM\Column(type="string")
      * @ORM\GeneratedValue(strategy="NONE")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING)]
+    #[ORM\GeneratedValue(strategy: 'NONE')]
     private string $id;
 
     /**
      * @ORM\Column(type="string")
      */
+    #[ORM\Column(type: Types::STRING)]
     private string $name;
 
     /**
      * @ORM\ManyToOne(targetEntity="Author", inversedBy="books")
      * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
      */
+    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
+    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
     private ?Author $author;
 
     /**
@@ -43,6 +51,7 @@ class Book
      *
      * @var Collection<array-key, Reader>
      */
+    #[ORM\ManyToMany(targetEntity: Reader::class, cascade: ['persist'])]
     private Collection $readers;
 
     /**
@@ -50,6 +59,7 @@ class Book
      *
      * @var Collection<array-key, Category>
      */
+    #[ORM\ManyToMany(targetEntity: Category::class)]
     private Collection $categories;
 
     public function __construct(

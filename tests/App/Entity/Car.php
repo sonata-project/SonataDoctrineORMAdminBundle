@@ -13,21 +13,27 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 
+use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
+#[ORM\Entity]
 class Car
 {
     /**
      * @ORM\Id
      * @ORM\Column(type="string")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::STRING)]
     private string $name;
 
     /**
      * @ORM\Id
      * @ORM\Column(type="integer")
      */
+    #[ORM\Id]
+    #[ORM\Column(type: Types::INTEGER)]
     private int $year;
 
     public function __construct(string $name = '', int $year = 0)

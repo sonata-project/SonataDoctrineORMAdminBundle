@@ -18,6 +18,7 @@ use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCom
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddGuesserCompilerPass;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddTemplatesCompilerPass;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
+use Symfony\Component\DependencyInjection\Compiler\CompilerPassInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
@@ -27,15 +28,24 @@ class SonataDoctrineORMAdminBundleTest extends TestCase
 {
     public function testBuild(): void
     {
-        $containerBuilder = $this->createMock(ContainerBuilder::class);
-
-        $containerBuilder->expects(static::exactly(3))->method('addCompilerPass')->withConsecutive(
-            [static::isInstanceOf(AddGuesserCompilerPass::class)],
-            [static::isInstanceOf(AddTemplatesCompilerPass::class)],
-            [static::isInstanceOf(AddAuditEntityCompilerPass::class)]
-        );
+        $containerBuilder = new ContainerBuilder();
 
         $bundle = new SonataDoctrineORMAdminBundle();
         $bundle->build($containerBuilder);
+
+        static::assertNotNull($this->findCompilerPass($containerBuilder, AddGuesserCompilerPass::class));
+        static::assertNotNull($this->findCompilerPass($containerBuilder, AddTemplatesCompilerPass::class));
+        static::assertNotNull($this->findCompilerPass($containerBuilder, AddAuditEntityCompilerPass::class));
+    }
+
+    private function findCompilerPass(ContainerBuilder $container, string $class): ?CompilerPassInterface
+    {
+        foreach ($container->getCompiler()->getPassConfig()->getPasses() as $pass) {
+            if ($pass instanceof $class) {
+                return $pass;
+            }
+        }
+
+        return null;
     }
 }

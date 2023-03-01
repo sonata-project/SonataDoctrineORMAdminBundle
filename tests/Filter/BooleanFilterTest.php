@@ -39,7 +39,6 @@ final class BooleanFilterTest extends FilterTestCase
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([]));
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([null, 'test']));
 
         self::assertSameQuery([], $proxyQuery);
         static::assertFalse($filter->isActive());
