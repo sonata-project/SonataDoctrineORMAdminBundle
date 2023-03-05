@@ -40,24 +40,12 @@ use Symfony\Component\Form\FormFactoryInterface;
  */
 final class DatagridBuilder implements DatagridBuilderInterface
 {
-    private FilterFactoryInterface $filterFactory;
-
-    private FormFactoryInterface $formFactory;
-
-    private TypeGuesserInterface $guesser;
-
-    private bool $csrfTokenEnabled;
-
     public function __construct(
-        FormFactoryInterface $formFactory,
-        FilterFactoryInterface $filterFactory,
-        TypeGuesserInterface $guesser,
-        bool $csrfTokenEnabled = true
+        private FormFactoryInterface $formFactory,
+        private FilterFactoryInterface $filterFactory,
+        private TypeGuesserInterface $guesser,
+        private bool $csrfTokenEnabled = true
     ) {
-        $this->formFactory = $formFactory;
-        $this->filterFactory = $filterFactory;
-        $this->guesser = $guesser;
-        $this->csrfTokenEnabled = $csrfTokenEnabled;
     }
 
     public function fixFieldDescription(FieldDescriptionInterface $fieldDescription): void

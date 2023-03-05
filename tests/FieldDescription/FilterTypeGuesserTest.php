@@ -39,7 +39,6 @@ final class FilterTypeGuesserTest extends TestCase
     }
 
     /**
-     * @param int|string|null      $mappingType
      * @param array<string, mixed> $expectedOptions
      *
      * @dataProvider guessDataProvider
@@ -47,7 +46,7 @@ final class FilterTypeGuesserTest extends TestCase
      * @phpstan-param class-string $expectedType
      */
     public function testGuess(
-        $mappingType,
+        int|string|null $mappingType,
         string $expectedType,
         array $expectedOptions,
         int $expectedConfidence

@@ -46,12 +46,12 @@ final class ProxyQueryTest extends TestCase
 
         try {
             $schemaTool->dropSchema($classes);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
 
         try {
             $schemaTool->createSchema($classes);
-        } catch (\Exception $e) {
+        } catch (\Exception) {
         }
     }
 

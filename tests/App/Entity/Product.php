@@ -18,33 +18,27 @@ use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
 #[ORM\Entity]
-class Product
+class Product implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $id;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column(type: Types::STRING)]
-    private string $name;
-
-    /**
-     * @ORM\Column(type="decimal")
-     */
-    #[ORM\Column(type: Types::DECIMAL)]
-    private string $currentPrice;
-
-    public function __construct(int $id, string $name = '', string $currentPrice = '0.0')
-    {
-        $this->id = $id;
-        $this->name = $name;
-        $this->currentPrice = $currentPrice;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        private int $id,
+        /**
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Column(type: Types::STRING)]
+        private string $name = '',
+        /**
+         * @ORM\Column(type="decimal")
+         */
+        #[ORM\Column(type: Types::DECIMAL)]
+        private string $currentPrice = '0.0'
+    ) {
     }
 
     public function __toString(): string

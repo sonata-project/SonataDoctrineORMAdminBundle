@@ -21,11 +21,8 @@ use Symfony\Bridge\Doctrine\ManagerRegistry;
 
 final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
 {
-    private ManagerRegistry $registry;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private ManagerRegistry $registry)
     {
-        $this->registry = $registry;
     }
 
     public function create(string $class, string $name, array $options = []): FieldDescriptionInterface

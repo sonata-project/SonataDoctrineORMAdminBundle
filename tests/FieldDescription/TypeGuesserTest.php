@@ -32,13 +32,12 @@ final class TypeGuesserTest extends TestCase
     }
 
     /**
-     * @param int|string|null      $mappingType
      * @param array<string, mixed> $expectedOptions
      *
      * @dataProvider guessDataProvider
      */
     public function testGuess(
-        $mappingType,
+        int|string|null $mappingType,
         string $expectedType,
         array $expectedOptions,
         int $expectedConfidence
