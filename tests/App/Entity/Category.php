@@ -18,28 +18,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
 #[ORM\Entity]
-class Category
+class Category implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::STRING)]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
-    private string $id;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column(type: Types::STRING)]
-    private string $name;
-
-    public function __construct(string $id = '', string $name = '')
-    {
-        $this->id = $id;
-        $this->name = $name;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="string")
+         * @ORM\GeneratedValue(strategy="NONE")
+         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::STRING)]
+        #[ORM\GeneratedValue(strategy: 'NONE')]
+        private string $id = '',
+        /**
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Column(type: Types::STRING)]
+        private string $name = ''
+    ) {
     }
 
     public function __toString(): string

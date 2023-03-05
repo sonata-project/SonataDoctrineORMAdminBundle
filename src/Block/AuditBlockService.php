@@ -25,13 +25,11 @@ use Twig\Environment;
  */
 final class AuditBlockService extends AbstractBlockService
 {
-    private AuditReader $auditReader;
-
-    public function __construct(Environment $twig, AuditReader $auditReader)
-    {
+    public function __construct(
+        Environment $twig,
+        private AuditReader $auditReader
+    ) {
         parent::__construct($twig);
-
-        $this->auditReader = $auditReader;
     }
 
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response

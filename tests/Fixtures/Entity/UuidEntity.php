@@ -17,11 +17,8 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestCl
 
 final class UuidEntity
 {
-    private NonIntegerIdentifierTestClass $uuid;
-
-    public function __construct(NonIntegerIdentifierTestClass $uuid)
+    public function __construct(private NonIntegerIdentifierTestClass $uuid)
     {
-        $this->uuid = $uuid;
     }
 
     public function getId(): NonIntegerIdentifierTestClass

@@ -21,31 +21,27 @@ use Doctrine\ORM\Mapping as ORM;
 class Item
 {
     /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Command")
-     */
-    #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Command::class)]
-    private Command $command;
-
-    /**
-     * @ORM\Id
-     * @ORM\ManyToOne(targetEntity="Product")
-     */
-    #[ORM\Id]
-    #[ORM\ManyToOne(targetEntity: Product::class)]
-    private Product $product;
-
-    /**
      * @ORM\Column(type="decimal")
      */
     #[ORM\Column(type: Types::DECIMAL)]
     private string $offeredPrice;
 
-    public function __construct(Command $command, Product $product)
-    {
-        $this->command = $command;
-        $this->product = $product;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\ManyToOne(targetEntity="Command")
+         */
+        #[ORM\Id]
+        #[ORM\ManyToOne(targetEntity: Command::class)]
+        private Command $command,
+        /**
+         * @ORM\Id
+         * @ORM\ManyToOne(targetEntity="Product")
+         */
+        #[ORM\Id]
+        #[ORM\ManyToOne(targetEntity: Product::class)]
+        private Product $product
+    ) {
         $this->offeredPrice = $product->getCurrentPrice();
     }
 

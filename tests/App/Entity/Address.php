@@ -18,17 +18,15 @@ use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Embeddable() */
 #[ORM\Embeddable]
-class Address
+class Address implements \Stringable
 {
-    /**
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column(type: Types::STRING)]
-    private string $street;
-
-    public function __construct(string $street = '')
-    {
-        $this->street = $street;
+    public function __construct(
+        /**
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Column(type: Types::STRING)]
+        private string $street = ''
+    ) {
     }
 
     public function __toString(): string

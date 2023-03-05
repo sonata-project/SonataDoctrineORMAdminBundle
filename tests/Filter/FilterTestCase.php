@@ -55,28 +55,19 @@ abstract class FilterTestCase extends TestCase
         $queryBuilder = $this->createStub(TestQueryBuilder::class);
 
         $queryBuilder->method('setParameter')->willReturnCallback(
-            /**
-             * @param mixed $value
-             */
-            static function (string $name, $value) use ($queryBuilder): void {
+            static function (string $name, mixed $value) use ($queryBuilder): void {
                 $queryBuilder->queryParameters[$name] = $value;
             }
         );
 
         $queryBuilder->method('andWhere')->willReturnCallback(
-            /**
-             * @param mixed $query
-             */
-            static function ($query) use ($queryBuilder): void {
+            static function (mixed $query) use ($queryBuilder): void {
                 $queryBuilder->query[] = sprintf('WHERE %s', $query);
             }
         );
 
         $queryBuilder->method('andHaving')->willReturnCallback(
-            /**
-             * @param mixed $query
-             */
-            static function ($query) use ($queryBuilder): void {
+            static function (mixed $query) use ($queryBuilder): void {
                 $queryBuilder->query[] = sprintf('HAVING %s', $query);
             }
         );
@@ -121,10 +112,7 @@ abstract class FilterTestCase extends TestCase
         );
 
         $expr->method('in')->willReturnCallback(
-            /**
-             * @param mixed $parameter
-             */
-            static function (string $alias, $parameter): string {
+            static function (string $alias, mixed $parameter): string {
                 if (\is_array($parameter)) {
                     return sprintf('%s IN ("%s")', $alias, implode(', ', $parameter));
                 }
@@ -134,10 +122,7 @@ abstract class FilterTestCase extends TestCase
         );
 
         $expr->method('notIn')->willReturnCallback(
-            /**
-             * @param mixed $parameter
-             */
-            static function (string $alias, $parameter): string {
+            static function (string $alias, mixed $parameter): string {
                 if (\is_array($parameter)) {
                     return sprintf('%s NOT IN ("%s")', $alias, implode(', ', $parameter));
                 }

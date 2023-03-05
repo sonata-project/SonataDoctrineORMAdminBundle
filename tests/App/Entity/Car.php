@@ -18,28 +18,24 @@ use Doctrine\ORM\Mapping as ORM;
 
 /** @ORM\Entity */
 #[ORM\Entity]
-class Car
+class Car implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::STRING)]
-    private string $name;
-
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $year;
-
-    public function __construct(string $name = '', int $year = 0)
-    {
-        $this->name = $name;
-        $this->year = $year;
+    public function __construct(
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="string")
+         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::STRING)]
+        private string $name = '',
+        /**
+         * @ORM\Id
+         * @ORM\Column(type="integer")
+         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        private int $year = 0
+    ) {
     }
 
     public function __toString(): string

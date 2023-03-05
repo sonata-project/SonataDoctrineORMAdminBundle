@@ -15,11 +15,8 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 final class ValueObjectWithToStringImpl
 {
-    private string $uuid;
-
-    public function __construct(string $uuid)
+    public function __construct(private string $uuid)
     {
-        $this->uuid = $uuid;
     }
 
     public function getValue(): string

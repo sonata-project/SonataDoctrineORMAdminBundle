@@ -24,11 +24,8 @@ use Sonata\AdminBundle\Model\Revision;
  */
 final class AuditReader implements AuditReaderInterface
 {
-    private SimpleThingsAuditReader $auditReader;
-
-    public function __construct(SimpleThingsAuditReader $auditReader)
+    public function __construct(private SimpleThingsAuditReader $auditReader)
     {
-        $this->auditReader = $auditReader;
     }
 
     /**
@@ -42,7 +39,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->find($className, $id, $revisionId);
-        } catch (\Throwable $exception) {
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -72,7 +69,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->createRevisionFromEntityAuditRevision($this->auditReader->findRevision($revisionId));
-        } catch (\Throwable $exception) {
+        } catch (\Throwable) {
             return null;
         }
     }
@@ -84,7 +81,7 @@ final class AuditReader implements AuditReaderInterface
                 [$this, 'createRevisionFromEntityAuditRevision'],
                 $this->auditReader->findRevisions($className, $id)
             );
-        } catch (\Throwable $exception) {
+        } catch (\Throwable) {
             return [];
         }
     }
@@ -93,7 +90,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return $this->auditReader->diff($className, $id, $oldRevisionId, $newRevisionId);
-        } catch (\Throwable $exception) {
+        } catch (\Throwable) {
             return [];
         }
     }

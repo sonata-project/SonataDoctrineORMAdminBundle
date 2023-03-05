@@ -22,17 +22,8 @@ final class ContainerEntity
      */
     public $plainField;
 
-    /**
-     * @var Embeddable\EmbeddedEntity
-     */
-    public $embeddedEntity;
-
-    private AssociatedEntity $associatedEntity;
-
-    public function __construct(AssociatedEntity $associatedEntity, EmbeddedEntity $embeddedEntity)
+    public function __construct(private AssociatedEntity $associatedEntity, public EmbeddedEntity $embeddedEntity)
     {
-        $this->associatedEntity = $associatedEntity;
-        $this->embeddedEntity = $embeddedEntity;
     }
 
     /**

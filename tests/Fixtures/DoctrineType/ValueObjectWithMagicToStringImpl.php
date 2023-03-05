@@ -13,13 +13,10 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
-final class ValueObjectWithMagicToStringImpl
+final class ValueObjectWithMagicToStringImpl implements \Stringable
 {
-    private string $uuid;
-
-    public function __construct(string $uuid)
+    public function __construct(private string $uuid)
     {
-        $this->uuid = $uuid;
     }
 
     public function __toString(): string
