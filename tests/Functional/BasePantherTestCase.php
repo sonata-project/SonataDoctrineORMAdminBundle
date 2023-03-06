@@ -18,10 +18,7 @@ use Symfony\Component\Panther\PantherTestCase;
 
 abstract class BasePantherTestCase extends PantherTestCase
 {
-    /**
-     * @var Client
-     */
-    protected $client;
+    protected Client $client;
 
     protected function setUp(): void
     {

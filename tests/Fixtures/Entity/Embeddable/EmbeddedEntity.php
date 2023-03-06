@@ -15,10 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable;
 
 final class EmbeddedEntity
 {
-    /**
-     * @var bool|null
-     */
-    public $plainField;
+    public ?bool $plainField = null;
 
     private ?SubEmbeddedEntity $subEmbeddedEntity = null;
 

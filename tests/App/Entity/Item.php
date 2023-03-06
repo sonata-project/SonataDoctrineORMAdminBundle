@@ -16,28 +16,16 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
 class Item
 {
-    /**
-     * @ORM\Column(type="decimal")
-     */
     #[ORM\Column(type: Types::DECIMAL)]
     private string $offeredPrice;
 
     public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\ManyToOne(targetEntity="Command")
-         */
         #[ORM\Id]
         #[ORM\ManyToOne(targetEntity: Command::class)]
         private Command $command,
-        /**
-         * @ORM\Id
-         * @ORM\ManyToOne(targetEntity="Product")
-         */
         #[ORM\Id]
         #[ORM\ManyToOne(targetEntity: Product::class)]
         private Product $product

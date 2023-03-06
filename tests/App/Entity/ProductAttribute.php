@@ -16,21 +16,13 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
 class ProductAttribute
 {
     public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\ManyToOne(targetEntity="Product")
-         */
         #[ORM\Id]
         #[ORM\ManyToOne(targetEntity: Product::class)]
         private Product $product,
-        /**
-         * @ORM\Column(type="string")
-         */
         #[ORM\Column(type: Types::STRING)]
         private string $name
     ) {
