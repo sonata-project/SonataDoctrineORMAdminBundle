@@ -32,10 +32,7 @@ final class UuidType extends StringType
         return self::NAME;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?NonIntegerIdentifierTestClass
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?NonIntegerIdentifierTestClass
     {
         if (null === $value || '' === $value) {
             return null;
@@ -52,10 +49,7 @@ final class UuidType extends StringType
         return new NonIntegerIdentifierTestClass($value);
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?string
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?string
     {
         $value = $this->convertToPHPValue($value, $platform);
 

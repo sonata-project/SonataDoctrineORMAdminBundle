@@ -16,26 +16,15 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
 class Product implements \Stringable
 {
     public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         */
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
         private int $id,
-        /**
-         * @ORM\Column(type="string")
-         */
         #[ORM\Column(type: Types::STRING)]
         private string $name = '',
-        /**
-         * @ORM\Column(type="decimal")
-         */
         #[ORM\Column(type: Types::DECIMAL)]
         private string $currentPrice = '0.0'
     ) {

@@ -16,26 +16,15 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
 final class DoubleNameEntity
 {
     public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         */
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
         public int $id,
-        /**
-         * @ORM\Column(type="string")
-         */
         #[ORM\Column(type: Types::STRING)]
         public string $name,
-        /**
-         * @ORM\Column(type="string", nullable=true)
-         */
         #[ORM\Column(type: Types::STRING, nullable: true)]
         public ?string $name2
     ) {

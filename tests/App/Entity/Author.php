@@ -18,37 +18,23 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
 class Author implements \Stringable
 {
     /**
-     * @ORM\OneToMany(targetEntity=Book::class, mappedBy="author")
-     *
      * @var Collection<array-key, Book>
      */
     #[ORM\OneToMany(targetEntity: Book::class, mappedBy: 'author')]
     private Collection $books;
 
-    /**
-     * @ORM\Embedded(class="Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Address")
-     */
     #[ORM\Embedded(class: Address::class)]
     private Address $address;
 
     public function __construct(
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="string")
-         * @ORM\GeneratedValue(strategy="NONE")
-         */
         #[ORM\Id]
         #[ORM\Column(type: Types::STRING)]
         #[ORM\GeneratedValue(strategy: 'NONE')]
         private string $id = '',
-        /**
-         * @ORM\Column(type="string")
-         */
         #[ORM\Column(type: Types::STRING)]
         private string $name = ''
     ) {

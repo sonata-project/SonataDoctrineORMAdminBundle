@@ -20,10 +20,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util;
  */
 final class NonIntegerIdentifierTestClass implements \Stringable
 {
-    /**
-     * @param string $uuid
-     */
-    public function __construct(private $uuid)
+    public function __construct(private string $uuid)
     {
     }
 
@@ -32,10 +29,7 @@ final class NonIntegerIdentifierTestClass implements \Stringable
         return $this->toString();
     }
 
-    /**
-     * @return string
-     */
-    public function toString()
+    public function toString(): string
     {
         return $this->uuid;
     }

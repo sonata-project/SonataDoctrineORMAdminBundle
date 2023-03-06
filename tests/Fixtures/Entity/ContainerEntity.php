@@ -17,19 +17,15 @@ use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Embeddable\EmbeddedEntit
 
 final class ContainerEntity
 {
-    /**
-     * @var int|null
-     */
-    public $plainField;
+    public ?int $plainField = null;
 
-    public function __construct(private AssociatedEntity $associatedEntity, public EmbeddedEntity $embeddedEntity)
-    {
+    public function __construct(
+        private AssociatedEntity $associatedEntity,
+        public EmbeddedEntity $embeddedEntity
+    ) {
     }
 
-    /**
-     * @return AssociatedEntity
-     */
-    public function getAssociatedEntity()
+    public function getAssociatedEntity(): AssociatedEntity
     {
         return $this->associatedEntity;
     }
