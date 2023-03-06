@@ -26,7 +26,7 @@ final class DoubleNameEntity
         #[ORM\Column(type: Types::STRING)]
         public string $name,
         #[ORM\Column(type: Types::STRING, nullable: true)]
-        public ?string $name2
+        public ?string $name2 = null
     ) {
     }
 }
