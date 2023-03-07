@@ -80,8 +80,6 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  */
 final class ProxyQuery implements ProxyQueryInterface
 {
-    private QueryBuilder $queryBuilder;
-
     private ?string $sortBy = null;
 
     private ?string $sortOrder = null;
@@ -100,9 +98,8 @@ final class ProxyQuery implements ProxyQueryInterface
      */
     private array $hints = [];
 
-    public function __construct(QueryBuilder $queryBuilder)
+    public function __construct(private QueryBuilder $queryBuilder)
     {
-        $this->queryBuilder = $queryBuilder;
         $this->uniqueParameterId = 0;
         $this->entityJoinAliases = [];
     }
@@ -158,7 +155,7 @@ final class ProxyQuery implements ProxyQueryInterface
             $orderByDQLPart = $queryBuilder->getDQLPart('orderBy');
             $queryBuilder->resetDQLPart('orderBy');
 
-            if (false === strpos($sortBy, '.')) {
+            if (!str_contains($sortBy, '.')) {
                 $sortBy = $rootAlias.'.'.$sortBy;
             }
 
@@ -318,7 +315,7 @@ final class ProxyQuery implements ProxyQueryInterface
      *
      * @return $this
      */
-    public function setHint(string $name, $value): ProxyQueryInterface
+    public function setHint(string $name, mixed $value): ProxyQueryInterface
     {
         $this->hints[$name] = $value;
 

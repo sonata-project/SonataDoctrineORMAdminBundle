@@ -15,17 +15,9 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-/**
- * @ORM\Entity()
- */
 #[ORM\Entity]
 class Sub extends Base
 {
-    /**
-     * @ORM\Column(options={"default"="HELLO WORLD"})
-     *
-     * @var string
-     */
     #[ORM\Column(options: ['default' => 'HELLO WORLD'])]
-    public $otherField = 'HELLO WORLD';
+    public string $otherField = 'HELLO WORLD';
 }

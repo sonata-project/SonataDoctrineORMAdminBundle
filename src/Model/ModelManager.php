@@ -45,19 +45,15 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 {
     public const ID_SEPARATOR = '~';
 
-    private ManagerRegistry $registry;
-
-    private PropertyAccessorInterface $propertyAccessor;
-
     /**
      * @var EntityManagerInterface[]
      */
     private array $cache = [];
 
-    public function __construct(ManagerRegistry $registry, PropertyAccessorInterface $propertyAccessor)
-    {
-        $this->registry = $registry;
-        $this->propertyAccessor = $propertyAccessor;
+    public function __construct(
+        private ManagerRegistry $registry,
+        private PropertyAccessorInterface $propertyAccessor
+    ) {
     }
 
     public function getRealClass(object $object): string
@@ -182,7 +178,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function getEntityManager($class): EntityManagerInterface
     {
         if (\is_object($class)) {
-            $class = \get_class($class);
+            $class = $class::class;
         }
 
         if (!isset($this->cache[$class])) {
@@ -385,7 +381,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function reverseTransform(object $object, array $array = []): void
     {
-        $metadata = $this->getMetadata(\get_class($object));
+        $metadata = $this->getMetadata($object::class);
 
         foreach ($array as $name => $value) {
             $property = $this->getFieldName($metadata, $name);

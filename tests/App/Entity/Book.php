@@ -18,58 +18,32 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
-class Book
+class Book implements \Stringable
 {
     /**
-     * @ORM\Id
-     * @ORM\Column(type="string")
-     * @ORM\GeneratedValue(strategy="NONE")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::STRING)]
-    #[ORM\GeneratedValue(strategy: 'NONE')]
-    private string $id;
-
-    /**
-     * @ORM\Column(type="string")
-     */
-    #[ORM\Column(type: Types::STRING)]
-    private string $name;
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Author", inversedBy="books")
-     * @ORM\JoinColumn(name="author_id", referencedColumnName="id", onDelete="SET NULL")
-     */
-    #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
-    #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-    private ?Author $author;
-
-    /**
-     * @ORM\ManyToMany(targetEntity=Reader::class, cascade={"persist"})
-     *
      * @var Collection<array-key, Reader>
      */
     #[ORM\ManyToMany(targetEntity: Reader::class, cascade: ['persist'])]
     private Collection $readers;
 
     /**
-     * @ORM\ManyToMany(targetEntity="Category")
-     *
      * @var Collection<array-key, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class)]
     private Collection $categories;
 
     public function __construct(
-        string $id = '',
-        string $name = '',
-        ?Author $author = null
+        #[ORM\Id]
+        #[ORM\Column(type: Types::STRING)]
+        #[ORM\GeneratedValue(strategy: 'NONE')]
+        private string $id = '',
+        #[ORM\Column(type: Types::STRING)]
+        private string $name = '',
+        #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
+        #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        private ?Author $author = null
     ) {
-        $this->id = $id;
-        $this->name = $name;
-        $this->author = $author;
         $this->categories = new ArrayCollection();
         $this->readers = new ArrayCollection();
     }

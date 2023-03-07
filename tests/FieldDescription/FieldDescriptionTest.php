@@ -55,7 +55,7 @@ final class FieldDescriptionTest extends TestCase
         try {
             $field->mergeOption('integer', []);
             static::fail('no exception raised !!');
-        } catch (\RuntimeException $e) {
+        } catch (\RuntimeException) {
         }
 
         $expected = [
@@ -253,10 +253,8 @@ final class FieldDescriptionTest extends TestCase
 
     /**
      * @dataProvider getDescribesSingleValuedAssociationProvider
-     *
-     * @param string|int $mappingType
      */
-    public function testDescribesSingleValuedAssociation($mappingType, bool $expected): void
+    public function testDescribesSingleValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
             'fieldName' => 'foo',
@@ -279,10 +277,8 @@ final class FieldDescriptionTest extends TestCase
 
     /**
      * @dataProvider getDescribesCollectionValuedAssociationProvider
-     *
-     * @param string|int $mappingType
      */
-    public function testDescribesCollectionValuedAssociation($mappingType, bool $expected): void
+    public function testDescribesCollectionValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
             'fieldName' => 'foo',

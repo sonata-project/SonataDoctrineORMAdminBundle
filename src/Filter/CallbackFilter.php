@@ -30,7 +30,7 @@ final class CallbackFilter extends Filter
         if (!\is_bool($isActive)) {
             throw new \UnexpectedValueException(sprintf(
                 'The callback should return a boolean, %s returned',
-                \is_object($isActive) ? 'instance of "'.\get_class($isActive).'"' : '"'.\gettype($isActive).'"'
+                \is_object($isActive) ? 'instance of "'.$isActive::class.'"' : '"'.\gettype($isActive).'"'
             ));
         }
 

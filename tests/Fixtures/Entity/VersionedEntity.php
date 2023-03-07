@@ -15,8 +15,5 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity;
 
 final class VersionedEntity
 {
-    /**
-     * @var int|null
-     */
-    public $version;
+    public ?int $version = null;
 }

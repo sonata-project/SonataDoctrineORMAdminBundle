@@ -32,10 +32,7 @@ final class ProductIdType extends Type
         return true;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function convertToPHPValue($value, AbstractPlatform $platform): ?ProductId
+    public function convertToPHPValue(mixed $value, AbstractPlatform $platform): ?ProductId
     {
         if (null === $value || $value instanceof ProductId) {
             return $value;
@@ -52,10 +49,7 @@ final class ProductIdType extends Type
         return new ProductId((int) $value);
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function convertToDatabaseValue($value, AbstractPlatform $platform): ?int
+    public function convertToDatabaseValue(mixed $value, AbstractPlatform $platform): ?int
     {
         $value = $this->convertToPHPValue($value, $platform);
 

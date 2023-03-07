@@ -25,20 +25,13 @@ use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
  */
 final class ShowBuilder implements ShowBuilderInterface
 {
-    private TypeGuesserInterface $guesser;
-
-    /**
-     * @var string[]
-     */
-    private array $templates;
-
     /**
      * @param string[] $templates
      */
-    public function __construct(TypeGuesserInterface $guesser, array $templates)
-    {
-        $this->guesser = $guesser;
-        $this->templates = $templates;
+    public function __construct(
+        private TypeGuesserInterface $guesser,
+        private array $templates
+    ) {
     }
 
     public function getBaseList(array $options = []): FieldDescriptionCollection
@@ -75,7 +68,7 @@ final class ShowBuilder implements ShowBuilderInterface
             throw new \RuntimeException(sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
-                \get_class($fieldDescription->getAdmin())
+                $fieldDescription->getAdmin()::class
             ));
         }
 

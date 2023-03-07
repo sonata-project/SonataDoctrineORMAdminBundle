@@ -85,20 +85,12 @@ final class StringFilter extends Filter implements SearchableFilterInterface
 
         $this->applyWhere($query, $or);
 
-        switch ($type) {
-            case StringOperatorType::TYPE_EQUAL:
-            case StringOperatorType::TYPE_NOT_EQUAL:
-                $format = '%s';
-                break;
-            case StringOperatorType::TYPE_STARTS_WITH:
-                $format = '%s%%';
-                break;
-            case StringOperatorType::TYPE_ENDS_WITH:
-                $format = '%%%s';
-                break;
-            default:
-                $format = '%%%s%%';
-        }
+        $format = match ($type) {
+            StringOperatorType::TYPE_EQUAL, StringOperatorType::TYPE_NOT_EQUAL => '%s',
+            StringOperatorType::TYPE_STARTS_WITH => '%s%%',
+            StringOperatorType::TYPE_ENDS_WITH => '%%%s',
+            default => '%%%s%%',
+        };
 
         $query->getQueryBuilder()->setParameter(
             $parameterName,

@@ -83,9 +83,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
 
     /**
      * @param ProxyQueryInterface<object> $query
-     * @param mixed                       $parameter
      */
-    final protected function applyWhere(ProxyQueryInterface $query, $parameter): void
+    final protected function applyWhere(ProxyQueryInterface $query, mixed $parameter): void
     {
         if (self::CONDITION_OR === $this->getCondition()) {
             $this->addOrParameter($query, $parameter);
@@ -99,9 +98,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
 
     /**
      * @param ProxyQueryInterface<object> $query
-     * @param mixed                       $parameter
      */
-    final protected function applyHaving(ProxyQueryInterface $query, $parameter): void
+    final protected function applyHaving(ProxyQueryInterface $query, mixed $parameter): void
     {
         if (self::CONDITION_OR === $this->getCondition()) {
             $query->getQueryBuilder()->orHaving($parameter);
@@ -132,9 +130,8 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
      * which will produce undesired results.
      *
      * @param ProxyQueryInterface<object> $query
-     * @param mixed                       $parameter
      */
-    private function addOrParameter(ProxyQueryInterface $query, $parameter): void
+    private function addOrParameter(ProxyQueryInterface $query, mixed $parameter): void
     {
         if ($this->hasPreviousFilter()) {
             $previousFilter = $this->getPreviousFilter();

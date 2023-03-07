@@ -26,11 +26,8 @@ use Symfony\Component\Security\Acl\Domain\UserSecurityIdentity;
 
 final class ObjectAclManipulator extends BaseObjectAclManipulator
 {
-    private ManagerRegistry $registry;
-
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(private ManagerRegistry $registry)
     {
-        $this->registry = $registry;
     }
 
     public function batchConfigureAcls(OutputInterface $output, AdminInterface $admin, ?UserSecurityIdentity $securityIdentity = null): void

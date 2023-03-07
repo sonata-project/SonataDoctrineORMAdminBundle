@@ -16,27 +16,17 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\App\Entity;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
-/** @ORM\Entity */
 #[ORM\Entity]
-class Command
+class Command implements \Stringable
 {
-    /**
-     * @ORM\Id
-     * @ORM\Column(type="integer")
-     */
-    #[ORM\Id]
-    #[ORM\Column(type: Types::INTEGER)]
-    private int $id;
-
-    /**
-     * @ORM\Column(type="datetime")
-     */
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private \DateTime $createdAt;
 
-    public function __construct(int $id)
-    {
-        $this->id = $id;
+    public function __construct(
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        private int $id
+    ) {
         $this->createdAt = new \DateTime();
     }
 
