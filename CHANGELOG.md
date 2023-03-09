@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.10.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.9.1...4.10.0) - 2023-03-09
+### Removed
+- [[#1714](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1714)] Drop support for `doctrine/dbal` ^2.0. ([@jordisala1991](https://github.com/jordisala1991))
+- [[#1714](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1714)] Drop support for `doctrine/persistence` ^2.0. ([@jordisala1991](https://github.com/jordisala1991))
+- [[#1715](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1715)] Support for PHP 7.4
+- [[#1715](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1715)] Support for Symfony 6.0 and 6.1
+
 ## [4.9.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.9.0...4.9.1) - 2022-12-29
 ### Fixed
 - [[#1690](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1690)] ProxyQuery and ProxyQueryInterface are covariant ([@VincentLanglet](https://github.com/VincentLanglet))
