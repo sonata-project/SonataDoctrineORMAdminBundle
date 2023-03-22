@@ -68,7 +68,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to create object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -83,7 +83,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to update object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -98,7 +98,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to delete object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
