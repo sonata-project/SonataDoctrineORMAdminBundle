@@ -236,7 +236,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function getIdentifierValues(object $model): array
     {
         $metadata = $this->getMetadata($model::class);
-        $platform = $this->getEntityManager($class::class)->getConnection()->getDatabasePlatform();
+        $platform = $this->getEntityManager($model::class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
 
