@@ -441,16 +441,16 @@ final class ModelManagerTest extends TestCase
         $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata->method('getName')->willReturn(VersionedEntity::class);
 
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('persist');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
             
@@ -486,16 +486,16 @@ final class ModelManagerTest extends TestCase
         $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata->method('getName')->willReturn(VersionedEntity::class);
 
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('persist');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
 
@@ -516,16 +516,16 @@ final class ModelManagerTest extends TestCase
         $classMetadata = $this->createMock(ClassMetadata::class);
         $classMetadata->method('getName')->willReturn(VersionedEntity::class);
 
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('remove');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
 
