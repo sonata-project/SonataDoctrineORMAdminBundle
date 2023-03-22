@@ -81,6 +81,14 @@ final class ModelManagerTest extends TestCase
 
     public function testGetRealClass(): void
     {
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->method('getName')->willReturn(User::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getClassMetadata')->willReturn($classMetadata);
+
+        $this->registry->method('getManagerForClass')->willReturn($entityManager);
+
         static::assertSame(User::class, $this->modelManager->getRealClass(new User()));
     }
 
