@@ -453,7 +453,7 @@ final class ModelManagerTest extends TestCase
         $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
-            
+
         $entityManager->expects(static::once())
             ->method('getClassMetadata')
             ->willReturn($classMetadata);
