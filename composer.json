@@ -47,7 +47,7 @@
         "twig/twig": "^2.10 || ^3.0"
     },
     "require-dev": {
-        "dama/doctrine-test-bundle": "^6.7",
+        "dama/doctrine-test-bundle": "^6.7 || ^7.0",
         "doctrine/doctrine-fixtures-bundle": "^3.4",
         "friendsofphp/php-cs-fixer": "^3.4",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2",
