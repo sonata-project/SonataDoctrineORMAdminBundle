@@ -75,7 +75,7 @@ jobs:
             - name: Globally install symfony/flex
               if: matrix.symfony-require != ''
               run: |
-                  composer config —-json extra.symfony.endpoint '["https://raw.githubusercontent.com/symfony/recipes/c8d90298241f176a261dadc4814d7058415a4c1f/index.json"]'
+                  composer config extra.symfony.endpoint '["https://raw.githubusercontent.com/symfony/recipes/c8d90298241f176a261dadc4814d7058415a4c1f/index.json"]'
                   composer global config --no-plugins allow-plugins.symfony/flex true
                   composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
