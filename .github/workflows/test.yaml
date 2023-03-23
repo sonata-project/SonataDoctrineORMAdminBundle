@@ -76,7 +76,7 @@ jobs:
               if: matrix.symfony-require != ''
               run: |
                   composer config allow-plugins.symfony/flex true
-                  composer require --no-progress --no-scripts --no-plugins symfony/flex
+                  composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
             - name: Install variant
               if: matrix.variant != 'normal' && !startsWith(matrix.variant, 'symfony/symfony')
