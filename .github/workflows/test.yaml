@@ -75,7 +75,7 @@ jobs:
             - name: Globally install symfony/flex
               if: matrix.symfony-require != ''
               run: |
-                  composer config --no-plugins allow-plugins.symfony/flex true
+                  composer config allow-plugins.symfony/flex true
                   composer global require --no-progress --no-scripts --no-plugins symfony/flex
 
             - name: Install variant
