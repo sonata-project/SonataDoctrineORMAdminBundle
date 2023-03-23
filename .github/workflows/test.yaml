@@ -45,17 +45,17 @@ jobs:
                     - php-version: '8.2'
                       dependencies: highest
                       allowed-to-fail: false
-                      symfony-require: 4.4
+                      symfony-require: 4.4.*
                       variant: symfony/symfony:"4.4.*"
                     - php-version: '8.2'
                       dependencies: highest
                       allowed-to-fail: false
-                      symfony-require: 5.4
+                      symfony-require: 5.4.*
                       variant: symfony/symfony:"5.4.*"
                     - php-version: '8.2'
                       dependencies: highest
                       allowed-to-fail: false
-                      symfony-require: 6.2
+                      symfony-require: 6.2.*
                       variant: symfony/symfony:"6.2.*"
 
         steps:
