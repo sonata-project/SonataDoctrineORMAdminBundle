@@ -93,6 +93,7 @@
     },
     "config": {
         "allow-plugins": {
+            "symfony/flex": true,
             "phpstan/extension-installer": true,
             "composer/package-versions-deprecated": true
         },
