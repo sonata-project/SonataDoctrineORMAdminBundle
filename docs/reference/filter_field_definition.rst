@@ -96,7 +96,7 @@ StringListFilter
 ----------------
 
 This filter is made for filtering on values saved in databases as serialized arrays of strings with the
-``@ORM\Column(type="array")`` annotation. It is recommended to use another table and ``OneToMany`` relations
+``#[ORM\Column(type: Types::ARRAY)]`` attribute. It is recommended to use another table and ``OneToMany`` relations
 if you want to make complex ``SQL`` queries or if your table is too big and you get performance issues but
 this filter can provide some basic queries::
 
