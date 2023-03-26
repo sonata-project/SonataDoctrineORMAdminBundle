@@ -25,16 +25,13 @@ Author
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
 
-    /**
-     * @ORM\Embeddable
-     */
+    #[ORM\Embeddable]
     class Author
     {
-        /**
-         * @ORM\Column(type = "string")
-         */
+        #[ORM\Column(type: Types::STRING)]
         private $name;
 
         public function __construct($name)
