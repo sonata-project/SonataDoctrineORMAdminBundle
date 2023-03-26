@@ -31,15 +31,13 @@ Author
     #[ORM\Embeddable]
     class Author
     {
-        #[ORM\Column(type: Types::STRING)]
-        private $name;
-
-        public function __construct($name)
-        {
-            $this->name = $name;
+        public function __construct(
+            #[ORM\Column(type: Types::STRING)]
+            private string $name
+        ) {
         }
 
-        public function getName()
+        public function getName(): string
         {
             return $this->name;
         }
@@ -54,6 +52,8 @@ Post
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\Common\Collections\Collection;
     use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
@@ -64,52 +64,52 @@ Post
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
         #[ORM\GeneratedValue]
-        private $id;
+        private ?int $id = null;
 
         #[ORM\Column(type: Types::STRING)]
         #[Assert\NotBlank]
         #[Assert\Length(min: 10, max: 255)]
-        private $title;
+        private ?string $title = null;
 
         #[ORM\Column(type: Types::TEXT)]
-        private $abstract;
+        private ?string $abstract = null;
 
         #[ORM\Column(type: Types::TEXT)]
         #[Assert\NotBlank]
-        private $content;
+        private ?string $content = null;
 
         #[ORM\Column(type: Types::BOOLEAN)]
-        private $enabled;
+        private bool $enabled = false;
 
         #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-        private $created_at;
+        private ?\DateTimeInterface $created_at = null;
 
         #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
-        private $updated_at;
+        private ?\DateTimeInterface $updated_at = null;
 
         #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
-        private $comments;
+        private Collection $comments;
 
         #[ORM\ManyToMany(targetEntity: Tag::class)]
-        private $tags;
+        private Collection $tags;
 
         #[ORM\Embedded(class: Author::class)]
-        private $author;
+        private Author $author;
 
         public function __construct()
         {
-            $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-            $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->tags = new ArrayCollection();
+            $this->comments = new ArrayCollection();
             $this->created_at = new \DateTime("now");
             $this->author = new Author('admin');
         }
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getTitle();
+            return $this->getTitle() ?? '-';
         }
 
-        public function getAuthor()
+        public function getAuthor(): Author
         {
             return $this->author;
         }
@@ -124,6 +124,8 @@ Tag
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\Common\Collections\Collection;
     use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
@@ -134,26 +136,26 @@ Tag
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
         #[ORM\GeneratedValue]
-        private $id;
+        private ?int $id = null;
 
         #[ORM\Column(type: Types::STRING)]
         #[Assert\NotBlank]
-        private $name;
+        private ?string $name = null;
 
         #[ORM\Column(type: Types::BOOLEAN)]
-        private $enabled;
+        private bool $enabled = false;
 
         #[ORM\ManyToMany(targetEntity: Post::class)]
-        private $posts;
+        private Collection $posts;
 
         public function __construct()
         {
-            $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->posts = new ArrayCollection();
         }
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getName();
+            return $this->getName() ?? '-';
         }
     }
 
@@ -176,29 +178,29 @@ Comment
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
         #[ORM\GeneratedValue]
-        private $id;
+        private ?int = null;
 
         #[ORM\Column(type: Types::STRING)]
         #[Assert\NotBlank]
-        private $name;
+        private ?string $name = null;
 
         #[ORM\Column(type: Types::STRING)]
         #[Assert\NotBlank]
-        private $email;
+        private ?string $email = null;
 
         #[ORM\Column(type: Types::STRING)]
-        private $url;
+        private ?string $url = null;
 
         #[ORM\Column(type: Types::TEXT)]
         #[Assert\NotBlank]
-        private $message;
+        private ?string $message = null;
 
         #[ORM\ManyToOne(targetEntity: Post::class)]
-        private $post;
+        private ?Post $post = null;
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getName();
+            return $this->getName() ?? '-';
         }
     }
 
