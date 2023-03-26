@@ -90,7 +90,7 @@ Post
         #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
         private $comments;
 
-        #[ORM\OneToMany(targetEntity: Tag::class)]
+        #[ORM\ManyToMany(targetEntity: Tag::class)]
         private $tags;
 
         #[ORM\Embedded(class: Author::class)]
