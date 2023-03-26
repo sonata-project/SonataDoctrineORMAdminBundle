@@ -13,7 +13,6 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Model;
 
-use Doctrine\Common\Util\ClassUtils;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\LockMode;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
@@ -58,7 +57,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function getRealClass(object $object): string
     {
-        return ClassUtils::getClass($object);
+        return $this->getMetadata($object::class)->getName();
     }
 
     public function create(object $object): void
@@ -69,7 +68,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to create object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to create object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -84,7 +83,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to update object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to update object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -99,7 +98,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', ClassUtils::getClass($object)),
+                sprintf('Failed to delete object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -108,7 +107,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function getLockVersion(object $object)
     {
-        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+        $metadata = $this->getMetadata($object::class);
 
         if (!$metadata->isVersioned || !isset($metadata->reflFields[$metadata->versionField])) {
             return null;
@@ -119,7 +118,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function lock(object $object, ?int $expectedVersion): void
     {
-        $metadata = $this->getMetadata(ClassUtils::getClass($object));
+        $metadata = $this->getMetadata($object::class);
 
         if (!$metadata->isVersioned) {
             return;
@@ -236,9 +235,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function getIdentifierValues(object $model): array
     {
-        $class = ClassUtils::getClass($model);
-        $metadata = $this->getMetadata($class);
-        $platform = $this->getEntityManager($class)->getConnection()->getDatabasePlatform();
+        $metadata = $this->getMetadata($model::class);
+        $platform = $this->getEntityManager($model::class)->getConnection()->getDatabasePlatform();
 
         $identifiers = [];
 
@@ -256,7 +254,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
                 continue;
             }
 
-            $identifierMetadata = $this->getMetadata(ClassUtils::getClass($value));
+            $identifierMetadata = $this->getMetadata($value::class);
 
             foreach ($identifierMetadata->getIdentifierValues($value) as $identifierValue) {
                 $identifiers[] = $identifierValue;
