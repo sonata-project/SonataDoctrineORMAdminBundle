@@ -54,69 +54,46 @@ Post
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Post
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
         private $id;
 
-        /**
-         * @ORM\Column(type="string", length=255)
-         *
-         * @Assert\NotBlank()
-         * @Assert\Length(min="10", max=255)
-         */
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
+        #[Assert\Length(min: 10, max: 255)]
         private $title;
 
-        /**
-         * @ORM\Column(type="text")
-         */
+        #[ORM\Column(type: Types::TEXT)]
         private $abstract;
 
-        /**
-         * @ORM\Column(type="text")
-         *
-         * @Assert\NotBlank()
-         */
+        #[ORM\Column(type: Types::TEXT)]
+        #[Assert\NotBlank]
         private $content;
 
-        /**
-         * @ORM\Column(type="boolean")
-         */
+        #[ORM\Column(type: Types::BOOLEAN)]
         private $enabled;
 
-        /**
-         * @ORM\Column(type="datetime")
-         */
+        #[ORM\Column(type: Types::DATETIME_MUTABLE)]
         private $created_at;
 
-        /**
-         * @ORM\Column(type="datetime_immutable")
-         */
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
         private $updated_at;
 
-        /**
-         * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
-         */
+        #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
         private $comments;
 
-        /**
-         * @ORM\ManyToMany(targetEntity="Tag")
-         */
+        #[ORM\OneToMany(targetEntity: Tag::class)]
         private $tags;
 
-        /**
-         * @ORM\Embedded(class="Author")
-         */
+        #[ORM\Embedded(class: Author::class)]
         private $author;
 
         public function __construct()
@@ -147,35 +124,26 @@ Tag
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Tag
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
         private $id;
 
-        /**
-         * @ORM\Column(type="string")
-         * @Assert\NotBlank()
-         */
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
         private $name;
 
-        /**
-         * @ORM\Column(type="boolean")
-         */
+        #[ORM\Column(type: Types::BOOLEAN)]
         private $enabled;
 
-        /**
-         * @ORM\ManyToMany(targetEntity="Post")
-         */
+        #[ORM\ManyToMany(targetEntity: Post::class)]
         private $posts;
 
         public function __construct()
@@ -198,49 +166,34 @@ Comment
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Comment
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
         private $id;
 
-        /**
-         * @ORM\Column(type="string")
-         *
-         * @Assert\NotBlank()
-         */
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
         private $name;
 
-        /**
-         * @ORM\Column(type="string")
-         *
-         * @Assert\NotBlank()
-         */
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
         private $email;
 
-        /**
-         * @ORM\Column(type="string")
-         */
+        #[ORM\Column(type: Types::STRING)]
         private $url;
 
-        /**
-         * @ORM\Column(type="text")
-         * @Assert\NotBlank()
-         */
+        #[ORM\Column(type: Types::TEXT)]
+        #[Assert\NotBlank]
         private $message;
 
-        /**
-         * @ORM\ManyToOne(targetEntity="Post")
-         */
+        #[ORM\ManyToOne(targetEntity: Post::class)]
         private $post;
 
         public function __toString()
@@ -257,16 +210,18 @@ Comment
 
     For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented::
 
+        use Doctrine\DBAL\Types\Types;
+        use Doctrine\ORM\Mapping as ORM;
+        use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
+        use Ramsey\Uuid\UuidInterface;
+
         class Comment
         {
-            /**
-             * @var \Ramsey\Uuid\UuidInterface
-             * @Id
-             * @Column(type="uuid_binary_ordered_time", unique=true)
-             * @GeneratedValue(strategy="CUSTOM")
-             * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
-             */
-            private $id;
+            #[ORM\Id]
+            #[ORM\Column(type: Types::INTEGER)]
+            #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+            #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
+            private ?UuidInterface $id = null;
 
             // ...
         }
