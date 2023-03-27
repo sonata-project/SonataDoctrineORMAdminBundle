@@ -81,6 +81,14 @@ final class ModelManagerTest extends TestCase
 
     public function testGetRealClass(): void
     {
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->method('getName')->willReturn(User::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
+        $entityManager->method('getClassMetadata')->willReturn($classMetadata);
+
+        $this->registry->method('getManagerForClass')->willReturn($entityManager);
+
         static::assertSame(User::class, $this->modelManager->getRealClass(new User()));
     }
 
@@ -430,18 +438,25 @@ final class ModelManagerTest extends TestCase
      */
     public function testCreate(\Throwable $exception): void
     {
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->method('getName')->willReturn(VersionedEntity::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('persist');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
+
+        $entityManager->expects(static::once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
 
         $this->expectException(ModelManagerException::class);
 
@@ -468,18 +483,25 @@ final class ModelManagerTest extends TestCase
      */
     public function testUpdate(\Throwable $exception): void
     {
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->method('getName')->willReturn(VersionedEntity::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('persist');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
+
+        $entityManager->expects(static::once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
 
         $this->expectException(ModelManagerException::class);
 
@@ -491,18 +513,25 @@ final class ModelManagerTest extends TestCase
      */
     public function testRemove(\Throwable $exception): void
     {
-        $entityManger = $this->createMock(EntityManagerInterface::class);
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata->method('getName')->willReturn(VersionedEntity::class);
+
+        $entityManager = $this->createMock(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
-            ->willReturn($entityManger);
+            ->willReturn($entityManager);
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('remove');
 
-        $entityManger->expects(static::once())
+        $entityManager->expects(static::once())
             ->method('flush')
             ->willThrowException($exception);
+
+        $entityManager->expects(static::once())
+            ->method('getClassMetadata')
+            ->willReturn($classMetadata);
 
         $this->expectException(ModelManagerException::class);
 
