@@ -25,24 +25,19 @@ Author
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
 
-    /**
-     * @ORM\Embeddable
-     */
+    #[ORM\Embeddable]
     class Author
     {
-        /**
-         * @ORM\Column(type = "string")
-         */
-        private $name;
-
-        public function __construct($name)
-        {
-            $this->name = $name;
+        public function __construct(
+            #[ORM\Column(type: Types::STRING)]
+            private string $name
+        ) {
         }
 
-        public function getName()
+        public function getName(): string
         {
             return $this->name;
         }
@@ -57,85 +52,64 @@ Post
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\Common\Collections\Collection;
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Post
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
-        private $id;
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
+        private ?int $id = null;
 
-        /**
-         * @ORM\Column(type="string", length=255)
-         *
-         * @Assert\NotBlank()
-         * @Assert\Length(min="10", max=255)
-         */
-        private $title;
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
+        #[Assert\Length(min: 10, max: 255)]
+        private ?string $title = null;
 
-        /**
-         * @ORM\Column(type="text")
-         */
-        private $abstract;
+        #[ORM\Column(type: Types::TEXT)]
+        private ?string $abstract = null;
 
-        /**
-         * @ORM\Column(type="text")
-         *
-         * @Assert\NotBlank()
-         */
-        private $content;
+        #[ORM\Column(type: Types::TEXT)]
+        #[Assert\NotBlank]
+        private ?string $content = null;
 
-        /**
-         * @ORM\Column(type="boolean")
-         */
-        private $enabled;
+        #[ORM\Column(type: Types::BOOLEAN)]
+        private bool $enabled = false;
 
-        /**
-         * @ORM\Column(type="datetime")
-         */
-        private $created_at;
+        #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+        private ?\DateTimeInterface $created_at = null;
 
-        /**
-         * @ORM\Column(type="datetime_immutable")
-         */
-        private $updated_at;
+        #[ORM\Column(type: Types::DATETIME_IMMUTABLE)]
+        private ?\DateTimeInterface $updated_at = null;
 
-        /**
-         * @ORM\OneToMany(targetEntity="Comment", mappedBy="post")
-         */
-        private $comments;
+        #[ORM\OneToMany(targetEntity: Comment::class, mappedBy: 'post')]
+        private Collection $comments;
 
-        /**
-         * @ORM\ManyToMany(targetEntity="Tag")
-         */
-        private $tags;
+        #[ORM\ManyToMany(targetEntity: Tag::class)]
+        private Collection $tags;
 
-        /**
-         * @ORM\Embedded(class="Author")
-         */
-        private $author;
+        #[ORM\Embedded(class: Author::class)]
+        private Author $author;
 
         public function __construct()
         {
-            $this->tags = new \Doctrine\Common\Collections\ArrayCollection();
-            $this->comments = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->tags = new ArrayCollection();
+            $this->comments = new ArrayCollection();
             $this->created_at = new \DateTime("now");
             $this->author = new Author('admin');
         }
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getTitle();
+            return $this->getTitle() ?? '-';
         }
 
-        public function getAuthor()
+        public function getAuthor(): Author
         {
             return $this->author;
         }
@@ -150,45 +124,38 @@ Tag
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\Common\Collections\ArrayCollection;
+    use Doctrine\Common\Collections\Collection;
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Tag
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
-        private $id;
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
+        private ?int $id = null;
 
-        /**
-         * @ORM\Column(type="string")
-         * @Assert\NotBlank()
-         */
-        private $name;
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
+        private ?string $name = null;
 
-        /**
-         * @ORM\Column(type="boolean")
-         */
-        private $enabled;
+        #[ORM\Column(type: Types::BOOLEAN)]
+        private bool $enabled = false;
 
-        /**
-         * @ORM\ManyToMany(targetEntity="Post")
-         */
-        private $posts;
+        #[ORM\ManyToMany(targetEntity: Post::class)]
+        private Collection $posts;
 
         public function __construct()
         {
-            $this->posts = new \Doctrine\Common\Collections\ArrayCollection();
+            $this->posts = new ArrayCollection();
         }
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getName();
+            return $this->getName() ?? '-';
         }
     }
 
@@ -201,54 +168,39 @@ Comment
 
     namespace Tutorial\BlogBundle\Entity;
 
+    use Doctrine\DBAL\Types\Types;
     use Doctrine\ORM\Mapping as ORM;
     use Symfony\Component\Validator\Constraints as Assert;
 
-    /**
-     * @ORM\Entity
-     */
+    #[ORM\Entity]
     class Comment
     {
-        /**
-         * @ORM\Id
-         * @ORM\Column(type="integer")
-         * @ORM\GeneratedValue(strategy="AUTO")
-         */
-        private $id;
+        #[ORM\Id]
+        #[ORM\Column(type: Types::INTEGER)]
+        #[ORM\GeneratedValue]
+        private ?int = null;
 
-        /**
-         * @ORM\Column(type="string")
-         *
-         * @Assert\NotBlank()
-         */
-        private $name;
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
+        private ?string $name = null;
 
-        /**
-         * @ORM\Column(type="string")
-         *
-         * @Assert\NotBlank()
-         */
-        private $email;
+        #[ORM\Column(type: Types::STRING)]
+        #[Assert\NotBlank]
+        private ?string $email = null;
 
-        /**
-         * @ORM\Column(type="string")
-         */
-        private $url;
+        #[ORM\Column(type: Types::STRING)]
+        private ?string $url = null;
 
-        /**
-         * @ORM\Column(type="text")
-         * @Assert\NotBlank()
-         */
-        private $message;
+        #[ORM\Column(type: Types::TEXT)]
+        #[Assert\NotBlank]
+        private ?string $message = null;
 
-        /**
-         * @ORM\ManyToOne(targetEntity="Post")
-         */
-        private $post;
+        #[ORM\ManyToOne(targetEntity: Post::class)]
+        private ?Post $post = null;
 
-        public function __toString()
+        public function __toString(): string
         {
-            return $this->getName();
+            return $this->getName() ?? '-';
         }
     }
 
@@ -260,16 +212,18 @@ Comment
 
     For example, in a use case where `InnoDB-optimised binary UUIDs`_ is implemented::
 
+        use Doctrine\DBAL\Types\Types;
+        use Doctrine\ORM\Mapping as ORM;
+        use Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator;
+        use Ramsey\Uuid\UuidInterface;
+
         class Comment
         {
-            /**
-             * @var \Ramsey\Uuid\UuidInterface
-             * @Id
-             * @Column(type="uuid_binary_ordered_time", unique=true)
-             * @GeneratedValue(strategy="CUSTOM")
-             * @CustomIdGenerator(class="Ramsey\Uuid\Doctrine\UuidOrderedTimeGenerator")
-             */
-            private $id;
+            #[ORM\Id]
+            #[ORM\Column(type: Types::INTEGER)]
+            #[ORM\GeneratedValue(strategy: 'CUSTOM')]
+            #[ORM\CustomIdGenerator(class: UuidOrderedTimeGenerator::class)]
+            private ?UuidInterface $id = null;
 
             // ...
         }
