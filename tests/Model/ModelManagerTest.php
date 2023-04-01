@@ -79,7 +79,6 @@ final class ModelManagerTest extends TestCase
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
     }
 
-
     public function testGetRealClassWithProxyObject(): void
     {
         $proxyClass = User::class;
