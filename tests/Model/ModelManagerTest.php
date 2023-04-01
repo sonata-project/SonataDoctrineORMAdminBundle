@@ -79,17 +79,38 @@ final class ModelManagerTest extends TestCase
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
     }
 
-    public function testGetRealClass(): void
+    public function testGetRealClassWithProxyObject(): void
     {
+        $proxyClass = User::class;
+        $baseClass = \stdClass::class;
+
         $classMetadata = $this->createMock(ClassMetadata::class);
-        $classMetadata->method('getName')->willReturn(User::class);
+        $classMetadata->expects(static::once())
+            ->method('getName')
+            ->willReturn($baseClass);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->method('getClassMetadata')->willReturn($classMetadata);
+        $entityManager->expects(static::once())
+            ->method('getClassMetadata')
+            ->with($proxyClass)
+            ->willReturn($classMetadata);
 
-        $this->registry->method('getManagerForClass')->willReturn($entityManager);
+        $this->registry->expects(static::once())
+            ->method('getManagerForClass')
+            ->with($proxyClass)
+            ->willReturn($entityManager);
 
-        static::assertSame(User::class, $this->modelManager->getRealClass(new User()));
+        static::assertSame($baseClass, $this->modelManager->getRealClass(new User()));
+    }
+
+    public function testGetRealClassWithNonProxyObject(): void
+    {
+        $this->registry->expects(static::once())
+            ->method('getManagerForClass')
+            ->with(\DateTime::class)
+            ->willReturn(null);
+
+        static::assertSame(\DateTime::class, $this->modelManager->getRealClass(new \DateTime()));
     }
 
     /**
@@ -443,7 +464,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -488,7 +509,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -518,7 +539,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 

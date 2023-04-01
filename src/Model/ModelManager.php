@@ -25,6 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\MappingException;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -57,7 +58,18 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function getRealClass(object $object): string
     {
-        return $this->getMetadata($object::class)->getName();
+        $class = $object::class;
+
+        $em = $this->registry->getManagerForClass($class);
+        if (null === $em) {
+            return $class;
+        }
+
+        try {
+            return $em->getClassMetadata($class)->getName();
+        } catch (MappingException) {
+            return $class;
+        }
     }
 
     public function create(object $object): void
