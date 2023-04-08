@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.11.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.10.0...4.11.0) - 2023-04-09
+### Changed
+- [[#1734](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1734)] Exception message at `ModelManager::batchDelete()` in order to provide more details about the failed batch operation ([@phansys](https://github.com/phansys))
+
+### Fixed
+- [[#1722](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1722)] Avoid dependency of `doctrine/common` ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.10.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.9.1...4.10.0) - 2023-03-09
 ### Removed
 - [[#1714](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1714)] Drop support for `doctrine/dbal` ^2.0. ([@jordisala1991](https://github.com/jordisala1991))
