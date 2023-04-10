@@ -43,6 +43,6 @@ final class CollectionItemRemovalTest extends BasePantherTestCase
 
         $this->client->submit($form);
 
-        self::assertSelectorTextContains('.alert-error', 'Item "1" has been successfully updated.');
+        self::assertSelectorTextContains('.alert-danger', 'Item "1" has been successfully updated.');
     }
 }
