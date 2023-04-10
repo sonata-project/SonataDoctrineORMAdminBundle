@@ -26,7 +26,7 @@ final class MotherFixtures extends Fixture implements FixtureInterface
     public function load(ObjectManager $manager): void
     {
         $mother = new Mother();
-        $this->addChildren($mother, 1);
+        $this->addChildren($mother, 2);
 
         $manager->persist($mother);
         $manager->flush();

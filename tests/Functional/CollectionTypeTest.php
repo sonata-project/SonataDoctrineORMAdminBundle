@@ -16,7 +16,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Panther\DomCrawler\Crawler;
 
-final class CollectionItemRemovalTest extends BasePantherTestCase
+final class CollectionTypeTest extends BasePantherTestCase
 {
     public function testRemoveCollectionItemWithoutValidation(): void
     {
@@ -25,8 +25,8 @@ final class CollectionItemRemovalTest extends BasePantherTestCase
         $form = $crawler->selectButton('Update')->form();
         $form['mother[children][0][name]'] = '';
 
-        $crawler->filter('.icheckbox_square-blue')->each(static function (Crawler $label): void {
-            $label->click();
+        $crawler->filter('#mother_children_0__delete + ins')->each(static function (Crawler $checkbox): void {
+            $checkbox->click();
         });
 
         $this->client->submit($form);
@@ -43,6 +43,6 @@ final class CollectionItemRemovalTest extends BasePantherTestCase
 
         $this->client->submit($form);
 
-        self::assertSelectorTextContains('.alert-danger', 'Item "1" has been successfully updated.');
+        self::assertSelectorTextContains('.alert-danger', 'An error has occurred during update of item "1".');
     }
 }
