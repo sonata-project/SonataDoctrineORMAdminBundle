@@ -3,7 +3,7 @@ framework:
         enabled: true
     form:
         enabled: true
-    secret: '%env(APP_SECRET)%'
+    secret: secret
     http_method_override: false
     test: true
     translator:
@@ -28,3 +28,7 @@ doctrine:
                 dir: "%kernel.project_dir%/Entity"
                 is_bundle: false
                 prefix: Sonata\DoctrineORMAdminBundle\Tests\App\Entity
+
+sonata_admin:
+    options:
+        html5_validate: false
