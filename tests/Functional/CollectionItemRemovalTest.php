@@ -33,4 +33,16 @@ final class CollectionItemRemovalTest extends BasePantherTestCase
 
         self::assertSelectorTextContains('.alert-success', 'Item "1" has been successfully updated.');
     }
+
+    public function testTriggerCollectionValidation(): void
+    {
+        $crawler = $this->client->request(Request::METHOD_GET, '/admin/tests/app/mother/1/edit?uniqid=mother');
+
+        $form = $crawler->selectButton('Update')->form();
+        $form['mother[children][0][name]'] = '';
+
+        $this->client->submit($form);
+
+        self::assertSelectorTextContains('.alert-error', 'Item "1" has been successfully updated.');
+    }
 }
