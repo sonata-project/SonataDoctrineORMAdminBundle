@@ -25,6 +25,7 @@ final class ExportActionsTest extends BaseFunctionalTestCase
      */
     public function testExportAction(string $url, array $parameters, array $expected): void
     {
+        // TODO: Remove the $content variable when drop support for Symfony < 6.2
         ob_start();
         $this->client->request(Request::METHOD_GET, $url, $parameters);
         $content = ob_get_contents();
