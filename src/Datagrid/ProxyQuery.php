@@ -199,7 +199,7 @@ final class ProxyQuery implements ProxyQueryInterface
         if (!isset($fieldMapping['fieldName'])) {
             $this->sortBy = null;
 
-            return;
+            return $this;
         }
 
         $alias = $this->entityJoin($parentAssociationMappings);
