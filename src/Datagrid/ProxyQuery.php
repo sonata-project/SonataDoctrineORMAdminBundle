@@ -196,11 +196,14 @@ final class ProxyQuery implements ProxyQueryInterface
 
     public function setSortBy(array $parentAssociationMappings, array $fieldMapping): BaseProxyQueryInterface
     {
-        $alias = $this->entityJoin($parentAssociationMappings);
+        if (!isset($fieldMapping['fieldName'])) {
+            $this->sortBy = null;
 
-        $this->sortBy = isset($fieldMapping['fieldName']) ?
-            $alias.'.'.$fieldMapping['fieldName'] :
-            null;
+            return;
+        }
+
+        $alias = $this->entityJoin($parentAssociationMappings);
+        $this->sortBy = $alias.'.'.$fieldMapping['fieldName'];
 
         return $this;
     }
