@@ -24,6 +24,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\UidFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Guess\Guess;
@@ -75,6 +76,9 @@ final class FilterTypeGuesser implements TypeGuesserInterface
                 $options['field_options'] = ['class' => $fieldDescription->getTargetModel()];
 
                 return new TypeGuess(ModelFilter::class, $options, Guess::HIGH_CONFIDENCE);
+            case 'uuid':
+            case 'ulid':
+                return new TypeGuess(UidFilter::class, $options, Guess::HIGH_CONFIDENCE);
             default:
                 return new TypeGuess(StringFilter::class, $options, Guess::LOW_CONFIDENCE);
         }

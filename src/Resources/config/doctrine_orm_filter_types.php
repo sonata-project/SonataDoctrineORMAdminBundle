@@ -30,6 +30,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringListFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\UidFilter;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
     $containerConfigurator->services()
@@ -80,7 +81,10 @@ return static function (ContainerConfigurator $containerConfigurator): void {
             ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_string_list'])
 
         ->set('sonata.admin.orm.filter.type.time', TimeFilter::class)
-            ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_time']);
+            ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_time'])
+
+        ->set('sonata.admin.orm.filter.type.uid', UidFilter::class)
+            ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_uid']);
 
     /**
      * NEXT_MAJOR: Remove this service definition.
