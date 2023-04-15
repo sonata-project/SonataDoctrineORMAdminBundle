@@ -28,7 +28,7 @@ final class ManyToOneMappingTest extends BasePantherTestCase
         $attributeName = $crawler->filter('.book_name')->attr('name');
         static::assertNotNull($attributeName);
 
-        $form = $crawler->selectButton('Create and return to list')->form();
+        $form = $crawler->selectButton('Create')->form();
         $form[$attributeId] = 'book_new_id';
         $form[$attributeName] = 'A wonderful book';
 
@@ -46,6 +46,11 @@ final class ManyToOneMappingTest extends BasePantherTestCase
         $this->client->submit($form);
 
         self::assertSelectorTextContains('.alert-success', '"A wonderful book" has been successfully created.');
+
+        $this->client->clickLink('Delete');
+        $this->client->submitForm('Yes, delete');
+
+        self::assertSelectorTextContains('.alert-success', 'Item "A wonderful book" has been deleted successfully.');
     }
 
     private function createAuthorForm(Crawler $crawler): Form

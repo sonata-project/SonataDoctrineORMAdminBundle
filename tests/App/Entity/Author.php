@@ -93,4 +93,11 @@ class Author implements \Stringable
             )->toArray()
         );
     }
+
+    public function getFirstBook(): ?Book
+    {
+        $firstBook = $this->books->first();
+
+        return false !== $firstBook ? $firstBook : null;
+    }
 }
