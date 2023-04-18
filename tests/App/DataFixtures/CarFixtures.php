@@ -19,6 +19,9 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Car;
 
 final class CarFixtures extends Fixture
 {
+    public const CAR = 'car';
+    public const CAR_FROM_2010 = 'car_from_2010';
+
     public function load(ObjectManager $manager): void
     {
         $foo2000 = new Car('Foo', 2000);
@@ -29,5 +32,8 @@ final class CarFixtures extends Fixture
         $manager->persist($foo2010);
         $manager->persist($bar2000);
         $manager->flush();
+
+        $this->addReference(self::CAR, $foo2000);
+        $this->addReference(self::CAR_FROM_2010, $foo2010);
     }
 }
