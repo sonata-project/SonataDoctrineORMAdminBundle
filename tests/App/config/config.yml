@@ -8,6 +8,15 @@ framework:
     test: true
     translator:
         enabled: true
+    session:
+        storage_factory_id: session.storage.factory.mock_file
+    router:
+        utf8: true
+
+security:
+    firewalls:
+        main:
+            lazy: true
 
 twig:
     exception_controller: null
