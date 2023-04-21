@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $containerConfigurator): void {
 
     $containerConfigurator->services()
 
-        ->set('sonata.admin.manipulator.acl.object.orm', '%sonata.admin.manipulator.acl.object.orm.class%')
+        ->set('sonata.admin.manipulator.acl.object.orm', (string) param('sonata.admin.manipulator.acl.object.orm.class'))
             ->public()
             ->args([
                 service('doctrine'),
