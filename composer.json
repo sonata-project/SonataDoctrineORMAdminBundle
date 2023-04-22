@@ -64,7 +64,7 @@
         "sonata-project/entity-audit-bundle": "^1.1",
         "symfony/browser-kit": "^5.4 || ^6.2",
         "symfony/css-selector": "^5.4 || ^6.2",
-        "symfony/panther": "^1.0 || ^2.0",
+        "symfony/panther": "^2.0.1",
         "symfony/phpunit-bridge": "^6.2",
         "symfony/templating": "^5.4 || ^6.2",
         "symfony/yaml": "^5.4 || ^6.2",
