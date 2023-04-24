@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.12.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.11.0...4.12.0) - 2023-04-24
+### Changed
+- [[#1737](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1737)] Bump `sonata-project/form-extensions` to ^1.19 ([@jordisala1991](https://github.com/jordisala1991))
+
+### Fixed
+- [[#1705](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1705)] Fix export for admins sorted on a property that belongs to a one to many. ([@jordisala1991](https://github.com/jordisala1991))
+
+### Removed
+- [[#1739](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1739)] Support for Symfony 4.4 ([@jordisala1991](https://github.com/jordisala1991))
+- [[#1739](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1739)] Support for Twig 2 ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.11.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.10.0...4.11.0) - 2023-04-09
 ### Changed
 - [[#1734](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1734)] Exception message at `ModelManager::batchDelete()` in order to provide more details about the failed batch operation ([@phansys](https://github.com/phansys))
