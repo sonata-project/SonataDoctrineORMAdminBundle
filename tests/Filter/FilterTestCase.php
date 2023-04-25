@@ -13,6 +13,8 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
 use Doctrine\ORM\Query\Expr\Andx;
 use Doctrine\ORM\Query\Expr\Orx;
@@ -53,6 +55,10 @@ abstract class FilterTestCase extends TestCase
     final protected function createQueryBuilderStub(): TestQueryBuilder
     {
         $queryBuilder = $this->createStub(TestQueryBuilder::class);
+
+        $queryBuilder->method('getEntityManager')->willReturnCallback(
+            fn (): EntityManagerInterface => $this->createEntityManagerStub()
+        );
 
         $queryBuilder->method('setParameter')->willReturnCallback(
             static function (string $name, mixed $value) use ($queryBuilder): void {
@@ -99,6 +105,22 @@ abstract class FilterTestCase extends TestCase
         return $queryBuilder;
     }
 
+    private function createEntityManagerStub(): EntityManagerInterface
+    {
+        $classMetadata = $this->createStub(ClassMetadata::class);
+        $entityManager = $this->createStub(EntityManagerInterface::class);
+
+        $classMetadata->method('getIdentifierValues')->willReturnCallback(
+            static fn (mixed $value): array => ['id' => $value]
+        );
+
+        $entityManager->method('getClassMetadata')->willReturnCallback(
+            static fn (string $class): ClassMetadata => $classMetadata
+        );
+
+        return $entityManager;
+    }
+
     private function createExprStub(): Expr
     {
         $expr = $this->createStub(Expr::class);
@@ -137,6 +159,14 @@ abstract class FilterTestCase extends TestCase
 
         $expr->method('isNotNull')->willReturnCallback(
             static fn (string $queryPart): string => $queryPart.' IS NOT NULL'
+        );
+
+        $expr->method('eq')->willReturnCallback(
+            static fn (string $alias, mixed $parameter): string => sprintf('%s = %s', $alias, $parameter)
+        );
+
+        $expr->method('not')->willReturnCallback(
+            static fn (mixed $restriction): string => sprintf('NOT (%s)', $restriction)
         );
 
         return $expr;

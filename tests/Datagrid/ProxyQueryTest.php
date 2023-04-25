@@ -30,8 +30,8 @@ final class ProxyQueryTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (!Type::hasType('uuid')) {
-            Type::addType('uuid', UuidType::class);
+        if (!Type::hasType(UuidType::NAME)) {
+            Type::addType(UuidType::NAME, UuidType::class);
         }
     }
 
@@ -139,8 +139,15 @@ final class ProxyQueryTest extends TestCase
         $query2 = new ProxyQuery(
             $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o')->addOrderBy('o.name')
         );
+
+        static::assertSame([$entity2, $entity3, $entity1], iterator_to_array($query2->execute()));
+
         $query2->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('ASC');
 
         static::assertSame([$entity2, $entity1, $entity3], iterator_to_array($query2->execute()));
+
+        $query2->setSortBy([], []);
+
+        static::assertSame([$entity2, $entity3, $entity1], iterator_to_array($query2->execute()));
     }
 }

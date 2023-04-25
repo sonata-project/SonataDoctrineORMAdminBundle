@@ -3,11 +3,20 @@ framework:
         enabled: true
     form:
         enabled: true
-    secret: '%env(APP_SECRET)%'
+    secret: secret
     http_method_override: false
     test: true
     translator:
         enabled: true
+    session:
+        storage_factory_id: session.storage.factory.mock_file
+    router:
+        utf8: true
+
+security:
+    firewalls:
+        main:
+            lazy: true
 
 twig:
     exception_controller: null
@@ -28,3 +37,7 @@ doctrine:
                 dir: "%kernel.project_dir%/Entity"
                 is_bundle: false
                 prefix: Sonata\DoctrineORMAdminBundle\Tests\App\Entity
+
+sonata_admin:
+    options:
+        html5_validate: false

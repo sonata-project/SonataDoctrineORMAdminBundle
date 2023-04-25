@@ -11,22 +11,20 @@ declare(strict_types=1);
  * file that was distributed with this source code.
  */
 
+namespace Symfony\Component\DependencyInjection\Loader\Configurator;
+
 use Sonata\DoctrineORMAdminBundle\Util\ObjectAclManipulator;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
-use Symfony\Component\DependencyInjection\Loader\Configurator\ReferenceConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
-    // Use "service" function for creating references to services when dropping support for Symfony 4.4
-    // Use "param" function for creating references to parameters when dropping support for Symfony 5.1
-    $parameters = $containerConfigurator->parameters();
+    $containerConfigurator->parameters()
 
-    $parameters->set('sonata.admin.manipulator.acl.object.orm.class', ObjectAclManipulator::class);
+        ->set('sonata.admin.manipulator.acl.object.orm.class', ObjectAclManipulator::class);
 
-    $services = $containerConfigurator->services();
+    $containerConfigurator->services()
 
-    $services->set('sonata.admin.manipulator.acl.object.orm', '%sonata.admin.manipulator.acl.object.orm.class%')
-        ->public()
-        ->args([
-            new ReferenceConfigurator('doctrine'),
-        ]);
+        ->set('sonata.admin.manipulator.acl.object.orm', (string) param('sonata.admin.manipulator.acl.object.orm.class'))
+            ->public()
+            ->args([
+                service('doctrine'),
+            ]);
 };

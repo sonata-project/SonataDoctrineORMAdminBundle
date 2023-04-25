@@ -25,8 +25,24 @@ final class ItemAdmin extends AbstractAdmin
     protected function configureListFields(ListMapper $list): void
     {
         $list
-            ->add('command')
-            ->add('product')
+            ->add('command.id', null, [
+                'sortable' => true,
+                'sort_field_mapping' => [
+                    'fieldName' => 'id',
+                ],
+                'sort_parent_association_mappings' => [[
+                    'fieldName' => 'command',
+                ]],
+            ])
+            ->add('product.name', null, [
+                'sortable' => true,
+                'sort_field_mapping' => [
+                    'fieldName' => 'name',
+                ],
+                'sort_parent_association_mappings' => [[
+                    'fieldName' => 'product',
+                ]],
+            ])
             ->add('offeredPrice');
     }
 }

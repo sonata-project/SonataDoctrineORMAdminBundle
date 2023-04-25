@@ -25,6 +25,7 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\Persistence\Mapping\MappingException;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -44,6 +45,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 {
     public const ID_SEPARATOR = '~';
 
+    private const BATCH_SIZE = 20;
+
     /**
      * @var EntityManagerInterface[]
      */
@@ -57,7 +60,18 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function getRealClass(object $object): string
     {
-        return $this->getMetadata($object::class)->getName();
+        $class = $object::class;
+
+        $em = $this->registry->getManagerForClass($class);
+        if (null === $em) {
+            return $class;
+        }
+
+        try {
+            return $em->getClassMetadata($class)->getName();
+        } catch (MappingException) {
+            return $class;
+        }
     }
 
     public function create(object $object): void
@@ -314,6 +328,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
+        $rootAlias = current($qb->getRootAliases());
+        $metadata = $this->getMetadata($class);
 
         $prefix = uniqid();
         $sqls = [];
@@ -321,10 +337,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $ids = explode(self::ID_SEPARATOR, (string) $id);
 
             $ands = [];
-            foreach ($fieldNames as $posName => $name) {
+            foreach ($fieldNames as $index => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', current($qb->getRootAliases()), $name, $parameterName);
-                $qb->setParameter($parameterName, $ids[$posName]);
+                $ands[] = sprintf('%s.%s = :%s', $rootAlias, $name, $parameterName);
+                $qb->setParameter(
+                    $parameterName,
+                    $ids[$index],
+                    $metadata->getTypeOfField($name)
+                );
             }
 
             $sqls[] = implode(' AND ', $ands);
@@ -333,7 +353,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
         $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
-    public function batchDelete(string $class, BaseProxyQueryInterface $query): void
+    public function batchDelete(string $class, BaseProxyQueryInterface $query, int $batchSize = self::BATCH_SIZE): void
     {
         if (!$query instanceof ProxyQueryInterface) {
             throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
@@ -350,13 +370,15 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
         $entityManager = $this->getEntityManager($class);
         $i = 0;
+        $confirmedDeletionsCount = 0;
 
         try {
             foreach ($query->getDoctrineQuery()->toIterable() as $object) {
                 $entityManager->remove($object);
 
-                if (0 === (++$i % 20)) {
+                if (0 === (++$i % $batchSize)) {
                     $entityManager->flush();
+                    $confirmedDeletionsCount = $i;
                     $entityManager->clear();
                 }
             }
@@ -364,8 +386,31 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
             $entityManager->clear();
         } catch (\PDOException|Exception $exception) {
+            $id = null;
+
+            if (isset($object)) {
+                $id = $this->getNormalizedIdentifier($object);
+            }
+
+            if (null === $id) {
+                throw new ModelManagerException(
+                    sprintf('Failed to perform batch deletion for "%s" objects', $class),
+                    (int) $exception->getCode(),
+                    $exception
+                );
+            }
+
+            $msg = 'Failed to delete object "%s" (id: %s) while performing batch deletion';
+            if ($i > $batchSize) {
+                $msg .= sprintf(' (%u objects were successfully deleted before this error)', $confirmedDeletionsCount);
+            }
+
             throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', $class),
+                sprintf(
+                    $msg,
+                    $class,
+                    $id
+                ),
                 (int) $exception->getCode(),
                 $exception
             );

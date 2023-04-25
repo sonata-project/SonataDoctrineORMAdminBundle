@@ -18,12 +18,18 @@ use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\AbstractQuery;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Internal\Hydration\SimpleObjectHydrator;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
+use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Stub\Exception as ExceptionStub;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -79,17 +85,38 @@ final class ModelManagerTest extends TestCase
         $this->modelManager = new ModelManager($this->registry, PropertyAccess::createPropertyAccessor());
     }
 
-    public function testGetRealClass(): void
+    public function testGetRealClassWithProxyObject(): void
     {
+        $proxyClass = User::class;
+        $baseClass = \stdClass::class;
+
         $classMetadata = $this->createMock(ClassMetadata::class);
-        $classMetadata->method('getName')->willReturn(User::class);
+        $classMetadata->expects(static::once())
+            ->method('getName')
+            ->willReturn($baseClass);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
-        $entityManager->method('getClassMetadata')->willReturn($classMetadata);
+        $entityManager->expects(static::once())
+            ->method('getClassMetadata')
+            ->with($proxyClass)
+            ->willReturn($classMetadata);
 
-        $this->registry->method('getManagerForClass')->willReturn($entityManager);
+        $this->registry->expects(static::once())
+            ->method('getManagerForClass')
+            ->with($proxyClass)
+            ->willReturn($entityManager);
 
-        static::assertSame(User::class, $this->modelManager->getRealClass(new User()));
+        static::assertSame($baseClass, $this->modelManager->getRealClass(new User()));
+    }
+
+    public function testGetRealClassWithNonProxyObject(): void
+    {
+        $this->registry->expects(static::once())
+            ->method('getManagerForClass')
+            ->with(\DateTime::class)
+            ->willReturn(null);
+
+        static::assertSame(\DateTime::class, $this->modelManager->getRealClass(new \DateTime()));
     }
 
     /**
@@ -443,7 +470,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -488,7 +515,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -518,7 +545,7 @@ final class ModelManagerTest extends TestCase
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
 
-        $this->registry->expects(static::once())
+        $this->registry->expects(static::atLeastOnce())
             ->method('getManagerForClass')
             ->willReturn($entityManager);
 
@@ -536,6 +563,140 @@ final class ModelManagerTest extends TestCase
         $this->expectException(ModelManagerException::class);
 
         $this->modelManager->delete(new VersionedEntity());
+    }
+
+    /**
+     * @return iterable<int|string, array<int, string|array<int, object|null>|null>>
+     *
+     * @phpstan-return iterable<int|string, array{0: string, 1: ?array<int, object>, 2: array<int, ?ExceptionStub>}>
+     */
+    public function failingBatchDeleteProvider(): iterable
+    {
+        yield [
+            'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
+            .' performing batch deletion (20 objects were successfully deleted before this error)',
+            array_fill(0, 21, new VersionedEntity()),
+            [null, static::throwException(new Exception())],
+        ];
+
+        yield [
+            'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
+            .' performing batch deletion',
+            [new VersionedEntity(), new VersionedEntity()],
+            [static::throwException(new Exception())],
+        ];
+
+        yield [
+            'Failed to perform batch deletion for "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" objects',
+            null,
+            [null],
+        ];
+    }
+
+    /**
+     * @param array<int, object>|null        $result
+     * @param array<int, ExceptionStub|null> $onConsecutiveFlush
+     *
+     * @dataProvider failingBatchDeleteProvider
+     */
+    public function testFailingBatchDelete(string $expectedExceptionMessage, ?array $result, array $onConsecutiveFlush): void
+    {
+        $classMetadata = $this->createMock(ClassMetadata::class);
+        $classMetadata
+            ->method('getIdentifierValues')
+            ->willReturn([
+                'id' => 42,
+            ]);
+        $classMetadata->expects(static::once())
+            ->method('getIdentifierFieldNames')
+            ->willReturn(['id']);
+        $classMetadata->table['name'] = 'versioned_entity';
+
+        $batchSize = 20;
+
+        $em = $this->setGetMetadataExpectation(VersionedEntity::class, $classMetadata);
+        $em
+            ->expects(static::exactly(null === $result ? 0 : \count($result)))
+            ->method('remove');
+        $em
+            ->expects(static::exactly(null === $result ? 0 : (int) ceil(\count($result) / $batchSize)))
+            ->method('flush')
+            ->will(static::onConsecutiveCalls(
+                ...$onConsecutiveFlush
+            ));
+        $em
+            ->method('getConfiguration')
+            ->willReturn(new Configuration());
+
+        $uow = $this->createMock(UnitOfWork::class);
+        $uow
+            ->expects(static::exactly(null === $result ? 0 : 1))
+            ->method('getEntityState')
+            ->willReturn(UnitOfWork::STATE_MANAGED);
+
+        $em
+            ->expects(static::exactly(null === $result ? 0 : 1))
+            ->method('getUnitOfWork')
+            ->willReturn($uow);
+
+        $connection = $this->createMock(Connection::class);
+        $connection
+            ->method('getDatabasePlatform')
+            ->willReturn($this->createStub(AbstractPlatform::class));
+        $connection
+            ->method('getParams')
+            ->willReturn([]);
+
+        $em
+            ->method('getConnection')
+            ->willReturn($connection);
+
+        $hydrator = $this->createMock(SimpleObjectHydrator::class);
+        $hydrator
+            ->expects(static::once())
+            ->method('toIterable')
+            ->willReturnCallback(static function () use ($result): iterable {
+                if (null === $result) {
+                    throw new Exception();
+                }
+
+                return $result;
+            });
+
+        $em
+            ->expects(static::once())
+            ->method('newHydrator')
+            ->willReturn($hydrator);
+
+        $queryBuilder = new QueryBuilder($em);
+        $queryBuilder
+            ->select('ve')
+            ->from(VersionedEntity::class, 've');
+
+        $query = new Query($em);
+        $query->setDQL($queryBuilder->getDQL());
+
+        $em
+            ->expects(static::once())
+            ->method('createQuery')
+            ->willReturn($query);
+
+        $cmf = $this->createMock(ClassMetadataFactory::class);
+        $cmf
+            ->expects(static::once())
+            ->method('getMetadataFor')
+            ->with(VersionedEntity::class)
+            ->willReturn($classMetadata);
+
+        $em
+            ->expects(static::once())
+            ->method('getMetadataFactory')
+            ->willReturn($cmf);
+
+        $this->expectException(ModelManagerException::class);
+        $this->expectExceptionMessage($expectedExceptionMessage);
+
+        $this->modelManager->batchDelete(VersionedEntity::class, new ProxyQuery($queryBuilder), $batchSize);
     }
 
     /**
@@ -560,7 +721,7 @@ final class ModelManagerTest extends TestCase
             ->getMock();
 
         $queryBuilder
-            ->expects(static::exactly(\count($expectedParameters)))
+            ->expects(static::once())
             ->method('getRootAliases')
             ->willReturn(['p']);
 

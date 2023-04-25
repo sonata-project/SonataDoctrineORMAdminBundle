@@ -22,6 +22,7 @@ use Sonata\BlockBundle\Cache\HttpCacheHandler;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
+use Sonata\Exporter\Bridge\Symfony\SonataExporterBundle;
 use Sonata\Form\Bridge\Symfony\SonataFormBundle;
 use Sonata\Twig\Bridge\Symfony\SonataTwigBundle;
 use Symfony\Bundle\FrameworkBundle\FrameworkBundle;
@@ -33,7 +34,6 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
-use Symfony\Component\Security\Http\Authentication\AuthenticatorManager;
 
 final class AppKernel extends Kernel
 {
@@ -49,6 +49,7 @@ final class AppKernel extends Kernel
             new SecurityBundle(),
             new SonataAdminBundle(),
             new SonataBlockBundle(),
+            new SonataExporterBundle(),
             new SonataDoctrineBundle(),
             new SonataDoctrineORMAdminBundle(),
             new SonataFormBundle(),
@@ -73,12 +74,7 @@ final class AppKernel extends Kernel
         return __DIR__;
     }
 
-    /**
-     * TODO: Add typehint when support for Symfony < 5.1 is dropped.
-     *
-     * @param RoutingConfigurator $routes
-     */
-    protected function configureRoutes($routes): void
+    protected function configureRoutes(RoutingConfigurator $routes): void
     {
         $routes->import(sprintf('%s/config/routes.yaml', $this->getProjectDir()));
     }
@@ -92,12 +88,8 @@ final class AppKernel extends Kernel
 
         $loader->load(__DIR__.'/config/config.yml');
 
-        if (class_exists(IsGranted::class)) {
-            $loader->load(__DIR__.'/config/config_symfony_v6.yml');
-        } elseif (class_exists(AuthenticatorManager::class)) {
+        if (!class_exists(IsGranted::class)) {
             $loader->load(__DIR__.'/config/config_symfony_v5.yml');
-        } else {
-            $loader->load(__DIR__.'/config/config_symfony_v4.yml');
         }
 
         if (class_exists(HttpCacheHandler::class)) {

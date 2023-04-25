@@ -18,14 +18,22 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\BookWithAuthorAutocompleteAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CarAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\CategoryAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\ChildAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\ItemAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\MotherAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\SubAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\UlidChildEntityAdmin;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Admin\UuidEntityAdmin;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Author;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Book;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Car;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Category;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Child;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Item;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Mother;
 use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Sub;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\UlidChildEntity;
+use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\UuidEntity;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 
 return static function (ContainerConfigurator $containerConfigurator): void {
@@ -94,5 +102,33 @@ return static function (ContainerConfigurator $containerConfigurator): void {
                 'manager_type' => 'orm',
                 'model_class' => Sub::class,
                 'label' => 'Inheritance',
+            ])
+
+        ->set(MotherAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'model_class' => Mother::class,
+                'label' => 'Mother',
+            ])
+
+        ->set(ChildAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'model_class' => Child::class,
+                'label' => 'Child',
+            ])
+
+        ->set(UuidEntityAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'model_class' => UuidEntity::class,
+                'label' => 'UuidEntity',
+            ])
+
+        ->set(UlidChildEntityAdmin::class)
+            ->tag('sonata.admin', [
+                'manager_type' => 'orm',
+                'model_class' => UlidChildEntity::class,
+                'label' => 'UlidChildEntity',
             ]);
 };

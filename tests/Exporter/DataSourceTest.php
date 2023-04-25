@@ -59,7 +59,7 @@ final class DataSourceTest extends TestCase
         static::assertInstanceOf(DoctrineORMQuerySourceIterator::class, $iterator);
     }
 
-    public function testCreateIteratorWithSortBy(): void
+    public function testCreateIteratorWithNormalSortBy(): void
     {
         $configuration = $this->createStub(Configuration::class);
         $configuration->method('getDefaultQueryHints')->willReturn([]);
@@ -73,6 +73,7 @@ final class DataSourceTest extends TestCase
 
         $query = new Query($em);
 
+        $queryBuilder->expects(static::once())->method('getDQLPart')->willReturn([]);
         $queryBuilder->expects(static::once())->method('getRootAliases')->willReturn(['o', 'a', 'e']);
         $queryBuilder->expects(static::once())->method('distinct');
         $queryBuilder->expects(static::once())->method('select')->with('o');

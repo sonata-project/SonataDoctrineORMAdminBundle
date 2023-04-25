@@ -42,7 +42,7 @@ final class EmbeddedMappingTest extends BasePantherTestCase
         $attributeAddressStreet = $crawler->filter('.author_address')->attr('name');
         static::assertNotNull($attributeAddressStreet);
 
-        $form = $crawler->selectButton('Create and return to list')->form();
+        $form = $crawler->selectButton('Create')->form();
         $form[$attributeId] = 'new_id';
         $form[$attributeName] = 'A wonderful author';
         $form[$attributeAddressStreet] = 'A wonderful street to live';
@@ -50,5 +50,10 @@ final class EmbeddedMappingTest extends BasePantherTestCase
         $this->client->submit($form);
 
         self::assertSelectorTextContains('.alert-success', '"A wonderful author" has been successfully created.');
+
+        $this->client->clickLink('Delete');
+        $this->client->submitForm('Yes, delete');
+
+        self::assertSelectorTextContains('.alert-success', 'tem "A wonderful author" has been deleted successfully.');
     }
 }
