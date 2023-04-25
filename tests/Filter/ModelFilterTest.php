@@ -47,8 +47,8 @@ final class ModelFilterTest extends FilterTestCase
         ]));
 
         // the alias is now computer by the entityJoin method
-        self::assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
-        self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.id = :field_name_0 OR alias.id = :field_name_1'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => '1', 'field_name_1' => '2'], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -66,10 +66,10 @@ final class ModelFilterTest extends FilterTestCase
 
         // the alias is now computer by the entityJoin method
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE (NOT (alias.id = :field_name_0 OR alias.id = :field_name_1)) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
-        self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => '1', 'field_name_1' => '2'], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -82,8 +82,8 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]));
 
-        self::assertSameQuery(['WHERE alias IN :field_name_0'], $proxyQuery);
-        self::assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.id = :field_name_0'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => 2], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -97,11 +97,11 @@ final class ModelFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE NOT (alias.id = :field_name_0) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
 
-        self::assertSameQueryParameters(['field_name_0' => [2]], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => 2], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -115,7 +115,7 @@ final class ModelFilterTest extends FilterTestCase
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
 
         self::assertSameQuery(
-            ['WHERE alias NOT IN :field_name_0 OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
+            ['WHERE NOT (alias.id = :field_name_0) OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
             $proxyQuery
         );
     }
@@ -151,6 +151,7 @@ final class ModelFilterTest extends FilterTestCase
         $filter->initialize('field_name', [
             'mapping_type' => ClassMetadata::ONE_TO_ONE,
             'field_name' => 'field_name',
+            'field_options' => ['class' => 'FooBar'],
             'association_mapping' => [
                 'fieldName' => 'association_mapping',
             ],
@@ -162,7 +163,7 @@ final class ModelFilterTest extends FilterTestCase
 
         self::assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
-            'WHERE s_association_mapping IN :field_name_0',
+            'WHERE s_association_mapping.id = :field_name_0',
         ], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
@@ -173,6 +174,7 @@ final class ModelFilterTest extends FilterTestCase
         $filter->initialize('field_name', [
             'mapping_type' => ClassMetadata::ONE_TO_ONE,
             'field_name' => 'field_name',
+            'field_options' => ['class' => 'FooBar'],
             'parent_association_mappings' => [
                 [
                     'fieldName' => 'association_mapping',
@@ -194,7 +196,7 @@ final class ModelFilterTest extends FilterTestCase
             'LEFT JOIN o.association_mapping AS s_association_mapping',
             'LEFT JOIN s_association_mapping.sub_association_mapping AS s_association_mapping_sub_association_mapping',
             'LEFT JOIN s_association_mapping_sub_association_mapping.sub_sub_association_mapping AS s_association_mapping_sub_association_mapping_sub_sub_association_mapping',
-            'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping IN :field_name_0',
+            'WHERE s_association_mapping_sub_association_mapping_sub_sub_association_mapping.id = :field_name_0',
         ], $proxyQuery);
         static::assertTrue($filter->isActive());
     }

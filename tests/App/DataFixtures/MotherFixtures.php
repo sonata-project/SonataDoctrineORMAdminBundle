@@ -21,8 +21,6 @@ use Sonata\DoctrineORMAdminBundle\Tests\App\Entity\Mother;
 
 final class MotherFixtures extends Fixture implements FixtureInterface
 {
-    public const MOTHER = 'mother';
-
     public function load(ObjectManager $manager): void
     {
         $mother = new Mother();
@@ -30,8 +28,6 @@ final class MotherFixtures extends Fixture implements FixtureInterface
 
         $manager->persist($mother);
         $manager->flush();
-
-        $this->addReference(self::MOTHER, $mother);
     }
 
     private function addChildren(Mother $mother, int $children): void

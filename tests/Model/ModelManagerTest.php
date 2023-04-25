@@ -721,7 +721,7 @@ final class ModelManagerTest extends TestCase
             ->getMock();
 
         $queryBuilder
-            ->expects(static::exactly(\count($expectedParameters)))
+            ->expects(static::once())
             ->method('getRootAliases')
             ->willReturn(['p']);
 

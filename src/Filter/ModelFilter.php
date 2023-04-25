@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Filter;
 
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Query\Expr\Orx;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -76,31 +77,24 @@ final class ModelFilter extends Filter
             return;
         }
 
-        $parameterName = $this->getNewParameterName($query);
+        $inExpression = $this->buildInExpression($query, $alias, $data);
 
         if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
-            $or = $query->getQueryBuilder()->expr()->orX();
-
-            $or->add($query->getQueryBuilder()->expr()->notIn($alias, ':'.$parameterName));
-
-            $associationMapping = $this->getAssociationMapping();
-
-            if (ClassMetadata::MANY_TO_MANY === $associationMapping['type']) {
-                $or->add(
-                    sprintf('%s.%s IS EMPTY', $this->getParentAlias($query, $alias), $this->getFieldName())
-                );
+            if (false === ($this->getAssociationMapping()['isOwningSide'] ?? true)) {
+                $nullExpression = sprintf('IDENTITY(%s.%s) IS NULL', $alias, $this->getAssociationMapping()['mappedBy']);
             } else {
-                $or->add($query->getQueryBuilder()->expr()->isNull(
-                    sprintf('IDENTITY(%s.%s)', $this->getParentAlias($query, $alias), $this->getFieldName())
-                ));
+                $nullExpression = ClassMetadata::MANY_TO_MANY === $this->getAssociationMapping()['type']
+                    ? sprintf('%s.%s IS EMPTY', $this->getParentAlias($query, $alias), $this->getFieldName())
+                    : sprintf('IDENTITY(%s.%s) IS NULL', $this->getParentAlias($query, $alias), $this->getFieldName());
             }
 
-            $this->applyWhere($query, $or);
-        } else {
-            $this->applyWhere($query, $query->getQueryBuilder()->expr()->in($alias, ':'.$parameterName));
+            $inExpression = $query->getQueryBuilder()->expr()->orX(
+                $query->getQueryBuilder()->expr()->not($inExpression),
+                $nullExpression
+            );
         }
 
-        $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
+        $this->applyWhere($query, $inExpression);
     }
 
     protected function association(ProxyQueryInterface $query, FilterData $data): array
@@ -139,5 +133,36 @@ final class ModelFilter extends Filter
         }
 
         return $parentAlias;
+    }
+
+    /**
+     * @param ProxyQueryInterface<object> $query
+     */
+    private function buildInExpression(ProxyQueryInterface $query, string $alias, FilterData $data): Orx
+    {
+        $queryBuilder = $query->getQueryBuilder();
+        $metadata = $queryBuilder->getEntityManager()->getClassMetadata(
+            $this->getFieldOption('class')
+        );
+        $orX = $queryBuilder->expr()->orX();
+
+        foreach ($data->getValue() as $value) {
+            $andX = $queryBuilder->expr()->andX();
+
+            foreach ($metadata->getIdentifierValues($value) as $fieldName => $identifierValue) {
+                $parameterName = $this->getNewParameterName($query);
+
+                $andX->add($queryBuilder->expr()->eq(sprintf('%s.%s', $alias, $fieldName), ':'.$parameterName));
+                $queryBuilder->setParameter(
+                    $parameterName,
+                    $identifierValue,
+                    $metadata->getTypeOfField($fieldName)
+                );
+            }
+
+            $orX->add($andX);
+        }
+
+        return $orX;
     }
 }

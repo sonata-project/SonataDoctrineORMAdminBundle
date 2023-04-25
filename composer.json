@@ -67,6 +67,7 @@
         "symfony/panther": "^2.0.1",
         "symfony/phpunit-bridge": "^6.2",
         "symfony/templating": "^5.4 || ^6.2",
+        "symfony/uid": "^5.4 || ^6.2",
         "symfony/yaml": "^5.4 || ^6.2",
         "vimeo/psalm": "^5.7",
         "weirdan/doctrine-psalm-plugin": "^2.0"

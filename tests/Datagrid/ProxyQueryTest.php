@@ -30,8 +30,8 @@ final class ProxyQueryTest extends TestCase
 
     public static function setUpBeforeClass(): void
     {
-        if (!Type::hasType('uuid')) {
-            Type::addType('uuid', UuidType::class);
+        if (!Type::hasType(UuidType::NAME)) {
+            Type::addType(UuidType::NAME, UuidType::class);
         }
     }
 

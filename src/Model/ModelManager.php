@@ -328,6 +328,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
+        $rootAlias = current($qb->getRootAliases());
+        $metadata = $this->getMetadata($class);
 
         $prefix = uniqid();
         $sqls = [];
@@ -335,10 +337,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $ids = explode(self::ID_SEPARATOR, (string) $id);
 
             $ands = [];
-            foreach ($fieldNames as $posName => $name) {
+            foreach ($fieldNames as $index => $name) {
                 $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', current($qb->getRootAliases()), $name, $parameterName);
-                $qb->setParameter($parameterName, $ids[$posName]);
+                $ands[] = sprintf('%s.%s = :%s', $rootAlias, $name, $parameterName);
+                $qb->setParameter(
+                    $parameterName,
+                    $ids[$index],
+                    $metadata->getTypeOfField($name)
+                );
             }
 
             $sqls[] = implode(' AND ', $ands);
