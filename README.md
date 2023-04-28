@@ -42,9 +42,9 @@ This package is available under the [MIT license](LICENSE).
 [test_unstable_badge]: https://github.com/sonata-project/SonataDoctrineORMAdminBundle/workflows/Test/badge.svg?branch=5.x
 [test_unstable_link]: https://github.com/sonata-project/SonataDoctrineORMAdminBundle/actions?query=workflow:test+branch:5.x
 [coverage_stable_badge]: https://codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/branch/4.x/graph/badge.svg
-[coverage_stable_link]: https://codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/branch/4.x
+[coverage_stable_link]: https://app.codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/tree/4.x
 [coverage_unstable_badge]: https://codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/branch/5.x/graph/badge.svg
-[coverage_unstable_link]: https://codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/branch/5.x
+[coverage_unstable_link]: https://app.codecov.io/gh/sonata-project/SonataDoctrineORMAdminBundle/tree/5.x
 [shepherd_stable_badge]: https://shepherd.dev/github/sonata-project/SonataDoctrineORMAdminBundle/coverage.svg
 [shepherd_stable_link]: https://shepherd.dev/github/sonata-project/SonataDoctrineORMAdminBundle
 [documentation_stable_badge]: https://readthedocs.org/projects/sonata-project-doctrineormadminbundle/badge/?version=4.x
