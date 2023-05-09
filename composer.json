@@ -82,6 +82,8 @@
     "suggest": {
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
+    "minimum-stability": "dev",
+    "prefer-stable": true,
     "autoload": {
         "psr-4": {
             "Sonata\\DoctrineORMAdminBundle\\": "src/"
