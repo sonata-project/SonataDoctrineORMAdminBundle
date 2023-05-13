@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.13.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.12.0...4.13.0) - 2023-05-13
+### Added
+- [[#1755](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1755)] Support for `sonata-project/form-extensions` 2.0 ([@jordisala1991](https://github.com/jordisala1991))
+- [[#1738](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1738)] Support for `symfony/uid` as primary keys using `Uuid` or `Ulid` ([@jordisala1991](https://github.com/jordisala1991))
+
+### Fixed
+- [[#1738](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1738)] `ModelFilter` for related entities using compound ids ([@jordisala1991](https://github.com/jordisala1991))
+- [[#1738](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1738)] `ModelFilter` when filtering for not equals and using an inverse side relation ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.12.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.11.0...4.12.0) - 2023-04-24
 ### Changed
 - [[#1737](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1737)] Bump `sonata-project/form-extensions` to ^1.19 ([@jordisala1991](https://github.com/jordisala1991))
