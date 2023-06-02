@@ -460,8 +460,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     private function getValueFromType(object $value, Type $type, string $fieldType, AbstractPlatform $platform): string
     {
-        if ($platform->hasDoctrineTypeMappingFor($fieldType) &&
-            'binary' === $platform->getDoctrineTypeMapping($fieldType)
+        if ($platform->hasDoctrineTypeMappingFor($fieldType)
+            && 'binary' === $platform->getDoctrineTypeMapping($fieldType)
         ) {
             return (string) $type->convertToPHPValue($value, $platform);
         }
