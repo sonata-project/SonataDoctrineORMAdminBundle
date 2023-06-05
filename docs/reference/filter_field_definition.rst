@@ -354,7 +354,7 @@ ChoiceFilter
                             'new' => 'new',
                             'open' => 'open',
                             'closed' => 'closed',
-                        ],                        
+                        ],
                     ],
                 ])
             ;
@@ -409,24 +409,21 @@ You can customize the label which appears on the main widget by using a ``label`
 Callback
 ^^^^^^^^
 
-To create a custom callback filter, two methods need to be implemented:
+To create a custom callback filter, a method to define how to use the field's value needs to be implemented.
+It shall return whether the filter actually is applied to the query builder or not.
 
-* one to define the field type,
-* one to define how to use the field's value.
-
-The latter shall return whether the filter actually is applied to the queryBuilder or not.
-In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` implement this functionality::
+In this example, this functionality is provided by an anonymous function, but this option accepts any
+callable syntax::
 
     namespace Sonata\NewsBundle\Admin;
 
+    use Application\Sonata\NewsBundle\Entity\Comment;
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Filter\Model\FilterData;
     use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
     use Sonata\DoctrineORMAdminBundle\Filter\CallbackFilter;
     use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
-
-    use Application\Sonata\NewsBundle\Entity\Comment;
 
     final class PostAdmin extends AbstractAdmin
     {
@@ -440,7 +437,8 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
                 ])
                 ->add('author')
                 ->add('with_open_comments', CallbackFilter::class, [
-    //                'callback'   => [$this, 'getWithOpenCommentFilter'],
+                    // This option accepts any callable syntax.
+                    // 'callback' => [$this, 'getWithOpenCommentFilter'],
                     'callback' => static function(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
                         if (!$data->hasValue()) {
                             return false;
@@ -453,21 +451,7 @@ In this example, ``getWithOpenCommentField`` and ``getWithOpenCommentFilter`` im
 
                         return true;
                     },
-                    'field_type' => CheckboxType::class
+                    'field_type' => CheckboxType::class,
                 ]);
-        }
-
-        public function getWithOpenCommentFilter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
-        {
-            if (!$data->hasValue()) {
-                return false;
-            }
-
-            $query
-                ->leftJoin(sprintf('%s.comments', $alias), 'c')
-                ->andWhere('c.status = :status')
-                ->setParameter('status', Comment::STATUS_MODERATE);
-
-            return true;
         }
     }
