@@ -1,7 +1,7 @@
 UPGRADE 4.x
 ===========
 
-UPGRADE FROM 4.x to 4.x
+UPGRADE FROM 4.0 to 4.1
 =======================
 
 ### Sonata\DoctrineORMAdminBundle\Filter\ModelAutocompleteFilter
