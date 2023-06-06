@@ -59,7 +59,7 @@
         "phpunit/phpunit": "^9.5",
         "psalm/plugin-phpunit": "^0.18",
         "psalm/plugin-symfony": "^5.0",
-        "rector/rector": "^0.16",
+        "rector/rector": "^0.17",
         "sonata-project/block-bundle": "^4.2",
         "sonata-project/entity-audit-bundle": "^1.1",
         "symfony/browser-kit": "^5.4 || ^6.2",
