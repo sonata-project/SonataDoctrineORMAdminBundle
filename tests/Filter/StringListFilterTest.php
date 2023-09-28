@@ -48,7 +48,7 @@ final class StringListFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider containsDataProvider
+     * @dataProvider provideContainsCases
      */
     public function testContains(?int $type): void
     {
@@ -67,7 +67,7 @@ final class StringListFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{int|null}>
      */
-    public function containsDataProvider(): iterable
+    public function provideContainsCases(): iterable
     {
         yield 'explicit contains' => [ContainsOperatorType::TYPE_CONTAINS];
         yield 'implicit contains' => [null];
@@ -106,7 +106,7 @@ final class StringListFilterTest extends FilterTestCase
      * @param array<string>         $query
      * @param array<string, string> $parameters
      *
-     * @dataProvider multipleValuesDataProvider
+     * @dataProvider provideMultipleValuesCases
      */
     public function testMultipleValues(array $value, ?int $type, array $query, array $parameters): void
     {
@@ -125,7 +125,7 @@ final class StringListFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string[], int, string[], array<string, string>}>
      */
-    public function multipleValuesDataProvider(): iterable
+    public function provideMultipleValuesCases(): iterable
     {
         yield 'equal choice' => [
             ['asd', 'qwe'],

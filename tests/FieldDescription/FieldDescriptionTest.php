@@ -252,7 +252,7 @@ final class FieldDescriptionTest extends TestCase
     }
 
     /**
-     * @dataProvider getDescribesSingleValuedAssociationProvider
+     * @dataProvider provideDescribesSingleValuedAssociationCases
      */
     public function testDescribesSingleValuedAssociation(string|int $mappingType, bool $expected): void
     {
@@ -266,7 +266,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function getDescribesSingleValuedAssociationProvider(): iterable
+    public function provideDescribesSingleValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, true];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, true];
@@ -276,7 +276,7 @@ final class FieldDescriptionTest extends TestCase
     }
 
     /**
-     * @dataProvider getDescribesCollectionValuedAssociationProvider
+     * @dataProvider provideDescribesCollectionValuedAssociationCases
      */
     public function testDescribesCollectionValuedAssociation(string|int $mappingType, bool $expected): void
     {
@@ -290,7 +290,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function getDescribesCollectionValuedAssociationProvider(): iterable
+    public function provideDescribesCollectionValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, false];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, false];

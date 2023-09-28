@@ -27,34 +27,32 @@ final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
     /**
      * @phpstan-return iterable<array-key, array{bool, array<string, array{audit?: bool|null, class: class-string}>, class-string[]}>
      */
-    public function processDataProvider(): iterable
+    public function provideProcessCases(): iterable
     {
-        return [
+        yield [
+            true,
             [
-                true,
-                [
-                    'admin1' => ['audit' => null,  'class' => Product::class],
-                    'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
-                    'admin3' => ['audit' => false, 'class' => UuidEntity::class],
-                    'admin4' => ['class' => VersionedEntity::class],
-                ],
-                [
-                    Product::class,
-                    SimpleEntity::class,
-                    VersionedEntity::class,
-                ],
+                'admin1' => ['audit' => null,  'class' => Product::class],
+                'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
+                'admin3' => ['audit' => false, 'class' => UuidEntity::class],
+                'admin4' => ['class' => VersionedEntity::class],
             ],
             [
-                false,
-                [
-                    'admin1' => ['audit' => null,  'class' => Product::class],
-                    'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
-                    'admin3' => ['audit' => false, 'class' => UuidEntity::class],
-                    'admin4' => ['class' => VersionedEntity::class],
-                ],
-                [
-                    SimpleEntity::class,
-                ],
+                Product::class,
+                SimpleEntity::class,
+                VersionedEntity::class,
+            ],
+        ];
+        yield [
+            false,
+            [
+                'admin1' => ['audit' => null,  'class' => Product::class],
+                'admin2' => ['audit' => true,  'class' => SimpleEntity::class],
+                'admin3' => ['audit' => false, 'class' => UuidEntity::class],
+                'admin4' => ['class' => VersionedEntity::class],
+            ],
+            [
+                SimpleEntity::class,
             ],
         ];
     }
@@ -63,7 +61,7 @@ final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
      * @phpstan-param array<string, array{audit?: bool|null, class: class-string}> $services
      * @phpstan-param class-string[] $expectedAuditedEntities
      *
-     * @dataProvider processDataProvider
+     * @dataProvider provideProcessCases
      */
     public function testProcess(bool $force, array $services, array $expectedAuditedEntities): void
     {

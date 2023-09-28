@@ -81,7 +81,7 @@ final class DatagridBuilderTest extends TestCase
     /**
      * @phpstan-param class-string $pager
      *
-     * @dataProvider getBaseDatagridData
+     * @dataProvider provideGetBaseDatagridCases
      */
     public function testGetBaseDatagrid(string $pagerType, string $pager): void
     {
@@ -103,17 +103,15 @@ final class DatagridBuilderTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string, class-string}>
      */
-    public function getBaseDatagridData(): iterable
+    public function provideGetBaseDatagridCases(): iterable
     {
-        return [
-            'simple' => [
-                Pager::TYPE_SIMPLE,
-                SimplePager::class,
-            ],
-            'default' => [
-                Pager::TYPE_DEFAULT,
-                Pager::class,
-            ],
+        yield 'simple' => [
+            Pager::TYPE_SIMPLE,
+            SimplePager::class,
+        ];
+        yield 'default' => [
+            Pager::TYPE_DEFAULT,
+            Pager::class,
         ];
     }
 

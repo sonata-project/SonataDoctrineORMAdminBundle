@@ -31,7 +31,7 @@ final class UlidChildEntityAdminTest extends BaseAdminTestCase
         yield 'Remove Ulid Child Entity' => ['01GY4D6JYD2KCVDCJS0JF17X90/delete'];
     }
 
-    public static function provideFormUrlsCases(): iterable
+    public static function provideFormsUrlsCases(): iterable
     {
         yield 'Create Ulid Child Entity' => ['create', [
             'uniqid' => 'ulidchildentity',

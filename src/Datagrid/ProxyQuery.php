@@ -179,6 +179,7 @@ final class ProxyQuery implements ProxyQueryInterface
         $existingOrders = [];
         foreach ($queryBuilder->getDQLPart('orderBy') as $order) {
             foreach ($order->getParts() as $part) {
+                \assert(\is_string($part));
                 $existingOrders[] = trim(str_replace([Criteria::DESC, Criteria::ASC], '', $part));
             }
         }
