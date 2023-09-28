@@ -44,18 +44,17 @@ final class PagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{class-string}>
      */
-    public function entityClassDataProvider(): iterable
+    public function provideCountResultsCases(): iterable
     {
-        return [
-            [User::class], // single identifier
-            [UserBrowser::class], // composite identifier
-        ];
+        yield [User::class];
+        // single identifier
+        yield [UserBrowser::class];
     }
 
     /**
      * @phpstan-param class-string $className
      *
-     * @dataProvider entityClassDataProvider
+     * @dataProvider provideCountResultsCases
      */
     public function testCountResults(string $className): void
     {

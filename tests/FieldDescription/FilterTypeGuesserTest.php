@@ -41,7 +41,7 @@ final class FilterTypeGuesserTest extends TestCase
     /**
      * @param array<string, mixed> $expectedOptions
      *
-     * @dataProvider guessDataProvider
+     * @dataProvider provideGuessCases
      *
      * @phpstan-param class-string $expectedType
      */
@@ -67,7 +67,7 @@ final class FilterTypeGuesserTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{int|string|null, class-string, array<string, mixed>, int}>
      */
-    public function guessDataProvider(): iterable
+    public function provideGuessCases(): iterable
     {
         yield [
             null,

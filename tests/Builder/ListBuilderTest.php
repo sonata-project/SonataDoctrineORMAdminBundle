@@ -100,7 +100,7 @@ final class ListBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider fixFieldDescriptionData
+     * @dataProvider provideFixFieldDescriptionCases
      */
     public function testFixFieldDescription(int $type, string $template): void
     {
@@ -119,25 +119,23 @@ final class ListBuilderTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{int, string}>
      */
-    public function fixFieldDescriptionData(): iterable
+    public function provideFixFieldDescriptionCases(): iterable
     {
-        return [
-            'one-to-one' => [
-                ClassMetadata::ONE_TO_ONE,
-                '@SonataAdmin/CRUD/Association/list_one_to_one.html.twig',
-            ],
-            'many-to-one' => [
-                ClassMetadata::MANY_TO_ONE,
-                '@SonataAdmin/CRUD/Association/list_many_to_one.html.twig',
-            ],
-            'one-to-many' => [
-                ClassMetadata::ONE_TO_MANY,
-                '@SonataAdmin/CRUD/Association/list_one_to_many.html.twig',
-            ],
-            'many-to-many' => [
-                ClassMetadata::MANY_TO_MANY,
-                '@SonataAdmin/CRUD/Association/list_many_to_many.html.twig',
-            ],
+        yield 'one-to-one' => [
+            ClassMetadata::ONE_TO_ONE,
+            '@SonataAdmin/CRUD/Association/list_one_to_one.html.twig',
+        ];
+        yield 'many-to-one' => [
+            ClassMetadata::MANY_TO_ONE,
+            '@SonataAdmin/CRUD/Association/list_many_to_one.html.twig',
+        ];
+        yield 'one-to-many' => [
+            ClassMetadata::ONE_TO_MANY,
+            '@SonataAdmin/CRUD/Association/list_one_to_many.html.twig',
+        ];
+        yield 'many-to-many' => [
+            ClassMetadata::MANY_TO_MANY,
+            '@SonataAdmin/CRUD/Association/list_many_to_many.html.twig',
         ];
     }
 

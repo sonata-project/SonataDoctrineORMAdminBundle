@@ -103,7 +103,7 @@ final class ShowBuilderTest extends TestCase
     }
 
     /**
-     * @dataProvider fixFieldDescriptionData
+     * @dataProvider provideFixFieldDescriptionCases
      */
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
@@ -121,29 +121,27 @@ final class ShowBuilderTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string, int, string}>
      */
-    public function fixFieldDescriptionData(): iterable
+    public function provideFixFieldDescriptionCases(): iterable
     {
-        return [
-            'one-to-one' => [
-                FieldDescriptionInterface::TYPE_ONE_TO_ONE,
-                ClassMetadata::ONE_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
-            ],
-            'many-to-one' => [
-                FieldDescriptionInterface::TYPE_MANY_TO_ONE,
-                ClassMetadata::MANY_TO_ONE,
-                '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
-            ],
-            'one-to-many' => [
-                FieldDescriptionInterface::TYPE_ONE_TO_MANY,
-                ClassMetadata::ONE_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
-            ],
-            'many-to-many' => [
-                FieldDescriptionInterface::TYPE_MANY_TO_MANY,
-                ClassMetadata::MANY_TO_MANY,
-                '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
-            ],
+        yield 'one-to-one' => [
+            FieldDescriptionInterface::TYPE_ONE_TO_ONE,
+            ClassMetadata::ONE_TO_ONE,
+            '@SonataAdmin/CRUD/Association/show_one_to_one.html.twig',
+        ];
+        yield 'many-to-one' => [
+            FieldDescriptionInterface::TYPE_MANY_TO_ONE,
+            ClassMetadata::MANY_TO_ONE,
+            '@SonataAdmin/CRUD/Association/show_many_to_one.html.twig',
+        ];
+        yield 'one-to-many' => [
+            FieldDescriptionInterface::TYPE_ONE_TO_MANY,
+            ClassMetadata::ONE_TO_MANY,
+            '@SonataAdmin/CRUD/Association/show_one_to_many.html.twig',
+        ];
+        yield 'many-to-many' => [
+            FieldDescriptionInterface::TYPE_MANY_TO_MANY,
+            ClassMetadata::MANY_TO_MANY,
+            '@SonataAdmin/CRUD/Association/show_many_to_many.html.twig',
         ];
     }
 

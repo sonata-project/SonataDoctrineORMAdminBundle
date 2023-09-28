@@ -25,7 +25,7 @@ final class FilterTest extends FilterTestCase
     /**
      * @phpstan-param array<array{string|null, array<string, mixed>, string, FilterData}> $filterOptionsCollection
      *
-     * @dataProvider orExpressionProvider
+     * @dataProvider provideOrExpressionCases
      */
     public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
     {
@@ -70,7 +70,7 @@ final class FilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string, array<array{string|null, array<string, mixed>, string, FilterData}>}>
      */
-    public function orExpressionProvider(): iterable
+    public function provideOrExpressionCases(): iterable
     {
         yield 'Default behavior' => [
             'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'

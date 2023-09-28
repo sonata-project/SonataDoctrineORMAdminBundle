@@ -49,14 +49,12 @@ final class StringFilterTest extends FilterTestCase
      */
     public function getValues(): iterable
     {
-        return [
-            'filter by normal value' => ['asd', false, true],
-            'not filter by empty string' => ['', false, false],
-            'filter by empty string' => ['', true, true],
-            'not filter by null' => [null, false, false],
-            'filter by null' => [null, true, true],
-            'filter by \'0\'' => ['0', false, true],
-        ];
+        yield 'filter by normal value' => ['asd', false, true];
+        yield 'not filter by empty string' => ['', false, false];
+        yield 'filter by empty string' => ['', true, true];
+        yield 'not filter by null' => [null, false, false];
+        yield 'filter by null' => [null, true, true];
+        yield 'filter by \'0\'' => ['0', false, true];
     }
 
     /**
@@ -64,14 +62,12 @@ final class StringFilterTest extends FilterTestCase
      */
     public function getValuesForMeaningLessType(): iterable
     {
-        return [
-            'filter by normal value' => ['asd', false, true],
-            'not filter by empty string' => ['', false, false],
-            'still not filter by empty string with allow empty' => ['', true, false],
-            'not filter by null' => [null, false, false],
-            'still not filter by null with allow empty' => [null, true, false],
-            'filter by \'0\'' => ['0', false, true],
-        ];
+        yield 'filter by normal value' => ['asd', false, true];
+        yield 'not filter by empty string' => ['', false, false];
+        yield 'still not filter by empty string with allow empty' => ['', true, false];
+        yield 'not filter by null' => [null, false, false];
+        yield 'still not filter by null with allow empty' => [null, true, false];
+        yield 'filter by \'0\'' => ['0', false, true];
     }
 
     /**
@@ -269,7 +265,7 @@ final class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider caseSensitiveDataProvider
+     * @dataProvider provideCaseSensitiveCases
      *
      * @param array<string, mixed> $options
      */
@@ -290,7 +286,7 @@ final class StringFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{array{force_case_insensitivity?: bool|null}, int, string, string}>
      */
-    public function caseSensitiveDataProvider(): iterable
+    public function provideCaseSensitiveCases(): iterable
     {
         yield [[], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
         yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
