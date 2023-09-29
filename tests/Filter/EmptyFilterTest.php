@@ -36,7 +36,7 @@ final class EmptyFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider valueDataProvider
+     * @dataProvider provideValueCases
      */
     public function testValue(bool $inverse, int $value, string $expectedQuery): void
     {
@@ -69,13 +69,11 @@ final class EmptyFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array{bool, int, string}>
      */
-    public function valueDataProvider(): iterable
+    public function provideValueCases(): iterable
     {
-        return [
-            [false, BooleanType::TYPE_YES, 'WHERE alias.field IS EMPTY'],
-            [false, BooleanType::TYPE_NO, 'WHERE alias.field IS NOT EMPTY'],
-            [true, BooleanType::TYPE_YES, 'WHERE alias.field IS NOT EMPTY'],
-            [true, BooleanType::TYPE_NO, 'WHERE alias.field IS EMPTY'],
-        ];
+        yield [false, BooleanType::TYPE_YES, 'WHERE alias.field IS EMPTY'];
+        yield [false, BooleanType::TYPE_NO, 'WHERE alias.field IS NOT EMPTY'];
+        yield [true, BooleanType::TYPE_YES, 'WHERE alias.field IS NOT EMPTY'];
+        yield [true, BooleanType::TYPE_NO, 'WHERE alias.field IS EMPTY'];
     }
 }

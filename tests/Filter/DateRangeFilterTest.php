@@ -111,7 +111,7 @@ final class DateRangeFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider provideDates
+     * @dataProvider provideFilterEndDateCoversWholeDayCases
      */
     public function testFilterEndDateCoversWholeDay(
         \DateTimeImmutable $expectedEndDateTime,
@@ -146,7 +146,7 @@ final class DateRangeFilterTest extends FilterTestCase
     /**
      * @return iterable<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
      */
-    public function provideDates(): iterable
+    public function provideFilterEndDateCoversWholeDayCases(): iterable
     {
         yield [
             new \DateTimeImmutable('2016-08-31 23:59:59.0-03:00'),

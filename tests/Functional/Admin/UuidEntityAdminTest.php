@@ -31,7 +31,7 @@ final class UuidEntityAdminTest extends BaseAdminTestCase
         yield 'Remove Uuid Entity' => ['018788d3-4bcd-79d7-8acf-b14b787c7e04/delete'];
     }
 
-    public static function provideFormUrlsCases(): iterable
+    public static function provideFormsUrlsCases(): iterable
     {
         yield 'Create Uuid Entity' => ['create', [
             'uniqid' => 'uuidentity',

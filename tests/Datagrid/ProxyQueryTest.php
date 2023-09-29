@@ -96,20 +96,18 @@ final class ProxyQueryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string}>
      */
-    public function validSortOrders(): iterable
+    public function provideItAllowsSortOrdersWithStrangeCaseCases(): iterable
     {
-        return [
-            ['ASC'],
-            ['DESC'],
-            ['asc'],
-            ['desc'],
-            ['AsC'],
-            ['deSc'],
-        ];
+        yield ['ASC'];
+        yield ['DESC'];
+        yield ['asc'];
+        yield ['desc'];
+        yield ['AsC'];
+        yield ['deSc'];
     }
 
     /**
-     * @dataProvider validSortOrders
+     * @dataProvider provideItAllowsSortOrdersWithStrangeCaseCases
      */
     public function testItAllowsSortOrdersWithStrangeCase(string $validValue): void
     {

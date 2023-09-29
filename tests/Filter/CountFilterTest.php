@@ -47,7 +47,7 @@ final class CountFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider filterDataProvider
+     * @dataProvider provideFilterCases
      */
     public function testFilter(string $expected, ?int $type): void
     {
@@ -65,15 +65,13 @@ final class CountFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string, int|null}>
      */
-    public function filterDataProvider(): iterable
+    public function provideFilterCases(): iterable
     {
-        return [
-            ['HAVING COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL],
-            ['HAVING COUNT(alias.field) >= :field_name_0', NumberOperatorType::TYPE_GREATER_EQUAL],
-            ['HAVING COUNT(alias.field) > :field_name_0', NumberOperatorType::TYPE_GREATER_THAN],
-            ['HAVING COUNT(alias.field) <= :field_name_0', NumberOperatorType::TYPE_LESS_EQUAL],
-            ['HAVING COUNT(alias.field) < :field_name_0', NumberOperatorType::TYPE_LESS_THAN],
-            ['HAVING COUNT(alias.field) = :field_name_0', null],
-        ];
+        yield ['HAVING COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL];
+        yield ['HAVING COUNT(alias.field) >= :field_name_0', NumberOperatorType::TYPE_GREATER_EQUAL];
+        yield ['HAVING COUNT(alias.field) > :field_name_0', NumberOperatorType::TYPE_GREATER_THAN];
+        yield ['HAVING COUNT(alias.field) <= :field_name_0', NumberOperatorType::TYPE_LESS_EQUAL];
+        yield ['HAVING COUNT(alias.field) < :field_name_0', NumberOperatorType::TYPE_LESS_THAN];
+        yield ['HAVING COUNT(alias.field) = :field_name_0', null];
     }
 }

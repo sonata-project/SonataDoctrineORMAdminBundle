@@ -28,7 +28,7 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
 final class SmartPaginatorFactoryTest extends TestCase
 {
     /**
-     * @dataProvider getQueriesForFetchJoinedCollection
+     * @dataProvider provideFetchJoinedCollectionCases
      */
     public function testFetchJoinedCollection(QueryBuilder $queryBuilder, bool $expected): void
     {
@@ -50,7 +50,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{QueryBuilder, bool}>
      */
-    public function getQueriesForFetchJoinedCollection(): iterable
+    public function provideFetchJoinedCollectionCases(): iterable
     {
         yield 'Without joins' => [
             TestEntityManagerFactory::create()
@@ -77,7 +77,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider getQueriesForOutputWalker
+     * @dataProvider provideUseOutputWalkerCases
      */
     public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
@@ -103,7 +103,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: QueryBuilder, 1: bool|null, 2?: string}>
      */
-    public function getQueriesForOutputWalker(): iterable
+    public function provideUseOutputWalkerCases(): iterable
     {
         yield 'Simple query without joins' => [
             TestEntityManagerFactory::create()
@@ -190,7 +190,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     }
 
     /**
-     * @dataProvider getQueriesForCountWalkerDistinct
+     * @dataProvider provideCountWalkerDistinctCases
      */
     public function testCountWalkerDistinct(QueryBuilder $queryBuilder, bool $hasHint, bool $expected): void
     {
@@ -215,7 +215,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{QueryBuilder, bool, bool}>
      */
-    public function getQueriesForCountWalkerDistinct(): iterable
+    public function provideCountWalkerDistinctCases(): iterable
     {
         yield 'Simple query without joins' => [
             TestEntityManagerFactory::create()
