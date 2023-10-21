@@ -54,15 +54,14 @@ final class TypeGuesser implements TypeGuesserInterface
             case 'time':
             case 'time_immutable':
                 return new TypeGuess(FieldDescriptionInterface::TYPE_TIME, [], Guess::HIGH_CONFIDENCE);
+            case 'enum':
+                return new TypeGuess(FieldDescriptionInterface::TYPE_ENUM, [], Guess::HIGH_CONFIDENCE);
             case ClassMetadata::ONE_TO_MANY:
                 return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_MANY, [], Guess::HIGH_CONFIDENCE);
-
             case ClassMetadata::MANY_TO_MANY:
                 return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_MANY, [], Guess::HIGH_CONFIDENCE);
-
             case ClassMetadata::MANY_TO_ONE:
                 return new TypeGuess(FieldDescriptionInterface::TYPE_MANY_TO_ONE, [], Guess::HIGH_CONFIDENCE);
-
             case ClassMetadata::ONE_TO_ONE:
                 return new TypeGuess(FieldDescriptionInterface::TYPE_ONE_TO_ONE, [], Guess::HIGH_CONFIDENCE);
             default:

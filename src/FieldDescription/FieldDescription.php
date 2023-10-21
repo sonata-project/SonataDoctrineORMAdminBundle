@@ -52,7 +52,7 @@ final class FieldDescription extends BaseFieldDescription
         $this->fieldMapping = $fieldMapping;
 
         $this->type ??= (string) $fieldMapping['type'];
-        $this->mappingType ??= $fieldMapping['type'];
+        $this->mappingType ??= isset($fieldMapping['enumType']) ? 'enum' : $fieldMapping['type'];
     }
 
     protected function setAssociationMapping(array $associationMapping): void

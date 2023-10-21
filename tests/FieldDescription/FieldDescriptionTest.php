@@ -19,6 +19,7 @@ use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\DoctrineORMAdminBundle\FieldDescription\FieldDescription;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Enum\Suit;
 
 final class FieldDescriptionTest extends TestCase
 {
@@ -249,6 +250,17 @@ final class FieldDescriptionTest extends TestCase
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.child.myMethod');
 
         static::assertSame('myMethodValue', $field->getValue($mockedObject));
+    }
+
+    public function testEnum(): void
+    {
+        $fieldMapping = ['type' => 'string', 'enumType' => Suit::class];
+
+        $field = new FieldDescription('bar', [], $fieldMapping);
+
+        static::assertSame('string', $field->getType());
+        static::assertSame('enum', $field->getMappingType());
+        static::assertSame($fieldMapping, $field->getFieldMapping());
     }
 
     /**
