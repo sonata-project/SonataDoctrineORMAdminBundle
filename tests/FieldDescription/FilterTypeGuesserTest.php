@@ -19,13 +19,16 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\FieldDescription\FilterTypeGuesser;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\NumberFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
+use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Enum\Suit;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Guess\Guess;
 
@@ -44,18 +47,21 @@ final class FilterTypeGuesserTest extends TestCase
      * @dataProvider provideGuessCases
      *
      * @phpstan-param class-string $expectedType
+     * @phpstan-param array<string, mixed> $fieldMapping
      */
     public function testGuess(
         int|string|null $mappingType,
         string $expectedType,
         array $expectedOptions,
-        int $expectedConfidence
+        int $expectedConfidence,
+        array $fieldMapping = []
     ): void {
         $fieldDescription = $this->createStub(FieldDescriptionInterface::class);
         $fieldDescription->method('getFieldName')->willReturn('foo');
         $fieldDescription->method('getMappingType')->willReturn($mappingType);
         $fieldDescription->method('getParentAssociationMappings')->willReturn([]);
         $fieldDescription->method('getTargetModel')->willReturn('Foo');
+        $fieldDescription->method('getFieldMapping')->willReturn($fieldMapping);
 
         $guess = $this->guesser->guess($fieldDescription);
 
@@ -65,7 +71,7 @@ final class FilterTypeGuesserTest extends TestCase
     }
 
     /**
-     * @phpstan-return iterable<array-key, array{int|string|null, class-string, array<string, mixed>, int}>
+     * @phpstan-return iterable<array-key, array{0: int|string|null, 1: class-string, 2: array<string, mixed>, 3: int, 4?: array<string, mixed>}>
      */
     public function provideGuessCases(): iterable
     {
@@ -123,6 +129,21 @@ final class FilterTypeGuesserTest extends TestCase
             StringFilter::class,
             ['field_name' => 'foo', 'parent_association_mappings' => []],
             Guess::MEDIUM_CONFIDENCE,
+        ];
+
+        yield [
+            'enum',
+            ChoiceFilter::class,
+            [
+                'field_name' => 'foo',
+                'parent_association_mappings' => [],
+                'field_type' => EnumType::class,
+                'field_options' => [
+                    'class' => Suit::class,
+                ],
+            ],
+            Guess::HIGH_CONFIDENCE,
+            ['enumType' => Suit::class],
         ];
 
         yield [
