@@ -141,5 +141,12 @@ final class TypeGuesserTest extends TestCase
             [],
             Guess::HIGH_CONFIDENCE,
         ];
+
+        yield [
+            'enum',
+            FieldDescriptionInterface::TYPE_ENUM,
+            [],
+            Guess::HIGH_CONFIDENCE,
+        ];
     }
 }

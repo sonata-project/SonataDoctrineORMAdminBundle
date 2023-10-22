@@ -18,6 +18,7 @@ use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\FieldDescription\TypeGuesserInterface;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
 use Sonata\DoctrineORMAdminBundle\Filter\BooleanFilter;
+use Sonata\DoctrineORMAdminBundle\Filter\ChoiceFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\ModelFilter;
@@ -26,6 +27,7 @@ use Sonata\DoctrineORMAdminBundle\Filter\StringFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\TimeFilter;
 use Sonata\DoctrineORMAdminBundle\Filter\UidFilter;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Form\Extension\Core\Type\EnumType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Guess\Guess;
 use Symfony\Component\Form\Guess\TypeGuess;
@@ -66,6 +68,11 @@ final class FilterTypeGuesser implements TypeGuesserInterface
             case 'time':
             case 'time_immutable':
                 return new TypeGuess(TimeFilter::class, $options, Guess::HIGH_CONFIDENCE);
+            case 'enum':
+                $options['field_type'] = EnumType::class;
+                $options['field_options']['class'] = $fieldDescription->getFieldMapping()['enumType'];
+
+                return new TypeGuess(ChoiceFilter::class, $options, Guess::HIGH_CONFIDENCE);
             case ClassMetadata::ONE_TO_ONE:
             case ClassMetadata::ONE_TO_MANY:
             case ClassMetadata::MANY_TO_ONE:
