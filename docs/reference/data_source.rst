@@ -4,12 +4,12 @@
 Export / DataSource
 ===================
 
-When using an admins export feature you might want to modify how dates and times are exported.
-This is done by calling ``setDateTimeFormat`` on the data source iterator.
+When using an admins export feature you might want to modify how values, such as dates, times and enumerations are exported.
+This is done by calling convenience methods like ``setDateTimeFormat()`` and ``useBackedEnumValue()`` on the data source iterator.
 
 Here's one way to do it:
 
-1. Decorate the default Sonata\DoctrineORMAdminBundle\Exporter\DataSource with your own and call ``setDateTimeFormat`` there.::
+1. Decorate the default Sonata\DoctrineORMAdminBundle\Exporter\DataSource with your own and calls there.::
 
       namespace App\Service\Admin;
 
@@ -34,6 +34,7 @@ Here's one way to do it:
               $iterator = $this->dataSource->createIterator($query, $fields);
 
               $iterator->setDateTimeFormat('Y-m-d H:i:s');
+              $iterator->useBackedEnumValue(false);
 
               return $iterator;
           }
