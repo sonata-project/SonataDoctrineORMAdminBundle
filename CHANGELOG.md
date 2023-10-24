@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.14.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.13.0...4.14.0) - 2023-10-23
+### Added
+- [[#1768](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1768)] Guessing for enum types ([@phansys](https://github.com/phansys))
+
 ## [4.13.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.12.0...4.13.0) - 2023-05-13
 ### Added
 - [[#1755](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1755)] Support for `sonata-project/form-extensions` 2.0 ([@jordisala1991](https://github.com/jordisala1991))
