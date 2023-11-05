@@ -41,3 +41,4 @@ doctrine:
 sonata_admin:
     options:
         html5_validate: false
+        use_stickyforms: false
