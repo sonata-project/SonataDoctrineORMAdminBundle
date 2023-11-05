@@ -5,7 +5,7 @@
 Audit
 =====
 
-The bundle provides optional support for the ``EntityAuditBundle`` from https://github.com/simplethings/EntityAudit.
+The bundle provides optional support for the ``EntityAuditBundle`` from https://github.com/sonata-project/EntityAuditBundle.
 
 How it works
 ------------
@@ -32,7 +32,7 @@ The audit functionality is provided by an optional, separated bundle that you ne
 
 .. code-block:: bash
 
-    composer require simplethings/entity-audit-bundle
+    composer require sonata-project/entity-audit-bundle
 
 Next, be sure to enable the bundle in your `bundles.php` file::
 
