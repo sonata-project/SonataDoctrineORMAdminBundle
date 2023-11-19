@@ -35,7 +35,6 @@ final class AuditBlockService extends AbstractBlockService
     public function execute(BlockContextInterface $blockContext, ?Response $response = null): Response
     {
         $template = $blockContext->getTemplate();
-        \assert(null !== $template);
         $limit = $blockContext->getSetting('limit');
         \assert(\is_int($limit));
 

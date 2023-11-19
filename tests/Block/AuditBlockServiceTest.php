@@ -86,11 +86,8 @@ final class AuditBlockServiceTest extends BlockServiceTestCase
 
         self::assertSettings([
             'attr' => [],
-            'extra_cache_keys' => [],
             'limit' => 10,
             'template' => '@SonataDoctrineORMAdmin/Block/block_audit.html.twig',
-            'ttl' => 0,
-            'use_cache' => true,
         ], $blockContext);
     }
 }
