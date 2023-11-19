@@ -79,9 +79,6 @@ final class AppKernel extends Kernel
         $routes->import(sprintf('%s/config/routes.yaml', $this->getProjectDir()));
     }
 
-    /**
-     * @psalm-suppress DeprecatedClass
-     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->setParameter('app.base_dir', $this->getBaseDir());
