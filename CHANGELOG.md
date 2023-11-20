@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.14.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.14.0...4.14.1) - 2023-11-20
+### Fixed
+- [[#1767](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1767)] DateTimeRangeFilter exception occurs when either the `start` or `end` field is empty. ([@tonyaxo](https://github.com/tonyaxo))
+
 ## [4.14.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.13.0...4.14.0) - 2023-10-23
 ### Added
 - [[#1768](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1768)] Guessing for enum types ([@phansys](https://github.com/phansys))
