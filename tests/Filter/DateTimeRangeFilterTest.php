@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Sonata\AdminBundle\Filter\Model\FilterData;
+use Sonata\AdminBundle\Form\Type\Operator\DateRangeOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateTimeRangeFilter;
 use Sonata\Form\Type\DateTimeRangeType;
@@ -42,5 +43,49 @@ final class DateTimeRangeFilterTest extends FilterTestCase
         $filter->initialize('foo');
 
         static::assertSame(DateTimeRangeType::class, $filter->getFieldType());
+    }
+
+    public function testFilterNotBetweenStartDate(): void
+    {
+        $filter = new DateTimeRangeFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $startDateTime = new \DateTime('2023-10-03T12:00:01');
+
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
+            'type' => DateRangeOperatorType::TYPE_NOT_BETWEEN,
+            'value' => [
+                'start' => $startDateTime,
+                'end' => null,
+            ],
+        ]));
+
+        self::assertSameQuery(['WHERE alias.field < :field_name_0'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $startDateTime], $proxyQuery);
+        static::assertTrue($filter->isActive());
+    }
+
+    public function testFilterNotBetweenEndDate(): void
+    {
+        $filter = new DateTimeRangeFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $endDateTime = new \DateTime('2023-10-03T12:00:01');
+
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
+            'type' => DateRangeOperatorType::TYPE_NOT_BETWEEN,
+            'value' => [
+                'start' => null,
+                'end' => $endDateTime,
+            ],
+        ]));
+
+        self::assertSameQuery(['WHERE alias.field > :field_name_1'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_1' => $endDateTime], $proxyQuery);
+        static::assertTrue($filter->isActive());
     }
 }

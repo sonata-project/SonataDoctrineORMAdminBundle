@@ -18,7 +18,6 @@ use Doctrine\Bundle\DoctrineBundle\DoctrineBundle;
 use Doctrine\Bundle\FixturesBundle\DoctrineFixturesBundle;
 use Knp\Bundle\MenuBundle\KnpMenuBundle;
 use Sonata\AdminBundle\SonataAdminBundle;
-use Sonata\BlockBundle\Cache\HttpCacheHandler;
 use Sonata\BlockBundle\SonataBlockBundle;
 use Sonata\Doctrine\Bridge\Symfony\SonataDoctrineBundle;
 use Sonata\DoctrineORMAdminBundle\SonataDoctrineORMAdminBundle;
@@ -79,9 +78,6 @@ final class AppKernel extends Kernel
         $routes->import(sprintf('%s/config/routes.yaml', $this->getProjectDir()));
     }
 
-    /**
-     * @psalm-suppress DeprecatedClass
-     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->setParameter('app.base_dir', $this->getBaseDir());
@@ -90,10 +86,6 @@ final class AppKernel extends Kernel
 
         if (!class_exists(IsGranted::class)) {
             $loader->load(__DIR__.'/config/config_symfony_v5.yml');
-        }
-
-        if (class_exists(HttpCacheHandler::class)) {
-            $loader->load($this->getProjectDir().'/config/config_sonata_block_v4.yaml');
         }
 
         $loader->load(__DIR__.'/config/services.php');
