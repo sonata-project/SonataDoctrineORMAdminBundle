@@ -26,7 +26,7 @@
     "homepage": "https://docs.sonata-project.org/projects/SonataDoctrineORMAdminBundle",
     "require": {
         "php": "^8.0",
-        "doctrine/dbal": "^3.5",
+        "doctrine/dbal": "^3.4",
         "doctrine/doctrine-bundle": "^2.7",
         "doctrine/orm": "^2.14",
         "doctrine/persistence": "^3.0.2",
