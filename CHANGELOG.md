@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.15.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.14.1...4.15.0) - 2023-12-04
+### Added
+- [[#1780](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1780)] Support for Symfony 7. ([@jordisala1991](https://github.com/jordisala1991))
+
 ## [4.14.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.14.0...4.14.1) - 2023-11-20
 ### Fixed
 - [[#1767](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1767)] DateTimeRangeFilter exception occurs when either the `start` or `end` field is empty. ([@tonyaxo](https://github.com/tonyaxo))
