@@ -21,10 +21,6 @@ Full configuration options
             force: true
 
         templates:
-            form:
-                - "@SonataDoctrineORMAdmin/Form/form_admin_fields.html.twig"
-            filter:
-                - "@SonataDoctrineORMAdmin/Form/filter_admin_fields.html.twig"
             types:
                 list:
                     array:      "@SonataAdmin/CRUD/list_array.html.twig"
