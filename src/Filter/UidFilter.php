@@ -50,7 +50,7 @@ final class UidFilter extends Filter implements SearchableFilterInterface
 
     public function isSearchEnabled(): bool
     {
-        return $this->getOption('global_search');
+        return $this->getOption('global_search')===null?false:$this->getOption('global_search');
     }
 
     public function getDefaultOptions(): array
