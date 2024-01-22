@@ -312,13 +312,13 @@ final class ProxyQuery implements ProxyQueryInterface
     }
 
     /**
-     * Sets a {@see \Doctrine\ORM\Query} hint. If the hint name is not recognized, it is silently ignored.
+     * Sets a {@see Query} hint. If the hint name is not recognized, it is silently ignored.
      *
      * @param string $name  the name of the hint
      * @param mixed  $value the value of the hint
      *
-     * @see \Doctrine\ORM\Query::setHint
-     * @see \Doctrine\ORM\Query::HINT_CUSTOM_OUTPUT_WALKER
+     * @see Query::setHint
+     * @see Query::HINT_CUSTOM_OUTPUT_WALKER
      *
      * @return $this
      */
