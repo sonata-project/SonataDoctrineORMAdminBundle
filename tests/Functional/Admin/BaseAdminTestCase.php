@@ -115,7 +115,7 @@ abstract class BaseAdminTestCase extends WebTestCase
     abstract public static function provideFormsUrlsCases(): iterable;
 
     /**
-     * @return iterable<array<string|array|integer>>
+     * @return iterable<array<string|array|int>>
      *
      * @phpstan-return iterable<array{0: string, 1?: array<string>, 2?: integer}>
      */
