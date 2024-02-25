@@ -14,7 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\FieldDescription;
 
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Mapping\AssociationMapping;
 use Doctrine\ORM\Mapping\ClassMetadata;
+use Doctrine\ORM\Mapping\FieldMapping;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionFactoryInterface;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Symfony\Bridge\Doctrine\ManagerRegistry;
@@ -32,9 +34,12 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
         return new FieldDescription(
             $name,
             $options,
-            $metadata->fieldMappings[$propertyName] ?? [],
-            $metadata->associationMappings[$propertyName] ?? [],
-            $parentAssociationMappings,
+            $this->mappingToArray($metadata->fieldMappings[$propertyName] ?? []),
+            $this->mappingToArray($metadata->associationMappings[$propertyName] ?? []),
+            array_map(
+                [$this, 'mappingToArray'],
+                $parentAssociationMappings,
+            ),
             $propertyName
         );
     }
@@ -94,5 +99,27 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
         }
 
         return $em;
+    }
+
+    /**
+     * @psalm-suppress UndefinedClass
+     * @phpstan-ignore-next-line
+     */
+    private function mappingToArray(array|FieldMapping|AssociationMapping $mapping): array
+    {
+        if (\is_array($mapping)) {
+            return $mapping;
+        }
+
+        /**
+         * @psalm-suppress UndefinedClass
+         * @phpstan-ignore-next-line
+         */
+        if ($mapping instanceof AssociationMapping) {
+            /* @phpstan-ignore-next-line */
+            return $mapping->toArray();
+        }
+
+        return (array) $mapping;
     }
 }

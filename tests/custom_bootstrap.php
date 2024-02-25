@@ -19,6 +19,7 @@ use Symfony\Component\Filesystem\Filesystem;
 
 $kernel = new AppKernel($_SERVER['APP_ENV'] ?? 'test', (bool) ($_SERVER['APP_DEBUG'] ?? false));
 $application = new Application($kernel);
+$application->setCatchExceptions(false);
 $application->setAutoExit(false);
 
 $input = new ArrayInput([

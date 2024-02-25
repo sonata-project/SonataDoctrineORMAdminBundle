@@ -149,7 +149,7 @@ final class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => [BooleanType::TYPE_NO]]));
 
-        self::assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field IN(0)'], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -165,7 +165,7 @@ final class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => [BooleanType::TYPE_NO]]));
 
-        self::assertSameQuery(['WHERE alias.field IS NULL OR alias.field IN ("0")'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field IS NULL OR alias.field IN(0)'], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -181,7 +181,7 @@ final class BooleanFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => null, 'value' => [BooleanType::TYPE_NO]]));
 
-        self::assertSameQuery(['WHERE alias.field IN ("0")'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field IN(0)'], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 }
