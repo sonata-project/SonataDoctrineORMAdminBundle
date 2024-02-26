@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.16.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.15.0...4.16.0) - 2024-02-26
+### Added
+- [[#1796](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1796)] Compatibility with `doctrine/dbal` 4 and `doctrine/orm` 3 ([@dmaicher](https://github.com/dmaicher))
+
 ## [4.15.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.14.1...4.15.0) - 2023-12-04
 ### Added
 - [[#1780](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1780)] Support for Symfony 7. ([@jordisala1991](https://github.com/jordisala1991))
