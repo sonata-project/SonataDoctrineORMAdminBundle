@@ -32,6 +32,8 @@ doctrine:
     orm:
         auto_generate_proxy_classes: true
         auto_mapping: true
+        report_fields_where_declared: true
+        validate_xml_mapping: true
         mappings:
             SonataORMTest:
                 type: attribute

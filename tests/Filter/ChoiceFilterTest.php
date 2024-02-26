@@ -52,7 +52,7 @@ final class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', '2']]));
 
-        self::assertSameQuery(['WHERE alias.field IN :field_name_0'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field IN(:field_name_0)'], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
@@ -66,7 +66,7 @@ final class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', '2']]));
 
-        self::assertSameQuery(['WHERE alias.field NOT IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field NOT IN(:field_name_0) OR alias.field IS NULL'], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => ['1', '2']], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
@@ -80,7 +80,7 @@ final class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => ['1', null]]));
 
-        self::assertSameQuery(['WHERE alias.field IN :field_name_0 OR alias.field IS NULL'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field IN(:field_name_0) OR alias.field IS NULL'], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
@@ -94,7 +94,7 @@ final class ChoiceFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => ['1', null]]));
 
-        self::assertSameQuery(['WHERE alias.field NOT IN :field_name_0'], $proxyQuery);
+        self::assertSameQuery(['WHERE alias.field NOT IN(:field_name_0)'], $proxyQuery);
         self::assertSameQueryParameters(['field_name_0' => ['1', null]], $proxyQuery);
         static::assertTrue($filter->isActive());
     }

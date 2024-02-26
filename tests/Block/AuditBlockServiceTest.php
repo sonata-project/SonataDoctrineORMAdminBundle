@@ -35,6 +35,10 @@ final class AuditBlockServiceTest extends BlockServiceTestCase
 
     protected function setUp(): void
     {
+        if (!class_exists(SimpleThingsAuditReader::class)) {
+            static::markTestSkipped('AuditBundle is not available');
+        }
+
         parent::setUp();
         $this->simpleThingsAuditReader = $this->createMock(SimpleThingsAuditReader::class);
 

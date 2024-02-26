@@ -19,7 +19,7 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity]
 class Item
 {
-    #[ORM\Column(type: Types::DECIMAL)]
+    #[ORM\Column(type: Types::DECIMAL, precision: 2)]
     private string $offeredPrice;
 
     public function __construct(

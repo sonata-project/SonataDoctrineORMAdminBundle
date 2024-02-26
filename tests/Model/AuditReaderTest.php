@@ -35,6 +35,10 @@ final class AuditReaderTest extends TestCase
 
     protected function setUp(): void
     {
+        if (!class_exists(SimpleThingsAuditReader::class)) {
+            static::markTestSkipped('AuditBundle is not available');
+        }
+
         $this->simpleThingsAuditReader = $this->createMock(SimpleThingsAuditReader::class);
         $this->auditReader = new AuditReader($this->simpleThingsAuditReader);
     }
