@@ -41,14 +41,15 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
+        $objects = [new \stdClass(), new \stdClass()];
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => EqualOperatorType::TYPE_EQUAL,
-            'value' => ['1', '2'],
+            'value' => $objects,
         ]));
 
         // the alias is now computer by the entityJoin method
         self::assertSameQuery(['WHERE alias.id = :field_name_0 OR alias.id = :field_name_1'], $proxyQuery);
-        self::assertSameQueryParameters(['field_name_0' => '1', 'field_name_1' => '2'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $objects[0], 'field_name_1' => $objects[1]], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -59,17 +60,18 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
+        $objects = [new \stdClass(), new \stdClass()];
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => EqualOperatorType::TYPE_NOT_EQUAL,
-            'value' => ['1', '2'],
+            'value' => $objects,
         ]));
 
         // the alias is now computer by the entityJoin method
         self::assertSameQuery(
-            ['WHERE (NOT (alias.id = :field_name_0 OR alias.id = :field_name_1)) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE (NOT(alias.id = :field_name_0 OR alias.id = :field_name_1)) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
-        self::assertSameQueryParameters(['field_name_0' => '1', 'field_name_1' => '2'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $objects[0], 'field_name_1' => $objects[1]], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -80,10 +82,11 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 2]));
+        $object = new \stdClass();
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => $object]));
 
         self::assertSameQuery(['WHERE alias.id = :field_name_0'], $proxyQuery);
-        self::assertSameQueryParameters(['field_name_0' => 2], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $object], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -94,14 +97,15 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
+        $object = new \stdClass();
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => $object]));
 
         self::assertSameQuery(
-            ['WHERE NOT (alias.id = :field_name_0) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE NOT(alias.id = :field_name_0) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
             $proxyQuery
         );
 
-        self::assertSameQueryParameters(['field_name_0' => 2], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $object], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
 
@@ -112,10 +116,10 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => 2]));
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => new \stdClass()]));
 
         self::assertSameQuery(
-            ['WHERE NOT (alias.id = :field_name_0) OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
+            ['WHERE NOT(alias.id = :field_name_0) OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
             $proxyQuery
         );
     }
@@ -129,7 +133,7 @@ final class ModelFilterTest extends FilterTestCase
 
         $this->expectException(\RuntimeException::class);
 
-        $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'asd']));
+        $filter->apply($proxyQuery, FilterData::fromArray(['value' => new \stdClass()]));
     }
 
     public function testAssociationWithValidMappingAndEmptyFieldName(): void
@@ -141,7 +145,7 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, FilterData::fromArray(['value' => 'asd']));
+        $filter->apply($proxyQuery, FilterData::fromArray(['value' => new \stdClass()]));
         static::assertTrue($filter->isActive());
     }
 
@@ -159,7 +163,7 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
+        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => new \stdClass()]));
 
         self::assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',
@@ -190,7 +194,7 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => 'asd']));
+        $filter->apply($proxyQuery, FilterData::fromArray(['type' => EqualOperatorType::TYPE_EQUAL, 'value' => new \stdClass()]));
 
         self::assertSameQuery([
             'LEFT JOIN o.association_mapping AS s_association_mapping',

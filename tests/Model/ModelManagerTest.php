@@ -14,13 +14,12 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Model;
 
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\ConnectionException;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Internal\Hydration\SimpleObjectHydrator;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\OptimisticLockException;
@@ -143,7 +142,7 @@ final class ModelManagerTest extends TestCase
         $connection->method('getDatabasePlatform')->willReturn($platform);
 
         $classMetadata = $this->createMock(ClassMetadata::class);
-        $classMetadata->method('getIdentifierValues')->willReturn([$entity->getId()]);
+        $classMetadata->method('getIdentifierValues')->willReturn(['id' => $entity->getId()]);
         $classMetadata->method('getTypeOfField')->willReturn(UuidBinaryType::NAME);
 
         $entityManager = $this->createMock(EntityManagerInterface::class);
@@ -259,7 +258,7 @@ final class ModelManagerTest extends TestCase
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects(static::any())
             ->method('getIdentifierValues')
-            ->willReturn([$entity->getId()]);
+            ->willReturn(['id' => $entity->getId()]);
         $meta->expects(static::any())
             ->method('getTypeOfField')
             ->willReturn(UuidBinaryType::NAME);
@@ -304,7 +303,7 @@ final class ModelManagerTest extends TestCase
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects(static::any())
             ->method('getIdentifierValues')
-            ->willReturn([$entity->getId()]);
+            ->willReturn(['id' => $entity->getId()]);
         $meta->expects(static::any())
             ->method('getTypeOfField')
             ->willReturn(UuidType::NAME);
@@ -347,7 +346,7 @@ final class ModelManagerTest extends TestCase
         $meta = $this->createMock(ClassMetadata::class);
         $meta->expects(static::any())
             ->method('getIdentifierValues')
-            ->willReturn([$entity->getId()]);
+            ->willReturn(['id' => $entity->getId()]);
         $meta->expects(static::any())
             ->method('getTypeOfField')
             ->willReturn(ProductIdType::NAME);
@@ -493,7 +492,7 @@ final class ModelManagerTest extends TestCase
             new \PDOException(),
         ];
         yield 'DBALException' => [
-            new Exception(),
+            new ConnectionException(),
         ];
     }
 
@@ -568,14 +567,14 @@ final class ModelManagerTest extends TestCase
             'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
             .' performing batch deletion (20 objects were successfully deleted before this error)',
             array_fill(0, 21, new VersionedEntity()),
-            [null, static::throwException(new Exception())],
+            [null, static::throwException(new ConnectionException())],
         ];
 
         yield [
             'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
             .' performing batch deletion',
             [new VersionedEntity(), new VersionedEntity()],
-            [static::throwException(new Exception())],
+            [static::throwException(new ConnectionException())],
         ];
 
         yield [
@@ -643,35 +642,35 @@ final class ModelManagerTest extends TestCase
             ->method('getConnection')
             ->willReturn($connection);
 
-        $hydrator = $this->createMock(SimpleObjectHydrator::class);
-        $hydrator
+        $query = $this->createMock(Query::class);
+        $query
             ->expects(static::once())
             ->method('toIterable')
             ->willReturnCallback(static function () use ($result): iterable {
                 if (null === $result) {
-                    throw new Exception();
+                    throw new ConnectionException();
                 }
 
                 return $result;
             });
 
-        $em
-            ->expects(static::once())
-            ->method('newHydrator')
-            ->willReturn($hydrator);
-
-        $queryBuilder = new QueryBuilder($em);
+        $queryBuilder = $this->createMock(QueryBuilder::class);
         $queryBuilder
-            ->select('ve')
-            ->from(VersionedEntity::class, 've');
-
-        $query = new Query($em);
-        $query->setDQL($queryBuilder->getDQL());
-
-        $em
             ->expects(static::once())
-            ->method('createQuery')
+            ->method('getQuery')
             ->willReturn($query);
+        $queryBuilder
+            ->method('getRootAliases')
+            ->willReturn(['v']);
+        $queryBuilder
+            ->method('getRootEntities')
+            ->willReturn([VersionedEntity::class]);
+        $queryBuilder
+            ->method('getEntityManager')
+            ->willReturn($em);
+        $queryBuilder
+            ->method('getDQLPart')
+            ->willReturn([]);
 
         $cmf = $this->createMock(ClassMetadataFactory::class);
         $cmf
@@ -823,7 +822,7 @@ final class ModelManagerTest extends TestCase
             ->with($class)
             ->willReturn($em);
 
-        $em->expects(static::atLeastOnce())
+        $em
             ->method('getClassMetadata')
             ->with($class)
             ->willReturn($classMetadata);

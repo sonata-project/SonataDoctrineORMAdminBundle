@@ -16,8 +16,6 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Query\Expr;
-use Doctrine\ORM\Query\Expr\Andx;
-use Doctrine\ORM\Query\Expr\Orx;
 use Doctrine\ORM\QueryBuilder;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -61,31 +59,39 @@ abstract class FilterTestCase extends TestCase
         );
 
         $queryBuilder->method('setParameter')->willReturnCallback(
-            static function (string $name, mixed $value) use ($queryBuilder): void {
+            static function (string $name, mixed $value) use ($queryBuilder): TestQueryBuilder {
                 $queryBuilder->queryParameters[$name] = $value;
+
+                return $queryBuilder;
             }
         );
 
         $queryBuilder->method('andWhere')->willReturnCallback(
-            static function (mixed $query) use ($queryBuilder): void {
+            static function (mixed $query) use ($queryBuilder): TestQueryBuilder {
                 $queryBuilder->query[] = sprintf('WHERE %s', $query);
+
+                return $queryBuilder;
             }
         );
 
         $queryBuilder->method('andHaving')->willReturnCallback(
-            static function (mixed $query) use ($queryBuilder): void {
+            static function (mixed $query) use ($queryBuilder): TestQueryBuilder {
                 $queryBuilder->query[] = sprintf('HAVING %s', $query);
+
+                return $queryBuilder;
             }
         );
 
         $queryBuilder->method('addGroupBy')->willReturnCallback(
-            static function (string $groupBy) use ($queryBuilder): void {
+            static function (string $groupBy) use ($queryBuilder): TestQueryBuilder {
                 $queryBuilder->query[] = sprintf('GROUP BY %s', $groupBy);
+
+                return $queryBuilder;
             }
         );
 
         $queryBuilder->method('expr')->willReturnCallback(
-            fn (): Expr => $this->createExprStub()
+            static fn (): Expr => new Expr()
         );
 
         $queryBuilder->method('getRootAliases')->willReturnCallback(
@@ -97,8 +103,10 @@ abstract class FilterTestCase extends TestCase
         );
 
         $queryBuilder->method('leftJoin')->willReturnCallback(
-            static function (string $parameter, string $alias) use ($queryBuilder): void {
+            static function (string $parameter, string $alias) use ($queryBuilder): TestQueryBuilder {
                 $queryBuilder->query[] = sprintf('LEFT JOIN %s AS %s', $parameter, $alias);
+
+                return $queryBuilder;
             }
         );
 
@@ -119,57 +127,6 @@ abstract class FilterTestCase extends TestCase
         );
 
         return $entityManager;
-    }
-
-    private function createExprStub(): Expr
-    {
-        $expr = $this->createStub(Expr::class);
-
-        $expr->method('orX')->willReturnCallback(
-            static fn (): Orx => new Orx(\func_get_args())
-        );
-
-        $expr->method('andX')->willReturnCallback(
-            static fn (): Andx => new Andx(\func_get_args())
-        );
-
-        $expr->method('in')->willReturnCallback(
-            static function (string $alias, mixed $parameter): string {
-                if (\is_array($parameter)) {
-                    return sprintf('%s IN ("%s")', $alias, implode(', ', $parameter));
-                }
-
-                return sprintf('%s IN %s', $alias, $parameter);
-            }
-        );
-
-        $expr->method('notIn')->willReturnCallback(
-            static function (string $alias, mixed $parameter): string {
-                if (\is_array($parameter)) {
-                    return sprintf('%s NOT IN ("%s")', $alias, implode(', ', $parameter));
-                }
-
-                return sprintf('%s NOT IN %s', $alias, $parameter);
-            }
-        );
-
-        $expr->method('isNull')->willReturnCallback(
-            static fn (string $queryPart): string => $queryPart.' IS NULL'
-        );
-
-        $expr->method('isNotNull')->willReturnCallback(
-            static fn (string $queryPart): string => $queryPart.' IS NOT NULL'
-        );
-
-        $expr->method('eq')->willReturnCallback(
-            static fn (string $alias, mixed $parameter): string => sprintf('%s = %s', $alias, $parameter)
-        );
-
-        $expr->method('not')->willReturnCallback(
-            static fn (mixed $restriction): string => sprintf('NOT (%s)', $restriction)
-        );
-
-        return $expr;
     }
 }
 
