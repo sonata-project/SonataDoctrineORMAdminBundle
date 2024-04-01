@@ -94,7 +94,9 @@ final class ModelFilter extends Filter
             );
         }
 
-        $this->applyWhere($query, $inExpression);
+        if ($inExpression->count() > 0) {
+            $this->applyWhere($query, $inExpression);
+        }
     }
 
     protected function association(ProxyQueryInterface $query, FilterData $data): array
@@ -147,6 +149,10 @@ final class ModelFilter extends Filter
         $orX = $queryBuilder->expr()->orX();
 
         foreach ($data->getValue() as $value) {
+            if (!\is_object($value)) {
+                continue;
+            }
+
             $andX = $queryBuilder->expr()->andX();
 
             foreach ($metadata->getIdentifierValues($value) as $fieldName => $identifierValue) {

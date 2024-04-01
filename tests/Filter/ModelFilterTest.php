@@ -53,6 +53,25 @@ final class ModelFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
     }
 
+    public function testFilterNonObject(): void
+    {
+        $filter = new ModelFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $objects = [new \stdClass(), new \stdClass()];
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
+            'type' => EqualOperatorType::TYPE_EQUAL,
+            'value' => null,
+        ]));
+
+        // the alias is now computer by the entityJoin method
+        self::assertSameQuery([], $proxyQuery);
+        self::assertSameQueryParameters([], $proxyQuery);
+        static::assertFalse($filter->isActive());
+    }
+
     public function testFilterArrayTypeIsNotEqual(): void
     {
         $filter = new ModelFilter();
