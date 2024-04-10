@@ -59,6 +59,7 @@ final class UidFilter extends Filter implements SearchableFilterInterface
             'field_type' => TextType::class,
             'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
+            'global_search' => false,
         ];
     }
 
