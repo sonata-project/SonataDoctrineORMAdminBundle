@@ -45,6 +45,7 @@ final class ClassFilter extends Filter
     {
         return [
             'field_type' => ChoiceType::class,
+            'field_options' => [],
             'operator_type' => EqualOperatorType::class,
             'operator_options' => [],
         ];
@@ -57,10 +58,13 @@ final class ClassFilter extends Filter
     {
         return [
             'field_type' => $this->getFieldType(),
-            'field_options' => [
-                'required' => false,
-                'choices' => $this->getOption('sub_classes'),
-            ],
+            'field_options' => array_merge(
+                [
+                    'required' => false,
+                    'choices' => $this->getOption('sub_classes'),
+                ],
+                $this->getFieldOptions(),
+            ),
             'operator_type' => $this->getOption('operator_type'),
             'operator_options' => $this->getOption('operator_options'),
             'label' => $this->getLabel(),
