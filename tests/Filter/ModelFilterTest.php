@@ -60,7 +60,6 @@ final class ModelFilterTest extends FilterTestCase
 
         $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
 
-        $objects = [new \stdClass(), new \stdClass()];
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
             'type' => EqualOperatorType::TYPE_EQUAL,
             'value' => null,

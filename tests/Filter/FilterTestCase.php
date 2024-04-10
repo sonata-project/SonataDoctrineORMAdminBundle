@@ -26,7 +26,7 @@ abstract class FilterTestCase extends TestCase
      * @param string[]           $expected
      * @param ProxyQuery<object> $proxyQuery
      */
-    final protected function assertSameQuery(array $expected, ProxyQuery $proxyQuery): void
+    final protected static function assertSameQuery(array $expected, ProxyQuery $proxyQuery): void
     {
         $queryBuilder = $proxyQuery->getQueryBuilder();
         if (!$queryBuilder instanceof TestQueryBuilder) {
@@ -40,7 +40,7 @@ abstract class FilterTestCase extends TestCase
      * @param mixed[]            $expected
      * @param ProxyQuery<object> $proxyQuery
      */
-    final protected function assertSameQueryParameters(array $expected, ProxyQuery $proxyQuery): void
+    final protected static function assertSameQueryParameters(array $expected, ProxyQuery $proxyQuery): void
     {
         $queryBuilder = $proxyQuery->getQueryBuilder();
         if (!$queryBuilder instanceof TestQueryBuilder) {
