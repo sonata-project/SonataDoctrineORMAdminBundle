@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.17.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.16.1...4.17.0) - 2024-04-13
+### Added
+- [[#1805](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1805)] Allow to pass extra field options in ClassFilter ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.16.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.16.0...4.16.1) - 2024-04-10
 ### Fixed
 - [[#1803](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1803)] UidFilter `global_search` default value ([@VincentLanglet](https://github.com/VincentLanglet))
