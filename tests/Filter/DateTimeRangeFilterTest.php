@@ -88,4 +88,27 @@ final class DateTimeRangeFilterTest extends FilterTestCase
         self::assertSameQueryParameters(['field_name_1' => $endDateTime], $proxyQuery);
         static::assertTrue($filter->isActive());
     }
+
+    public function testFilterNotBetweenStartAndEndDate(): void
+    {
+        $filter = new DateTimeRangeFilter();
+        $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);
+
+        $proxyQuery = new ProxyQuery($this->createQueryBuilderStub());
+
+        $startDateTime = new \DateTime('2023-10-03T11:00:01');
+        $endDateTime = new \DateTime('2023-10-03T12:00:01');
+
+        $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray([
+            'type' => DateRangeOperatorType::TYPE_NOT_BETWEEN,
+            'value' => [
+                'start' => $startDateTime,
+                'end' => $endDateTime,
+            ],
+        ]));
+
+        self::assertSameQuery(['WHERE alias.field < :field_name_0 OR alias.field > :field_name_1'], $proxyQuery);
+        self::assertSameQueryParameters(['field_name_0' => $startDateTime, 'field_name_1' => $endDateTime], $proxyQuery);
+        static::assertTrue($filter->isActive());
+    }
 }
