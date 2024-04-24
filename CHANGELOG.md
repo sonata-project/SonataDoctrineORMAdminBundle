@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.17.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.17.0...4.17.1) - 2024-04-24
+### Fixed
+- [[#1807](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1807)] DateTimeRangeFilter when both the `start` or `end` field are not empty. ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.17.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.16.1...4.17.0) - 2024-04-13
 ### Added
 - [[#1805](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1805)] Allow to pass extra field options in ClassFilter ([@VincentLanglet](https://github.com/VincentLanglet))
