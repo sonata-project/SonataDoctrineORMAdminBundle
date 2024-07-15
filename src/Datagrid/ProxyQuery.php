@@ -17,6 +17,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Criteria;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Query;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Sonata\AdminBundle\Datagrid\ProxyQueryInterface as BaseProxyQueryInterface;
@@ -245,6 +246,9 @@ final class ProxyQuery implements ProxyQueryInterface
         return $this;
     }
 
+    /**
+     * @phpstan-ignore-next-line for ORM 2 compatibility
+     */
     public function getFirstResult(): ?int
     {
         return $this->queryBuilder->getFirstResult();
@@ -277,7 +281,7 @@ final class ProxyQuery implements ProxyQueryInterface
 
         $newAlias = 's';
 
-        /** @var Query\Expr\Join[][] $joinedEntities */
+        /** @var Join[][] $joinedEntities */
         $joinedEntities = $this->queryBuilder->getDQLPart('join');
 
         foreach ($associationMappings as $associationMapping) {

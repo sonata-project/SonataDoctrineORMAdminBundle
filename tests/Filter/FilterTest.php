@@ -33,7 +33,7 @@ final class FilterTest extends FilterTestCase
         $entityManager->method('getExpressionBuilder')->willReturn(new Expr());
         $queryBuilder = new TestQueryBuilder($entityManager);
 
-        $queryBuilder->select('e')->from('MyEntity', 'e');
+        $queryBuilder->select('e')->from(MyEntity::class, 'e');
 
         // Some custom conditions set previous to the filters.
         $queryBuilder
@@ -46,7 +46,7 @@ final class FilterTest extends FilterTestCase
             )
             ->setParameter('parameter_1', 3);
 
-        static::assertSame('SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
+        static::assertSame('SELECT e FROM Sonata\DoctrineORMAdminBundle\Tests\Filter\MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)', $queryBuilder->getDQL());
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 
@@ -73,7 +73,7 @@ final class FilterTest extends FilterTestCase
     public function provideOrExpressionCases(): iterable
     {
         yield 'Default behavior' => [
-            'SELECT e FROM MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
+            'SELECT e FROM Sonata\DoctrineORMAdminBundle\Tests\Filter\MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'
             .' AND e.project LIKE :project_0 AND e.version LIKE :version_1 AND 7 = 8',
             [
                 [
@@ -101,4 +101,8 @@ final class FilterTest extends FilterTestCase
             ],
         ];
     }
+}
+
+class MyEntity
+{
 }

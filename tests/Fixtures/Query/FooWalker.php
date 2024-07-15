@@ -13,10 +13,14 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query;
 
+use Doctrine\ORM\Query\AST\OrderByClause;
 use Doctrine\ORM\Query\SqlWalker;
 
 final class FooWalker extends SqlWalker
 {
+    /**
+     * @param OrderByClause $orderByClause
+     */
     public function walkOrderByClause($orderByClause): string
     {
         return str_replace(' ASC', ' DESC', parent::walkOrderByClause($orderByClause));

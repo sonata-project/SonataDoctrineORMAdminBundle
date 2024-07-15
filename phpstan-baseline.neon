@@ -9,6 +9,3 @@ parameters:
         - # https://github.com/phpstan/phpstan-strict-rules/issues/130
             message: '#^Call to static method PHPUnit\\Framework\\Assert::.* will always evaluate to true\.$#'
             path: tests/
-        - # https://github.com/doctrine/orm/pull/9778
-            message: '#Parameter \#1 \$className of method Doctrine\\Persistence\\Mapping\\AbstractClassMetadataFactory<Doctrine\\ORM\\Mapping\\ClassMetadata>::getMetadataFor\(\) expects class-string, string given.#'
-            path: src/Datagrid/ProxyQuery.php

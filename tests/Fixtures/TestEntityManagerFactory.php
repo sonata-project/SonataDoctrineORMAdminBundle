@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures;
 
 use Doctrine\Common\EventManager;
 use Doctrine\DBAL\DriverManager;
+use Doctrine\ORM\Configuration;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\ORMSetup;
@@ -22,9 +23,6 @@ use PHPUnit\Framework\TestCase;
 
 final class TestEntityManagerFactory
 {
-    /**
-     * @psalm-suppress DeprecatedMethod
-     */
     public static function create(): EntityManagerInterface
     {
         if (!\extension_loaded('pdo_sqlite')) {
@@ -34,6 +32,12 @@ final class TestEntityManagerFactory
         if (version_compare(\PHP_VERSION, '8.0.0', '>=')) {
             $config = ORMSetup::createAttributeMetadataConfiguration([], true);
         } else {
+            /**
+             * @var Configuration $config
+             *
+             * @psalm-suppress UndefinedMethod
+             * @phpstan-ignore-next-line
+             */
             $config = ORMSetup::createAnnotationMetadataConfiguration([], true);
         }
 

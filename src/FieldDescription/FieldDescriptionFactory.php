@@ -102,7 +102,6 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
     }
 
     /**
-     * @psalm-suppress UndefinedClass
      * @phpstan-ignore-next-line
      */
     private function mappingToArray(array|FieldMapping|AssociationMapping $mapping): array
@@ -111,12 +110,7 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
             return $mapping;
         }
 
-        /**
-         * @psalm-suppress UndefinedClass
-         * @phpstan-ignore-next-line
-         */
         if ($mapping instanceof AssociationMapping) {
-            /* @phpstan-ignore-next-line */
             return $mapping->toArray();
         }
 
