@@ -76,11 +76,11 @@ final class StringFilter extends Filter implements SearchableFilterInterface
         }
 
         $or = $query->getQueryBuilder()->expr()->orX(
-            sprintf($clause, $alias, $field, $operator, $parameterName)
+            \sprintf($clause, $alias, $field, $operator, $parameterName)
         );
 
         if (StringOperatorType::TYPE_NOT_CONTAINS === $type || StringOperatorType::TYPE_NOT_EQUAL === $type) {
-            $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+            $or->add($query->getQueryBuilder()->expr()->isNull(\sprintf('%s.%s', $alias, $field)));
         }
 
         $this->applyWhere($query, $or);
@@ -94,7 +94,7 @@ final class StringFilter extends Filter implements SearchableFilterInterface
 
         $query->getQueryBuilder()->setParameter(
             $parameterName,
-            sprintf(
+            \sprintf(
                 $format,
                 $forceCaseInsensitivity && '' !== $value ? mb_strtolower($value) : $value
             )
@@ -132,7 +132,7 @@ final class StringFilter extends Filter implements SearchableFilterInterface
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            throw new \OutOfRangeException(sprintf(
+            throw new \OutOfRangeException(\sprintf(
                 'The type "%s" is not supported, allowed one are "%s".',
                 $type,
                 implode('", "', array_keys(self::CHOICES))

@@ -35,7 +35,7 @@ class UuidEntity implements \Stringable
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(type: 'uuid')]
-        private Uuid $id
+        private Uuid $id,
     ) {
     }
 

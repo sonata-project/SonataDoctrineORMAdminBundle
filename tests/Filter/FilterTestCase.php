@@ -68,7 +68,7 @@ abstract class FilterTestCase extends TestCase
 
         $queryBuilder->method('andWhere')->willReturnCallback(
             static function (mixed $query) use ($queryBuilder): TestQueryBuilder {
-                $queryBuilder->query[] = sprintf('WHERE %s', $query);
+                $queryBuilder->query[] = \sprintf('WHERE %s', $query);
 
                 return $queryBuilder;
             }
@@ -76,7 +76,7 @@ abstract class FilterTestCase extends TestCase
 
         $queryBuilder->method('andHaving')->willReturnCallback(
             static function (mixed $query) use ($queryBuilder): TestQueryBuilder {
-                $queryBuilder->query[] = sprintf('HAVING %s', $query);
+                $queryBuilder->query[] = \sprintf('HAVING %s', $query);
 
                 return $queryBuilder;
             }
@@ -84,7 +84,7 @@ abstract class FilterTestCase extends TestCase
 
         $queryBuilder->method('addGroupBy')->willReturnCallback(
             static function (string $groupBy) use ($queryBuilder): TestQueryBuilder {
-                $queryBuilder->query[] = sprintf('GROUP BY %s', $groupBy);
+                $queryBuilder->query[] = \sprintf('GROUP BY %s', $groupBy);
 
                 return $queryBuilder;
             }
@@ -104,7 +104,7 @@ abstract class FilterTestCase extends TestCase
 
         $queryBuilder->method('leftJoin')->willReturnCallback(
             static function (string $parameter, string $alias) use ($queryBuilder): TestQueryBuilder {
-                $queryBuilder->query[] = sprintf('LEFT JOIN %s AS %s', $parameter, $alias);
+                $queryBuilder->query[] = \sprintf('LEFT JOIN %s AS %s', $parameter, $alias);
 
                 return $queryBuilder;
             }

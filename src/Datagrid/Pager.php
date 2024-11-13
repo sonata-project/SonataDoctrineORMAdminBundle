@@ -31,7 +31,7 @@ final class Pager extends BasePager
     {
         $query = $this->getQuery();
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $results = $query->execute();
@@ -55,7 +55,7 @@ final class Pager extends BasePager
     {
         $query = $this->getQuery();
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The pager query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $this->resultsCount = \count($query->execute());

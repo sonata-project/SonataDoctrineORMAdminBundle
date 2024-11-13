@@ -95,7 +95,7 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
         $em = $this->registry->getManagerForClass($class);
 
         if (!$em instanceof EntityManagerInterface) {
-            throw new \UnexpectedValueException(sprintf('No entity manager defined for class "%s".', $class));
+            throw new \UnexpectedValueException(\sprintf('No entity manager defined for class "%s".', $class));
         }
 
         return $em;

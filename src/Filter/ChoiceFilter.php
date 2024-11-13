@@ -64,7 +64,7 @@ final class ChoiceFilter extends Filter
         }
 
         $isNullSelected = \in_array(null, $data->getValue(), true);
-        $completeField = sprintf('%s.%s', $alias, $field);
+        $completeField = \sprintf('%s.%s', $alias, $field);
         $parameterName = $this->getNewParameterName($query);
 
         $or = $query->getQueryBuilder()->expr()->orX();
@@ -96,7 +96,7 @@ final class ChoiceFilter extends Filter
         }
 
         $parameterName = $this->getNewParameterName($query);
-        $completeField = sprintf('%s.%s', $alias, $field);
+        $completeField = \sprintf('%s.%s', $alias, $field);
 
         if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             if (null === $data->getValue()) {
@@ -104,7 +104,7 @@ final class ChoiceFilter extends Filter
             } else {
                 $this->applyWhere(
                     $query,
-                    sprintf('%s != :%s OR %s IS NULL', $completeField, $parameterName, $completeField)
+                    \sprintf('%s != :%s OR %s IS NULL', $completeField, $parameterName, $completeField)
                 );
                 $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
             }
@@ -112,7 +112,7 @@ final class ChoiceFilter extends Filter
             if (null === $data->getValue()) {
                 $this->applyWhere($query, $query->getQueryBuilder()->expr()->isNull($completeField));
             } else {
-                $this->applyWhere($query, sprintf('%s = :%s', $completeField, $parameterName));
+                $this->applyWhere($query, \sprintf('%s = :%s', $completeField, $parameterName));
                 $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
             }
         }

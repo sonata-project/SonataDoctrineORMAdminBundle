@@ -28,7 +28,7 @@ class UlidChildEntity implements \Stringable
         #[ORM\Column(type: 'ulid')]
         private Ulid $id,
         #[ORM\Column(type: Types::STRING)]
-        private ?string $name = null
+        private ?string $name = null,
     ) {
     }
 

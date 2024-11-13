@@ -30,7 +30,7 @@ final class ShowBuilder implements ShowBuilderInterface
      */
     public function __construct(
         private TypeGuesserInterface $guesser,
-        private array $templates
+        private array $templates,
     ) {
     }
 
@@ -44,7 +44,7 @@ final class ShowBuilder implements ShowBuilderInterface
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
             if (null === $guessType) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new \InvalidArgumentException(\sprintf(
                     'Cannot guess a type for the field description "%s", You MUST provide a type.',
                     $fieldDescription->getName()
                 ));
@@ -65,7 +65,7 @@ final class ShowBuilder implements ShowBuilderInterface
     {
         $type = $fieldDescription->getType();
         if (null === $type) {
-            throw new \RuntimeException(sprintf(
+            throw new \RuntimeException(\sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
                 $fieldDescription->getAdmin()::class

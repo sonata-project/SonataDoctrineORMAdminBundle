@@ -28,7 +28,7 @@ class Item
         private Command $command,
         #[ORM\Id]
         #[ORM\ManyToOne(targetEntity: Product::class)]
-        private Product $product
+        private Product $product,
     ) {
         $this->offeredPrice = $product->getCurrentPrice();
     }

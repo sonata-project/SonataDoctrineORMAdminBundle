@@ -36,7 +36,7 @@ class Author implements \Stringable
         #[ORM\GeneratedValue(strategy: 'NONE')]
         private string $id = '',
         #[ORM\Column(type: Types::STRING)]
-        private string $name = ''
+        private string $name = '',
     ) {
         $this->address = new Address();
         $this->books = new ArrayCollection();

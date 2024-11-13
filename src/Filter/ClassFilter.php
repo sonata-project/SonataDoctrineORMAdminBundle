@@ -38,7 +38,7 @@ final class ClassFilter extends Filter
         $type = $data->getType() ?? EqualOperatorType::TYPE_EQUAL;
         $operator = $this->getOperator($type);
 
-        $this->applyWhere($query, sprintf('%s %s %s', $alias, $operator, $data->getValue()));
+        $this->applyWhere($query, \sprintf('%s %s %s', $alias, $operator, $data->getValue()));
     }
 
     public function getDefaultOptions(): array
@@ -74,7 +74,7 @@ final class ClassFilter extends Filter
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            throw new \OutOfRangeException(sprintf(
+            throw new \OutOfRangeException(\sprintf(
                 'The type "%s" is not supported, allowed one are "%s".',
                 $type,
                 implode('", "', array_keys(self::CHOICES))

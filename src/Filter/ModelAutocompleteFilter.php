@@ -111,9 +111,9 @@ final class ModelAutocompleteFilter extends Filter
         $parameterName = $this->getNewParameterName($query);
 
         if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
-            $this->applyWhere($query, sprintf('%s != :%s', $alias, $parameterName));
+            $this->applyWhere($query, \sprintf('%s != :%s', $alias, $parameterName));
         } else {
-            $this->applyWhere($query, sprintf('%s = :%s', $alias, $parameterName));
+            $this->applyWhere($query, \sprintf('%s = :%s', $alias, $parameterName));
         }
 
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());

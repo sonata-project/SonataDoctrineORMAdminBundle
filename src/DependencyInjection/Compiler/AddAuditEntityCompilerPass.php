@@ -66,7 +66,7 @@ final class AddAuditEntityCompilerPass implements CompilerPassInterface
         if ('%' === $name[0]) {
             $parameter = $container->getParameter(substr($name, 1, -1));
             if (!\is_string($parameter)) {
-                throw new \InvalidArgumentException(sprintf('Cannot find the model name "%s"', $name));
+                throw new \InvalidArgumentException(\sprintf('Cannot find the model name "%s"', $name));
             }
 
             return $parameter;

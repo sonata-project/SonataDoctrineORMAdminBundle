@@ -44,7 +44,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
         private FormFactoryInterface $formFactory,
         private FilterFactoryInterface $filterFactory,
         private TypeGuesserInterface $guesser,
-        private bool $csrfTokenEnabled = true
+        private bool $csrfTokenEnabled = true,
     ) {
     }
 
@@ -102,7 +102,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
             if (null === $guessType) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new \InvalidArgumentException(\sprintf(
                     'Cannot guess a type for the field description "%s", You MUST provide a type.',
                     $fieldDescription->getName()
                 ));
@@ -143,7 +143,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
 
         $query = $admin->createQuery();
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The admin query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The admin query MUST implement %s.', ProxyQueryInterface::class));
         }
         /** @phpstan-var ProxyQueryInterface<object> $query */
 
@@ -170,7 +170,7 @@ final class DatagridBuilder implements DatagridBuilderInterface
                 return $simplePager;
 
             default:
-                throw new \RuntimeException(sprintf('Unknown pager type "%s".', $pagerType));
+                throw new \RuntimeException(\sprintf('Unknown pager type "%s".', $pagerType));
         }
     }
 }

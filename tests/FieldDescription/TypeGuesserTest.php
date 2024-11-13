@@ -40,7 +40,7 @@ final class TypeGuesserTest extends TestCase
         int|string|null $mappingType,
         string $expectedType,
         array $expectedOptions,
-        int $expectedConfidence
+        int $expectedConfidence,
     ): void {
         $fieldDescription = $this->createStub(FieldDescriptionInterface::class);
         $fieldDescription->method('getFieldName')->willReturn('foo');

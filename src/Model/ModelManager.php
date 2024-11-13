@@ -54,7 +54,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
     public function __construct(
         private ManagerRegistry $registry,
-        private PropertyAccessorInterface $propertyAccessor
+        private PropertyAccessorInterface $propertyAccessor,
     ) {
     }
 
@@ -82,7 +82,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to create object: %s', $this->getRealClass($object)),
+                \sprintf('Failed to create object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -97,7 +97,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to update object: %s', $this->getRealClass($object)),
+                \sprintf('Failed to update object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -112,7 +112,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $entityManager->flush();
         } catch (\PDOException|Exception $exception) {
             throw new ModelManagerException(
-                sprintf('Failed to delete object: %s', $this->getRealClass($object)),
+                \sprintf('Failed to delete object: %s', $this->getRealClass($object)),
                 (int) $exception->getCode(),
                 $exception
             );
@@ -198,7 +198,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $em = $this->registry->getManagerForClass($class);
 
             if (!$em instanceof EntityManagerInterface) {
-                throw new \RuntimeException(sprintf('No entity manager defined for class %s', $class));
+                throw new \RuntimeException(\sprintf('No entity manager defined for class %s', $class));
             }
 
             $this->cache[$class] = $em;
@@ -238,7 +238,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             return $results;
         }
 
-        throw new \InvalidArgumentException(sprintf(
+        throw new \InvalidArgumentException(\sprintf(
             'Argument 1 passed to %s() must be an instance of %s, %s, or %s',
             __METHOD__,
             QueryBuilder::class,
@@ -316,11 +316,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     public function addIdentifiersToQuery(string $class, BaseProxyQueryInterface $query, array $idx): void
     {
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         if ([] === $idx) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 'Array passed as argument 3 to "%s()" must not be empty.',
                 __METHOD__
             ));
@@ -338,8 +338,8 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
             $ands = [];
             foreach ($fieldNames as $index => $name) {
-                $parameterName = sprintf('field_%s_%s_%d', $prefix, $name, $pos);
-                $ands[] = sprintf('%s.%s = :%s', $rootAlias, $name, $parameterName);
+                $parameterName = \sprintf('field_%s_%s_%d', $prefix, $name, $pos);
+                $ands[] = \sprintf('%s.%s = :%s', $rootAlias, $name, $parameterName);
                 $qb->setParameter(
                     $parameterName,
                     $ids[$index],
@@ -350,13 +350,13 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             $sqls[] = implode(' AND ', $ands);
         }
 
-        $qb->andWhere(sprintf('( %s )', implode(' OR ', $sqls)));
+        $qb->andWhere(\sprintf('( %s )', implode(' OR ', $sqls)));
     }
 
     public function batchDelete(string $class, BaseProxyQueryInterface $query, int $batchSize = self::BATCH_SIZE): void
     {
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         if ([] !== $query->getQueryBuilder()->getDQLPart('join')) {
@@ -394,7 +394,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
             if (null === $id) {
                 throw new ModelManagerException(
-                    sprintf('Failed to perform batch deletion for "%s" objects', $class),
+                    \sprintf('Failed to perform batch deletion for "%s" objects', $class),
                     (int) $exception->getCode(),
                     $exception
                 );
@@ -402,11 +402,11 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
             $msg = 'Failed to delete object "%s" (id: %s) while performing batch deletion';
             if ($i > $batchSize) {
-                $msg .= sprintf(' (%u objects were successfully deleted before this error)', $confirmedDeletionsCount);
+                $msg .= \sprintf(' (%u objects were successfully deleted before this error)', $confirmedDeletionsCount);
             }
 
             throw new ModelManagerException(
-                sprintf(
+                \sprintf(
                     $msg,
                     $class,
                     $id

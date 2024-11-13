@@ -19,7 +19,7 @@ final class AssociatedEntity
 {
     public function __construct(
         public EmbeddedEntity $embeddedEntity,
-        private int $plainField
+        private int $plainField,
     ) {
     }
 

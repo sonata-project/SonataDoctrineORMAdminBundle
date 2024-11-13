@@ -46,7 +46,7 @@ final class CountFilter extends Filter
         }
 
         $query->getQueryBuilder()->addGroupBy($rootAlias);
-        $this->applyHaving($query, sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
+        $this->applyHaving($query, \sprintf('COUNT(%s.%s) %s :%s', $alias, $field, $operator, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, $data->getValue());
     }
 
@@ -73,7 +73,7 @@ final class CountFilter extends Filter
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            throw new \OutOfRangeException(sprintf(
+            throw new \OutOfRangeException(\sprintf(
                 'The type "%s" is not supported, allowed one are "%s".',
                 $type,
                 implode('", "', array_keys(self::CHOICES))

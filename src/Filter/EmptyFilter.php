@@ -35,12 +35,12 @@ final class EmptyFilter extends Filter
         if (!$inverse && $isYes || $inverse && $isNo) {
             $this->applyWhere(
                 $query,
-                sprintf('%s.%s IS EMPTY', $alias, $field)
+                \sprintf('%s.%s IS EMPTY', $alias, $field)
             );
         } else {
             $this->applyWhere(
                 $query,
-                sprintf('%s.%s IS NOT EMPTY', $alias, $field)
+                \sprintf('%s.%s IS NOT EMPTY', $alias, $field)
             );
         }
     }

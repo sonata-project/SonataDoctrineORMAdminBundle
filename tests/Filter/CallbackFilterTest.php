@@ -38,7 +38,7 @@ final class CallbackFilterTest extends FilterTestCase
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
             'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
-                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $query->getQueryBuilder()->andWhere(\sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;
@@ -73,7 +73,7 @@ final class CallbackFilterTest extends FilterTestCase
      */
     public function customCallback(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
     {
-        $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+        $query->getQueryBuilder()->andWhere(\sprintf('CUSTOM QUERY %s.%s', $alias, $field));
         $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
         return true;
@@ -97,7 +97,7 @@ final class CallbackFilterTest extends FilterTestCase
         $filter = new CallbackFilter();
         $filter->initialize('field_name_test', [
             'callback' => static function (ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool {
-                $query->getQueryBuilder()->andWhere(sprintf('CUSTOM QUERY %s.%s', $alias, $field));
+                $query->getQueryBuilder()->andWhere(\sprintf('CUSTOM QUERY %s.%s', $alias, $field));
                 $query->getQueryBuilder()->setParameter('value', $data->getValue());
 
                 return true;

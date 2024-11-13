@@ -24,7 +24,7 @@ class ProductAttribute
         #[ORM\ManyToOne(targetEntity: Product::class)]
         private Product $product,
         #[ORM\Column(type: Types::STRING)]
-        private string $name
+        private string $name,
     ) {
     }
 

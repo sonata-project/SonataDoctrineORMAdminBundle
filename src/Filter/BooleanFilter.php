@@ -81,10 +81,10 @@ final class BooleanFilter extends Filter
             false === $treatNullAs && \in_array(0, $values, true)
             || true === $treatNullAs && \in_array(1, $values, true)
         ) {
-            $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+            $or->add($query->getQueryBuilder()->expr()->isNull(\sprintf('%s.%s', $alias, $field)));
         }
 
-        $or->add($query->getQueryBuilder()->expr()->in(sprintf('%s.%s', $alias, $field), $values));
+        $or->add($query->getQueryBuilder()->expr()->in(\sprintf('%s.%s', $alias, $field), $values));
 
         $this->applyWhere($query, $or);
     }
@@ -100,11 +100,11 @@ final class BooleanFilter extends Filter
             false === $treatNullAs && BooleanType::TYPE_NO === $data->getValue()
             || true === $treatNullAs && BooleanType::TYPE_YES === $data->getValue()
         ) {
-            $or->add($query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field)));
+            $or->add($query->getQueryBuilder()->expr()->isNull(\sprintf('%s.%s', $alias, $field)));
         }
 
         $parameterName = $this->getNewParameterName($query);
-        $or->add(sprintf('%s.%s = :%s', $alias, $field, $parameterName));
+        $or->add(\sprintf('%s.%s = :%s', $alias, $field, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, (BooleanType::TYPE_YES === $data->getValue()) ? 1 : 0);
 
         $this->applyWhere($query, $or);

@@ -25,7 +25,7 @@ class Category implements \Stringable
         #[ORM\GeneratedValue(strategy: 'NONE')]
         private string $id = '',
         #[ORM\Column(type: Types::STRING)]
-        private string $name = ''
+        private string $name = '',
     ) {
     }
 

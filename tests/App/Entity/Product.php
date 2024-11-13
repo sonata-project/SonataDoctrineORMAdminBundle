@@ -26,7 +26,7 @@ class Product implements \Stringable
         #[ORM\Column(type: Types::STRING)]
         private string $name = '',
         #[ORM\Column(type: Types::DECIMAL, precision: 2)]
-        private string $currentPrice = '0.0'
+        private string $currentPrice = '0.0',
     ) {
     }
 
