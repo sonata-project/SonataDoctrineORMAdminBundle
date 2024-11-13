@@ -72,9 +72,11 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  * @method QueryBuilder         addOrderBy($sort, $order = null)
  * @method QueryBuilder         addCriteria(Criteria $criteria)
  * @method mixed                getDQLPart($queryPartName)
- * @method array                getDQLParts()
+ * @method mixed[]              getDQLParts()
  * @method QueryBuilder         resetDQLParts($parts = null)
  * @method QueryBuilder         resetDQLPart($part)
+ *
+ * @phpstan-method ArrayCollection<int, Query\Parameter> getParameters()
  *
  * @phpstan-template-covariant T of object
  * @phpstan-implements ProxyQueryInterface<T>
