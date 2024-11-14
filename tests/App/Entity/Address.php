@@ -21,7 +21,7 @@ class Address implements \Stringable
 {
     public function __construct(
         #[ORM\Column(type: Types::STRING)]
-        private string $street = ''
+        private string $street = '',
     ) {
     }
 

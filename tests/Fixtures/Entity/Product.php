@@ -17,7 +17,7 @@ final class Product
 {
     public function __construct(
         private ProductId $id,
-        private string $name
+        private string $name,
     ) {
     }
 

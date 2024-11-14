@@ -70,7 +70,7 @@ abstract class AbstractDateFilter extends Filter
             $type = DateOperatorType::TYPE_GREATER_EQUAL;
 
             $endDateParameterName = $this->getNewParameterName($query);
-            $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
+            $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, '<', $endDateParameterName));
 
             if ('timestamp' === $this->getOption('input_type')) {
                 $endValue = strtotime('+1 day', $value->getTimestamp());
@@ -92,7 +92,7 @@ abstract class AbstractDateFilter extends Filter
         $value = 'timestamp' === $this->getOption('input_type') ? $value->getTimestamp() : $value;
 
         $parameterName = $this->getNewParameterName($query);
-        $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, $value, $this->getParameterType($value));
     }
 
@@ -161,19 +161,19 @@ abstract class AbstractDateFilter extends Filter
 
         if (DateRangeOperatorType::TYPE_NOT_BETWEEN === $type) {
             if (null !== $value['start'] && null !== $value['end']) {
-                $this->applyWhere($query, sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
+                $this->applyWhere($query, \sprintf('%s.%s < :%s OR %s.%s > :%s', $alias, $field, $startDateParameterName, $alias, $field, $endDateParameterName));
             } elseif (null !== $value['start']) {
-                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<', $startDateParameterName));
+                $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, '<', $startDateParameterName));
             } elseif (null !== $value['end']) {
-                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>', $endDateParameterName));
+                $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, '>', $endDateParameterName));
             }
         } else {
             if (null !== $value['start']) {
-                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
+                $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, '>=', $startDateParameterName));
             }
 
             if (null !== $value['end']) {
-                $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
+                $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, '<=', $endDateParameterName));
             }
         }
 
@@ -212,7 +212,7 @@ abstract class AbstractDateFilter extends Filter
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            throw new \OutOfRangeException(sprintf(
+            throw new \OutOfRangeException(\sprintf(
                 'The type "%s" is not supported, allowed one are "%s".',
                 $type,
                 implode('", "', array_keys(self::CHOICES))

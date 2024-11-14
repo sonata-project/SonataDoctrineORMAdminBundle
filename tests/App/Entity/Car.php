@@ -25,7 +25,7 @@ class Car implements \Stringable
         private string $name = '',
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
-        private int $year = 0
+        private int $year = 0,
     ) {
     }
 

@@ -90,7 +90,7 @@ class AuthorAdmin extends AbstractAdmin
             ->getQueryBuilder()
             ->addSelect('book')
             ->addSelect('reader')
-            ->leftJoin(sprintf('%s.books', $alias), 'book')
+            ->leftJoin(\sprintf('%s.books', $alias), 'book')
             ->leftJoin('book.readers', 'reader');
 
         return $query;

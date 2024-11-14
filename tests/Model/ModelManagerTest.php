@@ -241,7 +241,7 @@ final class ModelManagerTest extends TestCase
         if ($expectsException) {
             $em->expects(static::once())
                 ->method('lock')
-                ->will(static::throwException(OptimisticLockException::lockFailed($object)));
+                ->willThrowException(OptimisticLockException::lockFailed($object));
 
             $this->expectException(LockException::class);
         }
@@ -612,9 +612,7 @@ final class ModelManagerTest extends TestCase
         $em
             ->expects(static::exactly(null === $result ? 0 : (int) ceil(\count($result) / $batchSize)))
             ->method('flush')
-            ->will(static::onConsecutiveCalls(
-                ...$onConsecutiveFlush
-            ));
+            ->willReturnOnConsecutiveCalls(...$onConsecutiveFlush);
         $em
             ->method('getConfiguration')
             ->willReturn(new Configuration());
@@ -717,7 +715,7 @@ final class ModelManagerTest extends TestCase
         $queryBuilder
             ->expects(static::once())
             ->method('andWhere')
-            ->with(static::stringContains(sprintf('( p.%s = :field_', $identifierFieldNames[0])));
+            ->with(static::stringContains(\sprintf('( p.%s = :field_', $identifierFieldNames[0])));
 
         $proxyQuery = new ProxyQuery($queryBuilder);
 

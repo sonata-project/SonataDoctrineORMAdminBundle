@@ -39,7 +39,7 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
             return;
         }
 
-        $output->writeln(sprintf(' > generate ACLs for %s', $admin->getCode()));
+        $output->writeln(\sprintf(' > generate ACLs for %s', $admin->getCode()));
         $objectOwnersMsg = null === $securityIdentity ? '' : ' and set the object owner';
 
         $class = $admin->getClass();
@@ -71,7 +71,7 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
                 }
 
                 if (0 === ($count % $batchSizeOutput)) {
-                    $output->writeln(sprintf('   - generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
+                    $output->writeln(\sprintf('   - generated class ACEs%s for %s objects (added %s, updated %s)', $objectOwnersMsg, $count, $countAdded, $countUpdated));
                 }
             }
 
@@ -82,13 +82,13 @@ final class ObjectAclManipulator extends BaseObjectAclManipulator
             }
         } catch (\PDOException|Exception $e) {
             throw new ModelManagerException(
-                sprintf('Failed to configure acl for class: %s', $class),
+                \sprintf('Failed to configure acl for class: %s', $class),
                 (int) $e->getCode(),
                 $e
             );
         }
 
-        $output->writeln(sprintf(
+        $output->writeln(\sprintf(
             '   - [TOTAL] generated class ACEs%s for %s objects (added %s, updated %s)',
             $objectOwnersMsg,
             $count,

@@ -44,7 +44,7 @@ final class UidFilter extends Filter implements SearchableFilterInterface
         $operator = $this->getOperator($data->getType() ?? EqualOperatorType::TYPE_EQUAL);
         $parameterName = $this->getNewParameterName($query);
 
-        $this->applyWhere($query, sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+        $this->applyWhere($query, \sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
         $query->getQueryBuilder()->setParameter($parameterName, $uidValue, $this->getParameterType($uidValue));
     }
 
@@ -93,7 +93,7 @@ final class UidFilter extends Filter implements SearchableFilterInterface
     private function getOperator(int $type): string
     {
         if (!isset(self::CHOICES[$type])) {
-            throw new \OutOfRangeException(sprintf(
+            throw new \OutOfRangeException(\sprintf(
                 'The type "%s" is not supported, allowed one are "%s".',
                 $type,
                 implode('", "', array_keys(self::CHOICES))

@@ -25,7 +25,7 @@ class Command implements \Stringable
     public function __construct(
         #[ORM\Id]
         #[ORM\Column(type: Types::INTEGER)]
-        private int $id
+        private int $id,
     ) {
         $this->createdAt = new \DateTime();
     }

@@ -21,7 +21,7 @@ final class ContainerEntity
 
     public function __construct(
         private AssociatedEntity $associatedEntity,
-        public EmbeddedEntity $embeddedEntity
+        public EmbeddedEntity $embeddedEntity,
     ) {
     }
 

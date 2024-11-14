@@ -32,7 +32,7 @@ final class ListBuilder implements ListBuilderInterface
      */
     public function __construct(
         private TypeGuesserInterface $guesser,
-        private array $templates = []
+        private array $templates = [],
     ) {
     }
 
@@ -46,7 +46,7 @@ final class ListBuilder implements ListBuilderInterface
         if (null === $type) {
             $guessType = $this->guesser->guess($fieldDescription);
             if (null === $guessType) {
-                throw new \InvalidArgumentException(sprintf(
+                throw new \InvalidArgumentException(\sprintf(
                     'Cannot guess a type for the field description "%s", You MUST provide a type.',
                     $fieldDescription->getName()
                 ));
@@ -72,7 +72,7 @@ final class ListBuilder implements ListBuilderInterface
     {
         $type = $fieldDescription->getType();
         if (null === $type) {
-            throw new \RuntimeException(sprintf(
+            throw new \RuntimeException(\sprintf(
                 'Please define a type for field `%s` in `%s`',
                 $fieldDescription->getName(),
                 $fieldDescription->getAdmin()::class
@@ -141,7 +141,7 @@ final class ListBuilder implements ListBuilderInterface
             $actions = $fieldDescription->getOption('actions');
             foreach ($actions as $k => $action) {
                 if (!isset($action['template'])) {
-                    $actions[$k]['template'] = sprintf('@SonataAdmin/CRUD/list__action_%s.html.twig', $k);
+                    $actions[$k]['template'] = \sprintf('@SonataAdmin/CRUD/list__action_%s.html.twig', $k);
                 }
             }
 

@@ -23,12 +23,12 @@ final class CallbackFilter extends Filter
     public function filter(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): void
     {
         if (!\is_callable($this->getOption('callback'))) {
-            throw new \RuntimeException(sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
+            throw new \RuntimeException(\sprintf('Please provide a valid callback option "filter" for field "%s"', $this->getName()));
         }
 
         $isActive = \call_user_func($this->getOption('callback'), $query, $alias, $field, $data);
         if (!\is_bool($isActive)) {
-            throw new \UnexpectedValueException(sprintf(
+            throw new \UnexpectedValueException(\sprintf(
                 'The callback should return a boolean, %s returned',
                 \is_object($isActive) ? 'instance of "'.$isActive::class.'"' : '"'.\gettype($isActive).'"'
             ));

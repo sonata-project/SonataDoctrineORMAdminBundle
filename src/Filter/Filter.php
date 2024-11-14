@@ -35,7 +35,7 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     final public function apply(BaseProxyQueryInterface $query, FilterData $filterData): void
     {
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         if ($filterData->hasValue()) {
@@ -53,7 +53,7 @@ abstract class Filter extends BaseFilter implements GroupableConditionAwareInter
     public function getConditionGroup(): Composite
     {
         if (!$this->hasConditionGroup()) {
-            throw new \LogicException(sprintf('Filter "%s" has no condition group.', $this->getName()));
+            throw new \LogicException(\sprintf('Filter "%s" has no condition group.', $this->getName()));
         }
         \assert(null !== $this->conditionGroup);
 

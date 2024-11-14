@@ -81,11 +81,11 @@ final class ModelFilter extends Filter
 
         if ($data->isType(EqualOperatorType::TYPE_NOT_EQUAL)) {
             if (false === ($this->getAssociationMapping()['isOwningSide'] ?? true)) {
-                $nullExpression = sprintf('IDENTITY(%s.%s) IS NULL', $alias, $this->getAssociationMapping()['mappedBy']);
+                $nullExpression = \sprintf('IDENTITY(%s.%s) IS NULL', $alias, $this->getAssociationMapping()['mappedBy']);
             } else {
                 $nullExpression = ClassMetadata::MANY_TO_MANY === $this->getAssociationMapping()['type']
-                    ? sprintf('%s.%s IS EMPTY', $this->getParentAlias($query, $alias), $this->getFieldName())
-                    : sprintf('IDENTITY(%s.%s) IS NULL', $this->getParentAlias($query, $alias), $this->getFieldName());
+                    ? \sprintf('%s.%s IS EMPTY', $this->getParentAlias($query, $alias), $this->getFieldName())
+                    : \sprintf('IDENTITY(%s.%s) IS NULL', $this->getParentAlias($query, $alias), $this->getFieldName());
             }
 
             $inExpression = $query->getQueryBuilder()->expr()->orX(
@@ -158,7 +158,7 @@ final class ModelFilter extends Filter
             foreach ($metadata->getIdentifierValues($value) as $fieldName => $identifierValue) {
                 $parameterName = $this->getNewParameterName($query);
 
-                $andX->add($queryBuilder->expr()->eq(sprintf('%s.%s', $alias, $fieldName), ':'.$parameterName));
+                $andX->add($queryBuilder->expr()->eq(\sprintf('%s.%s', $alias, $fieldName), ':'.$parameterName));
                 $queryBuilder->setParameter(
                     $parameterName,
                     $identifierValue,

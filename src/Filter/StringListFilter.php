@@ -36,13 +36,13 @@ final class StringListFilter extends Filter
         $andConditions = $query->getQueryBuilder()->expr()->andX();
         foreach ($data->getValue() as $item) {
             $parameterName = $this->getNewParameterName($query);
-            $andConditions->add(sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
+            $andConditions->add(\sprintf('%s.%s %s :%s', $alias, $field, $operator, $parameterName));
 
             $query->getQueryBuilder()->setParameter($parameterName, '%'.serialize($item).'%');
         }
 
         if ($data->isType(ContainsOperatorType::TYPE_EQUAL)) {
-            $andConditions->add(sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data->getValue())));
+            $andConditions->add(\sprintf("%s.%s LIKE 'a:%s:%%'", $alias, $field, \count($data->getValue())));
         }
 
         $this->applyWhere($query, $andConditions);

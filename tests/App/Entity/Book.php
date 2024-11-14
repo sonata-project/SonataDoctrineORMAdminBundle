@@ -42,7 +42,7 @@ class Book implements \Stringable
         private string $name = '',
         #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
         #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
-        private ?Author $author = null
+        private ?Author $author = null,
     ) {
         $this->categories = new ArrayCollection();
         $this->readers = new ArrayCollection();

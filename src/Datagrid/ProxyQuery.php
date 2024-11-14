@@ -72,9 +72,11 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
  * @method QueryBuilder         addOrderBy($sort, $order = null)
  * @method QueryBuilder         addCriteria(Criteria $criteria)
  * @method mixed                getDQLPart($queryPartName)
- * @method array                getDQLParts()
+ * @method mixed[]              getDQLParts()
  * @method QueryBuilder         resetDQLParts($parts = null)
  * @method QueryBuilder         resetDQLPart($part)
+ *
+ * @phpstan-method ArrayCollection<int, Query\Parameter> getParameters()
  *
  * @phpstan-template-covariant T of object
  * @phpstan-implements ProxyQueryInterface<T>
@@ -218,7 +220,7 @@ final class ProxyQuery implements ProxyQueryInterface
     public function setSortOrder(string $sortOrder): BaseProxyQueryInterface
     {
         if (!\in_array(strtoupper($sortOrder), $validSortOrders = ['ASC', 'DESC'], true)) {
-            throw new \InvalidArgumentException(sprintf(
+            throw new \InvalidArgumentException(\sprintf(
                 '"%s" is not a valid sort order, valid values are "%s"',
                 $sortOrder,
                 implode(', ', $validSortOrders)
@@ -294,7 +296,7 @@ final class ProxyQuery implements ProxyQueryInterface
                     /** @var literal-string $newAliasTmp */
                     $newAliasTmp = $joinExpr->getAlias() ?? '';
 
-                    if (sprintf('%s.%s', $alias, $fieldName) === $joinExpr->getJoin()) {
+                    if (\sprintf('%s.%s', $alias, $fieldName) === $joinExpr->getJoin()) {
                         $this->entityJoinAliases[] = $newAliasTmp;
                         $alias = $newAliasTmp;
 
@@ -306,7 +308,7 @@ final class ProxyQuery implements ProxyQueryInterface
             $newAlias .= '_'.$fieldName;
             if (!\in_array($newAlias, $this->entityJoinAliases, true)) {
                 $this->entityJoinAliases[] = $newAlias;
-                $this->queryBuilder->leftJoin(sprintf('%s.%s', $alias, $fieldName), $newAlias);
+                $this->queryBuilder->leftJoin(\sprintf('%s.%s', $alias, $fieldName), $newAlias);
             }
 
             $alias = $newAlias;

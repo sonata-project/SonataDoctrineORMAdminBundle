@@ -116,7 +116,7 @@ final class DateRangeFilterTest extends FilterTestCase
     public function testFilterEndDateCoversWholeDay(
         \DateTimeImmutable $expectedEndDateTime,
         \DateTime $viewEndDateTime,
-        \DateTimeZone $modelTimeZone
+        \DateTimeZone $modelTimeZone,
     ): void {
         $filter = new DateRangeFilter();
         $filter->initialize('field_name', ['field_options' => ['class' => 'FooBar']]);

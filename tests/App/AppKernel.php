@@ -75,7 +75,7 @@ final class AppKernel extends Kernel
 
     protected function configureRoutes(RoutingConfigurator $routes): void
     {
-        $routes->import(sprintf('%s/config/routes.yaml', $this->getProjectDir()));
+        $routes->import(\sprintf('%s/config/routes.yaml', $this->getProjectDir()));
     }
 
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void

@@ -24,7 +24,7 @@ final class DataSource implements DataSourceInterface
     public function createIterator(BaseProxyQueryInterface $query, array $fields): \Iterator
     {
         if (!$query instanceof ProxyQueryInterface) {
-            throw new \TypeError(sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
+            throw new \TypeError(\sprintf('The query MUST implement %s.', ProxyQueryInterface::class));
         }
 
         $rootAlias = current($query->getQueryBuilder()->getRootAliases());

@@ -35,12 +35,12 @@ final class NullFilter extends Filter
         if (!$inverse && $isYes || $inverse && $isNo) {
             $this->applyWhere(
                 $query,
-                $query->getQueryBuilder()->expr()->isNull(sprintf('%s.%s', $alias, $field))
+                $query->getQueryBuilder()->expr()->isNull(\sprintf('%s.%s', $alias, $field))
             );
         } else {
             $this->applyWhere(
                 $query,
-                $query->getQueryBuilder()->expr()->isNotNull(sprintf('%s.%s', $alias, $field))
+                $query->getQueryBuilder()->expr()->isNotNull(\sprintf('%s.%s', $alias, $field))
             );
         }
     }
