@@ -17,7 +17,6 @@ Here's one way to do it:
       use Sonata\AdminBundle\Exporter\DataSourceInterface;
       use Sonata\DoctrineORMAdminBundle\Exporter\DataSource;
       use Sonata\Exporter\Source\DoctrineORMQuerySourceIterator;
-      use Sonata\Exporter\Source\SourceIteratorInterface;
 
       class DecoratingDataSource implements DataSourceInterface
       {
@@ -28,7 +27,7 @@ Here's one way to do it:
               $this->dataSource = $dataSource;
           }
 
-          public function createIterator(ProxyQueryInterface $query, array $fields): SourceIteratorInterface
+          public function createIterator(ProxyQueryInterface $query, array $fields): \Iterator
           {
               /** @var DoctrineORMQuerySourceIterator $iterator */
               $iterator = $this->dataSource->createIterator($query, $fields);
@@ -47,4 +46,3 @@ Here's one way to do it:
           ...
           App\Service\Admin\DecoratingDataSource:
               decorates: 'sonata.admin.data_source.orm'
-              arguments: ['@App\Services\Admin\DecoratingDataSource.inner']
