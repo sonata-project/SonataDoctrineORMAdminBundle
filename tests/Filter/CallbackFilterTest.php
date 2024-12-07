@@ -58,7 +58,7 @@ final class CallbackFilterTest extends FilterTestCase
 
         $filter = new CallbackFilter();
         $filter->initialize('field_name', [
-            'callback' => [$this, 'customCallback'],
+            'callback' => $this->customCallback(...),
         ]);
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['value' => 'myValue']));

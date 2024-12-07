@@ -95,7 +95,7 @@ final class DataSource implements DataSourceInterface
                 $joinAlias = $joinPart->getAlias();
 
                 if ($joinAlias === $alias) {
-                    $joinParts = explode('.', $join);
+                    $joinParts = explode('.', (string) $join);
 
                     return end($joinParts);
                 }

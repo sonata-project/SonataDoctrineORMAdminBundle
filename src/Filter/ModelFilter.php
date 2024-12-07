@@ -126,7 +126,7 @@ final class ModelFilter extends Filter
         if (isset($joins[$rootAlias])) {
             foreach ($joins[$rootAlias] as $join) {
                 if ($join->getAlias() === $alias) {
-                    $parts = explode('.', $join->getJoin());
+                    $parts = explode('.', (string) $join->getJoin());
                     $parentAlias = $parts[0];
 
                     break;

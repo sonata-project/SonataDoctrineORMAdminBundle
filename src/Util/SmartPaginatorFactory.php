@@ -158,7 +158,7 @@ final class SmartPaginatorFactory
         foreach ($orderByParts as $orderByPart) {
             foreach ($orderByPart->getParts() as $part) {
                 foreach ($joinAliases as $joinAlias) {
-                    if (str_starts_with($part, $joinAlias.'.')) {
+                    if (str_starts_with((string) $part, $joinAlias.'.')) {
                         return true;
                     }
                 }
