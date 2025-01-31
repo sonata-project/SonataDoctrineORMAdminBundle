@@ -29,7 +29,7 @@
         "doctrine/dbal": "^3.4 || ^4.0",
         "doctrine/doctrine-bundle": "^2.10",
         "doctrine/orm": "^2.17 || ^3.0",
-        "doctrine/persistence": "^3.0.2",
+        "doctrine/persistence": "^3.0.2 || ^4.0",
         "sonata-project/admin-bundle": "^4.34",
         "sonata-project/exporter": "^2.0 || ^3.0",
         "sonata-project/form-extensions": "^1.19 || ^2.0",
@@ -47,8 +47,9 @@
         "twig/twig": "^3.0"
     },
     "require-dev": {
+        "ext-pdo_sqlite": "*",
         "dama/doctrine-test-bundle": "^8.0",
-        "doctrine/doctrine-fixtures-bundle": "^3.4",
+        "doctrine/doctrine-fixtures-bundle": "^3.4 || ^4.0",
         "friendsofphp/php-cs-fixer": "^3.4",
         "matthiasnoback/symfony-dependency-injection-test": "^4.2 || ^5.0",
         "phpstan/extension-installer": "^1.0",

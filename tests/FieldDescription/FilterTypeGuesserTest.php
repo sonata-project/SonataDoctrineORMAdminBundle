@@ -56,7 +56,7 @@ final class FilterTypeGuesserTest extends TestCase
         int $expectedConfidence,
         array $fieldMapping = [],
     ): void {
-        $fieldDescription = $this->createStub(FieldDescriptionInterface::class);
+        $fieldDescription = static::createStub(FieldDescriptionInterface::class);
         $fieldDescription->method('getFieldName')->willReturn('foo');
         $fieldDescription->method('getMappingType')->willReturn($mappingType);
         $fieldDescription->method('getParentAssociationMappings')->willReturn([]);

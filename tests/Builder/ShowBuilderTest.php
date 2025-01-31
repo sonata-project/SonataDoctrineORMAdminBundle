@@ -44,7 +44,7 @@ final class ShowBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->guesser = $this->createStub(TypeGuesserInterface::class);
+        $this->guesser = static::createStub(TypeGuesserInterface::class);
 
         $this->showBuilder = new ShowBuilder(
             $this->guesser,
@@ -69,7 +69,7 @@ final class ShowBuilderTest extends TestCase
 
     public function testAddFieldNoType(): void
     {
-        $typeGuess = $this->createStub(TypeGuess::class);
+        $typeGuess = static::createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => ClassMetadata::MANY_TO_ONE]);
         $fieldDescription->setAdmin($this->admin);

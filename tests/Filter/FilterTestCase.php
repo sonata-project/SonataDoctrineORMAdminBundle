@@ -52,7 +52,7 @@ abstract class FilterTestCase extends TestCase
 
     final protected function createQueryBuilderStub(): TestQueryBuilder
     {
-        $queryBuilder = $this->createStub(TestQueryBuilder::class);
+        $queryBuilder = static::createStub(TestQueryBuilder::class);
 
         $queryBuilder->method('getEntityManager')->willReturnCallback(
             fn (): EntityManagerInterface => $this->createEntityManagerStub()
@@ -115,8 +115,8 @@ abstract class FilterTestCase extends TestCase
 
     private function createEntityManagerStub(): EntityManagerInterface
     {
-        $classMetadata = $this->createStub(ClassMetadata::class);
-        $entityManager = $this->createStub(EntityManagerInterface::class);
+        $classMetadata = static::createStub(ClassMetadata::class);
+        $entityManager = static::createStub(EntityManagerInterface::class);
 
         $classMetadata->method('getIdentifierValues')->willReturnCallback(
             static fn (mixed $value): array => ['id' => $value]

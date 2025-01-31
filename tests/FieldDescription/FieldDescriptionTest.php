@@ -215,7 +215,7 @@ final class FieldDescriptionTest extends TestCase
         $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
         $mockedObject->expects(static::never())->method('myMethod')->willReturn('myMethodValue');
 
-        $admin = $this->createStub(AdminInterface::class);
+        $admin = static::createStub(AdminInterface::class);
         $field = new FieldDescription('name');
         $field->setAdmin($admin);
 

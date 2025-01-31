@@ -33,7 +33,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function testFetchJoinedCollection(QueryBuilder $queryBuilder, bool $expected): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
-        $proxyQuery = $this->createStub(ProxyQueryInterface::class);
+        $proxyQuery = static::createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')
             ->willReturn($queryBuilder);
@@ -82,7 +82,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
-        $proxyQuery = $this->createStub(ProxyQueryInterface::class);
+        $proxyQuery = static::createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')
             ->willReturn($queryBuilder);
@@ -195,7 +195,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     public function testCountWalkerDistinct(QueryBuilder $queryBuilder, bool $hasHint, bool $expected): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
-        $proxyQuery = $this->createStub(ProxyQueryInterface::class);
+        $proxyQuery = static::createStub(ProxyQueryInterface::class);
         $proxyQuery
             ->method('getQueryBuilder')
             ->willReturn($queryBuilder);
