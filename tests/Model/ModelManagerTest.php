@@ -631,7 +631,7 @@ final class ModelManagerTest extends TestCase
         $connection = $this->createMock(Connection::class);
         $connection
             ->method('getDatabasePlatform')
-            ->willReturn($this->createStub(AbstractPlatform::class));
+            ->willReturn(static::createStub(AbstractPlatform::class));
         $connection
             ->method('getParams')
             ->willReturn([]);
@@ -776,7 +776,7 @@ final class ModelManagerTest extends TestCase
      */
     public function testAddIdentifiersToQueryWithEmptyIdentifiers(): void
     {
-        $datagrid = $this->createStub(ProxyQueryInterface::class);
+        $datagrid = static::createStub(ProxyQueryInterface::class);
 
         $this->expectException(\InvalidArgumentException::class);
         $this->expectExceptionMessage('Array passed as argument 3 to "Sonata\DoctrineORMAdminBundle\Model\ModelManager::addIdentifiersToQuery()" must not be empty.');

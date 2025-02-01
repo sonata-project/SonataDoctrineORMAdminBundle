@@ -33,10 +33,10 @@ final class DataSourceTest extends TestCase
 
     public function testCreateIterator(): void
     {
-        $configuration = $this->createStub(Configuration::class);
+        $configuration = static::createStub(Configuration::class);
         $configuration->method('getDefaultQueryHints')->willReturn([]);
 
-        $em = $this->createStub(EntityManager::class);
+        $em = static::createStub(EntityManager::class);
         $em->method('getConfiguration')->willReturn($configuration);
 
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)
@@ -61,10 +61,10 @@ final class DataSourceTest extends TestCase
 
     public function testCreateIteratorWithNormalSortBy(): void
     {
-        $configuration = $this->createStub(Configuration::class);
+        $configuration = static::createStub(Configuration::class);
         $configuration->method('getDefaultQueryHints')->willReturn([]);
 
-        $em = $this->createStub(EntityManager::class);
+        $em = static::createStub(EntityManager::class);
         $em->method('getConfiguration')->willReturn($configuration);
 
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)

@@ -32,15 +32,16 @@ use Symfony\Component\Config\Loader\LoaderInterface;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Routing\Loader\Configurator\RoutingConfigurator;
-use Symfony\Component\Security\Http\Attribute\IsGranted;
+use Symfony\UX\StimulusBundle\StimulusBundle;
 
 final class AppKernel extends Kernel
 {
     use MicroKernelTrait;
 
+    /** @psalm-suppress InvalidReturnType */
     public function registerBundles(): iterable
     {
-        return [
+        $bundles = [
             new DoctrineBundle(),
             new DAMADoctrineTestBundle(),
             new FrameworkBundle(),
@@ -56,6 +57,15 @@ final class AppKernel extends Kernel
             new TwigBundle(),
             new DoctrineFixturesBundle(),
         ];
+
+        if (class_exists(StimulusBundle::class)) {
+            $bundles[] = new StimulusBundle();
+        }
+
+        /**
+         * @psalm-suppress InvalidReturnStatement
+         */
+        return $bundles; /* @phpstan-ignore return.type */
     }
 
     public function getCacheDir(): string
@@ -83,11 +93,6 @@ final class AppKernel extends Kernel
         $container->setParameter('app.base_dir', $this->getBaseDir());
 
         $loader->load(__DIR__.'/config/config.yml');
-
-        if (!class_exists(IsGranted::class)) {
-            $loader->load(__DIR__.'/config/config_symfony_v5.yml');
-        }
-
         $loader->load(__DIR__.'/config/services.php');
     }
 

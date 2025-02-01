@@ -45,7 +45,7 @@ final class ListBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->typeGuesser = $this->createStub(TypeGuesserInterface::class);
+        $this->typeGuesser = static::createStub(TypeGuesserInterface::class);
         $this->admin = $this->createMock(AdminInterface::class);
 
         $this->admin->method('getClass')->willReturn('Foo');

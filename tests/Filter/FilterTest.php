@@ -29,7 +29,7 @@ final class FilterTest extends FilterTestCase
      */
     public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
     {
-        $entityManager = $this->createStub(EntityManagerInterface::class);
+        $entityManager = static::createStub(EntityManagerInterface::class);
         $entityManager->method('getExpressionBuilder')->willReturn(new Expr());
         $queryBuilder = new TestQueryBuilder($entityManager);
 

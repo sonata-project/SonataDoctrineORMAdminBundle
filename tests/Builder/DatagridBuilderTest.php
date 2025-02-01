@@ -64,9 +64,9 @@ final class DatagridBuilderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->formFactory = $this->createStub(FormFactoryInterface::class);
-        $this->filterFactory = $this->createStub(FilterFactoryInterface::class);
-        $this->typeGuesser = $this->createStub(TypeGuesserInterface::class);
+        $this->formFactory = static::createStub(FormFactoryInterface::class);
+        $this->filterFactory = static::createStub(FilterFactoryInterface::class);
+        $this->typeGuesser = static::createStub(TypeGuesserInterface::class);
 
         $this->datagridBuilder = new DatagridBuilder(
             $this->formFactory,
@@ -85,9 +85,9 @@ final class DatagridBuilderTest extends TestCase
      */
     public function testGetBaseDatagrid(string $pagerType, string $pager): void
     {
-        $proxyQuery = $this->createStub(ProxyQueryInterface::class);
+        $proxyQuery = static::createStub(ProxyQueryInterface::class);
         $fieldDescriptionCollection = new FieldDescriptionCollection();
-        $formBuilder = $this->createStub(FormBuilderInterface::class);
+        $formBuilder = static::createStub(FormBuilderInterface::class);
 
         $this->admin->method('getPagerType')->willReturn($pagerType);
         $this->admin->method('createQuery')->willReturn($proxyQuery);
@@ -147,7 +147,7 @@ final class DatagridBuilderTest extends TestCase
     public function testAddFilterNoType(): void
     {
         $datagrid = $this->createMock(DatagridInterface::class);
-        $guessType = $this->createStub(TypeGuess::class);
+        $guessType = static::createStub(TypeGuess::class);
 
         $fieldDescription = new FieldDescription('test');
         $fieldDescription->setAdmin($this->admin);
