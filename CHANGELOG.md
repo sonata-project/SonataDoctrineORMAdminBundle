@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.18.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.17.1...4.18.0) - 2025-02-03
+### Added
+- [[#1826](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1826)] Support for `doctrine/persistence` ^4.0 ([@dmaicher](https://github.com/dmaicher))
+
 ## [4.17.1](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.17.0...4.17.1) - 2024-04-24
 ### Fixed
 - [[#1807](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1807)] DateTimeRangeFilter when both the `start` or `end` field are not empty. ([@VincentLanglet](https://github.com/VincentLanglet))

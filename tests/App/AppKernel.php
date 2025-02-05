@@ -38,7 +38,6 @@ final class AppKernel extends Kernel
 {
     use MicroKernelTrait;
 
-    /** @psalm-suppress InvalidReturnType */
     public function registerBundles(): iterable
     {
         $bundles = [
@@ -62,10 +61,7 @@ final class AppKernel extends Kernel
             $bundles[] = new StimulusBundle();
         }
 
-        /**
-         * @psalm-suppress InvalidReturnStatement
-         */
-        return $bundles; /* @phpstan-ignore return.type */
+        return $bundles;
     }
 
     public function getCacheDir(): string
