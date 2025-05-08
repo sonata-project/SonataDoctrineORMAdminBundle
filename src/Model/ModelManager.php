@@ -329,6 +329,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
         $fieldNames = $this->getIdentifierFieldNames($class);
         $qb = $query->getQueryBuilder();
         $rootAlias = current($qb->getRootAliases());
+        \assert(false !== $rootAlias);
         $metadata = $this->getMetadata($class);
 
         $prefix = uniqid();
@@ -361,6 +362,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
 
         if ([] !== $query->getQueryBuilder()->getDQLPart('join')) {
             $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+            \assert(false !== $rootAlias);
 
             // Distinct is needed to iterate, even if group by is used
             // @see https://github.com/doctrine/orm/issues/5868
