@@ -84,9 +84,11 @@ final class ModelFilterTest extends FilterTestCase
             'value' => $objects,
         ]));
 
+        $rootAlias = current($proxyQuery->getRootAliases());
+        static::assertNotFalse($rootAlias);
         // the alias is now computer by the entityJoin method
         self::assertSameQuery(
-            ['WHERE (NOT(alias.id = :field_name_0 OR alias.id = :field_name_1)) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE (NOT(alias.id = :field_name_0 OR alias.id = :field_name_1)) OR IDENTITY('.$rootAlias.'.field_name) IS NULL'],
             $proxyQuery
         );
         self::assertSameQueryParameters(['field_name_0' => $objects[0], 'field_name_1' => $objects[1]], $proxyQuery);
@@ -118,8 +120,10 @@ final class ModelFilterTest extends FilterTestCase
         $object = new \stdClass();
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => $object]));
 
+        $rootAlias = current($proxyQuery->getRootAliases());
+        static::assertNotFalse($rootAlias);
         self::assertSameQuery(
-            ['WHERE NOT(alias.id = :field_name_0) OR IDENTITY('.current($proxyQuery->getRootAliases()).'.field_name) IS NULL'],
+            ['WHERE NOT(alias.id = :field_name_0) OR IDENTITY('.$rootAlias.'.field_name) IS NULL'],
             $proxyQuery
         );
 
@@ -136,8 +140,10 @@ final class ModelFilterTest extends FilterTestCase
 
         $filter->filter($proxyQuery, 'alias', 'field', FilterData::fromArray(['type' => EqualOperatorType::TYPE_NOT_EQUAL, 'value' => new \stdClass()]));
 
+        $rootAlias = current($proxyQuery->getRootAliases());
+        static::assertNotFalse($rootAlias);
         self::assertSameQuery(
-            ['WHERE NOT(alias.id = :field_name_0) OR '.current($proxyQuery->getRootAliases()).'.field_name IS EMPTY'],
+            ['WHERE NOT(alias.id = :field_name_0) OR '.$rootAlias.'.field_name IS EMPTY'],
             $proxyQuery
         );
     }

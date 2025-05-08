@@ -28,7 +28,6 @@ use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
 use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\MockObject\Stub\Exception as ExceptionStub;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Exception\LockException;
 use Sonata\AdminBundle\Exception\ModelManagerException;
@@ -559,7 +558,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @return iterable<int|string, array<int, string|array<int, object|null>|null>>
      *
-     * @phpstan-return iterable<int|string, array{0: string, 1: ?array<int, object>, 2: array<int, ?ExceptionStub>}>
+     * @phpstan-return iterable<int|string, array{0: string, 1: ?array<int, object>, 2: array<int, mixed>}>
      */
     public function provideFailingBatchDeleteCases(): iterable
     {
@@ -585,8 +584,8 @@ final class ModelManagerTest extends TestCase
     }
 
     /**
-     * @param array<int, object>|null        $result
-     * @param array<int, ExceptionStub|null> $onConsecutiveFlush
+     * @param array<int, object>|null $result
+     * @param array<int, mixed>       $onConsecutiveFlush
      *
      * @dataProvider provideFailingBatchDeleteCases
      */

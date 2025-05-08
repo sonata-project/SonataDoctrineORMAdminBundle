@@ -17,6 +17,9 @@ use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Uid\Ulid;
 
+/**
+ * @psalm-suppress ClassMustBeFinal
+ */
 #[ORM\Entity]
 class UlidChildEntity implements \Stringable
 {

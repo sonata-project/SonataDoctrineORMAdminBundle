@@ -24,7 +24,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 /**
  * @author Marko Kunic <kunicmarko20@gmail.com>
  */
-class SonataDoctrineORMAdminBundleTest extends TestCase
+final class SonataDoctrineORMAdminBundleTest extends TestCase
 {
     public function testBuild(): void
     {

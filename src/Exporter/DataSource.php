@@ -28,6 +28,7 @@ final class DataSource implements DataSourceInterface
         }
 
         $rootAlias = current($query->getQueryBuilder()->getRootAliases());
+        \assert(false !== $rootAlias);
 
         // Distinct is needed to iterate, even if group by is used
         // @see https://github.com/doctrine/orm/issues/5868
