@@ -152,6 +152,7 @@ final class ProxyQuery implements ProxyQueryInterface
         $queryBuilder = clone $this->queryBuilder;
 
         $rootAlias = current($queryBuilder->getRootAliases());
+        \assert(false !== $rootAlias);
 
         $sortBy = $this->getSortBy();
         if (null !== $sortBy) {

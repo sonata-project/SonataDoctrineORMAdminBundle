@@ -103,6 +103,6 @@ final class FilterTest extends FilterTestCase
     }
 }
 
-class MyEntity
+final class MyEntity
 {
 }

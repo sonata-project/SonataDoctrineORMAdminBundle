@@ -74,6 +74,7 @@ abstract class AbstractDateFilter extends Filter
 
             if ('timestamp' === $this->getOption('input_type')) {
                 $endValue = strtotime('+1 day', $value->getTimestamp());
+                \assert(false !== $endValue);
             } elseif ($value instanceof \DateTime) {
                 $endValue = clone $value;
                 $endValue->add(new \DateInterval('P1D'));
