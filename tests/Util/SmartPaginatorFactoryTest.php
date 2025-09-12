@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Util;
 
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\Tools\Pagination\CountWalker;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQueryInterface;
@@ -27,9 +28,7 @@ use Sonata\DoctrineORMAdminBundle\Util\SmartPaginatorFactory;
 
 final class SmartPaginatorFactoryTest extends TestCase
 {
-    /**
-     * @dataProvider provideFetchJoinedCollectionCases
-     */
+    #[DataProvider('provideFetchJoinedCollectionCases')]
     public function testFetchJoinedCollection(QueryBuilder $queryBuilder, bool $expected): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
@@ -50,7 +49,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{QueryBuilder, bool}>
      */
-    public function provideFetchJoinedCollectionCases(): iterable
+    public static function provideFetchJoinedCollectionCases(): iterable
     {
         yield 'Without joins' => [
             TestEntityManagerFactory::create()
@@ -76,9 +75,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideUseOutputWalkerCases
-     */
+    #[DataProvider('provideUseOutputWalkerCases')]
     public function testUseOutputWalker(QueryBuilder $queryBuilder, ?bool $expected, ?string $sortBy = null): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
@@ -103,7 +100,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: QueryBuilder, 1: bool|null, 2?: string}>
      */
-    public function provideUseOutputWalkerCases(): iterable
+    public static function provideUseOutputWalkerCases(): iterable
     {
         yield 'Simple query without joins' => [
             TestEntityManagerFactory::create()
@@ -189,9 +186,7 @@ final class SmartPaginatorFactoryTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider provideCountWalkerDistinctCases
-     */
+    #[DataProvider('provideCountWalkerDistinctCases')]
     public function testCountWalkerDistinct(QueryBuilder $queryBuilder, bool $hasHint, bool $expected): void
     {
         /** @var ProxyQueryInterface<object>&MockObject $proxyQuery */
@@ -215,7 +210,7 @@ final class SmartPaginatorFactoryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{QueryBuilder, bool, bool}>
      */
-    public function provideCountWalkerDistinctCases(): iterable
+    public static function provideCountWalkerDistinctCases(): iterable
     {
         yield 'Simple query without joins' => [
             TestEntityManagerFactory::create()

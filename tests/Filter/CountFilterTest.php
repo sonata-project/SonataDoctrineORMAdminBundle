@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\NumberOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -46,9 +47,7 @@ final class CountFilterTest extends FilterTestCase
         static::assertFalse($filter->isActive());
     }
 
-    /**
-     * @dataProvider provideFilterCases
-     */
+    #[DataProvider('provideFilterCases')]
     public function testFilter(string $expected, ?int $type): void
     {
         $filter = new CountFilter();
@@ -65,7 +64,7 @@ final class CountFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string, int|null}>
      */
-    public function provideFilterCases(): iterable
+    public static function provideFilterCases(): iterable
     {
         yield ['HAVING COUNT(alias.field) = :field_name_0', NumberOperatorType::TYPE_EQUAL];
         yield ['HAVING COUNT(alias.field) >= :field_name_0', NumberOperatorType::TYPE_GREATER_EQUAL];

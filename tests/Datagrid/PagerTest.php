@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\ORM\Tools\Pagination\Paginator;
 use Doctrine\ORM\Tools\SchemaTool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\Pager;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -44,7 +45,7 @@ final class PagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{class-string}>
      */
-    public function provideCountResultsCases(): iterable
+    public static function provideCountResultsCases(): iterable
     {
         yield [User::class];
         // single identifier
@@ -53,9 +54,8 @@ final class PagerTest extends TestCase
 
     /**
      * @phpstan-param class-string $className
-     *
-     * @dataProvider provideCountResultsCases
      */
+    #[DataProvider('provideCountResultsCases')]
     public function testCountResults(string $className): void
     {
         $em = TestEntityManagerFactory::create();

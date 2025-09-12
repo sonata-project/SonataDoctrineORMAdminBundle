@@ -27,6 +27,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use Doctrine\ORM\UnitOfWork;
 use Doctrine\Persistence\ManagerRegistry;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Exception\LockException;
@@ -120,7 +121,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{class-string}>
      */
-    public function provideGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethodCases(): iterable
+    public static function provideGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethodCases(): iterable
     {
         yield 'value object with toString implementation' => [ValueObjectWithToStringImpl::class];
         yield 'value object with magic toString implementation' => [ValueObjectWithMagicToStringImpl::class];
@@ -128,9 +129,8 @@ final class ModelManagerTest extends TestCase
 
     /**
      * @param class-string $vbClassName
-     *
-     * @dataProvider provideGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethodCases
      */
+    #[DataProvider('provideGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethodCases')]
     public function testGetIdentifierValuesWhenIdentifierIsValueObjectWithToStringMethod(string $vbClassName): void
     {
         $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
@@ -167,37 +167,30 @@ final class ModelManagerTest extends TestCase
         static::assertSame($em, $this->modelManager->getEntityManager(\stdClass::class));
     }
 
-    /**
-     * @dataProvider provideSupportsQueryCases
-     */
-    public function testSupportsQuery(bool $expected, object $object): void
+    public function testSupportsQuery(): void
     {
-        static::assertSame($expected, $this->modelManager->supportsQuery($object));
-    }
+        $cases = [
+            [true, new ProxyQuery(static::createMock(QueryBuilder::class))],
+            [true, static::createMock(AbstractQuery::class)],
+            [true, static::createMock(QueryBuilder::class)],
+            [false, new \stdClass()],
+        ];
 
-    /**
-     * @phpstan-return iterable<array-key, array{bool, object}>
-     */
-    public function provideSupportsQueryCases(): iterable
-    {
-        yield [true, new ProxyQuery($this->createMock(QueryBuilder::class))];
-        yield [true, $this->createMock(AbstractQuery::class)];
-        yield [true, $this->createMock(QueryBuilder::class)];
-        yield [false, new \stdClass()];
+        foreach ($cases as [$expected, $object]) {
+            static::assertSame($expected, $this->modelManager->supportsQuery($object));
+        }
     }
 
     /**
      * @phpstan-return iterable<array-key, array{bool}>
      */
-    public function provideGetVersionCases(): iterable
+    public static function provideGetVersionCases(): iterable
     {
         yield [true];
         yield [false];
     }
 
-    /**
-     * @dataProvider provideGetVersionCases
-     */
+    #[DataProvider('provideGetVersionCases')]
     public function testGetVersion(bool $isVersioned): void
     {
         $object = new VersionedEntity();
@@ -216,16 +209,14 @@ final class ModelManagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{bool, bool}>
      */
-    public function provideLockCases(): iterable
+    public static function provideLockCases(): iterable
     {
         yield [true,  false];
         yield [true,  true];
         yield [false, false];
     }
 
-    /**
-     * @dataProvider provideLockCases
-     */
+    #[DataProvider('provideLockCases')]
     public function testLock(bool $isVersioned, bool $expectsException): void
     {
         $object = new VersionedEntity();
@@ -452,9 +443,7 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->getEntityManager(VersionedEntity::class);
     }
 
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
+    #[DataProvider('createUpdateRemoveData')]
     public function testCreate(\Throwable $exception): void
     {
         $classMetadata = $this->createMock(ClassMetadata::class);
@@ -485,7 +474,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{\Throwable}>
      */
-    public function createUpdateRemoveData(): iterable
+    public static function createUpdateRemoveData(): iterable
     {
         yield \PDOException::class => [
             new \PDOException(),
@@ -495,9 +484,7 @@ final class ModelManagerTest extends TestCase
         ];
     }
 
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
+    #[DataProvider('createUpdateRemoveData')]
     public function testUpdate(\Throwable $exception): void
     {
         $classMetadata = $this->createMock(ClassMetadata::class);
@@ -525,9 +512,7 @@ final class ModelManagerTest extends TestCase
         $this->modelManager->update(new VersionedEntity());
     }
 
-    /**
-     * @dataProvider createUpdateRemoveData
-     */
+    #[DataProvider('createUpdateRemoveData')]
     public function testRemove(\Throwable $exception): void
     {
         $classMetadata = $this->createMock(ClassMetadata::class);
@@ -560,20 +545,20 @@ final class ModelManagerTest extends TestCase
      *
      * @phpstan-return iterable<int|string, array{0: string, 1: ?array<int, object>, 2: array<int, mixed>}>
      */
-    public function provideFailingBatchDeleteCases(): iterable
+    public static function provideFailingBatchDeleteCases(): iterable
     {
         yield [
             'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
             .' performing batch deletion (20 objects were successfully deleted before this error)',
             array_fill(0, 21, new VersionedEntity()),
-            [null, static::throwException(new ConnectionException())],
+            [null, new ConnectionException()],
         ];
 
         yield [
             'Failed to delete object "Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\VersionedEntity" (id: 42) while'
             .' performing batch deletion',
             [new VersionedEntity(), new VersionedEntity()],
-            [static::throwException(new ConnectionException())],
+            [new ConnectionException()],
         ];
 
         yield [
@@ -586,9 +571,8 @@ final class ModelManagerTest extends TestCase
     /**
      * @param array<int, object>|null $result
      * @param array<int, mixed>       $onConsecutiveFlush
-     *
-     * @dataProvider provideFailingBatchDeleteCases
      */
+    #[DataProvider('provideFailingBatchDeleteCases')]
     public function testFailingBatchDelete(string $expectedExceptionMessage, ?array $result, array $onConsecutiveFlush): void
     {
         $classMetadata = $this->createMock(ClassMetadata::class);
@@ -611,7 +595,16 @@ final class ModelManagerTest extends TestCase
         $em
             ->expects(static::exactly(null === $result ? 0 : (int) ceil(\count($result) / $batchSize)))
             ->method('flush')
-            ->willReturnOnConsecutiveCalls(...$onConsecutiveFlush);
+            ->willReturnOnConsecutiveCalls(...array_map(
+                function ($v) {
+                    if ($v instanceof \Exception) {
+                        return $this->throwException($v);
+                    }
+
+                    return $v;
+                },
+                $onConsecutiveFlush,
+            ));
         $em
             ->method('getConfiguration')
             ->willReturn(new Configuration());
@@ -692,10 +685,9 @@ final class ModelManagerTest extends TestCase
      * @param string[]          $identifierFieldNames
      * @param array<int|string> $ids
      *
-     * @dataProvider provideAddIdentifiersToQueryCases
-     *
      * @phpstan-param non-empty-array<int|string> $ids
      */
+    #[DataProvider('provideAddIdentifiersToQueryCases')]
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
     {
         $em = $this->createMock(EntityManagerInterface::class);
@@ -736,7 +728,7 @@ final class ModelManagerTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string[], string[], non-empty-array<int|string>}>
      */
-    public function provideAddIdentifiersToQueryCases(): iterable
+    public static function provideAddIdentifiersToQueryCases(): iterable
     {
         yield [['1', '2'], ['id'], [1, 2]];
         yield [['112', '2020'], ['id'], ['112', '2020']];

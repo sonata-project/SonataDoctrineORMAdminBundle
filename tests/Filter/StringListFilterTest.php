@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\ContainsOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -47,9 +48,7 @@ final class StringListFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
     }
 
-    /**
-     * @dataProvider provideContainsCases
-     */
+    #[DataProvider('provideContainsCases')]
     public function testContains(?int $type): void
     {
         $filter = new StringListFilter();
@@ -67,7 +66,7 @@ final class StringListFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{int|null}>
      */
-    public function provideContainsCases(): iterable
+    public static function provideContainsCases(): iterable
     {
         yield 'explicit contains' => [ContainsOperatorType::TYPE_CONTAINS];
         yield 'implicit contains' => [null];
@@ -105,9 +104,8 @@ final class StringListFilterTest extends FilterTestCase
      * @param array<string>         $value
      * @param array<string>         $query
      * @param array<string, string> $parameters
-     *
-     * @dataProvider provideMultipleValuesCases
      */
+    #[DataProvider('provideMultipleValuesCases')]
     public function testMultipleValues(array $value, ?int $type, array $query, array $parameters): void
     {
         $filter = new StringListFilter();
@@ -125,7 +123,7 @@ final class StringListFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string[], int, string[], array<string, string>}>
      */
-    public function provideMultipleValuesCases(): iterable
+    public static function provideMultipleValuesCases(): iterable
     {
         yield 'equal choice' => [
             ['asd', 'qwe'],

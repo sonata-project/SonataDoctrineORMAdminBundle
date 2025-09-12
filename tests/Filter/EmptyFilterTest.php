@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\EmptyFilter;
@@ -35,9 +36,7 @@ final class EmptyFilterTest extends FilterTestCase
         static::assertFalse($filter->isActive());
     }
 
-    /**
-     * @dataProvider provideValueCases
-     */
+    #[DataProvider('provideValueCases')]
     public function testValue(bool $inverse, int $value, string $expectedQuery): void
     {
         $filter = new EmptyFilter();
@@ -69,7 +68,7 @@ final class EmptyFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array{bool, int, string}>
      */
-    public function provideValueCases(): iterable
+    public static function provideValueCases(): iterable
     {
         yield [false, BooleanType::TYPE_YES, 'WHERE alias.field IS EMPTY'];
         yield [false, BooleanType::TYPE_NO, 'WHERE alias.field IS NOT EMPTY'];

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -102,9 +103,7 @@ final class ShowBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideFixFieldDescriptionCases
-     */
+    #[DataProvider('provideFixFieldDescriptionCases')]
     public function testFixFieldDescription(string $type, int $mappingType, string $template): void
     {
         $fieldDescription = new FieldDescription('FakeName', [], ['type' => $mappingType]);
@@ -121,7 +120,7 @@ final class ShowBuilderTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string, int, string}>
      */
-    public function provideFixFieldDescriptionCases(): iterable
+    public static function provideFixFieldDescriptionCases(): iterable
     {
         yield 'one-to-one' => [
             FieldDescriptionInterface::TYPE_ONE_TO_ONE,
