@@ -13,15 +13,15 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Functional\Admin;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 abstract class BaseAdminTestCase extends WebTestCase
 {
     /**
-     * @dataProvider provideCrudUrlsCases
-     *
      * @param array<string, mixed> $parameters
      */
+    #[DataProvider('provideCrudUrlsCases')]
     public function testCrudUrls(string $url, array $parameters = []): void
     {
         $client = self::createClient();
@@ -34,11 +34,10 @@ abstract class BaseAdminTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider provideFormsUrlsCases
-     *
      * @param array<string, mixed> $parameters
      * @param array<string, mixed> $fieldValues
      */
+    #[DataProvider('provideFormsUrlsCases')]
     public function testFormsUrls(string $url, array $parameters, string $button, array $fieldValues = []): void
     {
         $client = self::createClient();
@@ -53,10 +52,9 @@ abstract class BaseAdminTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider provideBatchActionsCases
-     *
      * @param array<string> $idx
      */
+    #[DataProvider('provideBatchActionsCases')]
     public function testBatchActions(string $action, array $idx = [], ?int $rowsAfter = null): void
     {
         $client = self::createClient();
@@ -80,10 +78,9 @@ abstract class BaseAdminTestCase extends WebTestCase
     }
 
     /**
-     * @dataProvider provideFilterActionCases
-     *
      * @param array<string, array{value: string|array<string>}> $filters
      */
+    #[DataProvider('provideFilterActionCases')]
     public function testFilterAction(array $filters, int $count): void
     {
         $client = self::createClient();

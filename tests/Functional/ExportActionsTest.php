@@ -13,16 +13,16 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 final class ExportActionsTest extends BaseFunctionalTestCase
 {
     /**
-     * @dataProvider provideExportActionCases
-     *
      * @param array<mixed> $parameters
      * @param array<mixed> $expected
      */
+    #[DataProvider('provideExportActionCases')]
     public function testExportAction(string $url, array $parameters, array $expected): void
     {
         // TODO: Remove the $content variable when drop support for Symfony < 6.2

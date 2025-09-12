@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\FieldDescription;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
@@ -263,9 +264,7 @@ final class FieldDescriptionTest extends TestCase
         static::assertSame($fieldMapping, $field->getFieldMapping());
     }
 
-    /**
-     * @dataProvider provideDescribesSingleValuedAssociationCases
-     */
+    #[DataProvider('provideDescribesSingleValuedAssociationCases')]
     public function testDescribesSingleValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
@@ -278,7 +277,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function provideDescribesSingleValuedAssociationCases(): iterable
+    public static function provideDescribesSingleValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, true];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, true];
@@ -287,9 +286,7 @@ final class FieldDescriptionTest extends TestCase
         yield 'string' => ['string', false];
     }
 
-    /**
-     * @dataProvider provideDescribesCollectionValuedAssociationCases
-     */
+    #[DataProvider('provideDescribesCollectionValuedAssociationCases')]
     public function testDescribesCollectionValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
@@ -302,7 +299,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function provideDescribesCollectionValuedAssociationCases(): iterable
+    public static function provideDescribesCollectionValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, false];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, false];

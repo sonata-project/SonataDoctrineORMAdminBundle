@@ -13,13 +13,12 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Functional;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Symfony\Component\HttpFoundation\Request;
 
 final class BatchActionsTest extends BaseFunctionalTestCase
 {
-    /**
-     * @dataProvider provideDeleteBatchActionCases
-     */
+    #[DataProvider('provideDeleteBatchActionCases')]
     public function testDeleteBatchAction(string $url): void
     {
         $this->client->request(Request::METHOD_GET, $url);

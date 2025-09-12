@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Builder;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
@@ -99,9 +100,7 @@ final class ListBuilderTest extends TestCase
         );
     }
 
-    /**
-     * @dataProvider provideFixFieldDescriptionCases
-     */
+    #[DataProvider('provideFixFieldDescriptionCases')]
     public function testFixFieldDescription(int $type, string $template): void
     {
         $this->admin->expects(static::once())->method('attachAdminClass');
@@ -119,7 +118,7 @@ final class ListBuilderTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{int, string}>
      */
-    public function provideFixFieldDescriptionCases(): iterable
+    public static function provideFixFieldDescriptionCases(): iterable
     {
         yield 'one-to-one' => [
             ClassMetadata::ONE_TO_ONE,

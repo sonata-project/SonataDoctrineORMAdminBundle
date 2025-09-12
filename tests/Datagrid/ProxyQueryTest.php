@@ -17,6 +17,7 @@ use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\SchemaTool;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType\UuidType;
@@ -96,7 +97,7 @@ final class ProxyQueryTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{string}>
      */
-    public function provideItAllowsSortOrdersWithStrangeCaseCases(): iterable
+    public static function provideItAllowsSortOrdersWithStrangeCaseCases(): iterable
     {
         yield ['ASC'];
         yield ['DESC'];
@@ -106,9 +107,7 @@ final class ProxyQueryTest extends TestCase
         yield ['deSc'];
     }
 
-    /**
-     * @dataProvider provideItAllowsSortOrdersWithStrangeCaseCases
-     */
+    #[DataProvider('provideItAllowsSortOrdersWithStrangeCaseCases')]
     public function testItAllowsSortOrdersWithStrangeCase(string $validValue): void
     {
         $query = new ProxyQuery($this->em->createQueryBuilder());
