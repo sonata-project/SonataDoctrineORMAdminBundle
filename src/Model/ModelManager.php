@@ -123,15 +123,23 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     {
         $metadata = $this->getMetadata($object::class);
 
-        // TODO: fix access to deprecated reflFields property
-        /** @psalm-suppress DeprecatedProperty */
-        if (!$metadata->isVersioned || null === $metadata->versionField || !isset($metadata->reflFields[$metadata->versionField])) {
+        if (!$metadata->isVersioned || null === $metadata->versionField) {
             return null;
         }
 
-        // TODO: fix access to deprecated reflFields property
         /** @psalm-suppress DeprecatedProperty */
-        return $metadata->reflFields[$metadata->versionField]->getValue($object);
+        $reflField = $metadata->propertyAccessors[$metadata->versionField]
+            ?? $metadata->reflFields[$metadata->versionField]
+            ?? null;
+        if (null === $reflField) {
+            return null;
+        }
+
+        /**
+         * @psalm-suppress InternalMethod
+         * @phpstan-ignore-next-line method.internalInterface
+         */
+        return $reflField->getValue($object);
     }
 
     public function lock(object $object, ?int $expectedVersion): void
