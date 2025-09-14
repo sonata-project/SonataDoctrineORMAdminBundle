@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\AdminBundle\Form\Type\Operator\StringOperatorType;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
@@ -47,7 +48,7 @@ final class StringFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string|null, bool, bool}>
      */
-    public function getValues(): iterable
+    public static function getValues(): iterable
     {
         yield 'filter by normal value' => ['asd', false, true];
         yield 'not filter by empty string' => ['', false, false];
@@ -60,7 +61,7 @@ final class StringFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string|null, bool, bool}>
      */
-    public function getValuesForMeaningLessType(): iterable
+    public static function getValuesForMeaningLessType(): iterable
     {
         yield 'filter by normal value' => ['asd', false, true];
         yield 'not filter by empty string' => ['', false, false];
@@ -70,9 +71,7 @@ final class StringFilterTest extends FilterTestCase
         yield 'filter by \'0\'' => ['0', false, true];
     }
 
-    /**
-     * @dataProvider getValuesForMeaningLessType
-     */
+    #[DataProvider('getValuesForMeaningLessType')]
     public function testDefaultType(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -93,9 +92,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValuesForMeaningLessType
-     */
+    #[DataProvider('getValuesForMeaningLessType')]
     public function testContains(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -116,9 +113,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValuesForMeaningLessType
-     */
+    #[DataProvider('getValuesForMeaningLessType')]
     public function testStartsWith(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -139,9 +134,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValuesForMeaningLessType
-     */
+    #[DataProvider('getValuesForMeaningLessType')]
     public function testEndsWith(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -162,9 +155,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValuesForMeaningLessType
-     */
+    #[DataProvider('getValuesForMeaningLessType')]
     public function testNotContains(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -185,9 +176,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValues
-     */
+    #[DataProvider('getValues')]
     public function testEquals(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -208,9 +197,7 @@ final class StringFilterTest extends FilterTestCase
         }
     }
 
-    /**
-     * @dataProvider getValues
-     */
+    #[DataProvider('getValues')]
     public function testNotEquals(?string $value, bool $allowEmpty, bool $shouldBeActive): void
     {
         $filter = new StringFilter();
@@ -265,10 +252,9 @@ final class StringFilterTest extends FilterTestCase
     }
 
     /**
-     * @dataProvider provideCaseSensitiveCases
-     *
      * @param array<string, mixed> $options
      */
+    #[DataProvider('provideCaseSensitiveCases')]
     public function testCaseSensitive(array $options, int $operatorType, string $expectedQuery, string $expectedParameter): void
     {
         $filter = new StringFilter();
@@ -286,7 +272,7 @@ final class StringFilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{array{force_case_insensitivity?: bool|null}, int, string, string}>
      */
-    public function provideCaseSensitiveCases(): iterable
+    public static function provideCaseSensitiveCases(): iterable
     {
         yield [[], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];
         yield [['force_case_insensitivity' => false], StringOperatorType::TYPE_CONTAINS, 'WHERE alias.field LIKE :field_name_0', '%FooBar%'];

@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\FieldDescription;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\Admin\AdminInterface;
 use Sonata\AdminBundle\Exception\NoValueException;
@@ -189,67 +190,119 @@ final class FieldDescriptionTest extends TestCase
 
     public function testGetValue(): void
     {
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFoo'])->getMock();
-        $mockedObject->expects(static::once())->method('getFoo')->willReturn('myMethodValue');
+        $object = new class {
+            public function getFoo(): string
+            {
+                return 'myMethodValue';
+            }
+        };
 
         $field = new FieldDescription('name', ['accessor' => 'foo']);
 
-        static::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($object));
     }
 
     public function testGetValueWithParentAssociationMappings(): void
     {
-        $mockedSubObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getFieldName'])->getMock();
-        $mockedSubObject->expects(static::once())->method('getFieldName')->willReturn('value');
+        $subObject = new class {
+            public function getFieldName(): string
+            {
+                return 'value';
+            }
+        };
 
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getSubObject'])->getMock();
-        $mockedObject->expects(static::once())->method('getSubObject')->willReturn($mockedSubObject);
+        $parentObject = new class($subObject) {
+            public function __construct(private object $subObject)
+            {
+            }
+
+            public function getSubObject(): object
+            {
+                return $this->subObject;
+            }
+        };
 
         $field = new FieldDescription('name', [], [], [], [['fieldName' => 'subObject']], 'fieldName');
 
-        static::assertSame('value', $field->getValue($mockedObject));
+        static::assertSame('value', $field->getValue($parentObject));
     }
 
     public function testGetValueWhenCannotRetrieve(): void
     {
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['myMethod'])->getMock();
-        $mockedObject->expects(static::never())->method('myMethod')->willReturn('myMethodValue');
+        $object = new class {
+            public function myMethod(): string
+            {
+                return 'myMethodValue';
+            }
+        };
 
         $admin = static::createStub(AdminInterface::class);
         $field = new FieldDescription('name');
         $field->setAdmin($admin);
 
         $this->expectException(NoValueException::class);
-        static::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($object));
     }
 
     public function testGetValueForEmbeddedObject(): void
     {
-        $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
-        $mockedEmbeddedObject->expects(static::once())->method('getMyMethod')->willReturn('myMethodValue');
+        $subObject = new class {
+            public function getMyMethod(): string
+            {
+                return 'myMethodValue';
+            }
+        };
 
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
-        $mockedObject->expects(static::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
+        $parentObject = new class($subObject) {
+            public function __construct(private object $subObject)
+            {
+            }
+
+            public function getMyEmbeddedObject(): object
+            {
+                return $this->subObject;
+            }
+        };
 
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.myMethod');
 
-        static::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($parentObject));
     }
 
     public function testGetValueForMultiLevelEmbeddedObject(): void
     {
-        $mockedChildEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyMethod'])->getMock();
-        $mockedChildEmbeddedObject->expects(static::once())->method('getMyMethod')->willReturn('myMethodValue');
+        $subSubObject = new class {
+            public function getMyMethod(): string
+            {
+                return 'myMethodValue';
+            }
+        };
 
-        $mockedEmbeddedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getChild'])->getMock();
-        $mockedEmbeddedObject->expects(static::once())->method('getChild')->willReturn($mockedChildEmbeddedObject);
+        $subObject = new class($subSubObject) {
+            public function __construct(private object $subObject)
+            {
+            }
 
-        $mockedObject = $this->getMockBuilder(\stdClass::class)->addMethods(['getMyEmbeddedObject'])->getMock();
-        $mockedObject->expects(static::once())->method('getMyEmbeddedObject')->willReturn($mockedEmbeddedObject);
+            public function getChild(): object
+            {
+                return $this->subObject;
+            }
+        };
+
+        $parentObject = new class($subObject) {
+            public function __construct(private object $subObject)
+            {
+            }
+
+            public function getMyEmbeddedObject(): object
+            {
+                return $this->subObject;
+            }
+        };
 
         $field = new FieldDescription('myMethod', [], [], [], [], 'myEmbeddedObject.child.myMethod');
 
-        static::assertSame('myMethodValue', $field->getValue($mockedObject));
+        static::assertSame('myMethodValue', $field->getValue($parentObject));
     }
 
     public function testEnum(): void
@@ -263,9 +316,7 @@ final class FieldDescriptionTest extends TestCase
         static::assertSame($fieldMapping, $field->getFieldMapping());
     }
 
-    /**
-     * @dataProvider provideDescribesSingleValuedAssociationCases
-     */
+    #[DataProvider('provideDescribesSingleValuedAssociationCases')]
     public function testDescribesSingleValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
@@ -278,7 +329,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function provideDescribesSingleValuedAssociationCases(): iterable
+    public static function provideDescribesSingleValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, true];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, true];
@@ -287,9 +338,7 @@ final class FieldDescriptionTest extends TestCase
         yield 'string' => ['string', false];
     }
 
-    /**
-     * @dataProvider provideDescribesCollectionValuedAssociationCases
-     */
+    #[DataProvider('provideDescribesCollectionValuedAssociationCases')]
     public function testDescribesCollectionValuedAssociation(string|int $mappingType, bool $expected): void
     {
         $fd = new FieldDescription('foo', [], [], [
@@ -302,7 +351,7 @@ final class FieldDescriptionTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: string|int, 1: bool}>
      */
-    public function provideDescribesCollectionValuedAssociationCases(): iterable
+    public static function provideDescribesCollectionValuedAssociationCases(): iterable
     {
         yield 'one to one' => [ClassMetadata::ONE_TO_ONE, false];
         yield 'many to one' => [ClassMetadata::MANY_TO_ONE, false];

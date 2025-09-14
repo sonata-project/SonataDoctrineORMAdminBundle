@@ -28,12 +28,22 @@ class Book implements \Stringable
      * @var Collection<array-key, Reader>
      */
     #[ORM\ManyToMany(targetEntity: Reader::class, cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'book_reader', joinColumns: [new ORM\JoinColumn(onDelete: 'CASCADE', options: ['length' => 255])])]
     private Collection $readers;
 
     /**
      * @var Collection<array-key, Category>
      */
     #[ORM\ManyToMany(targetEntity: Category::class)]
+    #[ORM\JoinTable(
+        name: 'book_category',
+        joinColumns: [
+            new ORM\JoinColumn(onDelete: 'CASCADE', options: ['length' => 255]),
+        ],
+        inverseJoinColumns: [
+            new ORM\JoinColumn(options: ['length' => 255]),
+        ]
+    )]
     private Collection $categories;
 
     public function __construct(
@@ -44,7 +54,7 @@ class Book implements \Stringable
         #[ORM\Column(type: Types::STRING)]
         private string $name = '',
         #[ORM\ManyToOne(targetEntity: Author::class, inversedBy: 'books')]
-        #[ORM\JoinColumn(name: 'author_id', referencedColumnName: 'id', onDelete: 'SET NULL')]
+        #[ORM\JoinColumn(onDelete: 'SET NULL', options: ['length' => 255])]
         private ?Author $author = null,
     ) {
         $this->categories = new ArrayCollection();
