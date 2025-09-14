@@ -28,8 +28,8 @@ final class BatchActionsTest extends BaseFunctionalTestCase
         ]);
         $this->client->submitForm('Yes, execute');
 
-        self::assertSelectorTextContains('div.alert-success', 'Selected items have been successfully deleted.');
         self::assertResponseIsSuccessful();
+        self::assertSelectorTextContains('div.alert-success', 'Selected items have been successfully deleted.');
     }
 
     /**
