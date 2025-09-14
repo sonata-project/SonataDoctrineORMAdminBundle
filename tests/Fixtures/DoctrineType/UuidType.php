@@ -38,7 +38,7 @@ final class UuidType extends StringType
         }
 
         if (!\is_string($value)) {
-            throw new \RuntimeException('Invalid value: ' . $value);
+            throw new \RuntimeException('Invalid value: '.$value);
         }
 
         return new NonIntegerIdentifierTestClass($value);

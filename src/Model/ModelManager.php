@@ -123,10 +123,14 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
     {
         $metadata = $this->getMetadata($object::class);
 
-        if (!$metadata->isVersioned || !isset($metadata->reflFields[$metadata->versionField])) {
+        // TODO: fix access to deprecated reflFields property
+        /** @psalm-suppress DeprecatedProperty */
+        if (!$metadata->isVersioned || null === $metadata->versionField || !isset($metadata->reflFields[$metadata->versionField])) {
             return null;
         }
 
+        // TODO: fix access to deprecated reflFields property
+        /** @psalm-suppress DeprecatedProperty */
         return $metadata->reflFields[$metadata->versionField]->getValue($object);
     }
 

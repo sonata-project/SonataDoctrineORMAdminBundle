@@ -14,7 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
 use Doctrine\DBAL\Types\StringType;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Util\NonIntegerIdentifierTestClass;
 
@@ -39,7 +38,7 @@ final class UuidBinaryType extends StringType
         }
 
         if (!\is_string($value)) {
-            throw new \RuntimeException('Invalid value: ' . $value);
+            throw new \RuntimeException('Invalid value: '.$value);
         }
 
         return new NonIntegerIdentifierTestClass($value);
@@ -55,7 +54,7 @@ final class UuidBinaryType extends StringType
 
         $bin = hex2bin(str_replace('-', '', $value->toString()));
         if (false === $bin) {
-            throw new \RuntimeException('Invalid value: ' . $value);
+            throw new \RuntimeException('Invalid value: '.var_export($value, true));
         }
 
         return $bin;

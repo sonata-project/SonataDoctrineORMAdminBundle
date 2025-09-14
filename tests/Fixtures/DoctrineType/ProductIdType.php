@@ -14,8 +14,6 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\DoctrineType;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Doctrine\DBAL\Types\ConversionException;
-use Doctrine\DBAL\Types\Exception\InvalidType;
 use Doctrine\DBAL\Types\Type;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\ProductId;
 
@@ -43,7 +41,7 @@ final class ProductIdType extends Type
         }
 
         if (!is_numeric($value)) {
-            throw new \RuntimeException('Invalid value: ' . $value);
+            throw new \RuntimeException('Invalid value: '.$value);
         }
 
         return new ProductId((int) $value);

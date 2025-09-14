@@ -790,6 +790,8 @@ final class ModelManagerTest extends TestCase
         if ($isVersioned) {
             $versionField = 'version';
             $metadata->versionField = $versionField;
+            // TODO: fix access to deprecated reflFields property
+            /** @psalm-suppress DeprecatedProperty */
             $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
         }
 
