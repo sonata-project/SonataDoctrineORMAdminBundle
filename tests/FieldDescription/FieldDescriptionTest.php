@@ -191,7 +191,7 @@ final class FieldDescriptionTest extends TestCase
     public function testGetValue(): void
     {
         $object = new class {
-            public function getFoo()
+            public function getFoo(): string
             {
                 return 'myMethodValue';
             }
@@ -205,18 +205,18 @@ final class FieldDescriptionTest extends TestCase
     public function testGetValueWithParentAssociationMappings(): void
     {
         $subObject = new class {
-            public function getFieldName()
+            public function getFieldName(): string
             {
                 return 'value';
             }
         };
 
         $parentObject = new class($subObject) {
-            public function __construct(private $subObject)
+            public function __construct(private object $subObject)
             {
             }
 
-            public function getSubObject()
+            public function getSubObject(): object
             {
                 return $this->subObject;
             }
@@ -230,7 +230,7 @@ final class FieldDescriptionTest extends TestCase
     public function testGetValueWhenCannotRetrieve(): void
     {
         $object = new class {
-            public function myMethod()
+            public function myMethod(): string
             {
                 return 'myMethodValue';
             }
@@ -247,18 +247,18 @@ final class FieldDescriptionTest extends TestCase
     public function testGetValueForEmbeddedObject(): void
     {
         $subObject = new class {
-            public function getMyMethod()
+            public function getMyMethod(): string
             {
                 return 'myMethodValue';
             }
         };
 
         $parentObject = new class($subObject) {
-            public function __construct(private $subObject)
+            public function __construct(private object $subObject)
             {
             }
 
-            public function getMyEmbeddedObject()
+            public function getMyEmbeddedObject(): object
             {
                 return $this->subObject;
             }
@@ -272,29 +272,29 @@ final class FieldDescriptionTest extends TestCase
     public function testGetValueForMultiLevelEmbeddedObject(): void
     {
         $subSubObject = new class {
-            public function getMyMethod()
+            public function getMyMethod(): string
             {
                 return 'myMethodValue';
             }
         };
 
         $subObject = new class($subSubObject) {
-            public function __construct(private $subObject)
+            public function __construct(private object $subObject)
             {
             }
 
-            public function getChild()
+            public function getChild(): object
             {
                 return $this->subObject;
             }
         };
 
         $parentObject = new class($subObject) {
-            public function __construct(private $subObject)
+            public function __construct(private object $subObject)
             {
             }
 
-            public function getMyEmbeddedObject()
+            public function getMyEmbeddedObject(): object
             {
                 return $this->subObject;
             }

@@ -39,11 +39,7 @@ final class UuidBinaryType extends StringType
         }
 
         if (!\is_string($value)) {
-            throw ConversionException::conversionFailedInvalidType(
-                $value,
-                $this->getName(),
-                ['null', 'string', NonIntegerIdentifierTestClass::class]
-            );
+            throw new \RuntimeException('Invalid value: ' . $value);
         }
 
         return new NonIntegerIdentifierTestClass($value);
@@ -59,7 +55,7 @@ final class UuidBinaryType extends StringType
 
         $bin = hex2bin(str_replace('-', '', $value->toString()));
         if (false === $bin) {
-            throw ConversionException::conversionFailed($value->toString(), $this->getName());
+            throw new \RuntimeException('Invalid value: ' . $value);
         }
 
         return $bin;
