@@ -127,19 +127,7 @@ final class ModelManager implements ModelManagerInterface, LockInterface, ProxyR
             return null;
         }
 
-        /** @psalm-suppress DeprecatedProperty */
-        $reflField = $metadata->propertyAccessors[$metadata->versionField]
-            ?? $metadata->reflFields[$metadata->versionField]
-            ?? null;
-        if (null === $reflField) {
-            return null;
-        }
-
-        /**
-         * @psalm-suppress InternalMethod
-         * @phpstan-ignore-next-line method.internalInterface
-         */
-        return $reflField->getValue($object);
+        return $metadata->getFieldValue($object, $metadata->versionField);
     }
 
     public function lock(object $object, ?int $expectedVersion): void

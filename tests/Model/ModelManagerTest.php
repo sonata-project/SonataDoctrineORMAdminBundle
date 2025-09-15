@@ -23,6 +23,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\ORM\Mapping\ClassMetadataFactory;
 use Doctrine\ORM\Mapping\PropertyAccessors\ObjectCastPropertyAccessor;
+use Doctrine\ORM\Mapping\PropertyAccessors\PropertyAccessorFactory;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
@@ -794,12 +795,9 @@ final class ModelManagerTest extends TestCase
 
             /* @phpstan-ignore-next-line function.alreadyNarrowedType */
             if (property_exists($metadata, 'propertyAccessors')) {
-                /**
-                 * @psalm-suppress InternalClass, InternalMethod
-                 * @phpstan-ignore-next-line staticMethod.internalClass
-                 */
-                $metadata->propertyAccessors[$versionField] = ObjectCastPropertyAccessor::fromReflectionProperty(
-                    new \ReflectionProperty($class, $versionField),
+                $metadata->propertyAccessors[$versionField] = PropertyAccessorFactory::createPropertyAccessor(
+                    $class,
+                    $versionField,
                 );
             } else {
                 /** @psalm-suppress DeprecatedProperty */
