@@ -13,6 +13,7 @@ declare(strict_types=1);
 
 namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\DateRangeFilter;
@@ -110,9 +111,7 @@ final class DateRangeFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
     }
 
-    /**
-     * @dataProvider provideFilterEndDateCoversWholeDayCases
-     */
+    #[DataProvider('provideFilterEndDateCoversWholeDayCases')]
     public function testFilterEndDateCoversWholeDay(
         \DateTimeImmutable $expectedEndDateTime,
         \DateTime $viewEndDateTime,
@@ -146,7 +145,7 @@ final class DateRangeFilterTest extends FilterTestCase
     /**
      * @return iterable<array{\DateTimeImmutable, \DateTime, \DateTimeZone}>
      */
-    public function provideFilterEndDateCoversWholeDayCases(): iterable
+    public static function provideFilterEndDateCoversWholeDayCases(): iterable
     {
         yield [
             new \DateTimeImmutable('2016-08-31 23:59:59.0-03:00'),

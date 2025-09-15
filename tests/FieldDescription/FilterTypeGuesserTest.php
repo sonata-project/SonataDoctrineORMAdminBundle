@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\FieldDescription;
 
 use Doctrine\ORM\Mapping\ClassMetadata;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 use Sonata\AdminBundle\FieldDescription\FieldDescriptionInterface;
 use Sonata\AdminBundle\Form\Type\Operator\EqualOperatorType;
@@ -44,11 +45,10 @@ final class FilterTypeGuesserTest extends TestCase
     /**
      * @param array<string, mixed> $expectedOptions
      *
-     * @dataProvider provideGuessCases
-     *
      * @phpstan-param class-string $expectedType
      * @phpstan-param array<string, mixed> $fieldMapping
      */
+    #[DataProvider('provideGuessCases')]
     public function testGuess(
         int|string|null $mappingType,
         string $expectedType,
@@ -73,7 +73,7 @@ final class FilterTypeGuesserTest extends TestCase
     /**
      * @phpstan-return iterable<array-key, array{0: int|string|null, 1: class-string, 2: array<string, mixed>, 3: int, 4?: array<string, mixed>}>
      */
-    public function provideGuessCases(): iterable
+    public static function provideGuessCases(): iterable
     {
         yield [
             null,

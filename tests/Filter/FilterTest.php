@@ -15,6 +15,7 @@ namespace Sonata\DoctrineORMAdminBundle\Tests\Filter;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\Expr;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\AdminBundle\Filter\Model\FilterData;
 use Sonata\DoctrineORMAdminBundle\Datagrid\ProxyQuery;
 use Sonata\DoctrineORMAdminBundle\Filter\Filter;
@@ -24,9 +25,8 @@ final class FilterTest extends FilterTestCase
 {
     /**
      * @phpstan-param array<array{string|null, array<string, mixed>, string, FilterData}> $filterOptionsCollection
-     *
-     * @dataProvider provideOrExpressionCases
      */
+    #[DataProvider('provideOrExpressionCases')]
     public function testOrExpression(string $expected, array $filterOptionsCollection = []): void
     {
         $entityManager = static::createStub(EntityManagerInterface::class);
@@ -70,7 +70,7 @@ final class FilterTest extends FilterTestCase
     /**
      * @phpstan-return iterable<array-key, array{string, array<array{string|null, array<string, mixed>, string, FilterData}>}>
      */
-    public function provideOrExpressionCases(): iterable
+    public static function provideOrExpressionCases(): iterable
     {
         yield 'Default behavior' => [
             'SELECT e FROM Sonata\DoctrineORMAdminBundle\Tests\Filter\MyEntity e WHERE 1 = 2 AND (:parameter_1 = 4 OR 5 = 6)'

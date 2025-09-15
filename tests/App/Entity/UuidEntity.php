@@ -31,7 +31,7 @@ class UuidEntity implements \Stringable
     private ?UlidChildEntity $child = null;
 
     #[ORM\ManyToOne(targetEntity: Car::class)]
-    #[ORM\JoinColumn(name: 'car_name', referencedColumnName: 'name')]
+    #[ORM\JoinColumn(name: 'car_name', referencedColumnName: 'name', options: ['length' => 255])]
     #[ORM\JoinColumn(name: 'car_year', referencedColumnName: 'year')]
     private ?Car $car = null;
 

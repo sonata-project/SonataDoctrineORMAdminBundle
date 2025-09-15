@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\DependencyInjection\Compiler;
 
 use Matthias\SymfonyDependencyInjectionTest\PhpUnit\AbstractCompilerPassTestCase;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Sonata\DoctrineORMAdminBundle\DependencyInjection\Compiler\AddAuditEntityCompilerPass;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\Product;
 use Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Entity\SimpleEntity;
@@ -27,7 +28,7 @@ final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
     /**
      * @phpstan-return iterable<array-key, array{bool, array<string, array{audit?: bool|null, class: class-string}>, class-string[]}>
      */
-    public function provideProcessCases(): iterable
+    public static function provideProcessCases(): iterable
     {
         yield [
             true,
@@ -60,9 +61,8 @@ final class AddAuditEntityCompilerPassTest extends AbstractCompilerPassTestCase
     /**
      * @phpstan-param array<string, array{audit?: bool|null, class: class-string}> $services
      * @phpstan-param class-string[] $expectedAuditedEntities
-     *
-     * @dataProvider provideProcessCases
      */
+    #[DataProvider('provideProcessCases')]
     public function testProcess(bool $force, array $services, array $expectedAuditedEntities): void
     {
         $this->setDefinition('simplethings_entityaudit.config', new Definition());
