@@ -149,14 +149,6 @@ Tweak the TagAdmin class
                 ->addIdentifier('name')
                 ->add('enabled');
         }
-
-        public function validate(ErrorElement $errorElement, $object)
-        {
-            $errorElement
-                ->with('name')
-                    ->assertMaxLength(['limit' => 32])
-                ->end();
-        }
     }
 
 And register the `TagAdmin` class inside the DIC in your config file:
