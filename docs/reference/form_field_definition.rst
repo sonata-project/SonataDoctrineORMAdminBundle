@@ -15,7 +15,6 @@ Example
     use Sonata\AdminBundle\Admin\AbstractAdmin;
     use Sonata\AdminBundle\Form\FormMapper;
     use Sonata\AdminBundle\Form\Type\ModelListType;
-    use Sonata\Form\Validator\ErrorElement;
 
     final class PostAdmin extends AbstractAdmin
     {
