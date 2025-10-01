@@ -123,7 +123,6 @@ Tweak the TagAdmin class
     use Sonata\AdminBundle\Datagrid\ListMapper;
     use Sonata\AdminBundle\Datagrid\DatagridMapper;
     use Sonata\AdminBundle\Form\FormMapper;
-    use Sonata\Form\Validator\ErrorElement;
 
     use Tutorial\BlogBundle\Entity\Tag;
 
@@ -148,14 +147,6 @@ Tweak the TagAdmin class
             $listMapper
                 ->addIdentifier('name')
                 ->add('enabled');
-        }
-
-        public function validate(ErrorElement $errorElement, $object)
-        {
-            $errorElement
-                ->with('name')
-                    ->assertMaxLength(['limit' => 32])
-                ->end();
         }
     }
 
