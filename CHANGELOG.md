@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.19.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.18.0...4.19.0) - 2025-10-12
+### Added
+- [[#1844](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1844)] Added support for `doctrine/doctrine-bundle` 3.0 ([@dmaicher](https://github.com/dmaicher))
+
+### Fixed
+- [[#1840](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1840)] Fixed Doctrine ClassMetadata reflFields deprecation ([@VincentLanglet](https://github.com/VincentLanglet))
+
 ## [4.18.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.17.1...4.18.0) - 2025-02-03
 ### Added
 - [[#1826](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1826)] Support for `doctrine/persistence` ^4.0 ([@dmaicher](https://github.com/dmaicher))
