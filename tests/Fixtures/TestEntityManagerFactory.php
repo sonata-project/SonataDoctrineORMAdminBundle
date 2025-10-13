@@ -41,6 +41,10 @@ final class TestEntityManagerFactory
             $config = ORMSetup::createAnnotationMetadataConfiguration([], true);
         }
 
+        if (\PHP_VERSION_ID >= 80400) {
+            $config->enableNativeLazyObjects(true);
+        }
+
         $connection = DriverManager::getConnection(
             [
                 'driver' => 'pdo_sqlite',
