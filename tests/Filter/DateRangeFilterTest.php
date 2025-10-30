@@ -199,7 +199,7 @@ final class DateRangeFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
 
         $builder = $proxyQuery->getQueryBuilder();
-        \assert($builder instanceof TestQueryBuilder);
+        static::assertInstanceOf(TestQueryBuilder::class, $builder);
         static::assertCount(1, $builder->queryParameters);
         static::assertSame(
             $endDateTime->modify('+23 hours 59 minutes 59 seconds')->getTimestamp(),

@@ -54,3 +54,5 @@ $input = new ArrayInput([
     '--symlink' => true,
 ]);
 $application->run($input, new NullOutput());
+
+restore_error_handler();
