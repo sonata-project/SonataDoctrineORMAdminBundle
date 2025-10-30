@@ -25,20 +25,15 @@ final class ExportActionsTest extends BaseFunctionalTestCase
     #[DataProvider('provideExportActionCases')]
     public function testExportAction(string $url, array $parameters, array $expected): void
     {
-        // TODO: Remove the $content variable when drop support for Symfony < 6.2
-        ob_start();
         $this->client->request(Request::METHOD_GET, $url, $parameters);
-        $content = ob_get_contents();
-        ob_end_clean();
 
         self::assertResponseIsSuccessful();
         static::assertSame(
             $expected,
             json_decode(
-                '' !== $content && false !== $content ? $content : $this->client->getInternalResponse()->getContent(),
+                $this->client->getInternalResponse()->getContent(),
                 true,
-                512,
-                \JSON_THROW_ON_ERROR
+                flags: \JSON_THROW_ON_ERROR
             )
         );
     }
