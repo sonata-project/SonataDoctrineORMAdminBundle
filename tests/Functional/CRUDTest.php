@@ -67,7 +67,7 @@ final class CRUDTest extends BaseFunctionalTestCase
     public function testDelete(): void
     {
         $doctrine = static::bootKernel()->getContainer()->get('doctrine');
-        \assert($doctrine instanceof Registry);
+        static::assertInstanceOf(Registry::class, $doctrine);
         $entityManager = $doctrine->getManager();
 
         $entityManager->persist(new Category('category_to_remove', 'name'));
