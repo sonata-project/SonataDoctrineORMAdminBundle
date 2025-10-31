@@ -30,7 +30,12 @@ final class TestEntityManagerFactory
         }
 
         if (version_compare(\PHP_VERSION, '8.0.0', '>=')) {
-            $config = ORMSetup::createAttributeMetadataConfiguration([], true);
+            /* @phpstan-ignore function.alreadyNarrowedType */
+            if (\PHP_VERSION_ID >= 80400 && method_exists(ORMSetup::class, 'createAttributeMetadataConfig')) {
+                $config = ORMSetup::createAttributeMetadataConfig([], true);
+            } else {
+                $config = ORMSetup::createAttributeMetadataConfiguration([], true);
+            }
         } else {
             /**
              * @var Configuration $config

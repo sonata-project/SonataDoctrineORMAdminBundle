@@ -59,7 +59,7 @@ final class DateFilterTest extends FilterTestCase
         static::assertTrue($filter->isActive());
 
         $builder = $proxyQuery->getQueryBuilder();
-        \assert($builder instanceof TestQueryBuilder);
+        static::assertInstanceOf(TestQueryBuilder::class, $builder);
         static::assertCount(2, $builder->queryParameters);
     }
 }
