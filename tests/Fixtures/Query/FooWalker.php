@@ -14,9 +14,9 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Fixtures\Query;
 
 use Doctrine\ORM\Query\AST\OrderByClause;
-use Doctrine\ORM\Query\SqlWalker;
+use Doctrine\ORM\Query\SqlOutputWalker;
 
-final class FooWalker extends SqlWalker
+final class FooWalker extends SqlOutputWalker
 {
     /**
      * @param OrderByClause $orderByClause
