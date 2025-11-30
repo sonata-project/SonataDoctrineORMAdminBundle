@@ -70,8 +70,6 @@ final class CallbackFilterTest extends FilterTestCase
 
     /**
      * @param ProxyQueryInterface<object> $query
-     *
-     * @phpstan-ignore return.tooWideBool
      */
     public function customCallback(ProxyQueryInterface $query, string $alias, string $field, FilterData $data): bool
     {
