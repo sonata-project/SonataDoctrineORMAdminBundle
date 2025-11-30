@@ -86,12 +86,8 @@ return static function (ContainerConfigurator $containerConfigurator): void {
         ->set('sonata.admin.orm.filter.type.uid', UidFilter::class)
             ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_uid']);
 
-    /**
+    /*
      * NEXT_MAJOR: Remove this service definition.
-     *
-     * @psalm-suppress DeprecatedClass
-     *
-     * @see https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1545
      */
     $containerConfigurator->services()->set('sonata.admin.orm.filter.type.model_autocomplete', ModelAutocompleteFilter::class)
         ->tag('sonata.admin.filter.type', ['alias' => 'doctrine_orm_model_autocomplete']);

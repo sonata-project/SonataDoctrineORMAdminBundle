@@ -130,9 +130,6 @@ abstract class FilterTestCase extends TestCase
     }
 }
 
-/**
- * @psalm-suppress ClassMustBeFinal
- */
 class TestQueryBuilder extends QueryBuilder
 {
     /** @var string[] */

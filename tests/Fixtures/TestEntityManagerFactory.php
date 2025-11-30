@@ -40,7 +40,6 @@ final class TestEntityManagerFactory
             /**
              * @var Configuration $config
              *
-             * @psalm-suppress UndefinedMethod
              * @phpstan-ignore-next-line
              */
             $config = ORMSetup::createAnnotationMetadataConfiguration([], true);
