@@ -10,6 +10,7 @@ composer.lock
 phpunit.xml
 phpstan.neon
 /.phpunit.result.cache
+tests/App/config/reference.php
 /docs/_build/
 /drivers
 /tests/App/public/bundles
