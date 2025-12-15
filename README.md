@@ -10,7 +10,6 @@ Integrate Doctrine ORM into the SonataAdminBundle
 
 [![Latest Stable Version](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/v/stable)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 [![Latest Unstable Version](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/v/unstable)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
-[![Psalm Type Coverage][shepherd_stable_badge]][shepherd_stable_link]
 [![License](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/license)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
 
 [![Total Downloads](https://poser.pugx.org/sonata-project/doctrine-orm-admin-bundle/downloads)](https://packagist.org/packages/sonata-project/doctrine-orm-admin-bundle)
