@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.20.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.19.0...4.20.0) - 2025-12-18
+### Added
+- [[#1852](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1852)] Support for Symfony 8 ([@dmaicher](https://github.com/dmaicher))
+
+### Removed
+- [[#1852](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1852)] Support for PHP 8.1 ([@dmaicher](https://github.com/dmaicher))
+- [[#1852](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1852)] Support for Symfony 7.1 and 7.2 ([@dmaicher](https://github.com/dmaicher))
+- [[#1847](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1847)] Support for `sonata-project/exporter` v2 ([@dmaicher](https://github.com/dmaicher))
+- [[#1847](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1847)] Support for `sonata-project/form-extensions` v1 ([@dmaicher](https://github.com/dmaicher))
+
 ## [4.19.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.18.0...4.19.0) - 2025-10-12
 ### Added
 - [[#1844](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1844)] Added support for `doctrine/doctrine-bundle` 3.0 ([@dmaicher](https://github.com/dmaicher))
