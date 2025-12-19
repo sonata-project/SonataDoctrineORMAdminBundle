@@ -26,9 +26,6 @@ final class ProductIdType extends Type
         return $platform->getIntegerTypeDeclarationSQL($column);
     }
 
-    /**
-     * @phpstan-ignore return.tooWideBool
-     */
     public function requiresSQLCommentHint(AbstractPlatform $platform): bool
     {
         return true;

@@ -763,9 +763,6 @@ final class ModelManagerTest extends TestCase
         ];
     }
 
-    /**
-     * @psalm-suppress InvalidArgument
-     */
     public function testAddIdentifiersToQueryWithEmptyIdentifiers(): void
     {
         $datagrid = static::createStub(ProxyQueryInterface::class);
@@ -799,7 +796,6 @@ final class ModelManagerTest extends TestCase
                     $versionField,
                 );
             } else {
-                /** @psalm-suppress DeprecatedProperty */
                 $metadata->reflFields[$versionField] = new \ReflectionProperty($class, $versionField);
             }
         }
