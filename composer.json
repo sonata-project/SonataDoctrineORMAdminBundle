@@ -52,7 +52,6 @@
         "doctrine/doctrine-fixtures-bundle": "^3.4 || ^4.0",
         "friendsofphp/php-cs-fixer": "^3.4",
         "matthiasnoback/symfony-dependency-injection-test": "^6.1",
-        "php-webdriver/webdriver": "dev-main as 1.99",
         "phpstan/extension-installer": "^1.0",
         "phpstan/phpdoc-parser": "^1.0",
         "phpstan/phpstan": "^1.0 || ^2.0",
