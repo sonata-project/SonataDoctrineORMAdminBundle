@@ -60,7 +60,7 @@ final class AuditReader implements AuditReaderInterface
         }
 
         return array_map(
-            [$this, 'createRevisionFromEntityAuditRevision'],
+            $this->createRevisionFromEntityAuditRevision(...),
             $this->auditReader->findRevisionHistory($limit, $offset)
         );
     }
@@ -78,7 +78,7 @@ final class AuditReader implements AuditReaderInterface
     {
         try {
             return array_map(
-                [$this, 'createRevisionFromEntityAuditRevision'],
+                $this->createRevisionFromEntityAuditRevision(...),
                 $this->auditReader->findRevisions($className, $id)
             );
         } catch (\Throwable) {
