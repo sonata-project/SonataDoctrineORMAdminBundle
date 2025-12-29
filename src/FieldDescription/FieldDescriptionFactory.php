@@ -37,7 +37,7 @@ final class FieldDescriptionFactory implements FieldDescriptionFactoryInterface
             $this->mappingToArray($metadata->fieldMappings[$propertyName] ?? []),
             $this->mappingToArray($metadata->associationMappings[$propertyName] ?? []),
             array_map(
-                [$this, 'mappingToArray'],
+                $this->mappingToArray(...),
                 $parentAssociationMappings,
             ),
             $propertyName
