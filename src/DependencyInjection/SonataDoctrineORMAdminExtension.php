@@ -18,6 +18,7 @@ use Symfony\Component\Config\Definition\Processor;
 use Symfony\Component\Config\FileLocator;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\PhpFileLoader;
+use Symfony\Component\Security\Acl\Model\ObjectIdentityInterface;
 
 /**
  * @author Thomas Rabaix <thomas.rabaix@sonata-project.org>
@@ -46,7 +47,10 @@ final class SonataDoctrineORMAdminExtension extends AbstractSonataAdminExtension
             $container->setParameter('sonata_doctrine_orm_admin.audit.force', $config['audit']['force']);
         }
 
-        $loader->load('security.php');
+        if (interface_exists(ObjectIdentityInterface::class)) {
+            // only load this in case the optional symfony/security-acl package is installed
+            $loader->load('security.php');
+        }
 
         $container->setParameter('sonata_doctrine_orm_admin.entity_manager', $config['entity_manager']);
 
