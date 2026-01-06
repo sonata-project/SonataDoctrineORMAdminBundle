@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.21.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.20.0...4.21.0) - 2026-01-05
+### Changed
+- [[#1858](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1858)] The `symfony/security-acl` dependency is now optional. You need to explicitly require it as a dependency if you are using ACL. ([@dmaicher](https://github.com/dmaicher))
+
 ## [4.20.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.19.0...4.20.0) - 2025-12-18
 ### Added
 - [[#1852](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1852)] Support for Symfony 8 ([@dmaicher](https://github.com/dmaicher))
