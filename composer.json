@@ -63,7 +63,7 @@
         "sonata-project/entity-audit-bundle": "^1.1",
         "symfony/browser-kit": "^6.4 || ^7.3 || ^8.0",
         "symfony/css-selector": "^6.4 || ^7.3 || ^8.0",
-        "symfony/panther": "dev-symfony-8-support",
+        "symfony/panther": "^2.4",
         "symfony/security-acl": "^3.0",
         "symfony/uid": "^6.4 || ^7.3 || ^8.0",
         "symfony/yaml": "^6.4 || ^7.3 || ^8.0"
@@ -79,12 +79,6 @@
     "suggest": {
         "sonata-project/entity-audit-bundle": "If you want to support for versioning of entities and their associations."
     },
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git@github.com:dmaicher/symfony-panther.git"
-        }
-    ],
     "minimum-stability": "dev",
     "prefer-stable": true,
     "autoload": {
