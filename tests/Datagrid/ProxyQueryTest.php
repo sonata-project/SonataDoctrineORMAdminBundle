@@ -14,6 +14,7 @@ declare(strict_types=1);
 namespace Sonata\DoctrineORMAdminBundle\Tests\Datagrid;
 
 use Doctrine\DBAL\Types\Type;
+use Doctrine\Deprecations\Deprecation;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query;
 use Doctrine\ORM\Tools\SchemaTool;
@@ -113,6 +114,54 @@ final class ProxyQueryTest extends TestCase
         $query = new ProxyQuery($this->em->createQueryBuilder());
         $query->setSortOrder($validValue);
         static::assertSame($validValue, $query->getSortOrder());
+    }
+
+    /**
+     * @phpstan-return iterable<array-key, array{string|null, non-empty-string}>
+     */
+    public static function provideSortOrderIsAppliedToTheQueryCases(): iterable
+    {
+        yield 'ASC' => ['ASC', 'ORDER BY o.name2 ASC, o.id ASC'];
+        yield 'DESC' => ['DESC', 'ORDER BY o.name2 DESC, o.id DESC'];
+        yield 'lowercase desc' => ['desc', 'ORDER BY o.name2 DESC, o.id DESC'];
+        yield 'default' => [null, 'ORDER BY o.name2 ASC, o.id ASC'];
+    }
+
+    /**
+     * @param non-empty-string $expectedOrderBy
+     */
+    #[DataProvider('provideSortOrderIsAppliedToTheQueryCases')]
+    public function testSortOrderIsAppliedToTheQuery(?string $sortOrder, string $expectedOrderBy): void
+    {
+        $query = new ProxyQuery(
+            $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o')
+        );
+        $query->setSortBy([], ['fieldName' => 'name2']);
+        if (null !== $sortOrder) {
+            $query->setSortOrder($sortOrder);
+        }
+
+        $dql = $query->getDoctrineQuery()->getDQL();
+
+        static::assertNotNull($dql);
+        static::assertStringEndsWith($expectedOrderBy, $dql);
+    }
+
+    public function testSortOrderDoesNotTriggerSortDirectionDeprecation(): void
+    {
+        $link = 'https://github.com/doctrine/orm/issues/11313';
+        $before = Deprecation::getTriggeredDeprecations()[$link] ?? 0;
+
+        $query = new ProxyQuery(
+            $this->em->createQueryBuilder()->select('o')->from(DoubleNameEntity::class, 'o')
+        );
+        $query->setSortBy([], ['fieldName' => 'name2'])->setSortOrder('DESC');
+        $query->getDoctrineQuery();
+
+        $query->setSortBy([], []);
+        $query->getDoctrineQuery();
+
+        static::assertSame($before, Deprecation::getTriggeredDeprecations()[$link] ?? 0);
     }
 
     public function testExecuteWithOrderBy(): void
