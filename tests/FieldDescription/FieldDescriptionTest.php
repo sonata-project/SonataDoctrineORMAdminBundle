@@ -78,7 +78,7 @@ final class FieldDescriptionTest extends TestCase
 
     public function testGetParent(): void
     {
-        $adminMock = $this->createMock(AdminInterface::class);
+        $adminMock = static::createStub(AdminInterface::class);
         $field = new FieldDescription('name');
         $field->setParent($adminMock);
 
@@ -87,7 +87,7 @@ final class FieldDescriptionTest extends TestCase
 
     public function testGetAdmin(): void
     {
-        $adminMock = $this->createMock(AdminInterface::class);
+        $adminMock = static::createStub(AdminInterface::class);
         $field = new FieldDescription('name');
         $field->setAdmin($adminMock);
 

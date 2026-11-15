@@ -48,7 +48,7 @@ final class ProductIdType extends Type
     {
         $value = $this->convertToPHPValue($value, $platform);
 
-        return null !== $value ? $value->getId() : null;
+        return $value?->getId();
     }
 
     public function getName(): string

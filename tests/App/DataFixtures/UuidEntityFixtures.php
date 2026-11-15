@@ -27,7 +27,6 @@ final class UuidEntityFixtures extends Fixture implements DependentFixtureInterf
     {
         $car = $this->getReference(CarFixtures::CAR, Car::class);
         $carFrom2010 = $this->getReference(CarFixtures::CAR_FROM_2010, Car::class);
-        $carFrom2010 = $this->getReference(CarFixtures::CAR_FROM_2010, Car::class);
 
         $foo = $this->getReference(UlidChildEntityFixtures::ULID_FOO, UlidChildEntity::class);
         $bar = $this->getReference(UlidChildEntityFixtures::ULID_BAR, UlidChildEntity::class);

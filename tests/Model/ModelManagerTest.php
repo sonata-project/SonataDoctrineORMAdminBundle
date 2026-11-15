@@ -136,7 +136,7 @@ final class ModelManagerTest extends TestCase
     {
         $entity = new UuidBinaryEntity(new $vbClassName('a7ef873a-e7b5-11e9-81b4-2a2ae2dbcce4'));
 
-        $platform = $this->createMock(AbstractPlatform::class);
+        $platform = static::createStub(AbstractPlatform::class);
 
         $connection = $this->createMock(Connection::class);
         $connection->method('getDatabasePlatform')->willReturn($platform);
@@ -159,7 +159,7 @@ final class ModelManagerTest extends TestCase
 
     public function testInstantiateWithDeprecatedRegistryInterface(): void
     {
-        $em = $this->createMock(EntityManagerInterface::class);
+        $em = static::createStub(EntityManagerInterface::class);
 
         $this->registry->expects(static::once())
             ->method('getManagerForClass')
@@ -691,7 +691,7 @@ final class ModelManagerTest extends TestCase
     #[DataProvider('provideAddIdentifiersToQueryCases')]
     public function testAddIdentifiersToQuery(array $expectedParameters, array $identifierFieldNames, array $ids): void
     {
-        $em = $this->createMock(EntityManagerInterface::class);
+        $em = static::createStub(EntityManagerInterface::class);
 
         /** @var QueryBuilder&MockObject $queryBuilder */
         $queryBuilder = $this->getMockBuilder(QueryBuilder::class)

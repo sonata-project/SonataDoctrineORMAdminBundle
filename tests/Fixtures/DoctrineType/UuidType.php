@@ -48,6 +48,6 @@ final class UuidType extends StringType
     {
         $value = $this->convertToPHPValue($value, $platform);
 
-        return null !== $value ? $value->toString() : null;
+        return $value?->toString();
     }
 }
