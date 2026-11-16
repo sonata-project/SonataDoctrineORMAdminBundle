@@ -2,6 +2,13 @@
 All notable changes to this project will be documented in this file.
 This project adheres to [Semantic Versioning](http://semver.org/).
 
+## [4.22.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.21.0...4.22.0) - 2026-11-16
+### Fixed
+- [[#1863](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1863)] Deprecation triggered by Doctrine ORM 3.7 when `ProxyQuery` passes a string sort order to `QueryBuilder::addOrderBy()` instead of a `SortDirection` instance ([@valkars](https://github.com/valkars))
+
+### Removed
+- [[#1864](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1864)] Support for Symfony 7.3 and 8.0 ([@dmaicher](https://github.com/dmaicher))
+
 ## [4.21.0](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/compare/4.20.0...4.21.0) - 2026-01-05
 ### Changed
 - [[#1858](https://github.com/sonata-project/SonataDoctrineORMAdminBundle/pull/1858)] The `symfony/security-acl` dependency is now optional. You need to explicitly require it as a dependency if you are using ACL. ([@dmaicher](https://github.com/dmaicher))
