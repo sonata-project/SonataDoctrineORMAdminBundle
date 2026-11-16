@@ -163,7 +163,7 @@ final class ProxyQuery implements ProxyQueryInterface
                 $sortBy = $rootAlias.'.'.$sortBy;
             }
 
-            $queryBuilder->addOrderBy($sortBy, $this->getSortOrder());
+            $queryBuilder->addOrderBy($sortBy, $this->getSortDirection());
             foreach ($orderByDQLPart as $orderBy) {
                 $queryBuilder->addOrderBy($orderBy);
             }
@@ -192,7 +192,7 @@ final class ProxyQuery implements ProxyQueryInterface
             $field = $rootAlias.'.'.$identifierField;
 
             if (!\in_array($field, $existingOrders, true)) {
-                $queryBuilder->addOrderBy($field, $this->getSortOrder());
+                $queryBuilder->addOrderBy($field, $this->getSortDirection());
             }
         }
 
@@ -331,5 +331,50 @@ final class ProxyQuery implements ProxyQueryInterface
         $this->hints[$name] = $value;
 
         return $this;
+    }
+
+    /**
+     * Returns the sort order in the form expected by the installed ORM: a `SortDirection`
+     * enum (PHP 8.6 / symfony polyfill) when `QueryBuilder::addOrderBy()` accepts it,
+     * otherwise the plain "ASC"/"DESC" string.
+     *
+     * @return \SortDirection|string|null
+     */
+    private function getSortDirection(): mixed
+    {
+        $sortOrder = $this->getSortOrder();
+
+        if (!self::supportsSortDirection()) {
+            return $sortOrder;
+        }
+
+        // `null` has always meant "ASC" for the query builder.
+        return null !== $sortOrder && 'DESC' === strtoupper($sortOrder)
+            ? \SortDirection::Descending
+            : \SortDirection::Ascending;
+    }
+
+    private static function supportsSortDirection(): bool
+    {
+        static $supported = null;
+
+        if (null !== $supported) {
+            return $supported;
+        }
+
+        if (!enum_exists(\SortDirection::class)) {
+            return $supported = false;
+        }
+
+        $type = (new \ReflectionMethod(QueryBuilder::class, 'addOrderBy'))->getParameters()[1]->getType();
+        $types = $type instanceof \ReflectionUnionType ? $type->getTypes() : [$type];
+
+        foreach ($types as $namedType) {
+            if ($namedType instanceof \ReflectionNamedType && \SortDirection::class === $namedType->getName()) {
+                return $supported = true;
+            }
+        }
+
+        return $supported = false;
     }
 }
